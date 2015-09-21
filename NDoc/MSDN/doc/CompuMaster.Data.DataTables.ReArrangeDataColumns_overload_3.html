@@ -1,0 +1,81 @@
+<html dir="LTR">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=Windows-1252" />
+    <meta name="vs_targetSchema" content="http://schemas.microsoft.com/intellisense/ie5" />
+    <title>DataTables.ReArrangeDataColumns Method (DataTable, DataColumn[], ArrayList)</title>
+    <xml>
+    </xml>
+    <link rel="stylesheet" type="text/css" href="MSDN.css" />
+  </head>
+  <body id="bodyID" class="dtBODY">
+    <div id="nsbanner">
+      <div id="bannerrow1">
+        <table class="bannerparthead" cellspacing="0">
+          <tr id="hdr">
+            <td class="runninghead">CompuMaster.Data library</td>
+            <td class="product">
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div id="TitleRow">
+        <h1 class="dtH1">DataTables.ReArrangeDataColumns Method (DataTable, DataColumn[], ArrayList)</h1>
+      </div>
+    </div>
+    <div id="nstext">
+      <p> Rearrange columns and also change their data types </p>
+      <div class="syntax">
+        <span class="lang">[Visual Basic]</span>
+        <br />Overloads Public Shared Function ReArrangeDataColumns( _<br />   ByVal <i>source</i> As <a href="ms-help://MS.NETFrameworkSDKv1.1/cpref/html/frlrfSystemDataDataTableClassTopic.htm">DataTable</a>, _<br />   ByVal <i>destinationColumnSet</i> As <a href="ms-help://MS.NETFrameworkSDKv1.1/cpref/html/frlrfSystemDataDataColumnClassTopic.htm">DataColumn()</a>, _<br />   ByVal <i>ignoreConversionExceptionAndLogThemHere</i> As <a href="ms-help://MS.NETFrameworkSDKv1.1/cpref/html/frlrfSystemCollectionsArrayListClassTopic.htm">ArrayList</a> _<br />) As <a href="ms-help://MS.NETFrameworkSDKv1.1/cpref/html/frlrfSystemDataDataTableClassTopic.htm">DataTable</a></div>
+      <div class="syntax">
+        <span class="lang">[C#]</span>
+        <br />public static <a href="ms-help://MS.NETFrameworkSDKv1.1/cpref/html/frlrfSystemDataDataTableClassTopic.htm">DataTable</a> ReArrangeDataColumns(<br />   <a href="ms-help://MS.NETFrameworkSDKv1.1/cpref/html/frlrfSystemDataDataTableClassTopic.htm">DataTable</a> <i>source</i>,<br />   <a href="ms-help://MS.NETFrameworkSDKv1.1/cpref/html/frlrfSystemDataDataColumnClassTopic.htm">DataColumn[]</a> <i>destinationColumnSet</i>,<br />   <a href="ms-help://MS.NETFrameworkSDKv1.1/cpref/html/frlrfSystemCollectionsArrayListClassTopic.htm">ArrayList</a> <i>ignoreConversionExceptionAndLogThemHere</i><br />);</div>
+      <h4 class="dtH4">Parameters</h4>
+      <dl>
+        <dt>
+          <i>source</i>
+        </dt>
+        <dd>The source table with data</dd>
+        <dt>
+          <i>destinationColumnSet</i>
+        </dt>
+        <dd>An array of columns as they shall be inserted into the result</dd>
+        <dt>
+          <i>ignoreConversionExceptionAndLogThemHere</i>
+        </dt>
+        <dd>In case of data conversion exceptions, log them here instead of throwing them immediately</dd>
+      </dl>
+      <h4 class="dtH4">Return Value</h4>
+      <p>A new and independent data table with copied data</p>
+      <h4 class="dtH4">Remarks</h4>
+      <p> The copy process requires that the names of the destination columns can be found in the columns collection of the source table. </p>
+      <h4 class="dtH4">Example</h4>
+      <p>
+     <pre class="code" language="vb">    ReArrangeDataColumns(source, New System.Data.DataColumn() {New DataColumn("column1Name", GetType(String)), New DataColumn("column2Name", GetType(Integer))}) 
+</pre>
+ </p>
+      <h4 class="dtH4">See Also</h4>
+      <p>
+        <a href="CompuMaster.Data.DataTables.html">DataTables Class</a> | <a href="CompuMaster.Data.html">CompuMaster.Data Namespace</a> | <a href="CompuMaster.Data.DataTables.ReArrangeDataColumns_overloads.html">DataTables.ReArrangeDataColumns Overload List</a></p>
+      <object type="application/x-oleobject" classid="clsid:1e2a7bd0-dab9-11d0-b93a-00c04fc99f9e" viewastext="true" style="display: none;">
+        <param name="Keyword" value="ReArrangeDataColumns method">
+        </param>
+        <param name="Keyword" value="ReArrangeDataColumns method, DataTables class">
+        </param>
+        <param name="Keyword" value="DataTables.ReArrangeDataColumns method">
+        </param>
+      </object>
+      <hr />
+      <div id="footer">
+        <p>
+          <a href="mailto:support@compumaster.de?subject=CompuMaster.Data%20library%20Documentation%20Feedback:%20DataTables.ReArrangeDataColumns Method (DataTable,%20DataColumn[],%20ArrayList)">Send comments on this topic.</a>
+        </p>
+        <p>
+          <a href="http://www.compumaster.de/">2005-2008 CompuMaster GmbH</a>
+        </p>
+        <p>
+        </p>
+      </div>
+    </div>
+  </body>
+</html>

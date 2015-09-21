@@ -1,0 +1,79 @@
+<html dir="LTR">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=Windows-1252" />
+    <meta name="vs_targetSchema" content="http://schemas.microsoft.com/intellisense/ie5" />
+    <title>Manipulation.WriteDataSetToDataConnection Method</title>
+    <xml>
+    </xml>
+    <link rel="stylesheet" type="text/css" href="MSDN.css" />
+  </head>
+  <body id="bodyID" class="dtBODY">
+    <div id="nsbanner">
+      <div id="bannerrow1">
+        <table class="bannerparthead" cellspacing="0">
+          <tr id="hdr">
+            <td class="runninghead">CompuMaster.Data library</td>
+            <td class="product">
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div id="TitleRow">
+        <h1 class="dtH1">Manipulation.WriteDataSetToDataConnection Method </h1>
+      </div>
+    </div>
+    <div id="nstext">
+      <p> Write tables of a dataset with their rows into tables on a data connection </p>
+      <div class="syntax">
+        <span class="lang">[Visual Basic]</span>
+        <br />Public Shared Sub WriteDataSetToDataConnection( _<br />   ByVal <i>dataSet</i> As <a href="ms-help://MS.NETFrameworkSDKv1.1/cpref/html/frlrfSystemDataDataSetClassTopic.htm">DataSet</a>, _<br />   ByVal <i>dataConnection</i> As <a href="ms-help://MS.NETFrameworkSDKv1.1/cpref/html/frlrfSystemDataIDbConnectionClassTopic.htm">IDbConnection</a>, _<br />   ByVal <i>ddlLanguage</i> As <a href="CompuMaster.Data.Manipulation.DdlLanguage.html">DdlLanguage</a>, _<br />   ByVal <i>dropExistingRowsInDestinationTable</i> As <a href="ms-help://MS.NETFrameworkSDKv1.1/cpref/html/frlrfSystemBooleanClassTopic.htm">Boolean</a> _<br />)</div>
+      <div class="syntax">
+        <span class="lang">[C#]</span>
+        <br />public static <a href="ms-help://MS.NETFrameworkSDKv1.1/cpref/html/frlrfSystemVoidClassTopic.htm">void</a> WriteDataSetToDataConnection(<br />   <a href="ms-help://MS.NETFrameworkSDKv1.1/cpref/html/frlrfSystemDataDataSetClassTopic.htm">DataSet</a> <i>dataSet</i>,<br />   <a href="ms-help://MS.NETFrameworkSDKv1.1/cpref/html/frlrfSystemDataIDbConnectionClassTopic.htm">IDbConnection</a> <i>dataConnection</i>,<br />   <a href="CompuMaster.Data.Manipulation.DdlLanguage.html">DdlLanguage</a> <i>ddlLanguage</i>,<br />   <a href="ms-help://MS.NETFrameworkSDKv1.1/cpref/html/frlrfSystemBooleanClassTopic.htm">bool</a> <i>dropExistingRowsInDestinationTable</i><br />);</div>
+      <h4 class="dtH4">Parameters</h4>
+      <dl>
+        <dt>
+          <i>dataSet</i>
+        </dt>
+        <dd>A dataset whose tables shall be transferred to the data connection</dd>
+        <dt>
+          <i>dataConnection</i>
+        </dt>
+        <dd>An opened connection to the data source</dd>
+        <dt>
+          <i>ddlLanguage</i>
+        </dt>
+        <dd>A DDL language which shall be used for creating/extending a table on the data connection</dd>
+        <dt>
+          <i>dropExistingRowsInDestinationTable</i>
+        </dt>
+        <dd>
+        </dd>
+      </dl>
+      <h4 class="dtH4">Remarks</h4>
+      <p>Missing columns will be added automatically. In case that a column already exist on the remote database and its datatype doesn't match the datatype in the source table, there might be thrown an exception while data transfer.</p>
+      <h4 class="dtH4">See Also</h4>
+      <p>
+        <a href="CompuMaster.Data.Manipulation.html">Manipulation Class</a> | <a href="CompuMaster.Data.html">CompuMaster.Data Namespace</a></p>
+      <object type="application/x-oleobject" classid="clsid:1e2a7bd0-dab9-11d0-b93a-00c04fc99f9e" viewastext="true" style="display: none;">
+        <param name="Keyword" value="WriteDataSetToDataConnection method">
+        </param>
+        <param name="Keyword" value="WriteDataSetToDataConnection method, Manipulation class">
+        </param>
+        <param name="Keyword" value="Manipulation.WriteDataSetToDataConnection method">
+        </param>
+      </object>
+      <hr />
+      <div id="footer">
+        <p>
+          <a href="mailto:support@compumaster.de?subject=CompuMaster.Data%20library%20Documentation%20Feedback:%20Manipulation.WriteDataSetToDataConnection Method ">Send comments on this topic.</a>
+        </p>
+        <p>
+          <a href="http://www.compumaster.de/">2005-2008 CompuMaster GmbH</a>
+        </p>
+        <p>
+        </p>
+      </div>
+    </div>
+  </body>
+</html>

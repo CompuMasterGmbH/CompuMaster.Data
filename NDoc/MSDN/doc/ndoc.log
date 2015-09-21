@@ -1,0 +1,259 @@
+Building documentation...
+Initializing...
+Merging XML documentation...
+Building file mapping...
+Loading XSLT files...
+    namespace.xslt
+    namespacehierarchy.xslt
+    type.xslt
+    typehierarchy.xslt
+    allmembers.xslt
+    individualmembers.xslt
+    event.xslt
+    member.xslt
+    memberoverload.xslt
+    property.xslt
+    field.xslt
+    htmlcontents.xslt
+Generating HTML pages...
+CompuMaster.Data.html
+CompuMaster.DataHierarchy.html
+CompuMaster.Data.Csv.html
+CompuMaster.Data.CsvMembers.html
+CompuMaster.Data.CsvConstructor.html
+CompuMaster.Data.CsvMethods.html
+CompuMaster.Data.Csv.ConvertDataTableToText_overloads.html
+CompuMaster.Data.Csv.ConvertDataTableToText_overload_2.html
+CompuMaster.Data.Csv.ConvertDataTableToText_overload_1.html
+CompuMaster.Data.Csv.ReadDataTableFromCsvFile_overloads.html
+CompuMaster.Data.Csv.ReadDataTableFromCsvFile_overload_1.html
+CompuMaster.Data.Csv.ReadDataTableFromCsvFile_overload_2.html
+CompuMaster.Data.Csv.ReadDataTableFromCsvFile_overload_3.html
+CompuMaster.Data.Csv.ReadDataTableFromCsvFile_overload_4.html
+CompuMaster.Data.Csv.ReadDataTableFromCsvString_overloads.html
+CompuMaster.Data.Csv.ReadDataTableFromCsvString_overload_4.html
+CompuMaster.Data.Csv.ReadDataTableFromCsvString_overload_3.html
+CompuMaster.Data.Csv.ReadDataTableFromCsvString_overload_1.html
+CompuMaster.Data.Csv.ReadDataTableFromCsvString_overload_2.html
+CompuMaster.Data.Csv.WriteDataTableToCsvBytes_overloads.html
+CompuMaster.Data.Csv.WriteDataTableToCsvBytes_overload_1.html
+CompuMaster.Data.Csv.WriteDataTableToCsvBytes_overload_2.html
+CompuMaster.Data.Csv.WriteDataTableToCsvFile_overloads.html
+CompuMaster.Data.Csv.WriteDataTableToCsvFile_overload_1.html
+CompuMaster.Data.Csv.WriteDataTableToCsvFile_overload_3.html
+CompuMaster.Data.Csv.WriteDataTableToCsvFile_overload_4.html
+CompuMaster.Data.Csv.WriteDataTableToCsvFile_overload_2.html
+CompuMaster.Data.Csv.WriteDataTableToCsvFile_overload_5.html
+CompuMaster.Data.Csv.WriteDataTableToCsvMemoryStream.html
+CompuMaster.Data.Csv.WriteDataTableToCsvString.html
+CompuMaster.Data.Csv.WriteDataViewToCsvFile_overloads.html
+CompuMaster.Data.Csv.WriteDataViewToCsvFile_overload_1.html
+CompuMaster.Data.Csv.WriteDataViewToCsvFile_overload_2.html
+CompuMaster.Data.Csv.WriteDataViewToCsvFile_overload_3.html
+CompuMaster.Data.DatabaseManagement.html
+CompuMaster.Data.DatabaseManagementMembers.html
+CompuMaster.Data.DatabaseManagementConstructor.html
+CompuMaster.Data.DatabaseManagementMethods.html
+CompuMaster.Data.DatabaseManagement.CreateDatabaseFile.html
+CompuMaster.Data.DataTables.html
+CompuMaster.Data.DataTablesMembers.html
+CompuMaster.Data.DataTablesConstructor.html
+CompuMaster.Data.DataTablesMethods.html
+CompuMaster.Data.DataTables.AddPrefixesToColumnNames.html
+CompuMaster.Data.DataTables.AddSuffixesToColumnNames.html
+CompuMaster.Data.DataTables.ConvertDataReaderToDataSet.html
+CompuMaster.Data.DataTables.ConvertDataReaderToDataTable_overloads.html
+CompuMaster.Data.DataTables.ConvertDataReaderToDataTable_overload_1.html
+CompuMaster.Data.DataTables.ConvertDataReaderToDataTable_overload_2.html
+CompuMaster.Data.DataTables.ConvertDatasetToXml.html
+CompuMaster.Data.DataTables.ConvertDataTableToArrayList_overloads.html
+CompuMaster.Data.DataTables.ConvertDataTableToArrayList_overload_1.html
+CompuMaster.Data.DataTables.ConvertDataTableToArrayList_overload_2.html
+CompuMaster.Data.DataTables.ConvertDataTableToArrayList_overload_3.html
+CompuMaster.Data.DataTables.ConvertDataTableToDictionaryEntryArray_overloads.html
+CompuMaster.Data.DataTables.ConvertDataTableToDictionaryEntryArray_overload_2.html
+CompuMaster.Data.DataTables.ConvertDataTableToDictionaryEntryArray_overload_1.html
+CompuMaster.Data.DataTables.ConvertDataTableToDictionaryEntryArray_overload_3.html
+CompuMaster.Data.DataTables.ConvertDataTableToHashtable_overloads.html
+CompuMaster.Data.DataTables.ConvertDataTableToHashtable_overload_1.html
+CompuMaster.Data.DataTables.ConvertDataTableToHashtable_overload_2.html
+CompuMaster.Data.DataTables.ConvertDataTableToHashtable_overload_3.html
+CompuMaster.Data.DataTables.ConvertDataTableToWinFormsListControlItem.html
+CompuMaster.Data.DataTables.ConvertDataViewToDataTable.html
+CompuMaster.Data.DataTables.ConvertICollectionToDataTable.html
+CompuMaster.Data.DataTables.ConvertIDictionaryToDataTable_overloads.html
+CompuMaster.Data.DataTables.ConvertIDictionaryToDataTable_overload_1.html
+CompuMaster.Data.DataTables.ConvertIDictionaryToDataTable_overload_2.html
+CompuMaster.Data.DataTables.ConvertNameValueCollectionToDataTable_overloads.html
+CompuMaster.Data.DataTables.ConvertNameValueCollectionToDataTable_overload_1.html
+CompuMaster.Data.DataTables.ConvertNameValueCollectionToDataTable_overload_2.html
+CompuMaster.Data.DataTables.ConvertToHtmlTable_overloads.html
+CompuMaster.Data.DataTables.ConvertToHtmlTable_overload_3.html
+CompuMaster.Data.DataTables.ConvertToHtmlTable_overload_10.html
+CompuMaster.Data.DataTables.ConvertToHtmlTable_overload_9.html
+CompuMaster.Data.DataTables.ConvertToHtmlTable_overload_2.html
+CompuMaster.Data.DataTables.ConvertToHtmlTable_overload_8.html
+CompuMaster.Data.DataTables.ConvertToHtmlTable_overload_7.html
+CompuMaster.Data.DataTables.ConvertToHtmlTable_overload_1.html
+CompuMaster.Data.DataTables.ConvertToHtmlTable_overload_5.html
+CompuMaster.Data.DataTables.ConvertToHtmlTable_overload_4.html
+CompuMaster.Data.DataTables.ConvertToHtmlTable_overload_6.html
+CompuMaster.Data.DataTables.ConvertToPlainTextTable_overloads.html
+CompuMaster.Data.DataTables.ConvertToPlainTextTable_overload_2.html
+CompuMaster.Data.DataTables.ConvertToPlainTextTable_overload_3.html
+CompuMaster.Data.DataTables.ConvertToPlainTextTable_overload_1.html
+CompuMaster.Data.DataTables.ConvertXmlToDataset.html
+CompuMaster.Data.DataTables.CopyDataTableWithSubsetOfRows_overloads.html
+CompuMaster.Data.DataTables.CopyDataTableWithSubsetOfRows_overload_1.html
+CompuMaster.Data.DataTables.CopyDataTableWithSubsetOfRows_overload_2.html
+CompuMaster.Data.DataTables.CreateDataRowClone.html
+CompuMaster.Data.DataTables.CreateDataTableClone_overloads.html
+CompuMaster.Data.DataTables.CreateDataTableClone_overload_1.html
+CompuMaster.Data.DataTables.CreateDataTableClone_overload_5.html
+CompuMaster.Data.DataTables.CreateDataTableClone_overload_6.html
+CompuMaster.Data.DataTables.CreateDataTableClone_overload_2.html
+CompuMaster.Data.DataTables.CreateDataTableClone_overload_3.html
+CompuMaster.Data.DataTables.CreateDataTableClone_overload_4.html
+CompuMaster.Data.DataTables.CrossJoinTables.html
+CompuMaster.Data.DataTables.FindDuplicates_overloads.html
+CompuMaster.Data.DataTables.FindDuplicates_overload_1.html
+CompuMaster.Data.DataTables.FindDuplicates_overload_2.html
+CompuMaster.Data.DataTables.GetDataTableViaODBC.html
+CompuMaster.Data.DataTables.GetDataTableViaSqlClient.html
+CompuMaster.Data.DataTables.JoinTables_overloads.html
+CompuMaster.Data.DataTables.JoinTables_overload_3.html
+CompuMaster.Data.DataTables.JoinTables_overload_1.html
+CompuMaster.Data.DataTables.JoinTables_overload_2.html
+CompuMaster.Data.DataTables.JoinTables_overload_4.html
+CompuMaster.Data.DataTables.JoinTables_overload_5.html
+CompuMaster.Data.DataTables.KeepColumnsAndRemoveAllOthers.html
+CompuMaster.Data.DataTables.LookupUnqiueColumnName.html
+CompuMaster.Data.DataTables.ReArrangeDataColumns_overloads.html
+CompuMaster.Data.DataTables.ReArrangeDataColumns_overload_2.html
+CompuMaster.Data.DataTables.ReArrangeDataColumns_overload_3.html
+CompuMaster.Data.DataTables.ReArrangeDataColumns_overload_1.html
+CompuMaster.Data.DataTables.RemoveColumns.html
+CompuMaster.Data.DataTables.RemoveDuplicates.html
+CompuMaster.Data.DataTables.RemoveRowsWithNoCorrespondingValueInComparisonTable_overloads.html
+CompuMaster.Data.DataTables.RemoveRowsWithNoCorrespondingValueInComparisonTable_overload_1.html
+CompuMaster.Data.DataTables.RemoveRowsWithNoCorrespondingValueInComparisonTable_overload_2.html
+CompuMaster.Data.DataTables.JoinTypes.html
+CompuMaster.Data.DataTables.ReArrangeDataColumnsException.html
+CompuMaster.Data.DataTables.ReArrangeDataColumnsExceptionMembers.html
+CompuMaster.Data.DataTables.ReArrangeDataColumnsExceptionConstructor.html
+CompuMaster.Data.DataTables.ReArrangeDataColumnsExceptionProperties.html
+CompuMaster.Data.DataTables.ReArrangeDataColumnsException.ColumnIndex.html
+CompuMaster.Data.DataTables.ReArrangeDataColumnsException.Message.html
+CompuMaster.Data.DataTables.ReArrangeDataColumnsException.ProblematicValue.html
+CompuMaster.Data.DataTables.ReArrangeDataColumnsException.RowIndex.html
+CompuMaster.Data.DataTables.ReArrangeDataColumnsException.TargetColumnType.html
+CompuMaster.Data.DataTables.WinFormsListControlItem.html
+CompuMaster.Data.DataTables.WinFormsListControlItemMembers.html
+CompuMaster.Data.DataTables.WinFormsListControlItemConstructor.html
+CompuMaster.Data.DataTables.WinFormsListControlItemProperties.html
+CompuMaster.Data.DataTables.WinFormsListControlItem.Key.html
+CompuMaster.Data.DataTables.WinFormsListControlItem.Value.html
+CompuMaster.Data.DataTables.WinFormsListControlItemMethods.html
+CompuMaster.Data.DataTables.WinFormsListControlItem.ToString.html
+CompuMaster.Data.Ldap.html
+CompuMaster.Data.LdapMembers.html
+CompuMaster.Data.LdapConstructor.html
+CompuMaster.Data.LdapMethods.html
+CompuMaster.Data.Ldap.Query.html
+CompuMaster.Data.Ldap.QueryAllUsers.html
+CompuMaster.Data.Ldap.QueryUsers.html
+CompuMaster.Data.Ldap.QueryUsersByAccountName.html
+CompuMaster.Data.Ldap.QueryUsersByName.html
+CompuMaster.Data.Manipulation.html
+CompuMaster.Data.ManipulationMembers.html
+CompuMaster.Data.ManipulationConstructor.html
+CompuMaster.Data.ManipulationMethods.html
+CompuMaster.Data.Manipulation.LoadQueryDataForManipulationViaCode_overloads.html
+CompuMaster.Data.Manipulation.LoadQueryDataForManipulationViaCode_overload_1.html
+CompuMaster.Data.Manipulation.LoadQueryDataForManipulationViaCode_overload_2.html
+CompuMaster.Data.Manipulation.LoadTableDataForManipulationViaCode_overloads.html
+CompuMaster.Data.Manipulation.LoadTableDataForManipulationViaCode_overload_1.html
+CompuMaster.Data.Manipulation.LoadTableDataForManipulationViaCode_overload_2.html
+CompuMaster.Data.Manipulation.UpdateCodeManipulatedData.html
+CompuMaster.Data.Manipulation.WriteDataSetToDataConnection.html
+CompuMaster.Data.Manipulation.WriteDataTableToDataConnection.html
+CompuMaster.Data.Manipulation.DataManipulationResults.html
+CompuMaster.Data.Manipulation.DataManipulationResultsMembers.html
+CompuMaster.Data.Manipulation.DataManipulationResultsConstructor.html
+CompuMaster.Data.Manipulation.DataManipulationResultsFields.html
+CompuMaster.Data.Manipulation.DataManipulationResults.Command.html
+CompuMaster.Data.Manipulation.DataManipulationResults.DataAdapter.html
+CompuMaster.Data.Manipulation.DataManipulationResults.Table.html
+CompuMaster.Data.Manipulation.DdlLanguage.html
+CompuMaster.Data.XlsReader.html
+CompuMaster.Data.XlsReaderMembers.html
+CompuMaster.Data.XlsReaderConstructor.html
+CompuMaster.Data.XlsReaderMethods.html
+CompuMaster.Data.XlsReader.ReadDataTableFromXlsFile_overloads.html
+CompuMaster.Data.XlsReader.ReadDataTableFromXlsFile_overload_1.html
+CompuMaster.Data.XlsReader.ReadDataTableFromXlsFile_overload_2.html
+CompuMaster.Data.DataQuery.html
+CompuMaster.Data.DataQueryHierarchy.html
+CompuMaster.Data.DataQuery.AnyIDataProvider.html
+CompuMaster.Data.DataQuery.AnyIDataProviderMembers.html
+CompuMaster.Data.DataQuery.AnyIDataProviderMethods.html
+CompuMaster.Data.DataQuery.AnyIDataProvider.CloseAndDisposeConnection.html
+CompuMaster.Data.DataQuery.AnyIDataProvider.CloseConnection.html
+CompuMaster.Data.DataQuery.AnyIDataProvider.CreateConnection_overloads.html
+CompuMaster.Data.DataQuery.AnyIDataProvider.CreateConnection_overload_1.html
+CompuMaster.Data.DataQuery.AnyIDataProvider.CreateConnection_overload_2.html
+CompuMaster.Data.DataQuery.AnyIDataProvider.ExecuteNonQuery_overloads.html
+CompuMaster.Data.DataQuery.AnyIDataProvider.ExecuteNonQuery_overload_2.html
+CompuMaster.Data.DataQuery.AnyIDataProvider.ExecuteNonQuery_overload_4.html
+CompuMaster.Data.DataQuery.AnyIDataProvider.ExecuteNonQuery_overload_3.html
+CompuMaster.Data.DataQuery.AnyIDataProvider.ExecuteNonQuery_overload_1.html
+CompuMaster.Data.DataQuery.AnyIDataProvider.ExecuteReader_overloads.html
+CompuMaster.Data.DataQuery.AnyIDataProvider.ExecuteReader_overload_3.html
+CompuMaster.Data.DataQuery.AnyIDataProvider.ExecuteReader_overload_2.html
+CompuMaster.Data.DataQuery.AnyIDataProvider.ExecuteReader_overload_1.html
+CompuMaster.Data.DataQuery.AnyIDataProvider.ExecuteReaderAndPutFirstColumnIntoArrayList_overloads.html
+CompuMaster.Data.DataQuery.AnyIDataProvider.ExecuteReaderAndPutFirstColumnIntoArrayList_overload_2.html
+CompuMaster.Data.DataQuery.AnyIDataProvider.ExecuteReaderAndPutFirstColumnIntoArrayList_overload_3.html
+CompuMaster.Data.DataQuery.AnyIDataProvider.ExecuteReaderAndPutFirstColumnIntoArrayList_overload_1.html
+CompuMaster.Data.DataQuery.AnyIDataProvider.ExecuteReaderAndPutFirstTwoColumnsIntoDictionaryEntryArray.html
+CompuMaster.Data.DataQuery.AnyIDataProvider.ExecuteReaderAndPutFirstTwoColumnsIntoHashtable_overloads.html
+CompuMaster.Data.DataQuery.AnyIDataProvider.ExecuteReaderAndPutFirstTwoColumnsIntoHashtable_overload_2.html
+CompuMaster.Data.DataQuery.AnyIDataProvider.ExecuteReaderAndPutFirstTwoColumnsIntoHashtable_overload_1.html
+CompuMaster.Data.DataQuery.AnyIDataProvider.ExecuteScalar_overloads.html
+CompuMaster.Data.DataQuery.AnyIDataProvider.ExecuteScalar_overload_2.html
+CompuMaster.Data.DataQuery.AnyIDataProvider.ExecuteScalar_overload_3.html
+CompuMaster.Data.DataQuery.AnyIDataProvider.ExecuteScalar_overload_1.html
+CompuMaster.Data.DataQuery.AnyIDataProvider.FillDataTable_overloads.html
+CompuMaster.Data.DataQuery.AnyIDataProvider.FillDataTable_overload_1.html
+CompuMaster.Data.DataQuery.AnyIDataProvider.FillDataTable_overload_4.html
+CompuMaster.Data.DataQuery.AnyIDataProvider.FillDataTable_overload_3.html
+CompuMaster.Data.DataQuery.AnyIDataProvider.FillDataTable_overload_2.html
+CompuMaster.Data.DataQuery.AnyIDataProvider.FillDataTables.html
+CompuMaster.Data.DataQuery.AnyIDataProvider.OpenConnection.html
+CompuMaster.Data.DataQuery.AnyIDataProvider.Automations.html
+CompuMaster.Data.DataQuery.AnyIDataProvider.DataException.html
+CompuMaster.Data.DataQuery.AnyIDataProvider.DataExceptionMembers.html
+CompuMaster.Data.DataQuery.AnyIDataProvider.DataExceptionConstructor.html
+CompuMaster.Data.DataQuery.AnyIDataProvider.DataExceptionMethods.html
+CompuMaster.Data.DataQuery.AnyIDataProvider.DataException.ToString.html
+Generating HTML content file...
+transform the HHC contents file into html
+Compiling HTML Help file...
+Compiling Html Help file
+Microsoft HTML Help Compiler 4.74.8702
+
+Compiling r:\camm.biz\camm Tools\CompuMaster.Data\NDoc\MSDN\doc\ndoc_msdn_temp\CompuMaster.Data.chm
+
+
+Compile time: 0 minutes, 7 seconds
+442	Topics
+1,372	Local links
+220	Internet links
+6	Graphics
+
+
+Created r:\camm.biz\camm Tools\CompuMaster.Data\NDoc\MSDN\doc\ndoc_msdn_temp\CompuMaster.Data.chm, 143,126 bytes
+Compression decreased file by 837,842 bytes.
+
+Html Help compile complete
+Done.

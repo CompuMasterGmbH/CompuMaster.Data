@@ -1,0 +1,46 @@
+<?xml version="1.0" standalone="yes"?>
+<root>
+  <xs:schema id="root" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xs:element name="root" msdata:IsDataSet="true" msdata:UseCurrentLocale="true">
+      <xs:complexType>
+        <xs:choice minOccurs="0" maxOccurs="unbounded">
+          <xs:element name="table1">
+            <xs:complexType>
+              <xs:sequence>
+                <xs:element name="ID" type="xs:int" minOccurs="0" />
+                <xs:element name="Text" type="xs:string" minOccurs="0" />
+              </xs:sequence>
+            </xs:complexType>
+          </xs:element>
+          <xs:element name="table2">
+            <xs:complexType>
+              <xs:sequence>
+                <xs:element name="ID" type="xs:int" minOccurs="0" />
+                <xs:element name="AnotherText" type="xs:string" minOccurs="0" />
+                <xs:element name="Date" type="xs:dateTime" minOccurs="0" />
+              </xs:sequence>
+            </xs:complexType>
+          </xs:element>
+        </xs:choice>
+      </xs:complexType>
+    </xs:element>
+  </xs:schema>
+  <table1>
+    <ID>1</ID>
+    <Text>Row 1</Text>
+  </table1>
+  <table1>
+    <ID>2</ID>
+    <Text>Row 2</Text>
+  </table1>
+  <table2>
+    <ID>1</ID>
+    <AnotherText>T2Row 1</AnotherText>
+    <Date>2015-07-03T13:35:27.9351868+02:00</Date>
+  </table2>
+  <table2>
+    <ID>1</ID>
+    <AnotherText>T2Row 2</AnotherText>
+    <Date>2015-07-04T13:35:27.9361897+02:00</Date>
+  </table2>
+</root>

@@ -1,0 +1,95 @@
+<html dir="LTR">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=Windows-1252" />
+    <meta name="vs_targetSchema" content="http://schemas.microsoft.com/intellisense/ie5" />
+    <title>DataTables.CreateDataTableClone Method (DataTable, DataTable, String, String, Int32, Boolean, Boolean, Boolean)</title>
+    <xml>
+    </xml>
+    <link rel="stylesheet" type="text/css" href="MSDN.css" />
+  </head>
+  <body id="bodyID" class="dtBODY">
+    <div id="nsbanner">
+      <div id="bannerrow1">
+        <table class="bannerparthead" cellspacing="0">
+          <tr id="hdr">
+            <td class="runninghead">CompuMaster.Data library</td>
+            <td class="product">
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div id="TitleRow">
+        <h1 class="dtH1">DataTables.CreateDataTableClone Method (DataTable, DataTable, String, String, Int32, Boolean, Boolean, Boolean)</h1>
+      </div>
+    </div>
+    <div id="nstext">
+      <p> Creates a complete clone of a DataTable with structure as well as data </p>
+      <div class="syntax">
+        <span class="lang">[Visual Basic]</span>
+        <br />Overloads Public Shared Sub CreateDataTableClone( _<br />   ByVal <i>sourceTable</i> As <a href="ms-help://MS.NETFrameworkSDKv1.1/cpref/html/frlrfSystemDataDataTableClassTopic.htm">DataTable</a>, _<br />   ByVal <i>destinationTable</i> As <a href="ms-help://MS.NETFrameworkSDKv1.1/cpref/html/frlrfSystemDataDataTableClassTopic.htm">DataTable</a>, _<br />   ByVal <i>rowFilter</i> As <a href="ms-help://MS.NETFrameworkSDKv1.1/cpref/html/frlrfSystemStringClassTopic.htm">String</a>, _<br />   ByVal <i>sort</i> As <a href="ms-help://MS.NETFrameworkSDKv1.1/cpref/html/frlrfSystemStringClassTopic.htm">String</a>, _<br />   ByVal <i>topRows</i> As <a href="ms-help://MS.NETFrameworkSDKv1.1/cpref/html/frlrfSystemInt32ClassTopic.htm">Integer</a>, _<br />   ByVal <i>overwritePropertiesOfExistingColumns</i> As <a href="ms-help://MS.NETFrameworkSDKv1.1/cpref/html/frlrfSystemBooleanClassTopic.htm">Boolean</a>, _<br />   ByVal <i>dropExistingRowsInDestinationTable</i> As <a href="ms-help://MS.NETFrameworkSDKv1.1/cpref/html/frlrfSystemBooleanClassTopic.htm">Boolean</a>, _<br />   ByVal <i>removeUnusedColumnsFromDestinationTable</i> As <a href="ms-help://MS.NETFrameworkSDKv1.1/cpref/html/frlrfSystemBooleanClassTopic.htm">Boolean</a> _<br />)</div>
+      <div class="syntax">
+        <span class="lang">[C#]</span>
+        <br />public static <a href="ms-help://MS.NETFrameworkSDKv1.1/cpref/html/frlrfSystemVoidClassTopic.htm">void</a> CreateDataTableClone(<br />   <a href="ms-help://MS.NETFrameworkSDKv1.1/cpref/html/frlrfSystemDataDataTableClassTopic.htm">DataTable</a> <i>sourceTable</i>,<br />   <a href="ms-help://MS.NETFrameworkSDKv1.1/cpref/html/frlrfSystemDataDataTableClassTopic.htm">DataTable</a> <i>destinationTable</i>,<br />   <a href="ms-help://MS.NETFrameworkSDKv1.1/cpref/html/frlrfSystemStringClassTopic.htm">string</a> <i>rowFilter</i>,<br />   <a href="ms-help://MS.NETFrameworkSDKv1.1/cpref/html/frlrfSystemStringClassTopic.htm">string</a> <i>sort</i>,<br />   <a href="ms-help://MS.NETFrameworkSDKv1.1/cpref/html/frlrfSystemInt32ClassTopic.htm">int</a> <i>topRows</i>,<br />   <a href="ms-help://MS.NETFrameworkSDKv1.1/cpref/html/frlrfSystemBooleanClassTopic.htm">bool</a> <i>overwritePropertiesOfExistingColumns</i>,<br />   <a href="ms-help://MS.NETFrameworkSDKv1.1/cpref/html/frlrfSystemBooleanClassTopic.htm">bool</a> <i>dropExistingRowsInDestinationTable</i>,<br />   <a href="ms-help://MS.NETFrameworkSDKv1.1/cpref/html/frlrfSystemBooleanClassTopic.htm">bool</a> <i>removeUnusedColumnsFromDestinationTable</i><br />);</div>
+      <h4 class="dtH4">Parameters</h4>
+      <dl>
+        <dt>
+          <i>sourceTable</i>
+        </dt>
+        <dd>The source table to be copied</dd>
+        <dt>
+          <i>destinationTable</i>
+        </dt>
+        <dd>The destination of all operations; the destination table will be a clone of the source table at the end</dd>
+        <dt>
+          <i>rowFilter</i>
+        </dt>
+        <dd>An additional row filter, for all rows set it to null (Nothing in VisualBasic)</dd>
+        <dt>
+          <i>sort</i>
+        </dt>
+        <dd>An additional sort command</dd>
+        <dt>
+          <i>topRows</i>
+        </dt>
+        <dd>How many rows from top shall be returned as maximum?</dd>
+        <dt>
+          <i>overwritePropertiesOfExistingColumns</i>
+        </dt>
+        <dd>Shall the data type or any other settings of an existing table be modified to match the source column's definition?</dd>
+        <dt>
+          <i>dropExistingRowsInDestinationTable</i>
+        </dt>
+        <dd>Remove the existing rows of the destination table, first</dd>
+        <dt>
+          <i>removeUnusedColumnsFromDestinationTable</i>
+        </dt>
+        <dd>Remove the existing columns of the destination table which are not present in the source table</dd>
+      </dl>
+      <h4 class="dtH4">Remarks</h4>
+      <p>
+ </p>
+      <h4 class="dtH4">See Also</h4>
+      <p>
+        <a href="CompuMaster.Data.DataTables.html">DataTables Class</a> | <a href="CompuMaster.Data.html">CompuMaster.Data Namespace</a> | <a href="CompuMaster.Data.DataTables.CreateDataTableClone_overloads.html">DataTables.CreateDataTableClone Overload List</a></p>
+      <object type="application/x-oleobject" classid="clsid:1e2a7bd0-dab9-11d0-b93a-00c04fc99f9e" viewastext="true" style="display: none;">
+        <param name="Keyword" value="CreateDataTableClone method">
+        </param>
+        <param name="Keyword" value="CreateDataTableClone method, DataTables class">
+        </param>
+        <param name="Keyword" value="DataTables.CreateDataTableClone method">
+        </param>
+      </object>
+      <hr />
+      <div id="footer">
+        <p>
+          <a href="mailto:support@compumaster.de?subject=CompuMaster.Data%20library%20Documentation%20Feedback:%20DataTables.CreateDataTableClone Method (DataTable,%20DataTable,%20String,%20String,%20Int32,%20Boolean,%20Boolean,%20Boolean)">Send comments on this topic.</a>
+        </p>
+        <p>
+          <a href="http://www.compumaster.de/">2005-2008 CompuMaster GmbH</a>
+        </p>
+        <p>
+        </p>
+      </div>
+    </div>
+  </body>
+</html>

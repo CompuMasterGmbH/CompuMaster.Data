@@ -1,0 +1,77 @@
+<html dir="LTR">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=Windows-1252" />
+    <meta name="vs_targetSchema" content="http://schemas.microsoft.com/intellisense/ie5" />
+    <title>Ldap.QueryUsersByName Method</title>
+    <xml>
+    </xml>
+    <link rel="stylesheet" type="text/css" href="MSDN.css" />
+  </head>
+  <body id="bodyID" class="dtBODY">
+    <div id="nsbanner">
+      <div id="bannerrow1">
+        <table class="bannerparthead" cellspacing="0">
+          <tr id="hdr">
+            <td class="runninghead">CompuMaster.Data library</td>
+            <td class="product">
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div id="TitleRow">
+        <h1 class="dtH1">Ldap.QueryUsersByName Method </h1>
+      </div>
+    </div>
+    <div id="nstext">
+      <p> Returns different information on all the users with the given first and / or last name within the given domain as contents of a DataTable The Table contains the following columns: - UserName User's accountname - FirstName First name - LastName Last name - DiplayName Diplayed name - Title Title - EMail E-Mail address - Phone Phone number - MobilePhone Cell / mobile phone number - VoIPPhone VoIP phone number - Street Street and house number - ZIP Zip / postal code - City City name - Country Country name - Company Company name - Department Department name - Initials The initials of the user Note that any field except "UserName" is optional. All fields are of type String. Each user account is represented by a DataRow. </p>
+      <div class="syntax">
+        <span class="lang">[Visual Basic]</span>
+        <br />Public Shared Function QueryUsersByName( _<br />   ByVal <i>domain</i> As <a href="ms-help://MS.NETFrameworkSDKv1.1/cpref/html/frlrfSystemStringClassTopic.htm">String</a>, _<br />   ByVal <i>UserFirstName</i> As <a href="ms-help://MS.NETFrameworkSDKv1.1/cpref/html/frlrfSystemStringClassTopic.htm">String</a>, _<br />   ByVal <i>UserLastName</i> As <a href="ms-help://MS.NETFrameworkSDKv1.1/cpref/html/frlrfSystemStringClassTopic.htm">String</a> _<br />) As <a href="ms-help://MS.NETFrameworkSDKv1.1/cpref/html/frlrfSystemDataDataTableClassTopic.htm">DataTable</a></div>
+      <div class="syntax">
+        <span class="lang">[C#]</span>
+        <br />public static <a href="ms-help://MS.NETFrameworkSDKv1.1/cpref/html/frlrfSystemDataDataTableClassTopic.htm">DataTable</a> QueryUsersByName(<br />   <a href="ms-help://MS.NETFrameworkSDKv1.1/cpref/html/frlrfSystemStringClassTopic.htm">string</a> <i>domain</i>,<br />   <a href="ms-help://MS.NETFrameworkSDKv1.1/cpref/html/frlrfSystemStringClassTopic.htm">string</a> <i>UserFirstName</i>,<br />   <a href="ms-help://MS.NETFrameworkSDKv1.1/cpref/html/frlrfSystemStringClassTopic.htm">string</a> <i>UserLastName</i><br />);</div>
+      <h4 class="dtH4">Parameters</h4>
+      <dl>
+        <dt>
+          <i>domain</i>
+        </dt>
+        <dd>The domain from which to gather the information</dd>
+        <dt>
+          <i>UserFirstName</i>
+        </dt>
+        <dd>The first name for which to search (may be empty or nothing if last name is given)</dd>
+        <dt>
+          <i>UserLastName</i>
+        </dt>
+        <dd>The last name for which to search (may be empty or nothing if first name is given)</dd>
+      </dl>
+      <h4 class="dtH4">Return Value</h4>
+      <p>A DataTable containing the information, Nothing if an error occurs during execution</p>
+      <h4 class="dtH4">Remarks</h4>
+      <p>
+ </p>
+      <h4 class="dtH4">See Also</h4>
+      <p>
+        <a href="CompuMaster.Data.Ldap.html">Ldap Class</a> | <a href="CompuMaster.Data.html">CompuMaster.Data Namespace</a></p>
+      <object type="application/x-oleobject" classid="clsid:1e2a7bd0-dab9-11d0-b93a-00c04fc99f9e" viewastext="true" style="display: none;">
+        <param name="Keyword" value="QueryUsersByName method">
+        </param>
+        <param name="Keyword" value="QueryUsersByName method, Ldap class">
+        </param>
+        <param name="Keyword" value="Ldap.QueryUsersByName method">
+        </param>
+      </object>
+      <hr />
+      <div id="footer">
+        <p>
+          <a href="mailto:support@compumaster.de?subject=CompuMaster.Data%20library%20Documentation%20Feedback:%20Ldap.QueryUsersByName Method ">Send comments on this topic.</a>
+        </p>
+        <p>
+          <a href="http://www.compumaster.de/">2005-2008 CompuMaster GmbH</a>
+        </p>
+        <p>
+        </p>
+      </div>
+    </div>
+  </body>
+</html>
