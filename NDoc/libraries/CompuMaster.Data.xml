@@ -1,0 +1,3936 @@
+<?xml version="1.0"?>
+<doc>
+  <assembly>
+    <name>CompuMaster.Data</name>
+    <version>2.5.111.27893</version>
+    <fullname>CompuMaster.Data, Version=2.5.111.27893, Culture=neutral, PublicKeyToken=null</fullname>
+  </assembly>
+  <members>
+    <member name="M:CompuMaster.Data.DatabaseManagement.CreateDatabaseFile(System.String)">
+      <summary>
+ Create a database file on the specified location, supported file types are .mdb, .accdb 
+ </summary>
+ <param name="path">The path of the new database file</param>
+ <remarks>The folder for the file should already exist and be writable. </remarks></member>
+    <member name="M:CompuMaster.Data.DatabaseManagement.WriteAllBytes(System.String,System.Byte[])">
+      <summary>
+ Write all bytes to a binary file 
+ </summary>
+ <param name="path">The file path for the output</param>
+ <param name="bytes">File output data</param>
+ <remarks>An existing file will be overwritten</remarks></member>
+    <member name="M:CompuMaster.Data.DatabaseManagement.LoadBinaryResource(System.String)">
+      <summary>
+ Read an embedded, binary resource file 
+ </summary>
+ <param name="embeddedFileName">The name of the resouces</param>
+ <returns />
+ <remarks /></member>
+    <member name="T:CompuMaster.Data.DataQuery.NamespaceDoc">
+      <summary>
+     Querying data from all available types of data sources 
+ </summary>
+ <remarks>
+ </remarks>
+ <history>
+ 	[adminwezel]	04/10/2004	Created 
+ 	[adminwezel]	2006-02-10  Latest patch 
+ </history>
+ <copyright>CompuMaster GmbH</copyright></member>
+    <member name="T:CompuMaster.Data.DataQuery.AnyIDataProvider">
+      <summary>
+     Common routines to query data from any data provider 
+ </summary>
+ <remarks>
+ </remarks>
+ <history>
+ 	[baldauf]	2005-07-02	Created 
+ </history></member>
+    <member name="M:CompuMaster.Data.DataQuery.AnyIDataProvider.CreateConnection(System.String,System.String)">
+      <summary>
+     Create a new database connection by reflection of a type name 
+ </summary>
+ <param name="assemblyName">The assembly which implements the desired connection type</param>
+ <param name="connectionTypeName">The case-insensitive type name of the connection class, e. g. System.Data.SqlClient.SqlConnection</param>
+ <returns>The created connection object as an IDbConnection</returns>
+ <remarks>
+     Errors will be thrown in case of unresolvable parameter values or if the created type can't be casted into an IDbConnection. 
+ </remarks>
+ <history>
+ 	[baldauf]	2005-07-02	Created 
+ </history></member>
+    <member name="M:CompuMaster.Data.DataQuery.AnyIDataProvider.CreateConnection(System.String,System.String,System.String)">
+      <summary>
+     Create a new database connection by reflection of a type name 
+ </summary>
+ <param name="assemblyName">The assembly which implements the desired connection type</param>
+ <param name="connectionTypeName">The case-insensitive type name of the connection class, e. g. System.Data.SqlClient.SqlConnection</param>
+ <param name="connectionString">A connection string to be used for this connection</param>
+ <returns>The created connection object as an IDbConnection</returns>
+ <remarks>
+     Errors will be thrown in case of unresolvable parameter values or if the created type can't be casted into an IDbConnection. 
+ </remarks>
+ <history>
+ 	[baldauf]	2005-07-02	Created 
+ </history></member>
+    <member name="T:CompuMaster.Data.DataQuery.AnyIDataProvider.Automations">
+      <summary>
+     Automations for the connection in charge 
+ </summary>
+ <remarks>
+ </remarks>
+ <history>
+ 	[baldauf]	2005-07-02	Created 
+ </history></member>
+    <member name="M:CompuMaster.Data.DataQuery.AnyIDataProvider.ExecuteNonQuery(System.Data.IDbConnection,System.String,System.Data.CommandType,System.Data.IDataParameter[],CompuMaster.Data.DataQuery.AnyIDataProvider.Automations,System.Int32)">
+      <summary>
+     Executes a command without returning any data 
+ </summary>
+ <param name="dbConnection">The connection to the database</param>
+ <param name="commandText">The command text</param>
+ <param name="commandType">The command type</param>
+ <param name="sqlParameters">An optional list of SqlParameters</param>
+ <param name="automations">Automation options for the connection</param>
+ <param name="commandTimeout">A timeout value in seconds for the command object (negative values will be ignored and leave the timeout value on default)</param>
+ <returns />
+ <remarks>
+ </remarks>
+ <history>
+ 	[baldauf]	2005-07-02	Created 
+ </history></member>
+    <member name="M:CompuMaster.Data.DataQuery.AnyIDataProvider.ExecuteNonQuery(System.Data.IDbCommand,CompuMaster.Data.DataQuery.AnyIDataProvider.Automations)">
+      <summary>
+     Executes a command without returning any data 
+ </summary>
+ <param name="dbCommand">The command with an assigned connection property value</param>
+ <param name="automations">Automation options for the connection</param>
+ <remarks>
+ </remarks>
+ <history>
+ 	[baldauf]	2005-07-02	Created 
+ </history></member>
+    <member name="M:CompuMaster.Data.DataQuery.AnyIDataProvider.ExecuteNonQuery(System.Data.IDbConnection,System.String,System.Data.CommandType,System.Data.IDataParameter[],CompuMaster.Data.DataQuery.AnyIDataProvider.Automations)">
+      <summary>
+     Executes a command without returning any data 
+ </summary>
+ <param name="dbConnection">The connection to the database</param>
+ <param name="commandText">The command text</param>
+ <param name="commandType">The command type</param>
+ <param name="sqlParameters">An optional list of SqlParameters</param>
+ <param name="automations">Automation options for the connection</param>
+ <returns />
+ <remarks>
+ </remarks>
+ <history>
+ 	[baldauf]	2005-07-02	Created 
+ </history></member>
+    <member name="M:CompuMaster.Data.DataQuery.AnyIDataProvider.ExecuteNonQuery(System.Data.IDbConnection,System.String,System.Data.CommandType,System.Data.IDataParameter[])">
+      <summary>
+     Executes a command without returning any data 
+ </summary>
+ <param name="dbConnection">The connection to the database</param>
+ <param name="commandText">The command text</param>
+ <param name="commandType">The command type</param>
+ <param name="sqlParameters">An optional list of SqlParameters</param>
+ <returns />
+ <remarks>
+ </remarks>
+ <history>
+ 	[baldauf]	2005-07-02	Created 
+ </history></member>
+    <member name="M:CompuMaster.Data.DataQuery.AnyIDataProvider.ExecuteScalar(System.Data.IDbConnection,System.String,System.Data.CommandType,System.Data.IDataParameter[],CompuMaster.Data.DataQuery.AnyIDataProvider.Automations)">
+      <summary>
+     Executes a command scalar and returns the value 
+ </summary>
+ <param name="dbConnection">The connection to the database</param>
+ <param name="commandText">The command text</param>
+ <param name="commandType">The command type</param>
+ <param name="sqlParameters">An optional list of SqlParameters</param>
+ <param name="automations">Automation options for the connection</param>
+ <returns />
+ <remarks>
+ </remarks>
+ <history>
+ 	[baldauf]	2005-07-02	Created 
+ </history></member>
+    <member name="M:CompuMaster.Data.DataQuery.AnyIDataProvider.ExecuteScalar(System.Data.IDbCommand,CompuMaster.Data.DataQuery.AnyIDataProvider.Automations)">
+      <summary>
+     Executes a command scalar and returns the value 
+ </summary>
+ <param name="dbCommand">The command with an assigned connection property value</param>
+ <param name="automations">Automation options for the connection</param>
+ <remarks>
+ </remarks>
+ <history>
+ 	[baldauf]	2005-07-02	Created 
+ </history></member>
+    <member name="T:CompuMaster.Data.DataQuery.AnyIDataProvider.DataException">
+      <summary>
+     Data execution exceptions with details on the executed IDbCommand 
+ </summary>
+ <remarks>
+ </remarks>
+ <history>
+ 	[baldauf]	2005-07-02	Created 
+ </history></member>
+    <member name="M:CompuMaster.Data.DataQuery.AnyIDataProvider.DataException.ToString">
+      <summary>
+     The complete and detailed exception information inclusive the command text 
+ </summary>
+ <returns />
+ <remarks>
+ </remarks>
+ <history>
+ 	[baldauf]	2005-07-02	Created 
+ </history></member>
+    <member name="M:CompuMaster.Data.DataQuery.AnyIDataProvider.ExecuteScalar(System.Data.IDbConnection,System.String,System.Data.CommandType,System.Data.IDataParameter[])">
+      <summary>
+     Executes a command scalar and returns the value 
+ </summary>
+ <param name="dbConnection">The connection to the database</param>
+ <param name="commandText">The command text</param>
+ <param name="commandType">The command type</param>
+ <param name="sqlParameters">An optional list of SqlParameters</param>
+ <returns />
+ <remarks>
+ </remarks>
+ <history>
+ 	[baldauf]	2005-07-02	Created 
+ </history></member>
+    <member name="M:CompuMaster.Data.DataQuery.AnyIDataProvider.ExecuteReaderAndPutFirstColumnIntoArrayList(System.Data.IDbConnection,System.String,System.Data.CommandType,System.Data.IDataParameter[],CompuMaster.Data.DataQuery.AnyIDataProvider.Automations)">
+      <summary>
+     Executes a command with a data reader and returns the values of the first column 
+ </summary>
+ <param name="dbConnection">The connection to the database</param>
+ <param name="commandText">The command text</param>
+ <param name="commandType">The command type</param>
+ <param name="sqlParameters">An optional list of SqlParameters</param>
+ <param name="automations">Automation options for the connection</param>
+ <returns />
+ <remarks>
+ </remarks>
+ <history>
+ 	[baldauf]	2005-07-02	Created 
+ </history></member>
+    <member name="M:CompuMaster.Data.DataQuery.AnyIDataProvider.ExecuteReaderAndPutFirstColumnIntoArrayList(System.Data.IDbCommand,CompuMaster.Data.DataQuery.AnyIDataProvider.Automations)">
+      <summary>
+     Executes a command with a data reader and returns the values of the first column 
+ </summary>
+ <param name="dbCommand">The command object which shall be executed</param>
+ <param name="automations">Automation options for the connection</param>
+ <returns />
+ <remarks>
+ </remarks>
+ <history>
+ 	[baldauf]	2005-07-02	Created 
+ </history></member>
+    <member name="M:CompuMaster.Data.DataQuery.AnyIDataProvider.ExecuteReaderAndPutFirstColumnIntoArrayList(System.Data.IDbConnection,System.String,System.Data.CommandType,System.Data.IDataParameter[])">
+      <summary>
+     Executes a command with a data reader and returns the values of the first column 
+ </summary>
+ <param name="dbConnection">The connection to the database</param>
+ <param name="commandText">The command text</param>
+ <param name="commandType">The command type</param>
+ <param name="sqlParameters">An optional list of SqlParameters</param>
+ <returns />
+ <remarks>
+ </remarks>
+ <history>
+ 	[baldauf]	2005-07-02	Created 
+ </history></member>
+    <member name="M:CompuMaster.Data.DataQuery.AnyIDataProvider.ExecuteReaderAndPutFirstTwoColumnsIntoHashtable(System.Data.IDbConnection,System.String,System.Data.CommandType,System.Data.IDataParameter[],CompuMaster.Data.DataQuery.AnyIDataProvider.Automations)">
+      <summary>
+     Executes a command with a data reader and returns the values of the first two columns 
+ </summary>
+ <param name="dbConnection">The connection to the database</param>
+ <param name="commandText">The command text</param>
+ <param name="commandType">The command type</param>
+ <param name="sqlParameters">An optional list of SqlParameters</param>
+ <param name="automations">Automation options for the connection</param>
+ <returns>A hashtable with the values of the first column in the hashtable's key field and the second column values in the hashtable's value field</returns>
+ <remarks>
+ </remarks>
+ <history>
+ 	[baldauf]	2005-07-02	Created 
+ </history></member>
+    <member name="M:CompuMaster.Data.DataQuery.AnyIDataProvider.ExecuteReaderAndPutFirstTwoColumnsIntoDictionaryEntryArray(System.Data.IDbConnection,System.String,System.Data.CommandType,System.Data.IDataParameter[],CompuMaster.Data.DataQuery.AnyIDataProvider.Automations)">
+      <summary>
+     Executes a command with a data reader and returns the values of the first two columns 
+ </summary>
+ <param name="dbConnection">The connection to the database</param>
+ <param name="commandText">The command text</param>
+ <param name="commandType">The command type</param>
+ <param name="sqlParameters">An optional list of SqlParameters</param>
+ <param name="automations">Automation options for the connection</param>
+ <returns>A hashtable with the values of the first column in the hashtable's key field and the second column values in the hashtable's value field</returns>
+ <remarks>
+ </remarks>
+ <history>
+ 	[baldauf]	2005-07-02	Created 
+ </history></member>
+    <member name="M:CompuMaster.Data.DataQuery.AnyIDataProvider.ExecuteReaderAndPutFirstTwoColumnsIntoHashtable(System.Data.IDbConnection,System.String,System.Data.CommandType,System.Data.IDataParameter[])">
+      <summary>
+     Executes a command with a data reader and returns the values of the first two columns 
+ </summary>
+ <param name="dbConnection">The connection to the database</param>
+ <param name="commandText">The command text</param>
+ <param name="commandType">The command type</param>
+ <param name="sqlParameters">An optional list of SqlParameters</param>
+ <returns>A hashtable with the values of the first column in the hashtable's key field and the second column values in the hashtable's value field</returns>
+ <remarks>
+ </remarks>
+ <history>
+ 	[baldauf]	2005-07-02	Created 
+ </history></member>
+    <member name="M:CompuMaster.Data.DataQuery.AnyIDataProvider.ExecuteReader(System.Data.IDbConnection,System.String,System.Data.CommandType,System.Data.IDataParameter[],CompuMaster.Data.DataQuery.AnyIDataProvider.Automations,System.Int32)">
+      <summary>
+     Executes a command and return the data reader object for it 
+ </summary>
+ <param name="dbConnection">The connection to the database</param>
+ <param name="commandText">The command text</param>
+ <param name="commandType">The command type</param>
+ <param name="sqlParameters">An optional list of SqlParameters</param>
+ <param name="automations">Automation options for the connection</param>
+ <param name="commandTimeout">A timeout value in seconds for the command object (negative values will be ignored and leave the timeout value on default)</param>
+ <returns />
+ <remarks>
+     Automations can only open a connection, but never close. This is because you have to close the connection by yourself AFTER you walked through the data reader. 
+ </remarks>
+ <history>
+ 	[baldauf]	2005-07-02	Created 
+ </history></member>
+    <member name="M:CompuMaster.Data.DataQuery.AnyIDataProvider.ExecuteReader(System.Data.IDbConnection,System.String,System.Data.CommandType,System.Data.IDataParameter[],CompuMaster.Data.DataQuery.AnyIDataProvider.Automations)">
+      <summary>
+     Executes a command and return the data reader object for it 
+ </summary>
+ <param name="dbConnection">The connection to the database</param>
+ <param name="commandText">The command text</param>
+ <param name="commandType">The command type</param>
+ <param name="sqlParameters">An optional list of SqlParameters</param>
+ <returns />
+ <remarks>
+ </remarks>
+ <history>
+ 	[baldauf]	2005-07-02	Created 
+ </history></member>
+    <member name="M:CompuMaster.Data.DataQuery.AnyIDataProvider.ExecuteReader(System.Data.IDbCommand,CompuMaster.Data.DataQuery.AnyIDataProvider.Automations)">
+      <summary>
+     Executes a command and return the data reader object for it 
+ </summary>
+ <param name="dbCommand">The command with an assigned connection property value</param>
+ <param name="automations">Automation options for the connection</param>
+ <remarks>
+ </remarks>
+ <history>
+ 	[baldauf]	2005-07-02	Created 
+ </history></member>
+    <member name="M:CompuMaster.Data.DataQuery.AnyIDataProvider.FillDataTable(System.Data.IDbCommand,CompuMaster.Data.DataQuery.AnyIDataProvider.Automations,System.String)">
+      <summary>
+     Fill a new data table with the result of a command 
+ </summary>
+ <param name="dbCommand">The command object</param>
+ <param name="automations">Automation options for the connection</param>
+ <param name="tableName">The name for the new table</param>
+ <returns />
+ <remarks>
+ </remarks>
+ <history>
+ 	[baldauf]	2005-07-02	Created 
+ </history></member>
+    <member name="M:CompuMaster.Data.DataQuery.AnyIDataProvider.FillDataTable(System.Data.IDbConnection,System.String,System.Data.CommandType,System.Data.IDataParameter[],CompuMaster.Data.DataQuery.AnyIDataProvider.Automations,System.String,System.Int32)">
+      <summary>
+     Fill a new data table with the result of a command 
+ </summary>
+ <param name="dbConnection">The connection to the database</param>
+ <param name="commandText">The command text</param>
+ <param name="commandType">The command type</param>
+ <param name="sqlParameters">An optional list of SqlParameters</param>
+ <param name="automations">Automation options for the connection</param>
+ <param name="tableName">The name for the new table</param>
+ <param name="commandTimeout">A timeout value in seconds for the command object (negative values will be ignored and leave the timeout value on default)</param>
+ <returns />
+ <remarks>
+ </remarks>
+ <history>
+ 	[baldauf]	2005-07-02	Created 
+ </history></member>
+    <member name="M:CompuMaster.Data.DataQuery.AnyIDataProvider.FillDataTable(System.Data.IDbConnection,System.String,System.Data.CommandType,System.Data.IDataParameter[],CompuMaster.Data.DataQuery.AnyIDataProvider.Automations,System.String)">
+      <summary>
+     Fill a new data table with the result of a command 
+ </summary>
+ <param name="dbConnection">The connection to the database</param>
+ <param name="commandText">The command text</param>
+ <param name="commandType">The command type</param>
+ <param name="sqlParameters">An optional list of SqlParameters</param>
+ <param name="automations">Automation options for the connection</param>
+ <param name="tableName">The name for the new table</param>
+ <returns />
+ <remarks>
+ </remarks>
+ <history>
+ 	[baldauf]	2005-07-02	Created 
+ </history></member>
+    <member name="M:CompuMaster.Data.DataQuery.AnyIDataProvider.FillDataTable(System.Data.IDbConnection,System.String,System.Data.CommandType,System.Data.IDataParameter[],CompuMaster.Data.DataQuery.AnyIDataProvider.Automations)">
+      <summary>
+     Fill a new data table with the result of a command 
+ </summary>
+ <param name="dbConnection">The connection to the database</param>
+ <param name="commandText">The command text</param>
+ <param name="commandType">The command type</param>
+ <param name="sqlParameters">An optional list of SqlParameters</param>
+ <param name="automations">Automation options for the connection</param>
+ <returns />
+ <remarks>
+ </remarks>
+ <history>
+ 	[baldauf]	2005-07-02	Created 
+ </history></member>
+    <member name="M:CompuMaster.Data.DataQuery.AnyIDataProvider.FillDataTables(System.Data.IDbCommand,CompuMaster.Data.DataQuery.AnyIDataProvider.Automations)">
+      <summary>
+     Fill a new data table with the result of a command 
+ </summary>
+ <param name="dbCommand">The command object</param>
+ <param name="automations">Automation options for the connection</param>
+ <param name="tableName">The name for the new table</param>
+ <returns />
+ <remarks>
+ </remarks>
+ <history>
+ 	[adminsupport]	20.01.2005	Created 
+ </history></member>
+    <member name="M:CompuMaster.Data.DataQuery.AnyIDataProvider.CloseAndDisposeConnection(System.Data.IDbConnection)">
+      <summary>
+     Securely close and dispose a database connection 
+ </summary>
+ <param name="connection">The connection to close and dispose</param>
+ <remarks>
+ </remarks>
+ <history>
+ 	[baldauf]	2005-07-02	Created 
+ </history></member>
+    <member name="M:CompuMaster.Data.DataQuery.AnyIDataProvider.CloseConnection(System.Data.IDbConnection)">
+      <summary>
+     Securely close a database connection 
+ </summary>
+ <param name="connection">The connection to close</param>
+ <remarks>
+ </remarks>
+ <history>
+ 	[baldauf]	2005-07-02	Created 
+ </history></member>
+    <member name="M:CompuMaster.Data.DataQuery.AnyIDataProvider.OpenConnection(System.Data.IDbConnection)">
+      <summary>
+     Open a database connection if it is not already opened 
+ </summary>
+ <param name="connection">The connection to open</param>
+ <remarks>
+ </remarks>
+ <history>
+ 	[baldauf]	2005-07-02	Created 
+ </history></member>
+    <member name="T:CompuMaster.Data.Ldap">
+      <summary>
+     LDAP access to retrieve data 
+ </summary>
+ <remarks>
+ </remarks>
+ <history>
+ 	[baldauf]	2005-07-02	Created 
+ </history></member>
+    <member name="M:CompuMaster.Data.Ldap.QueryUsers(System.String,System.String)">
+      <summary>
+     Returns different information on all the users matching the filter 
+     expression within the given domain as contents of a DataTable 
+ 
+     The Table contains the following columns: 
+     - UserName      User's accountname 
+     - FirstName     First name 
+     - LastName      Last name 
+     - DiplayName    Diplayed name 
+     - Title         Title 
+     - EMail         E-Mail address 
+     - Phone         Phone number 
+     - MobilePhone   Cell / mobile phone number 
+     - VoIPPhone     VoIP phone number 
+     - Street        Street and house number 
+     - ZIP           Zip / postal code 
+     - City          City name 
+     - Country       Country name 
+     - Company       Company name 
+     - Department    Department name 
+     - Initials      The initials of the user 
+ 
+     Note that any field except "UserName" is optional. 
+     All fields are of type String. 
+     Each user account is represented by a DataRow. 
+ 
+ </summary>
+ <param name="domain">The domain from which to gather the information</param>
+ <param name="SearchFilterExpression">The filter expression for specific selection purposes. 
+             For valid filter expressions see the documentation about 
+             System.DirectoryServices.DirectorySearcher.Filter</param>
+ <returns>A DataTable containing the information, Nothing if an error occurs during execution</returns>
+ <remarks>
+ </remarks>
+ <history>
+ 	[abaldauf]	2005-07-02	Created 
+ </history></member>
+    <member name="M:CompuMaster.Data.Ldap.QueryUsersByAccountName(System.String,System.String)">
+      <summary>
+     Returns different information on all the users with the given account 
+     name within the given domain as contents of a DataTable 
+ 
+     The Table contains the following columns: 
+     - UserName      User's accountname 
+     - FirstName     First name 
+     - LastName      Last name 
+     - DiplayName    Diplayed name 
+     - Title         Title 
+     - EMail         E-Mail address 
+     - Phone         Phone number 
+     - MobilePhone   Cell / mobile phone number 
+     - VoIPPhone     VoIP phone number 
+     - Street        Street and house number 
+     - ZIP           Zip / postal code 
+     - City          City name 
+     - Country       Country name 
+     - Company       Company name 
+     - Department    Department name 
+     - Initials      The initials of the user 
+ 
+     Note that any field except "UserName" is optional. 
+     All fields are of type String. 
+     Each user account is represented by a DataRow. 
+ 
+ </summary>
+ <param name="domain">The domain from which to gather the information</param>
+ <param name="UserAccountName">The account name for which to search</param>
+ <returns>A DataTable containing the information, Nothing if an error occurs during execution</returns>
+ <remarks>
+ </remarks>
+ <history>
+     [abaldauf]  2005-07-02  Created 
+ </history></member>
+    <member name="M:CompuMaster.Data.Ldap.Query(System.String,System.String)">
+      <summary>
+     Query the LDAP 
+ </summary>
+ <param name="domain">The domain name which will be used as LDAP server name (to query the domain controller)</param>
+ <param name="searchFilterExpression">A search expression to filter the results</param>
+ <returns>A datatable containing all data as strings</returns>
+ <remarks>
+ </remarks>
+ <history>
+ 	[AdminSupport]	07.10.2005	Created 
+ </history></member>
+    <member name="M:CompuMaster.Data.Ldap.QueryUsersByName(System.String,System.String,System.String)">
+      <summary>
+     Returns different information on all the users with the given first 
+     and / or last name within the given domain as contents of a DataTable 
+ 
+     The Table contains the following columns: 
+     - UserName      User's accountname 
+     - FirstName     First name 
+     - LastName      Last name 
+     - DiplayName    Diplayed name 
+     - Title         Title 
+     - EMail         E-Mail address 
+     - Phone         Phone number 
+     - MobilePhone   Cell / mobile phone number 
+     - VoIPPhone     VoIP phone number 
+     - Street        Street and house number 
+     - ZIP           Zip / postal code 
+     - City          City name 
+     - Country       Country name 
+     - Company       Company name 
+     - Department    Department name 
+     - Initials      The initials of the user 
+ 
+     Note that any field except "UserName" is optional. 
+     All fields are of type String. 
+     Each user account is represented by a DataRow. 
+ 
+ </summary>
+ <param name="domain">The domain from which to gather the information</param>
+ <param name="UserFirstName">The first name for which to search (may be empty or nothing if last name is given)</param>
+ <param name="UserLastName">The last name for which to search (may be empty or nothing if first name is given)</param>
+ <returns>A DataTable containing the information, Nothing if an error occurs during execution</returns>
+ <remarks>
+ </remarks>
+ <history>
+     [abaldauf]  2005-07-02  Created 
+ </history></member>
+    <member name="M:CompuMaster.Data.Ldap.QueryAllUsers(System.String)">
+      <summary>
+     Returns different information on all users within the given domain 
+     as contents of a DataTable 
+ 
+     The Table contains the following columns: 
+     - UserName      User's accountname 
+     - FirstName     First name 
+     - LastName      Last name 
+     - DiplayName    Diplayed name 
+     - Title         Title 
+     - EMail         E-Mail address 
+     - Phone         Phone number 
+     - MobilePhone   Cell / mobile phone number 
+     - VoIPPhone     VoIP phone number 
+     - Street        Street and house number 
+     - ZIP           Zip / postal code 
+     - City          City name 
+     - Country       Country name 
+     - Company       Company name 
+     - Department    Department name 
+     - Initials      The initials of the user 
+ 
+     Note that any field except "UserName" is optional. 
+     All fields are of type String. 
+     Each user account is represented by a DataRow. 
+ 
+ </summary>
+ <param name="domain">The domain from which to gather the information</param>
+ <returns>A DataTable containing the information, Nothing if an error occurs during execution</returns>
+ <remarks>
+ </remarks>
+ <history>
+     [abaldauf]  2005-07-02  Created 
+ </history></member>
+    <member name="T:CompuMaster.Data.Manipulation">
+      <summary>
+ Provide methods for transferring data from and back to a remote database on a data connection 
+ </summary>
+ <remarks /></member>
+    <member name="T:CompuMaster.Data.Manipulation.DdlLanguage">
+      <summary>
+ DDL languages 
+ </summary>
+ <remarks /></member>
+    <member name="F:CompuMaster.Data.Manipulation.DdlLanguage.NoDDL">
+      <summary>
+ Do not use automations for creating of tables or columns 
+ </summary>
+ <remarks /></member>
+    <member name="F:CompuMaster.Data.Manipulation.DdlLanguage.MSJetEngine">
+      <summary>
+ Use the DDL syntax for maintenance of MS Jet Engines like MS Access files 
+ </summary>
+ <remarks /></member>
+    <member name="F:CompuMaster.Data.Manipulation.DdlLanguage.MSSqlServer">
+      <summary>
+ Use the DDL syntax for maintenance of MS SQL Server databases 
+ </summary>
+ <remarks /></member>
+    <member name="T:CompuMaster.Data.Manipulation.DataManipulationResults">
+      <summary>
+ A container for a DataTable with its IDataAdapter and IDbCommand 
+ </summary>
+ <remarks /></member>
+    <member name="M:CompuMaster.Data.Manipulation.WriteDataSetToDataConnection(System.Data.DataSet,System.Data.IDbConnection,CompuMaster.Data.Manipulation.DdlLanguage,System.Boolean)">
+      <summary>
+ Write tables of a dataset with their rows into tables on a data connection 
+ </summary>
+ <param name="dataSet">A dataset whose tables shall be transferred to the data connection</param>
+ <param name="dataConnection">An opened connection to the data source</param>
+ <param name="ddlLanguage">A DDL language which shall be used for creating/extending a table on the data connection</param>
+ <param name="dropExistingRowsInDestinationTable" />
+ <remarks>Missing columns will be added automatically. In case that a column already exist on the remote database and its datatype doesn't match the datatype in the source table, there might be thrown an exception while data transfer.</remarks></member>
+    <member name="M:CompuMaster.Data.Manipulation.WriteDataTableToDataConnection(System.Data.DataTable,System.Data.IDbConnection,CompuMaster.Data.Manipulation.DdlLanguage,System.Boolean)">
+      <summary>
+ Write a datatable with its rows into a table on a data connection 
+ </summary>
+ <param name="sourceTable">The table which shall be transferred to the data connection</param>
+ <param name="dataConnection">An opened connection to the data source</param>
+ <param name="ddlLanguage">A DDL language which shall be used for creating/extending a table on the data connection</param>
+ <param name="dropExistingRowsInDestinationTable">If True, all existing rows will be removed first before new rows from the source table will be imported</param>
+ <remarks>If the table doesn't exist on the data connection, it will be created automatically if supported by the DDL language. Missing columns will be added automatically. In case that a column already exist on the remote database and its datatype doesn't match the datatype in the source table, there might be thrown an exception while data transfer.</remarks></member>
+    <member name="M:CompuMaster.Data.Manipulation.CreateTableCommandText(System.String,System.String,CompuMaster.Data.Manipulation.DdlLanguage)">
+      <summary>
+ Create a script for creating an empty table with just a single primary ID key field 
+ </summary>
+ <param name="tableName">The table name which shall be created</param>
+ <param name="primaryColumnName">The name for the primary, auto-increment ID field</param>
+ <param name="ddlLanguage">The DDL language which shall be used</param>
+ <returns>A string containing a command text which can be executed against a data connection</returns>
+ <remarks /></member>
+    <member name="M:CompuMaster.Data.Manipulation.LoadTableDataForManipulationViaCode(System.Data.IDbConnection,System.String)">
+      <summary>
+ Load table data from the data connection in a mode for submitting changes in a later step 
+ </summary>
+ <param name="dataConnection">An opened connection to the data source</param>
+ <param name="tableName">The name of a table on the database</param>
+ <returns>An DataManipulationResults object with the returned data</returns>
+ <remarks /></member>
+    <member name="M:CompuMaster.Data.Manipulation.LoadTableDataForManipulationViaCode(System.Data.IDbConnection,System.String,System.Int32)">
+      <summary>
+ Load table data from the data connection in a mode for submitting changes in a later step 
+ </summary>
+ <param name="dataConnection">An opened connection to the data source</param>
+ <param name="tableName">The name of a table on the database</param>
+ <param name="commandTimeout">A timeout for the command in seconds</param>
+ <returns>An DataManipulationResults object with the returned data</returns>
+ <remarks /></member>
+    <member name="M:CompuMaster.Data.Manipulation.LoadDataForManipulationViaCode(System.Data.IDbConnection,System.Data.IDbCommand)">
+      <summary>
+ Load data from the data connection in a mode for submitting changes in a later step 
+ </summary>
+ <param name="dataConnection">An opened connection to the data source</param>
+ <param name="command">A prepared command object</param>
+ <returns>An DataManipulationResults object with the returned data</returns>
+ <remarks /></member>
+    <member name="M:CompuMaster.Data.Manipulation.LookupColumnNamesOnRemoteTable(System.String,System.String)">
+      <summary>
+ Lookup a full set of column names used in INSERT+UPDATE+DELETE statements 
+ </summary>
+ <param name="insertCommandCreatedByCommandBuilder" />
+ <param name="deleteCommandCreatedByCommandBuilder" />
+ <returns />
+ <remarks>The INSERT statement doesn't contain the auto increment keys, typically the primary ID key. The DELETE statement only contains the primary ID key(s) in its WHERE clause. Summarized, both statements contain the full list of column names used in all command texts.</remarks></member>
+    <member name="M:CompuMaster.Data.Manipulation.LoadQueryDataForManipulationViaCode(System.Data.IDbConnection,System.String)">
+      <summary>
+ Query the data from the data connection in a mode for submitting changes in a later step 
+ </summary>
+ <param name="dataConnection">An opened connection to the data source</param>
+ <param name="selectStatement">The name of a table on the database</param>
+ <returns>An DataManipulationResults object with the returned data</returns>
+ <remarks /></member>
+    <member name="M:CompuMaster.Data.Manipulation.LoadQueryDataForManipulationViaCode(System.Data.IDbConnection,System.String,System.Int32)">
+      <summary>
+ Query the data from the data connection in a mode for submitting changes in a later step 
+ </summary>
+ <param name="dataConnection">An opened connection to the data source</param>
+ <param name="selectStatement">The name of a table on the database</param>
+ <param name="commandTimeout">A timeout for the command in seconds</param>
+ <returns>An DataManipulationResults object with the returned data</returns>
+ <remarks /></member>
+    <member name="M:CompuMaster.Data.Manipulation.UpdateCodeManipulatedData(CompuMaster.Data.Manipulation.DataManipulationResults)">
+      <summary>
+     Write back changes to the data connection 
+ </summary>
+ <param name="container" />
+ <remarks>
+ </remarks>
+ <history>
+ 	[wezel]	23.05.2006	Created 
+ </history></member>
+    <member name="M:CompuMaster.Data.Manipulation.TryLoadTableStructureWith1RowFromConnection(System.String,System.Data.IDbConnection)">
+      <summary>
+ Load a first row from the remote connection to receive list of columns 
+ </summary>
+ <param name="tableName" />
+ <param name="dataConnection" />
+ <returns />
+ <remarks /></member>
+    <member name="T:CompuMaster.Data.NamespaceDoc">
+      <summary>
+     CompuMaster common tools and utilities for data exchange 
+ </summary>
+ <remarks>
+ </remarks>
+ <history>
+ 	[adminwezel]	04/10/2004	Created 
+ 	[adminwezel]	2006-02-10  Latest patch 
+ </history>
+ <copyright>CompuMaster GmbH</copyright></member>
+    <member name="T:CompuMaster.Data.Csv">
+      <summary>
+     Provides simplified access to CSV files 
+ </summary>
+ <remarks>
+ </remarks>
+ <history>
+ 	[baldauf]	2005-07-02	Created 
+ </history></member>
+    <member name="M:CompuMaster.Data.Csv.ReadDataTableFromCsvFile(System.String,System.Boolean,System.Int32[],System.String,System.Boolean)">
+      <summary>
+     Read from a CSV file 
+ </summary>
+ <param name="path">The path of the file</param>
+ <param name="csvContainsColumnHeaders">Indicates wether column headers are present</param>
+ <param name="encoding">The text encoding of the file</param>
+ <param name="columnWidths">An array of integers specifying the fixed column widths</param>
+ <param name="convertEmptyStringsToDBNull">Convert values with empty strings automatically to DbNull</param>
+ <returns />
+ <remarks>
+ </remarks>
+ <history>
+ 	[baldauf]	2005-07-02	Created 
+ </history></member>
+    <member name="M:CompuMaster.Data.Csv.ReadDataTableFromCsvFile(System.String,System.Boolean,System.Int32[],System.Text.Encoding,System.Globalization.CultureInfo,System.Boolean)">
+      <summary>
+     Read from a CSV file 
+ </summary>
+ <param name="path">The path of the file</param>
+ <param name="csvContainsColumnHeaders">Indicates wether column headers are present</param>
+ <param name="columnWidths">An array of integers specifying the fixed column widths</param>
+ <param name="encoding">The text encoding of the file</param>
+ <param name="cultureFormatProvider" />
+ <param name="convertEmptyStringsToDBNull">Convert values with empty strings automatically to DbNull</param>
+ <returns />
+ <remarks>
+ </remarks>
+ <history>
+ 	[adminwezel]	03.07.2004	Created 
+ </history></member>
+    <member name="M:CompuMaster.Data.Csv.ReadDataTableFromCsvString(System.String,System.Boolean,System.Globalization.CultureInfo,System.Int32[],System.Boolean)">
+      <summary>
+     Read from a CSV table 
+ </summary>
+ <param name="data">The content of a CSV file</param>
+ <param name="csvContainsColumnHeaders">Indicates wether column headers are present</param>
+ <param name="cultureFormatProvider" />
+ <param name="columnWidths">An array of integers specifying the fixed column widths</param>
+ <param name="convertEmptyStringsToDBNull">Convert values with empty strings automatically to DbNull</param>
+ <returns />
+ <remarks>
+ </remarks>
+ <history>
+ 	[adminwezel]	03.07.2004	Created 
+ </history></member>
+    <member name="M:CompuMaster.Data.Csv.ReadDataTableFromCsvString(System.String,System.Boolean,System.Int32[],System.Boolean)">
+      <summary>
+     Read from a CSV table 
+ </summary>
+ <param name="data">The content of a CSV file</param>
+ <param name="csvContainsColumnHeaders">Indicates wether column headers are present</param>
+ <param name="columnWidths">An array of integers specifying the fixed column widths</param>
+ <param name="convertEmptyStringsToDBNull">Convert values with empty strings automatically to DbNull</param>
+ <returns />
+ <remarks>
+ </remarks>
+ <history>
+ 	[baldauf]	2005-07-02	Created 
+ </history></member>
+    <member name="M:CompuMaster.Data.Csv.ReadDataTableFromCsvFile(System.String,System.Boolean,System.String,System.Char,System.Char,System.Boolean,System.Boolean)">
+      <summary>
+     Read from a CSV file 
+ </summary>
+ <param name="path">The path of the file</param>
+ <param name="csvContainsColumnHeaders">Indicates wether column headers are present</param>
+ <param name="encoding">The text encoding of the file</param>
+ <param name="Separator">Choose the required character for splitting the columns. Set to null (Nothing in VisualBasic) to enable fixed column widths mode</param>
+ <param name="recognizeTextBy">A character indicating the start and end of text strings</param>
+ <param name="recognizeDoubledColumnSeparatorCharAsOne">Currently without purpose</param>
+ <param name="convertEmptyStringsToDBNull">Convert values with empty strings automatically to DbNull</param>
+ <returns />
+ <remarks>
+ </remarks>
+ <history>
+ 	[baldauf]	2005-07-02	Created 
+ </history></member>
+    <member name="M:CompuMaster.Data.Csv.ReadDataTableFromCsvFile(System.String,System.Boolean,System.Text.Encoding,System.Globalization.CultureInfo,System.Char,System.Boolean,System.Boolean)">
+      <summary>
+     Read from a CSV file 
+ </summary>
+ <param name="path">The path of the file</param>
+ <param name="csvContainsColumnHeaders">Indicates wether column headers are present</param>
+ <param name="encoding">The text encoding of the file</param>
+ <param name="cultureFormatProvider" />
+ <param name="recognizeTextBy">A character indicating the start and end of text strings</param>
+ <param name="recognizeDoubledColumnSeparatorCharAsOne">Currently without purpose</param>
+ <param name="convertEmptyStringsToDBNull">Convert values with empty strings automatically to DbNull</param>
+ <returns />
+ <remarks>
+ </remarks>
+ <history>
+ 	[adminwezel]	03.07.2004	Created 
+ </history></member>
+    <member name="M:CompuMaster.Data.Csv.ReadDataTableFromCsvString(System.String,System.Boolean,System.Globalization.CultureInfo,System.Char,System.Boolean,System.Boolean)">
+      <summary>
+     Read from a CSV table 
+ </summary>
+ <param name="data">The content of a CSV file</param>
+ <param name="csvContainsColumnHeaders">Indicates wether column headers are present</param>
+ <param name="cultureFormatProvider" />
+ <param name="recognizeTextBy">A character indicating the start and end of text strings</param>
+ <param name="recognizeDoubledColumnSeparatorCharAsOne">Currently without purpose</param>
+ <param name="convertEmptyStringsToDBNull">Convert values with empty strings automatically to DbNull</param>
+ <returns />
+ <remarks>
+ </remarks>
+ <history>
+ 	[adminwezel]	03.07.2004	Created 
+ </history></member>
+    <member name="M:CompuMaster.Data.Csv.ReadDataTableFromCsvString(System.String,System.Boolean,System.Char,System.Char,System.Boolean,System.Boolean)">
+      <summary>
+     Read from a CSV table 
+ </summary>
+ <param name="data">The content of a CSV file</param>
+ <param name="csvContainsColumnHeaders">Indicates wether column headers are present</param>
+ <param name="Separator">Choose the required character for splitting the columns. Set to null (Nothing in VisualBasic) to enable fixed column widths mode</param>
+ <param name="RecognizeTextBy">A character indicating the start and end of text strings</param>
+ <param name="recognizeDoubledColumnSeparatorCharAsOne">Currently without purpose</param>
+ <param name="convertEmptyStringsToDBNull">Convert values with empty strings automatically to DbNull</param>
+ <returns />
+ <remarks>
+ </remarks>
+ <history>
+ 	[baldauf]	2005-07-02	Created 
+ </history></member>
+    <member name="M:CompuMaster.Data.Csv.WriteDataTableToCsvFile(System.String,System.Data.DataTable)">
+      <summary>
+     Write to a CSV file 
+ </summary>
+ <param name="path" />
+ <param name="dataTable" />
+ <remarks>
+ </remarks>
+ <history>
+ 	[baldauf]	2005-07-02	Created 
+ </history></member>
+    <member name="M:CompuMaster.Data.Csv.WriteDataTableToCsvFile(System.String,System.Data.DataTable,System.Boolean,System.Int32[],System.Globalization.CultureInfo,System.String)">
+      <summary>
+     Write to a CSV with fixed column widths 
+ </summary>
+ <param name="path">The path of the CSV file</param>
+ <param name="dataTable">A datatable which shall be exported</param>
+ <param name="writeCsvColumnHeaders">Add a row with column headers on the top</param>
+ <param name="columnWidths">An array of integers specifying the fixed column widths</param>
+ <param name="cultureFormatProvider">A culture format provider which declares list and decimal separators, etc.</param>
+ <param name="encoding">A file encoding (default UTF-8)</param>
+ <remarks>
+ </remarks>
+ <history>
+ 	[adminsupport]	10.03.2006	Created 
+ </history></member>
+    <member name="M:CompuMaster.Data.Csv.WriteDataTableToCsvFile(System.String,System.Data.DataTable,System.Boolean,System.Globalization.CultureInfo,System.String)">
+      <summary>
+     Write to a CSV file 
+ </summary>
+ <param name="path">The path of the CSV file</param>
+ <param name="dataTable">A datatable which shall be exported</param>
+ <param name="writeCsvColumnHeaders">Add a row with column headers on the top</param>
+ <param name="cultureFormatProvider">A culture format provider which declares list and decimal separators, etc.</param>
+ <param name="encoding">A file encoding (default UTF-8)</param>
+ <remarks>
+ </remarks>
+ <history>
+ 	[baldauf]	2005-07-02	Created 
+ </history></member>
+    <member name="M:CompuMaster.Data.Csv.WriteDataTableToCsvFile(System.String,System.Data.DataTable,System.Boolean,System.Globalization.CultureInfo,System.String,System.String,System.Char)">
+      <summary>
+     Write to a CSV file 
+ </summary>
+ <param name="path">The path of the CSV file</param>
+ <param name="dataTable">A datatable which shall be exported</param>
+ <param name="writeCsvColumnHeaders">Add a row with column headers on the top</param>
+ <param name="cultureFormatProvider">A culture format provider which declares list and decimal separators, etc.</param>
+ <param name="encoding">A file encoding (default UTF-8)</param>
+ <param name="columnSeparator">A column separator (culture default if empty value)</param>
+ <param name="recognizeTextBy">Recognize text by this character (default: quotation marks)</param>
+ <remarks>
+ </remarks>
+ <history>
+ 	[baldauf]	2005-07-02	Created 
+ </history></member>
+    <member name="M:CompuMaster.Data.Csv.ConvertDataTableToText(System.Data.DataTable,System.Boolean,System.Globalization.CultureInfo,System.String,System.Char)">
+      <summary>
+     Convert the datatable to a string based, comma-separated format 
+ </summary>
+ <param name="dataTable">A datatable which shall be exported</param>
+ <param name="writeCsvColumnHeaders">Add a row with column headers on the top</param>
+ <param name="cultureFormatProvider">A culture format provider which declares list and decimal separators, etc.</param>
+ <param name="encoding">A file encoding (default UTF-8)</param>
+ <param name="columnSeparator">A column separator (culture default if empty value)</param>
+ <param name="recognizeTextBy">Recognize text by this character (default: quotation marks)</param>
+ <returns />
+ <remarks>
+ </remarks>
+ <history>
+ 	[baldauf]	2005-07-02	Created 
+ </history></member>
+    <member name="M:CompuMaster.Data.Csv.ConvertDataTableToText(System.Data.DataTable,System.Boolean,System.Globalization.CultureInfo,System.Int32[])">
+      <summary>
+     Convert the datatable to a string based, comma-separated format 
+ </summary>
+ <param name="dataTable">A datatable which shall be exported</param>
+ <param name="writeCsvColumnHeaders">Add a row with column headers on the top</param>
+ <param name="cultureFormatProvider">A culture format provider which declares list and decimal separators, etc.</param>
+ <param name="columnWidths">An array of integers specifying the fixed column widths</param>
+ <returns>The table as text with comma-separated structure</returns>
+ <remarks>
+ </remarks>
+ <history>
+ 	[baldauf]	2005-07-02	Created 
+ </history></member>
+    <member name="M:CompuMaster.Data.Csv.WriteDataTableToCsvFile(System.String,System.Data.DataTable,System.Boolean,System.String,System.String,System.Char,System.Char)">
+      <summary>
+     Write to a CSV file 
+ </summary>
+ <param name="path">The path of the file</param>
+ <param name="dataTable">A datatable which shall be exported</param>
+ <param name="writeCsvColumnHeaders">Indicates wether column headers are present</param>
+ <param name="encoding">The text encoding of the file</param>
+ <param name="columnSeparator">Choose the required character for splitting the columns. Set to null (Nothing in VisualBasic) to enable fixed column widths mode</param>
+ <param name="recognizeTextBy">A character indicating the start and end of text strings</param>
+ <remarks>
+ </remarks>
+ <history>
+ 	[baldauf]	2005-07-02	Created 
+ </history></member>
+    <member name="M:CompuMaster.Data.Csv.WriteDataTableToCsvString(System.Data.DataTable,System.Boolean,System.String,System.Char,System.Char,System.Char)">
+      <summary>
+     Create a CSV table 
+ </summary>
+ <param name="dataTable" />
+ <param name="writeCsvColumnHeaders">Indicates wether column headers are present</param>
+ <param name="encoding">The text encoding of the file</param>
+ <param name="columnSeparator">Choose the required character for splitting the columns. Set to null (Nothing in VisualBasic) to enable fixed column widths mode</param>
+ <param name="recognizeTextBy">A character indicating the start and end of text strings</param>
+ <param name="decimalSeparator" />
+ <returns>A string containing the CSV table</returns>
+ <remarks>
+ </remarks>
+ <history>
+ 	[baldauf]	2005-07-02	Created 
+ </history></member>
+    <member name="M:CompuMaster.Data.Csv.WriteDataTableToCsvBytes(System.Data.DataTable,System.Boolean,System.String,System.Char,System.Char,System.Char)">
+      <summary>
+     Create a CSV table 
+ </summary>
+ <param name="dataTable" />
+ <param name="writeCsvColumnHeaders">Indicates wether column headers are present</param>
+ <param name="encoding">The text encoding of the file</param>
+ <param name="columnSeparator">Choose the required character for splitting the columns. Set to null (Nothing in VisualBasic) to enable fixed column widths mode</param>
+ <param name="recognizeTextBy">A character indicating the start and end of text strings</param>
+ <param name="decimalSeparator" />
+ <returns>A string containing the CSV table</returns>
+ <remarks>
+ </remarks>
+ <history>
+ 	[baldauf]	2005-07-02	Created 
+ </history></member>
+    <member name="M:CompuMaster.Data.Csv.WriteDataTableToCsvBytes(System.Data.DataTable,System.Boolean,System.Text.Encoding,System.Globalization.CultureInfo,System.Char,System.Char)">
+      <summary>
+     Create a CSV table 
+ </summary>
+ <param name="dataTable" />
+ <param name="writeCsvColumnHeaders">Indicates wether column headers are present</param>
+ <param name="encoding">The text encoding of the file</param>
+ <param name="cultureFormatProvider">A globalization information object for the conversion of all data to strings</param>
+ <param name="columnSeparator">Choose the required character for splitting the columns. Set to null (Nothing in VisualBasic) to enable fixed column widths mode</param>
+ <param name="recognizeTextBy">A character indicating the start and end of text strings</param>
+ <returns>A string containing the CSV table</returns>
+ <remarks>
+ </remarks>
+ <history>
+ 	[wezel]	19.04.2005	Created 
+ </history></member>
+    <member name="M:CompuMaster.Data.Csv.WriteDataTableToCsvMemoryStream(System.Data.DataTable,System.Boolean,System.String,System.String,System.Char,System.Char)">
+      <summary>
+     Create a CSV table 
+ </summary>
+ <param name="dataTable" />
+ <param name="writeCsvColumnHeaders">Indicates wether column headers are present</param>
+ <param name="encoding">The text encoding of the file</param>
+ <param name="columnSeparator">Choose the required character for splitting the columns. Set to null (Nothing in VisualBasic) to enable fixed column widths mode</param>
+ <param name="recognizeTextBy">A character indicating the start and end of text strings</param>
+ <param name="decimalSeparator" />
+ <returns>A memory stream containing all texts as bytes in Unicode format</returns>
+ <remarks>
+ </remarks>
+ <history>
+ 	[baldauf]	2005-07-02	Created 
+ </history></member>
+    <member name="M:CompuMaster.Data.Csv.WriteDataViewToCsvFile(System.String,System.Data.DataView)">
+      <summary>
+     Write to a CSV file 
+ </summary>
+ <param name="path" />
+ <param name="dataview" />
+ <remarks>
+ </remarks>
+ <history>
+ 	[baldauf]	2005-07-02	Created 
+ </history></member>
+    <member name="M:CompuMaster.Data.Csv.WriteDataViewToCsvFile(System.String,System.Data.DataView,System.Boolean,System.Globalization.CultureInfo,System.String,System.String,System.Char)">
+      <summary>
+     Write to a CSV file 
+ </summary>
+ <param name="path" />
+ <param name="dataView" />
+ <param name="writeCsvColumnHeaders" />
+ <param name="cultureFormatProvider" />
+ <param name="encoding" />
+ <remarks>
+ </remarks>
+ <history>
+ 	[baldauf]	2005-07-02	Created 
+ </history></member>
+    <member name="M:CompuMaster.Data.Csv.WriteDataViewToCsvFile(System.String,System.Data.DataView,System.Boolean,System.String,System.String,System.Char,System.Char)">
+      <summary>
+     Write to a CSV file 
+ </summary>
+ <param name="path" />
+ <param name="dataView" />
+ <param name="writeCsvColumnHeaders" />
+ <param name="encoding" />
+ <param name="columnSeparator" />
+ <param name="recognizeTextBy" />
+ <param name="decimalSeparator" />
+ <remarks>
+ </remarks>
+ <history>
+ 	[baldauf]	2005-07-02	Created 
+ </history></member>
+    <member name="T:CompuMaster.Data.DataTables">
+      <summary>
+     Common DataTable operations 
+ </summary>
+ <remarks>
+ </remarks>
+ <history>
+ 	[baldauf]	2005-07-02	Created 
+ </history></member>
+    <member name="M:CompuMaster.Data.DataTables.KeepColumnsAndRemoveAllOthers(System.Data.DataTable,System.String[])">
+      <summary>
+     Drop all columns except the required ones 
+ </summary>
+ <param name="table">A data table containing some columns</param>
+ <param name="remainingColumns">A list of column names which shall not be removed</param>
+ <remarks>
+     If the list of the remaining columns contains some column names which are not existing, then those column names will be ignored. There will be no exception in this case. 
+     The names of the columns are handled case-insensitive. 
+ </remarks>
+ <history>
+ 	[adminsupport]	07.03.2006	Created 
+ </history></member>
+    <member name="T:CompuMaster.Data.DataTables.WinFormsListControlItem">
+      <summary>
+ 
+ </summary>
+ <remarks>
+ </remarks>
+ <history>
+ 	[baldauf]	2005-07-02	Created 
+ </history></member>
+    <member name="M:CompuMaster.Data.DataTables.RowIndex(System.Data.DataRow)">
+      <summary>
+     Lookup the row index for a data row in a data table 
+ </summary>
+ <param name="dataRow">The data row whose index number is required</param>
+ <returns>An index number for the given data row</returns>
+ <remarks>
+ </remarks>
+ <history>
+ 	[AdminSupport]	12.09.2005	Created 
+ </history></member>
+    <member name="M:CompuMaster.Data.DataTables.FindDuplicates(System.Data.DataColumn)">
+      <summary>
+     Find duplicate values in a given row and calculate the number of occurances of each value in the table 
+ </summary>
+ <param name="column">A column of a datatable</param>
+ <returns>A hashtable containing the origin column value as key and the number of occurances as value</returns>
+ <remarks>
+ </remarks>
+ <history>
+ 	[AdminSupport]	30.08.2005	Created 
+ </history></member>
+    <member name="M:CompuMaster.Data.DataTables.FindDuplicates(System.Data.DataColumn,System.Int32)">
+      <summary>
+     Find duplicate values in a given row and calculate the number of occurances of each value in the table 
+ </summary>
+ <param name="column">A column of a datatable</param>
+ <param name="minOccurances">Only values with occurances equal or more than this number will be returned</param>
+ <returns>A hashtable containing the origin column value as key and the number of occurances as value</returns>
+ <remarks>
+ </remarks>
+ <history>
+ 	[AdminSupport]	30.08.2005	Created 
+ </history></member>
+    <member name="M:CompuMaster.Data.DataTables.RemoveDuplicates(System.Data.DataTable,System.String)">
+      <summary>
+ Remove rows with duplicate values in a given column 
+ </summary>
+ <param name="dataTable">A datatable with duplicate values</param>
+ <param name="colName">column name of the datatable which contains the duplicate values</param>
+ <returns>A datatable with unique records in the specified column</returns>
+ <remarks>
+ </remarks>
+ <history>
+ 	[zeutzheim]	04.05.2007	Created 
+ </history></member>
+    <member name="M:CompuMaster.Data.DataTables.ConvertDataTableToWinFormsListControlItem(System.Data.DataTable)">
+      <summary>
+     Convert the first two columns into objects which can be consumed by the ListControl objects in the System.Windows.Forms namespaces 
+ </summary>
+ <param name="datatable">The datatable which contains a key column and a value column for the list control</param>
+ <returns>An array of WinFormsListControlItem</returns>
+ <remarks>
+ </remarks>
+ <history>
+ 	[adminsupport]	29.06.2005	Created 
+ </history></member>
+    <member name="M:CompuMaster.Data.DataTables.ConvertDatasetToXml(System.Data.DataSet)">
+      <summary>
+     Convert a dataset to an xml string with data and schema information 
+ </summary>
+ <param name="dataset" />
+ <returns />
+ <remarks>
+ </remarks>
+ <history>
+ 	[baldauf]	2005-07-02  Created 
+ </history></member>
+    <member name="M:CompuMaster.Data.DataTables.ConvertXmlToDataset(System.String)">
+      <summary>
+     Convert an xml string to a dataset 
+ </summary>
+ <param name="xml" />
+ <returns />
+ <remarks>
+ </remarks>
+ <history>
+ 	[baldauf]	2005-07-02  Created 
+ </history></member>
+    <member name="M:CompuMaster.Data.DataTables.CopyDataTableWithSubsetOfRows(System.Data.DataTable,System.Int32)">
+      <summary>
+     Create a new data table clone with only some first rows 
+ </summary>
+ <param name="SourceTable">The source table to be copied</param>
+ <param name="NumberOfRows">The number of rows to be copied</param>
+ <returns>The new clone of the datatable</returns>
+ <remarks>
+ </remarks>
+ <history>
+ 	[baldauf]	2005-07-02  Created 
+ </history></member>
+    <member name="M:CompuMaster.Data.DataTables.CopyDataTableWithSubsetOfRows(System.Data.DataTable,System.Int32,System.Int32)">
+      <summary>
+     Create a new data table clone with only some first rows 
+ </summary>
+ <param name="SourceTable">The source table to be copied</param>
+ <param name="StartAtRow">The position where to start the copy process, the first row is at 0</param>
+ <param name="NumberOfRows">The number of rows to be copied</param>
+ <returns>The new clone of the datatable</returns>
+ <remarks>
+ </remarks>
+ <history>
+ 	[baldauf]	2005-07-02  Created 
+ </history></member>
+    <member name="M:CompuMaster.Data.DataTables.RemoveRowsWithNoCorrespondingValueInComparisonTable(System.Data.DataColumn,System.Data.DataColumn)">
+      <summary>
+     Remove those rows in the source column which haven't got the same value in the compare table 
+ </summary>
+ <param name="sourceColumn">This is the column of the master table where all operations shall be executed</param>
+ <param name="valuesMustExistInThisColumnToKeepTheSourceRow">This is the comparison value against the source table's column</param>
+ <returns>An arraylist of removed keys</returns>
+ <remarks>
+     Strings will be compared case-insensitive, DBNull values in the source table will always be removed 
+ </remarks>
+ <history>
+ 	[wezel]	07.10.2005	Created 
+ </history></member>
+    <member name="M:CompuMaster.Data.DataTables.RemoveRowsWithNoCorrespondingValueInComparisonTable(System.Data.DataColumn,System.Data.DataColumn,System.Boolean,System.Boolean)">
+      <summary>
+     Remove those rows in the source column which haven't got the same value in the compare table 
+ </summary>
+ <param name="sourceColumn">This is the column of the master table where all operations shall be executed</param>
+ <param name="valuesMustExistInThisColumnToKeepTheSourceRow">This is the comparison value against the source table's column</param>
+ <param name="ignoreCaseInStrings">Strings will be compared case-insensitive</param>
+ <param name="alwaysRemoveDBNullValues">Always remove the source row when it contains a DBNull value</param>
+ <returns>An arraylist of removed keys</returns>
+ <remarks>
+ </remarks>
+ <history>
+ 	[wezel]	07.10.2005	Created 
+ </history></member>
+    <member name="M:CompuMaster.Data.DataTables.CreateDataRowClone(System.Data.DataRow)">
+      <summary>
+     Creates a complete clone of a DataRow with structure as well as data 
+ </summary>
+ <param name="sourceRow">The source row to be copied</param>
+ <returns>The new clone of the DataRow</returns>
+ <remarks>
+     The resulting DataRow has got the schema from the sourceRow's DataTable. 
+ </remarks>
+ <history>
+ 	[baldauf]	2005-07-02  Created 
+ </history></member>
+    <member name="M:CompuMaster.Data.DataTables.CreateDataTableClone(System.Data.DataTable)">
+      <summary>
+     Creates a complete clone of a DataTable with structure as well as data 
+ </summary>
+ <param name="SourceTable">The source table to be copied</param>
+ <returns>The new clone of the datatable</returns>
+ <remarks>
+ </remarks>
+ <history>
+ 	[baldauf]	2005-07-02  Created 
+ </history></member>
+    <member name="M:CompuMaster.Data.DataTables.CreateDataTableClone(System.Data.DataTable,System.String)">
+      <summary>
+     Creates a complete clone of a DataTable with structure as well as data 
+ </summary>
+ <param name="SourceTable">The source table to be copied</param>
+ <param name="RowFilter">An additional row filter, for all rows set it to null (Nothing in VisualBasic)</param>
+ <returns>The new clone of the datatable</returns>
+ <remarks>
+ </remarks>
+ <history>
+ 	[baldauf]	2005-07-02  Created 
+ </history></member>
+    <member name="M:CompuMaster.Data.DataTables.CreateDataTableClone(System.Data.DataTable,System.String,System.String)">
+      <summary>
+     Creates a complete clone of a DataTable with structure as well as data 
+ </summary>
+ <param name="SourceTable">The source table to be copied</param>
+ <param name="RowFilter">An additional row filter, for all rows set it to null (Nothing in VisualBasic)</param>
+ <param name="Sort">An additional sort command</param>
+ <returns>The new clone of the datatable</returns>
+ <remarks>
+ </remarks>
+ <history>
+ 	[baldauf]	2005-07-02  Created 
+ </history></member>
+    <member name="M:CompuMaster.Data.DataTables.CreateDataTableClone(System.Data.DataTable,System.String,System.String,System.Int32)">
+      <summary>
+     Creates a complete clone of a DataTable with structure as well as data 
+ </summary>
+ <param name="SourceTable">The source table to be copied</param>
+ <param name="RowFilter">An additional row filter, for all rows set it to null (Nothing in VisualBasic)</param>
+ <param name="Sort">An additional sort command</param>
+ <param name="topRows">How many rows from top shall be returned as maximum?</param>
+ <returns>The new clone of the datatable</returns>
+ <remarks>
+ </remarks>
+ <history>
+ 	[baldauf]	2005-07-02  Created 
+ </history></member>
+    <member name="M:CompuMaster.Data.DataTables.CreateDataTableClone(System.Data.DataTable,System.Data.DataTable,System.String,System.String,System.Int32,System.Boolean)">
+      <summary>
+     Creates a complete clone of a DataTable with structure as well as data 
+ </summary>
+ <param name="sourceTable">The source table to be copied</param>
+ <param name="destinationTable">The destination of all operations; the destination table will be a clone of the source table at the end</param>
+ <param name="rowFilter">An additional row filter, for all rows set it to null (Nothing in VisualBasic)</param>
+ <param name="sort">An additional sort command</param>
+ <param name="topRows">How many rows from top shall be returned as maximum?</param>
+ <param name="overwritePropertiesOfExistingColumns">Shall the data type or any other settings of an existing table be modified to match the source column's definition?</param>
+ <remarks>
+     All rows of the destination table will be removed, first. 
+ </remarks>
+ <history>
+ 	[AdminSupport]	27.10.2005	Created 
+ </history></member>
+    <member name="M:CompuMaster.Data.DataTables.CreateDataTableClone(System.Data.DataTable,System.Data.DataTable,System.String,System.String,System.Int32,System.Boolean,System.Boolean,System.Boolean)">
+      <summary>
+     Creates a complete clone of a DataTable with structure as well as data 
+ </summary>
+ <param name="sourceTable">The source table to be copied</param>
+ <param name="destinationTable">The destination of all operations; the destination table will be a clone of the source table at the end</param>
+ <param name="rowFilter">An additional row filter, for all rows set it to null (Nothing in VisualBasic)</param>
+ <param name="sort">An additional sort command</param>
+ <param name="topRows">How many rows from top shall be returned as maximum?</param>
+ <param name="overwritePropertiesOfExistingColumns">Shall the data type or any other settings of an existing table be modified to match the source column's definition?</param>
+ <param name="dropExistingRowsInDestinationTable">Remove the existing rows of the destination table, first</param>
+ <param name="removeUnusedColumnsFromDestinationTable">Remove the existing columns of the destination table which are not present in the source table</param>
+ <remarks>
+ </remarks>
+ <history>
+ 	[AdminSupport]	31.10.2005	Created 
+ </history></member>
+    <member name="M:CompuMaster.Data.DataTables.RemoveColumns(System.Data.DataTable,System.String[])">
+      <summary>
+     Remove the specified columns if they exist 
+ </summary>
+ <param name="datatable">A datatable where the operations shall be made</param>
+ <param name="columnNames">The names of the columns which shall be removed</param>
+ <remarks>
+     The columns will only be removed if they exist. If a column name doesn't exist, it will be ignored. 
+ </remarks>
+ <history>
+ 	[adminwezel]	07.07.2005	Created 
+ </history></member>
+    <member name="M:CompuMaster.Data.DataTables.ConvertDataViewToDataTable(System.Data.DataView)">
+      <summary>
+     Creates a clone of a dataview but as a new data table 
+ </summary>
+ <param name="data">The data view to create the data table from</param>
+ <returns />
+ <remarks>
+ </remarks>
+ <history>
+ 	[baldauf]	2005-07-02  Created 
+ </history></member>
+    <member name="M:CompuMaster.Data.DataTables.ConvertDataTableToArrayList(System.Data.DataColumn)">
+      <summary>
+     Convert a data table to an arraylist 
+ </summary>
+ <param name="column">The column which shall be used to fill the arraylist</param>
+ <returns />
+ <remarks>
+ </remarks>
+ <history>
+ 	[baldauf]	2005-07-02  Created 
+ </history></member>
+    <member name="M:CompuMaster.Data.DataTables.ConvertDataTableToArrayList(System.Data.DataTable)">
+      <summary>
+     Convert a data table to an arraylist 
+ </summary>
+ <param name="data">The first column of this data table will be used</param>
+ <returns />
+ <remarks>
+ </remarks>
+ <history>
+ 	[baldauf]	2005-07-02  Created 
+ </history></member>
+    <member name="M:CompuMaster.Data.DataTables.ConvertDataTableToArrayList(System.Data.DataTable,System.Int32)">
+      <summary>
+     Convert a data table to an arraylist 
+ </summary>
+ <param name="data">The data table with the content</param>
+ <param name="selectedColumnIndex">The column which shall be used to fill the arraylist</param>
+ <returns />
+ <remarks>
+ </remarks>
+ <history>
+ 	[baldauf]	2005-07-02  Created 
+ </history></member>
+    <member name="M:CompuMaster.Data.DataTables.ConvertDataTableToHashtable(System.Data.DataColumn,System.Data.DataColumn)">
+      <summary>
+     Convert a data table to a hash table 
+ </summary>
+ <param name="keyColumn">This is the key column from the data table and MUST BE UNIQUE</param>
+ <param name="valueColumn">A column which contains the values</param>
+ <returns />
+ <remarks>
+ </remarks>
+ <history>
+ 	[baldauf]	2005-07-02  Created 
+ </history></member>
+    <member name="M:CompuMaster.Data.DataTables.ConvertDataTableToHashtable(System.Data.DataTable)">
+      <summary>
+     Convert a data table to a hash table 
+ </summary>
+ <param name="data">The first two columns of this data table will be used</param>
+ <returns />
+ <remarks>
+     ATTENTION: the very first column is used as key column and must be unique therefore 
+ </remarks>
+ <history>
+ 	[baldauf]	2005-07-02  Created 
+ </history></member>
+    <member name="M:CompuMaster.Data.DataTables.ConvertDataTableToHashtable(System.Data.DataTable,System.Int32,System.Int32)">
+      <summary>
+     Convert a data table to a hash table 
+ </summary>
+ <param name="data">The data table with the content</param>
+ <param name="keyColumnIndex">This is the key column from the data table and MUST BE UNIQUE</param>
+ <param name="valueColumnIndex">A column which contains the values</param>
+ <returns />
+ <remarks>
+ </remarks>
+ <history>
+ 	[baldauf]	2005-07-02  Created 
+ </history></member>
+    <member name="M:CompuMaster.Data.DataTables.ConvertDataTableToDictionaryEntryArray(System.Data.DataTable)">
+      <summary>
+     Convert a data table to an array of dictionary entries 
+ </summary>
+ <param name="data">The first two columns of this data table will be used</param>
+ <returns />
+ <remarks>
+     The very first column is used as key column, the second one as the value column 
+ </remarks>
+ <history>
+ 	[baldauf]	2005-07-02  Created 
+ </history></member>
+    <member name="M:CompuMaster.Data.DataTables.ConvertDataTableToDictionaryEntryArray(System.Data.DataColumn,System.Data.DataColumn)">
+      <summary>
+     Convert a data table to an array of dictionary entries 
+ </summary>
+ <param name="keyColumnIndex">This is the key column from the data table</param>
+ <param name="valueColumn">A column which contains the values</param>
+ <returns />
+ <remarks>
+ </remarks>
+ <history>
+ 	[baldauf]	2005-07-02  Created 
+ </history></member>
+    <member name="M:CompuMaster.Data.DataTables.ConvertDataTableToDictionaryEntryArray(System.Data.DataTable,System.Int32,System.Int32)">
+      <summary>
+     Convert a data table to an array of dictionary entries 
+ </summary>
+ <param name="data">The data table with the content</param>
+ <param name="keyColumnIndex">This is the key column from the data table</param>
+ <param name="valueColumnIndex">A column which contains the values</param>
+ <returns />
+ <remarks>
+ </remarks>
+ <history>
+ 	[baldauf]	2005-07-02  Created 
+ </history></member>
+    <member name="M:CompuMaster.Data.DataTables.ConvertICollectionToDataTable(System.Collections.ICollection)">
+      <summary>
+     Convert an ICollection to a datatable 
+ </summary>
+ <param name="collection">An ICollection with some content</param>
+ <returns>Datatable with column "key" and "value"</returns>
+ <remarks>
+ </remarks>
+ <history>
+ 	[baldauf]	2005-07-02  Created 
+ </history></member>
+    <member name="M:CompuMaster.Data.DataTables.ConvertIDictionaryToDataTable(System.Collections.IDictionary)">
+      <summary>
+     Convert an IDictionary to a datatable 
+ </summary>
+ <param name="dictionary">An IDictionary with some content</param>
+ <returns>Datatable with column "key" and "value"</returns>
+ <remarks>
+ </remarks>
+ <history>
+ 	[baldauf]	2005-07-02  Created 
+ </history></member>
+    <member name="M:CompuMaster.Data.DataTables.ConvertIDictionaryToDataTable(System.Collections.IDictionary,System.Boolean)">
+      <summary>
+     Convert an IDictionary to a datatable 
+ </summary>
+ <param name="dictionary">An IDictionary with some content</param>
+ <param name="keyIsUnqiue">If true, the key column in the data table will be marked as unique</param>
+ <returns>Datatable with column "key" and "value"</returns>
+ <remarks>
+ </remarks>
+ <history>
+ 	[baldauf]	2005-07-02  Created 
+ </history></member>
+    <member name="M:CompuMaster.Data.DataTables.ConvertNameValueCollectionToDataTable(System.Collections.Specialized.NameValueCollection)">
+      <summary>
+     Convert a NameValueCollection to a datatable 
+ </summary>
+ <param name="dictionary">An IDictionary with some content</param>
+ <returns>Datatable with column "key" and "value"</returns>
+ <remarks>
+ </remarks>
+ <history>
+ 	[baldauf]	2005-07-02  Created 
+ </history></member>
+    <member name="M:CompuMaster.Data.DataTables.ConvertNameValueCollectionToDataTable(System.Collections.Specialized.NameValueCollection,System.Boolean)">
+      <summary>
+     Convert a NameValueCollection to a datatable 
+ </summary>
+ <param name="dictionary">An IDictionary with some content</param>
+ <param name="keyIsUnqiue">If true, the key column in the data table will be marked as unique</param>
+ <returns>Datatable with column "key" and "value"</returns>
+ <remarks>
+ </remarks>
+ <history>
+ 	[baldauf]	2005-07-02  Created 
+ </history></member>
+    <member name="M:CompuMaster.Data.DataTables.GetDataTableViaODBC(System.String,System.String,System.String)">
+      <summary>
+     Simplified creation of a DataTable by definition of a SQL statement and a connection string 
+ </summary>
+ <param name="strSQL">The SQL statement to retrieve the data</param>
+ <param name="ConnectionString">The connection string to the data source</param>
+ <param name="NameOfNewDataTable">The name of the new DataTable</param>
+ <returns>A filled DataTable</returns>
+ <remarks>
+ </remarks>
+ <history>
+ 	[baldauf]	2005-07-02  Created 
+ </history></member>
+    <member name="M:CompuMaster.Data.DataTables.GetDataTableViaSqlClient(System.String,System.String,System.String)">
+      <summary>
+     Simplified creation of a DataTable by definition of a SQL statement and a connection string 
+ </summary>
+ <param name="strSQL">The SQL statement to retrieve the data</param>
+ <param name="ConnectionString">The connection string to the data source</param>
+ <param name="NameOfNewDataTable">The name of the new DataTable</param>
+ <returns>A filled DataTable</returns>
+ <remarks>
+ </remarks>
+ <history>
+ 	[baldauf]	2005-07-02  Created 
+ </history></member>
+    <member name="M:CompuMaster.Data.DataTables.LookupUnqiueColumnName(System.Data.DataTable,System.String)">
+      <summary>
+     Lookup a new unique column name for a data table 
+ </summary>
+ <param name="dataTable">The data table which shall get a new data column</param>
+ <param name="suggestedColumnName">A column name suggestion</param>
+ <returns>The suggested column name as it is or modified column name to be unique</returns>
+ <remarks>
+ </remarks>
+ <history>
+ 	[adminwezel]	22.03.2005	Created 
+ </history></member>
+    <member name="M:CompuMaster.Data.DataTables.ConvertToHtmlTable(System.Data.DataTable)">
+      <summary>
+     Return a string with all columns and rows as an html table 
+ </summary>
+ <param name="dataTable">The datatable to retrieve the content from</param>
+ <returns>If no rows have been processed, the return string is nothing</returns>
+ <remarks>
+ </remarks>
+ <history>
+ 	[baldauf]	2005-07-02  Created 
+ </history></member>
+    <member name="M:CompuMaster.Data.DataTables.ConvertToHtmlTable(System.Data.DataRowCollection,System.String)">
+      <summary>
+     Return a string with all columns and rows as an html table 
+ </summary>
+ <param name="rows">The rows to be processed</param>
+ <param name="label">An optional title of the rows</param>
+ <returns>If no rows have been processed, the return string is nothing</returns>
+ <remarks>
+ </remarks>
+ <history>
+ 	[baldauf]	2005-07-02  Created 
+ </history></member>
+    <member name="M:CompuMaster.Data.DataTables.ConvertToHtmlTable(System.Data.DataRow(),System.String)">
+      <summary>
+     Return a string with all columns and rows as an html table 
+ </summary>
+ <param name="rows">The rows to be processed</param>
+ <param name="label">An optional title of the rows</param>
+ <returns>If no rows have been processed, the return string is nothing</returns>
+ <remarks>
+ </remarks>
+ <history>
+ 	[baldauf]	2005-07-02  Created 
+ </history></member>
+    <member name="M:CompuMaster.Data.DataTables.ConvertToHtmlTable(System.Data.DataTable,System.String,System.String,System.String)">
+      <summary>
+     Return a string with all columns and rows as an html table 
+ </summary>
+ <param name="dataTable">The datatable to retrieve the content from</param>
+ <param name="titleTagOpener">The opening tag in front of the table's title</param>
+ <param name="titleTagEnd">The closing tag after the table title</param>
+ <param name="additionalTableAttributes">Additional attributes for the rendered table</param>
+ <returns>If no rows have been processed, the return string is nothing</returns>
+ <remarks>
+ </remarks>
+ <history>
+ 	[baldauf]	2005-07-02  Created 
+ </history></member>
+    <member name="M:CompuMaster.Data.DataTables.ConvertToHtmlTable(System.Data.DataTable,System.String,System.String,System.String,System.Boolean)">
+      <summary>
+     Return a string with all columns and rows as an html table 
+ </summary>
+ <param name="dataTable">The datatable to retrieve the content from</param>
+ <param name="titleTagOpener">The opening tag in front of the table's title</param>
+ <param name="titleTagEnd">The closing tag after the table title</param>
+ <param name="additionalTableAttributes">Additional attributes for the rendered table</param>
+ <param name="htmlEncodeCellContentAndLineBreaks">Encode all output to valid HTML</param>
+ <returns>If no rows have been processed, the return string is nothing</returns>
+ <remarks>
+ </remarks>
+ <history>
+ 	[baldauf]	2005-07-02  Created 
+ </history></member>
+    <member name="M:CompuMaster.Data.DataTables.ConvertToHtmlTable(System.Data.DataRowCollection,System.String,System.String,System.String,System.String)">
+      <summary>
+     Return a string with all columns and rows as an html table 
+ </summary>
+ <param name="rows">The rows to be processed</param>
+ <param name="label">An optional title of the rows</param>
+ <param name="titleTagOpener">The opening tag in front of the table's title</param>
+ <param name="titleTagEnd">The closing tag after the table title</param>
+ <param name="additionalTableAttributes">Additional attributes for the rendered table</param>
+ <returns>If no rows have been processed, the return string is nothing</returns>
+ <remarks>
+ </remarks>
+ <history>
+ 	[baldauf]	2005-07-02  Created 
+ </history></member>
+    <member name="M:CompuMaster.Data.DataTables.ConvertToHtmlTable(System.Data.DataRow(),System.String,System.String,System.String,System.String)">
+      <summary>
+     Return a string with all columns and rows as an html table 
+ </summary>
+ <param name="rows">The rows to be processed</param>
+ <param name="label">An optional title of the rows</param>
+ <param name="titleTagOpener">The opening tag in front of the table's title</param>
+ <param name="titleTagEnd">The closing tag after the table title</param>
+ <param name="additionalTableAttributes">Additional attributes for the rendered table</param>
+ <returns>If no rows have been processed, the return string is nothing</returns>
+ <remarks>
+ </remarks>
+ <history>
+ 	[baldauf]	2005-07-02  Created 
+ </history></member>
+    <member name="M:CompuMaster.Data.DataTables.ConvertToPlainTextTable(System.Data.DataTable)">
+      <summary>
+     Return a string with all columns and rows, helpfull for debugging purposes 
+ </summary>
+ <param name="dataTable">The datatable to retrieve the content from</param>
+ <returns>All rows are tab separated. If no rows have been processed, the user will get notified about this fact</returns>
+ <remarks>
+ </remarks>
+ <history>
+ 	[baldauf]	2005-07-02  Created 
+ </history></member>
+    <member name="M:CompuMaster.Data.DataTables.ConvertToPlainTextTable(System.Data.DataRow(),System.String)">
+      <summary>
+     Return a string with all columns and rows, helpfull for debugging purposes 
+ </summary>
+ <param name="rows">The rows to be processed</param>
+ <param name="label">An optional title of the rows</param>
+ <returns>All rows are tab separated. If no rows have been processed, the user will get notified about this fact</returns>
+ <remarks>
+ </remarks>
+ <history>
+ 	[baldauf]	2005-07-02  Created 
+ </history></member>
+    <member name="M:CompuMaster.Data.DataTables.ConvertToPlainTextTable(System.Data.DataRowCollection,System.String)">
+      <summary>
+     Return a string with all columns and rows, helpfull for debugging purposes 
+ </summary>
+ <param name="rows">The rows to be processed</param>
+ <param name="label">An optional title of the rows</param>
+ <returns>All rows are tab separated. If no rows have been processed, the user will get notified about this fact</returns>
+ <remarks>
+ </remarks>
+ <history>
+ 	[baldauf]	2005-07-02  Created 
+ </history></member>
+    <member name="M:CompuMaster.Data.DataTables.ConvertDataReaderToDataSet(System.Data.IDataReader)">
+      <summary>
+     Convert any opened datareader into a dataset 
+ </summary>
+ <param name="dataReader">An already opened dataReader</param>
+ <returns>A dataset containing all datatables the dataReader was able to read</returns>
+ <remarks>
+ </remarks>
+ <history>
+ 	[wezel]	13.01.2005	Created 
+ </history></member>
+    <member name="M:CompuMaster.Data.DataTables.ConvertDataReaderToDataTable(System.Data.IDataReader)">
+      <summary>
+     Convert any opened datareader into a data table 
+ </summary>
+ <param name="dataReader">An already opened dataReader</param>
+ <returns>A data table containing all data the dataReader was able to read</returns>
+ <remarks>
+ </remarks>
+ <history>
+ 	[baldauf]	2005-07-02  Created 
+ </history></member>
+    <member name="M:CompuMaster.Data.DataTables.ConvertDataReaderToDataTable(System.Data.IDataReader,System.String)">
+      <summary>
+     Convert any opened datareader into a data table 
+ </summary>
+ <param name="dataReader">An already opened dataReader</param>
+ <param name="tableName">The name for the new table</param>
+ <returns>A data table containing all data the dataReader was able to read</returns>
+ <remarks>
+ </remarks>
+ <history>
+ 	[baldauf]	2005-07-02  Created 
+ </history></member>
+    <member name="T:CompuMaster.Data.DataTables.JoinTypes">
+      <summary>
+     Table join types 
+ </summary>
+ <remarks>
+ </remarks>
+ <history>
+ 	[baldauf]	2005-07-02  Created 
+ </history></member>
+    <member name="M:CompuMaster.Data.DataTables.JoinTables(System.Data.DataTable,System.Data.DataTable,CompuMaster.Data.DataTables.JoinTypes)">
+      <summary>
+     Execute a table join on two tables of the same dataset based on the first relation found 
+ </summary>
+ <param name="leftParentTable" />
+ <param name="rightChildTable" />
+ <param name="joinType">Inner or left join</param>
+ <returns />
+ <remarks>
+ </remarks>
+ <history>
+ 	[baldauf]	2005-07-02  Created 
+ </history></member>
+    <member name="M:CompuMaster.Data.DataTables.JoinTables(System.Data.DataTable,System.Data.DataTable,System.Data.DataRelation,CompuMaster.Data.DataTables.JoinTypes)">
+      <summary>
+     Execute a table join on two tables of the same dataset which have got a defined relation 
+ </summary>
+ <param name="leftParentTable">The left or parent table</param>
+ <param name="rightChildTable">The right or child table</param>
+ <param name="relation">A data table relation which shall be used for the joining</param>
+ <param name="joinType">Inner or left join</param>
+ <returns />
+ <remarks>
+     The selected columns are: 
+     <ul>
+         <li>all columns from the left parent table</li>
+         <li>INNER JOIN: those columns from the right child table which are not member of the relation in charge</li>
+         <li>LEFT JOIN: all columns from the right child table</li>
+     </ul>
+ </remarks>
+ <history>
+ 	[baldauf]	2005-07-02  Created 
+ </history></member>
+    <member name="M:CompuMaster.Data.DataTables.JoinTables(System.Data.DataTable,System.Data.DataColumn[],System.Data.DataTable,System.Data.DataColumn[],CompuMaster.Data.DataTables.JoinTypes)">
+      <summary>
+     Execute a table join on two tables of the same dataset which have got a defined relation 
+ </summary>
+ <param name="leftParentTable">The left or parent table</param>
+ <param name="leftTableColumnsToCopy">An array of columns to copy from the left table</param>
+ <param name="rightChildTable">The right or child table</param>
+ <param name="rightTableColumnsToCopy">An array of columns to copy from the right table</param>
+ <param name="relation">A data table relation which shall be used for the joining</param>
+ <param name="joinType">Inner or left join</param>
+ <returns />
+ <remarks>
+ </remarks>
+ <history>
+ 	[baldauf]	2005-07-02  Created 
+ </history></member>
+    <member name="M:CompuMaster.Data.DataTables.JoinTables(System.Data.DataTable,System.Int32[],System.Data.DataTable,System.Int32[],CompuMaster.Data.DataTables.JoinTypes)">
+      <summary>
+     Execute a table join on two tables of the same dataset which have got a defined relation 
+ </summary>
+ <param name="leftParentTable">The left or parent table</param>
+ <param name="indexesOfLeftTableColumnsToCopy">An array of column indexes to copy from the left table</param>
+ <param name="rightChildTable">The right or child table</param>
+ <param name="indexesOfRightTableColumnsToCopy">An array of column indexes to copy from the right table</param>
+ <param name="relation">A data table relation which shall be used for the joining</param>
+ <param name="joinType">Inner or left join</param>
+ <returns />
+ <remarks>
+ </remarks>
+ <history>
+ 	[baldauf]	2005-07-02  Created 
+ </history></member>
+    <member name="M:CompuMaster.Data.DataTables.JoinTables(System.Data.DataTable,System.Int32[],System.Data.DataTable,System.Int32[],System.Data.DataRelation,CompuMaster.Data.DataTables.JoinTypes)">
+      <summary>
+     Execute a table join on two tables of the same dataset which have got a defined relation 
+ </summary>
+ <param name="leftParentTable">The left or parent table</param>
+ <param name="indexesOfLeftTableColumnsToCopy">An array of column indexes to copy from the left table</param>
+ <param name="rightChildTable">The right or child table</param>
+ <param name="indexesOfRightTableColumnsToCopy">An array of column indexes to copy from the right table</param>
+ <param name="relation">A data table relation which shall be used for the joining</param>
+ <param name="joinType">Inner or left join</param>
+ <returns />
+ <remarks>
+ </remarks>
+ <history>
+ 	[baldauf]	2005-07-02  Created 
+ </history></member>
+    <member name="M:CompuMaster.Data.DataTables.CrossJoinTables(System.Data.DataTable,System.Int32[],System.Data.DataTable,System.Int32[])">
+      <summary>
+     Cross join of two tables 
+ </summary>
+ <param name="leftTable">A first datatable</param>
+ <param name="indexesOfLeftTableColumnsToCopy">An array of column indexes to copy from the left table</param>
+ <param name="rightTable">A second datatable</param>
+ <param name="indexesOfRightTableColumnsToCopy">An array of column indexes to copy from the right table</param>
+ <returns />
+ <remarks>
+ </remarks>
+ <history>
+ 	[baldauf]	2005-07-02  Created 
+ </history></member>
+    <member name="M:CompuMaster.Data.DataTables.AddPrefixesToColumnNames(System.Data.DataTable,System.Int32[],System.String)">
+      <summary>
+     Add a prefix to the names of the columns 
+ </summary>
+ <param name="dataTable" />
+ <param name="columnIndexes" />
+ <param name="prefix">e. g. "orders."</param>
+ <remarks>
+ </remarks>
+ <history>
+ 	[baldauf]	2005-07-02  Created 
+ </history></member>
+    <member name="M:CompuMaster.Data.DataTables.AddSuffixesToColumnNames(System.Data.DataTable,System.Int32[],System.String)">
+      <summary>
+     Add a suffix to the names of the columns 
+ </summary>
+ <param name="dataTable" />
+ <param name="columnIndexes" />
+ <param name="suffix">e. g. "-orders"</param>
+ <remarks>
+ </remarks>
+ <history>
+ 	[baldauf]	2005-07-02  Created 
+ </history></member>
+    <member name="T:CompuMaster.Data.DataTables.ReArrangeDataColumnsException">
+      <summary>
+     An exception which gets thrown when converting data in the ReArrangeDataColumns methods 
+ </summary>
+ <remarks>
+ </remarks>
+ <history>
+ 	[baldauf]	2005-07-02  Created 
+ </history></member>
+    <member name="M:CompuMaster.Data.DataTables.ReArrangeDataColumns(System.Data.DataTable,System.String[])">
+      <summary>
+     Rearrange columns 
+ </summary>
+ <param name="source">The source table with data</param>
+ <param name="columnsToCopy">An array of column names which shall be copied in the specified order from the source table</param>
+ <returns>A new and independent data table with copied data</returns>
+ <remarks>
+ </remarks>
+ <history>
+ 	[adminwezel]	07.07.2005	Created 
+ </history></member>
+    <member name="M:CompuMaster.Data.DataTables.ReArrangeDataColumns(System.Data.DataTable,System.Data.DataColumn[])">
+      <summary>
+     Rearrange columns and also change their data types 
+ </summary>
+ <param name="source">The source table with data</param>
+ <param name="destinationColumnSet">An array of columns as they shall be inserted into the result</param>
+ <returns>A new and independent data table with copied data</returns>
+ <remarks>
+     The copy process requires that the names of the destination columns can be found in the columns collection of the source table. 
+ </remarks>
+ <example>
+     <code language="vb">
+         ReArrangeDataColumns(source, New System.Data.DataColumn() {New DataColumn("column1Name", GetType(String)), New DataColumn("column2Name", GetType(Integer))}) 
+     </code>
+ </example>
+ <history>
+ 	[baldauf]	2005-07-02  Created 
+ </history></member>
+    <member name="M:CompuMaster.Data.DataTables.ReArrangeDataColumns(System.Data.DataTable,System.Data.DataColumn[],System.Collections.ArrayList)">
+      <summary>
+     Rearrange columns and also change their data types 
+ </summary>
+ <param name="source">The source table with data</param>
+ <param name="destinationColumnSet">An array of columns as they shall be inserted into the result</param>
+ <param name="ignoreConversionExceptionAndLogThemHere">In case of data conversion exceptions, log them here instead of throwing them immediately</param>
+ <returns>A new and independent data table with copied data</returns>
+ <remarks>
+     The copy process requires that the names of the destination columns can be found in the columns collection of the source table. 
+ </remarks>
+ <example>
+     <code language="vb">
+         ReArrangeDataColumns(source, New System.Data.DataColumn() {New DataColumn("column1Name", GetType(String)), New DataColumn("column2Name", GetType(Integer))}) 
+     </code>
+ </example>
+ <history>
+ 	[baldauf]	2005-07-02  Created 
+ </history></member>
+    <member name="T:CompuMaster.Data.XlsReader">
+      <summary>
+     Provides simplified read access to XLS files via MS OLEDB Jet Providers 
+ </summary>
+ <remarks>
+ </remarks>
+ <history>
+ 	[baldauf]	2005-07-02  Created 
+ </history></member>
+    <member name="M:CompuMaster.Data.XlsReader.ReadDataTableFromXlsFile(System.String,System.String)">
+      <summary>
+     Read from an excel file 
+ </summary>
+ <param name="path">The path of the .XLS file</param>
+ <param name="sheetName">A name of a sheet where the read operations shall execute</param>
+ <returns>A new and independent datatable with the content of the sheet</returns>
+ <remarks>
+ </remarks>
+ <history>
+ 	[baldauf]	2005-07-02  Created 
+ </history></member>
+    <member name="M:CompuMaster.Data.XlsReader.ReadDataTableFromXlsFile(System.String,System.String,System.String)">
+      <summary>
+     Read from an excel file 
+ </summary>
+ <param name="path">The path of the .XLS file</param>
+ <param name="sheetName">A name of a sheet where the read operations shall execute</param>
+ <param name="querySql">A query SQL to filter the returned data, e. g. SELECT * FROM [sheetName$]</param>
+ <returns>A new and independent datatable with the content of the sheet</returns>
+ <remarks>
+ </remarks>
+ <history>
+ 	[baldauf]	2005-07-02  Created 
+ </history></member>
+    <member name="T:CompuMaster.Tools.Data.Ldap">
+      <summary>
+     LDAP access to retrieve data 
+ </summary>
+ <remarks>
+ </remarks>
+ <history>
+ 	[wezel]	20.06.2005	Created 
+ </history></member>
+    <member name="M:CompuMaster.Tools.Data.Ldap.QueryUsers(System.String,System.String)">
+      <summary>
+     Returns different information on all the users matching the filter 
+     expression within the given domain as contents of a DataTable 
+ 
+     The Table contains the following columns: 
+     - UserName      User's accountname 
+     - FirstName     First name 
+     - LastName      Last name 
+     - DiplayName    Diplayed name 
+     - Title         Title 
+     - EMail         E-Mail address 
+     - Phone         Phone number 
+     - MobilePhone   Cell / mobile phone number 
+     - VoIPPhone     VoIP phone number 
+     - Street        Street and house number 
+     - ZIP           Zip / postal code 
+     - City          City name 
+     - Country       Country name 
+     - Company       Company name 
+     - Department    Department name 
+     - Initials      The initials of the user 
+ 
+     Note that any field except "UserName" is optional. 
+     All fields are of type String. 
+     Each user account is represented by a DataRow. 
+ 
+ </summary>
+ <param name="domain">The domain from which to gather the information</param>
+ <param name="SearchFilterExpression">The filter expression for specific selection purposes. 
+             For valid filter expressions see the documentation about 
+             System.DirectoryServices.DirectorySearcher.Filter</param>
+ <returns>A DataTable containing the information, Nothing if an error occurs during execution</returns>
+ <remarks>
+ </remarks>
+ <history>
+ 	[abaldauf]	2005-06-16	Created 
+     [abaldauf]  2005-06-20  Modified for usage of a filter expression 
+ </history></member>
+    <member name="M:CompuMaster.Tools.Data.Ldap.QueryUsersByAccountName(System.String,System.String)">
+      <summary>
+     Returns different information on all the users with the given account 
+     name within the given domain as contents of a DataTable 
+ 
+     The Table contains the following columns: 
+     - UserName      User's accountname 
+     - FirstName     First name 
+     - LastName      Last name 
+     - DiplayName    Diplayed name 
+     - Title         Title 
+     - EMail         E-Mail address 
+     - Phone         Phone number 
+     - MobilePhone   Cell / mobile phone number 
+     - VoIPPhone     VoIP phone number 
+     - Street        Street and house number 
+     - ZIP           Zip / postal code 
+     - City          City name 
+     - Country       Country name 
+     - Company       Company name 
+     - Department    Department name 
+     - Initials      The initials of the user 
+ 
+     Note that any field except "UserName" is optional. 
+     All fields are of type String. 
+     Each user account is represented by a DataRow. 
+ 
+ </summary>
+ <param name="domain">The domain from which to gather the information</param>
+ <param name="UserAccountName">The account name for which to search</param>
+ <returns>A DataTable containing the information, Nothing if an error occurs during execution</returns>
+ <remarks>
+ </remarks>
+ <history>
+     [abaldauf]  2005-06-20  Created 
+ </history></member>
+    <member name="M:CompuMaster.Tools.Data.Ldap.QueryUsersByName(System.String,System.String,System.String)">
+      <summary>
+     Returns different information on all the users with the given first 
+     and / or last name within the given domain as contents of a DataTable 
+ 
+     The Table contains the following columns: 
+     - UserName      User's accountname 
+     - FirstName     First name 
+     - LastName      Last name 
+     - DiplayName    Diplayed name 
+     - Title         Title 
+     - EMail         E-Mail address 
+     - Phone         Phone number 
+     - MobilePhone   Cell / mobile phone number 
+     - VoIPPhone     VoIP phone number 
+     - Street        Street and house number 
+     - ZIP           Zip / postal code 
+     - City          City name 
+     - Country       Country name 
+     - Company       Company name 
+     - Department    Department name 
+     - Initials      The initials of the user 
+ 
+     Note that any field except "UserName" is optional. 
+     All fields are of type String. 
+     Each user account is represented by a DataRow. 
+ 
+ </summary>
+ <param name="domain">The domain from which to gather the information</param>
+ <param name="UserFirstName">The first name for which to search (may be empty or nothing if last name is given)</param>
+ <param name="UserLastName">The last name for which to search (may be empty or nothing if first name is given)</param>
+ <returns>A DataTable containing the information, Nothing if an error occurs during execution</returns>
+ <remarks>
+ </remarks>
+ <history>
+     [abaldauf]  2005-06-20  Created 
+ </history></member>
+    <member name="M:CompuMaster.Tools.Data.Ldap.Query(System.String,System.String)">
+      <summary>
+     Query the LDAP 
+ </summary>
+ <param name="domain">The domain name which will be used as LDAP server name (to query the domain controller)</param>
+ <param name="searchFilterExpression">A search expression to filter the results</param>
+ <returns>A datatable containing all data as strings</returns>
+ <remarks>
+ </remarks>
+ <history>
+ 	[AdminSupport]	07.10.2005	Created 
+ </history></member>
+    <member name="M:CompuMaster.Tools.Data.Ldap.QueryAllUsers(System.String)">
+      <summary>
+     Returns different information on all users within the given domain 
+     as contents of a DataTable 
+ 
+     The Table contains the following columns: 
+     - UserName      User's accountname 
+     - FirstName     First name 
+     - LastName      Last name 
+     - DiplayName    Diplayed name 
+     - Title         Title 
+     - EMail         E-Mail address 
+     - Phone         Phone number 
+     - MobilePhone   Cell / mobile phone number 
+     - VoIPPhone     VoIP phone number 
+     - Street        Street and house number 
+     - ZIP           Zip / postal code 
+     - City          City name 
+     - Country       Country name 
+     - Company       Company name 
+     - Department    Department name 
+     - Initials      The initials of the user 
+ 
+     Note that any field except "UserName" is optional. 
+     All fields are of type String. 
+     Each user account is represented by a DataRow. 
+ 
+ </summary>
+ <param name="domain">The domain from which to gather the information</param>
+ <returns>A DataTable containing the information, Nothing if an error occurs during execution</returns>
+ <remarks>
+ </remarks>
+ <history>
+     [abaldauf]  2005-06-20  Created 
+ </history></member>
+    <member name="M:CompuMaster.Tools.Data.Ldap.QueryUsers_CreateInfoTable(System.String)">
+      <summary>
+     Creates a DataTable with all the required columns for containing 
+     user information 
+ </summary>
+ <param name="DomName">The domain name to be included in the table's title</param>
+ <returns>An empty DataTable containing the prepared columns</returns>
+ <remarks>
+ </remarks>
+ <history>
+ 	[abaldauf]	2005-06-16	Created 
+ </history></member>
+    <member name="T:CompuMaster.Tools.Data.NamespaceDoc">
+      <summary>
+     CompuMaster common tools and utilities 
+ </summary>
+ <remarks>
+		Changes on this file only after discussion with Jochen Wezel!! 
+ </remarks>
+ <history>
+ 	[adminwezel]	04/10/2004	Created 
+ 	[adminwezel]	2006-02-10  Latest patch 
+ </history>
+ <copyright>CompuMaster GmbH</copyright></member>
+    <member name="T:CompuMaster.Tools.Data.DataQuery.SqlClient">
+      <summary>
+     Common routines to query data from a sql server database 
+ </summary>
+ <remarks>
+ </remarks>
+ <history>
+ 	[adminsupport]	21.12.2004	Created 
+ </history></member>
+    <member name="M:CompuMaster.Tools.Data.DataQuery.SqlClient.ExecuteNonQuery(System.String,System.String,System.Data.CommandType,System.Data.SqlClient.SqlParameter[])">
+      <summary>
+     Executes a command scalar and returns the value 
+ </summary>
+ <param name="ConnectionString">The connection string to the database</param>
+ <param name="CommandText">The command text</param>
+ <param name="CommandType">The command type</param>
+ <param name="sqlParameters">An optional list of SqlParameters</param>
+ <remarks>
+ </remarks>
+ <history>
+ 	[adminsupport]	03.12.2004	Created 
+ </history></member>
+    <member name="M:CompuMaster.Tools.Data.DataQuery.SqlClient.ExecuteScalar(System.String,System.String,System.Data.CommandType,System.Data.SqlClient.SqlParameter[])">
+      <summary>
+     Executes a command scalar and returns the value 
+ </summary>
+ <param name="ConnectionString">The connection string to the database</param>
+ <param name="CommandText">The command text</param>
+ <param name="CommandType">The command type</param>
+ <param name="sqlParameters">An optional list of SqlParameters</param>
+ <returns />
+ <remarks>
+ </remarks>
+ <history>
+ 	[adminsupport]	03.12.2004	Created 
+ </history></member>
+    <member name="M:CompuMaster.Tools.Data.DataQuery.SqlClient.ExecuteReaderAndPutFirstColumnIntoArrayList(System.String,System.String,System.Data.CommandType,System.Data.SqlClient.SqlParameter[])">
+      <summary>
+     Executes a command with a data reader and returns the values of the first column 
+ </summary>
+ <param name="ConnectionString">The connection string to the database</param>
+ <param name="CommandText">The command text</param>
+ <param name="CommandType">The command type</param>
+ <param name="sqlParameters">An optional list of SqlParameters</param>
+ <returns />
+ <remarks>
+ </remarks>
+ <history>
+ 	[adminsupport]	03.12.2004	Created 
+ </history></member>
+    <member name="M:CompuMaster.Tools.Data.DataQuery.SqlClient.ExecuteReaderAndPutFirstTwoColumnsIntoHashtable(System.String,System.String,System.Data.CommandType,System.Data.SqlClient.SqlParameter[])">
+      <summary>
+     Executes a command with a data reader and returns the values of the first two columns 
+ </summary>
+ <param name="ConnectionString">The connection string to the database</param>
+ <param name="CommandText">The command text</param>
+ <param name="CommandType">The command type</param>
+ <param name="sqlParameters">An optional list of SqlParameters</param>
+ <returns>A hashtable with the values of the first column in the hashtable's key field and the second column values in the hashtable's value field</returns>
+ <remarks>
+ </remarks>
+ <history>
+ 	[adminsupport]	03.12.2004	Created 
+ </history></member>
+    <member name="T:CompuMaster.Tools.Data.DataQuery.AnyIDataProvider">
+      <summary>
+     Common routines to query data from any data provider 
+ </summary>
+ <remarks>
+ </remarks>
+ <history>
+ 	[adminsupport]	21.12.2004	Created 
+ </history></member>
+    <member name="M:CompuMaster.Tools.Data.DataQuery.AnyIDataProvider.CreateConnection(System.String,System.String)">
+      <summary>
+     Create a new database connection by reflection of a type name 
+ </summary>
+ <param name="assemblyName">The assembly which implements the desired connection type</param>
+ <param name="connectionTypeName">The case-insensitive type name of the connection class, e. g. System.Data.SqlClient.SqlConnection</param>
+ <returns>The created connection object as an IDbConnection</returns>
+ <remarks>
+     Errors will be thrown in case of unresolvable parameter values or if the created type can't be casted into an IDbConnection. 
+ </remarks>
+ <history>
+ 	[wezel]	14.02.2005	Created 
+ </history></member>
+    <member name="M:CompuMaster.Tools.Data.DataQuery.AnyIDataProvider.CreateConnection(System.String,System.String,System.String)">
+      <summary>
+     Create a new database connection by reflection of a type name 
+ </summary>
+ <param name="assemblyName">The assembly which implements the desired connection type</param>
+ <param name="connectionTypeName">The case-insensitive type name of the connection class, e. g. System.Data.SqlClient.SqlConnection</param>
+ <param name="connectionString">A connection string to be used for this connection</param>
+ <returns>The created connection object as an IDbConnection</returns>
+ <remarks>
+     Errors will be thrown in case of unresolvable parameter values or if the created type can't be casted into an IDbConnection. 
+ </remarks>
+ <history>
+ 	[wezel]	14.02.2005	Created 
+ </history></member>
+    <member name="T:CompuMaster.Tools.Data.DataQuery.AnyIDataProvider.Automations">
+      <summary>
+     Automations for the connection in charge 
+ </summary>
+ <remarks>
+ </remarks>
+ <history>
+ 	[wezel]	19.01.2005	Created 
+ </history></member>
+    <member name="M:CompuMaster.Tools.Data.DataQuery.AnyIDataProvider.ExecuteNonQuery(System.Data.IDbConnection,System.String,System.Data.CommandType,System.Data.IDataParameter[],CompuMaster.Tools.Data.DataQuery.AnyIDataProvider.Automations,System.Int32)">
+      <summary>
+     Executes a command without returning any data 
+ </summary>
+ <param name="dbConnection">The connection to the database</param>
+ <param name="commandText">The command text</param>
+ <param name="commandType">The command type</param>
+ <param name="sqlParameters">An optional list of SqlParameters</param>
+ <param name="automations">Automation options for the connection</param>
+ <param name="commandTimeout">A timeout value in seconds for the command object (negative values will be ignored and leave the timeout value on default)</param>
+ <remarks>
+ </remarks>
+ <history>
+ 	[adminsupport]	03.12.2004	Created 
+ </history></member>
+    <member name="M:CompuMaster.Tools.Data.DataQuery.AnyIDataProvider.ExecuteNonQuery(System.Data.IDbCommand,CompuMaster.Tools.Data.DataQuery.AnyIDataProvider.Automations)">
+      <summary>
+     Executes a command without returning any data 
+ </summary>
+ <param name="dbCommand">The command with an assigned connection property value</param>
+ <param name="automations">Automation options for the connection</param>
+ <remarks>
+ </remarks>
+ <history>
+ 	[adminwezel]	05.04.2005	Created 
+ </history></member>
+    <member name="M:CompuMaster.Tools.Data.DataQuery.AnyIDataProvider.ExecuteNonQuery(System.Data.IDbConnection,System.String,System.Data.CommandType,System.Data.IDataParameter[],CompuMaster.Tools.Data.DataQuery.AnyIDataProvider.Automations)">
+      <summary>
+     Executes a command without returning any data 
+ </summary>
+ <param name="dbConnection">The connection to the database</param>
+ <param name="commandText">The command text</param>
+ <param name="commandType">The command type</param>
+ <param name="sqlParameters">An optional list of SqlParameters</param>
+ <param name="automations">Automation options for the connection</param>
+ <remarks>
+ </remarks>
+ <history>
+ 	[adminsupport]	03.12.2004	Created 
+ </history></member>
+    <member name="M:CompuMaster.Tools.Data.DataQuery.AnyIDataProvider.ExecuteNonQuery(System.Data.IDbConnection,System.String,System.Data.CommandType,System.Data.IDataParameter[])">
+      <summary>
+     Executes a command without returning any data 
+ </summary>
+ <param name="dbConnection">The connection to the database</param>
+ <param name="commandText">The command text</param>
+ <param name="commandType">The command type</param>
+ <param name="sqlParameters">An optional list of SqlParameters</param>
+ <remarks>
+ </remarks>
+ <history>
+ 	[adminsupport]	03.12.2004	Created 
+ </history></member>
+    <member name="M:CompuMaster.Tools.Data.DataQuery.AnyIDataProvider.ExecuteScalar(System.Data.IDbConnection,System.String,System.Data.CommandType,System.Data.IDataParameter[],CompuMaster.Tools.Data.DataQuery.AnyIDataProvider.Automations)">
+      <summary>
+     Executes a command scalar and returns the value 
+ </summary>
+ <param name="dbConnection">The connection to the database</param>
+ <param name="commandText">The command text</param>
+ <param name="commandType">The command type</param>
+ <param name="sqlParameters">An optional list of SqlParameters</param>
+ <param name="automations">Automation options for the connection</param>
+ <returns />
+ <remarks>
+ </remarks>
+ <history>
+ 	[adminsupport]	03.12.2004	Created 
+ </history></member>
+    <member name="M:CompuMaster.Tools.Data.DataQuery.AnyIDataProvider.ExecuteScalar(System.Data.IDbCommand,CompuMaster.Tools.Data.DataQuery.AnyIDataProvider.Automations)">
+      <summary>
+     Executes a command scalar and returns the value 
+ </summary>
+ <param name="dbCommand">The command with an assigned connection property value</param>
+ <param name="automations">Automation options for the connection</param>
+ <remarks>
+ </remarks>
+ <history>
+ 	[adminwezel]	05.04.2005	Created 
+ </history></member>
+    <member name="T:CompuMaster.Tools.Data.DataQuery.AnyIDataProvider.DataException">
+      <summary>
+     Data execution exceptions with details on the executed IDbCommand 
+ </summary>
+ <remarks>
+ </remarks>
+ <history>
+ 	[adminwezel]	23.06.2005	Created 
+ </history></member>
+    <member name="M:CompuMaster.Tools.Data.DataQuery.AnyIDataProvider.DataException.ConvertParameterCollectionToString(System.Data.IDataParameterCollection)">
+      <summary>
+     Convert the collection with all the parameters to a plain text string 
+ </summary>
+ <param name="parameters">An IDataParameterCollection of a IDbCommand</param>
+ <returns />
+ <remarks>
+ </remarks>
+ <history>
+ 	[adminwezel]	23.06.2005	Created 
+ </history></member>
+    <member name="M:CompuMaster.Tools.Data.DataQuery.AnyIDataProvider.DataException.ToString">
+      <summary>
+     The complete and detailed exception information inclusive the command text 
+ </summary>
+ <returns />
+ <remarks>
+ </remarks>
+ <history>
+ 	[adminwezel]	23.06.2005	Created 
+ </history></member>
+    <member name="M:CompuMaster.Tools.Data.DataQuery.AnyIDataProvider.ExecuteScalar(System.Data.IDbConnection,System.String,System.Data.CommandType,System.Data.IDataParameter[])">
+      <summary>
+     Executes a command scalar and returns the value 
+ </summary>
+ <param name="dbConnection">The connection to the database</param>
+ <param name="commandText">The command text</param>
+ <param name="commandType">The command type</param>
+ <param name="sqlParameters">An optional list of SqlParameters</param>
+ <returns />
+ <remarks>
+ </remarks>
+ <history>
+ 	[adminsupport]	03.12.2004	Created 
+ </history></member>
+    <member name="M:CompuMaster.Tools.Data.DataQuery.AnyIDataProvider.ExecuteReaderAndPutFirstColumnIntoArrayList(System.Data.IDbConnection,System.String,System.Data.CommandType,System.Data.IDataParameter[],CompuMaster.Tools.Data.DataQuery.AnyIDataProvider.Automations)">
+      <summary>
+     Executes a command with a data reader and returns the values of the first column 
+ </summary>
+ <param name="dbConnection">The connection to the database</param>
+ <param name="commandText">The command text</param>
+ <param name="commandType">The command type</param>
+ <param name="sqlParameters">An optional list of SqlParameters</param>
+ <param name="automations">Automation options for the connection</param>
+ <returns />
+ <remarks>
+ </remarks>
+ <history>
+ 	[adminsupport]	03.12.2004	Created 
+ </history></member>
+    <member name="M:CompuMaster.Tools.Data.DataQuery.AnyIDataProvider.ExecuteReaderAndPutFirstColumnIntoArrayList(System.Data.IDbCommand,CompuMaster.Tools.Data.DataQuery.AnyIDataProvider.Automations)">
+      <summary>
+     Executes a command with a data reader and returns the values of the first column 
+ </summary>
+ <param name="dbCommand">The command object which shall be executed</param>
+ <param name="automations">Automation options for the connection</param>
+ <returns />
+ <remarks>
+ </remarks>
+ <history>
+ 	[adminsupport]	03.12.2004	Created 
+ </history></member>
+    <member name="M:CompuMaster.Tools.Data.DataQuery.AnyIDataProvider.ExecuteReaderAndPutFirstColumnIntoArrayList(System.Data.IDbConnection,System.String,System.Data.CommandType,System.Data.IDataParameter[])">
+      <summary>
+     Executes a command with a data reader and returns the values of the first column 
+ </summary>
+ <param name="dbConnection">The connection to the database</param>
+ <param name="commandText">The command text</param>
+ <param name="commandType">The command type</param>
+ <param name="sqlParameters">An optional list of SqlParameters</param>
+ <returns />
+ <remarks>
+ </remarks>
+ <history>
+ 	[adminsupport]	03.12.2004	Created 
+ </history></member>
+    <member name="M:CompuMaster.Tools.Data.DataQuery.AnyIDataProvider.ExecuteReaderAndPutFirstTwoColumnsIntoHashtable(System.Data.IDbConnection,System.String,System.Data.CommandType,System.Data.IDataParameter[],CompuMaster.Tools.Data.DataQuery.AnyIDataProvider.Automations)">
+      <summary>
+     Executes a command with a data reader and returns the values of the first two columns 
+ </summary>
+ <param name="dbConnection">The connection to the database</param>
+ <param name="commandText">The command text</param>
+ <param name="commandType">The command type</param>
+ <param name="sqlParameters">An optional list of SqlParameters</param>
+ <param name="automations">Automation options for the connection</param>
+ <returns>A hashtable with the values of the first column in the hashtable's key field and the second column values in the hashtable's value field</returns>
+ <remarks>
+ </remarks>
+ <history>
+ 	[adminsupport]	03.12.2004	Created 
+ </history></member>
+    <member name="M:CompuMaster.Tools.Data.DataQuery.AnyIDataProvider.ExecuteReaderAndPutFirstTwoColumnsIntoDictionaryEntryArray(System.Data.IDbCommand,CompuMaster.Tools.Data.DataQuery.AnyIDataProvider.Automations)">
+      <summary>
+     Executes a command with a data reader and returns the values of the first two columns 
+ </summary>
+ <param name="dbCommand">The prepared command to the database</param>
+ <param name="automations">Automation options for the connection</param>
+ <returns>A hashtable with the values of the first column in the hashtable's key field and the second column values in the hashtable's value field</returns>
+ <remarks>
+ </remarks>
+ <history>
+ 	[adminsupport]	03.12.2004	Created 
+ </history></member>
+    <member name="M:CompuMaster.Tools.Data.DataQuery.AnyIDataProvider.ExecuteReaderAndPutFirstTwoColumnsIntoDictionaryEntryArray(System.Data.IDbConnection,System.String,System.Data.CommandType,System.Data.IDataParameter[],CompuMaster.Tools.Data.DataQuery.AnyIDataProvider.Automations)">
+      <summary>
+     Executes a command with a data reader and returns the values of the first two columns 
+ </summary>
+ <param name="dbConnection">The connection to the database</param>
+ <param name="commandText">The command text</param>
+ <param name="commandType">The command type</param>
+ <param name="sqlParameters">An optional list of SqlParameters</param>
+ <param name="automations">Automation options for the connection</param>
+ <returns>A hashtable with the values of the first column in the hashtable's key field and the second column values in the hashtable's value field</returns>
+ <remarks>
+ </remarks>
+ <history>
+ 	[adminsupport]	03.12.2004	Created 
+ </history></member>
+    <member name="M:CompuMaster.Tools.Data.DataQuery.AnyIDataProvider.ExecuteReaderAndPutFirstTwoColumnsIntoHashtable(System.Data.IDbConnection,System.String,System.Data.CommandType,System.Data.IDataParameter[])">
+      <summary>
+     Executes a command with a data reader and returns the values of the first two columns 
+ </summary>
+ <param name="dbConnection">The connection to the database</param>
+ <param name="commandText">The command text</param>
+ <param name="commandType">The command type</param>
+ <param name="sqlParameters">An optional list of SqlParameters</param>
+ <returns>A hashtable with the values of the first column in the hashtable's key field and the second column values in the hashtable's value field</returns>
+ <remarks>
+ </remarks>
+ <history>
+ 	[adminsupport]	03.12.2004	Created 
+ </history></member>
+    <member name="M:CompuMaster.Tools.Data.DataQuery.AnyIDataProvider.ExecuteReader(System.Data.IDbConnection,System.String,System.Data.CommandType,System.Data.IDataParameter[],CompuMaster.Tools.Data.DataQuery.AnyIDataProvider.Automations,System.Int32)">
+      <summary>
+     Executes a command and return the data reader object for it 
+ </summary>
+ <param name="dbConnection">The connection to the database</param>
+ <param name="commandText">The command text</param>
+ <param name="commandType">The command type</param>
+ <param name="sqlParameters">An optional list of SqlParameters</param>
+ <param name="automations">Automation options for the connection</param>
+ <param name="commandTimeout">A timeout value in seconds for the command object (negative values will be ignored and leave the timeout value on default)</param>
+ <returns />
+ <remarks>
+     Automations can only open a connection, but never close. This is because you have to close the connection by yourself AFTER you walked through the data reader. 
+ </remarks>
+ <history>
+ 	[adminsupport]	03.12.2004	Created 
+ </history></member>
+    <member name="M:CompuMaster.Tools.Data.DataQuery.AnyIDataProvider.ExecuteReader(System.Data.IDbConnection,System.String,System.Data.CommandType,System.Data.IDataParameter[],CompuMaster.Tools.Data.DataQuery.AnyIDataProvider.Automations)">
+      <summary>
+     Executes a command and return the data reader object for it 
+ </summary>
+ <param name="dbConnection">The connection to the database</param>
+ <param name="commandText">The command text</param>
+ <param name="commandType">The command type</param>
+ <param name="sqlParameters">An optional list of SqlParameters</param>
+ <returns />
+ <remarks>
+ </remarks>
+ <history>
+ 	[adminsupport]	03.12.2004	Created 
+ </history></member>
+    <member name="M:CompuMaster.Tools.Data.DataQuery.AnyIDataProvider.ExecuteReader(System.Data.IDbCommand,CompuMaster.Tools.Data.DataQuery.AnyIDataProvider.Automations)">
+      <summary>
+     Executes a command and return the data reader object for it 
+ </summary>
+ <param name="dbCommand">The command with an assigned connection property value</param>
+ <param name="automations">Automation options for the connection</param>
+ <remarks>
+ </remarks>
+ <history>
+ 	[adminwezel]	05.04.2005	Created 
+ </history></member>
+    <member name="M:CompuMaster.Tools.Data.DataQuery.AnyIDataProvider.FillDataTable(System.Data.IDbCommand,CompuMaster.Tools.Data.DataQuery.AnyIDataProvider.Automations,System.String)">
+      <summary>
+     Fill a new data table with the result of a command 
+ </summary>
+ <param name="dbCommand">The command object</param>
+ <param name="automations">Automation options for the connection</param>
+ <param name="tableName">The name for the new table</param>
+ <returns />
+ <remarks>
+ </remarks>
+ <history>
+ 	[adminsupport]	20.01.2005	Created 
+ </history></member>
+    <member name="M:CompuMaster.Tools.Data.DataQuery.AnyIDataProvider.FillDataTable(System.Data.IDbConnection,System.String,System.Data.CommandType,System.Data.IDataParameter[],CompuMaster.Tools.Data.DataQuery.AnyIDataProvider.Automations,System.String,System.Int32)">
+      <summary>
+     Fill a new data table with the result of a command 
+ </summary>
+ <param name="dbConnection">The connection to the database</param>
+ <param name="commandText">The command text</param>
+ <param name="commandType">The command type</param>
+ <param name="sqlParameters">An optional list of SqlParameters</param>
+ <param name="automations">Automation options for the connection</param>
+ <param name="tableName">The name for the new table</param>
+ <param name="commandTimeout">A timeout value in seconds for the command object (negative values will be ignored and leave the timeout value on default)</param>
+ <returns />
+ <remarks>
+ </remarks>
+ <history>
+ 	[adminsupport]	20.01.2005	Created 
+ </history></member>
+    <member name="M:CompuMaster.Tools.Data.DataQuery.AnyIDataProvider.FillDataTable(System.Data.IDbConnection,System.String,System.Data.CommandType,System.Data.IDataParameter[],CompuMaster.Tools.Data.DataQuery.AnyIDataProvider.Automations,System.String)">
+      <summary>
+     Fill a new data table with the result of a command 
+ </summary>
+ <param name="dbConnection">The connection to the database</param>
+ <param name="commandText">The command text</param>
+ <param name="commandType">The command type</param>
+ <param name="sqlParameters">An optional list of SqlParameters</param>
+ <param name="automations">Automation options for the connection</param>
+ <param name="tableName">The name for the new table</param>
+ <returns />
+ <remarks>
+ </remarks>
+ <history>
+ 	[adminsupport]	20.01.2005	Created 
+ </history></member>
+    <member name="M:CompuMaster.Tools.Data.DataQuery.AnyIDataProvider.FillDataTable(System.Data.IDbConnection,System.String,System.Data.CommandType,System.Data.IDataParameter[],CompuMaster.Tools.Data.DataQuery.AnyIDataProvider.Automations)">
+      <summary>
+     Fill a new data table with the result of a command 
+ </summary>
+ <param name="dbConnection">The connection to the database</param>
+ <param name="commandText">The command text</param>
+ <param name="commandType">The command type</param>
+ <param name="sqlParameters">An optional list of SqlParameters</param>
+ <param name="automations">Automation options for the connection</param>
+ <returns />
+ <remarks>
+ </remarks>
+ <history>
+ 	[adminsupport]	20.01.2005	Created 
+ </history></member>
+    <member name="M:CompuMaster.Tools.Data.DataQuery.AnyIDataProvider.FillDataTables(System.Data.IDbCommand,CompuMaster.Tools.Data.DataQuery.AnyIDataProvider.Automations)">
+      <summary>
+     Fill a new data table with the result of a command 
+ </summary>
+ <param name="dbCommand">The command object</param>
+ <param name="automations">Automation options for the connection</param>
+ <returns />
+ <remarks>
+ </remarks>
+ <history>
+ 	[adminsupport]	20.01.2005	Created 
+ </history></member>
+    <member name="M:CompuMaster.Tools.Data.DataQuery.AnyIDataProvider.CloseAndDisposeConnection(System.Data.IDbConnection)">
+      <summary>
+     Securely close and dispose a database connection 
+ </summary>
+ <param name="connection">The connection to close and dispose</param>
+ <remarks>
+ </remarks>
+ <history>
+ 	[adminsupport]	20.01.2005	Created 
+ </history></member>
+    <member name="M:CompuMaster.Tools.Data.DataQuery.AnyIDataProvider.CloseConnection(System.Data.IDbConnection)">
+      <summary>
+     Securely close a database connection 
+ </summary>
+ <param name="connection">The connection to close</param>
+ <remarks>
+ </remarks>
+ <history>
+ 	[adminsupport]	20.01.2005	Created 
+ </history></member>
+    <member name="M:CompuMaster.Tools.Data.DataQuery.AnyIDataProvider.OpenConnection(System.Data.IDbConnection)">
+      <summary>
+     Open a database connection if it is not already opened 
+ </summary>
+ <param name="connection">The connection to open</param>
+ <remarks>
+ </remarks>
+ <history>
+ 	[adminsupport]	20.01.2005	Created 
+ </history></member>
+    <member name="T:CompuMaster.Tools.Data.Csv">
+      <summary>
+     Provides simplified access to CSV files 
+ </summary>
+ <remarks>
+ </remarks>
+ <history>
+ 	[adminwezel]	03.07.2004	Created 
+ </history></member>
+    <member name="M:CompuMaster.Tools.Data.Csv.ReadDataTableFromCsvReader(System.IO.StreamReader,System.Boolean,System.Globalization.CultureInfo,System.Int32[],System.Boolean)">
+      <summary>
+     Read from a CSV table 
+ </summary>
+ <param name="reader">A stream reader targetting CSV data</param>
+ <param name="includesColumnHeaders">Indicates wether column headers are present</param>
+ <param name="columnWidths">An array of column widths in their order</param>
+ <param name="convertEmptyStringsToDBNull">Convert values with empty strings automatically to DbNull</param>
+ <returns />
+ <remarks>
+ </remarks>
+ <history>
+ 	[adminsupport]	19.04.2005	Created 
+ </history></member>
+    <member name="M:CompuMaster.Tools.Data.Csv.ReadDataTableFromCsvFile(System.String,System.Boolean,System.Int32[],System.String,System.Boolean)">
+      <summary>
+     Read from a CSV file 
+ </summary>
+ <param name="path">The path of the file</param>
+ <param name="includesColumnHeaders">Indicates wether column headers are present</param>
+ <param name="columnWidths">An array of column widths in their order</param>
+ <param name="encoding">The text encoding of the file</param>
+ <param name="convertEmptyStringsToDBNull">Convert values with empty strings automatically to DbNull</param>
+ <returns />
+ <remarks>
+ </remarks>
+ <history>
+ 	[adminwezel]	03.07.2004	Created 
+ </history></member>
+    <member name="M:CompuMaster.Tools.Data.Csv.ReadDataTableFromCsvFile(System.String,System.Boolean,System.Int32[],System.Text.Encoding,System.Globalization.CultureInfo,System.Boolean)">
+      <summary>
+     Read from a CSV file 
+ </summary>
+ <param name="path">The path of the file</param>
+ <param name="includesColumnHeaders">Indicates wether column headers are present</param>
+ <param name="columnWidths">An array of column widths in their order</param>
+ <param name="encoding">The text encoding of the file</param>
+ <param name="cultureFormatProvider" />
+ <param name="convertEmptyStringsToDBNull">Convert values with empty strings automatically to DbNull</param>
+ <returns />
+ <remarks>
+ </remarks>
+ <history>
+ 	[adminwezel]	03.07.2004	Created 
+ </history></member>
+    <member name="M:CompuMaster.Tools.Data.Csv.ReadDataTableFromCsvString(System.String,System.Boolean,System.Int32[],System.Boolean)">
+      <summary>
+     Read from a CSV table 
+ </summary>
+ <param name="data">The content of a CSV file</param>
+ <param name="includesColumnHeaders">Indicates wether column headers are present</param>
+ <param name="columnWidths">An array of column widths in their order</param>
+ <param name="convertEmptyStringsToDBNull">Convert values with empty strings automatically to DbNull</param>
+ <returns />
+ <remarks>
+ </remarks>
+ <history>
+ 	[adminwezel]	03.07.2004	Created 
+ </history></member>
+    <member name="M:CompuMaster.Tools.Data.Csv.ReadDataTableFromCsvString(System.String,System.Boolean,System.Globalization.CultureInfo,System.Int32[],System.Boolean)">
+      <summary>
+     Read from a CSV table 
+ </summary>
+ <param name="data">The content of a CSV file</param>
+ <param name="includesColumnHeaders">Indicates wether column headers are present</param>
+ <param name="cultureFormatProvider" />
+ <param name="columnWidths">An array of column widths in their order</param>
+ <param name="convertEmptyStringsToDBNull">Convert values with empty strings automatically to DbNull</param>
+ <returns />
+ <remarks>
+ </remarks>
+ <history>
+ 	[adminwezel]	03.07.2004	Created 
+ </history></member>
+    <member name="M:CompuMaster.Tools.Data.Csv.SplitFixedCsvLineIntoCellValues(System.String@,System.Collections.ArrayList,System.Int32@,System.Int32[])">
+      <summary>
+     Split a line content into separate column values and add them to the output list 
+ </summary>
+ <param name="lineContent">The line content as it has been read from the CSV file</param>
+ <param name="outputList">An array list which shall hold the separated column values</param>
+ <param name="startPosition">The start position to which the columnWidhts are related to</param>
+ <param name="columnWidths">An array of column widths in their order</param>
+ <remarks>
+ </remarks>
+ <history>
+ 	[AdminSupport]	29.08.2005	Created 
+ </history></member>
+    <member name="M:CompuMaster.Tools.Data.Csv.SplitFixedCsvLineIntoCellValuesIsNewColumnPosition(System.Int32,System.Int32,System.Int32[])">
+      <summary>
+     Calculate if the current position is the first position of a new column 
+ </summary>
+ <param name="currentPosition">The current position in the whole document</param>
+ <param name="startPosition">The start position to which the columnWidhts are related to</param>
+ <param name="columnWidths">An array containing the definitions of the column widths</param>
+ <returns>True if the current position identifies a new column value, otherwise False</returns>
+ <remarks>
+ </remarks>
+ <history>
+ 	[adminsupport]	07.03.2006	Created 
+ </history></member>
+    <member name="M:CompuMaster.Tools.Data.Csv.ReadDataTableFromCsvFile(System.String,System.Boolean,System.String,System.Char,System.Char,System.Boolean,System.Boolean)">
+      <summary>
+     Read from a CSV file 
+ </summary>
+ <param name="path">The path of the file</param>
+ <param name="includesColumnHeaders">Indicates wether column headers are present</param>
+ <param name="encoding">The text encoding of the file</param>
+ <param name="columnSeparator">Choose the required character for splitting the columns. Set to null (Nothing in VisualBasic) to enable fixed column widths mode</param>
+ <param name="recognizeTextBy">A character indicating the start and end of text strings</param>
+ <param name="recognizeDoubledColumnSeparatorCharAsOne">Currently without purpose</param>
+ <param name="convertEmptyStringsToDBNull">Convert values with empty strings automatically to DbNull</param>
+ <returns />
+ <remarks>
+ </remarks>
+ <history>
+ 	[adminwezel]	03.07.2004	Created 
+ </history></member>
+    <member name="M:CompuMaster.Tools.Data.Csv.ReadDataTableFromCsvFile(System.String,System.Boolean,System.Text.Encoding,System.Globalization.CultureInfo,System.Char,System.Boolean,System.Boolean)">
+      <summary>
+     Read from a CSV file 
+ </summary>
+ <param name="Path">The path of the file</param>
+ <param name="IncludesColumnHeaders">Indicates wether column headers are present</param>
+ <param name="Encoding">The text encoding of the file</param>
+ <param name="cultureFormatProvider" />
+ <param name="RecognizeTextBy">A character indicating the start and end of text strings</param>
+ <param name="recognizeDoubledColumnSeparatorCharAsOne">Currently without purpose</param>
+ <param name="convertEmptyStringsToDBNull">Convert values with empty strings automatically to DbNull</param>
+ <returns />
+ <remarks>
+ </remarks>
+ <history>
+ 	[adminwezel]	03.07.2004	Created 
+ </history></member>
+    <member name="M:CompuMaster.Tools.Data.Csv.ReadDataTableFromCsvReader(System.IO.StreamReader,System.Boolean,System.Globalization.CultureInfo,System.Char,System.Char,System.Boolean,System.Boolean)">
+      <summary>
+     Read from a CSV table 
+ </summary>
+ <param name="reader">A stream reader targetting CSV data</param>
+ <param name="includesColumnHeaders">Indicates wether column headers are present</param>
+ <param name="columnSeparator">Choose the required character for splitting the columns. Set to null (Nothing in VisualBasic) to enable fixed column widths mode</param>
+ <param name="recognizeTextBy">A character indicating the start and end of text strings</param>
+ <param name="recognizeDoubledColumnSeparatorCharAsOne">Currently without purpose</param>
+ <param name="convertEmptyStringsToDBNull">Convert values with empty strings automatically to DbNull</param>
+ <returns />
+ <remarks>
+ </remarks>
+ <history>
+ 	[adminsupport]	19.04.2005	Created 
+ </history></member>
+    <member name="M:CompuMaster.Tools.Data.Csv.SplitCsvLineIntoCellValues(System.String@,System.Collections.ArrayList,System.Int32@,System.Char,System.Char,System.Boolean)">
+      <summary>
+     Split a line content into separate column values and add them to the output list 
+ </summary>
+ <param name="lineContent">The line content as it has been read from the CSV file</param>
+ <param name="outputList">An array list which shall hold the separated column values</param>
+ <param name="startposition" />
+ <param name="columnSeparator" />
+ <param name="recognizeTextBy" />
+ <param name="recognizeDoubledColumnSeparatorCharAsOne" />
+ <remarks>
+ </remarks>
+ <history>
+ 	[AdminSupport]	29.08.2005	Created 
+ </history></member>
+    <member name="M:CompuMaster.Tools.Data.Csv.ReadDataTableFromCsvString(System.String,System.Boolean,System.Char,System.Char,System.Boolean,System.Boolean)">
+      <summary>
+     Read from a CSV table 
+ </summary>
+ <param name="data">The content of a CSV file</param>
+ <param name="includesColumnHeaders">Indicates wether column headers are present</param>
+ <param name="columnSeparator">Choose the required character for splitting the columns. Set to null (Nothing in VisualBasic) to enable fixed column widths mode</param>
+ <param name="recognizeTextBy">A character indicating the start and end of text strings</param>
+ <param name="recognizeDoubledColumnSeparatorCharAsOne">Currently without purpose</param>
+ <param name="convertEmptyStringsToDBNull">Convert values with empty strings automatically to DbNull</param>
+ <returns />
+ <remarks>
+ </remarks>
+ <history>
+ 	[adminwezel]	03.07.2004	Created 
+ </history></member>
+    <member name="M:CompuMaster.Tools.Data.Csv.ReadDataTableFromCsvString(System.String,System.Boolean,System.Globalization.CultureInfo,System.Char,System.Boolean,System.Boolean)">
+      <summary>
+     Read from a CSV table 
+ </summary>
+ <param name="data">The content of a CSV file</param>
+ <param name="IncludesColumnHeaders">Indicates wether column headers are present</param>
+ <param name="cultureFormatProvider" />
+ <param name="RecognizeTextBy">A character indicating the start and end of text strings</param>
+ <param name="recognizeDoubledColumnSeparatorCharAsOne">Currently without purpose</param>
+ <param name="convertEmptyStringsToDBNull">Convert values with empty strings automatically to DbNull</param>
+ <returns />
+ <remarks>
+ </remarks>
+ <history>
+ 	[adminwezel]	03.07.2004	Created 
+ </history></member>
+    <member name="M:CompuMaster.Tools.Data.Csv.ConvertDBNullValuesToEmptyStrings(System.Data.DataTable)">
+      <summary>
+     Convert DBNull values to empty strings 
+ </summary>
+ <param name="data">The data which might contain DBNull values</param>
+ <remarks>
+ </remarks>
+ <history>
+ 	[wezel]	14.04.2005	Created 
+ </history></member>
+    <member name="M:CompuMaster.Tools.Data.Csv.ConvertEmptyStringsToDBNullValue(System.Data.DataTable)">
+      <summary>
+     Convert empty string values to DBNull 
+ </summary>
+ <param name="data">The data which might contain empty strings</param>
+ <remarks>
+ </remarks>
+ <history>
+ 	[wezel]	14.04.2005	Created 
+ </history></member>
+    <member name="M:CompuMaster.Tools.Data.Csv.FixedLengthText(System.String,System.Int32,System.Boolean)">
+      <summary>
+     Trims a string to exactly the required fix size 
+ </summary>
+ <param name="text" />
+ <param name="fixedLengthSize" />
+ <param name="alignedRight">Add additionally required spaces on the left (True) or on the right (False)</param>
+ <returns />
+ <remarks>
+ </remarks>
+ <history>
+ 	[adminsupport]	09.03.2006	Created 
+ </history></member>
+    <member name="M:CompuMaster.Tools.Data.Csv.ConvertDataTableToCsv(System.Data.DataTable,System.Boolean,System.Globalization.CultureInfo,System.Int32[])">
+      <summary>
+     Convert the datatable to a string based, comma-separated format 
+ </summary>
+ <param name="dataTable" />
+ <param name="includesColumnHeaders" />
+ <param name="cultureFormatProvider" />
+ <param name="columnWidths" />
+ <returns />
+ <remarks>
+ </remarks>
+ <history>
+ 	[adminsupport]	09.03.2006	Created 
+ </history></member>
+    <member name="M:CompuMaster.Tools.Data.Csv.ConvertDataTableToCsv(System.Data.DataTable,System.Boolean,System.Globalization.CultureInfo,System.String,System.Char)">
+      <summary>
+     Convert the datatable to a string based, comma-separated format 
+ </summary>
+ <param name="dataTable" />
+ <param name="includesColumnHeaders" />
+ <param name="cultureFormatProvider" />
+ <param name="columnSeparator" />
+ <param name="recognizeTextBy" />
+ <returns />
+ <remarks>
+ </remarks>
+ <history>
+ 	[adminsupport]	09.03.2006	Created 
+ </history></member>
+    <member name="M:CompuMaster.Tools.Data.Csv.WriteDataTableToCsvFile(System.String,System.Data.DataTable,System.Boolean,System.String,System.String,System.Char,System.Char)">
+      <summary>
+     Write to a CSV file 
+ </summary>
+ <param name="path">The path of the file</param>
+ <param name="dataTable" />
+ <param name="includesColumnHeaders">Indicates wether column headers are present</param>
+ <param name="encoding">The text encoding of the file</param>
+ <param name="columnSeparator">Choose the required character for splitting the columns. Set to null (Nothing in VisualBasic) to enable fixed column widths mode</param>
+ <param name="recognizeTextBy">A character indicating the start and end of text strings</param>
+ <param name="decimalSeparator">A character indicating the decimal separator in the text string</param>
+ <remarks>
+ </remarks>
+ <history>
+ 	[Wezel]	19.10.2004	Created 
+ </history></member>
+    <member name="M:CompuMaster.Tools.Data.Csv.WriteDataTableToCsvString(System.Data.DataTable,System.Boolean,System.String,System.Char,System.Char,System.Char)">
+      <summary>
+     Create a CSV table 
+ </summary>
+ <param name="dataTable" />
+ <param name="includesColumnHeaders">Indicates wether column headers are present</param>
+ <param name="encoding">The text encoding of the file</param>
+ <param name="columnSeparator">Choose the required character for splitting the columns. Set to null (Nothing in VisualBasic) to enable fixed column widths mode</param>
+ <param name="recognizeTextBy">A character indicating the start and end of text strings</param>
+ <param name="decimalSeparator" />
+ <returns>A string containing the CSV table</returns>
+ <remarks>
+ </remarks>
+ <history>
+ 	[wezel]	19.04.2005	Created 
+ </history></member>
+    <member name="M:CompuMaster.Tools.Data.Csv.WriteDataTableToCsvBytes(System.Data.DataTable,System.Boolean,System.String,System.Char,System.Char,System.Char)">
+      <summary>
+     Create a CSV table 
+ </summary>
+ <param name="dataTable" />
+ <param name="includesColumnHeaders">Indicates wether column headers are present</param>
+ <param name="encoding">The text encoding of the file</param>
+ <param name="columnSeparator">Choose the required character for splitting the columns. Set to null (Nothing in VisualBasic) to enable fixed column widths mode</param>
+ <param name="recognizeTextBy">A character indicating the start and end of text strings</param>
+ <param name="decimalSeparator" />
+ <returns>A string containing the CSV table</returns>
+ <remarks>
+ </remarks>
+ <history>
+ 	[wezel]	19.04.2005	Created 
+ </history></member>
+    <member name="M:CompuMaster.Tools.Data.Csv.WriteDataTableToCsvBytes(System.Data.DataTable,System.Boolean,System.Text.Encoding,System.Globalization.CultureInfo,System.Char,System.Char)">
+      <summary>
+     Create a CSV table 
+ </summary>
+ <param name="dataTable" />
+ <param name="includesColumnHeaders">Indicates wether column headers are present</param>
+ <param name="encoding">The text encoding of the file</param>
+ <param name="cultureFormatProvider">A globalization information object for the conversion of all data to strings</param>
+ <param name="columnSeparator">Choose the required character for splitting the columns. Set to null (Nothing in VisualBasic) to enable fixed column widths mode</param>
+ <param name="recognizeTextBy">A character indicating the start and end of text strings</param>
+ <returns>A string containing the CSV table</returns>
+ <remarks>
+ </remarks>
+ <history>
+ 	[wezel]	19.04.2005	Created 
+ </history></member>
+    <member name="M:CompuMaster.Tools.Data.Csv.WriteDataTableToCsvMemoryStream(System.Data.DataTable,System.Boolean,System.String,System.String,System.Char,System.Char)">
+      <summary>
+     Create a CSV table 
+ </summary>
+ <param name="dataTable" />
+ <param name="includesColumnHeaders">Indicates wether column headers are present</param>
+ <param name="encoding">The text encoding of the file</param>
+ <param name="columnSeparator">Choose the required character for splitting the columns. Set to null (Nothing in VisualBasic) to enable fixed column widths mode</param>
+ <param name="recognizeTextBy">A character indicating the start and end of text strings</param>
+ <param name="decimalSeparator" />
+ <returns>A memory stream containing all texts as bytes in Unicode format</returns>
+ <remarks>
+ </remarks>
+ <history>
+ 	[wezel]	19.04.2005	Created 
+ </history></member>
+    <member name="M:CompuMaster.Tools.Data.Csv.WriteDataTableToCsvMemoryStream(System.Data.DataTable,System.Boolean,System.Text.Encoding,System.Globalization.CultureInfo,System.String,System.Char)">
+      <summary>
+     Create a CSV table 
+ </summary>
+ <param name="dataTable" />
+ <param name="includesColumnHeaders">Indicates wether column headers are present</param>
+ <param name="encoding">The text encoding of the file</param>
+ <param name="cultureFormatProvider">A globalization information object for the conversion of all data to strings</param>
+ <param name="columnSeparator">Choose the required character for splitting the columns. Set to null (Nothing in VisualBasic) to enable fixed column widths mode</param>
+ <param name="recognizeTextBy">A character indicating the start and end of text strings</param>
+ <returns>A memory stream containing all texts as bytes in Unicode format</returns>
+ <remarks>
+ </remarks>
+ <history>
+ 	[wezel]	19.04.2005	Created 
+ </history></member>
+    <member name="M:CompuMaster.Tools.Data.Csv.CsvEncode(System.String,System.Char)">
+      <summary>
+     Encode a string into CSV encoding 
+ </summary>
+ <param name="value">The unencoded text</param>
+ <param name="recognizeTextBy">The character to identify a string in the CSV file</param>
+ <returns>The encoded writing style of the given text</returns>
+ <remarks>
+ </remarks>
+ <history>
+ 	[AdminSupport]	29.08.2005	Created 
+ </history></member>
+    <member name="M:CompuMaster.Tools.Data.Csv.WriteDataViewToCsvFile(System.String,System.Data.DataView,System.Boolean,System.String,System.String,System.Char,System.Char)">
+      <summary>
+     Write to a CSV file 
+ </summary>
+ <param name="path">The path of the file</param>
+ <param name="dataView">A dataview object with the desired rows</param>
+ <param name="includesColumnHeaders">Indicates wether column headers are present</param>
+ <param name="encoding">The text encoding of the file</param>
+ <param name="columnSeparator">Choose the required character for splitting the columns. Set to null (Nothing in VisualBasic) to enable fixed column widths mode</param>
+ <param name="recognizeTextBy">A character indicating the start and end of text strings</param>
+ <remarks>
+ </remarks>
+ <history>
+ 	[Wezel]	19.10.2004	Created 
+ </history></member>
+    <member name="T:CompuMaster.Tools.Data.DataTables">
+      <summary>
+     Common DataTable operations 
+ </summary>
+ <remarks>
+ </remarks>
+ <history>
+ 	[adminwezel]	03.07.2004	Created 
+ </history></member>
+    <member name="M:CompuMaster.Tools.Data.DataTables.RemoveDuplicates(System.Data.DataTable,System.String)">
+      <summary>
+ Remove rows with duplicate values in a given column 
+ </summary>
+ <param name="dataTable">A datatable with duplicate values</param>
+ <param name="columnName">Column name of the datatable which contains the duplicate values</param>
+ <returns>A datatable with unique records in the specified column</returns>
+ <remarks>
+ </remarks>
+ <history>
+ 	[zeutzheim]	04.05.2007	Created 
+ </history></member>
+    <member name="M:CompuMaster.Tools.Data.DataTables.KeepColumnsAndRemoveAllOthers(System.Data.DataTable,System.String[])">
+      <summary>
+     Drop all columns except the required ones 
+ </summary>
+ <param name="table">A data table containing some columns</param>
+ <param name="remainingColumns">A list of column names which shall not be removed</param>
+ <remarks>
+     If the list of the remaining columns contains some column names which are not existing, then those column names will be ignored. There will be no exception in this case. 
+     The names of the columns are handled case-insensitive. 
+ </remarks>
+ <history>
+ 	[adminsupport]	07.03.2006	Created 
+ </history></member>
+    <member name="M:CompuMaster.Tools.Data.DataTables.RowIndex(System.Data.DataRow)">
+      <summary>
+     Lookup the row index for a data row in a data table 
+ </summary>
+ <param name="dataRow">The data row whose index number is required</param>
+ <returns>An index number for the given data row</returns>
+ <remarks>
+ </remarks>
+ <history>
+ 	[AdminSupport]	12.09.2005	Created 
+ </history></member>
+    <member name="M:CompuMaster.Tools.Data.DataTables.FindDuplicates(System.Data.DataColumn)">
+      <summary>
+     Find duplicate values in a given row and calculate the number of occurances of each value in the table 
+ </summary>
+ <param name="column">A column of a datatable</param>
+ <returns>A hashtable containing the origin column value as key and the number of occurances as value</returns>
+ <remarks>
+ </remarks>
+ <history>
+ 	[AdminSupport]	30.08.2005	Created 
+ </history></member>
+    <member name="M:CompuMaster.Tools.Data.DataTables.FindDuplicates(System.Data.DataColumn,System.Int32)">
+      <summary>
+     Find duplicate values in a given row and calculate the number of occurances of each value in the table 
+ </summary>
+ <param name="column">A column of a datatable</param>
+ <param name="minOccurances">Only values with occurances equal or more than this number will be returned</param>
+ <returns>A hashtable containing the origin column value as key and the number of occurances as value</returns>
+ <remarks>
+ </remarks>
+ <history>
+ 	[AdminSupport]	30.08.2005	Created 
+ </history></member>
+    <member name="M:CompuMaster.Tools.Data.DataTables.ConvertDataTableToWinFormsListControlItem(System.Data.DataTable)">
+      <summary>
+     Convert the first two columns into objects which can be consumed by the ListControl objects in the System.Windows.Forms namespaces 
+ </summary>
+ <param name="datatable">The datatable which contains a key column and a value column for the list control</param>
+ <returns>An array of WinFormsListControlItem</returns>
+ <remarks>
+ </remarks>
+ <history>
+ 	[adminsupport]	29.06.2005	Created 
+ </history></member>
+    <member name="M:CompuMaster.Tools.Data.DataTables.ConvertDatasetToXml(System.Data.DataSet)">
+      <summary>
+     Convert a dataset to an xml string with data and schema information 
+ </summary>
+ <param name="dataset" />
+ <returns />
+ <remarks>
+ </remarks>
+ <history>
+ 	[AdminSupport]	04.05.2005	Created 
+ </history></member>
+    <member name="M:CompuMaster.Tools.Data.DataTables.ConvertXmlToDataset(System.String)">
+      <summary>
+     Convert an xml string to a dataset 
+ </summary>
+ <param name="xml" />
+ <returns />
+ <remarks>
+ </remarks>
+ <history>
+ 	[AdminSupport]	04.05.2005	Created 
+ </history></member>
+    <member name="M:CompuMaster.Tools.Data.DataTables.GetDataTableWithSubsetOfRows(System.Data.DataTable,System.Int32)">
+      <summary>
+     Create a new data table clone with only some first rows 
+ </summary>
+ <param name="SourceTable">The source table to be copied</param>
+ <param name="NumberOfRows">The number of rows to be copied</param>
+ <returns>The new clone of the datatable</returns>
+ <remarks>
+ </remarks>
+ <history>
+ 	[adminwezel]	28.08.2004	Created 
+ </history></member>
+    <member name="M:CompuMaster.Tools.Data.DataTables.GetDataTableWithSubsetOfRows(System.Data.DataTable,System.Int32,System.Int32)">
+      <summary>
+     Create a new data table clone with only some first rows 
+ </summary>
+ <param name="SourceTable">The source table to be copied</param>
+ <param name="StartAtRow">The position where to start the copy process, the first row is at 0</param>
+ <param name="NumberOfRows">The number of rows to be copied</param>
+ <returns>The new clone of the datatable</returns>
+ <remarks>
+ </remarks>
+ <history>
+ 	[adminwezel]	28.08.2004	Created 
+ </history></member>
+    <member name="M:CompuMaster.Tools.Data.DataTables.RemoveRowsWithNoCorrespondingValueInComparisonTable(System.Data.DataColumn,System.Data.DataColumn)">
+      <summary>
+     Remove those rows in the source column which haven't got the same value in the compare table 
+ </summary>
+ <param name="sourceColumn">This is the column of the master table where all operations shall be executed</param>
+ <param name="valuesMustExistInThisColumnToKeepTheSourceRow">This is the comparison value against the source table's column</param>
+ <returns>An arraylist of removed keys</returns>
+ <remarks>
+     Strings will be compared case-insensitive, DBNull values in the source table will always be removed 
+ </remarks>
+ <history>
+ 	[wezel]	07.10.2005	Created 
+ </history></member>
+    <member name="M:CompuMaster.Tools.Data.DataTables.RemoveRowsWithNoCorrespondingValueInComparisonTable(System.Data.DataColumn,System.Data.DataColumn,System.Boolean,System.Boolean)">
+      <summary>
+     Remove those rows in the source column which haven't got the same value in the compare table 
+ </summary>
+ <param name="sourceColumn">This is the column of the master table where all operations shall be executed</param>
+ <param name="valuesMustExistInThisColumnToKeepTheSourceRow">This is the comparison value against the source table's column</param>
+ <param name="ignoreCaseInStrings">Strings will be compared case-insensitive</param>
+ <param name="alwaysRemoveDBNullValues">Always remove the source row when it contains a DBNull value</param>
+ <returns>An arraylist of removed keys</returns>
+ <remarks>
+ </remarks>
+ <history>
+ 	[wezel]	07.10.2005	Created 
+ </history></member>
+    <member name="M:CompuMaster.Tools.Data.DataTables.RemoveRowsWithNoCorrespondingValueInComparisonTable(DataColumn,DataColumn,Boolean,Boolean)">
+      <summary>
+     Remove those rows in the source column which haven't got the same value in the compare table 
+ </summary>
+ <param name="sourceColumns">These are the columns of the master table where all operations shall be executed</param>
+ <param name="valuesMustExistInTheseColumnsToKeepTheSourceRow">These are the comparison values against the source table's columns</param>
+ <param name="ignoreCaseInStrings">Strings will be compared case-insensitive</param>
+ <param name="alwaysRemoveDBNullValues">Always remove the source row when it contains a DBNull value</param>
+ <returns>An arraylist with object arrays containing all key values of a row in the order of the source columns</returns>
+ <remarks>
+ </remarks>
+ <history>
+ 	[wezel]	07.10.2005	Created 
+ </history></member>
+    <member name="M:CompuMaster.Tools.Data.DataTables.CreateDataRowClone(System.Data.DataRow)">
+      <summary>
+     Creates a complete clone of a DataRow with structure as well as data 
+ </summary>
+ <param name="sourceRow">The source row to be copied</param>
+ <returns>The new clone of the DataRow</returns>
+ <remarks>
+     The resulting DataRow has got the schema from the sourceRow's DataTable, but it hasn't been added to the table yet. 
+ </remarks>
+ <history>
+ 	[baldauf]	2005-07-02  Created 
+ </history></member>
+    <member name="M:CompuMaster.Tools.Data.DataTables.GetDataTableClone(System.Data.DataTable)">
+      <summary>
+     Creates a complete clone of a DataTable with structure as well as data 
+ </summary>
+ <param name="SourceTable">The source table to be copied</param>
+ <returns>The new clone of the datatable</returns>
+ <remarks>
+ </remarks>
+ <history>
+ 	[adminwezel]	03.07.2004	Created 
+ </history></member>
+    <member name="M:CompuMaster.Tools.Data.DataTables.GetDataTableClone(System.Data.DataTable,System.String)">
+      <summary>
+     Creates a complete clone of a DataTable with structure as well as data 
+ </summary>
+ <param name="SourceTable">The source table to be copied</param>
+ <param name="RowFilter">An additional row filter, for all rows set it to null (Nothing in VisualBasic)</param>
+ <returns>The new clone of the datatable</returns>
+ <remarks>
+ </remarks>
+ <history>
+ 	[adminwezel]	03.07.2004	Created 
+ </history></member>
+    <member name="M:CompuMaster.Tools.Data.DataTables.GetDataTableClone(System.Data.DataTable,System.String,System.String)">
+      <summary>
+     Creates a complete clone of a DataTable with structure as well as data 
+ </summary>
+ <param name="SourceTable">The source table to be copied</param>
+ <param name="RowFilter">An additional row filter, for all rows set it to null (Nothing in VisualBasic)</param>
+ <param name="Sort">An additional sort command</param>
+ <returns>The new clone of the datatable</returns>
+ <remarks>
+ </remarks>
+ <history>
+ 	[adminwezel]	03.07.2004	Created 
+ </history></member>
+    <member name="M:CompuMaster.Tools.Data.DataTables.GetDataTableClone(System.Data.DataTable,System.String,System.String,System.Int32)">
+      <summary>
+     Creates a complete clone of a DataTable with structure as well as data 
+ </summary>
+ <param name="SourceTable">The source table to be copied</param>
+ <param name="RowFilter">An additional row filter, for all rows set it to null (Nothing in VisualBasic)</param>
+ <param name="Sort">An additional sort command</param>
+ <param name="topRows">How many rows from top shall be returned as maximum?</param>
+ <returns>The new clone of the datatable</returns>
+ <remarks>
+ </remarks>
+ <history>
+ 	[adminwezel]	03.07.2004	Created 
+ </history></member>
+    <member name="M:CompuMaster.Tools.Data.DataTables.GetDataTableClone(System.Data.DataTable,System.Data.DataTable,System.String,System.String,System.Int32,System.Boolean,System.Boolean,System.Boolean)">
+      <summary>
+     Creates a complete clone of a DataTable with structure as well as data 
+ </summary>
+ <param name="sourceTable">The source table to be copied</param>
+ <param name="destinationTable">The destination of all operations; the destination table will be a clone of the source table at the end</param>
+ <param name="rowFilter">An additional row filter, for all rows set it to null (Nothing in VisualBasic)</param>
+ <param name="sort">An additional sort command</param>
+ <param name="topRows">How many rows from top shall be returned as maximum?</param>
+ <param name="overwritePropertiesOfExistingColumns">Shall the data type or any other settings of an existing table be modified to match the source column's definition?</param>
+ <param name="dropExistingRowsInDestinationTable">Remove the existing rows of the destination table, first</param>
+ <param name="removeUnusedColumnsFromDestinationTable">Remove the existing columns of the destination table which are not present in the source table</param>
+ <remarks>
+ </remarks>
+ <history>
+ 	[AdminSupport]	27.10.2005	Created 
+ </history></member>
+    <member name="M:CompuMaster.Tools.Data.DataTables.ConvertDataViewToDataTable(System.Data.DataView)">
+      <summary>
+     Creates a clone of a dataview but as a new data table 
+ </summary>
+ <param name="data">The data view to create the data table from</param>
+ <returns />
+ <remarks>
+ </remarks>
+ <history>
+ 	[mecky]	20.10.2004	Created 
+ </history></member>
+    <member name="M:CompuMaster.Tools.Data.DataTables.ConvertArrayListToDataTable(System.Collections.ArrayList)">
+      <summary>
+     Convert an ArrayList to a datatable 
+ </summary>
+ <param name="arrayList">An ArrayList with some content</param>
+ <returns>Datatable with column "key" and "value"</returns>
+ <remarks>
+ </remarks>
+ <history>
+ 	[adminsupport]	08.12.2004	Created 
+ </history></member>
+    <member name="M:CompuMaster.Tools.Data.DataTables.ConvertDataTableToArrayList(System.Data.DataColumn)">
+      <summary>
+     Convert a data table to an arraylist 
+ </summary>
+ <param name="column">The column which shall be used to fill the arraylist</param>
+ <returns />
+ <remarks>
+ </remarks>
+ <history>
+ 	[adminsupport]	15.04.2005	Created 
+ </history></member>
+    <member name="M:CompuMaster.Tools.Data.DataTables.ConvertDataTableToArrayList(System.Data.DataTable)">
+      <summary>
+     Convert a data table to an arraylist 
+ </summary>
+ <param name="data">The first column of this data table will be used</param>
+ <returns />
+ <remarks>
+ </remarks>
+ <history>
+ 	[adminsupport]	15.04.2005	Created 
+ </history></member>
+    <member name="M:CompuMaster.Tools.Data.DataTables.ConvertDataTableToArrayList(System.Data.DataTable,System.Int32)">
+      <summary>
+     Convert a data table to an arraylist 
+ </summary>
+ <param name="data">The data table with the content</param>
+ <param name="selectedColumnIndex">The column which shall be used to fill the arraylist</param>
+ <returns />
+ <remarks>
+ </remarks>
+ <history>
+ 	[adminsupport]	15.04.2005	Created 
+ </history></member>
+    <member name="M:CompuMaster.Tools.Data.DataTables.ConvertDataTableToHashtable(System.Data.DataColumn,System.Data.DataColumn)">
+      <summary>
+     Convert a data table to a hash table 
+ </summary>
+ <param name="keyColumn">This is the key column from the data table and MUST BE UNIQUE</param>
+ <param name="valueColumn">A column which contains the values</param>
+ <returns />
+ <remarks>
+ </remarks>
+ <history>
+ 	[adminsupport]	15.04.2005	Created 
+ </history></member>
+    <member name="M:CompuMaster.Tools.Data.DataTables.ConvertDataTableToHashtable(System.Data.DataTable)">
+      <summary>
+     Convert a data table to a hash table 
+ </summary>
+ <param name="data">The first two columns of this data table will be used</param>
+ <returns />
+ <remarks>
+     ATTENTION: the very first column is used as key column and must be unique therefore 
+ </remarks>
+ <history>
+ 	[adminsupport]	15.04.2005	Created 
+ </history></member>
+    <member name="M:CompuMaster.Tools.Data.DataTables.ConvertDataTableToHashtable(System.Data.DataTable,System.Int32,System.Int32)">
+      <summary>
+     Convert a data table to a hash table 
+ </summary>
+ <param name="data">The data table with the content</param>
+ <param name="keyColumnIndex">This is the key column from the data table and MUST BE UNIQUE (make it unique, first!)</param>
+ <param name="valueColumnIndex">A column which contains the values</param>
+ <returns />
+ <remarks>
+ </remarks>
+ <history>
+ 	[adminsupport]	15.04.2005	Created 
+ </history></member>
+    <member name="M:CompuMaster.Tools.Data.DataTables.ConvertDataTableToDictionaryEntryArray(System.Data.DataTable)">
+      <summary>
+     Convert a data table to an array of dictionary entries 
+ </summary>
+ <param name="data">The first two columns of this data table will be used</param>
+ <returns />
+ <remarks>
+     The very first column is used as key column, the second one as the value column 
+ </remarks>
+ <history>
+ 	[adminsupport]	15.04.2005	Created 
+ </history></member>
+    <member name="M:CompuMaster.Tools.Data.DataTables.ConvertDataTableToDictionaryEntryArray(System.Data.DataColumn,System.Data.DataColumn)">
+      <summary>
+     Convert a data table to an array of dictionary entries 
+ </summary>
+ <param name="keyColumn">This is the key column from the data table</param>
+ <param name="valueColumn">A column which contains the values</param>
+ <returns />
+ <remarks>
+ </remarks>
+ <history>
+ 	[adminsupport]	15.04.2005	Created 
+ </history></member>
+    <member name="M:CompuMaster.Tools.Data.DataTables.ConvertDataTableToDictionaryEntryArray(System.Data.DataTable,System.Int32,System.Int32)">
+      <summary>
+     Convert a data table to an array of dictionary entries 
+ </summary>
+ <param name="data">The data table with the content</param>
+ <param name="keyColumnIndex">This is the key column from the data table</param>
+ <param name="valueColumnIndex">A column which contains the values</param>
+ <returns />
+ <remarks>
+ </remarks>
+ <history>
+ 	[adminsupport]	15.04.2005	Created 
+ </history></member>
+    <member name="M:CompuMaster.Tools.Data.DataTables.ConvertHashtableToDataTable(System.Collections.Hashtable)">
+      <summary>
+     Convert a hashtable to a datatable 
+ </summary>
+ <param name="hashtable">A hashtable with some content</param>
+ <returns>Datatable with column "key" and "value"</returns>
+ <remarks>
+ </remarks>
+ <history>
+ 	[adminsupport]	08.12.2004	Created 
+ </history></member>
+    <member name="M:CompuMaster.Tools.Data.DataTables.ConvertICollectionToDataTable(System.Collections.ICollection)">
+      <summary>
+     Convert an ICollection to a datatable 
+ </summary>
+ <param name="collection">An ICollection with some content</param>
+ <returns>Datatable with column "key" and "value"</returns>
+ <remarks>
+ </remarks>
+ <history>
+ 	[adminsupport]	08.12.2004	Created 
+ </history></member>
+    <member name="M:CompuMaster.Tools.Data.DataTables.ConvertIDictionaryToDataTable(System.Collections.IDictionary)">
+      <summary>
+     Convert an IDictionary to a datatable 
+ </summary>
+ <param name="dictionary">An IDictionary with some content</param>
+ <returns>Datatable with column "key" and "value"</returns>
+ <remarks>
+ </remarks>
+ <history>
+ 	[adminsupport]	08.12.2004	Created 
+ </history></member>
+    <member name="M:CompuMaster.Tools.Data.DataTables.ConvertIDictionaryToDataTable(System.Collections.IDictionary,System.Boolean)">
+      <summary>
+     Convert an IDictionary to a datatable 
+ </summary>
+ <param name="dictionary">An IDictionary with some content</param>
+ <param name="keyIsUnique">If true, the key column in the data table will be marked as unique</param>
+ <returns>Datatable with column "key" and "value"</returns>
+ <remarks>
+ </remarks>
+ <history>
+ 	[adminsupport]	08.12.2004	Created 
+ </history></member>
+    <member name="M:CompuMaster.Tools.Data.DataTables.ConvertNameValueCollectionToDataTable(System.Collections.Specialized.NameValueCollection)">
+      <summary>
+     Convert a NameValueCollection to a datatable 
+ </summary>
+ <param name="nameValueCollection">An IDictionary with some content</param>
+ <returns>Datatable with column "key" and "value"</returns>
+ <remarks>
+ </remarks>
+ <history>
+ 	[adminsupport]	08.12.2004	Created 
+ </history></member>
+    <member name="M:CompuMaster.Tools.Data.DataTables.ConvertNameValueCollectionToDataTable(System.Collections.Specialized.NameValueCollection,System.Boolean)">
+      <summary>
+     Convert a NameValueCollection to a datatable 
+ </summary>
+ <param name="nameValueCollection">An IDictionary with some content</param>
+ <param name="keyIsUnique">If true, the key column in the data table will be marked as unique</param>
+ <returns>Datatable with column "key" and "value"</returns>
+ <remarks>
+ </remarks>
+ <history>
+ 	[adminsupport]	08.12.2004	Created 
+ </history></member>
+    <member name="M:CompuMaster.Tools.Data.DataTables.GetDataTableViaODBC(System.String,System.String,System.String)">
+      <summary>
+     Simplified creation of a DataTable by definition of a SQL statement and a connection string 
+ </summary>
+ <param name="strSQL">The SQL statement to retrieve the data</param>
+ <param name="ConnectionString">The connection string to the data source</param>
+ <param name="NameOfNewDataTable">The name of the new DataTable</param>
+ <returns>A filled DataTable</returns>
+ <remarks>
+ </remarks>
+ <history>
+ 	[adminwezel]	03.07.2004	Created 
+ </history></member>
+    <member name="M:CompuMaster.Tools.Data.DataTables.GetDataTableViaSqlClient(System.String,System.String,System.String)">
+      <summary>
+     Simplified creation of a DataTable by definition of a SQL statement and a connection string 
+ </summary>
+ <param name="strSQL">The SQL statement to retrieve the data</param>
+ <param name="ConnectionString">The connection string to the data source</param>
+ <param name="NameOfNewDataTable">The name of the new DataTable</param>
+ <returns>A filled DataTable</returns>
+ <remarks>
+ </remarks>
+ <history>
+ 	[adminwezel]	03.07.2004	Created 
+ </history></member>
+    <member name="M:CompuMaster.Tools.Data.DataTables.ConvertToHtmlTable(System.Data.DataTable)">
+      <summary>
+     Return a string with all columns and rows as an html table 
+ </summary>
+ <param name="dataTable">The datatable to retrieve the content from</param>
+ <returns>If no rows have been processed, the return string is nothing</returns>
+ <remarks>
+ </remarks>
+ <history>
+ 	[baldauf]	2005-07-02  Created 
+ </history></member>
+    <member name="M:CompuMaster.Tools.Data.DataTables.ConvertToHtmlTable(System.Data.DataRowCollection,System.String)">
+      <summary>
+     Return a string with all columns and rows as an html table 
+ </summary>
+ <param name="rows">The rows to be processed</param>
+ <param name="label">An optional title of the rows</param>
+ <returns>If no rows have been processed, the return string is nothing</returns>
+ <remarks>
+ </remarks>
+ <history>
+ 	[baldauf]	2005-07-02  Created 
+ </history></member>
+    <member name="M:CompuMaster.Tools.Data.DataTables.ConvertToHtmlTable(System.Data.DataRow(),System.String)">
+      <summary>
+     Return a string with all columns and rows as an html table 
+ </summary>
+ <param name="rows">The rows to be processed</param>
+ <param name="label">An optional title of the rows</param>
+ <returns>If no rows have been processed, the return string is nothing</returns>
+ <remarks>
+ </remarks>
+ <history>
+ 	[baldauf]	2005-07-02  Created 
+ </history></member>
+    <member name="M:CompuMaster.Tools.Data.DataTables.ConvertToHtmlTable(System.Data.DataTable,System.String,System.String,System.String)">
+      <summary>
+     Return a string with all columns and rows as an html table 
+ </summary>
+ <param name="dataTable">The datatable to retrieve the content from</param>
+ <param name="titleTagOpener">The opening tag in front of the table's title</param>
+ <param name="titleTagEnd">The closing tag after the table title</param>
+ <param name="additionalTableAttributes">Additional attributes for the rendered table</param>
+ <returns>If no rows have been processed, the return string is nothing</returns>
+ <remarks>
+ </remarks>
+ <history>
+ 	[adminsupport]	21.12.2004	Created 
+ </history></member>
+    <member name="M:CompuMaster.Tools.Data.DataTables.ConvertToHtmlTable(System.Data.DataRowCollection,System.String,System.String,System.String,System.String)">
+      <summary>
+     Return a string with all columns and rows as an html table 
+ </summary>
+ <param name="rows">The rows to be processed</param>
+ <param name="label">An optional title of the rows</param>
+ <param name="titleTagOpener">The opening tag in front of the table's title</param>
+ <param name="titleTagEnd">The closing tag after the table title</param>
+ <param name="additionalTableAttributes">Additional attributes for the rendered table</param>
+ <returns>If no rows have been processed, the return string is nothing</returns>
+ <remarks>
+ </remarks>
+ <history>
+ 	[adminwezel]	05.08.2004	Created 
+ </history></member>
+    <member name="M:CompuMaster.Tools.Data.DataTables.ConvertToHtmlTable(System.Data.DataRowCollection,System.String,System.String,System.String,System.String,System.Boolean)">
+      <summary>
+     Return a string with all columns and rows as an html table 
+ </summary>
+ <param name="rows">The rows to be processed</param>
+ <param name="label">An optional title of the rows</param>
+ <param name="titleTagOpener">The opening tag in front of the table's title</param>
+ <param name="titleTagEnd">The closing tag after the table title</param>
+ <param name="additionalTableAttributes">Additional attributes for the rendered table</param>
+ <param name="htmlEncodeCellContentAndLineBreaks">Encode all output to valid HTML</param>
+ <returns>If no rows have been processed, the return string is nothing</returns>
+ <remarks>
+ </remarks>
+ <history>
+ 	[adminwezel]	05.08.2004	Created 
+ </history></member>
+    <member name="M:CompuMaster.Tools.Data.DataTables.HtmlEncodeLineBreaks(System.String)">
+      <summary>
+     Converts all line breaks into HTML line breaks ("&lt;br&gt;") 
+ </summary>
+ <param name="Text" />
+ <returns />
+ <remarks>
+     Supported line breaks are linebreaks of Windows, MacOS as well as Linux/Unix. 
+ </remarks>
+ <history>
+ 	[adminwezel]	06.07.2004	Created 
+ </history></member>
+    <member name="M:CompuMaster.Tools.Data.DataTables.ConvertToHtmlTable(System.Data.DataRow(),System.String,System.String,System.String,System.String)">
+      <summary>
+     Return a string with all columns and rows as an html table 
+ </summary>
+ <param name="rows">The rows to be processed</param>
+ <param name="label">An optional title of the rows</param>
+ <param name="titleTagOpener">The opening tag in front of the table's title</param>
+ <param name="titleTagEnd">The closing tag after the table title</param>
+ <param name="additionalTableAttributes">Additional attributes for the rendered table</param>
+ <returns>If no rows have been processed, the return string is nothing</returns>
+ <remarks>
+ </remarks>
+ <history>
+ 	[adminwezel]	05.08.2004	Created 
+ </history></member>
+    <member name="M:CompuMaster.Tools.Data.DataTables.ConvertToPlainTextTable(System.Data.DataTable)">
+      <summary>
+     Return a string with all columns and rows, helpfull for debugging purposes 
+ </summary>
+ <param name="dataTable">The datatable to retrieve the content from</param>
+ <returns>All rows are tab separated. If no rows have been processed, the user will get notified about this fact</returns>
+ <remarks>
+ </remarks>
+ <history>
+ 	[adminsupport]	21.12.2004	Created 
+ </history></member>
+    <member name="M:CompuMaster.Tools.Data.DataTables.ConvertToPlainTextTable(System.Data.DataRow(),System.String)">
+      <summary>
+     Return a string with all columns and rows, helpfull for debugging purposes 
+ </summary>
+ <param name="rows">The rows to be processed</param>
+ <param name="label">An optional title of the rows</param>
+ <returns>All rows are tab separated. If no rows have been processed, the user will get notified about this fact</returns>
+ <remarks>
+ </remarks>
+ <history>
+ 	[adminwezel]	05.08.2004	Created 
+ </history></member>
+    <member name="M:CompuMaster.Tools.Data.DataTables._ConvertToPlainTextTable(System.Data.DataRowCollection,System.String)">
+      <summary>
+     Return a string with all columns and rows, helpfull for debugging purposes 
+ </summary>
+ <param name="rows">The rows to be processed</param>
+ <param name="label">An optional title of the rows</param>
+ <returns>All rows are tab separated. If no rows have been processed, the user will get notified about this fact</returns>
+ <remarks>
+ </remarks>
+ <history>
+ 	[adminwezel]	05.08.2004	Created 
+ </history></member>
+    <member name="M:CompuMaster.Tools.Data.DataTables.RemoveColumns(System.Data.DataTable,System.String[])">
+      <summary>
+     Remove the specified columns if they exist 
+ </summary>
+ <param name="datatable">A datatable where the operations shall be made</param>
+ <param name="columnNames">The names of the columns which shall be removed</param>
+ <remarks>
+     The columns will only be removed if they exist. If a column name doesn't exist, it will be ignored. 
+ </remarks>
+ <history>
+ 	[adminwezel]	07.07.2005	Created 
+ </history></member>
+    <member name="M:CompuMaster.Tools.Data.DataTables.ConvertToPlainTextTable(System.Data.DataRowCollection,System.String)">
+      <summary>
+     Return a string with all columns and rows, helpfull for debugging purposes 
+ </summary>
+ <param name="rows">The rows to be processed</param>
+ <param name="label">An optional title of the rows</param>
+ <returns>All rows are tab separated. If no rows have been processed, the user will get notified about this fact</returns>
+ <remarks>
+ </remarks>
+ <history>
+ 	[adminwezel]	05.08.2004	Created 
+ </history></member>
+    <member name="M:CompuMaster.Tools.Data.DataTables.ConvertDataReaderToDataSet(System.Data.IDataReader)">
+      <summary>
+     Convert any opened datareader into a dataset 
+ </summary>
+ <param name="dataReader">An already opened dataReader</param>
+ <returns>A dataset containing all datatables the dataReader was able to read</returns>
+ <remarks>
+ </remarks>
+ <history>
+ 	[wezel]	13.01.2005	Created 
+ </history></member>
+    <member name="M:CompuMaster.Tools.Data.DataTables.ConvertDataReaderToDataTable(System.Data.IDataReader)">
+      <summary>
+     Convert any opened datareader into a data table 
+ </summary>
+ <param name="dataReader">An already opened dataReader</param>
+ <returns>A data table containing all data the dataReader was able to read</returns>
+ <remarks>
+ </remarks>
+ <history>
+ 	[wezel]	13.01.2005	Created 
+ </history></member>
+    <member name="M:CompuMaster.Tools.Data.DataTables.ConvertDataReaderToDataTable(System.Data.IDataReader,System.String)">
+      <summary>
+     Convert any opened datareader into a data table 
+ </summary>
+ <param name="dataReader">An already opened dataReader</param>
+ <param name="tableName">The name for the new table</param>
+ <returns>A data table containing all data the dataReader was able to read</returns>
+ <remarks>
+ </remarks>
+ <history>
+ 	[wezel]	13.01.2005	Created 
+ </history></member>
+    <member name="T:CompuMaster.Tools.Data.DataTables.DataReaderAdapter">
+      <summary>
+     A data adapter for data readers making the real conversion 
+ </summary>
+ <remarks>
+ </remarks>
+ <history>
+ 	[wezel]	13.01.2005	Created 
+ </history></member>
+    <member name="T:CompuMaster.Tools.Data.DataTables.JoinTypes">
+      <summary>
+     Table join types 
+ </summary>
+ <remarks>
+ </remarks>
+ <history>
+ 	[adminwezel]	22.03.2005	Created 
+ </history></member>
+    <member name="F:CompuMaster.Tools.Data.DataTables.JoinTypes.Inner">
+      <summary>
+     The result contains only those rows which exist in both tables 
+ </summary>
+ <remarks>
+ </remarks>
+ <history>
+ 	[adminwezel]	17.01.2006	Created 
+ </history></member>
+    <member name="F:CompuMaster.Tools.Data.DataTables.JoinTypes.Left">
+      <summary>
+     The result contains all rows of the left, parent table and only those rows of the other table which are related the rows of the left table 
+ </summary>
+ <remarks>
+ </remarks>
+ <history>
+ 	[adminwezel]	17.01.2006	Created 
+ </history></member>
+    <member name="F:CompuMaster.Tools.Data.DataTables.JoinTypes.EndEnum">
+      <summary>
+'     The result contains all rows of the left, parent table and all rows of the right, child table. Missing values on the other side will be of value DBNull 
+' </summary>
+' <remarks>
+' </remarks>
+' <history>
+' 	[adminwezel]	17.01.2006	Created 
+' </history>
+'</member>
+    <member name="M:CompuMaster.Tools.Data.DataTables.JoinTables(System.Data.DataTable,System.Data.DataTable,CompuMaster.Tools.Data.DataTables.JoinTypes)">
+      <summary>
+     Execute a table join on two tables of the same dataset based on the first relation found 
+ </summary>
+ <param name="leftParentTable" />
+ <param name="rightChildTable" />
+ <param name="joinType">Inner or left join</param>
+ <returns />
+ <remarks>
+ </remarks>
+ <history>
+ 	[adminwezel]	22.03.2005	Created 
+ </history></member>
+    <member name="M:CompuMaster.Tools.Data.DataTables.JoinTables(System.Data.DataTable,System.Data.DataTable,System.Data.DataRelation,CompuMaster.Tools.Data.DataTables.JoinTypes)">
+      <summary>
+     Execute a table join on two tables of the same dataset which have got a defined relation 
+ </summary>
+ <param name="leftParentTable">The left or parent table</param>
+ <param name="rightChildTable">The right or child table</param>
+ <param name="relation">A data table relation which shall be used for the joining</param>
+ <param name="joinType">Inner or left join</param>
+ <returns />
+ <remarks>
+     The selected columns are: 
+     <list>
+         <item>all columns from the left parent table</item>
+         <item>INNER JOIN: those columns from the right child table which are not member of the relation in charge</item>
+         <item>LEFT JOIN: all columns from the right child table</item>
+     </list>
+ </remarks>
+ <history>
+ 	[adminwezel]	22.03.2005	Created 
+ </history></member>
+    <member name="M:CompuMaster.Tools.Data.DataTables.JoinTables(System.Data.DataTable,System.Data.DataColumn[],System.Data.DataTable,System.Data.DataColumn[],CompuMaster.Tools.Data.DataTables.JoinTypes)">
+      <summary>
+     Execute a table join on two tables of the same dataset which have got a defined relation 
+ </summary>
+ <param name="leftParentTable">The left or parent table</param>
+ <param name="leftTableColumnsToCopy">An array of columns to copy from the left table</param>
+ <param name="rightChildTable">The right or child table</param>
+ <param name="rightTableColumnsToCopy">An array of columns to copy from the right table</param>
+ <param name="joinType">Inner or left join</param>
+ <returns />
+ <remarks>
+ </remarks>
+ <history>
+ 	[adminwezel]	22.03.2005	Created 
+ </history></member>
+    <member name="M:CompuMaster.Tools.Data.DataTables.JoinTables(System.Data.DataTable,System.Int32[],System.Data.DataTable,System.Int32[],CompuMaster.Tools.Data.DataTables.JoinTypes)">
+      <summary>
+     Execute a table join on two tables of the same dataset which have got a defined relation 
+ </summary>
+ <param name="leftParentTable">The left or parent table</param>
+ <param name="indexesOfLeftTableColumnsToCopy">An array of column indexes to copy from the left table</param>
+ <param name="rightChildTable">The right or child table</param>
+ <param name="indexesOfRightTableColumnsToCopy">An array of column indexes to copy from the right table</param>
+ <param name="joinType">Inner or left join</param>
+ <returns />
+ <remarks>
+ </remarks>
+ <history>
+ 	[adminwezel]	22.03.2005	Created 
+ </history></member>
+    <member name="M:CompuMaster.Tools.Data.DataTables.JoinTables(System.Data.DataTable,System.Int32[],System.Data.DataTable,System.Int32[],System.Data.DataRelation,CompuMaster.Tools.Data.DataTables.JoinTypes)">
+      <summary>
+     Execute a table join on two tables of the same dataset which have got a defined relation 
+ </summary>
+ <param name="leftParentTable">The left or parent table</param>
+ <param name="indexesOfLeftTableColumnsToCopy">An array of column indexes to copy from the left table</param>
+ <param name="rightChildTable">The right or child table</param>
+ <param name="indexesOfRightTableColumnsToCopy">An array of column indexes to copy from the right table</param>
+ <param name="relation">A data table relation which shall be used for the joining</param>
+ <param name="joinType">Inner or left join</param>
+ <returns />
+ <remarks>
+ </remarks>
+ <history>
+ 	[adminwezel]	22.03.2005	Created 
+ </history></member>
+    <member name="M:CompuMaster.Tools.Data.DataTables.CrossJoinTables(System.Data.DataTable,System.Int32[],System.Data.DataTable,System.Int32[])">
+      <summary>
+     Cross join of two tables 
+ </summary>
+ <param name="leftTable">A first datatable</param>
+ <param name="indexesOfLeftTableColumnsToCopy">An array of column indexes to copy from the left table</param>
+ <param name="rightTable">A second datatable</param>
+ <param name="indexesOfRightTableColumnsToCopy">An array of column indexes to copy from the right table</param>
+ <returns />
+ <remarks>
+ </remarks>
+ <history>
+ 	[adminwezel]	27.05.2005	Created 
+ </history></member>
+    <member name="M:CompuMaster.Tools.Data.DataTables.AddPrefixesToColumnNames(System.Data.DataTable,System.Int32[],System.String)">
+      <summary>
+     Add a prefix to the names of the columns 
+ </summary>
+ <param name="dataTable" />
+ <param name="columnIndexes" />
+ <param name="prefix">e. g. "orders."</param>
+ <remarks>
+ </remarks>
+ <history>
+ 	[adminwezel]	27.05.2005	Created 
+ </history></member>
+    <member name="M:CompuMaster.Tools.Data.DataTables.AddSuffixesToColumnNames(System.Data.DataTable,System.Int32[],System.String)">
+      <summary>
+     Add a suffix to the names of the columns 
+ </summary>
+ <param name="dataTable" />
+ <param name="columnIndexes" />
+ <param name="suffix">e. g. "-orders"</param>
+ <remarks>
+ </remarks>
+ <history>
+ 	[adminwezel]	27.05.2005	Created 
+ </history></member>
+    <member name="M:CompuMaster.Tools.Data.DataTables.LookupUnqiueColumnName(System.Data.DataTable,System.String)">
+      <summary>
+     Lookup a new unique column name for a data table 
+ </summary>
+ <param name="dataTable">The data table which shall get a new data column</param>
+ <param name="suggestedColumnName">A column name suggestion</param>
+ <returns>The suggested column name as it is or modified column name to be unique</returns>
+ <remarks>
+ </remarks>
+ <history>
+ 	[adminwezel]	22.03.2005	Created 
+ </history></member>
+    <member name="T:CompuMaster.Tools.Data.DataTables.ReArrangeDataColumnsException">
+      <summary>
+     An exception which gets thrown when converting data in the ReArrangeDataColumns methods 
+ </summary>
+ <remarks>
+ </remarks>
+ <history>
+ 	[wezel]	14.04.2005	Created 
+ </history></member>
+    <member name="M:CompuMaster.Tools.Data.DataTables.ReArrangeDataColumns(System.Data.DataTable,System.String[])">
+      <summary>
+     Rearrange columns 
+ </summary>
+ <param name="source">The source table with data</param>
+ <param name="columnsToCopy">An array of column names which shall be copied in the specified order from the source table</param>
+ <returns>A new and independent data table with copied data</returns>
+ <remarks>
+ </remarks>
+ <history>
+ 	[adminwezel]	07.07.2005	Created 
+ </history></member>
+    <member name="M:CompuMaster.Tools.Data.DataTables.ReArrangeDataColumns(System.Data.DataTable,System.Data.DataColumn[])">
+      <summary>
+     Rearrange columns and also change their data types 
+ </summary>
+ <param name="source">The source table with data</param>
+ <param name="destinationColumnSet">An array of columns as they shall be inserted into the result</param>
+ <returns>A new and independent data table with copied data</returns>
+ <remarks>
+     The copy process requires that the names of the destination columns can be found in the columns collection of the source table. 
+ </remarks>
+ <example>
+     <code language="vb">
+         ReArrangeDataColumns(source, New System.Data.DataColumn() {New DataColumn("column1Name", GetType(String)), New DataColumn("column2Name", GetType(Integer))}) 
+     </code>
+ </example>
+ <history>
+ 	[wezel]	14.04.2005	Created 
+ </history></member>
+    <member name="M:CompuMaster.Tools.Data.DataTables.ReArrangeDataColumns(System.Data.DataTable,System.Data.DataColumn[],System.Collections.ArrayList)">
+      <summary>
+     Rearrange columns and also change their data types 
+ </summary>
+ <param name="source">The source table with data</param>
+ <param name="destinationColumnSet">An array of columns as they shall be inserted into the result</param>
+ <param name="ignoreConversionExceptionAndLogThemHere">In case of data conversion exceptions, log them here instead of throwing them immediately</param>
+ <returns>A new and independent data table with copied data</returns>
+ <remarks>
+     The copy process requires that the names of the destination columns can be found in the columns collection of the source table. 
+ </remarks>
+ <example>
+     <code language="vb">
+         ReArrangeDataColumns(source, New System.Data.DataColumn() {New DataColumn("column1Name", GetType(String)), New DataColumn("column2Name", GetType(Integer))}) 
+     </code>
+ </example>
+ <history>
+ 	[wezel]	14.04.2005	Created 
+ </history></member>
+    <member name="T:CompuMaster.Tools.Data.XlsReader">
+      <summary>
+     Provides simplified read access to XLS files via MS OLEDB Jet Providers 
+ </summary>
+ <remarks>
+ </remarks>
+ <history>
+ 	[adminwezel]	30.05.2005	Created 
+ </history></member>
+    <member name="M:CompuMaster.Tools.Data.XlsReader.ReadDataTableFromXlsFile(System.String,System.String)">
+      <summary>
+     Read from an excel file 
+ </summary>
+ <param name="path">The path of the .XLS file</param>
+ <param name="sheetName">A name of a sheet where the read operations shall execute</param>
+ <returns>A new and independent datatable with the content of the sheet</returns>
+ <remarks>
+ </remarks>
+ <history>
+ 	[baldauf]	2005-07-02  Created 
+ </history></member>
+    <member name="M:CompuMaster.Tools.Data.XlsReader.ReadDataTableFromXlsFile(System.String,System.String,System.String)">
+      <summary>
+     Read from an excel file 
+ </summary>
+ <param name="path">The path of the .XLS file</param>
+ <param name="sheetName">A name of a sheet where the read operations shall execute</param>
+ <param name="querySql">A query SQL to filter the returned data, e. g. SELECT * FROM [sheetName$]</param>
+ <returns>A new and independent datatable with the content of the sheet</returns>
+ <remarks>
+ </remarks>
+ <history>
+ 	[baldauf]	2005-07-02  Created 
+ </history></member>
+  </members>
+</doc>
