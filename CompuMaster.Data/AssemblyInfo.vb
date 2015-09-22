@@ -2,7 +2,7 @@ Imports System
 Imports System.Reflection
 Imports System.Runtime.InteropServices
 
-<Assembly: AssemblyTitle("CompuMaster.Data - LGPL 2.1 edition")>
+<Assembly: AssemblyTitle("CompuMaster.Data - MIT license edition")>
 <Assembly: AssemblyDescription("")> 
 <Assembly: AssemblyCompany("CompuMaster GmbH")> 
 <Assembly: AssemblyProduct("CompuMaster Tools")> 
@@ -14,5 +14,5 @@ Imports System.Runtime.InteropServices
 
 <Assembly: Guid("FDE425FC-D944-4747-A1D8-082356335D53")> 
 
-<Assembly: AssemblyVersion("2.7.2015.0703")> 
-<Assembly: AssemblyDelaySign(True)>
+<Assembly: AssemblyVersion("2.7.2015.0922")> 
+<Assembly: AssemblyDelaySign(False)>
