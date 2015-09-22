@@ -2,7 +2,7 @@ Imports System
 Imports System.Reflection
 Imports System.Runtime.InteropServices
 
-<Assembly: AssemblyTitle("CompuMaster.Data - MIT license edition")>
+<Assembly: AssemblyTitle("CompuMaster.Data.Controls - MIT license edition")>
 <Assembly: AssemblyDescription("")> 
 <Assembly: AssemblyCompany("CompuMaster GmbH")> 
 <Assembly: AssemblyProduct("CompuMaster Tools")> 
@@ -10,9 +10,9 @@ Imports System.Runtime.InteropServices
 <Assembly: AssemblyTrademark("CompuMaster")> 
 <Assembly: CLSCompliant(True)> 
 <Assembly: ComVisibleAttribute(False)> 
-<Assembly: System.Security.AllowPartiallyTrustedCallers()>
+<Assembly: System.Security.AllowPartiallyTrustedCallers()> 
 
-<Assembly: Guid("ECE425FC-D944-4747-A1D8-08235073C9B7")>
+<Assembly: Guid("FDE425FC-D944-4747-A1D8-082356335D53")>
 
-<Assembly: AssemblyVersion("2.7.2015.0922")> 
+<Assembly: AssemblyVersion("2.7.2015.0922")>
 <Assembly: AssemblyDelaySign(False)>

@@ -6,3 +6,7 @@
 /.vs
 /CompuMaster.Data/CompuMaster.Data.vbproj.user
 /packages
+/CompuMaster.Data.Controls.Debug/obj
+/CompuMaster.Data.Controls.Debug/bin
+/CompuMaster.Data.Controls/obj
+/CompuMaster.Data.Controls/bin
