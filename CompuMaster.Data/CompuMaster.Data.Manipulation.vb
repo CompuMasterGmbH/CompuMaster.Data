@@ -141,7 +141,7 @@ Namespace CompuMaster.Data
 
             'Create remote table if required
             If RemoteTable Is Nothing Then
-                Dim ColumnCreationCommandText As String = CreateTableCommandText(remoteTableName, CompuMaster.Data.DataTablesTools.LookupUnqiueColumnName(sourceTable, "PrimaryKeyID"), ddlLanguage)
+                Dim ColumnCreationCommandText As String = CreateTableCommandText(remoteTableName, CompuMaster.Data.DataTablesTools.LookupUniqueColumnName(sourceTable, "PrimaryKeyID"), ddlLanguage)
                 CompuMaster.Data.DataQuery.ExecuteNonQuery(dataConnection, ColumnCreationCommandText, CommandType.Text, Nothing, CompuMaster.Data.DataQuery.Automations.None, 0)
                 RemoteTable = LoadTableStructureWith1RowFromConnection(remoteTableName, dataConnection, False)
             End If

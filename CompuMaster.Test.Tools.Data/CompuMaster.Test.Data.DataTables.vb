@@ -426,8 +426,8 @@ Namespace CompuMaster.Test.Data
             first.Rows.Add(New Object() {23, "L", "X"})
             first.Rows.Add(New Object() {21, "p", "a"})
             first.Rows.Add(New Object() {1, "q", "z"})
-            CompuMaster.Data.DataTables.CreateDataTableClone(first, second, Nothing, Nothing, Nothing, CompuMaster.Data.DataTables.RequestedRowChanges.DropExistingRowsInDestinationTableAndInsertNewRows, False, _
-                                                             CompuMaster.Data.DataTables.RequestedSchemaChangesForUnusedColumns.None, CompuMaster.Data.DataTables.RequestedSchemaChangesForExistingColumns.None, _
+            CompuMaster.Data.DataTables.CreateDataTableClone(first, second, Nothing, Nothing, Nothing, CompuMaster.Data.DataTables.RequestedRowChanges.DropExistingRowsInDestinationTableAndInsertNewRows, False,
+                                                             CompuMaster.Data.DataTables.RequestedSchemaChangesForUnusedColumns.None, CompuMaster.Data.DataTables.RequestedSchemaChangesForExistingColumns.None,
                                                              CompuMaster.Data.DataTables.RequestedSchemaChangesForAdditionalColumns.Add)
 
             '  Assert.AreEqual(1, second.PrimaryKey.GetLength(0))
@@ -450,7 +450,7 @@ Namespace CompuMaster.Test.Data
             merge_dest.Columns.Add("B", GetType(String))
 
 
-           
+
 
             merge_source.PrimaryKey = New DataColumn() {merge_source.Columns(0)}
             merge_dest.PrimaryKey = New DataColumn() {merge_dest.Columns(0)}
@@ -462,8 +462,8 @@ Namespace CompuMaster.Test.Data
             oldSource = merge_source
             oldDest = merge_dest
 
-            CompuMaster.Data.DataTables.CreateDataTableClone(merge_source, merge_dest, Nothing, Nothing, Nothing, CompuMaster.Data.DataTables.RequestedRowChanges.KeepExistingRowsInDestinationTableAndAddRemoveUpdateChangedRows, _
-                                                             True, CompuMaster.Data.DataTables.RequestedSchemaChangesForUnusedColumns.None, CompuMaster.Data.DataTables.RequestedSchemaChangesForExistingColumns.None, _
+            CompuMaster.Data.DataTables.CreateDataTableClone(merge_source, merge_dest, Nothing, Nothing, Nothing, CompuMaster.Data.DataTables.RequestedRowChanges.KeepExistingRowsInDestinationTableAndAddRemoveUpdateChangedRows,
+                                                             True, CompuMaster.Data.DataTables.RequestedSchemaChangesForUnusedColumns.None, CompuMaster.Data.DataTables.RequestedSchemaChangesForExistingColumns.None,
                                                              CompuMaster.Data.DataTables.RequestedSchemaChangesForAdditionalColumns.None)
             Assert.AreEqual(1, merge_dest.Rows.Count())
             Assert.AreEqual(2, merge_dest.Columns.Count())
@@ -472,15 +472,15 @@ Namespace CompuMaster.Test.Data
             merge_source = oldSource
             merge_dest = oldDest
 
-            CompuMaster.Data.DataTables.CreateDataTableClone(merge_source, merge_dest, Nothing, Nothing, Nothing, CompuMaster.Data.DataTables.RequestedRowChanges.KeepExistingRowsInDestinationTableAndAddRemoveUpdateChangedRows, _
-                                                             True, CompuMaster.Data.DataTables.RequestedSchemaChangesForUnusedColumns.None, CompuMaster.Data.DataTables.RequestedSchemaChangesForExistingColumns.None, _
+            CompuMaster.Data.DataTables.CreateDataTableClone(merge_source, merge_dest, Nothing, Nothing, Nothing, CompuMaster.Data.DataTables.RequestedRowChanges.KeepExistingRowsInDestinationTableAndAddRemoveUpdateChangedRows,
+                                                             True, CompuMaster.Data.DataTables.RequestedSchemaChangesForUnusedColumns.None, CompuMaster.Data.DataTables.RequestedSchemaChangesForExistingColumns.None,
                                                              CompuMaster.Data.DataTables.RequestedSchemaChangesForAdditionalColumns.Add)
             Assert.AreEqual(3, merge_dest.Columns.Count())
             Assert.AreEqual(1, merge_dest.Rows.Count())
             StringAssert.IsMatch("hello!", merge_dest.Rows(0).Item(1))
             StringAssert.IsMatch("missing", merge_dest.Rows(0).Item(2))
 
-          
+
             Dim merge_source2 As New DataTable
             Dim merge_dest2 As New DataTable
 
@@ -502,8 +502,8 @@ Namespace CompuMaster.Test.Data
             merge_dest2.Rows.Add(New String() {"23", "hello"})
             merge_source2.Rows.Add(New String() {"23", "hello!", "missing"})
 
-            CompuMaster.Data.DataTables.CreateDataTableClone(merge_source2, merge_dest2, Nothing, Nothing, Nothing, CompuMaster.Data.DataTables.RequestedRowChanges.KeepExistingRowsInDestinationTableAndAddRemoveUpdateChangedRows, _
-                                                             True, CompuMaster.Data.DataTables.RequestedSchemaChangesForUnusedColumns.None, _
+            CompuMaster.Data.DataTables.CreateDataTableClone(merge_source2, merge_dest2, Nothing, Nothing, Nothing, CompuMaster.Data.DataTables.RequestedRowChanges.KeepExistingRowsInDestinationTableAndAddRemoveUpdateChangedRows,
+                                                             True, CompuMaster.Data.DataTables.RequestedSchemaChangesForUnusedColumns.None,
                                                              CompuMaster.Data.DataTables.RequestedSchemaChangesForExistingColumns.Update, CompuMaster.Data.DataTables.RequestedSchemaChangesForAdditionalColumns.None)
             StringAssert.IsMatch("hello!", merge_dest2.Rows(0).Item(1))
             Assert.AreEqual(2, merge_dest2.Columns.Count)
@@ -538,9 +538,9 @@ Namespace CompuMaster.Test.Data
             merge_source3.AcceptChanges()
             merge_dest3.AcceptChanges()
 
-            CompuMaster.Data.DataTables.CreateDataTableClone(merge_source3, merge_dest3, "C = 'A'", "A ASC", Nothing, CompuMaster.Data.DataTables.RequestedRowChanges.KeepExistingRowsInDestinationTableAndAddRemoveUpdateChangedRows, _
-                                                             True, CompuMaster.Data.DataTables.RequestedSchemaChangesForUnusedColumns.None, _
-                                                             CompuMaster.Data.DataTables.RequestedSchemaChangesForExistingColumns.None, _
+            CompuMaster.Data.DataTables.CreateDataTableClone(merge_source3, merge_dest3, "C = 'A'", "A ASC", Nothing, CompuMaster.Data.DataTables.RequestedRowChanges.KeepExistingRowsInDestinationTableAndAddRemoveUpdateChangedRows,
+                                                             True, CompuMaster.Data.DataTables.RequestedSchemaChangesForUnusedColumns.None,
+                                                             CompuMaster.Data.DataTables.RequestedSchemaChangesForExistingColumns.None,
                                                              CompuMaster.Data.DataTables.RequestedSchemaChangesForAdditionalColumns.None)
 
 
@@ -574,8 +574,8 @@ Namespace CompuMaster.Test.Data
 
             big.ReadXml(System.Environment.CurrentDirectory & "\testfiles/3000RowsTable.xml")
 
-            CompuMaster.Data.DataTables.CreateDataTableClone(big, bigCopy, "", "", Nothing, CompuMaster.Data.DataTables.RequestedRowChanges.DropExistingRowsInDestinationTableAndInsertNewRows, False, _
-                                                             CompuMaster.Data.DataTables.RequestedSchemaChangesForUnusedColumns.Remove, CompuMaster.Data.DataTables.RequestedSchemaChangesForExistingColumns.None, _
+            CompuMaster.Data.DataTables.CreateDataTableClone(big, bigCopy, "", "", Nothing, CompuMaster.Data.DataTables.RequestedRowChanges.DropExistingRowsInDestinationTableAndInsertNewRows, False,
+                                                             CompuMaster.Data.DataTables.RequestedSchemaChangesForUnusedColumns.Remove, CompuMaster.Data.DataTables.RequestedSchemaChangesForExistingColumns.None,
                                                              CompuMaster.Data.DataTables.RequestedSchemaChangesForAdditionalColumns.Add)
             Assert.AreEqual(big.Columns.Count, bigCopy.Columns.Count)
             Assert.AreEqual(big.Rows.Count, bigCopy.Rows.Count)
@@ -587,8 +587,8 @@ Namespace CompuMaster.Test.Data
             bigCopy.Rows.Item(900).Item(1) = 55
             bigCopy.Rows.Item(bigCopy.Rows.Count - 5).Item(1) = 78
 
-            CompuMaster.Data.DataTables.CreateDataTableClone(bigCopy, bigCopy2, "", "", Nothing, CompuMaster.Data.DataTables.RequestedRowChanges.DropExistingRowsInDestinationTableAndInsertNewRows, _
-                                                             False, CompuMaster.Data.DataTables.RequestedSchemaChangesForUnusedColumns.None, CompuMaster.Data.DataTables.RequestedSchemaChangesForExistingColumns.None, _
+            CompuMaster.Data.DataTables.CreateDataTableClone(bigCopy, bigCopy2, "", "", Nothing, CompuMaster.Data.DataTables.RequestedRowChanges.DropExistingRowsInDestinationTableAndInsertNewRows,
+                                                             False, CompuMaster.Data.DataTables.RequestedSchemaChangesForUnusedColumns.None, CompuMaster.Data.DataTables.RequestedSchemaChangesForExistingColumns.None,
                                                              CompuMaster.Data.DataTables.RequestedSchemaChangesForAdditionalColumns.Add)
 
             Assert.AreEqual(bigCopy.Rows.Count(), bigCopy2.Rows.Count())
@@ -860,7 +860,8 @@ Namespace CompuMaster.Test.Data
 
         End Sub
 
-        <Test()> Public Sub CrossJoinTables()
+
+        Private Function CreateCrossJoinTablesTableSet1() As JoinTableSet
             Dim left As New DataTable
             Dim right As New DataTable
             'Cross join test'
@@ -877,13 +878,45 @@ Namespace CompuMaster.Test.Data
             rDataRow.Item(0) = "RightTest"
             right.Rows.Add(rDataRow)
 
-            Console.WriteLine("LEFT TABLE CONTENTS")
-            Console.WriteLine(CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(left))
-            Console.WriteLine()
-            Console.WriteLine("RIGHT TABLE CONTENTS")
-            Console.WriteLine(CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(right))
+            Return New JoinTableSet("CreateCrossJoinTableSet1", left, Nothing, right, Nothing)
+        End Function
 
-            Dim crossjoined As DataTable = CompuMaster.Data.DataTables.CrossJoinTables(left, Nothing, right, Nothing)
+        Private Function CreateCrossJoinTablesTableSet2() As JoinTableSet
+            Dim left As New DataTable
+            Dim right As New DataTable
+            'Cross join test'
+            left.Columns.Add("FirstCol")
+            left.Columns.Add("SecondCol")
+            left.Columns.Add("ThirdCol")
+            Dim lDataRow As DataRow = left.NewRow
+            lDataRow.Item(0) = "Test1"
+            lDataRow.Item(1) = "Test1Col2"
+            left.Rows.Add(lDataRow)
+            lDataRow = left.NewRow
+            lDataRow.Item(0) = "Test2"
+            lDataRow.Item(1) = "Test2Col2"
+            left.Rows.Add(lDataRow)
+
+            right.Columns.Add("FourthCol")
+            Dim rDataRow As DataRow = right.NewRow
+            rDataRow.Item(0) = "RightTest1"
+            right.Rows.Add(rDataRow)
+            rDataRow = right.NewRow
+            rDataRow.Item(0) = "RightTest2"
+            right.Rows.Add(rDataRow)
+            rDataRow = right.NewRow
+            rDataRow.Item(0) = "RightTest3"
+            right.Rows.Add(rDataRow)
+
+            Return New JoinTableSet("CreateCrossJoinTableSet2", left, Nothing, right, Nothing)
+        End Function
+
+        <Test()> Public Sub CrossJoinTables()
+
+            Dim TestTableSet As JoinTableSet = Me.CreateCrossJoinTablesTableSet1
+            TestTableSet.WriteToConsole()
+
+            Dim crossjoined As DataTable = CompuMaster.Data.DataTables.CrossJoinTables(TestTableSet.LeftTable, Nothing, TestTableSet.RightTable, Nothing)
             StringAssert.IsMatch("FourthCol", crossjoined.Columns.Item(3).ColumnName)
             StringAssert.IsMatch("RightTest", crossjoined.Rows.Item(0).Item(3))
             Assert.IsTrue(IsDBNull(crossjoined.Rows.Item(0).Item(2)))
@@ -891,6 +924,55 @@ Namespace CompuMaster.Test.Data
 
             Console.WriteLine("FULL-OUTER-JOINED TABLE CONTENTS")
             Console.WriteLine(CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(crossjoined))
+        End Sub
+
+        <Test()> Public Sub SqlJoinTables_CrossJoin()
+            SqlJoinTables_CrossJoin_Test1()
+            SqlJoinTables_CrossJoin_Test2()
+        End Sub
+        Private Sub SqlJoinTables_CrossJoin_Test1()
+
+            Dim TestTableSet As JoinTableSet = Me.CreateCrossJoinTablesTableSet1
+            TestTableSet.WriteToConsole()
+
+            Dim CrossJoined As DataTable = CompuMaster.Data.DataTables.SqlJoinTables(TestTableSet.LeftTable, New String() {}, New String() {}, TestTableSet.RightTable, New String() {}, New String() {}, CompuMaster.Data.DataTables.SqlJoinTypes.Cross)
+
+            Console.WriteLine("CROS-JOINED TABLE CONTENTS")
+            Console.WriteLine(CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(CrossJoined))
+
+            'TODO: ResultComparisonValue to be evaluated
+            Dim ShallBeResult As String = "JoinedTable" & vbNewLine &
+                    "FirstCol|SecondCol|ThirdCol|FourthCol" & vbNewLine &
+                    "--------+---------+--------+---------" & vbNewLine &
+                    "Test    |Test2    |        |RightTest" & vbNewLine &
+                    ""
+            Assert.AreEqual(ShallBeResult, CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(CrossJoined))
+
+        End Sub
+
+        Private Sub SqlJoinTables_CrossJoin_Test2()
+
+            Dim TestTableSet As JoinTableSet = Me.CreateCrossJoinTablesTableSet2
+            TestTableSet.WriteToConsole()
+
+            Dim CrossJoined As DataTable = CompuMaster.Data.DataTables.SqlJoinTables(TestTableSet.LeftTable, New String() {}, New String() {}, TestTableSet.RightTable, New String() {}, New String() {}, CompuMaster.Data.DataTables.SqlJoinTypes.Cross)
+
+            Console.WriteLine("CROS-JOINED TABLE CONTENTS")
+            Console.WriteLine(CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(CrossJoined))
+
+            'TODO: ResultComparisonValue to be evaluated
+            Dim ShallBeResult As String = "JoinedTable" & vbNewLine &
+                    "FirstCol|SecondCol|ThirdCol|FourthCol " & vbNewLine &
+                    "--------+---------+--------+----------" & vbNewLine &
+                    "Test1   |Test1Col2|        |RightTest1" & vbNewLine &
+                    "Test1   |Test1Col2|        |RightTest2" & vbNewLine &
+                    "Test1   |Test1Col2|        |RightTest3" & vbNewLine &
+                    "Test2   |Test2Col2|        |RightTest1" & vbNewLine &
+                    "Test2   |Test2Col2|        |RightTest2" & vbNewLine &
+                    "Test2   |Test2Col2|        |RightTest3" & vbNewLine &
+                    ""
+            Assert.AreEqual(ShallBeResult, CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(CrossJoined))
+
         End Sub
 
         Private Class JoinTableSet
@@ -970,6 +1052,7 @@ Namespace CompuMaster.Test.Data
 
             Return New JoinTableSet("CreateFullOuterJoinTableSet1", left, New String() {"left1"}, right, New String() {"right1"})
         End Function
+
         Private Function CreateFullOuterJoinTableSet2() As JoinTableSet
             'Full outer join test'
             Dim fullOuterJoined As New DataTable
@@ -1017,11 +1100,20 @@ Namespace CompuMaster.Test.Data
             addiontalLeft.Item(0) = 567
             addiontalLeft.Item(1) = 65527
             left.Rows.Add(addiontalLeft)
-           
+            addiontalLeft = left.NewRow
+            addiontalLeft.Item(0) = 5
+            addiontalLeft.Item(1) = 60
+            addiontalLeft.Item(2) = 70
+            left.Rows.Add(addiontalLeft)
+
 
             Dim addiontalRight As DataRow = right.NewRow
             addiontalRight.Item(0) = 789
             addiontalRight.Item(1) = 65728
+            right.Rows.Add(addiontalRight)
+            addiontalRight = right.NewRow
+            addiontalRight.Item(0) = 3
+            addiontalRight.Item(1) = 40
             right.Rows.Add(addiontalRight)
             addiontalRight = right.NewRow
             addiontalRight.Item(0) = 890
@@ -1031,7 +1123,7 @@ Namespace CompuMaster.Test.Data
         End Function
 #End Region
 
-        <Test()> Public Sub FullOuterJoinTables()
+        <Test()> Public Sub SqlJoinTables_FullOuter()
             FullOuterJoinTables_TableSet1()
             FullOuterJoinTables_TableSet1WithSameColumnNameInPrimaryKeyAtBothTables()
             FullOuterJoinTables_TableSet1WithSameColumnNameInPrimaryKeyAtBothTablesNamedClientTable_ID()
@@ -1043,7 +1135,8 @@ Namespace CompuMaster.Test.Data
             TestTables.WriteToConsole()
 
             Dim FullOuterJoined As DataTable
-            FullOuterJoined = CompuMaster.Data.DataTables.FullJoinTables(TestTables.LeftTable, TestTables.LeftPrimaryKeyColumns, TestTables.RightTable, TestTables.RightPrimaryKeyColumns)
+            'FullOuterJoined = CompuMaster.Data.DataTables.FullJoinTables(TestTables.LeftTable, TestTables.LeftPrimaryKeyColumns, TestTables.RightTable, TestTables.RightPrimaryKeyColumns)
+            FullOuterJoined = CompuMaster.Data.DataTables.SqlJoinTables(TestTables.LeftTable, TestTables.LeftPrimaryKeyColumns, Nothing, TestTables.RightTable, TestTables.RightPrimaryKeyColumns, Nothing, CompuMaster.Data.DataTables.SqlJoinTypes.FullOuter)
 
             Console.WriteLine("FULL-OUTER-JOINED TABLE CONTENTS: " & TestTables.TableSetName)
             Console.WriteLine(CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(FullOuterJoined))
@@ -1104,7 +1197,8 @@ Namespace CompuMaster.Test.Data
             TestTables.WriteToConsole()
 
             Dim FullOuterJoined As DataTable
-            FullOuterJoined = CompuMaster.Data.DataTables.FullJoinTables(TestTables.LeftTable, TestTables.LeftPrimaryKeyColumns, TestTables.RightTable, TestTables.RightPrimaryKeyColumns)
+            'FullOuterJoined = CompuMaster.Data.DataTables.FullJoinTables(TestTables.LeftTable, TestTables.LeftPrimaryKeyColumns, TestTables.RightTable, TestTables.RightPrimaryKeyColumns)
+            FullOuterJoined = CompuMaster.Data.DataTables.SqlJoinTables(TestTables.LeftTable, TestTables.LeftPrimaryKeyColumns, Nothing, TestTables.RightTable, TestTables.RightPrimaryKeyColumns, Nothing, CompuMaster.Data.DataTables.SqlJoinTypes.FullOuter)
 
             Console.WriteLine("FULL-OUTER-JOINED TABLE CONTENTS: " & TestTables.TableSetName)
             Console.WriteLine(CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(FullOuterJoined))
@@ -1167,7 +1261,8 @@ Namespace CompuMaster.Test.Data
             TestTables.WriteToConsole()
 
             Dim FullOuterJoined As DataTable
-            FullOuterJoined = CompuMaster.Data.DataTables.FullJoinTables(TestTables.LeftTable, TestTables.LeftPrimaryKeyColumns, TestTables.RightTable, TestTables.RightPrimaryKeyColumns)
+            'FullOuterJoined = CompuMaster.Data.DataTables.FullJoinTables(TestTables.LeftTable, TestTables.LeftPrimaryKeyColumns, TestTables.RightTable, TestTables.RightPrimaryKeyColumns)
+            FullOuterJoined = CompuMaster.Data.DataTables.SqlJoinTables(TestTables.LeftTable, TestTables.LeftPrimaryKeyColumns, Nothing, TestTables.RightTable, TestTables.RightPrimaryKeyColumns, Nothing, CompuMaster.Data.DataTables.SqlJoinTypes.FullOuter)
 
             Console.WriteLine("FULL-OUTER-JOINED TABLE CONTENTS: " & TestTables.TableSetName)
             Console.WriteLine(CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(FullOuterJoined))
@@ -1225,7 +1320,8 @@ Namespace CompuMaster.Test.Data
             TestTables.WriteToConsole()
 
             Dim FullOuterJoined As DataTable
-            FullOuterJoined = CompuMaster.Data.DataTables.FullJoinTables(TestTables.LeftTable, TestTables.LeftPrimaryKeyColumns, TestTables.RightTable, TestTables.RightPrimaryKeyColumns)
+            'FullOuterJoined = CompuMaster.Data.DataTables.FullJoinTables(TestTables.LeftTable, TestTables.LeftPrimaryKeyColumns, TestTables.RightTable, TestTables.RightPrimaryKeyColumns)
+            FullOuterJoined = CompuMaster.Data.DataTables.SqlJoinTables(TestTables.LeftTable, TestTables.LeftPrimaryKeyColumns, Nothing, TestTables.RightTable, TestTables.RightPrimaryKeyColumns, Nothing, CompuMaster.Data.DataTables.SqlJoinTypes.FullOuter)
 
             Console.WriteLine("FULL-OUTER-JOINED TABLE CONTENTS: " & TestTables.TableSetName)
             Console.WriteLine(CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(FullOuterJoined))
@@ -1240,34 +1336,46 @@ Namespace CompuMaster.Test.Data
             Next i
 
             'Verify row (content)
-            Assert.AreEqual(10, FullOuterJoined.Rows.Count())
-            For i As Integer = 0 To 5
-                Assert.AreEqual(0 + i, CInt(FullOuterJoined.Rows(i)(0)))
+            Assert.AreEqual(12, FullOuterJoined.Rows.Count())
+            For i As Integer = 0 To 3
+                If i = 1 Then
+                    Assert.AreEqual(DBNull.Value, FullOuterJoined.Rows(i)(0))
+                Else
+                    Assert.AreEqual(0 + i, CInt(FullOuterJoined.Rows(i)(0)))
+                End If
                 Assert.AreEqual(1 + i, CInt(FullOuterJoined.Rows(i)(1)))
                 Assert.AreEqual(2 + i, CInt(FullOuterJoined.Rows(i)(2)))
-                Assert.AreEqual(0 + i, CInt(FullOuterJoined.Rows(i)(3)))
-                Assert.AreEqual(1 + i, CInt(FullOuterJoined.Rows(i)(4)))
+                If i = 1 Or i = 2 Then
+                    Assert.AreEqual(DBNull.Value, FullOuterJoined.Rows(i)(3))
+                Else
+                    Assert.AreEqual(0 + i, CInt(FullOuterJoined.Rows(i)(3)))
+                End If
+                If i = 1 Then
+                    Assert.AreEqual(3, CInt(FullOuterJoined.Rows(i)(4)))
+                ElseIf i = 2 Then
+                    Assert.AreEqual(DBNull.Value, FullOuterJoined.Rows(i)(4))
+                ElseIf i = 4
+                    Assert.AreEqual(1 + i, CInt(FullOuterJoined.Rows(i)(4)))
+                End If
             Next i
-            Assert.AreEqual(567, CInt(FullOuterJoined.Rows(6)(0)))
-            Assert.AreEqual(65527, CInt(FullOuterJoined.Rows(6)(1)))
-            Assert.AreEqual(True, IsDBNull(FullOuterJoined.Rows(6)(2)))
-            Assert.AreEqual(True, IsDBNull(FullOuterJoined.Rows(6)(3)))
-            Assert.AreEqual(True, IsDBNull(FullOuterJoined.Rows(6)(4)))
-            Assert.AreEqual(678, CInt(FullOuterJoined.Rows(7)(0)))
-            Assert.AreEqual(65528, CInt(FullOuterJoined.Rows(7)(1)))
-            Assert.AreEqual(True, IsDBNull(FullOuterJoined.Rows(7)(2)))
-            Assert.AreEqual(True, IsDBNull(FullOuterJoined.Rows(7)(3)))
-            Assert.AreEqual(True, IsDBNull(FullOuterJoined.Rows(7)(4)))
-            Assert.AreEqual(True, IsDBNull(FullOuterJoined.Rows(8)(0)))
-            Assert.AreEqual(True, IsDBNull(FullOuterJoined.Rows(8)(1)))
-            Assert.AreEqual(True, IsDBNull(FullOuterJoined.Rows(8)(2)))
-            Assert.AreEqual(789, CInt(FullOuterJoined.Rows(8)(3)))
-            Assert.AreEqual(65728, CInt(FullOuterJoined.Rows(8)(4)))
-            Assert.AreEqual(True, IsDBNull(FullOuterJoined.Rows(9)(0)))
-            Assert.AreEqual(True, IsDBNull(FullOuterJoined.Rows(9)(1)))
-            Assert.AreEqual(True, IsDBNull(FullOuterJoined.Rows(9)(2)))
-            Assert.AreEqual(890, CInt(FullOuterJoined.Rows(9)(3)))
-            Assert.AreEqual(True, IsDBNull(FullOuterJoined.Rows(9)(4)))
+
+            Dim ShallBeResult As String = "JoinedTable" & vbNewLine &
+                    "left1|left2|left3|right1|right2" & vbNewLine &
+                    "-----+-----+-----+------+------" & vbNewLine &
+                    "0    |1    |2    |0     |1     " & vbNewLine &
+                    "     |2    |3    |      |3     " & vbNewLine &
+                    "2    |3    |4    |      |      " & vbNewLine &
+                    "3    |4    |5    |3     |4     " & vbNewLine &
+                    "3    |4    |5    |3     |40    " & vbNewLine &
+                    "4    |5    |6    |4     |104   " & vbNewLine &
+                    "5    |6    |7    |5     |      " & vbNewLine &
+                    "567  |65527|     |      |      " & vbNewLine &
+                    "5    |60   |70   |5     |      " & vbNewLine &
+                    "     |     |     |1     |2     " & vbNewLine &
+                    "     |     |     |789   |65728 " & vbNewLine &
+                    "     |     |     |890   |      " & vbNewLine &
+                    ""
+            Assert.AreEqual(ShallBeResult, CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(FullOuterJoined))
 
         End Sub
 
@@ -1404,6 +1512,9 @@ Namespace CompuMaster.Test.Data
             rightRow2.Item("right2") = 1234
             right.Rows.Add(rightRow2)
 
+            left.PrimaryKey = New System.Data.DataColumn() {left.Columns("left1")}
+            right.PrimaryKey = New System.Data.DataColumn() {right.Columns("right1")}
+
             Console.WriteLine("LEFT TABLE CONTENTS")
             Console.WriteLine(CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(left))
             Console.WriteLine()
@@ -1432,22 +1543,83 @@ Namespace CompuMaster.Test.Data
             Console.WriteLine(CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(LeftJoined))
 
             'Verify column (names)
-            Assert.AreEqual(4, leftJoined.Columns.Count())
-            StringAssert.IsMatch("left1", leftJoined.Columns(0).ColumnName)
-            StringAssert.IsMatch("left2", leftJoined.Columns(1).ColumnName)
-            StringAssert.IsMatch("right1", leftJoined.Columns(2).ColumnName)
-            StringAssert.IsMatch("right2", leftJoined.Columns(3).ColumnName)
+            Assert.AreEqual(4, LeftJoined.Columns.Count())
+            StringAssert.IsMatch("left1", LeftJoined.Columns(0).ColumnName)
+            StringAssert.IsMatch("left2", LeftJoined.Columns(1).ColumnName)
+            StringAssert.IsMatch("right1", LeftJoined.Columns(2).ColumnName)
+            StringAssert.IsMatch("right2", LeftJoined.Columns(3).ColumnName)
 
             'Verify row (content)
             Assert.AreEqual(2, LeftJoined.Rows.Count())
             Assert.IsTrue(IsDBNull(LeftJoined.Rows(1).Item(2)))
-            StringAssert.IsMatch("23", leftJoined.Rows(1).Item(0))
-            StringAssert.IsMatch("5", leftJoined.Rows(0).Item(0))
-            StringAssert.IsMatch("11", leftJoined.Rows(0).Item(3))
+            StringAssert.IsMatch("23", LeftJoined.Rows(1).Item(0))
+            StringAssert.IsMatch("5", LeftJoined.Rows(0).Item(0))
+            StringAssert.IsMatch("11", LeftJoined.Rows(0).Item(3))
 
-            Assert.AreEqual(10, CInt(leftJoined.Rows(0)(1)))
-            Assert.AreEqual(5, CInt(leftJoined.Rows(0)(2)))
-            Assert.AreEqual(99, CInt(leftJoined.Rows(1)(1)))
+            Assert.AreEqual(10, CInt(LeftJoined.Rows(0)(1)))
+            Assert.AreEqual(5, CInt(LeftJoined.Rows(0)(2)))
+            Assert.AreEqual(99, CInt(LeftJoined.Rows(1)(1)))
+        End Sub
+
+        <Test()> Public Sub SqlJoinTables_Left()
+            SqlJoinTables_Left_TableSet1()
+            SqlJoinTables_Left_TableSet2()
+        End Sub
+
+        Private Sub SqlJoinTables_Left_TableSet1()
+            Dim TestTables As JoinTableSet = Me.CreateLeftJoinTableSet1
+            TestTables.WriteToConsole()
+
+            Dim LeftJoined As DataTable
+            LeftJoined = CompuMaster.Data.DataTables.SqlJoinTables(TestTables.LeftTable, TestTables.LeftTable.PrimaryKey, Nothing, TestTables.RightTable, TestTables.RightTable.PrimaryKey, Nothing, CompuMaster.Data.DataTables.SqlJoinTypes.Left)
+
+            Console.WriteLine("LEFT-JOINED TABLE CONTENTS: " & TestTables.TableSetName)
+            Console.WriteLine(CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(LeftJoined))
+
+            'Verify column (names)
+            Assert.AreEqual(4, LeftJoined.Columns.Count())
+            StringAssert.IsMatch("left1", LeftJoined.Columns(0).ColumnName)
+            StringAssert.IsMatch("left2", LeftJoined.Columns(1).ColumnName)
+            StringAssert.IsMatch("right1", LeftJoined.Columns(2).ColumnName)
+            StringAssert.IsMatch("right2", LeftJoined.Columns(3).ColumnName)
+
+            'Verify row (content)
+            Assert.AreEqual(2, LeftJoined.Rows.Count())
+            Assert.IsTrue(IsDBNull(LeftJoined.Rows(1).Item(2)))
+            StringAssert.IsMatch("23", LeftJoined.Rows(1).Item(0))
+            StringAssert.IsMatch("5", LeftJoined.Rows(0).Item(0))
+            StringAssert.IsMatch("11", LeftJoined.Rows(0).Item(3))
+
+            Assert.AreEqual(10, CInt(LeftJoined.Rows(0)(1)))
+            Assert.AreEqual(5, CInt(LeftJoined.Rows(0)(2)))
+            Assert.AreEqual(99, CInt(LeftJoined.Rows(1)(1)))
+
+        End Sub
+
+        Private Sub SqlJoinTables_Left_TableSet2()
+            Dim TestTables As JoinTableSet = Me.CreateFullOuterJoinTableSet2
+            TestTables.WriteToConsole()
+
+            Dim LeftJoined As DataTable
+            LeftJoined = CompuMaster.Data.DataTables.SqlJoinTables(TestTables.LeftTable, New String() {"left1"}, Nothing, TestTables.RightTable, New String() {"right1"}, Nothing, CompuMaster.Data.DataTables.SqlJoinTypes.Left)
+
+            Console.WriteLine("LEFT-JOINED TABLE CONTENTS: " & TestTables.TableSetName)
+            Console.WriteLine(CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(LeftJoined))
+
+            Dim ShallBeResult As String = "JoinedTable" & vbNewLine &
+                    "left1|left2|left3|right1|right2" & vbNewLine &
+                    "-----+-----+-----+------+------" & vbNewLine &
+                    "0    |1    |2    |0     |1     " & vbNewLine &
+                    "     |2    |3    |      |3     " & vbNewLine &
+                    "2    |3    |4    |      |      " & vbNewLine &
+                    "3    |4    |5    |3     |4     " & vbNewLine &
+                    "3    |4    |5    |3     |40    " & vbNewLine &
+                    "4    |5    |6    |4     |104   " & vbNewLine &
+                    "5    |6    |7    |5     |      " & vbNewLine &
+                    "567  |65527|     |      |      " & vbNewLine &
+                    "5    |60   |70   |5     |      " & vbNewLine &
+                    ""
+            Assert.AreEqual(ShallBeResult, CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(LeftJoined))
 
         End Sub
 

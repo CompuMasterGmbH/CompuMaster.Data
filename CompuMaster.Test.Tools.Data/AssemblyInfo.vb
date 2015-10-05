@@ -17,7 +17,7 @@ Imports System.Runtime.InteropServices
 <Assembly: CLSCompliant(True)> 
 
 'Die folgende GUID ist für die ID der Typbibliothek, wenn dieses Projekt in COM angezeigt wird
-<Assembly: Guid("D8D4C425-B7A2-4F73-A91B-7C1EA686B0F6")> 
+<Assembly: Guid("D8D4C425-B7A2-4F73-A91B-7C1EA686B0F6")>
 
 ' Versionsinformationen für eine Assembly bestehen aus den folgenden vier Werten:
 '
@@ -29,4 +29,4 @@ Imports System.Runtime.InteropServices
 ' Sie können alle Werte angeben oder auf die standardmäßigen Build- und Revisionsnummern 
 ' zurückgreifen, indem Sie '*' wie unten angezeigt verwenden:
 
-<Assembly: AssemblyVersion("2.7.2012.0827")> 
+<Assembly: AssemblyVersion("2.7.2015.1005")>

@@ -1468,7 +1468,7 @@ Namespace CompuMaster.Data
         ''' <remarks>
         ''' </remarks>
         Public Shared Function LookupUniqueColumnName(ByVal dataTable As DataTable, ByVal suggestedColumnName As String) As String
-            Return CompuMaster.Data.DataTablesTools.LookupUnqiueColumnName(dataTable, suggestedColumnName)
+            Return CompuMaster.Data.DataTablesTools.LookupUniqueColumnName(dataTable, suggestedColumnName)
         End Function
 
         ''' <summary>
@@ -1481,7 +1481,7 @@ Namespace CompuMaster.Data
         ''' </remarks>
         <Obsolete("Use the correct method name without typing error"), ComponentModel.EditorBrowsable(ComponentModel.EditorBrowsableState.Never)> _
         Public Shared Function LookupUnqiueColumnName(ByVal dataTable As DataTable, ByVal suggestedColumnName As String) As String
-            Return CompuMaster.Data.DataTablesTools.LookupUnqiueColumnName(dataTable, suggestedColumnName)
+            Return CompuMaster.Data.DataTablesTools.LookupUniqueColumnName(dataTable, suggestedColumnName)
         End Function
 
         ''' -----------------------------------------------------------------------------
@@ -1664,6 +1664,30 @@ Namespace CompuMaster.Data
         <Obsolete("Use ConvertToPlainTextTableFixedColumnWidths instead", False), ComponentModel.EditorBrowsable(ComponentModel.EditorBrowsableState.Never)> _
         Public Shared Function ConvertToPlainTextTable(ByVal dataTable As DataTable, ByVal fixedColumnWidths As Integer()) As String
             Return ConvertToPlainTextTable(dataTable.Rows, dataTable.TableName, fixedColumnWidths)
+        End Function
+
+        ''' <summary>
+        '''     Return a string with all columns and rows, helpfull for debugging purposes
+        ''' </summary>
+        ''' <param name="dataRows">The datatable to retrieve the content from</param>
+        ''' <returns>All rows are separated by fixed width. If no rows have been processed, the user will get notified about this fact</returns>
+        ''' <remarks></remarks>
+        Public Shared Function ConvertToPlainTextTableFixedColumnWidths(ByVal dataRows As DataRow()) As String
+            Dim TableName As String = ""
+            If dataRows.Length > 0 Then
+                TableName = dataRows(0).Table.TableName
+            End If
+            Return _ConvertToPlainTextTableWithFixedColumnWidths(dataRows, TableName, SuggestColumnWidthsForFixedPlainTables(dataRows))
+        End Function
+
+        ''' <summary>
+        '''     Return a string with all columns and rows, helpfull for debugging purposes
+        ''' </summary>
+        ''' <param name="dataRow">The data row to retrieve the content from</param>
+        ''' <returns>All rows are separated by fixed width. If no rows have been processed, the user will get notified about this fact</returns>
+        ''' <remarks></remarks>
+        Public Shared Function ConvertToPlainTextTableFixedColumnWidths(ByVal dataRow As DataRow) As String
+            Return _ConvertToPlainTextTableWithFixedColumnWidths(New System.Data.DataRow() {dataRow}, dataRow.Table.TableName, SuggestColumnWidthsForFixedPlainTables(New System.Data.DataRow() {dataRow}))
         End Function
 
         ''' <summary>
@@ -1915,6 +1939,58 @@ Namespace CompuMaster.Data
         ''' Suggests column widths for a table using as minimum 2 chars, but minimum header string length, but also either full cell length for number/date/time columns or for all other types 80 % of all values should be visible completely
         ''' </summary>
         ''' <param name="rows"></param>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        Public Shared Function SuggestColumnWidthsForFixedPlainTables(rows As System.Data.DataRow()) As Integer()
+            If rows.Length = 0 Then
+                Return Nothing
+            Else
+                Return SuggestColumnWidthsForFixedPlainTables(rows, rows(0).Table, 80)
+            End If
+        End Function
+
+        ''' <summary>
+        ''' Suggests column widths for a table using as minimum 2 chars, but minimum header string length, but also either full cell length for number/date/time columns or for all other types 80 % of all values should be visible completely
+        ''' </summary>
+        ''' <param name="rows"></param>
+        ''' <param name="table"></param>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        Private Shared Function SuggestColumnWidthsForFixedPlainTables(rows As System.Data.DataRow(), table As DataTable,
+                                                                       optimalWidthWhenPercentageNumberOfRowsFitIntoCell As Double) As Integer()
+            Dim colWidths As New ArrayList
+            For ColCounter As Integer = 0 To table.Columns.Count - 1
+                Dim MinWidthForHeader As Integer
+                If table.Columns(ColCounter).Caption <> Nothing Then
+                    MinWidthForHeader = (String.Format("{0}", table.Columns(ColCounter).Caption)).Length
+                Else
+                    MinWidthForHeader = (String.Format("{0}", table.Columns(ColCounter).ColumnName)).Length
+                End If
+                Dim MinWidthForCells As Integer
+                If rows.Length > 0 Then
+                    If table.Columns(ColCounter).DataType.IsValueType AndAlso Not GetType(String).IsInstanceOfType(table.Columns(ColCounter).DataType) Then
+                        'number or date/time
+                        For RowCounter As Integer = 0 To table.Rows.Count - 1
+                            MinWidthForCells = System.Math.Max(MinWidthForCells, String.Format("{0}", table.Rows(RowCounter)(ColCounter)).Length)
+                        Next
+                    Else
+                        'string or any other object
+                        Dim cellWidths(table.Rows.Count - 1) As Integer
+                        For RowCounter As Integer = 0 To table.Rows.Count - 1
+                            cellWidths(RowCounter) = String.Format("{0}", table.Rows(RowCounter)(ColCounter)).Length
+                        Next
+                        MinWidthForCells = MaxValueOfFirstXPercent(cellWidths, optimalWidthWhenPercentageNumberOfRowsFitIntoCell)
+                    End If
+                End If
+                colWidths.Add(System.Math.Max(2, System.Math.Max(MinWidthForHeader, MinWidthForCells)))
+            Next
+            Return CType(colWidths.ToArray(GetType(Integer)), Integer())
+        End Function
+
+        ''' <summary>
+        ''' Suggests column widths for a table using as minimum 2 chars, but minimum header string length, but also either full cell length for number/date/time columns or for all other types 80 % of all values should be visible completely
+        ''' </summary>
+        ''' <param name="rows"></param>
         ''' <param name="table"></param>
         ''' <returns></returns>
         ''' <remarks></remarks>
@@ -1957,6 +2033,24 @@ Namespace CompuMaster.Data
         ''' <param name="fixedColumnWidths">The column sizes in chars</param>
         ''' <returns>All rows are with fixed column withs. If no rows have been processed, the user will get notified about this fact</returns>
         ''' <remarks></remarks>
+        Private Shared Function _ConvertToPlainTextTableWithFixedColumnWidths(ByVal rows As DataRow(), ByVal label As String,
+                                                                              ByVal fixedColumnWidths As Integer()) As String
+            Const vSeparatorHeader As String = "|"
+            Const hSeparatorHeader As Char = "-"c
+            Const hSeparatorCells As Char = Nothing
+            Const vSeparatorCells As String = "|"
+            Const crossSeparator As String = "+"
+            Return _ConvertToPlainTextTableWithFixedColumnWidths(rows, label, fixedColumnWidths, vSeparatorHeader, vSeparatorCells, crossSeparator, hSeparatorHeader, hSeparatorCells)
+        End Function
+
+        ''' <summary>
+        '''     Return a string with all columns and rows, helpfull for debugging purposes
+        ''' </summary>
+        ''' <param name="rows">The rows to be processed</param>
+        ''' <param name="label">An optional title of the rows</param>
+        ''' <param name="fixedColumnWidths">The column sizes in chars</param>
+        ''' <returns>All rows are with fixed column withs. If no rows have been processed, the user will get notified about this fact</returns>
+        ''' <remarks></remarks>
         Private Shared Function _ConvertToPlainTextTableWithFixedColumnWidths(ByVal rows As DataRowCollection, ByVal label As String, _
                                                                               ByVal fixedColumnWidths As Integer()) As String
             Const vSeparatorHeader As String = "|"
@@ -1965,6 +2059,77 @@ Namespace CompuMaster.Data
             Const vSeparatorCells As String = "|"
             Const crossSeparator As String = "+"
             Return _ConvertToPlainTextTableWithFixedColumnWidths(rows, label, fixedColumnWidths, vSeparatorHeader, vSeparatorCells, crossSeparator, hSeparatorHeader, hSeparatorCells)
+        End Function
+
+        ''' <summary>
+        '''     Return a string with all columns and rows, helpfull for debugging purposes
+        ''' </summary>
+        ''' <param name="rows">The rows to be processed</param>
+        ''' <param name="label">An optional title of the rows</param>
+        ''' <param name="fixedColumnWidths">The column sizes in chars</param>
+        ''' <param name="verticalSeparatorHeader"></param>
+        ''' <param name="verticalSeparatorCells"></param>
+        ''' <param name="crossSeparator"></param>
+        ''' <param name="horizontalSeparatorHeadline"></param>
+        ''' <param name="horizontalSeparatorCells"></param>
+        ''' <returns>All rows are with fixed column withs. If no rows have been processed, the user will get notified about this fact</returns>
+        ''' <remarks></remarks>
+        Private Shared Function _ConvertToPlainTextTableWithFixedColumnWidths(ByVal rows As DataRow(), ByVal label As String,
+                                                                              ByVal fixedColumnWidths As Integer(), verticalSeparatorHeader As String,
+                                                                              verticalSeparatorCells As String, crossSeparator As String,
+                                                                              horizontalSeparatorHeadline As Char, horizontalSeparatorCells As Char) As String
+            If Len(verticalSeparatorCells) <> Len(verticalSeparatorHeader) Then Throw New ArgumentException("Length of verticalSeparatorHeader and verticalSeparatorCells must be equal")
+            If (Char.GetNumericValue(horizontalSeparatorHeadline) > 0 OrElse Char.GetNumericValue(horizontalSeparatorCells) > 0) AndAlso Len(crossSeparator) <> Len(verticalSeparatorHeader) Then Throw New ArgumentException("Length of verticalSeparatorHeader and crossSeparator must be equal since horizontal lines are requested")
+            Dim Result As New System.Text.StringBuilder
+            'Add table name
+            If label <> "" Then
+                Result.Append(String.Format("{0}", label) & System.Environment.NewLine)
+            End If
+            If rows.Length <= 0 Then
+                Result.Append("no rows found" & System.Environment.NewLine)
+                Return Result.ToString
+            End If
+            'Add column headers
+            For ColCounter As Integer = 0 To System.Math.Min(rows(0).Table.Columns.Count, fixedColumnWidths.Length) - 1
+                Dim column As DataColumn = rows(0).Table.Columns(ColCounter)
+                If ColCounter <> 0 Then Result.Append(verticalSeparatorHeader)
+                If column.Caption <> Nothing Then
+                    Result.Append(TrimStringToFixedWidth(String.Format("{0}", column.Caption), fixedColumnWidths(ColCounter)))
+                Else
+                    Result.Append(TrimStringToFixedWidth(String.Format("{0}", column.ColumnName), fixedColumnWidths(ColCounter)))
+                End If
+            Next
+            Result.Append(System.Environment.NewLine)
+            If horizontalSeparatorHeadline <> Nothing Then
+                'Add header separator
+                Dim LineSeparatorHeader As String = ""
+                For ColCounter As Integer = 0 To System.Math.Min(rows(0).Table.Columns.Count, fixedColumnWidths.Length) - 1
+                    If ColCounter <> 0 Then LineSeparatorHeader &= crossSeparator
+                    LineSeparatorHeader &= Strings.StrDup(fixedColumnWidths(ColCounter), horizontalSeparatorHeadline)
+                Next
+                Result.Append(LineSeparatorHeader)
+                Result.Append(System.Environment.NewLine)
+            End If
+            'Add table rows
+            For Each row As DataRow In rows
+                For ColCounter As Integer = 0 To System.Math.Min(row.Table.Columns.Count, fixedColumnWidths.Length) - 1
+                    Dim column As DataColumn = row.Table.Columns(ColCounter)
+                    If ColCounter <> 0 Then Result.Append(verticalSeparatorCells)
+                    Result.Append(TrimStringToFixedWidth(String.Format("{0}", row(column)), fixedColumnWidths(ColCounter)))
+                Next
+                Result.Append(System.Environment.NewLine)
+                If horizontalSeparatorCells <> Nothing Then
+                    'Add lines in between of the cells area
+                    Dim LineSeparatorCells As String = ""
+                    For ColCounter As Integer = 0 To System.Math.Min(rows(0).Table.Columns.Count, fixedColumnWidths.Length) - 1
+                        If ColCounter <> 0 Then LineSeparatorCells &= crossSeparator
+                        LineSeparatorCells &= Strings.StrDup(fixedColumnWidths(ColCounter), horizontalSeparatorCells)
+                    Next
+                    Result.Append(LineSeparatorCells)
+                    Result.Append(System.Environment.NewLine)
+                End If
+            Next
+            Return Result.ToString
         End Function
 
         ''' <summary>
@@ -2238,6 +2403,14 @@ Namespace CompuMaster.Data
             Left = 1
         End Enum
 
+        Public Enum SqlJoinTypes As Byte
+            Inner = 0
+            Left = 1
+            Right = 2
+            FullOuter = 3
+            Cross = 4
+        End Enum
+
         ''' -----------------------------------------------------------------------------
         ''' <summary>
         '''     Execute a table join on two tables of the same dataset based on the first relation found
@@ -2277,7 +2450,7 @@ Namespace CompuMaster.Data
         ''' 	[baldauf]	2005-07-02  Created
         ''' </history>
         ''' -----------------------------------------------------------------------------
-        Public Shared Function JoinTables(ByVal leftParentTable As DataTable, ByVal rightChildTable As DataTable, _
+        Public Shared Function JoinTables(ByVal leftParentTable As DataTable, ByVal rightChildTable As DataTable,
                                           ByVal relation As DataRelation, ByVal joinType As JoinTypes) As DataTable
             Return CompuMaster.Data.DataTablesTools.JoinTables(leftParentTable, rightChildTable, relation, CType(joinType, CompuMaster.Data.DataTablesTools.JoinTypes))
         End Function
@@ -2298,7 +2471,7 @@ Namespace CompuMaster.Data
         ''' 	[baldauf]	2005-07-02  Created
         ''' </history>
         ''' -----------------------------------------------------------------------------
-        Public Shared Function JoinTables(ByVal leftParentTable As DataTable, ByVal leftTableColumnsToCopy As DataColumn(), ByVal rightChildTable As DataTable, _
+        Public Shared Function JoinTables(ByVal leftParentTable As DataTable, ByVal leftTableColumnsToCopy As DataColumn(), ByVal rightChildTable As DataTable,
                                           ByVal rightTableColumnsToCopy As DataColumn(), ByVal joinType As JoinTypes) As DataTable
             Return CompuMaster.Data.DataTablesTools.JoinTables(leftParentTable, leftTableColumnsToCopy, rightChildTable, rightTableColumnsToCopy, CType(joinType, CompuMaster.Data.DataTablesTools.JoinTypes))
         End Function
@@ -2319,8 +2492,8 @@ Namespace CompuMaster.Data
         ''' 	[baldauf]	2005-07-02  Created
         ''' </history>
         ''' -----------------------------------------------------------------------------
-        Public Shared Function JoinTables(ByVal leftParentTable As DataTable, ByVal indexesOfLeftTableColumnsToCopy As Integer(), _
-                                          ByVal rightChildTable As DataTable, ByVal indexesOfRightTableColumnsToCopy As Integer(), _
+        Public Shared Function JoinTables(ByVal leftParentTable As DataTable, ByVal indexesOfLeftTableColumnsToCopy As Integer(),
+                                          ByVal rightChildTable As DataTable, ByVal indexesOfRightTableColumnsToCopy As Integer(),
                                           ByVal joinType As JoinTypes) As DataTable
             Return CompuMaster.Data.DataTablesTools.JoinTables(leftParentTable, indexesOfLeftTableColumnsToCopy, rightChildTable, indexesOfRightTableColumnsToCopy, CType(joinType, CompuMaster.Data.DataTablesTools.JoinTypes))
         End Function
@@ -2342,10 +2515,10 @@ Namespace CompuMaster.Data
         ''' 	[baldauf]	2005-07-02  Created
         ''' </history>
         ''' -----------------------------------------------------------------------------
-        Public Shared Function JoinTables(ByVal leftParentTable As DataTable, ByVal indexesOfLeftTableColumnsToCopy As Integer(), _
-                                          ByVal rightChildTable As DataTable, ByVal indexesOfRightTableColumnsToCopy As Integer(), _
+        Public Shared Function JoinTables(ByVal leftParentTable As DataTable, ByVal indexesOfLeftTableColumnsToCopy As Integer(),
+                                          ByVal rightChildTable As DataTable, ByVal indexesOfRightTableColumnsToCopy As Integer(),
                                           ByVal relation As DataRelation, ByVal joinType As JoinTypes) As DataTable
-            Return CompuMaster.Data.DataTablesTools.JoinTables(leftParentTable, indexesOfLeftTableColumnsToCopy, rightChildTable, indexesOfRightTableColumnsToCopy, relation, CType(joinType,  _
+            Return CompuMaster.Data.DataTablesTools.JoinTables(leftParentTable, indexesOfLeftTableColumnsToCopy, rightChildTable, indexesOfRightTableColumnsToCopy, relation, CType(joinType,
                                                                CompuMaster.Data.DataTablesTools.JoinTypes))
         End Function
 
@@ -2364,7 +2537,7 @@ Namespace CompuMaster.Data
         ''' 	[baldauf]	2005-07-02  Created
         ''' </history>
         ''' -----------------------------------------------------------------------------
-        Public Shared Function CrossJoinTables(ByVal leftTable As DataTable, ByVal indexesOfLeftTableColumnsToCopy As Integer(), _
+        Public Shared Function CrossJoinTables(ByVal leftTable As DataTable, ByVal indexesOfLeftTableColumnsToCopy As Integer(),
                                                ByVal rightTable As DataTable, ByVal indexesOfRightTableColumnsToCopy As Integer()) As DataTable
             Return CompuMaster.Data.DataTablesTools.CrossJoinTables(leftTable, indexesOfLeftTableColumnsToCopy, rightTable, indexesOfRightTableColumnsToCopy)
         End Function
@@ -2376,6 +2549,7 @@ Namespace CompuMaster.Data
         ''' <param name="rightTable">2nd table</param>
         ''' <returns></returns>
         ''' <remarks>The primary key columns of both tables are used to find the corrorresponding matches</remarks>
+        <Obsolete("Use CompuMaster.Data.DataTables.SqlJoinTables instead", False), System.ComponentModel.EditorBrowsable(ComponentModel.EditorBrowsableState.Never)>
         Public Shared Function FullJoinTables(ByVal leftTable As DataTable, ByVal rightTable As DataTable) As DataTable
             Return FullJoinTables(leftTable, leftTable.PrimaryKey, rightTable, rightTable.PrimaryKey)
         End Function
@@ -2389,7 +2563,8 @@ Namespace CompuMaster.Data
         ''' <param name="rightKeyColumns">The key columns which shall be used for finding matches in the 1st table</param>
         ''' <returns></returns>
         ''' <remarks></remarks>
-        Public Shared Function FullJoinTables(ByVal leftTable As DataTable, ByVal leftKeyColumns As String(), ByVal rightTable As DataTable, _
+        <Obsolete("Use CompuMaster.Data.DataTables.SqlJoinTables instead", False), System.ComponentModel.EditorBrowsable(ComponentModel.EditorBrowsableState.Never)>
+        Public Shared Function FullJoinTables(ByVal leftTable As DataTable, ByVal leftKeyColumns As String(), ByVal rightTable As DataTable,
                                               ByVal rightKeyColumns As String()) As DataTable
             Dim leftIndexes As New ArrayList, rightIndexes As New ArrayList
             For MyCounter As Integer = 0 To leftKeyColumns.Length - 1
@@ -2410,7 +2585,8 @@ Namespace CompuMaster.Data
         ''' <param name="rightKeyColumns">The key columns which shall be used for finding matches in the 1st table</param>
         ''' <returns></returns>
         ''' <remarks></remarks>
-        Public Shared Function FullJoinTables(ByVal leftTable As DataTable, ByVal leftKeyColumns As DataColumn(), ByVal rightTable As DataTable, _
+        <Obsolete("Use CompuMaster.Data.DataTables.SqlJoinTables instead", False), System.ComponentModel.EditorBrowsable(ComponentModel.EditorBrowsableState.Never)>
+        Public Shared Function FullJoinTables(ByVal leftTable As DataTable, ByVal leftKeyColumns As DataColumn(), ByVal rightTable As DataTable,
                                               ByVal rightKeyColumns As DataColumn()) As DataTable
             Dim leftIndexes As New ArrayList, rightIndexes As New ArrayList
             For MyCounter As Integer = 0 To leftKeyColumns.Length - 1
@@ -2437,7 +2613,8 @@ Namespace CompuMaster.Data
         ''' <param name="rightKeyColumnIndexes">The key columns which shall be used for finding matches in the 1st table</param>
         ''' <returns></returns>
         ''' <remarks></remarks>
-        Public Shared Function FullJoinTables(ByVal leftTable As DataTable, ByVal leftKeyColumnIndexes As Integer(), ByVal rightTable As DataTable, _
+        <Obsolete("Use CompuMaster.Data.DataTables.SqlJoinTables instead", False), System.ComponentModel.EditorBrowsable(ComponentModel.EditorBrowsableState.Never)>
+        Public Shared Function FullJoinTables(ByVal leftTable As DataTable, ByVal leftKeyColumnIndexes As Integer(), ByVal rightTable As DataTable,
                                               ByVal rightKeyColumnIndexes As Integer()) As DataTable
             Return FullJoinTables(leftTable, leftKeyColumnIndexes, rightTable, rightKeyColumnIndexes, True)
         End Function
@@ -2452,7 +2629,8 @@ Namespace CompuMaster.Data
         ''' <param name="compareStringsCaseInsensitive">True to compare strings case insensitive, False for case sensitive</param>
         ''' <returns></returns>
         ''' <remarks></remarks>
-        Public Shared Function FullJoinTables(ByVal leftTable As DataTable, ByVal leftKeyColumnIndexes As Integer(), ByVal rightTable As DataTable, _
+        <Obsolete("Use CompuMaster.Data.DataTables.SqlJoinTables instead", False), System.ComponentModel.EditorBrowsable(ComponentModel.EditorBrowsableState.Never)>
+        Public Shared Function FullJoinTables(ByVal leftTable As DataTable, ByVal leftKeyColumnIndexes As Integer(), ByVal rightTable As DataTable,
                                               ByVal rightKeyColumnIndexes As Integer(), ByVal compareStringsCaseInsensitive As Boolean) As DataTable
             'Parameter validation
             If leftTable Is Nothing Then Throw New ArgumentException("Missing argument", "leftTable")
@@ -2778,9 +2956,9 @@ Namespace CompuMaster.Data
 
             Private MyCMToolsReArrangeDataColumnsException As CompuMaster.Data.ReArrangeDataColumnsException
 
-            Public Sub New(ByVal rowIndex As Integer, ByVal columnIndex As Integer, ByVal sourceColumnType As Type, ByVal targetColumnType As Type, _
+            Public Sub New(ByVal rowIndex As Integer, ByVal columnIndex As Integer, ByVal sourceColumnType As Type, ByVal targetColumnType As Type,
                            ByVal problematicValue As Object, ByVal innerException As Exception)
-                MyCMToolsReArrangeDataColumnsException = New CompuMaster.Data.ReArrangeDataColumnsException(rowIndex, columnIndex, sourceColumnType, targetColumnType, _
+                MyCMToolsReArrangeDataColumnsException = New CompuMaster.Data.ReArrangeDataColumnsException(rowIndex, columnIndex, sourceColumnType, targetColumnType,
                                                                                                             problematicValue, innerException)
             End Sub
 
@@ -2876,7 +3054,7 @@ Namespace CompuMaster.Data
         ''' 	[baldauf]	2005-07-02  Created
         ''' </history>
         ''' -----------------------------------------------------------------------------
-        Public Shared Function ReArrangeDataColumns(ByVal source As DataTable, ByVal destinationColumnSet As DataColumn(), _
+        Public Shared Function ReArrangeDataColumns(ByVal source As DataTable, ByVal destinationColumnSet As DataColumn(),
                                                     ByVal ignoreConversionExceptionAndLogThemHere As ArrayList) As DataTable
             Return CompuMaster.Data.DataTablesTools.ReArrangeDataColumns(source, destinationColumnSet, ignoreConversionExceptionAndLogThemHere)
         End Function
@@ -2905,6 +3083,408 @@ Namespace CompuMaster.Data
                 Result.Add(table.Columns(MyCounter).ColumnName)
             Next
             Return Result.ToArray
+        End Function
+
+        ''' <summary>
+        '''     Execute a table join on two tables (independent from their dataset, independent from their registered relations, without requirement for existing parent items (unlike to .NET standard behaviour) more like SQL behaviour)
+        ''' </summary>
+        ''' <param name="leftTable">The left table</param>
+        ''' <param name="leftTableKeys">An array of columns to be used as key columns for join (null/Nothing/empty array uses PrimaryKeys)</param>
+        ''' <param name="rightTable">The right table</param>
+        ''' <param name="rightTableKeys">An array of columns to be used as key columns for join (null/Nothing/empty array uses PrimaryKeys)</param>
+        ''' <param name="joinType">Inner, left, right or full join</param>
+        ''' <returns></returns>
+        ''' <remarks>
+        ''' </remarks>
+        Public Shared Function SqlJoinTables(ByVal leftTable As DataTable, leftTableKeys As System.Data.DataColumn(),
+                                          ByVal rightTable As DataTable, rightTableKeys As System.Data.DataColumn(),
+                                          ByVal joinType As SqlJoinTypes) As DataTable
+            Return SqlJoinTables(leftTable, leftTableKeys, Nothing, rightTable, rightTableKeys, Nothing, joinType)
+        End Function
+
+        ''' <summary>
+        '''     Execute a table join on two tables (independent from their dataset, independent from their registered relations, without requirement for existing parent items (unlike to .NET standard behaviour) more like SQL behaviour)
+        ''' </summary>
+        ''' <param name="leftTable">The left table</param>
+        ''' <param name="leftTableKeys">An array of columns to be used as key columns for join (null/Nothing/empty array uses PrimaryKeys)</param>
+        ''' <param name="leftTableColumnsToCopy">An array of columns to copy from the left table (null/Nothing uses all columns, empty array uses no columns)</param>
+        ''' <param name="rightTable">The right table</param>
+        ''' <param name="rightTableKeys">An array of columns to be used as key columns for join (null/Nothing/empty array uses PrimaryKeys)</param>
+        ''' <param name="rightTableColumnsToCopy">An array of columns to copy from the right table (null/Nothing uses all columns, empty array uses no columns)</param>
+        ''' <param name="joinType">Inner, left, right or full join</param>
+        ''' <returns></returns>
+        ''' <remarks>
+        ''' </remarks>
+        Public Shared Function SqlJoinTables(ByVal leftTable As DataTable, leftTableKeys As System.Data.DataColumn(), ByVal leftTableColumnsToCopy As System.Data.DataColumn(),
+                                          ByVal rightTable As DataTable, rightTableKeys As System.Data.DataColumn(), ByVal rightTableColumnsToCopy As System.Data.DataColumn(),
+                                          ByVal joinType As SqlJoinTypes) As DataTable
+            'Check arguments
+            If leftTableColumnsToCopy Is Nothing Then
+                leftTableColumnsToCopy = AllColumns(leftTable)
+            End If
+            If rightTableColumnsToCopy Is Nothing Then
+                rightTableColumnsToCopy = AllColumns(rightTable)
+            End If
+            If (leftTableColumnsToCopy Is Nothing OrElse leftTableColumnsToCopy.Length = 0) AndAlso (rightTableColumnsToCopy Is Nothing OrElse rightTableColumnsToCopy.Length = 0) Then
+                'Show all columns in case left and right side are without explicit definition
+                leftTableColumnsToCopy = AllColumns(leftTable)
+                rightTableColumnsToCopy = AllColumns(rightTable)
+            End If
+            If leftTableKeys Is Nothing OrElse leftTableKeys.Length = 0 Then
+                leftTableKeys = leftTable.PrimaryKey
+            End If
+            If rightTableKeys Is Nothing OrElse rightTableKeys.Length = 0 Then
+                rightTableKeys = rightTable.PrimaryKey
+            End If
+            If joinType = SqlJoinTypes.Cross Then
+                'Execute CrossJoin
+                Dim indexesOfLeftTableColumnsToCopy As New ArrayList(), indexesOfRightTableColumnsToCopy As New ArrayList()
+                For MyCounter As Integer = 0 To leftTableColumnsToCopy.Length - 1
+                    indexesOfLeftTableColumnsToCopy.Add(leftTableColumnsToCopy(MyCounter).Ordinal)
+                Next
+                For MyCounter As Integer = 0 To rightTableColumnsToCopy.Length - 1
+                    indexesOfRightTableColumnsToCopy.Add(rightTableColumnsToCopy(MyCounter).Ordinal)
+                Next
+                Return Data.DataTablesTools.CrossJoinTables(leftTable, CType(indexesOfLeftTableColumnsToCopy.ToArray(GetType(Integer)), Integer()), rightTable, CType(indexesOfRightTableColumnsToCopy.ToArray(GetType(Integer)), Integer()))
+            ElseIf joinType = SqlJoinTypes.Right Then
+                'Execute RightJoin
+
+                'Pre-Check required arguments
+                If leftTableKeys.Length <> rightTableKeys.Length Then Throw New ArgumentException("leftTableKeys and rightTableKeys must have got the same amount of keys")
+                If leftTableKeys.Length = 0 Then Throw New ArgumentNullException("leftTableKeys must have got at least 1 key")
+                For MyCounter As Integer = 0 To leftTableKeys.Length - 1
+                    If leftTableKeys(MyCounter).Table IsNot leftTable Then Throw New ArgumentException("All leftTableKeys must be columns of leftTable")
+                Next
+                For MyCounter As Integer = 0 To rightTableKeys.Length - 1
+                    If rightTableKeys(MyCounter).Table IsNot rightTable Then Throw New ArgumentException("All rightTableKeys must be columns of rightTable")
+                Next
+                For MyCounter As Integer = 0 To leftTableKeys.Length - 1
+                    If Not SqlJoin_AreCompatibleComparisonColumns(leftTableKeys(MyCounter).DataType, rightTableKeys(MyCounter).DataType) Then Throw New ArgumentException("Columns [" & leftTableKeys(MyCounter).ColumnName & "] And [" & rightTableKeys(MyCounter).ColumnName & "] can't be compared: datatype mismatch")
+                Next
+
+                'Inverse RightJoin to LeftJoin
+                Return SqlJoinTables(rightTable, rightTableKeys, rightTableColumnsToCopy, leftTable, leftTableKeys, leftTableColumnsToCopy, SqlJoinTypes.Left)
+            Else
+                'Execute Inner, Left or FullOuter Join
+
+                'Pre-Check required arguments
+                If leftTableKeys.Length <> rightTableKeys.Length Then Throw New ArgumentException("leftTableKeys and rightTableKeys must have got the same amount of keys")
+                If leftTableKeys.Length = 0 Then Throw New ArgumentNullException("leftTableKeys must have got at least 1 key")
+                For MyCounter As Integer = 0 To leftTableKeys.Length - 1
+                    If leftTableKeys(MyCounter).Table IsNot leftTable Then Throw New ArgumentException("All leftTableKeys must be columns of leftTable")
+                Next
+                For MyCounter As Integer = 0 To rightTableKeys.Length - 1
+                    If rightTableKeys(MyCounter).Table IsNot rightTable Then Throw New ArgumentException("All rightTableKeys must be columns of rightTable")
+                Next
+                For MyCounter As Integer = 0 To leftTableKeys.Length - 1
+                    If Not SqlJoin_AreCompatibleComparisonColumns(leftTableKeys(MyCounter).DataType, rightTableKeys(MyCounter).DataType) Then Throw New ArgumentException("Columns [" & leftTableKeys(MyCounter).ColumnName & "] And [" & rightTableKeys(MyCounter).ColumnName & "] can't be compared: datatype mismatch")
+                Next
+
+                'Prepare column wrap table
+                Dim LeftTableColumnWraps As Integer()
+                Dim colWraps As New ArrayList
+                For ColCounter As Integer = 0 To leftTableColumnsToCopy.Length - 1
+                    colWraps.Add(leftTableColumnsToCopy(ColCounter).Ordinal)
+                Next
+                LeftTableColumnWraps = CType(colWraps.ToArray(GetType(Integer)), Integer())
+
+
+                'Prepare the result table by copying the parent table
+                Dim Result As DataTable = leftTable.Clone
+                Result.TableName = "JoinedTable"
+                Result.PrimaryKey = Nothing
+
+                'Remove left table columns which are not required any more
+                For MyCounter As Integer = Result.Columns.Count - 1 To 0 Step -1
+                    Dim KeepThisColumn As Boolean = False
+                    For MyColCounter As Integer = 0 To LeftTableColumnWraps.Length - 1
+                        If LeftTableColumnWraps(MyColCounter) = MyCounter Then
+                            KeepThisColumn = True
+                            Exit For
+                        End If
+                    Next
+                    'Remove unique constraints to allow duplicate values now in the joined result table
+                    If Result.Columns(MyCounter).Unique = True Then
+                        Result.Columns(MyCounter).Unique = False
+                    End If
+                    'Remove unnecessary columns
+                    If KeepThisColumn = False Then
+                        Result.Columns.Remove(Result.Columns(MyCounter))
+                    End If
+                Next
+
+                'Add the right columns
+                Dim RightTableColumnWraps As Integer()
+                Dim colWrapsR As New ArrayList
+                For ColCounter As Integer = 0 To rightTableColumnsToCopy.Length - 1
+                    colWrapsR.Add(leftTableColumnsToCopy(ColCounter).Ordinal)
+                Next
+                RightTableColumnWraps = CType(colWrapsR.ToArray(GetType(Integer)), Integer())
+                For MyCounter As Integer = 0 To RightTableColumnWraps.Length - 1
+                    Dim MyColumn As DataColumn = rightTable.Columns(RightTableColumnWraps(MyCounter))
+                    Dim UniqueColumnName As String = LookupUniqueColumnName(Result, MyColumn.ColumnName)
+                    Dim ColumnCaption As String = MyColumn.Caption
+                    Dim ColumnType As System.Type = MyColumn.DataType
+                    Result.Columns.Add(UniqueColumnName, ColumnType).Caption = ColumnCaption
+                Next
+
+                Dim FoundRelatedRightRows As New ArrayList
+                'Fill the rows now with the missing data
+                For MyLeftTableRowCounter As Integer = 0 To leftTable.Rows.Count - 1
+                    Dim MyLeftRow As DataRow = leftTable.Rows(MyLeftTableRowCounter)
+                    Dim MyRightRows As DataRow() = SqlJoin_GetRightTableRows(MyLeftRow, rightTable, leftTableKeys, rightTableKeys)
+                    If joinType = SqlJoinTypes.FullOuter Then
+                        'only required for FullOuterJoin
+                        For MyRightRowCounter As Integer = 0 To MyRightRows.Length - 1
+                            Dim RowIndex As Integer = rightTable.Rows.IndexOf(MyRightRows(MyRightRowCounter))
+                            If FoundRelatedRightRows.Contains(RowIndex) = False Then
+                                FoundRelatedRightRows.Add(RowIndex)
+                            End If
+                        Next
+                    End If
+
+                    If MyRightRows.Length = 0 Then
+                        'Data only on left side
+                        Select Case joinType
+                            Case SqlJoinTypes.Left, SqlJoinTypes.FullOuter
+                                Dim NewRow As DataRow = Result.NewRow
+                                'Copy only data from parent table
+                                For MyColCounter As Integer = 0 To LeftTableColumnWraps.Length - 1
+                                    NewRow(MyColCounter) = MyLeftRow(LeftTableColumnWraps(MyColCounter))
+                                Next
+                                'Add the new row, now
+                                Result.Rows.Add(NewRow)
+                            Case SqlJoinTypes.Inner
+                                'don't add this row
+                        End Select
+                    Else
+                        'Data found on both sides
+                        For RowInserts As Integer = 0 To MyRightRows.Length - 1
+                            Dim NewRow As DataRow = Result.NewRow
+                            'Copy data from left table row
+                            For MyColCounter As Integer = 0 To LeftTableColumnWraps.Length - 1
+                                NewRow(MyColCounter) = MyLeftRow(LeftTableColumnWraps(MyColCounter))
+                            Next
+                            'Copy data from this right row
+                            Dim MyAdditionalRightRow As DataRow = MyRightRows(RowInserts)
+                            For MyColCounter As Integer = 0 To RightTableColumnWraps.Length - 1
+                                NewRow(LeftTableColumnWraps.Length + MyColCounter) = MyAdditionalRightRow(RightTableColumnWraps(MyColCounter))
+                            Next
+                            'Add the new row, now
+                            Result.Rows.Add(NewRow)
+                        Next
+                    End If
+
+                Next
+
+                'FullOuterJoin: Add rows from right table which haven't got a reference in left table
+                If joinType = SqlJoinTypes.FullOuter Then
+                    'only required for FullOuterJoin
+                    For MyRightRowCounter As Integer = 0 To rightTable.Rows.Count - 1
+                        If FoundRelatedRightRows.Contains(MyRightRowCounter) = False Then
+                            Dim NewRow As DataRow = Result.NewRow
+                            'Copy data from left table row
+                            For MyColCounter As Integer = 0 To LeftTableColumnWraps.Length - 1
+                                NewRow(MyColCounter) = DBNull.Value
+                            Next
+                            'Copy data from this right row
+                            Dim MyAdditionalRightRow As DataRow = rightTable.Rows(MyRightRowCounter)
+                            For MyColCounter As Integer = 0 To RightTableColumnWraps.Length - 1
+                                NewRow(LeftTableColumnWraps.Length + MyColCounter) = MyAdditionalRightRow(RightTableColumnWraps(MyColCounter))
+                            Next
+                            'Add the new row, now
+                            Result.Rows.Add(NewRow)
+                        End If
+                    Next
+                End If
+
+                Return Result
+            End If
+        End Function
+
+        Private Shared Function SqlJoin_GetRightTableRows(leftRow As DataRow, rightTable As DataTable, leftKeys As DataColumn(), rightKeys As DataColumn()) As DataRow()
+            Dim Result As New ArrayList()
+            For MyRowCounter As Integer = 0 To rightTable.Rows.Count - 1
+                Dim IsMatch As Boolean = True
+                For MyKeyCounter As Integer = 0 To leftKeys.Length - 1
+                    If SqlJoin_IsEqual(leftRow(leftKeys(MyKeyCounter)), rightTable.Rows(MyRowCounter)(rightKeys(MyKeyCounter))) = False Then
+                        IsMatch = False
+                        Exit For
+                    End If
+                Next
+                If IsMatch Then
+                    Result.Add(rightTable.Rows(MyRowCounter))
+                End If
+            Next
+            Return CType(Result.ToArray(GetType(System.Data.DataRow)), DataRow())
+        End Function
+
+        Private Shared Function SqlJoin_IsEqual(value1 As Object, value2 As Object) As Boolean
+            If IsDBNull(value1) Xor IsDBNull(value2) Then
+                Return False
+            ElseIf IsDBNull(value1) And IsDBNull(value2) Then
+                Return True
+            ElseIf value1.GetType Is GetType(String) AndAlso value2.GetType Is GetType(String) Then
+                Return CType(value1, String) = CType(value2, String)
+            ElseIf value1.GetType Is GetType(System.Decimal) OrElse value2.GetType Is GetType(System.Decimal) Then
+                Return CType(value1, System.Decimal) = CType(value2, System.Decimal)
+            ElseIf value1.GetType Is GetType(System.Double) OrElse value2.GetType Is GetType(System.Double) OrElse value1.GetType Is GetType(System.Single) OrElse value2.GetType Is GetType(System.Single) Then
+                Return CType(value1, System.Double) = CType(value2, System.Double)
+            ElseIf IsNumeric(value1) And IsNumeric(value2) Then
+                Return CType(value1, System.Int64) = CType(value2, System.Int64)
+            ElseIf IsDate(value1) And IsDate(value2) Then
+                Return CType(value1, DateTime) = CType(value2, DateTime)
+            Else
+                Return Object.Equals(value1, value2)
+            End If
+        End Function
+
+        Private Shared Function SqlJoin_AreCompatibleComparisonColumns(leftColumnDataType As System.Type, rightColumnDataType As System.Type) As Boolean
+            If leftColumnDataType Is GetType(String) AndAlso rightColumnDataType Is GetType(String) Then
+                Return True
+            ElseIf leftColumnDataType Is GetType(String) Xor rightColumnDataType Is GetType(String) Then
+                Return False
+            ElseIf leftColumnDataType.IsValueType AndAlso rightColumnDataType.IsValueType Then
+                Return True
+            ElseIf leftColumnDataType.IsValueType Xor rightColumnDataType.IsValueType Then
+                Return False
+            Else
+                Return True
+            End If
+        End Function
+
+        ''' <summary>
+        '''     Execute a table join on two tables (independent from their dataset, independent from their registered relations, without requirement for existing parent items (unlike to .NET standard behaviour) more like SQL behaviour)
+        ''' </summary>
+        ''' <param name="leftTable">The left table</param>
+        ''' <param name="indexesOfLeftTableKeys">An array of column indexes to be used as key columns for join (null/Nothing/empty array uses PrimaryKeys)</param>
+        ''' <param name="rightTable">The right table</param>
+        ''' <param name="indexesOfRightTableKeys">An array of column indexes to be used as key columns for join (null/Nothing/empty array uses PrimaryKeys)</param>
+        ''' <param name="joinType">Inner, left, right or full join</param>
+        ''' <returns></returns>
+        ''' <remarks>
+        ''' </remarks>
+        Public Shared Function SqlJoinTables(ByVal leftTable As DataTable, indexesOfLeftTableKeys As Integer(),
+                                          ByVal rightTable As DataTable, indexesOfRightTableKeys As Integer(),
+                                          ByVal joinType As SqlJoinTypes) As DataTable
+            Return SqlJoinTables(leftTable, indexesOfLeftTableKeys, Nothing, rightTable, indexesOfRightTableKeys, Nothing, joinType)
+        End Function
+
+        ''' <summary>
+        '''     Execute a table join on two tables (independent from their dataset, independent from their registered relations, without requirement for existing parent items (unlike to .NET standard behaviour) more like SQL behaviour)
+        ''' </summary>
+        ''' <param name="leftTable">The left table</param>
+        ''' <param name="indexesOfLeftTableKeys">An array of column indexes to be used as key columns for join (null/Nothing/empty array uses PrimaryKeys)</param>
+        ''' <param name="indexesOfLeftTableColumnsToCopy">An array of column indexes to copy from the left table (null/Nothing uses all columns, empty array uses no columns)</param>
+        ''' <param name="rightTable">The right table</param>
+        ''' <param name="indexesOfRightTableKeys">An array of column indexes to be used as key columns for join (null/Nothing/empty array uses PrimaryKeys)</param>
+        ''' <param name="indexesOfRightTableColumnsToCopy">An array of column indexes to copy from the right table (null/Nothing uses all columns, empty array uses no columns)</param>
+        ''' <param name="joinType">Inner, left, right or full join</param>
+        ''' <returns></returns>
+        ''' <remarks>
+        ''' </remarks>
+        Public Shared Function SqlJoinTables(ByVal leftTable As DataTable, indexesOfLeftTableKeys As Integer(), ByVal indexesOfLeftTableColumnsToCopy As Integer(),
+                                          ByVal rightTable As DataTable, indexesOfRightTableKeys As Integer(), ByVal indexesOfRightTableColumnsToCopy As Integer(),
+                                          ByVal joinType As SqlJoinTypes) As DataTable
+
+            Dim leftKeys As New ArrayList, rightKeys As New ArrayList, leftColumns As New ArrayList, rightColumns As New ArrayList
+            Dim newLeftKeys As DataColumn() = Nothing, newRightKeys As DataColumn() = Nothing, newLeftColumns As DataColumn() = Nothing, newRightColumns As DataColumn() = Nothing
+            If indexesOfLeftTableKeys IsNot Nothing Then
+                For MyCounter As Integer = 0 To indexesOfLeftTableKeys.Length - 1
+                    leftKeys.Add(leftTable.Columns(indexesOfLeftTableKeys(MyCounter)))
+                Next
+                newLeftKeys = CType(leftKeys.ToArray(GetType(System.Data.DataColumn)), System.Data.DataColumn())
+            End If
+            If indexesOfLeftTableColumnsToCopy IsNot Nothing Then
+                For MyCounter As Integer = 0 To indexesOfLeftTableColumnsToCopy.Length - 1
+                    leftColumns.Add(leftTable.Columns(indexesOfLeftTableColumnsToCopy(MyCounter)))
+                Next
+                newLeftColumns = CType(leftColumns.ToArray(GetType(System.Data.DataColumn)), System.Data.DataColumn())
+            End If
+            If indexesOfRightTableKeys IsNot Nothing Then
+                For MyCounter As Integer = 0 To indexesOfRightTableKeys.Length - 1
+                    rightKeys.Add(rightTable.Columns(indexesOfRightTableKeys(MyCounter)))
+                Next
+                newRightKeys = CType(rightKeys.ToArray(GetType(System.Data.DataColumn)), System.Data.DataColumn())
+            End If
+            If indexesOfRightTableColumnsToCopy IsNot Nothing Then
+                For MyCounter As Integer = 0 To indexesOfRightTableColumnsToCopy.Length - 1
+                    rightColumns.Add(rightTable.Columns(indexesOfRightTableColumnsToCopy(MyCounter)))
+                Next
+                newRightColumns = CType(rightColumns.ToArray(GetType(System.Data.DataColumn)), System.Data.DataColumn())
+            End If
+
+            Return SqlJoinTables(leftTable, newLeftKeys, newLeftColumns,
+                              rightTable, newRightKeys, newRightColumns,
+                              joinType)
+
+        End Function
+
+        ''' <summary>
+        '''     Execute a table join on two tables (independent from their dataset, independent from their registered relations, without requirement for existing parent items (unlike to .NET standard behaviour) more like SQL behaviour)
+        ''' </summary>
+        ''' <param name="leftTable">The left table</param>
+        ''' <param name="leftTableKeys">An array of columns to be used as key columns for join (null/Nothing/empty array uses PrimaryKeys)</param>
+        ''' <param name="rightTable">The right table</param>
+        ''' <param name="rightTableKeys">An array of columns to be used as key columns for join (null/Nothing/empty array uses PrimaryKeys)</param>
+        ''' <param name="joinType">Inner, left, right or full join</param>
+        ''' <returns></returns>
+        ''' <remarks>
+        ''' </remarks>
+        Public Shared Function SqlJoinTables(ByVal leftTable As DataTable, leftTableKeys As String(),
+                                          ByVal rightTable As DataTable, rightTableKeys As String(),
+                                          ByVal joinType As SqlJoinTypes) As DataTable
+            Return SqlJoinTables(leftTable, leftTableKeys, Nothing, rightTable, rightTableKeys, Nothing, joinType)
+        End Function
+
+        ''' <summary>
+        '''     Execute a table join on two tables (independent from their dataset, independent from their registered relations, without requirement for existing parent items (unlike to .NET standard behaviour) more like SQL behaviour)
+        ''' </summary>
+        ''' <param name="leftTable">The left table</param>
+        ''' <param name="leftTableKeys">An array of columns to be used as key columns for join (null/Nothing/empty array uses PrimaryKeys)</param>
+        ''' <param name="leftTableColumnsToCopy">An array of columns to copy from the left table (null/Nothing uses all columns, empty array uses no columns)</param>
+        ''' <param name="rightTable">The right table</param>
+        ''' <param name="rightTableKeys">An array of columns to be used as key columns for join (null/Nothing/empty array uses PrimaryKeys)</param>
+        ''' <param name="rightTableColumnsToCopy">An array of columns to copy from the right table (null/Nothing uses all columns, empty array uses no columns)</param>
+        ''' <param name="joinType">Inner, left, right or full join</param>
+        ''' <returns></returns>
+        ''' <remarks>
+        ''' </remarks>
+        Public Shared Function SqlJoinTables(ByVal leftTable As DataTable, leftTableKeys As String(), ByVal leftTableColumnsToCopy As String(),
+                                          ByVal rightTable As DataTable, rightTableKeys As String(), ByVal rightTableColumnsToCopy As String(),
+                                          ByVal joinType As SqlJoinTypes) As DataTable
+
+            Dim leftKeys As New ArrayList, rightKeys As New ArrayList, leftColumns As New ArrayList, rightColumns As New ArrayList
+            Dim newLeftKeys As DataColumn() = Nothing, newRightKeys As DataColumn() = Nothing, newLeftColumns As DataColumn() = Nothing, newRightColumns As DataColumn() = Nothing
+            If leftTableKeys IsNot Nothing Then
+                For MyCounter As Integer = 0 To leftTableKeys.Length - 1
+                    leftKeys.Add(leftTable.Columns(leftTableKeys(MyCounter)))
+                Next
+                newLeftKeys = CType(leftKeys.ToArray(GetType(System.Data.DataColumn)), System.Data.DataColumn())
+            End If
+            If leftTableColumnsToCopy IsNot Nothing Then
+                For MyCounter As Integer = 0 To leftTableColumnsToCopy.Length - 1
+                    leftColumns.Add(leftTable.Columns(leftTableColumnsToCopy(MyCounter)))
+                Next
+                newLeftColumns = CType(leftColumns.ToArray(GetType(System.Data.DataColumn)), System.Data.DataColumn())
+            End If
+            If rightTableKeys IsNot Nothing Then
+                For MyCounter As Integer = 0 To rightTableKeys.Length - 1
+                    rightKeys.Add(rightTable.Columns(rightTableKeys(MyCounter)))
+                Next
+                newRightKeys = CType(rightKeys.ToArray(GetType(System.Data.DataColumn)), System.Data.DataColumn())
+            End If
+            If rightTableColumnsToCopy IsNot Nothing Then
+                For MyCounter As Integer = 0 To rightTableColumnsToCopy.Length - 1
+                    rightColumns.Add(rightTable.Columns(rightTableColumnsToCopy(MyCounter)))
+                Next
+                newRightColumns = CType(rightColumns.ToArray(GetType(System.Data.DataColumn)), System.Data.DataColumn())
+            End If
+
+            Return SqlJoinTables(leftTable, newLeftKeys, newLeftColumns,
+                              rightTable, newRightKeys, newRightColumns,
+                              joinType)
+
         End Function
 
     End Class

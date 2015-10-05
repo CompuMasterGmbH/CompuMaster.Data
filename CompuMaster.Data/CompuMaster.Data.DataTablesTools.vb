@@ -1842,6 +1842,7 @@ Namespace CompuMaster.Data
             'Prepare the result table by copying the parent table
             Dim Result As DataTable = leftParentTable.Clone
             Result.TableName = "JoinedTable"
+            Result.PrimaryKey = Nothing
 
             'Remove left table columns which are not required any more
             For MyCounter As Integer = Result.Columns.Count - 1 To 0 Step -1
@@ -1875,7 +1876,7 @@ Namespace CompuMaster.Data
             End If
             For MyCounter As Integer = 0 To RightTableColumnWraps.Length - 1
                 Dim MyColumn As DataColumn = rightChildTable.Columns(RightTableColumnWraps(MyCounter))
-                Dim UniqueColumnName As String = LookupUnqiueColumnName(Result, MyColumn.ColumnName)
+                Dim UniqueColumnName As String = LookupUniqueColumnName(Result, MyColumn.ColumnName)
                 Dim ColumnCaption As String = MyColumn.Caption
                 Dim ColumnType As System.Type = MyColumn.DataType
                 Result.Columns.Add(UniqueColumnName, ColumnType).Caption = ColumnCaption
@@ -1939,6 +1940,7 @@ Namespace CompuMaster.Data
         Friend Shared Function CrossJoinTables(ByVal leftTable As DataTable, ByVal indexesOfLeftTableColumnsToCopy As Integer(), _
                                                ByVal rightTable As DataTable, ByVal indexesOfRightTableColumnsToCopy As Integer()) As DataTable
             'TODO: verify/fix exceptions when left AND right table contain rows not matching to the other side (FULL OUTER JOIN situations)
+            'TODO: above ToDo "verify/fix exceptions" might not be applicable here?!? --> to remove ?!?
 
             'Verify parameters
             If leftTable Is Nothing OrElse rightTable Is Nothing Then
@@ -1970,6 +1972,7 @@ Namespace CompuMaster.Data
             'Prepare the result table by copying the parent table
             Dim Result As DataTable = leftTable.Clone
             Result.TableName = "JoinedTable"
+            Result.PrimaryKey = Nothing
 
             'Remove left table columns which are not required any more
             For MyCounter As Integer = Result.Columns.Count - 1 To 0 Step -1
@@ -2001,7 +2004,7 @@ Namespace CompuMaster.Data
             End If
             For MyCounter As Integer = 0 To RightTableColumnWraps.Length - 1
                 Dim MyColumn As DataColumn = rightTable.Columns(RightTableColumnWraps(MyCounter))
-                Dim UniqueColumnName As String = LookupUnqiueColumnName(Result, MyColumn.ColumnName)
+                Dim UniqueColumnName As String = LookupUniqueColumnName(Result, MyColumn.ColumnName)
                 Dim ColumnCaption As String = MyColumn.Caption
                 Dim ColumnType As System.Type = MyColumn.DataType
                 Result.Columns.Add(UniqueColumnName, ColumnType).Caption = ColumnCaption
@@ -2107,7 +2110,7 @@ Namespace CompuMaster.Data
         ''' 	[adminwezel]	22.03.2005	Created
         ''' </history>
         ''' -----------------------------------------------------------------------------
-        Friend Shared Function LookupUnqiueColumnName(ByVal dataTable As DataTable, ByVal suggestedColumnName As String) As String
+        Friend Shared Function LookupUniqueColumnName(ByVal dataTable As DataTable, ByVal suggestedColumnName As String) As String
 
             Dim ColumnNameAlreadyExistant As Boolean = False
             For MyCounter As Integer = 0 To dataTable.Columns.Count - 1
@@ -2146,7 +2149,7 @@ Namespace CompuMaster.Data
                     suggestedColumnName = "ClientTable_" & suggestedColumnName
                 End If
                 'Revalidate uniqueness by running recursively
-                suggestedColumnName = LookupUnqiueColumnName(dataTable, suggestedColumnName)
+                suggestedColumnName = LookupUniqueColumnName(dataTable, suggestedColumnName)
             End If
 
             Return suggestedColumnName
