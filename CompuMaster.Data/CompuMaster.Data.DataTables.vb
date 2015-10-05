@@ -3217,7 +3217,7 @@ Namespace CompuMaster.Data
                 Dim RightTableColumnWraps As Integer()
                 Dim colWrapsR As New ArrayList
                 For ColCounter As Integer = 0 To rightTableColumnsToCopy.Length - 1
-                    colWrapsR.Add(leftTableColumnsToCopy(ColCounter).Ordinal)
+                    colWrapsR.Add(rightTableColumnsToCopy(ColCounter).Ordinal)
                 Next
                 RightTableColumnWraps = CType(colWrapsR.ToArray(GetType(Integer)), Integer())
                 For MyCounter As Integer = 0 To RightTableColumnWraps.Length - 1
