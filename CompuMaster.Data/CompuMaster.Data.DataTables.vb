@@ -2881,6 +2881,32 @@ Namespace CompuMaster.Data
             Return CompuMaster.Data.DataTablesTools.ReArrangeDataColumns(source, destinationColumnSet, ignoreConversionExceptionAndLogThemHere)
         End Function
 
+        ''' <summary>
+        ''' All columns of the table
+        ''' </summary>
+        ''' <param name="table"></param>
+        ''' <returns></returns>
+        Public Shared Function AllColumns(table As System.Data.DataTable) As System.Data.DataColumn()
+            Dim Result As New System.Collections.Generic.List(Of System.Data.DataColumn)
+            For MyCounter As Integer = 0 To table.Columns.Count - 1
+                Result.Add(table.Columns(MyCounter))
+            Next
+            Return Result.ToArray
+        End Function
+
+        ''' <summary>
+        ''' All column names of the table
+        ''' </summary>
+        ''' <param name="table"></param>
+        ''' <returns></returns>
+        Public Shared Function AllColumnNames(table As System.Data.DataTable) As String()
+            Dim Result As New System.Collections.Generic.List(Of String)
+            For MyCounter As Integer = 0 To table.Columns.Count - 1
+                Result.Add(table.Columns(MyCounter).ColumnName)
+            Next
+            Return Result.ToArray
+        End Function
+
     End Class
 
 End Namespace
