@@ -2008,6 +2008,7 @@ Namespace CompuMaster.Data
                 If rows.Count > 0 Then
                     If table.Columns(ColCounter).DataType.IsValueType AndAlso Not GetType(String).IsInstanceOfType(table.Columns(ColCounter).DataType) Then
                         'number or date/time
+                        MinWidthForCells = 1
                         For RowCounter As Integer = 0 To table.Rows.Count - 1
                             MinWidthForCells = System.Math.Max(MinWidthForCells, String.Format("{0}", table.Rows(RowCounter)(ColCounter)).Length)
                         Next
