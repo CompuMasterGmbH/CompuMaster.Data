@@ -52,7 +52,9 @@
 ## Some more features - XLS(X)
 read directly from .XLS/.XLSX files using XlsReader (may require separate database drivers from Microsoft (Office) installed on your system)
 ```vb.net
-SourceTable = CompuMaster.Data.XlsReader.ReadDataTableFromXlsFile("c:\temp\input.txt", "sheet1")
+SourceTable = CompuMaster.Data.XlsReader.ReadDataTableFromXlsFile( _
+    "c:\temp\input.txt", _
+    "sheet1")
 ```
 
 ## There is still more...
