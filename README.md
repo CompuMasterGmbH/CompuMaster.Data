@@ -4,10 +4,35 @@
 ## Some of the many features - all .Net data providers
 * easy and stable access to data from external data sources (native, OLE-DB, ODBC) 
 * execute/query data from database with the most less amount of code lines 
-* never forget to close a connection and run into pooling problems
-* common methods to query/update data from/on database for all .Net data providers - don't care any more about MS SQL Server, MySql, Oracle, PostgreSql or many other RDMS, don't care any more about accessing the RDMS using native .Net data providers, OLE-DB or ODBC connections
-* common methods to write back your locally changed data to your external data source
-* execute/query data from database with the most less amount of code lines 
+  * simply fill a complete DataTable with 1 line of code
+```vb.net
+        MyTable = CompuMaster.Data.DataQuery.AnyIDataProvider.FillDataTable(
+            New System.Data.OleDb.OleDbConnection(ConnectionString),
+            "SELECT * FROM table", System.Data.CommandType.Text,
+            Nothing,
+            CompuMaster.Data.DataQuery.AnyIDataProvider.Automations.AutoOpenAndCloseAndDisposeConnection,
+            "MyTableName")
+```
+  * execute a query with parameters within 5 lines of code
+```vb.net
+        Dim MyCmd As New System.Data.SqlClient.SqlCommand("SELECT * FROM table WHERE FN=@FirstName AND LN=@FamilyName", New System.Data.SqlClient.SqlConnection(ConnectionString))
+        MyCmd.Parameters.Add("@FirstName", SqlDbType.NVarChar).Value = "John"
+        MyCmd.Parameters.Add("@FamilyName", SqlDbType.NVarChar).Value = "O'Regan"
+        MyCmd.CommandType = System.Data.CommandType.Text
+        MyTable = CompuMaster.Data.DataQuery.AnyIDataProvider.FillDataTable(
+            MyCmd,
+            CompuMaster.Data.DataQuery.AnyIDataProvider.Automations.AutoOpenAndCloseAndDisposeConnection,
+            "MyTableName")
+```
+* code reduction = maintenance costs reduction
+  * execute/query data from database with the most less amount of code lines seen ever
+* code reduction = more stable code
+  * forget the Try-Catch-Finally blocks
+  * never forget to close a connection and run into pooling problems
+* simplified common methods to query/update data from/on database for all .Net data providers
+  * don't care any more about MS SQL Server, MySql, Oracle, PostgreSql or many other RDMS
+  * don't care any more about accessing the RDMS using native .Net data providers, OLE-DB or ODBC connections
+* simplified common methods to write back your locally changed data to your external data source
 
 ## Some of the many features - CSV
 * native access to CSV files
@@ -37,9 +62,9 @@
   * use 1 or more columns for joining
 ```vb.net
         Dim NewTable As DataTable = _
-              CompuMaster.Data.DataTables.SqlJoinTables( _
-              LeftTable, New String() {"ID"}, _
-              RightTable, New String() {"PrimaryKeyID"}, _
+              CompuMaster.Data.DataTables.SqlJoinTables( 
+              LeftTable, New String() {"ID"}, 
+              RightTable, New String() {"PrimaryKeyID"}, 
               CompuMaster.Data.DataTables.SqlJoinTypes.FullOuter)
 ```          
 * rearrange columns, sort rows and put them into new DataTables
@@ -52,8 +77,8 @@
 ## Some more features - XLS(X)
 read directly from .XLS/.XLSX files using XlsReader (may require separate database drivers from Microsoft (Office) installed on your system)
 ```vb.net
-SourceTable = CompuMaster.Data.XlsReader.ReadDataTableFromXlsFile( _
-    "c:\temp\input.txt", _
+SourceTable = CompuMaster.Data.XlsReader.ReadDataTableFromXlsFile( 
+    "c:\temp\input.txt", 
     "sheet1")
 ```
 
