@@ -3119,7 +3119,15 @@ Namespace CompuMaster.Data
         Public Shared Function SqlJoinTables(ByVal leftTable As DataTable, leftTableKeys As System.Data.DataColumn(), ByVal leftTableColumnsToCopy As System.Data.DataColumn(),
                                           ByVal rightTable As DataTable, rightTableKeys As System.Data.DataColumn(), ByVal rightTableColumnsToCopy As System.Data.DataColumn(),
                                           ByVal joinType As SqlJoinTypes) As DataTable
-            'Check arguments
+            'Check required arguments
+            If leftTable Is Nothing Then
+                Throw New ArgumentNullException("leftTable", "Left table is a required parameter")
+            End If
+            If rightTable Is Nothing Then
+                Throw New ArgumentNullException("rightTable", "Right table is a required parameter")
+            End If
+
+            'Auto-complete required arguments
             If leftTableColumnsToCopy Is Nothing Then
                 leftTableColumnsToCopy = AllColumns(leftTable)
             End If
@@ -3137,6 +3145,8 @@ Namespace CompuMaster.Data
             If rightTableKeys Is Nothing OrElse rightTableKeys.Length = 0 Then
                 rightTableKeys = rightTable.PrimaryKey
             End If
+
+            'Execute the SQL-JOIN
             If joinType = SqlJoinTypes.Cross Then
                 'Execute CrossJoin
                 Dim indexesOfLeftTableColumnsToCopy As New ArrayList(), indexesOfRightTableColumnsToCopy As New ArrayList()
@@ -3388,6 +3398,13 @@ Namespace CompuMaster.Data
                                           ByVal rightTable As DataTable, indexesOfRightTableKeys As Integer(), ByVal indexesOfRightTableColumnsToCopy As Integer(),
                                           ByVal joinType As SqlJoinTypes) As DataTable
 
+            If leftTable Is Nothing Then
+                Throw New ArgumentNullException("leftTable", "Left table is a required parameter")
+            End If
+            If rightTable Is Nothing Then
+                Throw New ArgumentNullException("rightTable", "Right table is a required parameter")
+            End If
+
             Dim leftKeys As New ArrayList, rightKeys As New ArrayList, leftColumns As New ArrayList, rightColumns As New ArrayList
             Dim newLeftKeys As DataColumn() = Nothing, newRightKeys As DataColumn() = Nothing, newLeftColumns As DataColumn() = Nothing, newRightColumns As DataColumn() = Nothing
             If indexesOfLeftTableKeys IsNot Nothing Then
@@ -3454,6 +3471,13 @@ Namespace CompuMaster.Data
         Public Shared Function SqlJoinTables(ByVal leftTable As DataTable, leftTableKeys As String(), ByVal leftTableColumnsToCopy As String(),
                                           ByVal rightTable As DataTable, rightTableKeys As String(), ByVal rightTableColumnsToCopy As String(),
                                           ByVal joinType As SqlJoinTypes) As DataTable
+
+            If leftTable Is Nothing Then
+                Throw New ArgumentNullException("leftTable", "Left table is a required parameter")
+            End If
+            If rightTable Is Nothing Then
+                Throw New ArgumentNullException("rightTable", "Right table is a required parameter")
+            End If
 
             Dim leftKeys As New ArrayList, rightKeys As New ArrayList, leftColumns As New ArrayList, rightColumns As New ArrayList
             Dim newLeftKeys As DataColumn() = Nothing, newRightKeys As DataColumn() = Nothing, newLeftColumns As DataColumn() = Nothing, newRightColumns As DataColumn() = Nothing

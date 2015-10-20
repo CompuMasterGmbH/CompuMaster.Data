@@ -1596,6 +1596,11 @@ Namespace CompuMaster.Test.Data
 
         End Sub
 
+        <Test, NUnit.Framework.ExpectedException(GetType(ArgumentNullException))> Public Sub SqlJoinTables_ExpectedExceptionNullParameter()
+            Dim TestTables As JoinTableSet = Me.CreateLeftJoinTableSet1
+            CompuMaster.Data.DataTables.SqlJoinTables(TestTables.LeftTable, TestTables.LeftTable.PrimaryKey, Nothing, Nothing, TestTables.RightTable.PrimaryKey, Nothing, CompuMaster.Data.DataTables.SqlJoinTypes.Left)
+        End Sub
+
         Private Sub SqlJoinTables_Left_TableSet2()
             Dim TestTables As JoinTableSet = Me.CreateFullOuterJoinTableSet2
             TestTables.WriteToConsole()
