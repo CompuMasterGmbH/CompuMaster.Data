@@ -1,0 +1,2 @@
+PowerShell -NoProfile -ExecutionPolicy Bypass -Command "& 'D:\GitHub-OpenSource\CompuMaster.Data\CompuMaster.Data\_CreateNewNuGetPackage\DoNotModify\CreateNuGetPackage.ps1' -ProjectFilePath 'D:\GitHub-OpenSource\CompuMaster.Data\CompuMaster.Data\CompuMaster.Data.VS2012.vbproj' -OutputDirectory 'D:\GitHub-OpenSource\CompuMaster.Data\CompuMaster.Data\bin\release\' -BuildConfiguration 'Release' -BuildPlatform 'AnyCPU' -verbose"
+pause
