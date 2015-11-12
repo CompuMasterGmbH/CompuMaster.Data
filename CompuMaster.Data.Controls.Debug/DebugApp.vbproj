@@ -120,7 +120,6 @@
       <CustomToolNamespace>My</CustomToolNamespace>
       <LastGenOutput>Settings.Designer.vb</LastGenOutput>
     </None>
-    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CompuMaster.Data.Controls\CompuMaster.Data.Controls.VS2012.vbproj">
