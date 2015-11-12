@@ -13,7 +13,7 @@
     <description>.NET library with common methods for simplified data access, data table arrangements and data IO</description>
     <releaseNotes></releaseNotes>
     <copyright>2005-2015 CompuMaster GmbH</copyright>
-    <tags>CompuMaster Data DataTable</tags>
+    <tags>CompuMaster Data DataTable LDAP CSV Text File SqlServer SqlClient* PostgreSQL Npgsql* AnyIDataProvider DatabaseManagement DataManipulation</tags>
   </metadata>
   <files>
     <file src="bin\Release\**\Npgsql*.dll" target="lib\net20"/>
