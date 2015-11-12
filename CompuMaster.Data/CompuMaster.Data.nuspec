@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<package xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <metadata xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+    <id>$id$</id>
+    <version>$version$</version>
+    <title>$title$</title>
+    <authors>$author$</authors>
+    <owners>$author$</owners>
+    <licenseUrl>https://raw.githubusercontent.com/CompuMasterGmbH/CompuMaster.Data/master/LICENSE</licenseUrl>
+    <projectUrl>https://github.com/CompuMasterGmbH/CompuMaster.Data</projectUrl>
+    <iconUrl>http://www.compumaster.de/favicon.ico</iconUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>.NET library with common methods for simplified data access, data table arrangements and data IO</description>
+    <releaseNotes></releaseNotes>
+    <copyright>2005-2015 CompuMaster GmbH</copyright>
+    <tags>CompuMaster Data DataTable</tags>
+  </metadata>
+  <files>
+    <file src="bin\Release\**\Npgsql*.dll" target="lib\net20"/>
+    <!-- <file src="bin\Release\**\Npgsql*.pdb" target="lib\net20"/> -->
+    <file src="bin\Release\**\Npgsql*.xml" target="lib\net20"/>
+  </files>
+</package>
