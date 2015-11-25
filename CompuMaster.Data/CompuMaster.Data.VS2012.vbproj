@@ -111,10 +111,6 @@
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="CompuMaster.Data, Version=2.7.2012.308, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>bin\net_2_0\CompuMaster.Data.dll</HintPath>
-    </Reference>
     <Reference Include="Npgsql">
       <HintPath>libs\Npgsql.dll</HintPath>
     </Reference>
