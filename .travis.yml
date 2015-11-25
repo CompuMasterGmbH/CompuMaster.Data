@@ -1,5 +1,7 @@
 language: csharp
 solution: CompuMaster.Data.VS2012.sln
+mono:
+  - 4.2.0
 install:
   - nuget restore CompuMaster.Data.VS2012.sln
   - nuget install NUnit.Runners -Version 2.6.4 -OutputDirectory testrunner
