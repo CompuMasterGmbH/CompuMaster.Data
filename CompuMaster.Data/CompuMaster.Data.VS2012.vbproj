@@ -13,7 +13,6 @@
     </AssemblyKeyContainerName>
     <AssemblyName>CompuMaster.Data</AssemblyName>
     <AssemblyOriginatorKeyFile>CompuMaster.Data.snk</AssemblyOriginatorKeyFile>
-    </AssemblyOriginatorKeyFile>
     <AssemblyOriginatorKeyMode>None</AssemblyOriginatorKeyMode>
     <DefaultClientScript>JScript</DefaultClientScript>
     <DefaultHTMLPageLayout>Grid</DefaultHTMLPageLayout>
