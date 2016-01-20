@@ -3,9 +3,9 @@
 
 ## Some of the many features - all .Net data providers
 * easy and stable access to data from external data sources (native, OLE-DB, ODBC) 
-* execute/query data from database with the most less amount of code lines 
-  * simply fill a complete DataTable with 1 (!!) line of code
+* execute/query data from database with the most less amount of code lines: simply **fill a complete DataTable** with **1 (!!) line of code**
 ```vb.net
+        'VB.NET sample:
         Dim MyTable As System.Data.DataTable = CompuMaster.Data.DataQuery.AnyIDataProvider.FillDataTable(
             New System.Data.OleDb.OleDbConnection(ConnectionString),
             "SELECT * FROM table", System.Data.CommandType.Text,
@@ -13,7 +13,8 @@
             CompuMaster.Data.DataQuery.AnyIDataProvider.Automations.AutoOpenAndCloseAndDisposeConnection,
             "MyTableName")
 ```
-```csharp
+```C#
+        // C# sample: 
         System.Data.DataTable myTable = CompuMaster.Data.DataQuery.AnyIDataProvider.FillDataTable(
             New System.Data.OleDb.OleDbConnection(ConnectionString),
             "SELECT * FROM table", System.Data.CommandType.Text,
@@ -21,7 +22,7 @@
             CompuMaster.Data.DataQuery.AnyIDataProvider.Automations.AutoOpenAndCloseAndDisposeConnection,
             "MyTableName");
 ```
-  * execute a query with parameters within 5 lines of code
+* execute a **query with several command parameters** within **5 (!!) lines of code**
 ```vb.net
         Dim MyCmd As New System.Data.SqlClient.SqlCommand("SELECT * FROM table WHERE FN=@FirstName AND LN=@FamilyName", New System.Data.SqlClient.SqlConnection(ConnectionString))
         MyCmd.Parameters.Add("@FirstName", SqlDbType.NVarChar).Value = "John"
@@ -86,7 +87,7 @@
 read directly from .XLS/.XLSX files using XlsReader (may require separate database drivers from Microsoft (Office) installed on your system)
 ```vb.net
 SourceTable = CompuMaster.Data.XlsReader.ReadDataTableFromXlsFile( 
-    "c:\temp\input.txt", 
+    "c:\temp\input.xlsx", 
     "sheet1")
 ```
 
@@ -97,3 +98,6 @@ Still not convinced? Download your library now and for free and see the many stu
 * Remove password part from ConnectionString in case you need to show it to your administrative user
 * Query from LDAP directories directly into DataTables
 * Create empty Microsoft Excel or Microsoft Access database files for immediate read/write access
+
+## Honors
+This library has been developed and maintained by [CompuMaster GmbH](http://www.compumaster.de/) for years.
