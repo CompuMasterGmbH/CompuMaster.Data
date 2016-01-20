@@ -104,6 +104,11 @@ Namespace CompuMaster.Data.DataQuery
         Public Shared Function MicrosoftExcelConnection(ByVal path As String, ByVal firstRowContainsHeaders As Boolean, ByVal readAllColumnsAsTextOnly As Boolean) As IDbConnection
             If path = Nothing Then Throw New ArgumentNullException("path")
             Dim TestFile As New TestFile(DataQuery.TestFile.TestFileType.MsExcel)
+            For MyCounter As Integer = 20 To 14 Step -1
+                If ProbeOleDBProvider(MicrosoftExcelConnectionProviderWorkingStatusForACE14, "Provider=Microsoft.ACE.OLEDB." & MyCounter & ".0;Data Source=" & TestFile.FilePath & ";Extended Properties=""Excel " & MyCounter & ".0 Xml;HDR=YES;IMEX=0"";") Then
+                    Return CompuMaster.Data.DataQuery.PlatformTools.CreateDataConnection("OleDB", "Provider=Microsoft.ACE.OLEDB." & MyCounter & ".0;Data Source=" & path & ";Extended Properties=""Excel " & MyCounter & ".0 Xml;HDR=" & BoolIf(firstRowContainsHeaders, "YES", "NO") & ";" & BoolIf(readAllColumnsAsTextOnly, "IMEX=1", "IMEX=0") & """;")
+                End If
+            Next
             If ProbeOleDBProvider(MicrosoftExcelConnectionProviderWorkingStatusForACE14, "Provider=Microsoft.ACE.OLEDB.14.0;Data Source=" & TestFile.FilePath & ";Extended Properties=""Excel 12.0 Xml;HDR=YES;IMEX=0"";") Then
                 Return CompuMaster.Data.DataQuery.PlatformTools.CreateDataConnection("OleDB", "Provider=Microsoft.ACE.OLEDB.14.0;Data Source=" & path & ";Extended Properties=""Excel 12.0 Xml;HDR=" & BoolIf(firstRowContainsHeaders, "YES", "NO") & ";" & BoolIf(readAllColumnsAsTextOnly, "IMEX=1", "IMEX=0") & """;")
             ElseIf ProbeOleDBProvider(MicrosoftExcelConnectionProviderWorkingStatusForACE12, "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" & TestFile.FilePath & ";Extended Properties=""Excel 12.0 Xml;HDR=YES;IMEX=0"";") Then

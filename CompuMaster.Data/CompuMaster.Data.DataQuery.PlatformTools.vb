@@ -83,23 +83,35 @@ Namespace CompuMaster.Data.DataQuery
             Dim Providers As New ArrayList
 
             ' I am only interested in the CLSID subtree
-            Dim keyCLSID As Microsoft.Win32.RegistryKey = Microsoft.Win32.Registry.ClassesRoot.OpenSubKey("CLSID", False)
+            'Dim keyCLSID As Microsoft.Win32.RegistryKey = Microsoft.Win32.Registry.ClassesRoot.OpenSubKey("CLSID", False)
+            Dim keyCLSID As Microsoft.Win32.RegistryKey = Microsoft.Win32.Registry.ClassesRoot.OpenSubKey("CLSID", Microsoft.Win32.RegistryKeyPermissionCheck.ReadSubTree, Security.AccessControl.RegistryRights.ReadKey)
             Dim keys() As String = keyCLSID.GetSubKeyNames()
             Dim de As DictionaryEntry
             Dim i As Int32
 
+            Dim AccessErrors As New Generic.List(Of Exception)
             ' Search through the tree just one level
             For i = 0 To keys.Length - 1
-                Dim key As Microsoft.Win32.RegistryKey = keyCLSID.OpenSubKey(keys(i), False)
+                Dim key As Microsoft.Win32.RegistryKey = Nothing
+                Try
+                    'Dim key As Microsoft.Win32.RegistryKey = keyCLSID.OpenSubKey(keys(i), False)
+                    key = keyCLSID.OpenSubKey(keys(i), Microsoft.Win32.RegistryKeyPermissionCheck.ReadSubTree, Security.AccessControl.RegistryRights.ReadKey)
 
-                ' Search for OLE DB Providers
-                de = SearchKeys(key)
-                If Not (de.Key Is Nothing) Then
-                    ' Found one, add it to the Dictionary
-                    Providers.Add(de)
-                End If
-                If Not key Is Nothing Then key.Close()
+                    ' Search for OLE DB Providers
+                    de = SearchKeys(key)
+                    If Not (de.Key Is Nothing) Then
+                        ' Found one, add it to the Dictionary
+                        Providers.Add(de)
+                    End If
+                Catch ex As Exception
+                    AccessErrors.Add(New Exception("ERROR at " & keyCLSID.ToString & "\" & keys(i)))
+                Finally
+                    If Not key Is Nothing Then key.Close()
+                End Try
             Next
+            If AccessErrors.Count > keys.Length / 40 Then '1 access error is usual at Win10 - error situation is with more than 40% errors on all existing sub-keys
+                Throw New Exception("AccessErrors=" & AccessErrors.Count)
+            End If
             Return CType(Providers.ToArray(GetType(DictionaryEntry)), DictionaryEntry())
         End Function
 
@@ -112,18 +124,23 @@ Namespace CompuMaster.Data.DataQuery
         Private Shared Function SearchKeys(ByVal key As Microsoft.Win32.RegistryKey) As DictionaryEntry
             Dim de As DictionaryEntry
 
-            'Tries to find the "OLE DB Provider" key
-            Dim key2 As Microsoft.Win32.RegistryKey = key.OpenSubKey("OLE DB Provider")
+            Try
+                'Tries to find the "OLE DB Provider" key
+                'Dim key2 As Microsoft.Win32.RegistryKey = key.OpenSubKey("OLE DB Provider", False)
+                Dim key2 As Microsoft.Win32.RegistryKey = key.OpenSubKey("OLE DB Provider", Microsoft.Win32.RegistryKeyPermissionCheck.ReadSubTree, Security.AccessControl.RegistryRights.ReadKey)
 
-            If Not (key2 Is Nothing) Then
-                ' Found it, fills the DictionaryEntry
-                de = New DictionaryEntry()
-                Dim sValues() As String = key2.GetValueNames()
-                de.Key = key.OpenSubKey("ProgID", False).GetValue(sValues(0))
-                Dim sValues2() As String = key2.GetValueNames()
-                de.Value = key2.GetValue(sValues2(0))
-                key2.Close()
-            End If
+                If Not (key2 Is Nothing) Then
+                    ' Found it, fills the DictionaryEntry
+                    de = New DictionaryEntry()
+                    Dim sValues() As String = key2.GetValueNames()
+                    de.Key = key.OpenSubKey("ProgID", False).GetValue(sValues(0))
+                    Dim sValues2() As String = key2.GetValueNames()
+                    de.Value = key2.GetValue(sValues2(0))
+                    key2.Close()
+                End If
+            Catch ex As Exception
+                Throw New Exception("ERROR at " & key.ToString & "\OLE DB Provider")
+            End Try
             Return de
         End Function
 
