@@ -4,14 +4,22 @@
 ## Some of the many features - all .Net data providers
 * easy and stable access to data from external data sources (native, OLE-DB, ODBC) 
 * execute/query data from database with the most less amount of code lines 
-  * simply fill a complete DataTable with 1 line of code
+  * simply fill a complete DataTable with 1 (!!) line of code
 ```vb.net
-        MyTable = CompuMaster.Data.DataQuery.AnyIDataProvider.FillDataTable(
+        Dim MyTable As System.Data.DataTable = CompuMaster.Data.DataQuery.AnyIDataProvider.FillDataTable(
             New System.Data.OleDb.OleDbConnection(ConnectionString),
             "SELECT * FROM table", System.Data.CommandType.Text,
             Nothing,
             CompuMaster.Data.DataQuery.AnyIDataProvider.Automations.AutoOpenAndCloseAndDisposeConnection,
             "MyTableName")
+```
+```csharp
+        System.Data.DataTable myTable = CompuMaster.Data.DataQuery.AnyIDataProvider.FillDataTable(
+            New System.Data.OleDb.OleDbConnection(ConnectionString),
+            "SELECT * FROM table", System.Data.CommandType.Text,
+            null,
+            CompuMaster.Data.DataQuery.AnyIDataProvider.Automations.AutoOpenAndCloseAndDisposeConnection,
+            "MyTableName");
 ```
   * execute a query with parameters within 5 lines of code
 ```vb.net
