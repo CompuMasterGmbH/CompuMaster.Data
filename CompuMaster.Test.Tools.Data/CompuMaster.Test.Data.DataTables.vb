@@ -183,7 +183,7 @@ Namespace CompuMaster.Test.Data
             Assert.IsTrue(ht.ContainsValue("z"))
         End Sub
 
-        <Test()> Public Sub ConvertDataTableToWebFormsListItem()
+        <Test(), NUnit.Framework.Ignore()> Public Sub ConvertDataTableToWebFormsListItem()
             Dim dt As New DataTable
             dt.Columns.Add("First")
             dt.Columns.Add("second")

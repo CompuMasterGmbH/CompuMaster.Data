@@ -103,9 +103,14 @@ Namespace CompuMaster.Data.DataQuery
         ''' <exception cref="Office2010x64OleDbOdbcEngineRequiredException" />
         Public Shared Function MicrosoftExcelConnection(ByVal path As String, ByVal firstRowContainsHeaders As Boolean, ByVal readAllColumnsAsTextOnly As Boolean) As IDbConnection
             If path = Nothing Then Throw New ArgumentNullException("path")
-            Dim TestFile As New TestFile(DataQuery.TestFile.TestFileType.MsExcel)
-            For MyCounter As Integer = 20 To 14 Step -1
-                If ProbeOleDBProvider(MicrosoftExcelConnectionProviderWorkingStatusForACE14, "Provider=Microsoft.ACE.OLEDB." & MyCounter & ".0;Data Source=" & TestFile.FilePath & ";Extended Properties=""Excel " & MyCounter & ".0 Xml;HDR=YES;IMEX=0"";") Then
+            Dim TestFile As TestFile
+            If path.ToLowerInvariant.EndsWith(".xls") Then
+                TestFile = New TestFile(DataQuery.TestFile.TestFileType.MsExcel95Xls)
+            Else
+                TestFile = New TestFile(DataQuery.TestFile.TestFileType.MsExcel2007Xlsx)
+            End If
+            For MyCounter As Integer = 20 To 15 Step -1
+                If ProbeOleDBProvider(MicrosoftExcelConnectionProviderWorkingStatusForACEDynList(MyCounter), "Provider=Microsoft.ACE.OLEDB." & MyCounter & ".0;Data Source=" & TestFile.FilePath & ";Extended Properties=""Excel " & MyCounter & ".0 Xml;HDR=YES;IMEX=0"";") Then
                     Return CompuMaster.Data.DataQuery.PlatformTools.CreateDataConnection("OleDB", "Provider=Microsoft.ACE.OLEDB." & MyCounter & ".0;Data Source=" & path & ";Extended Properties=""Excel " & MyCounter & ".0 Xml;HDR=" & BoolIf(firstRowContainsHeaders, "YES", "NO") & ";" & BoolIf(readAllColumnsAsTextOnly, "IMEX=1", "IMEX=0") & """;")
                 End If
             Next
@@ -118,6 +123,11 @@ Namespace CompuMaster.Data.DataQuery
             ElseIf ProbeOdbcDBProvider(MicrosoftExcelConnectionProviderWorkingStatusForOdbcDriver, "Driver={Microsoft Excel Driver (*.xls)};Dbq=" & TestFile.FilePath & ";") Then
                 Return CompuMaster.Data.DataQuery.PlatformTools.CreateDataConnection("ODBC", "Driver={Microsoft Excel Driver (*.xls)};Dbq=" & path & ";" & BoolIf(firstRowContainsHeaders, "FirstRowHasNames=1", "FirstRowHasNames=0") & ";" & BoolIf(readAllColumnsAsTextOnly, "ReadOnly=1", "ReadOnly=0") & """;")
             Else
+                Dim result As DictionaryEntry() = CompuMaster.Data.DataQuery.PlatformTools.InstalledOleDbProviders
+                For Each item As DictionaryEntry In result
+                    Dim provResult As Boolean = ProbeOleDBProvider(TriState.UseDefault, "Provider=" & item.Key.ToString & ";Data Source=" & TestFile.FilePath & ";")
+                    Console.WriteLine(item.Key.ToString & "=" & provResult)
+                Next
                 'Let the application find the exception with the most modern provider
                 If CompuMaster.Data.DataQuery.PlatformTools.CurrentClrRuntime = CompuMaster.Data.DataQuery.PlatformTools.ClrRuntimePlatform.x64 Then
                     '64bit - Requires Office 2010 JET drivers
@@ -132,6 +142,15 @@ Namespace CompuMaster.Data.DataQuery
             End If
         End Function
 
+        Private Shared _MicrosoftExcelConnectionProviderWorkingStatusForACEDynList As New Generic.Dictionary(Of Integer, TriState)
+        Private Shared ReadOnly Property MicrosoftExcelConnectionProviderWorkingStatusForACEDynList(officeMainVersion As Integer) As TriState
+            Get
+                If _MicrosoftExcelConnectionProviderWorkingStatusForACEDynList.ContainsKey(officeMainVersion) = False Then
+                    _MicrosoftExcelConnectionProviderWorkingStatusForACEDynList(officeMainVersion) = TriState.UseDefault
+                End If
+                Return _MicrosoftExcelConnectionProviderWorkingStatusForACEDynList(officeMainVersion)
+            End Get
+        End Property
         Private Shared MicrosoftExcelConnectionProviderWorkingStatusForACE14 As TriState = TriState.UseDefault
         Private Shared MicrosoftExcelConnectionProviderWorkingStatusForACE12 As TriState = TriState.UseDefault
         Private Shared MicrosoftExcelConnectionProviderWorkingStatusForJet4 As TriState = TriState.UseDefault

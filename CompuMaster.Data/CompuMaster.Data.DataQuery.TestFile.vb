@@ -19,15 +19,18 @@ Namespace CompuMaster.Data.DataQuery
         End Property
 
         Public Enum TestFileType As Byte
-            MsExcel
+            MsExcel95Xls
+            MsExcel2007Xlsx
             MsAccess
         End Enum
 
         Public Sub New(ByVal fileType As TestFileType)
             Dim TempFile As String
             TempFile = System.IO.Path.GetTempFileName
-            If fileType = TestFileType.MsExcel Then
+            If fileType = TestFileType.MsExcel95Xls Then
                 CompuMaster.Data.DatabaseManagement.CreateMsExcelFile(TempFile, DatabaseManagement.MsExcelFileType.MsExcel95Xls)
+            ElseIf fileType = TestFileType.MsExcel2007Xlsx Then
+                CompuMaster.Data.DatabaseManagement.CreateMsExcelFile(TempFile, DatabaseManagement.MsExcelFileType.MsExcel2007Xlsx)
             ElseIf fileType = TestFileType.MsAccess Then
                 CompuMaster.Data.DatabaseManagement.CreateDatabaseFile(TempFile, DatabaseManagement.DatabaseFileType.MsAccess2002Mdb)
             Else
