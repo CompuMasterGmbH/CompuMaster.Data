@@ -8,12 +8,12 @@
     <owners>$author$</owners>
     <licenseUrl>https://raw.githubusercontent.com/CompuMasterGmbH/CompuMaster.Data/master/LICENSE</licenseUrl>
     <projectUrl>https://github.com/CompuMasterGmbH/CompuMaster.Data</projectUrl>
-    <iconUrl>https://raw.githubusercontent.com/CompuMasterGmbH/CompuMaster.Data/master/LICENSE/logo_64x64.png</iconUrl>
+    <iconUrl>https://raw.githubusercontent.com/CompuMasterGmbH/CompuMaster.Data/master/logo_64x64.png</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>.NET library for Windows Forms applications with common methods for simplified data access, data table arrangements and data IO (based on CompuMaster.Data)</description>
     <releaseNotes></releaseNotes>
     <copyright>2005-2015 CompuMaster GmbH</copyright>
-    <tags>CompuMaster Data DataTable DataManipulation</tags>
+    <tags>CompuMaster Data Common Utils DataTable DataManipulation WinForm</tags>
     <dependencies>
       <dependency id="CompuMaster.Data" version="[$version$]" />
     </dependencies>

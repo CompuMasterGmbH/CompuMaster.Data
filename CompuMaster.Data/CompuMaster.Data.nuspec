@@ -8,12 +8,12 @@
     <owners>$author$</owners>
     <licenseUrl>https://raw.githubusercontent.com/CompuMasterGmbH/CompuMaster.Data/master/LICENSE</licenseUrl>
     <projectUrl>https://github.com/CompuMasterGmbH/CompuMaster.Data</projectUrl>
-    <iconUrl>https://raw.githubusercontent.com/CompuMasterGmbH/CompuMaster.Data/master/LICENSE/logo_64x64.png</iconUrl>
+    <iconUrl>https://raw.githubusercontent.com/CompuMasterGmbH/CompuMaster.Data/master/logo_64x64.png</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>.NET library with common methods for simplified data access, data table arrangements and data IO</description>
     <releaseNotes></releaseNotes>
     <copyright>2005-2015 CompuMaster GmbH</copyright>
-    <tags>CompuMaster Data DataTable LDAP CSV Text File SqlServer SqlClient* PostgreSQL Npgsql* AnyIDataProvider DatabaseManagement DataManipulation</tags>
+    <tags>CompuMaster Data Common Utils DataTable LDAP CSV Text File SqlServer SqlClient* PostgreSQL Npgsql* AnyIDataProvider DatabaseManagement DataManipulation</tags>
   </metadata>
   <files>
     <file src="bin\Release\**\Npgsql*.dll" target="lib\net20"/>
