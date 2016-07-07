@@ -2,7 +2,7 @@ Imports NUnit.Framework
 
 Namespace CompuMaster.Test.Data.DataQuery
 
-    <TestFixture()> Public Class Connections
+    <TestFixture(Category:="DB Connections")> Public Class Connections
 
 #If Not NET_1_1 Then
         <Test(), Obsolete> Public Sub DataException()

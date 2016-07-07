@@ -2,19 +2,34 @@ Imports NUnit.Framework
 
 Namespace CompuMaster.Test.Data
 
-    <TestFixture()> Public Class Ldap
+    <TestFixture(Category:="LDAP with security")> Public Class Ldap
 
         <Test()> Public Sub Query()
             Dim testTable As DataTable = CompuMaster.Data.Ldap.Query("compumaster", "(objectCategory=user)")
             Console.WriteLine(CompuMaster.Data.DataTables.ConvertToPlainTextTable(testTable))
+            Assert.Greater(testTable.Rows.Count, 1)
             testTable = CompuMaster.Data.Ldap.Query("CN=Jochen Wezel,CN=Users,DC=lan,DC=compumaster,DC=de", "(objectCategory=user)")
             Console.WriteLine(CompuMaster.Data.DataTables.ConvertToPlainTextTable(testTable))
+            Assert.AreEqual(testTable.Rows.Count, 1)
+        End Sub
+    End Class
+
+    <TestFixture(Category:="LDAP with security", Ignore:=True, IgnoreReason:="Required custom user credentials")> Class LdapWithSecurity
+
+        <Test, Category("LDAP")> Public Sub QueryMoreThan1000Entries()
+            Dim RecordCount As Integer = CompuMaster.Data.Ldap.QueryRecordCount("yourdomain.com", "(objectCategory=user)", "yourdomain\user", "yourpassword")
+            Console.WriteLine(RecordCount)
+            Assert.Greater(RecordCount, 1000)
+            Dim testTable As DataTable = CompuMaster.Data.Ldap.Query("yourdomain.com", "(objectCategory=user)", "yourdomain\user", "yourpassword")
+            Assert.Greater(testTable.Rows.Count, 1000)
+            testTable = CompuMaster.Data.Ldap.Query("CN=Users,DC=yourdomain,DC=com", "(objectCategory=user)")
+            Assert.Greater(testTable.Rows.Count, 1000)
         End Sub
 
     End Class
 
 
-    <NUnit.Framework.TestFixture> Public Class MiniTests
+    <NUnit.Framework.TestFixture(Category:="LDAP with security")> Public Class MiniTests
 
         <NUnit.Framework.Test> Public Sub TestIsStringWithA2ZOnly()
             Assert.AreEqual(True, IsStringWithA2ZOnly("akbkDED"))

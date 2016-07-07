@@ -8,10 +8,49 @@ Namespace CompuMaster.Data
     ''' </summary>
     Public Class Ldap
 
+        Public Shared Function QueryRecordCount(ByVal domain As String, ByVal searchFilterExpression As String) As Integer
+            Return QueryRecordCount(domain, searchFilterExpression, "", "")
+        End Function
+
+        Public Shared Function QueryRecordCount(ByVal domain As String, ByVal searchFilterExpression As String, username As String, password As String) As Integer
+
+            ' User-Einträge abfragen
+            Dim MyDirEntry As System.DirectoryServices.DirectoryEntry
+            If username = "" AndAlso password = "" Then
+                MyDirEntry = New System.DirectoryServices.DirectoryEntry("LDAP://" & domain)
+            Else
+                MyDirEntry = New System.DirectoryServices.DirectoryEntry("LDAP://" & domain, username, password)
+            End If
+            Dim MyDirSearcher As New System.DirectoryServices.DirectorySearcher(MyDirEntry)
+            If searchFilterExpression = Nothing Then
+                ' Alle Benutzer anzeigen falls Filter leer ist
+                MyDirSearcher.Filter = String.Empty
+            Else
+                ' Ansonsten den Filter verwenden
+                MyDirSearcher.Filter = searchFilterExpression
+            End If
+            MyDirSearcher.PageSize = Integer.MaxValue - 1 'otherwise ADS uses (sometimes) default of 1000 rows as maximum for a page
+            MyDirSearcher.SizeLimit = Integer.MaxValue - 1
+            Dim Result As Integer
+            Dim MySearchResults As System.DirectoryServices.SearchResultCollection = MyDirSearcher.FindAll()
+            Result = MySearchResults.Count
+            MySearchResults.Dispose()
+            MyDirSearcher.Dispose()
+            MyDirEntry.Close()
+            MyDirEntry.Dispose()
+            Return Result
+        End Function
+
         ''' <summary>
         '''     Returns different information on all the users matching the filter
         '''     expression within the given domain as contents of a DataTable
-        '''
+        ''' </summary>
+        ''' <param name="domain">The domain from which to gather the information</param>
+        ''' <param name="SearchFilterExpression">The filter expression for specific selection purposes.
+        '''             For valid filter expressions see the documentation about
+        '''             System.DirectoryServices.DirectorySearcher.Filter</param>
+        ''' <returns>A DataTable containing the information, Nothing if an error occurs during execution</returns>
+        ''' <remarks>
         '''     The Table contains the following columns:
         '''     - UserName      User's accountname
         '''     - FirstName     First name
@@ -33,18 +72,55 @@ Namespace CompuMaster.Data
         '''     Note that any field except "UserName" is optional.
         '''     All fields are of type String.
         '''     Each user account is represented by a DataRow.
-        '''     
+        ''' </remarks>
+        Public Shared Function QueryUsers(ByVal domain As String, ByVal SearchFilterExpression As String) As DataTable
+            Return QueryUsers(domain, SearchFilterExpression, "", "")
+        End Function
+
+        ''' <summary>
+        '''     Returns different information on all the users matching the filter
+        '''     expression within the given domain as contents of a DataTable
         ''' </summary>
         ''' <param name="domain">The domain from which to gather the information</param>
         ''' <param name="SearchFilterExpression">The filter expression for specific selection purposes.
         '''             For valid filter expressions see the documentation about
         '''             System.DirectoryServices.DirectorySearcher.Filter</param>
+        ''' <param name="username">LDAP authentification user</param>
+        ''' <param name="password">LDAP authentification password</param>
         ''' <returns>A DataTable containing the information, Nothing if an error occurs during execution</returns>
-        Public Shared Function QueryUsers(ByVal domain As String, ByVal SearchFilterExpression As String) As DataTable
+        ''' <remarks>
+        '''     The Table contains the following columns:
+        '''     - UserName      User's accountname
+        '''     - FirstName     First name
+        '''     - LastName      Last name
+        '''     - DiplayName    Diplayed name
+        '''     - Title         Position
+        '''     - EMail         E-Mail address
+        '''     - Phone         Phone number
+        '''     - MobilePhone   Cell / mobile phone number
+        '''     - VoIPPhone     VoIP phone number
+        '''     - Street        Street and house number
+        '''     - ZIP           Zip / postal code
+        '''     - City          City name
+        '''     - Country       Country name
+        '''     - Company       Company name
+        '''     - Department    Department name
+        '''     - Initials      The initials of the user
+        '''
+        '''     Note that any field except "UserName" is optional.
+        '''     All fields are of type String.
+        '''     Each user account is represented by a DataRow.
+        ''' </remarks>
+        Public Shared Function QueryUsers(ByVal domain As String, ByVal SearchFilterExpression As String, username As String, password As String) As DataTable
             Dim UserDataTable As DataTable = QueryUsers_CreateInfoTable(domain)
             Try
                 ' User-Einträge abfragen
-                Dim MyDirEntry As New System.DirectoryServices.DirectoryEntry("LDAP://" & domain)
+                Dim MyDirEntry As System.DirectoryServices.DirectoryEntry
+                If username = "" AndAlso password = "" Then
+                    MyDirEntry = New System.DirectoryServices.DirectoryEntry("LDAP://" & domain)
+                Else
+                    MyDirEntry = New System.DirectoryServices.DirectoryEntry("LDAP://" & domain, username, password)
+                End If
                 Dim MyDirSearcher As New System.DirectoryServices.DirectorySearcher(MyDirEntry)
                 If SearchFilterExpression = Nothing Then
                     ' Alle Benutzer anzeigen falls Filter leer ist
@@ -53,6 +129,8 @@ Namespace CompuMaster.Data
                     ' Ansonsten den Filter verwenden
                     MyDirSearcher.Filter = SearchFilterExpression
                 End If
+                MyDirSearcher.PageSize = Integer.MaxValue - 1 'otherwise ADS uses (sometimes) default of 1000 rows as maximum for a page
+                MyDirSearcher.SizeLimit = Integer.MaxValue - 1
                 Dim MySearchResults As System.DirectoryServices.SearchResultCollection = MyDirSearcher.FindAll()
                 Try
                     For counter As Integer = 0 To (MySearchResults.Count - 1)
@@ -120,7 +198,11 @@ Namespace CompuMaster.Data
         ''' <summary>
         '''     Returns different information on all the users with the given account
         '''     name within the given domain as contents of a DataTable
-        '''
+        ''' </summary>
+        ''' <param name="domain">The domain from which to gather the information</param>
+        ''' <param name="UserAccountName">The account name for which to search</param>
+        ''' <returns>A DataTable containing the information, Nothing if an error occurs during execution</returns>
+        ''' <remarks>
         '''     The Table contains the following columns:
         '''     - UserName      User's accountname
         '''     - FirstName     First name
@@ -142,16 +224,48 @@ Namespace CompuMaster.Data
         '''     Note that any field except "UserName" is optional.
         '''     All fields are of type String.
         '''     Each user account is represented by a DataRow.
-        '''     
+        ''' </remarks>
+        Public Shared Function QueryUsersByAccountName(ByVal domain As String, ByVal UserAccountName As String) As DataTable
+            Return QueryUsersByAccountName(domain, UserAccountName, "", "")
+        End Function
+
+        ''' <summary>
+        '''     Returns different information on all the users with the given account
+        '''     name within the given domain as contents of a DataTable
         ''' </summary>
         ''' <param name="domain">The domain from which to gather the information</param>
         ''' <param name="UserAccountName">The account name for which to search</param>
+        ''' <param name="ldapAuthUsername">LDAP authentification user</param>
+        ''' <param name="ldapAuthPassword">LDAP authentification password</param>
         ''' <returns>A DataTable containing the information, Nothing if an error occurs during execution</returns>
-        Public Shared Function QueryUsersByAccountName(ByVal domain As String, ByVal UserAccountName As String) As DataTable
+        ''' <remarks>
+        '''     The Table contains the following columns:
+        '''     - UserName      User's accountname
+        '''     - FirstName     First name
+        '''     - LastName      Last name
+        '''     - DiplayName    Diplayed name
+        '''     - Title         Position
+        '''     - EMail         E-Mail address
+        '''     - Phone         Phone number
+        '''     - MobilePhone   Cell / mobile phone number
+        '''     - VoIPPhone     VoIP phone number
+        '''     - Street        Street and house number
+        '''     - ZIP           Zip / postal code
+        '''     - City          City name
+        '''     - Country       Country name
+        '''     - Company       Company name
+        '''     - Department    Department name
+        '''     - Initials      The initials of the user
+        '''
+        '''     Note that any field except "UserName" is optional.
+        '''     All fields are of type String.
+        '''     Each user account is represented by a DataRow.
+        ''' </remarks>
+        Public Shared Function QueryUsersByAccountName(ByVal domain As String, ByVal UserAccountName As String, ldapAuthUsername As String, ldapAuthPassword As String) As DataTable
             If UserAccountName = Nothing Then
                 Return Nothing
             Else
-                Return QueryUsers(domain, "(&(objectCategory=user)(sAMAccountName=" & UserAccountName & "))")
+                Return QueryUsers(domain, "(&(objectCategory=user)(sAMAccountName=" & UserAccountName & "))", ldapAuthUsername, ldapAuthPassword)
             End If
         End Function
 
@@ -162,9 +276,26 @@ Namespace CompuMaster.Data
         ''' <param name="searchFilterExpression">A search expression to filter the results</param>
         ''' <returns>A datatable containing all data as strings</returns>
         Public Shared Function Query(ByVal domain As String, ByVal searchFilterExpression As String) As DataTable
+            Return Query(domain, searchFilterExpression, "", "")
+        End Function
+
+        ''' <summary>
+        '''     Query the LDAP
+        ''' </summary>
+        ''' <param name="domain">The domain name which will be used as LDAP server name (to query the domain controller)</param>
+        ''' <param name="searchFilterExpression">A search expression to filter the results</param>
+        ''' <param name="username">LDAP authentification user</param>
+        ''' <param name="password">LDAP authentification password</param>
+        ''' <returns>A datatable containing all data as strings</returns>
+        Public Shared Function Query(ByVal domain As String, ByVal searchFilterExpression As String, username As String, password As String) As DataTable
 
             ' User-Einträge abfragen
-            Dim MyDirEntry As New System.DirectoryServices.DirectoryEntry("LDAP://" & domain)
+            Dim MyDirEntry As System.DirectoryServices.DirectoryEntry
+            If username = "" AndAlso password = "" Then
+                MyDirEntry = New System.DirectoryServices.DirectoryEntry("LDAP://" & domain)
+            Else
+                MyDirEntry = New System.DirectoryServices.DirectoryEntry("LDAP://" & domain, username, password)
+            End If
             Dim MyDirSearcher As New System.DirectoryServices.DirectorySearcher(MyDirEntry)
             If searchFilterExpression = Nothing Then
                 ' Alle Benutzer anzeigen falls Filter leer ist
@@ -173,6 +304,8 @@ Namespace CompuMaster.Data
                 ' Ansonsten den Filter verwenden
                 MyDirSearcher.Filter = searchFilterExpression
             End If
+            MyDirSearcher.PageSize = Integer.MaxValue - 1 'otherwise ADS uses (sometimes) default of 1000 rows as maximum for a page
+            MyDirSearcher.SizeLimit = Integer.MaxValue - 1
             'Create return table
             Dim Result As New DataTable
             Dim MySearchResults As System.DirectoryServices.SearchResultCollection = MyDirSearcher.FindAll()
@@ -212,58 +345,12 @@ Namespace CompuMaster.Data
         ''' <summary>
         '''     Returns different information on all the users with the given first
         '''     and / or last name within the given domain as contents of a DataTable
-        '''
-        '''     The Table contains the following columns:
-        '''     - UserName      User's accountname
-        '''     - FirstName     First name
-        '''     - LastName      Last name
-        '''     - DiplayName    Diplayed name
-        '''     - Title         Position
-        '''     - EMail         E-Mail address
-        '''     - Phone         Phone number
-        '''     - MobilePhone   Cell / mobile phone number
-        '''     - VoIPPhone     VoIP phone number
-        '''     - Street        Street and house number
-        '''     - ZIP           Zip / postal code
-        '''     - City          City name
-        '''     - Country       Country name
-        '''     - Company       Company name
-        '''     - Department    Department name
-        '''     - Initials      The initials of the user
-        '''
-        '''     Note that any field except "UserName" is optional.
-        '''     All fields are of type String.
-        '''     Each user account is represented by a DataRow.
-        '''     
         ''' </summary>
         ''' <param name="domain">The domain from which to gather the information</param>
         ''' <param name="UserFirstName">The first name for which to search (may be empty or nothing if last name is given)</param>
         ''' <param name="UserLastName">The last name for which to search (may be empty or nothing if first name is given)</param>
         ''' <returns>A DataTable containing the information, Nothing if an error occurs during execution</returns>
-        Public Shared Function QueryUsersByName(ByVal domain As String, ByVal UserFirstName As String, ByVal UserLastName As String) As DataTable
-            If ((IsNothing(UserFirstName) OrElse (UserFirstName.Trim() = "")) AndAlso (IsNothing(UserLastName) OrElse (UserLastName.Trim() = ""))) Then
-                Return Nothing
-            Else
-                If (IsNothing(UserFirstName) OrElse (UserFirstName.Trim() = "")) Then
-                    ' First name is empty --> Query only by last name
-                    Return QueryUsers(domain, "(&(objectCategory=user)(sn=" & UserLastName & "))")
-                Else
-                    If (IsNothing(UserLastName) OrElse (UserLastName.Trim() = "")) Then
-                        ' Last name is empty --> Query only by first name
-                        Return QueryUsers(domain, "(&(objectCategory=user)(GivenName=" & UserFirstName & "))")
-                    Else
-                        ' Both parameters not empty --> Query user by first and last name
-                        Return QueryUsers(domain, "(&(objectCategory=user)(GivenName=" & UserFirstName & ")(sn=" & UserLastName & "))")
-                    End If
-                End If
-            End If
-        End Function
-
-        ''' -----------------------------------------------------------------------------
-        ''' <summary>
-        '''     Returns different information on all users within the given domain
-        '''     as contents of a DataTable
-        '''
+        ''' <remarks>
         '''     The Table contains the following columns:
         '''     - UserName      User's accountname
         '''     - FirstName     First name
@@ -285,18 +372,129 @@ Namespace CompuMaster.Data
         '''     Note that any field except "UserName" is optional.
         '''     All fields are of type String.
         '''     Each user account is represented by a DataRow.
-        '''     
+        ''' </remarks>
+        Public Shared Function QueryUsersByName(ByVal domain As String, ByVal UserFirstName As String, ByVal UserLastName As String) As DataTable
+            Return QueryUsersByName(domain, UserFirstName, UserLastName, "", "")
+        End Function
+
+        ''' <summary>
+        '''     Returns different information on all the users with the given first
+        '''     and / or last name within the given domain as contents of a DataTable
+        ''' </summary>
+        ''' <param name="domain">The domain from which to gather the information</param>
+        ''' <param name="UserFirstName">The first name for which to search (may be empty or nothing if last name is given)</param>
+        ''' <param name="UserLastName">The last name for which to search (may be empty or nothing if first name is given)</param>
+        ''' <param name="ldapAuthUsername">LDAP authentification user</param>
+        ''' <param name="ldapAuthPassword">LDAP authentification password</param>
+        ''' <returns>A DataTable containing the information, Nothing if an error occurs during execution</returns>
+        ''' <remarks>
+        '''     The Table contains the following columns:
+        '''     - UserName      User's accountname
+        '''     - FirstName     First name
+        '''     - LastName      Last name
+        '''     - DiplayName    Diplayed name
+        '''     - Title         Position
+        '''     - EMail         E-Mail address
+        '''     - Phone         Phone number
+        '''     - MobilePhone   Cell / mobile phone number
+        '''     - VoIPPhone     VoIP phone number
+        '''     - Street        Street and house number
+        '''     - ZIP           Zip / postal code
+        '''     - City          City name
+        '''     - Country       Country name
+        '''     - Company       Company name
+        '''     - Department    Department name
+        '''     - Initials      The initials of the user
+        '''
+        '''     Note that any field except "UserName" is optional.
+        '''     All fields are of type String.
+        '''     Each user account is represented by a DataRow.
+        ''' </remarks>
+        Public Shared Function QueryUsersByName(ByVal domain As String, ByVal UserFirstName As String, ByVal UserLastName As String, ldapAuthUsername As String, ldapAuthPassword As String) As DataTable
+            If ((IsNothing(UserFirstName) OrElse (UserFirstName.Trim() = "")) AndAlso (IsNothing(UserLastName) OrElse (UserLastName.Trim() = ""))) Then
+                Return Nothing
+            Else
+                If (IsNothing(UserFirstName) OrElse (UserFirstName.Trim() = "")) Then
+                    ' First name is empty --> Query only by last name
+                    Return QueryUsers(domain, "(&(objectCategory=user)(sn=" & UserLastName & "))", ldapAuthUsername, ldapAuthPassword)
+                Else
+                    If (IsNothing(UserLastName) OrElse (UserLastName.Trim() = "")) Then
+                        ' Last name is empty --> Query only by first name
+                        Return QueryUsers(domain, "(&(objectCategory=user)(GivenName=" & UserFirstName & "))", ldapAuthUsername, ldapAuthPassword)
+                    Else
+                        ' Both parameters not empty --> Query user by first and last name
+                        Return QueryUsers(domain, "(&(objectCategory=user)(GivenName=" & UserFirstName & ")(sn=" & UserLastName & "))", ldapAuthUsername, ldapAuthPassword)
+                    End If
+                End If
+            End If
+        End Function
+
+        ''' <summary>
+        '''     Returns different information on all users within the given domain
+        '''     as contents of a DataTable
         ''' </summary>
         ''' <param name="domain">The domain from which to gather the information</param>
         ''' <returns>A DataTable containing the information, Nothing if an error occurs during execution</returns>
         ''' <remarks>
+        '''     The Table contains the following columns:
+        '''     - UserName      User's accountname
+        '''     - FirstName     First name
+        '''     - LastName      Last name
+        '''     - DiplayName    Diplayed name
+        '''     - Title         Position
+        '''     - EMail         E-Mail address
+        '''     - Phone         Phone number
+        '''     - MobilePhone   Cell / mobile phone number
+        '''     - VoIPPhone     VoIP phone number
+        '''     - Street        Street and house number
+        '''     - ZIP           Zip / postal code
+        '''     - City          City name
+        '''     - Country       Country name
+        '''     - Company       Company name
+        '''     - Department    Department name
+        '''     - Initials      The initials of the user
+        '''
+        '''     Note that any field except "UserName" is optional.
+        '''     All fields are of type String.
+        '''     Each user account is represented by a DataRow.
         ''' </remarks>
-        ''' <history>
-        '''     [abaldauf]  2005-07-02  Created
-        ''' </history>
-        ''' -----------------------------------------------------------------------------
         Public Shared Function QueryAllUsers(ByVal domain As String) As DataTable
             Return QueryUsers(domain, "(objectCategory=user)")
+        End Function
+
+        ''' <summary>
+        '''     Returns different information on all users within the given domain
+        '''     as contents of a DataTable
+        ''' </summary>
+        ''' <param name="domain">The domain from which to gather the information</param>
+        ''' <param name="username">LDAP authentification user</param>
+        ''' <param name="password">LDAP authentification password</param>
+        ''' <returns>A DataTable containing the information, Nothing if an error occurs during execution</returns>
+        ''' <remarks>
+        '''     The Table contains the following columns:
+        '''     - UserName      User's accountname
+        '''     - FirstName     First name
+        '''     - LastName      Last name
+        '''     - DiplayName    Diplayed name
+        '''     - Title         Position
+        '''     - EMail         E-Mail address
+        '''     - Phone         Phone number
+        '''     - MobilePhone   Cell / mobile phone number
+        '''     - VoIPPhone     VoIP phone number
+        '''     - Street        Street and house number
+        '''     - ZIP           Zip / postal code
+        '''     - City          City name
+        '''     - Country       Country name
+        '''     - Company       Company name
+        '''     - Department    Department name
+        '''     - Initials      The initials of the user
+        '''
+        '''     Note that any field except "UserName" is optional.
+        '''     All fields are of type String.
+        '''     Each user account is represented by a DataRow.
+        ''' </remarks>
+        Public Shared Function QueryAllUsers(ByVal domain As String, username As String, password As String) As DataTable
+            Return QueryUsers(domain, "(objectCategory=user)", username, password)
         End Function
 
         ''' <summary>

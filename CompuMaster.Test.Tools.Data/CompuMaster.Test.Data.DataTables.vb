@@ -2,7 +2,7 @@ Imports NUnit.Framework
 
 Namespace CompuMaster.Test.Data
 
-    <TestFixture()> Public Class DataTables
+    <TestFixture(Category:="DataTables")> Public Class DataTables
 #Region "Test data"
         Private Function _TestTable1() As DataTable
             Dim Result As New DataTable("test1")

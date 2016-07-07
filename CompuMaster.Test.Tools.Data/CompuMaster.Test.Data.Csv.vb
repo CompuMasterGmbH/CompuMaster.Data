@@ -2,7 +2,7 @@ Imports NUnit.Framework
 
 Namespace CompuMaster.Test.Data
 
-    <TestFixture()> Public Class Csv
+    <TestFixture(Category:="CSV")> Public Class Csv
 
         <Test()> Public Sub ReadDataTableFromCsvStringSeparatorSeparated()
 

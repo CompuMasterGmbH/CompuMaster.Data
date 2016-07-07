@@ -2,7 +2,7 @@ Imports NUnit.Framework
 
 Namespace CompuMaster.Test.Data
 
-    <TestFixture()> Public Class XlsReader
+    <TestFixture(Category:="XLS Reader")> Public Class XlsReader
 
         <Test()> Public Sub ReadLastCell()
             Dim TestFile As String = System.IO.Path.Combine(System.Environment.CurrentDirectory, "testfiles\test_for_lastcell_e50aka95.xls")

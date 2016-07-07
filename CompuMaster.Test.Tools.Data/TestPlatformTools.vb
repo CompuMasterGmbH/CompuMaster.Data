@@ -1,6 +1,6 @@
 ﻿Imports NUnit.Framework
 
-<TestFixture()> Public Class TestPlatformTools
+<TestFixture(Category:="PlatformTools")> Public Class TestPlatformTools
 
     <Test> Public Sub InstalledOleDbProviders()
         Dim result As DictionaryEntry() = CompuMaster.Data.DataQuery.PlatformTools.InstalledOleDbProviders

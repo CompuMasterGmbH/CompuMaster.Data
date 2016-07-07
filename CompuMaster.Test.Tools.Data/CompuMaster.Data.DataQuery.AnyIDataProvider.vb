@@ -2,7 +2,7 @@
 
 Namespace CompuMaster.Test.Data.DataQuery
 
-    <TestFixture()> Public Class DataQueryAnyIDataProvider
+    <TestFixture(Category:="DataQueryAnyIDataProvider")> Public Class DataQueryAnyIDataProvider
 
         <Test()> Public Sub ExecuteReaderAndPutFirstColumnIntoGenericList()
             Dim TestFile As String = System.IO.Path.Combine(System.Environment.CurrentDirectory, "testfiles\test_for_msaccess.mdb")
