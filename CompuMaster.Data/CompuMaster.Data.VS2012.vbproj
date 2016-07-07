@@ -166,9 +166,6 @@
     <Compile Include="CompuMaster.Data.Ldap.vb">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="CompuMaster.Data.LdapTools.vb">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="CompuMaster.Data.Manipulation.vb">
       <SubType>Code</SubType>
     </Compile>
