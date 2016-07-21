@@ -1140,28 +1140,6 @@ Namespace CompuMaster.Data
         ''' 	[wezel]	19.04.2005	Created
         ''' </history>
         ''' -----------------------------------------------------------------------------
-        Friend Shared Function WriteDataTableToCsvString(ByVal dataTable As System.Data.DataTable, ByVal includesColumnHeaders As Boolean, Optional ByVal encoding As String = "UTF-8", Optional ByVal columnSeparator As Char = ","c, Optional ByVal recognizeTextBy As Char = """"c, Optional ByVal decimalSeparator As Char = "."c) As String
-            Dim MyStream As MemoryStream = WriteDataTableToCsvMemoryStream(dataTable, includesColumnHeaders, System.Text.Encoding.Unicode.EncodingName, columnSeparator, recognizeTextBy, decimalSeparator)
-            Return System.Text.Encoding.Unicode.GetString(MyStream.ToArray)
-        End Function
-
-        ''' -----------------------------------------------------------------------------
-        ''' <summary>
-        '''     Create a CSV table
-        ''' </summary>
-        ''' <param name="dataTable"></param>
-        ''' <param name="includesColumnHeaders">Indicates wether column headers are present</param>
-        ''' <param name="encoding">The text encoding of the file</param>
-        ''' <param name="columnSeparator">Choose the required character for splitting the columns. Set to null (Nothing in VisualBasic) to enable fixed column widths mode</param>
-        ''' <param name="recognizeTextBy">A character indicating the start and end of text strings</param>
-        ''' <param name="decimalSeparator"></param>
-        ''' <returns>A string containing the CSV table</returns>
-        ''' <remarks>
-        ''' </remarks>
-        ''' <history>
-        ''' 	[wezel]	19.04.2005	Created
-        ''' </history>
-        ''' -----------------------------------------------------------------------------
         Friend Shared Function WriteDataTableToCsvBytes(ByVal dataTable As System.Data.DataTable, ByVal includesColumnHeaders As Boolean, Optional ByVal encoding As String = "UTF-8", Optional ByVal columnSeparator As Char = ","c, Optional ByVal recognizeTextBy As Char = """"c, Optional ByVal decimalSeparator As Char = "."c) As Byte()
             Dim MyStream As MemoryStream = WriteDataTableToCsvMemoryStream(dataTable, includesColumnHeaders, encoding, columnSeparator, recognizeTextBy, decimalSeparator)
             Return MyStream.ToArray
