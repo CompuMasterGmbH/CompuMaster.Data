@@ -172,6 +172,7 @@
     <Compile Include="AssemblyInfo.vb">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="AssemblyTestEnvironment.vb" />
     <Compile Include="DataQuery.AnyIDataProvider.vb" />
     <Compile Include="DataQuery.Connections.vb" />
     <Compile Include="Csv.vb" />

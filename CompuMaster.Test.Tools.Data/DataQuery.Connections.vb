@@ -36,7 +36,7 @@ Namespace CompuMaster.Test.Data.DataQuery
         End Sub
 
         <Test()> Public Sub ReadMsAccessDatabase()
-            Dim TestFile As String = System.IO.Path.Combine(System.Environment.CurrentDirectory, "testfiles\test_for_msaccess.mdb")
+            Dim TestFile As String = AssemblyTestEnvironment.TestFileAbsolutePath("testfiles\test_for_msaccess.mdb")
             Dim MyConn As IDbConnection = CompuMaster.Data.DataQuery.Connections.MicrosoftAccessConnection(TestFile)
             Dim MyCmd As IDbCommand = MyConn.CreateCommand()
             MyCmd.CommandType = CommandType.Text
@@ -46,7 +46,7 @@ Namespace CompuMaster.Test.Data.DataQuery
         End Sub
 
         <Test()> Public Sub EnumerateTablesAndViewsInOleDbDataSource()
-            Dim TestFile As String = System.IO.Path.Combine(System.Environment.CurrentDirectory, "testfiles\test_for_msaccess.mdb")
+            Dim TestFile As String = AssemblyTestEnvironment.TestFileAbsolutePath("testfiles\test_for_msaccess.mdb")
             Dim conn As IDbConnection = CompuMaster.Data.DataQuery.Connections.MicrosoftAccessConnection(TestFile)
             'If CType(conn, Object).GetType Is GetType(System.Data.OleDb.OleDbConnection) Then
             Try
@@ -73,7 +73,7 @@ Namespace CompuMaster.Test.Data.DataQuery
         End Sub
 
         <Test()> Public Sub ReadMsAccessDatabaseEnumeratedTable()
-            Dim TestFile As String = System.IO.Path.Combine(System.Environment.CurrentDirectory, "testfiles\test_for_msaccess.mdb")
+            Dim TestFile As String = AssemblyTestEnvironment.TestFileAbsolutePath("testfiles\test_for_msaccess.mdb")
             Dim MyConn As IDbConnection = CompuMaster.Data.DataQuery.Connections.MicrosoftAccessConnection(TestFile)
             Dim table As DataTable
             Try

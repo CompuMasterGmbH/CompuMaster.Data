@@ -3,6 +3,7 @@ Imports NUnit.Framework
 Namespace CompuMaster.Test.Data
 
     <TestFixture(Category:="DataTables")> Public Class DataTables
+
 #Region "Test data"
         Private Function _TestTable1() As DataTable
             Dim Result As New DataTable("test1")
@@ -41,7 +42,7 @@ Namespace CompuMaster.Test.Data
         End Function
 
         Private Function _TestTable2() As DataTable
-            Dim file As String = System.IO.Path.Combine(System.Environment.CurrentDirectory, "testfiles\Q&A.xls")
+            Dim file As String = AssemblyTestEnvironment.TestFileAbsolutePath("testfiles\Q&A.xls")
             Dim dt As DataTable = CompuMaster.Data.XlsReader.ReadDataTableFromXlsFile(file, "Rund um das NT")
             Return dt
         End Function
@@ -122,7 +123,7 @@ Namespace CompuMaster.Test.Data
         End Sub
 
         <Test()> Public Sub ConvertDataReaderToDataTable()
-            Dim TestFile As String = System.IO.Path.Combine(System.Environment.CurrentDirectory, "testfiles\test_for_msaccess.mdb")
+            Dim TestFile As String = AssemblyTestEnvironment.TestFileAbsolutePath("testfiles\test_for_msaccess.mdb")
             Dim MyConn As IDbConnection = CompuMaster.Data.DataQuery.Connections.MicrosoftAccessConnection(TestFile)
             Dim MyCmd As IDbCommand = MyConn.CreateCommand()
             MyCmd.CommandType = CommandType.Text

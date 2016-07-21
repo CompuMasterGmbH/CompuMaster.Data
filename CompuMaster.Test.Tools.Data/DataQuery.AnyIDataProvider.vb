@@ -5,7 +5,7 @@ Namespace CompuMaster.Test.Data.DataQuery
     <TestFixture(Category:="DataQueryAnyIDataProvider")> Public Class DataQueryAnyIDataProvider
 
         <Test()> Public Sub ExecuteReaderAndPutFirstColumnIntoGenericList()
-            Dim TestFile As String = System.IO.Path.Combine(System.Environment.CurrentDirectory, "testfiles\test_for_msaccess.mdb")
+            Dim TestFile As String = AssemblyTestEnvironment.TestFileAbsolutePath("testfiles\test_for_msaccess.mdb")
             Dim MyConn As IDbConnection = CompuMaster.Data.DataQuery.Connections.MicrosoftAccessConnection(TestFile)
             Dim MyCmd As IDbCommand = MyConn.CreateCommand()
             MyCmd.CommandType = CommandType.Text
@@ -19,7 +19,7 @@ Namespace CompuMaster.Test.Data.DataQuery
         End Sub
 
         <Test()> Public Sub ExecuteReaderAndPutFirstColumnIntoGenericNullableList()
-            Dim TestFile As String = System.IO.Path.Combine(System.Environment.CurrentDirectory, "testfiles\test_for_msaccess.mdb")
+            Dim TestFile As String = AssemblyTestEnvironment.TestFileAbsolutePath("testfiles\test_for_msaccess.mdb")
             Dim MyConn As IDbConnection = CompuMaster.Data.DataQuery.Connections.MicrosoftAccessConnection(TestFile)
             Dim MyCmd As IDbCommand = MyConn.CreateCommand()
             MyCmd.CommandType = CommandType.Text
@@ -36,7 +36,7 @@ Namespace CompuMaster.Test.Data.DataQuery
         End Sub
 
         <Test()> Public Sub ExecuteReaderAndPutFirstTwoColumnsIntoGenericNullableKeyValuePairs()
-            Dim TestFile As String = System.IO.Path.Combine(System.Environment.CurrentDirectory, "testfiles\test_for_msaccess.mdb")
+            Dim TestFile As String = AssemblyTestEnvironment.TestFileAbsolutePath("testfiles\test_for_msaccess.mdb")
             Dim MyConn As IDbConnection = CompuMaster.Data.DataQuery.Connections.MicrosoftAccessConnection(TestFile)
             Dim MyCmd As IDbCommand = MyConn.CreateCommand()
             MyCmd.CommandType = CommandType.Text
@@ -60,7 +60,7 @@ Namespace CompuMaster.Test.Data.DataQuery
         End Sub
 
         <Test()> Public Sub ExecuteReaderAndPutFirstTwoColumnsIntoGenericKeyValuePairs()
-            Dim TestFile As String = System.IO.Path.Combine(System.Environment.CurrentDirectory, "testfiles\test_for_msaccess.mdb")
+            Dim TestFile As String = AssemblyTestEnvironment.TestFileAbsolutePath("testfiles\test_for_msaccess.mdb")
             Dim MyConn As IDbConnection = CompuMaster.Data.DataQuery.Connections.MicrosoftAccessConnection(TestFile)
             Dim MyCmd As IDbCommand = MyConn.CreateCommand()
             MyCmd.CommandType = CommandType.Text
@@ -80,7 +80,7 @@ Namespace CompuMaster.Test.Data.DataQuery
         End Sub
 
         <Test()> Public Sub ExecuteReaderAndPutFirstTwoColumnsIntoGenericNullableDictionary()
-            Dim TestFile As String = System.IO.Path.Combine(System.Environment.CurrentDirectory, "testfiles\test_for_msaccess.mdb")
+            Dim TestFile As String = AssemblyTestEnvironment.TestFileAbsolutePath("testfiles\test_for_msaccess.mdb")
             Dim MyConn As IDbConnection = CompuMaster.Data.DataQuery.Connections.MicrosoftAccessConnection(TestFile)
             Dim MyCmd As IDbCommand = MyConn.CreateCommand()
             MyCmd.CommandType = CommandType.Text
@@ -102,7 +102,7 @@ Namespace CompuMaster.Test.Data.DataQuery
         End Sub
 
         <Test()> Public Sub ExecuteReaderAndPutFirstTwoColumnsIntoGenericDictionary()
-            Dim TestFile As String = System.IO.Path.Combine(System.Environment.CurrentDirectory, "testfiles\test_for_msaccess.mdb")
+            Dim TestFile As String = AssemblyTestEnvironment.TestFileAbsolutePath("testfiles\test_for_msaccess.mdb")
             Dim MyConn As IDbConnection = CompuMaster.Data.DataQuery.Connections.MicrosoftAccessConnection(TestFile)
             Dim MyCmd As IDbCommand = MyConn.CreateCommand()
             MyCmd.CommandType = CommandType.Text
