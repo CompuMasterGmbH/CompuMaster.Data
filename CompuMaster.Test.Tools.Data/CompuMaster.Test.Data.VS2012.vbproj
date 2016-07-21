@@ -172,16 +172,16 @@
     <Compile Include="AssemblyInfo.vb">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="CompuMaster.Data.DataQuery.AnyIDataProvider.vb" />
-    <Compile Include="CompuMaster.Test.Data.DataQuery.Connections.vb" />
-    <Compile Include="CompuMaster.Test.Data.Csv.vb" />
-    <Compile Include="CompuMaster.Test.Data.DataTables.vb">
+    <Compile Include="DataQuery.AnyIDataProvider.vb" />
+    <Compile Include="DataQuery.Connections.vb" />
+    <Compile Include="Csv.vb" />
+    <Compile Include="DataTables.vb">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="CompuMaster.Test.Data.Ldap.vb">
+    <Compile Include="Ldap.vb">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="CompuMaster.Test.Data.XlsReader.vb" />
+    <Compile Include="XlsReader.vb" />
     <Compile Include="TestPlatformTools.vb" />
   </ItemGroup>
   <ItemGroup>

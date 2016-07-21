@@ -1123,7 +1123,6 @@ Namespace CompuMaster.Data
 
         End Sub
 
-        ''' -----------------------------------------------------------------------------
         ''' <summary>
         '''     Create a CSV table
         ''' </summary>
@@ -1139,7 +1138,6 @@ Namespace CompuMaster.Data
         ''' <history>
         ''' 	[wezel]	19.04.2005	Created
         ''' </history>
-        ''' -----------------------------------------------------------------------------
         Friend Shared Function WriteDataTableToCsvBytes(ByVal dataTable As System.Data.DataTable, ByVal includesColumnHeaders As Boolean, Optional ByVal encoding As String = "UTF-8", Optional ByVal columnSeparator As Char = ","c, Optional ByVal recognizeTextBy As Char = """"c, Optional ByVal decimalSeparator As Char = "."c) As Byte()
             Dim MyStream As MemoryStream = WriteDataTableToCsvMemoryStream(dataTable, includesColumnHeaders, encoding, columnSeparator, recognizeTextBy, decimalSeparator)
             Return MyStream.ToArray

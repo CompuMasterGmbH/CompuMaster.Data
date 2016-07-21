@@ -247,7 +247,8 @@ Namespace CompuMaster.Data
         ''' <param name="recognizeTextBy">A character indicating the start and end of text strings</param>
         ''' <param name="decimalSeparator"></param>
         ''' <returns>A string containing the CSV table with integrated file encoding for writing with e.g. System.IO.File.WriteAllText()</returns>
-        <Obsolete("Better use WriteDataTableToCsvFileStringWithTextEncoding() instead"), ComponentModel.EditorBrowsable(ComponentModel.EditorBrowsableState.Never)> Public Shared Function WriteDataTableToCsvString(ByVal dataTable As System.Data.DataTable, ByVal writeCsvColumnHeaders As Boolean, Optional ByVal encoding As String = "UTF-8", Optional ByVal columnSeparator As Char = ","c, Optional ByVal recognizeTextBy As Char = """"c, Optional ByVal decimalSeparator As Char = "."c) As String
+        <Obsolete("Better use WriteDataTableToCsvFileStringWithTextEncoding() instead"), ComponentModel.EditorBrowsable(ComponentModel.EditorBrowsableState.Never)>
+        Public Shared Function WriteDataTableToCsvString(ByVal dataTable As System.Data.DataTable, ByVal writeCsvColumnHeaders As Boolean, Optional ByVal encoding As String = "UTF-8", Optional ByVal columnSeparator As Char = ","c, Optional ByVal recognizeTextBy As Char = """"c, Optional ByVal decimalSeparator As Char = "."c) As String
             Dim MyStream As System.IO.MemoryStream = WriteDataTableToCsvMemoryStream(dataTable, writeCsvColumnHeaders, System.Text.Encoding.Unicode.EncodingName, columnSeparator, recognizeTextBy, decimalSeparator)
             Return System.Text.Encoding.Unicode.GetString(MyStream.ToArray)
         End Function
