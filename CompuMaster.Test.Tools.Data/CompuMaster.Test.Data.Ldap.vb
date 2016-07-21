@@ -14,7 +14,7 @@ Namespace CompuMaster.Test.Data
         End Sub
     End Class
 
-    <TestFixture(Category:="LDAP with security", Ignore:=True, IgnoreReason:="Required custom user credentials")> Class LdapWithSecurity
+    <TestFixture(Category:="LDAP with security", Ignore:="Required custom user credentials")> Class LdapWithSecurity
 
         <Test, Category("LDAP")> Public Sub QueryMoreThan1000Entries()
             Dim RecordCount As Integer = CompuMaster.Data.Ldap.QueryRecordCount("yourdomain.com", "(objectCategory=user)", "yourdomain\user", "yourpassword")

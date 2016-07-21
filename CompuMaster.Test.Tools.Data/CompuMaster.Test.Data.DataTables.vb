@@ -133,7 +133,7 @@ Namespace CompuMaster.Test.Data
             Assert.AreNotEqual(0, Data.Rows.Count)
         End Sub
 
-        <Test(), NUnit.Framework.Ignore()> Public Sub ConvertDatasetToXml()
+        <Test(), NUnit.Framework.Ignore("NotYetImplemented")> Public Sub ConvertDatasetToXml()
             Throw New NotImplementedException
         End Sub
 
@@ -183,7 +183,7 @@ Namespace CompuMaster.Test.Data
             Assert.IsTrue(ht.ContainsValue("z"))
         End Sub
 
-        <Test(), NUnit.Framework.Ignore()> Public Sub ConvertDataTableToWebFormsListItem()
+        <Test(), NUnit.Framework.Ignore("NotYetImplemented")> Public Sub ConvertDataTableToWebFormsListItem()
             Dim dt As New DataTable
             dt.Columns.Add("First")
             dt.Columns.Add("second")
@@ -215,7 +215,7 @@ Namespace CompuMaster.Test.Data
             StringAssert.IsMatch("Water", dt.Rows.Item(1).Item(1))
         End Sub
 
-        <Test(), NUnit.Framework.Ignore()> Public Sub ConvertICollectionToDataTable()
+        <Test(), NUnit.Framework.Ignore("NotYetImplemented")> Public Sub ConvertICollectionToDataTable()
             Throw New NotImplementedException
         End Sub
 
@@ -336,7 +336,7 @@ Namespace CompuMaster.Test.Data
         End Sub
 
 
-        <Test(), NUnit.Framework.Ignore()> Public Sub ConvertXmlToDataset()
+        <Test(), NUnit.Framework.Ignore("NotYetImplemented")> Public Sub ConvertXmlToDataset()
             Throw New NotImplementedException
         End Sub
 
@@ -1596,9 +1596,11 @@ Namespace CompuMaster.Test.Data
 
         End Sub
 
-        <Test, NUnit.Framework.ExpectedException(GetType(ArgumentNullException))> Public Sub SqlJoinTables_ExpectedExceptionNullParameter()
-            Dim TestTables As JoinTableSet = Me.CreateLeftJoinTableSet1
-            CompuMaster.Data.DataTables.SqlJoinTables(TestTables.LeftTable, TestTables.LeftTable.PrimaryKey, Nothing, Nothing, TestTables.RightTable.PrimaryKey, Nothing, CompuMaster.Data.DataTables.SqlJoinTypes.Left)
+        <Test> Public Sub SqlJoinTables_ExpectedExceptionNullParameter()
+            Assert.Throws(Of ArgumentNullException)(Sub()
+                                                        Dim TestTables As JoinTableSet = Me.CreateLeftJoinTableSet1
+                                                        CompuMaster.Data.DataTables.SqlJoinTables(TestTables.LeftTable, TestTables.LeftTable.PrimaryKey, Nothing, Nothing, TestTables.RightTable.PrimaryKey, Nothing, CompuMaster.Data.DataTables.SqlJoinTypes.Left)
+                                                    End Sub)
         End Sub
 
         Private Sub SqlJoinTables_Left_TableSet2()
