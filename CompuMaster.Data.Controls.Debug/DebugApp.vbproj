@@ -126,6 +126,10 @@
       <Project>{a67add6a-a78b-4b95-b9a4-b40a118c1813}</Project>
       <Name>CompuMaster.Data.Controls.VS2012</Name>
     </ProjectReference>
+    <ProjectReference Include="..\CompuMaster.Data\CompuMaster.Data.VS2012.vbproj">
+      <Project>{3bda1292-0d02-452e-9518-18496ab59231}</Project>
+      <Name>CompuMaster.Data.VS2012</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

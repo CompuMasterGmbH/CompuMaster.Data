@@ -278,8 +278,16 @@ Namespace CompuMaster.Data
         ''' <param name="decimalSeparator"></param>
         ''' <returns>A string containing the CSV table</returns>
         Public Shared Function WriteDataTableToCsvTextString(ByVal dataTable As System.Data.DataTable, ByVal writeCsvColumnHeaders As Boolean, Optional ByVal columnSeparator As Char = ","c, Optional ByVal recognizeTextBy As Char = """"c, Optional ByVal decimalSeparator As Char = "."c) As String
-            Dim MyStream As System.IO.MemoryStream = WriteDataTableToCsvMemoryStream(dataTable, writeCsvColumnHeaders, System.Text.Encoding.Unicode.EncodingName, columnSeparator, recognizeTextBy, decimalSeparator)
-            Return System.Text.Encoding.Unicode.GetString(MyStream.ToArray)
+            Dim WrittenStream As System.IO.MemoryStream = WriteDataTableToCsvMemoryStream(dataTable, writeCsvColumnHeaders, System.Text.Encoding.Unicode.EncodingName, columnSeparator, recognizeTextBy, decimalSeparator)
+            Dim ReaderStream As New System.IO.MemoryStream(WrittenStream.ToArray)
+            WrittenStream.Dispose()
+            Dim SR As New System.IO.StreamReader(ReaderStream)
+            Dim Result As String = SR.ReadToEnd()
+            SR.Close()
+            SR.Dispose()
+            ReaderStream.Close()
+            ReaderStream.Dispose()
+            Return Result
         End Function
 
         ''' <summary>
