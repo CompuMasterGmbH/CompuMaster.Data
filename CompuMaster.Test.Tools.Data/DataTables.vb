@@ -112,7 +112,7 @@ Namespace CompuMaster.Test.Data
             Assert.AreEqual(4, list.Count)
         End Sub
 
-        <Test()> Public Sub ConvertDataReaderToDataSet()
+        <Test(), Ignore("Requires custom connection string to execute")> Public Sub ConvertDataReaderToDataSet()
             Dim MyConn As New System.Data.SqlClient.SqlConnection("SERVER=sql2012;DATABASE=master;PWD=xxxxxxxxxxxxxxxxxxx;UID=sa")
             Dim MyCmd As IDbCommand = MyConn.CreateCommand()
             MyCmd.CommandType = CommandType.Text
@@ -573,7 +573,7 @@ Namespace CompuMaster.Test.Data
             Dim bigCopy As New DataTable
             Dim bigCopy2 As New DataTable
 
-            big.ReadXml(System.Environment.CurrentDirectory & "\testfiles/3000RowsTable.xml")
+            big.ReadXml(AssemblyTestEnvironment.TestFileAbsolutePath("testfiles\3000RowsTable.xml"))
 
             CompuMaster.Data.DataTables.CreateDataTableClone(big, bigCopy, "", "", Nothing, CompuMaster.Data.DataTables.RequestedRowChanges.DropExistingRowsInDestinationTableAndInsertNewRows, False,
                                                              CompuMaster.Data.DataTables.RequestedSchemaChangesForUnusedColumns.Remove, CompuMaster.Data.DataTables.RequestedSchemaChangesForExistingColumns.None,

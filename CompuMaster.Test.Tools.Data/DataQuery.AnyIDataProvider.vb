@@ -15,7 +15,7 @@ Namespace CompuMaster.Test.Data.DataQuery
             Assert.AreEqual(987654321, IntList(1), "Row content check IntegerLongValue column")
             Assert.AreEqual(0, IntList(2), "Row content check IntegerLongValue column")
             Assert.AreEqual(0, IntList(3), "Row content check IntegerLongValue column")
-            Assert.AreEqual(Nothing, IntList(4), "Row content check IntegerLongValue column")
+            Assert.AreEqual(0, IntList(4), "Row content check IntegerLongValue column") 'DbNull -> Nothing which equals 0
         End Sub
 
         <Test()> Public Sub ExecuteReaderAndPutFirstColumnIntoGenericNullableList()
@@ -71,12 +71,12 @@ Namespace CompuMaster.Test.Data.DataQuery
             Assert.AreEqual(987654321, IntegerStringDictionary(1).Key, "Row content check IntegerLongValue column")
             Assert.AreEqual(0, IntegerStringDictionary(2).Key, "Row content check IntegerLongValue column")
             Assert.AreEqual(0, IntegerStringDictionary(3).Key, "Row content check IntegerLongValue column")
-            Assert.AreEqual(Nothing, IntegerStringDictionary(4).Key, "Row content check IntegerLongValue column")
+            Assert.AreEqual(0, IntegerStringDictionary(4).Key, "Row content check IntegerLongValue column") 'DbNull -> Nothing which equals 0 for integers
             Assert.AreEqual("text short 1", IntegerStringDictionary(0).Value, "Row content check StringShortValue column")
             Assert.AreEqual("text short 2", IntegerStringDictionary(1).Value, "Row content check StringShortValue column")
             Assert.AreEqual("text short 3", IntegerStringDictionary(2).Value, "Row content check StringShortValue column")
             Assert.AreEqual("text short 4", IntegerStringDictionary(3).Value, "Row content check StringShortValue column")
-            Assert.AreEqual(Nothing, IntegerStringDictionary(4).Value, "Row content check StringShortValue column")
+            Assert.AreEqual(Nothing, IntegerStringDictionary(4).Value, "Row content check StringShortValue column") 'DbNull -> Nothing which is not String.Empty
         End Sub
 
         <Test()> Public Sub ExecuteReaderAndPutFirstTwoColumnsIntoGenericNullableDictionary()
