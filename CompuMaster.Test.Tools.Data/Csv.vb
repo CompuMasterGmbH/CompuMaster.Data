@@ -170,6 +170,19 @@ Namespace CompuMaster.Test.Data
             Return t
         End Function
 
+        <Test> Sub WriteDataTableToCsvTextStringAndReReadAndReWriteWithoutChanges()
+            Dim t As DataTable = SimpleSampleTable()
+            Dim bom As String = System.Text.Encoding.UTF8.GetString(System.Text.Encoding.UTF8.GetPreamble())
+            Dim csv As String
+            csv = CompuMaster.Data.Csv.WriteDataTableToCsvTextString(t, True)
+            Dim t2 As DataTable = CompuMaster.Data.Csv.ReadDataTableFromCsvString(csv, True)
+            Dim csv2 As String
+            Assert.AreEqual(t.Columns.Count, t2.Columns.Count) 'should be the very same
+            Assert.AreEqual(t.Rows.Count, t2.Rows.Count) 'should be the very same
+            csv2 = CompuMaster.Data.Csv.WriteDataTableToCsvTextString(t2, True)
+            Assert.AreEqual(csv, csv2) 'should be the very same
+        End Sub
+
     End Class
 
 End Namespace
