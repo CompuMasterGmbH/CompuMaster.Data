@@ -31,7 +31,7 @@ Namespace CompuMaster.Data
         ''' 	[adminsupport]	19.04.2005	Created
         ''' </history>
         ''' -----------------------------------------------------------------------------
-        Private Shared Function ReadDataTableFromCsvReader(ByVal reader As StreamReader, ByVal includesColumnHeaders As Boolean, ByVal cultureFormatProvider As System.Globalization.CultureInfo, ByVal columnWidths As Integer(), Optional ByVal convertEmptyStringsToDBNull As Boolean = False) As DataTable
+        Private Shared Function ReadDataTableFromCsvReader(ByVal reader As StreamReader, ByVal includesColumnHeaders As Boolean, ByVal cultureFormatProvider As System.Globalization.CultureInfo, ByVal columnWidths As Integer(), ByVal convertEmptyStringsToDBNull As Boolean) As DataTable
 
             If cultureFormatProvider Is Nothing Then
                 cultureFormatProvider = System.Globalization.CultureInfo.InvariantCulture
@@ -116,7 +116,7 @@ Namespace CompuMaster.Data
         ''' 	[adminwezel]	03.07.2004	Created
         ''' </history>
         ''' -----------------------------------------------------------------------------
-        Friend Shared Function ReadDataTableFromCsvFile(ByVal path As String, ByVal includesColumnHeaders As Boolean, ByVal columnWidths As Integer(), Optional ByVal encoding As String = "UTF-8", Optional ByVal convertEmptyStringsToDBNull As Boolean = False) As DataTable
+        Friend Shared Function ReadDataTableFromCsvFile(ByVal path As String, ByVal includesColumnHeaders As Boolean, ByVal columnWidths As Integer(), ByVal encoding As String, ByVal convertEmptyStringsToDBNull As Boolean) As DataTable
 
             Dim Result As New DataTable
             Dim fi As FileInfo
@@ -167,7 +167,7 @@ Namespace CompuMaster.Data
         ''' 	[adminwezel]	03.07.2004	Created
         ''' </history>
         ''' -----------------------------------------------------------------------------
-        Friend Shared Function ReadDataTableFromCsvFile(ByVal path As String, ByVal includesColumnHeaders As Boolean, ByVal columnWidths As Integer(), ByVal encoding As System.Text.Encoding, ByVal cultureFormatProvider As System.Globalization.CultureInfo, Optional ByVal convertEmptyStringsToDBNull As Boolean = False) As DataTable
+        Friend Shared Function ReadDataTableFromCsvFile(ByVal path As String, ByVal includesColumnHeaders As Boolean, ByVal columnWidths As Integer(), ByVal encoding As System.Text.Encoding, ByVal cultureFormatProvider As System.Globalization.CultureInfo, ByVal convertEmptyStringsToDBNull As Boolean) As DataTable
 
             Dim Result As New DataTable
             Dim fi As FileInfo
@@ -216,7 +216,7 @@ Namespace CompuMaster.Data
         ''' 	[adminwezel]	03.07.2004	Created
         ''' </history>
         ''' -----------------------------------------------------------------------------
-        Friend Shared Function ReadDataTableFromCsvString(ByVal data As String, ByVal includesColumnHeaders As Boolean, ByVal columnWidths As Integer(), Optional ByVal convertEmptyStringsToDBNull As Boolean = False) As DataTable
+        Friend Shared Function ReadDataTableFromCsvString(ByVal data As String, ByVal includesColumnHeaders As Boolean, ByVal columnWidths As Integer(), ByVal convertEmptyStringsToDBNull As Boolean) As DataTable
 
             Dim Result As New DataTable
             Dim reader As StreamReader = Nothing
@@ -250,7 +250,7 @@ Namespace CompuMaster.Data
         ''' 	[adminwezel]	03.07.2004	Created
         ''' </history>
         ''' -----------------------------------------------------------------------------
-        Friend Shared Function ReadDataTableFromCsvString(ByVal data As String, ByVal includesColumnHeaders As Boolean, ByVal cultureFormatProvider As System.Globalization.CultureInfo, ByVal columnWidths As Integer(), Optional ByVal convertEmptyStringsToDBNull As Boolean = False) As DataTable
+        Friend Shared Function ReadDataTableFromCsvString(ByVal data As String, ByVal includesColumnHeaders As Boolean, ByVal cultureFormatProvider As System.Globalization.CultureInfo, ByVal columnWidths As Integer(), ByVal convertEmptyStringsToDBNull As Boolean) As DataTable
 
             Dim Result As New DataTable
             Dim reader As StreamReader = Nothing
@@ -379,7 +379,7 @@ Namespace CompuMaster.Data
         ''' 	[adminwezel]	03.07.2004	Created
         ''' </history>
         ''' -----------------------------------------------------------------------------
-        Friend Shared Function ReadDataTableFromCsvFile(ByVal path As String, ByVal includesColumnHeaders As Boolean, Optional ByVal encoding As String = "UTF-8", Optional ByVal columnSeparator As Char = Nothing, Optional ByVal recognizeTextBy As Char = """"c, Optional ByVal recognizeMultipleColumnSeparatorCharsAsOne As Boolean = True, Optional ByVal convertEmptyStringsToDBNull As Boolean = False) As DataTable
+        Friend Shared Function ReadDataTableFromCsvFile(ByVal path As String, ByVal includesColumnHeaders As Boolean, ByVal encoding As String, ByVal columnSeparator As Char, ByVal recognizeTextBy As Char, ByVal recognizeMultipleColumnSeparatorCharsAsOne As Boolean, ByVal convertEmptyStringsToDBNull As Boolean) As DataTable
 
             Dim Result As New DataTable
             Dim fi As FileInfo
@@ -431,7 +431,7 @@ Namespace CompuMaster.Data
         ''' 	[adminwezel]	03.07.2004	Created
         ''' </history>
         ''' -----------------------------------------------------------------------------
-        Friend Shared Function ReadDataTableFromCsvFile(ByVal path As String, ByVal includesColumnHeaders As Boolean, ByVal encoding As System.Text.Encoding, ByVal cultureFormatProvider As System.Globalization.CultureInfo, Optional ByVal recognizeTextBy As Char = """"c, Optional ByVal recognizeMultipleColumnSeparatorCharsAsOne As Boolean = True, Optional ByVal convertEmptyStringsToDBNull As Boolean = False) As DataTable
+        Friend Shared Function ReadDataTableFromCsvFile(ByVal path As String, ByVal includesColumnHeaders As Boolean, ByVal encoding As System.Text.Encoding, ByVal cultureFormatProvider As System.Globalization.CultureInfo, ByVal recognizeTextBy As Char, ByVal recognizeMultipleColumnSeparatorCharsAsOne As Boolean, ByVal convertEmptyStringsToDBNull As Boolean) As DataTable
 
             Dim Result As New DataTable
             Dim fi As FileInfo
@@ -482,13 +482,13 @@ Namespace CompuMaster.Data
         ''' 	[adminsupport]	19.04.2005	Created
         ''' </history>
         ''' -----------------------------------------------------------------------------
-        Private Shared Function ReadDataTableFromCsvReader(ByVal reader As StreamReader, ByVal includesColumnHeaders As Boolean, ByVal cultureFormatProvider As System.Globalization.CultureInfo, Optional ByVal columnSeparator As Char = Nothing, Optional ByVal recognizeTextBy As Char = """"c, Optional ByVal recognizeMultipleColumnSeparatorCharsAsOne As Boolean = True, Optional ByVal convertEmptyStringsToDBNull As Boolean = False) As DataTable
+        Private Shared Function ReadDataTableFromCsvReader(ByVal reader As StreamReader, ByVal includesColumnHeaders As Boolean, ByVal cultureFormatProvider As System.Globalization.CultureInfo, ByVal columnSeparator As Char, ByVal recognizeTextBy As Char, ByVal recognizeMultipleColumnSeparatorCharsAsOne As Boolean, ByVal convertEmptyStringsToDBNull As Boolean) As DataTable
 
             If cultureFormatProvider Is Nothing Then
                 cultureFormatProvider = System.Globalization.CultureInfo.InvariantCulture
             End If
 
-            If columnSeparator = Nothing Then
+            If columnSeparator = Nothing OrElse columnSeparator = vbNullChar Then
                 'Attention: list separator is a string, but columnSeparator is implemented as char! Might be a bug in some specal cultures
                 If cultureFormatProvider.TextInfo.ListSeparator.Length > 1 Then
                     Throw New NotSupportedException("No column separator has been defined and the current culture declares a list separator with more than 1 character. Column separators with more than 1 characters are currenlty not supported.")
@@ -665,7 +665,7 @@ Namespace CompuMaster.Data
         ''' 	[adminwezel]	03.07.2004	Created
         ''' </history>
         ''' -----------------------------------------------------------------------------
-        Friend Shared Function ReadDataTableFromCsvString(ByVal data As String, ByVal includesColumnHeaders As Boolean, Optional ByVal columnSeparator As Char = Nothing, Optional ByVal recognizeTextBy As Char = """"c, Optional ByVal recognizeMultipleColumnSeparatorCharsAsOne As Boolean = True, Optional ByVal convertEmptyStringsToDBNull As Boolean = False) As DataTable
+        Friend Shared Function ReadDataTableFromCsvString(ByVal data As String, ByVal includesColumnHeaders As Boolean, ByVal columnSeparator As Char, ByVal recognizeTextBy As Char, ByVal recognizeMultipleColumnSeparatorCharsAsOne As Boolean, ByVal convertEmptyStringsToDBNull As Boolean) As DataTable
 
             Dim Result As New DataTable
             Dim reader As StreamReader = Nothing
@@ -700,7 +700,7 @@ Namespace CompuMaster.Data
         ''' 	[adminwezel]	03.07.2004	Created
         ''' </history>
         ''' -----------------------------------------------------------------------------
-        Friend Shared Function ReadDataTableFromCsvString(ByVal data As String, ByVal includesColumnHeaders As Boolean, ByVal cultureFormatProvider As System.Globalization.CultureInfo, Optional ByVal recognizeTextBy As Char = """"c, Optional ByVal recognizeMultipleColumnSeparatorCharsAsOne As Boolean = True, Optional ByVal convertEmptyStringsToDBNull As Boolean = False) As DataTable
+        Friend Shared Function ReadDataTableFromCsvString(ByVal data As String, ByVal includesColumnHeaders As Boolean, ByVal cultureFormatProvider As System.Globalization.CultureInfo, ByVal recognizeTextBy As Char, ByVal recognizeMultipleColumnSeparatorCharsAsOne As Boolean, ByVal convertEmptyStringsToDBNull As Boolean) As DataTable
 
             Dim Result As New DataTable
             Dim reader As StreamReader = Nothing
@@ -800,10 +800,10 @@ Namespace CompuMaster.Data
 
 #Region "Write data"
         Friend Shared Sub WriteDataTableToCsvFile(ByVal path As String, ByVal dataTable As System.Data.DataTable)
-            WriteDataTableToCsvFile(path, dataTable, True, System.Globalization.CultureInfo.InvariantCulture)
+            WriteDataTableToCsvFile(path, dataTable, True, System.Globalization.CultureInfo.InvariantCulture, "UTF-8", vbNullChar, """"c)
         End Sub
 
-        Friend Shared Sub WriteDataTableToCsvFile(ByVal path As String, ByVal dataTable As System.Data.DataTable, ByVal includesColumnHeaders As Boolean, ByVal columnWidths As Integer(), ByVal cultureFormatProvider As System.Globalization.CultureInfo, Optional ByVal encoding As String = "UTF-8")
+        Friend Shared Sub WriteDataTableToCsvFile(ByVal path As String, ByVal dataTable As System.Data.DataTable, ByVal includesColumnHeaders As Boolean, ByVal columnWidths As Integer(), ByVal cultureFormatProvider As System.Globalization.CultureInfo, ByVal encoding As String)
 
             'Create stream writer
             Dim writer As StreamWriter = Nothing
@@ -818,7 +818,7 @@ Namespace CompuMaster.Data
 
         End Sub
 
-        Friend Shared Sub WriteDataTableToCsvFile(ByVal path As String, ByVal dataTable As System.Data.DataTable, ByVal includesColumnHeaders As Boolean, ByVal cultureFormatProvider As System.Globalization.CultureInfo, Optional ByVal encoding As String = "UTF-8", Optional ByVal columnSeparator As String = ","c, Optional ByVal recognizeTextBy As Char = """"c)
+        Friend Shared Sub WriteDataTableToCsvFile(ByVal path As String, ByVal dataTable As System.Data.DataTable, ByVal includesColumnHeaders As Boolean, ByVal cultureFormatProvider As System.Globalization.CultureInfo, ByVal encoding As String, ByVal columnSeparator As String, ByVal recognizeTextBy As Char)
 
             'Create stream writer
             Dim writer As StreamWriter = Nothing
@@ -961,13 +961,13 @@ Namespace CompuMaster.Data
         ''' 	[adminsupport]	09.03.2006	Created
         ''' </history>
         ''' -----------------------------------------------------------------------------
-        Friend Shared Function ConvertDataTableToCsv(ByVal dataTable As System.Data.DataTable, ByVal includesColumnHeaders As Boolean, ByVal cultureFormatProvider As System.Globalization.CultureInfo, Optional ByVal columnSeparator As String = ","c, Optional ByVal recognizeTextBy As Char = """"c) As String
+        Friend Shared Function ConvertDataTableToCsv(ByVal dataTable As System.Data.DataTable, ByVal includesColumnHeaders As Boolean, ByVal cultureFormatProvider As System.Globalization.CultureInfo, ByVal columnSeparator As String, ByVal recognizeTextBy As Char) As String
 
             If cultureFormatProvider Is Nothing Then
                 cultureFormatProvider = System.Globalization.CultureInfo.InvariantCulture
             End If
 
-            If columnSeparator = Nothing Then
+            If columnSeparator = Nothing OrElse columnSeparator = vbNullChar Then
                 columnSeparator = cultureFormatProvider.TextInfo.ListSeparator
             End If
 
@@ -1048,7 +1048,7 @@ Namespace CompuMaster.Data
         ''' 	[Wezel]	19.10.2004	Created
         ''' </history>
         ''' -----------------------------------------------------------------------------
-        Friend Shared Sub WriteDataTableToCsvFile(ByVal path As String, ByVal dataTable As System.Data.DataTable, ByVal includesColumnHeaders As Boolean, Optional ByVal encoding As String = "UTF-8", Optional ByVal columnSeparator As String = ","c, Optional ByVal recognizeTextBy As Char = """"c, Optional ByVal decimalSeparator As Char = "."c)
+        Friend Shared Sub WriteDataTableToCsvFile(ByVal path As String, ByVal dataTable As System.Data.DataTable, ByVal includesColumnHeaders As Boolean, ByVal encoding As String, ByVal columnSeparator As String, ByVal recognizeTextBy As Char, ByVal decimalSeparator As Char)
 
             Dim cultureFormatProvider As New System.Globalization.CultureInfo("")
             cultureFormatProvider.NumberFormat.CurrencyDecimalSeparator = decimalSeparator
@@ -1138,7 +1138,7 @@ Namespace CompuMaster.Data
         ''' <history>
         ''' 	[wezel]	19.04.2005	Created
         ''' </history>
-        Friend Shared Function WriteDataTableToCsvBytes(ByVal dataTable As System.Data.DataTable, ByVal includesColumnHeaders As Boolean, Optional ByVal encoding As String = "UTF-8", Optional ByVal columnSeparator As Char = ","c, Optional ByVal recognizeTextBy As Char = """"c, Optional ByVal decimalSeparator As Char = "."c) As Byte()
+        Friend Shared Function WriteDataTableToCsvBytes(ByVal dataTable As System.Data.DataTable, ByVal includesColumnHeaders As Boolean, ByVal encoding As String, ByVal columnSeparator As Char, ByVal recognizeTextBy As Char, ByVal decimalSeparator As Char) As Byte()
             Dim MyStream As MemoryStream = WriteDataTableToCsvMemoryStream(dataTable, includesColumnHeaders, encoding, columnSeparator, recognizeTextBy, decimalSeparator)
             Return MyStream.ToArray
         End Function
@@ -1160,7 +1160,7 @@ Namespace CompuMaster.Data
         ''' 	[wezel]	19.04.2005	Created
         ''' </history>
         ''' -----------------------------------------------------------------------------
-        Friend Shared Function WriteDataTableToCsvBytes(ByVal dataTable As System.Data.DataTable, ByVal includesColumnHeaders As Boolean, ByVal encoding As System.Text.Encoding, ByVal cultureFormatProvider As System.Globalization.CultureInfo, Optional ByVal columnSeparator As Char = ","c, Optional ByVal recognizeTextBy As Char = """"c) As Byte()
+        Friend Shared Function WriteDataTableToCsvBytes(ByVal dataTable As System.Data.DataTable, ByVal includesColumnHeaders As Boolean, ByVal encoding As System.Text.Encoding, ByVal cultureFormatProvider As System.Globalization.CultureInfo, ByVal columnSeparator As Char, ByVal recognizeTextBy As Char) As Byte()
             Dim MyStream As MemoryStream = WriteDataTableToCsvMemoryStream(dataTable, includesColumnHeaders, encoding, cultureFormatProvider, columnSeparator, recognizeTextBy)
             Return MyStream.ToArray
         End Function
@@ -1182,7 +1182,7 @@ Namespace CompuMaster.Data
         ''' 	[wezel]	19.04.2005	Created
         ''' </history>
         ''' -----------------------------------------------------------------------------
-        Friend Shared Function WriteDataTableToCsvMemoryStream(ByVal dataTable As System.Data.DataTable, ByVal includesColumnHeaders As Boolean, Optional ByVal encoding As String = "UTF-8", Optional ByVal columnSeparator As String = ","c, Optional ByVal recognizeTextBy As Char = """"c, Optional ByVal decimalSeparator As Char = "."c) As System.IO.MemoryStream
+        Friend Shared Function WriteDataTableToCsvMemoryStream(ByVal dataTable As System.Data.DataTable, ByVal includesColumnHeaders As Boolean, ByVal encoding As String, ByVal columnSeparator As String, ByVal recognizeTextBy As Char, ByVal decimalSeparator As Char) As System.IO.MemoryStream
             Dim cultureFormatProvider As System.Globalization.CultureInfo = CType(System.Globalization.CultureInfo.InvariantCulture.Clone, System.Globalization.CultureInfo)
             cultureFormatProvider.NumberFormat.CurrencyDecimalSeparator = decimalSeparator
             cultureFormatProvider.NumberFormat.NumberDecimalSeparator = decimalSeparator
@@ -1207,13 +1207,13 @@ Namespace CompuMaster.Data
         ''' 	[wezel]	19.04.2005	Created
         ''' </history>
         ''' -----------------------------------------------------------------------------
-        Friend Shared Function WriteDataTableToCsvMemoryStream(ByVal dataTable As System.Data.DataTable, ByVal includesColumnHeaders As Boolean, ByVal encoding As System.Text.Encoding, ByVal cultureFormatProvider As System.Globalization.CultureInfo, Optional ByVal columnSeparator As String = ","c, Optional ByVal recognizeTextBy As Char = """"c) As System.IO.MemoryStream
+        Friend Shared Function WriteDataTableToCsvMemoryStream(ByVal dataTable As System.Data.DataTable, ByVal includesColumnHeaders As Boolean, ByVal encoding As System.Text.Encoding, ByVal cultureFormatProvider As System.Globalization.CultureInfo, ByVal columnSeparator As String, ByVal recognizeTextBy As Char) As System.IO.MemoryStream
 
             If cultureFormatProvider Is Nothing Then
                 cultureFormatProvider = System.Globalization.CultureInfo.InvariantCulture
             End If
 
-            If columnSeparator = Nothing Then
+            If columnSeparator = Nothing OrElse columnSeparator = vbNullChar Then
                 columnSeparator = cultureFormatProvider.TextInfo.ListSeparator
             End If
 
@@ -1310,10 +1310,10 @@ Namespace CompuMaster.Data
         End Function
 
         Friend Shared Sub WriteDataViewToCsvFile(ByVal path As String, ByVal dataview As System.Data.DataView)
-            WriteDataViewToCsvFile(path, dataview, True, System.Globalization.CultureInfo.InvariantCulture)
+            WriteDataViewToCsvFile(path, dataview, True, System.Globalization.CultureInfo.InvariantCulture, "UTF-8", vbNullChar, """"c)
         End Sub
 
-        Friend Shared Sub WriteDataViewToCsvFile(ByVal path As String, ByVal dataView As System.Data.DataView, ByVal includesColumnHeaders As Boolean, ByVal cultureFormatProvider As System.Globalization.CultureInfo, Optional ByVal encoding As String = "UTF-8", Optional ByVal columnSeparator As String = ","c, Optional ByVal recognizeTextBy As Char = """"c)
+        Friend Shared Sub WriteDataViewToCsvFile(ByVal path As String, ByVal dataView As System.Data.DataView, ByVal includesColumnHeaders As Boolean, ByVal cultureFormatProvider As System.Globalization.CultureInfo, ByVal encoding As String, ByVal columnSeparator As String, ByVal recognizeTextBy As Char)
 
             Dim DataTable As System.Data.DataTable = dataView.Table
 
@@ -1321,7 +1321,7 @@ Namespace CompuMaster.Data
                 cultureFormatProvider = System.Globalization.CultureInfo.InvariantCulture
             End If
 
-            If columnSeparator = Nothing Then
+            If columnSeparator = Nothing OrElse columnSeparator = vbNullChar Then
                 columnSeparator = cultureFormatProvider.TextInfo.ListSeparator
             End If
 
@@ -1408,7 +1408,7 @@ Namespace CompuMaster.Data
         ''' 	[Wezel]	19.10.2004	Created
         ''' </history>
         ''' -----------------------------------------------------------------------------
-        Friend Shared Sub WriteDataViewToCsvFile(ByVal path As String, ByVal dataView As System.Data.DataView, ByVal includesColumnHeaders As Boolean, Optional ByVal encoding As String = "UTF-8", Optional ByVal columnSeparator As String = ","c, Optional ByVal recognizeTextBy As Char = """"c, Optional ByVal decimalSeparator As Char = "."c)
+        Friend Shared Sub WriteDataViewToCsvFile(ByVal path As String, ByVal dataView As System.Data.DataView, ByVal includesColumnHeaders As Boolean, ByVal encoding As String, ByVal columnSeparator As String, ByVal recognizeTextBy As Char, ByVal decimalSeparator As Char)
 
             Dim DataTable As System.Data.DataTable = dataView.Table
 
