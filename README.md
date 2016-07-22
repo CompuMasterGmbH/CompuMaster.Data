@@ -1,6 +1,12 @@
 # CompuMaster.Data
 .NET library with common methods for simplified data access, data table arrangements and data IO
 
+## Simple download/installation using NuGet
+```powershell
+Install-Package CompuMaster.Data
+```
+Also see: https://www.nuget.org/packages/CompuMaster.Data/
+
 ## Some of the many features - all .Net data providers
 * easy and stable access to data from external data sources (native, OLE-DB, ODBC) 
 * execute/query data from database with the most less amount of code lines: simply **fill a complete DataTable** with **1 (!!) line of code**
@@ -101,3 +107,14 @@ Still not convinced? Download your library now and for free and see the many stu
 
 ## Honors
 This library has been developed and maintained by [CompuMaster GmbH](http://www.compumaster.de/) for years.
+
+## References
+
+### CompuMaster.Data.Controls
+You may find this library useful for using DataGrids in Windows Forms application with row update support on the foreign data source
+
+```powershell
+Install-Package CompuMaster.Data.Controls
+```
+
+Also see: https://www.nuget.org/packages/CompuMaster.Data.Controls/
