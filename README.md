@@ -1,6 +1,12 @@
 # CompuMaster.Data
 .NET library with common methods for simplified data access, data table arrangements and data IO
 
+[![NuGet CompuMaster.Data](https://img.shields.io/nuget/v/CompuMaster.Data.svg?label=NuGet%20CM.Data)](https://www.nuget.org/packages/CompuMaster.Data/) [![NuGet CompuMaster.Data.Controls](https://img.shields.io/nuget/v/CompuMaster.Data.Controls.svg?label=NuGet%20CM.Data.Controls)](https://www.nuget.org/packages/CompuMaster.Data.Controls) [![Travis](https://img.shields.io/travis/CompuMasterGmbH/CompuMaster.Data.svg?label=Build%20with%20Mono)](https://travis-ci.org/CompuMasterGmbH/CompuMaster.Data/)
+
+
+
+
+
 ## Simple download/installation using NuGet
 ```powershell
 Install-Package CompuMaster.Data
