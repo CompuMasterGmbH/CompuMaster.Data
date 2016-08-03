@@ -492,15 +492,7 @@ Namespace CompuMaster.Data
                 Dim remoteColumnNames As String() = LookupColumnNamesOnRemoteTable(Result.Table)
                 For MyCounter As Integer = 0 To remoteColumnNames.Length - 1
                     Dim remoteTableColumnName As String = remoteColumnNames(MyCounter)
-                    MyDA.DeleteCommand.CommandText = Replace(MyDA.DeleteCommand.CommandText, "(" & remoteTableColumnName & " = ", "([" & remoteTableColumnName & "] = ")
-                    MyDA.DeleteCommand.CommandText = Replace(MyDA.DeleteCommand.CommandText, ", " & remoteTableColumnName & " = ", ", [" & remoteTableColumnName & "] = ")
-                    MyDA.DeleteCommand.CommandText = Replace(MyDA.DeleteCommand.CommandText, "[[" & remoteTableColumnName & "]] = ", "[" & remoteTableColumnName & "] = ")
-                    MyDA.InsertCommand.CommandText = Replace(MyDA.InsertCommand.CommandText, "(" & remoteTableColumnName & ",", "([" & remoteTableColumnName & "],")
-                    MyDA.InsertCommand.CommandText = Replace(MyDA.InsertCommand.CommandText, "(" & remoteTableColumnName & ")", "([" & remoteTableColumnName & "])")
-                    MyDA.InsertCommand.CommandText = Replace(MyDA.InsertCommand.CommandText, ", " & remoteTableColumnName & ")", ", [" & remoteTableColumnName & "])")
-                    MyDA.InsertCommand.CommandText = Replace(MyDA.InsertCommand.CommandText, ", " & remoteTableColumnName & ", ", ", [" & remoteTableColumnName & "], ")
-                    MyDA.InsertCommand.CommandText = Replace(MyDA.InsertCommand.CommandText, "[[" & remoteTableColumnName & "]]", "[" & remoteTableColumnName & "]")
-                    MyDA.UpdateCommand.CommandText = Replace(MyDA.UpdateCommand.CommandText, " " & remoteTableColumnName & " = ", " [" & remoteTableColumnName & "] = ")
+                    AutoFixCommandColumnNames(MyDA.DeleteCommand, MyDA.InsertCommand, MyDA.UpdateCommand, remoteTableColumnName)
                 Next
             ElseIf CType(dataConnection, Object).GetType.ToString = "System.Data.Odbc.OdbcConnection" Then
                 Dim MyCmdsPrepareDA As New System.Data.Odbc.OdbcDataAdapter(CType(command, Odbc.OdbcCommand))
@@ -522,15 +514,7 @@ Namespace CompuMaster.Data
                 Dim remoteColumnNames As String() = LookupColumnNamesOnRemoteTable(Result.Table)
                 For MyCounter As Integer = 0 To remoteColumnNames.Length - 1
                     Dim remoteTableColumnName As String = remoteColumnNames(MyCounter)
-                    MyDA.DeleteCommand.CommandText = Replace(MyDA.DeleteCommand.CommandText, "(" & remoteTableColumnName & " = ", "([" & remoteTableColumnName & "] = ")
-                    MyDA.DeleteCommand.CommandText = Replace(MyDA.DeleteCommand.CommandText, ", " & remoteTableColumnName & " = ", ", [" & remoteTableColumnName & "] = ")
-                    MyDA.DeleteCommand.CommandText = Replace(MyDA.DeleteCommand.CommandText, "[[" & remoteTableColumnName & "]] = ", "[" & remoteTableColumnName & "] = ")
-                    MyDA.InsertCommand.CommandText = Replace(MyDA.InsertCommand.CommandText, "(" & remoteTableColumnName & ",", "([" & remoteTableColumnName & "],")
-                    MyDA.InsertCommand.CommandText = Replace(MyDA.InsertCommand.CommandText, "(" & remoteTableColumnName & ")", "([" & remoteTableColumnName & "])")
-                    MyDA.InsertCommand.CommandText = Replace(MyDA.InsertCommand.CommandText, ", " & remoteTableColumnName & ")", ", [" & remoteTableColumnName & "])")
-                    MyDA.InsertCommand.CommandText = Replace(MyDA.InsertCommand.CommandText, ", " & remoteTableColumnName & ", ", ", [" & remoteTableColumnName & "], ")
-                    MyDA.InsertCommand.CommandText = Replace(MyDA.InsertCommand.CommandText, "[[" & remoteTableColumnName & "]]", "[" & remoteTableColumnName & "]")
-                    MyDA.UpdateCommand.CommandText = Replace(MyDA.UpdateCommand.CommandText, " " & remoteTableColumnName & " = ", " [" & remoteTableColumnName & "] = ")
+                    AutoFixCommandColumnNames(MyDA.DeleteCommand, MyDA.InsertCommand, MyDA.UpdateCommand, remoteTableColumnName)
                 Next
             ElseIf CType(dataConnection, Object).GetType.ToString = "System.Data.OleDb.OleDbConnection" Then
                 'Dim MyDA As New System.Data.OleDb.OleDbDataAdapter(command)
@@ -553,15 +537,7 @@ Namespace CompuMaster.Data
                 Dim remoteColumnNames As String() = LookupColumnNamesOnRemoteTable(Result.Table)
                 For MyCounter As Integer = 0 To remoteColumnNames.Length - 1
                     Dim remoteTableColumnName As String = remoteColumnNames(MyCounter)
-                    MyDA.DeleteCommand.CommandText = Replace(MyDA.DeleteCommand.CommandText, "(" & remoteTableColumnName & " = ", "([" & remoteTableColumnName & "] = ")
-                    MyDA.DeleteCommand.CommandText = Replace(MyDA.DeleteCommand.CommandText, ", " & remoteTableColumnName & " = ", ", [" & remoteTableColumnName & "] = ")
-                    MyDA.DeleteCommand.CommandText = Replace(MyDA.DeleteCommand.CommandText, "[[" & remoteTableColumnName & "]] = ", "[" & remoteTableColumnName & "] = ")
-                    MyDA.InsertCommand.CommandText = Replace(MyDA.InsertCommand.CommandText, "(" & remoteTableColumnName & ",", "([" & remoteTableColumnName & "],")
-                    MyDA.InsertCommand.CommandText = Replace(MyDA.InsertCommand.CommandText, "(" & remoteTableColumnName & ")", "([" & remoteTableColumnName & "])")
-                    MyDA.InsertCommand.CommandText = Replace(MyDA.InsertCommand.CommandText, ", " & remoteTableColumnName & ")", ", [" & remoteTableColumnName & "])")
-                    MyDA.InsertCommand.CommandText = Replace(MyDA.InsertCommand.CommandText, ", " & remoteTableColumnName & ", ", ", [" & remoteTableColumnName & "], ")
-                    MyDA.InsertCommand.CommandText = Replace(MyDA.InsertCommand.CommandText, "[[" & remoteTableColumnName & "]]", "[" & remoteTableColumnName & "]")
-                    MyDA.UpdateCommand.CommandText = Replace(MyDA.UpdateCommand.CommandText, " " & remoteTableColumnName & " = ", " [" & remoteTableColumnName & "] = ")
+                    AutoFixCommandColumnNames(MyDA.DeleteCommand, MyDA.InsertCommand, MyDA.UpdateCommand, remoteTableColumnName)
                 Next
 
 #If Not NET_1_1 Then
@@ -588,6 +564,25 @@ Namespace CompuMaster.Data
             Return Result
 
         End Function
+
+        ''' <summary>
+        ''' Auto-Fix delete/insert/update commands to support field names with reserved names by adding brackets [ ] around the field names
+        ''' </summary>
+        ''' <param name="DeleteCommand"></param>
+        ''' <param name="InsertCommand"></param>
+        ''' <param name="UpdateCommand"></param>
+        ''' <param name="remoteTableColumnName"></param>
+        Private Shared Sub AutoFixCommandColumnNames(DeleteCommand As IDbCommand, InsertCommand As IDbCommand, UpdateCommand As IDbCommand, remoteTableColumnName As String)
+            DeleteCommand.CommandText = Replace(DeleteCommand.CommandText, "(" & remoteTableColumnName & " = ", "([" & remoteTableColumnName & "] = ")
+            DeleteCommand.CommandText = Replace(DeleteCommand.CommandText, ", " & remoteTableColumnName & " = ", ", [" & remoteTableColumnName & "] = ")
+            DeleteCommand.CommandText = Replace(DeleteCommand.CommandText, "[[" & remoteTableColumnName & "]] = ", "[" & remoteTableColumnName & "] = ")
+            InsertCommand.CommandText = Replace(InsertCommand.CommandText, "(" & remoteTableColumnName & ",", "([" & remoteTableColumnName & "],")
+            InsertCommand.CommandText = Replace(InsertCommand.CommandText, "(" & remoteTableColumnName & ")", "([" & remoteTableColumnName & "])")
+            InsertCommand.CommandText = Replace(InsertCommand.CommandText, ", " & remoteTableColumnName & ")", ", [" & remoteTableColumnName & "])")
+            InsertCommand.CommandText = Replace(InsertCommand.CommandText, ", " & remoteTableColumnName & ", ", ", [" & remoteTableColumnName & "], ")
+            InsertCommand.CommandText = Replace(InsertCommand.CommandText, "[[" & remoteTableColumnName & "]]", "[" & remoteTableColumnName & "]")
+            UpdateCommand.CommandText = Replace(UpdateCommand.CommandText, " " & remoteTableColumnName & " = ", " [" & remoteTableColumnName & "] = ")
+        End Sub
 
         ''' -----------------------------------------------------------------------------
         ''' <summary>
