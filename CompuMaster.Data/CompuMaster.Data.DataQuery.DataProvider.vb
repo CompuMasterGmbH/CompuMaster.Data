@@ -10,9 +10,12 @@ Namespace CompuMaster.Data.DataQuery
     ''' </summary>
     Public Class DataProvider
 
-        Public Sub New(assembly As System.Reflection.Assembly, connectionType As System.Type)
+        Public Sub New(assembly As System.Reflection.Assembly, connectionType As System.Type, commandType As System.Type, commandBuilderType As System.Type, dataAdapterType As System.Type)
             Me.Assembly = assembly
             Me.ConnectionType = connectionType
+            Me.CommandType = commandType
+            Me.CommandBuilderType = commandBuilderType
+            Me.DataAdapterType = dataAdapterType
         End Sub
 
         Public ReadOnly Property Assembly As System.Reflection.Assembly
@@ -27,6 +30,8 @@ Namespace CompuMaster.Data.DataQuery
         '    End Get
         'End Property
         Public ReadOnly Property ConnectionType As System.Type
+        Public ReadOnly Property CommandBuilderType As System.Type
+        Public ReadOnly Property DataAdapterType As System.Type
         'Private ReadOnly Property ConnectionTypeName As String
         '    Get
         '        Return Me.ConnectionType.Name
@@ -37,14 +42,6 @@ Namespace CompuMaster.Data.DataQuery
         End Function
 
         Public ReadOnly Property CommandType As System.Type
-            Get
-                Static BufferedResult As System.Type
-                If BufferedResult Is Nothing Then
-                    BufferedResult = Me.CreateConnection.CreateCommand.GetType
-                End If
-                Return BufferedResult
-            End Get
-        End Property
         'Private ReadOnly Property CommandTypeName As String
         '    Get
         '        Return Me.CommandType.Name
@@ -53,6 +50,39 @@ Namespace CompuMaster.Data.DataQuery
         Public Function CreateCommand() As IDbCommand
             Return CType(Activator.CreateInstance(Me.CommandType), IDbCommand)
         End Function
+        Public Function CreateCommandBuilder() As System.Data.Common.DbCommandBuilder
+            If Me.CommandBuilderType Is Nothing Then
+                Return Nothing
+            Else
+                Return CType(Activator.CreateInstance(Me.CommandBuilderType), System.Data.Common.DbCommandBuilder)
+            End If
+        End Function
+        Public Function CreateDataAdapter() As System.Data.IDbDataAdapter
+            If Me.DataAdapterType Is Nothing Then
+                Return Nothing
+            Else
+                Return CType(Activator.CreateInstance(Me.DataAdapterType), System.Data.IDbDataAdapter)
+            End If
+        End Function
+
+        'Public ReadOnly Property CommandBuilderType As System.Type
+        '    Get
+        '        Static BufferedResult As System.Type
+        '        If BufferedResult Is Nothing Then
+        '            BufferedResult = Me.CreateConnection.CreateCommand.GetType
+        '        End If
+        '        Return BufferedResult
+        '    End Get
+        'End Property
+        'Public ReadOnly Property DataAdapterType As System.Type
+        '    Get
+        '        Static BufferedResult As System.Type
+        '        If BufferedResult Is Nothing Then
+        '            BufferedResult = System.Data.DbProviderFactories.GetFactory(Me.CreateConnection.CreateCommand
+        '        End If
+        '        Return BufferedResult
+        '    End Get
+        'End Property
 
         ''' <summary>
         ''' A common title for the data connector
@@ -73,6 +103,28 @@ Namespace CompuMaster.Data.DataQuery
 
         Public Overrides Function ToString() As String
             Return Me.Title
+        End Function
+
+        Public Shared Function LookupDataProvider(title As String) As DataProvider
+            Dim availableProviders As List(Of DataProvider) = AvailableDataProviders()
+            For MyCounter As Integer = 0 To availableProviders.Count - 1
+                If title = availableProviders(MyCounter).Title Then Return availableProviders(MyCounter)
+            Next
+            Return Nothing
+        End Function
+        Public Shared Function LookupDataProvider(title As String, appDomain As AppDomain) As DataProvider
+            Dim availableProviders As List(Of DataProvider) = AvailableDataProviders(appDomain)
+            For MyCounter As Integer = 0 To availableProviders.Count - 1
+                If title = availableProviders(MyCounter).Title Then Return availableProviders(MyCounter)
+            Next
+            Return Nothing
+        End Function
+        Public Shared Function LookupDataProvider(title As String, assembly As System.Reflection.Assembly) As DataProvider
+            Dim availableProviders As List(Of DataProvider) = AvailableDataProviders(assembly)
+            For MyCounter As Integer = 0 To availableProviders.Count - 1
+                If title = availableProviders(MyCounter).Title Then Return availableProviders(MyCounter)
+            Next
+            Return Nothing
         End Function
 
         Public Shared Function AvailableDataProviders() As List(Of DataProvider)
@@ -104,14 +156,63 @@ Namespace CompuMaster.Data.DataQuery
             Dim Result As New List(Of DataProvider)
             For Each t As Type In assembly.GetTypes()
                 For Each iface As Type In t.GetInterfaces()
-                    If iface Is GetType(System.Data.IDbConnection) And t IsNot GetType(System.Data.Common.DbConnection) Then
-                        Dim Provider As New DataProvider(assembly, t)
+                    If iface Is GetType(System.Data.IDbConnection) AndAlso t IsNot GetType(System.Data.Common.DbConnection) Then
+                        Dim IDbCommandType As System.Type = CType(Activator.CreateInstance(t), IDbConnection).CreateCommand.GetType
+                        Dim IDbDataAdapterType As System.Type = FindIDbDataApaterType(assembly, IDbCommandType)
+                        Dim DbCommandBuilderType As System.Type = FindDbCommandBuilder(assembly, IDbDataAdapterType)
+                        Dim Provider As New DataProvider(assembly, t, IDbCommandType, DbCommandBuilderType, IDbDataAdapterType)
                         Result.Add(Provider)
                     End If
                 Next
             Next
             Return Result
         End Function
+
+        Private Shared Function FindIDbDataApaterType(assembly As System.Reflection.Assembly, targetForCommand As System.Type) As System.Type
+            For Each t As Type In assembly.GetTypes()
+                For Each iface As Type In t.GetInterfaces()
+                    If iface Is GetType(System.Data.IDbDataAdapter) AndAlso t IsNot GetType(System.Data.Common.DbDataAdapter) Then
+                        For Each tContructor As Reflection.ConstructorInfo In t.GetConstructors
+                            For Each tConstructorParameter As Reflection.ParameterInfo In tContructor.GetParameters
+                                If tConstructorParameter.ParameterType Is targetForCommand Then
+                                    Return t
+                                End If
+                            Next
+                        Next
+                    End If
+                Next
+            Next
+            Return Nothing
+        End Function
+
+        Private Shared Function FindDbCommandBuilder(assembly As System.Reflection.Assembly, targetForDataAdapter As System.Type) As System.Type
+            For Each t As Type In assembly.GetTypes()
+                For Each tParent As Type In AllBaseTypes(t)
+                    If tParent Is GetType(System.Data.Common.DbCommandBuilder) AndAlso t IsNot GetType(System.Data.Common.DbCommandBuilder) Then
+                        For Each tContructor As Reflection.ConstructorInfo In t.GetConstructors
+                            For Each tConstructorParameter As Reflection.ParameterInfo In tContructor.GetParameters
+                                If tConstructorParameter.ParameterType Is targetForDataAdapter Then
+                                    Return t
+                                End If
+                            Next
+                        Next
+                    End If
+                Next
+            Next
+            Return Nothing
+        End Function
+
+        Private Shared Function AllBaseTypes(item As Type) As List(Of Type)
+            Dim Result As New List(Of Type)
+            AllBaseTypes(Result, item)
+            Return Result
+        End Function
+        Private Shared Sub AllBaseTypes(resultList As List(Of Type), item As Type)
+            If item.BaseType IsNot Nothing Then
+                resultList.Add(item.BaseType)
+                AllBaseTypes(resultList, item.BaseType)
+            End If
+        End Sub
 
     End Class
 End Namespace
