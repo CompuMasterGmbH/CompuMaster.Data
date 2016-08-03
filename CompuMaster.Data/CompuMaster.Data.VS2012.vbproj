@@ -142,6 +142,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="CompuMaster.Data.DataManipulationResult.vb" />
+    <Compile Include="CompuMaster.Data.DataQuery.DataProvider.vb" />
     <Compile Include="CompuMaster.Data.DataQuery.TestFile.vb" />
     <Compile Include="CompuMaster.Data.ReArrangeDataColumnsException.vb" />
     <Compile Include="CompuMaster.Data.Csv.vb">
