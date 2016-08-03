@@ -16,22 +16,22 @@ Namespace CompuMaster.Data.DataQuery
         End Sub
 
         Public ReadOnly Property Assembly As System.Reflection.Assembly
-        Public ReadOnly Property AssemblyPath As String
-            Get
-                Return Assembly.Location
-            End Get
-        End Property
-        Public ReadOnly Property AssemblyName As String
-            Get
-                Return Assembly.GetName.Name
-            End Get
-        End Property
+        'Private ReadOnly Property AssemblyPath As String
+        '    Get
+        '        Return Assembly.Location
+        '    End Get
+        'End Property
+        'Private ReadOnly Property AssemblyName As String
+        '    Get
+        '        Return Assembly.GetName.Name
+        '    End Get
+        'End Property
         Public ReadOnly Property ConnectionType As System.Type
-        Public ReadOnly Property ConnectionTypeName As String
-            Get
-                Return Me.ConnectionType.Name
-            End Get
-        End Property
+        'Private ReadOnly Property ConnectionTypeName As String
+        '    Get
+        '        Return Me.ConnectionType.Name
+        '    End Get
+        'End Property
         Public Function CreateConnection() As IDbConnection
             Return CType(Activator.CreateInstance(Me.ConnectionType), IDbConnection)
         End Function
@@ -45,6 +45,11 @@ Namespace CompuMaster.Data.DataQuery
                 Return BufferedResult
             End Get
         End Property
+        'Private ReadOnly Property CommandTypeName As String
+        '    Get
+        '        Return Me.CommandType.Name
+        '    End Get
+        'End Property
         Public Function CreateCommand() As IDbCommand
             Return CType(Activator.CreateInstance(Me.CommandType), IDbCommand)
         End Function
@@ -56,10 +61,10 @@ Namespace CompuMaster.Data.DataQuery
         Public ReadOnly Property Title As String
             Get
                 Dim Result As String
-                Result = Strings.Replace(Me.ConnectionTypeName, "Connection", "",,, CompareMethod.Text)
-                If Result = "Sql" AndAlso Me.AssemblyName.ToLowerInvariant = "system.data" Then
+                Result = Strings.Replace(Me.ConnectionType.Name, "Connection", "",,, CompareMethod.Text)
+                If Result = "Sql" AndAlso Me.Assembly.GetName.Name.ToLowerInvariant = "system.data" Then
                     Result = "SqlClient"
-                ElseIf Result = "Odbc" AndAlso Me.AssemblyName.ToLowerInvariant = "system.data" Then
+                ElseIf Result = "Odbc" AndAlso Me.Assembly.GetName.Name.ToLowerInvariant = "system.data" Then
                     Result = "ODBC"
                 End If
                 Return Result
