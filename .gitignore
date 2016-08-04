@@ -14,3 +14,9 @@
 /CompuMaster.Data.Controls/New-NuGetPackages
 /CompuMaster.Data/New-NuGetPackages
 /CompuMaster.Test.Tools.Data/TestResults
+/CompuMaster.Test.Web.Net20/Bin/CompuMaster.Data.xml
+/CompuMaster.Test.Web.Net20/Bin/CompuMaster.Data.dll
+/CompuMaster.Test.Web.Net20/Bin/CompuMaster.Data.pdb
+/CompuMaster.Test.Web.Net20/Bin/Npgsql.xml
+/CompuMaster.Test.Web.Net20/Bin/Npgsql.dll
+/CompuMaster.Test.Web.Net20/Bin/Npgsql.pdb
