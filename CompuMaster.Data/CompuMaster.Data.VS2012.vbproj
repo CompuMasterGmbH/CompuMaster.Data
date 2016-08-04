@@ -141,43 +141,43 @@
     <Compile Include="AssemblyInfo.vb">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="CompuMaster.Data.DataManipulationResult.vb" />
-    <Compile Include="CompuMaster.Data.DataManipulationTools.vb" />
-    <Compile Include="CompuMaster.Data.DataQuery.DataProvider.vb" />
-    <Compile Include="CompuMaster.Data.DataQuery.TestFile.vb" />
-    <Compile Include="CompuMaster.Data.ReArrangeDataColumnsException.vb" />
-    <Compile Include="CompuMaster.Data.Csv.vb">
+    <Compile Include="DataManipulationResult.vb" />
+    <Compile Include="DataManipulationTools.vb" />
+    <Compile Include="DataQuery.DataProvider.vb" />
+    <Compile Include="DataQuery.TestFile.vb" />
+    <Compile Include="ReArrangeDataColumnsException.vb" />
+    <Compile Include="Csv.vb">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="CompuMaster.Data.CsvTools.vb">
+    <Compile Include="CsvTools.vb">
     </Compile>
-    <Compile Include="CompuMaster.Data.DatabaseManagement.vb">
+    <Compile Include="DatabaseManagement.vb">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="CompuMaster.Data.DataQuery.DataException.vb" />
-    <Compile Include="CompuMaster.Data.DataQuery.DataReaderUtils.vb" />
-    <Compile Include="CompuMaster.Data.DataQuery.AnyIDataProvider.vb">
+    <Compile Include="DataQuery.DataException.vb" />
+    <Compile Include="DataQuery.DataReaderUtils.vb" />
+    <Compile Include="DataQuery.AnyIDataProvider.vb">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="CompuMaster.Data.DataQuery.Connections.vb" />
-    <Compile Include="CompuMaster.Data.DataQuery.PlatformTools.vb" />
-    <Compile Include="CompuMaster.Data.DataTables.vb">
+    <Compile Include="DataQuery.Connections.vb" />
+    <Compile Include="DataQuery.PlatformTools.vb" />
+    <Compile Include="DataTables.vb">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="CompuMaster.Data.DataTablesTools.vb" />
-    <Compile Include="CompuMaster.Data.Ldap.vb">
+    <Compile Include="DataTablesTools.vb" />
+    <Compile Include="Ldap.vb">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="CompuMaster.Data.Manipulation.vb">
+    <Compile Include="Manipulation.vb">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="CompuMaster.Data.vb">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="CompuMaster.Data.XlsReader.vb">
+    <Compile Include="XlsReader.vb">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="CompuMaster.Data.Utils.vb">
+    <Compile Include="Utils.vb">
       <SubType>Code</SubType>
     </Compile>
     <EmbeddedResource Include="template.accdb" />
