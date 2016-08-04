@@ -111,9 +111,6 @@
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Npgsql">
-      <HintPath>libs\Npgsql.dll</HintPath>
-    </Reference>
     <Reference Include="System">
       <Name>System</Name>
     </Reference>
@@ -142,7 +139,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="DataManipulationResult.vb" />
-    <Compile Include="DataManipulationTools.vb" />
+    <Compile Include="ManipulationTools.vb" />
     <Compile Include="DataQuery.DataProvider.vb" />
     <Compile Include="DataQuery.TestFile.vb" />
     <Compile Include="ReArrangeDataColumnsException.vb" />

@@ -546,23 +546,6 @@ Namespace CompuMaster.Data
                     AutoFixCommandColumnNames(MyDA.DeleteCommand, MyDA.InsertCommand, MyDA.UpdateCommand, remoteTableColumnName)
                 Next
 
-#If Not NET_1_1 Then
-            ElseIf CType(dataConnection, Object).GetType.ToString = "Npgsql.NpgsqlConnection" Then
-                Dim MyCmdsPrepareDA As New Npgsql.NpgsqlDataAdapter(CType(command, Npgsql.NpgsqlCommand))
-                Dim MyCmdsPrepareCmdBuilder As New Npgsql.NpgsqlCommandBuilder(MyCmdsPrepareDA)
-                Dim MyDA As New Npgsql.NpgsqlDataAdapter(CType(command, Npgsql.NpgsqlCommand))
-                Dim MyCmdBuilder As New Npgsql.NpgsqlCommandBuilder(MyDA)
-                Result = New CompuMaster.Data.DataManipulationResult(command, MyDA)
-                MyDA.Fill(Result.Table)
-
-                MyDA.DeleteCommand = MyCmdsPrepareCmdBuilder.GetDeleteCommand()
-                MyDA.DeleteCommand.UpdatedRowSource = UpdateRowSource.None
-                MyDA.InsertCommand = MyCmdsPrepareCmdBuilder.GetInsertCommand()
-                MyDA.InsertCommand.UpdatedRowSource = UpdateRowSource.None
-                MyDA.UpdateCommand = MyCmdsPrepareCmdBuilder.GetUpdateCommand()
-                MyDA.UpdateCommand.UpdatedRowSource = UpdateRowSource.None
-#End If
-
             Else
                 Dim providers As System.Collections.Generic.List(Of Data.DataQuery.DataProvider)
                 Dim CurrentProvider As Data.DataQuery.DataProvider = Nothing
@@ -595,7 +578,7 @@ Namespace CompuMaster.Data
                 End If
             End If
 
-                Return Result
+            Return Result
 
         End Function
 
@@ -788,18 +771,21 @@ Namespace CompuMaster.Data
                     End If
                     Throw New Exception("Error found - transaction has been rolled back", ex)
                 End Try
-            ElseIf CType(container.Command.Connection, Object).GetType.ToString = "System.Data.Odbc.OdbcConnection" Then
-                CType(container.DataAdapter, System.Data.Odbc.OdbcDataAdapter).Update(container.Table)
-            ElseIf CType(container.Command.Connection, Object).GetType.ToString = "System.Data.OleDb.OleDbConnection" Then
-                CType(container.DataAdapter, System.Data.OleDb.OleDbDataAdapter).Update(container.Table)
-#If Not NET_1_1 Then
-            ElseIf CType(container.Command.Connection, Object).GetType.ToString = "Npgsql.NpgsqlConnection" Then
-                CType(container.DataAdapter, Npgsql.NpgsqlDataAdapter).Update(container.Table)
-#End If
             Else
-                Throw New NotSupportedException("Data provider not supported yet")
+                Dim providers As System.Collections.Generic.List(Of Data.DataQuery.DataProvider)
+                Dim CurrentProvider As Data.DataQuery.DataProvider = Nothing
+                providers = Data.DataQuery.DataProvider.AvailableDataProviders()
+                For MyCounter As Integer = 0 To providers.Count - 1
+                    If providers(MyCounter).ConnectionType Is CType(container.Command.Connection, Object).GetType Then
+                        CurrentProvider = providers(MyCounter)
+                    End If
+                Next
+                If CurrentProvider IsNot Nothing Then
+                    ManipulationTools.IDbDataAdapterUpdate(container.DataAdapter, CurrentProvider.DataAdapterType, container.Table)
+                Else
+                    Throw New NotSupportedException("Data provider not supported yet")
+                End If
             End If
-
         End Sub
 
         ''' <summary>
