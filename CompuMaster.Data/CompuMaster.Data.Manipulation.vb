@@ -141,13 +141,19 @@ Namespace CompuMaster.Data
 
             'Create remote table if required
             If RemoteTable Is Nothing Then
-                Dim ColumnCreationCommandText As String = CreateTableCommandText(remoteTableName, CompuMaster.Data.DataTablesTools.LookupUniqueColumnName(sourceTable, "PrimaryKeyID"), ddlLanguage)
+                Dim PrimaryKeyColumn As String
+                If sourceTable.PrimaryKey IsNot Nothing AndAlso sourceTable.PrimaryKey.Length = 1 AndAlso sourceTable.PrimaryKey(0).AutoIncrement = True AndAlso sourceTable.PrimaryKey(0).Unique = True AndAlso sourceTable.PrimaryKey(0).DataType Is GetType(Integer) Then
+                    PrimaryKeyColumn = sourceTable.PrimaryKey(0).ColumnName
+                Else
+                    PrimaryKeyColumn = CompuMaster.Data.DataTablesTools.LookupUniqueColumnName(sourceTable, "PrimaryKeyID")
+                End If
+                Dim ColumnCreationCommandText As String = CreateTableCommandText(remoteTableName, PrimaryKeyColumn, ddlLanguage)
                 CompuMaster.Data.DataQuery.ExecuteNonQuery(dataConnection, ColumnCreationCommandText, CommandType.Text, Nothing, CompuMaster.Data.DataQuery.Automations.None, 0)
-                RemoteTable = LoadTableStructureWith1RowFromConnection(remoteTableName, dataConnection, False)
-            End If
+                    RemoteTable = LoadTableStructureWith1RowFromConnection(remoteTableName, dataConnection, False)
+                End If
 
-            'Extend schema if required
-            Dim extendSchemaCommandText As String = AddMissingColumnsCommandText(sourceTable, RemoteTable, ddlLanguage)
+                'Extend schema if required
+                Dim extendSchemaCommandText As String = AddMissingColumnsCommandText(sourceTable, RemoteTable, ddlLanguage)
             If extendSchemaCommandText <> Nothing Then
                 CompuMaster.Data.DataQuery.ExecuteNonQuery(dataConnection, extendSchemaCommandText, CommandType.Text, Nothing, CompuMaster.Data.DataQuery.Automations.None, 0)
             End If
@@ -186,7 +192,7 @@ Namespace CompuMaster.Data
                 'Write to database
                 WriteDataTableToDataConnection(sourceTable, dataConnection, ddlLanguage, dropExistingRowsInDestinationTable)
             Finally
-                'Auto-Open
+                'Auto-Close
                 Select Case connectionBehaviour
                     Case DataQuery.AnyIDataProvider.Automations.AutoCloseAndDisposeConnection
                         CompuMaster.Data.DataQuery.CloseConnection(dataConnection)
