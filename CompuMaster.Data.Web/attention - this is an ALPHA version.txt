@@ -1,0 +1,10 @@
+TODO/TOFIX BEFORE BETA:
+- Add new row
+- Remove row
+- Update row while concurrent user adds/removes rows between/from visible rows of currently modifying user
+- Paging 
+- stable behaviour with session/application context loss while paging
+- Column Sorting
+- Data update of different data types (and control types)
+- Data update when using format strings (e.g. for datetimes)
+- Data update concept for correctly handling/persisting NULL values

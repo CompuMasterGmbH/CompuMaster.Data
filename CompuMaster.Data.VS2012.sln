@@ -61,6 +61,30 @@ Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "CompuMaster.Test.Web.Net45"
 		DefaultWebSiteLanguage = "Visual Basic"
 	EndProjectSection
 EndProject
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "CompuMaster.Data.Web", "CompuMaster.Data.Web\CompuMaster.Data.Web.vbproj", "{428F3B6A-C1F5-4A1C-95BE-E6EF0C7F7735}"
+EndProject
+Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "CompuMaster.Test.Web.DataUpdate", "CompuMaster.Test.Web.DataUpdate\", "{2B69F017-7DD3-4195-99AA-278C3064C1E7}"
+	ProjectSection(WebsiteProperties) = preProject
+		TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.0"
+		ProjectReferences = "{428f3b6a-c1f5-4a1c-95be-e6ef0c7f7735}|CompuMaster.Data.Web.dll;"
+		Debug.AspNetCompiler.VirtualPath = "/localhost_28150"
+		Debug.AspNetCompiler.PhysicalPath = "CompuMaster.Test.Web.DataUpdate\"
+		Debug.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_28150\"
+		Debug.AspNetCompiler.Updateable = "true"
+		Debug.AspNetCompiler.ForceOverwrite = "true"
+		Debug.AspNetCompiler.FixedNames = "false"
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.VirtualPath = "/localhost_28150"
+		Release.AspNetCompiler.PhysicalPath = "CompuMaster.Test.Web.DataUpdate\"
+		Release.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_28150\"
+		Release.AspNetCompiler.Updateable = "true"
+		Release.AspNetCompiler.ForceOverwrite = "true"
+		Release.AspNetCompiler.FixedNames = "false"
+		Release.AspNetCompiler.Debug = "False"
+		VWDPort = "28150"
+		SlnRelativePath = "CompuMaster.Test.Web.DataUpdate\"
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SubversionScc) = preSolution
 		Svn-Managed = True
@@ -142,6 +166,30 @@ Global
 		{254590D6-9078-4E09-BF6D-59B29F3852F5}.Release|Any CPU.ActiveCfg = Debug|Any CPU
 		{254590D6-9078-4E09-BF6D-59B29F3852F5}.Release|x86.ActiveCfg = Debug|Any CPU
 		{254590D6-9078-4E09-BF6D-59B29F3852F5}.Release|x86.Build.0 = Debug|Any CPU
+		{428F3B6A-C1F5-4A1C-95BE-E6EF0C7F7735}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{428F3B6A-C1F5-4A1C-95BE-E6EF0C7F7735}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{428F3B6A-C1F5-4A1C-95BE-E6EF0C7F7735}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{428F3B6A-C1F5-4A1C-95BE-E6EF0C7F7735}.Debug|x86.Build.0 = Debug|Any CPU
+		{428F3B6A-C1F5-4A1C-95BE-E6EF0C7F7735}.NAnt|Any CPU.ActiveCfg = Debug @ CMIntranet|Any CPU
+		{428F3B6A-C1F5-4A1C-95BE-E6EF0C7F7735}.NAnt|Any CPU.Build.0 = Debug @ CMIntranet|Any CPU
+		{428F3B6A-C1F5-4A1C-95BE-E6EF0C7F7735}.NAnt|x86.ActiveCfg = Debug @ CMIntranet|Any CPU
+		{428F3B6A-C1F5-4A1C-95BE-E6EF0C7F7735}.NAnt|x86.Build.0 = Debug @ CMIntranet|Any CPU
+		{428F3B6A-C1F5-4A1C-95BE-E6EF0C7F7735}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{428F3B6A-C1F5-4A1C-95BE-E6EF0C7F7735}.Release|Any CPU.Build.0 = Release|Any CPU
+		{428F3B6A-C1F5-4A1C-95BE-E6EF0C7F7735}.Release|x86.ActiveCfg = Release|Any CPU
+		{428F3B6A-C1F5-4A1C-95BE-E6EF0C7F7735}.Release|x86.Build.0 = Release|Any CPU
+		{2B69F017-7DD3-4195-99AA-278C3064C1E7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2B69F017-7DD3-4195-99AA-278C3064C1E7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2B69F017-7DD3-4195-99AA-278C3064C1E7}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{2B69F017-7DD3-4195-99AA-278C3064C1E7}.Debug|x86.Build.0 = Debug|Any CPU
+		{2B69F017-7DD3-4195-99AA-278C3064C1E7}.NAnt|Any CPU.ActiveCfg = Debug|Any CPU
+		{2B69F017-7DD3-4195-99AA-278C3064C1E7}.NAnt|Any CPU.Build.0 = Debug|Any CPU
+		{2B69F017-7DD3-4195-99AA-278C3064C1E7}.NAnt|x86.ActiveCfg = Debug|Any CPU
+		{2B69F017-7DD3-4195-99AA-278C3064C1E7}.NAnt|x86.Build.0 = Debug|Any CPU
+		{2B69F017-7DD3-4195-99AA-278C3064C1E7}.Release|Any CPU.ActiveCfg = Debug|Any CPU
+		{2B69F017-7DD3-4195-99AA-278C3064C1E7}.Release|Any CPU.Build.0 = Debug|Any CPU
+		{2B69F017-7DD3-4195-99AA-278C3064C1E7}.Release|x86.ActiveCfg = Debug|Any CPU
+		{2B69F017-7DD3-4195-99AA-278C3064C1E7}.Release|x86.Build.0 = Debug|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

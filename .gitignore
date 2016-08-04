@@ -28,3 +28,13 @@
 /CompuMaster.Test.Web.Net45/Bin/Npgsql.pdb
 /CompuMaster.Test.Web.Net45/Bin/Npgsql.xml
 /CompuMaster.Test.Web.Net45/Bin/CompuMaster.Data.dll
+/CompuMaster.Data.Web/obj
+/CompuMaster.Data.Web/bin
+/CompuMaster.Test.Web.DataUpdate/App_Data/test.mdb
+/CompuMaster.Test.Web.DataUpdate/Bin/CompuMaster.Data.Web.pdb
+/CompuMaster.Test.Web.DataUpdate/Bin/CompuMaster.Data.Web.xml
+/CompuMaster.Test.Web.DataUpdate/Bin/CompuMaster.Data.xml
+/CompuMaster.Test.Web.DataUpdate/Bin/Npgsql.dll
+/CompuMaster.Test.Web.DataUpdate/Bin/Npgsql.xml
+/CompuMaster.Test.Web.DataUpdate/Bin/CompuMaster.Data.dll
+/CompuMaster.Test.Web.DataUpdate/Bin/CompuMaster.Data.Web.dll

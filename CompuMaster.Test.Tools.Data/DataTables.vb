@@ -113,7 +113,7 @@ Namespace CompuMaster.Test.Data
         End Sub
 
         <Test(), Ignore("Requires custom connection string to execute")> Public Sub ConvertDataReaderToDataSet()
-            Dim MyConn As New System.Data.SqlClient.SqlConnection("SERVER=sql2012;DATABASE=master;PWD=xxxxxxxxxxxxxxxxxxx;UID=sa")
+            Dim MyConn As New System.Data.SqlClient.SqlConnection("SERVER=yoursqlserver;DATABASE=master;PWD=xxxxxxxxxxxxxxxxxxx;UID=sa")
             Dim MyCmd As IDbCommand = MyConn.CreateCommand()
             MyCmd.CommandType = CommandType.Text
             MyCmd.CommandText = "exec sp_databases; Exec sp_tables;"
