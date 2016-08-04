@@ -40,6 +40,11 @@ Namespace CompuMaster.Data.DataQuery
         Public Function CreateConnection() As IDbConnection
             Return CType(Activator.CreateInstance(Me.ConnectionType), IDbConnection)
         End Function
+        Public Function CreateConnection(connectionString As String) As IDbConnection
+            Dim Result As IDbConnection = Me.CreateConnection
+            Result.ConnectionString = connectionString
+            Return Result
+        End Function
 
         Public ReadOnly Property CommandType As System.Type
         'Private ReadOnly Property CommandTypeName As String
@@ -49,6 +54,17 @@ Namespace CompuMaster.Data.DataQuery
         'End Property
         Public Function CreateCommand() As IDbCommand
             Return CType(Activator.CreateInstance(Me.CommandType), IDbCommand)
+        End Function
+        Public Function CreateCommand(sql As String) As IDbCommand
+            Dim Result As IDbCommand = Me.CreateCommand
+            Result.CommandText = sql
+            Return Result
+        End Function
+        Public Function CreateCommand(sql As String, connectionString As String) As IDbCommand
+            Dim Result As IDbCommand = Me.CreateCommand
+            Result.CommandText = sql
+            Result.Connection = Me.CreateConnection(connectionString)
+            Return Result
         End Function
         Public Function CreateCommandBuilder() As System.Data.Common.DbCommandBuilder
             If Me.CommandBuilderType Is Nothing Then
