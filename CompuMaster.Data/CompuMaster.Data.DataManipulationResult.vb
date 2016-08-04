@@ -11,7 +11,7 @@ Namespace CompuMaster.Data
         Implements IDisposable
 
         Protected WithEvents DataTable As System.Data.DataTable
-        Protected UpdateDataAdapter As System.Data.IDataAdapter
+        Protected UpdateDataAdapter As System.Data.IDbDataAdapter
         Protected SelectCommand As System.Data.IDbCommand
 
         ''' <summary>
@@ -39,7 +39,7 @@ Namespace CompuMaster.Data
         ''' <param name="command">The SELECT command for retrieving the data</param>
         ''' <param name="dataAdapter">An instance of data adapter using the SELECT command</param>
         ''' <remarks></remarks>
-        Friend Sub New(ByVal command As System.Data.IDbCommand, ByVal dataAdapter As System.Data.IDataAdapter)
+        Friend Sub New(ByVal command As System.Data.IDbCommand, ByVal dataAdapter As System.Data.IDbDataAdapter)
             Me.New(Nothing, command, dataAdapter)
         End Sub
 
@@ -50,7 +50,7 @@ Namespace CompuMaster.Data
         ''' <param name="command">The SELECT command for retrieving the data</param>
         ''' <param name="dataAdapter">An instance of data adapter using the SELECT command</param>
         ''' <remarks></remarks>
-        Friend Sub New(ByVal table As System.Data.DataTable, ByVal command As System.Data.IDbCommand, ByVal dataAdapter As System.Data.IDataAdapter)
+        Friend Sub New(ByVal table As System.Data.DataTable, ByVal command As System.Data.IDbCommand, ByVal dataAdapter As System.Data.IDbDataAdapter)
             If table Is Nothing Then table = New System.Data.DataTable("livedataclone")
             If command Is Nothing Then Throw New ArgumentNullException("command")
             If dataAdapter Is Nothing Then Throw New ArgumentNullException("dataAdapter")
@@ -85,7 +85,7 @@ Namespace CompuMaster.Data
         ''' <value></value>
         ''' <returns></returns>
         ''' <remarks></remarks>
-        Public ReadOnly Property DataAdapter() As System.Data.IDataAdapter
+        Public ReadOnly Property DataAdapter() As System.Data.IDbDataAdapter
             Get
                 Return UpdateDataAdapter
             End Get

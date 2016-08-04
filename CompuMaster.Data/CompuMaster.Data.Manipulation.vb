@@ -46,7 +46,7 @@ Namespace CompuMaster.Data
             <Obsolete("Use CompuMaster.Data.Manipulation instead", True)> Public Sub New()
                 MyBase.New(Nothing, Nothing, Nothing)
             End Sub
-            Friend Sub New(ByVal command As System.Data.IDbCommand, ByVal dataAdapter As System.Data.IDataAdapter)
+            Friend Sub New(ByVal command As System.Data.IDbCommand, ByVal dataAdapter As System.Data.IDbDataAdapter)
                 MyBase.New(Nothing, command, dataAdapter)
             End Sub
             Protected Overloads Overrides Sub Dispose(ByVal disposing As Boolean)
@@ -558,10 +558,38 @@ Namespace CompuMaster.Data
 #End If
 
             Else
-                Throw New NotSupportedException("Data provider not supported yet")
+                Dim providers As System.Collections.Generic.List(Of Data.DataQuery.DataProvider)
+                Dim CurrentProvider As Data.DataQuery.DataProvider = Nothing
+                providers = Data.DataQuery.DataProvider.AvailableDataProviders()
+                For MyCounter As Integer = 0 To providers.Count - 1
+                    If providers(MyCounter) Is dataConnection.GetType Then
+                        CurrentProvider = providers(MyCounter)
+                    End If
+                Next
+                If CurrentProvider IsNot Nothing Then
+                    Dim MyCmdsPrepareDA As System.Data.IDbDataAdapter = CurrentProvider.CreateDataAdapter()
+                    MyCmdsPrepareDA.SelectCommand = command
+                    Dim MyCmdsPrepareCmdBuilder As System.Data.Common.DbCommandBuilder = CurrentProvider.CreateCommandBuilder()
+                    MyCmdsPrepareCmdBuilder.DataAdapter = CType(MyCmdsPrepareDA, System.Data.Common.DbDataAdapter)
+                    Dim MyDA As System.Data.IDbDataAdapter = CurrentProvider.CreateDataAdapter()
+                    MyDA.SelectCommand = command
+                    Dim MyCmdBuilder As System.Data.Common.DbCommandBuilder = CurrentProvider.CreateCommandBuilder()
+                    MyCmdBuilder.DataAdapter = CType(MyDA, System.Data.Common.DbDataAdapter)
+                    Result = New CompuMaster.Data.DataManipulationResult(command, MyDA)
+                    CType(MyDA, System.Data.Common.DbDataAdapter).Fill(Result.Table)
+
+                    MyDA.DeleteCommand = MyCmdsPrepareCmdBuilder.GetDeleteCommand()
+                    MyDA.DeleteCommand.UpdatedRowSource = UpdateRowSource.None
+                    MyDA.InsertCommand = MyCmdsPrepareCmdBuilder.GetInsertCommand()
+                    MyDA.InsertCommand.UpdatedRowSource = UpdateRowSource.None
+                    MyDA.UpdateCommand = MyCmdsPrepareCmdBuilder.GetUpdateCommand()
+                    MyDA.UpdateCommand.UpdatedRowSource = UpdateRowSource.None
+                Else
+                    Throw New NotSupportedException("Data provider not supported yet")
+                End If
             End If
 
-            Return Result
+                Return Result
 
         End Function
 
