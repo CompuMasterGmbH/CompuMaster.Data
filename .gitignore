@@ -38,3 +38,5 @@
 /CompuMaster.Test.Web.DataUpdate/Bin/Npgsql.xml
 /CompuMaster.Test.Web.DataUpdate/Bin/CompuMaster.Data.dll
 /CompuMaster.Test.Web.DataUpdate/Bin/CompuMaster.Data.Web.dll
+CompuMaster.Test.Web.DataUpdate/Bin/Npgsql.pdb
+CompuMaster.Test.Web.DataUpdate/Bin/CompuMaster.Data.pdb
