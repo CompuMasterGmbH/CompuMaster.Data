@@ -357,7 +357,7 @@ Namespace CompuMaster.Data
                                 Case "DateTime"
                                     ColumnCreationArguments &= "date"
                                 Case "Boolean"
-                                    ColumnCreationArguments &= "boolean"
+                                    ColumnCreationArguments &= "bit"
                                 Case "Byte"
                                     ColumnCreationArguments &= "integer"
                                 Case "Int16"
