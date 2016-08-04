@@ -49,6 +49,14 @@
         Row("LangID") = 3
         Row("SortID") = 1000
         Result.Rows.Add(Row)
+        Row = Result.NewRow
+        Row("ID") = 3
+        Row("What2Setup") = "text"
+        Row("Value2Setup") = "another demo"
+        Row("TranslationRequired") = True
+        Row("LangID") = 3
+        Row("SortID") = 1000
+        Result.Rows.Add(Row)
         Return Result
     End Function
 
