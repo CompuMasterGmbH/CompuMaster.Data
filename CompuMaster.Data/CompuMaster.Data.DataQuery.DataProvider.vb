@@ -24,11 +24,11 @@ Namespace CompuMaster.Data.DataQuery
         '        Return Assembly.Location
         '    End Get
         'End Property
-        'Private ReadOnly Property AssemblyName As String
-        '    Get
-        '        Return Assembly.GetName.Name
-        '    End Get
-        'End Property
+        Private ReadOnly Property AssemblyName As String
+            Get
+                Return Me.Assembly.FullName.Substring(0, Me.Assembly.FullName.IndexOf(","c))
+            End Get
+        End Property
         Public ReadOnly Property ConnectionType As System.Type
         Public ReadOnly Property CommandBuilderType As System.Type
         Public ReadOnly Property DataAdapterType As System.Type
@@ -92,9 +92,9 @@ Namespace CompuMaster.Data.DataQuery
             Get
                 Dim Result As String
                 Result = Strings.Replace(Me.ConnectionType.Name, "Connection", "",,, CompareMethod.Text)
-                If Result = "Sql" AndAlso Me.Assembly.GetName.Name.ToLowerInvariant = "system.data" Then
+                If Result = "Sql" AndAlso Me.AssemblyName.ToLowerInvariant = "system.data" Then
                     Result = "SqlClient"
-                ElseIf Result = "Odbc" AndAlso Me.Assembly.GetName.Name.ToLowerInvariant = "system.data" Then
+                ElseIf Result = "Odbc" AndAlso Me.AssemblyName.ToLowerInvariant = "system.data" Then
                     Result = "ODBC"
                 End If
                 Return Result
@@ -135,7 +135,7 @@ Namespace CompuMaster.Data.DataQuery
             Dim AlreadyLoadedAssemblies As System.Reflection.Assembly() = AppDomain.CurrentDomain.GetAssemblies
             Dim Result As New List(Of DataProvider)
             For Each asm As System.Reflection.Assembly In AlreadyLoadedAssemblies
-                Dim asmName As String = asm.GetName.Name.ToLowerInvariant
+                Dim asmName As String = asm.FullName.Substring(0,asm.fullname.IndexOf(","c)) 'asm.GetName.Name.ToLowerInvariant
                 Dim TryToFindDataConnectorsInAssembly As Boolean
                 If asmName = "system.data" OrElse asmName = "system.data.oracleclient" Then
                     TryToFindDataConnectorsInAssembly = True
