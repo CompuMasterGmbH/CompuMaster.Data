@@ -68,89 +68,9 @@ Namespace CompuMaster.Data.Web
 
         Public Property DataLoadException As Exception
 
-        Public Class DataManipulationResults
-			Public Table As System.Data.DataTable
-			Public DataAdapter As System.Data.IDataAdapter
-			Public Command As System.Data.IDbCommand
-		End Class
+        Private _SuppressEventRowCreated As Boolean = False
 
-		''' -----------------------------------------------------------------------------
-		''' <summary>
-		'''     Execute query and stop time and show results
-		''' </summary>
-		''' <remarks>
-		''' </remarks>
-		''' <history>
-		''' 	[wezel]	19.01.2005	Created
-		''' </history>
-		''' -----------------------------------------------------------------------------
-		Private Function LoadDataForManipulationViaQuickEdit() As DataManipulationResults
-
-			'Execute the command and stop the time
-			Dim Result As New DataManipulationResults
-			Dim MyConn As System.Data.IDbConnection
-			Dim MyCmd As System.Data.IDbCommand
-			Dim MyDA As System.Data.IDataAdapter
-
-
-			If Me.DataProviderName = "SqlClient" Then
-				MyConn = New System.Data.SqlClient.SqlConnection(Me.DataConnectionString)
-				MyCmd = New System.Data.SqlClient.SqlCommand(Me.DataSelectCommand, MyConn)
-				MyDA = New System.Data.SqlClient.SqlDataAdapter(MyCmd)
-				Dim MyCmdBuilder As New System.Data.SqlClient.SqlCommandBuilder(MyDA)
-			ElseIf Me.DataProviderName = "ODBC" Then
-				MyConn = New System.Data.Odbc.OdbcConnection(Me.DataConnectionString)
-				MyCmd = New System.Data.Odbc.OdbcCommand(Me.DataSelectCommand, MyConn)
-				MyDA = New System.Data.Odbc.OdbcDataAdapter(MyCmd)
-				Dim MyCmdBuilder As New System.Data.Odbc.OdbcCommandBuilder(MyDA)
-			ElseIf Me.DataProviderName = "OleDb" Then
-				MyConn = New System.Data.OleDb.OleDbConnection(Me.DataConnectionString)
-				MyCmd = New System.Data.OleDb.OleDbCommand(Me.DataSelectCommand, MyConn)
-				MyDA = New System.Data.OleDb.OleDbDataAdapter(MyCmd)
-				Dim MyCmdBuilder As New System.Data.OleDb.OleDbCommandBuilder(MyDA)
-			Else
-				Throw New Exception("Invalid data provider selected")
-			End If
-
-			MyCmd.CommandType = CommandType.Text
-			MyCmd.CommandTimeout = 300 '5 minutes
-			Result.DataAdapter = MyDA
-			Result.Command = MyCmd
-			MyConn.Open()
-
-			'Read data
-			Result.Table = New DataTable("livedataclone")
-			Dim ResultDS As New DataSet("root")
-			ResultDS.Tables.Add(Result.Table)
-			If Me.DataProviderName = "SqlClient" Then
-				CType(MyDA, SqlClient.SqlDataAdapter).Fill(Result.Table)
-			ElseIf Me.DataProviderName = "ODBC" Then
-				CType(MyDA, System.Data.Odbc.OdbcDataAdapter).Fill(Result.Table)
-			ElseIf Me.DataProviderName = "OleDb" Then
-				CType(MyDA, System.Data.OleDb.OleDbDataAdapter).Fill(Result.Table)
-			Else
-				Throw New Exception("Invalid data provider selected")
-			End If
-
-			Return Result
-
-		End Function
-
-		Private Sub UpdateCodeManipulatedData(ByVal container As DataManipulationResults)
-			If Me.DataProviderName = "SqlClient" Then
-				CType(container.DataAdapter, SqlClient.SqlDataAdapter).Update(container.Table)
-			ElseIf Me.DataProviderName = "ODBC" Then
-				CType(container.DataAdapter, Odbc.OdbcDataAdapter).Update(container.Table)
-			ElseIf Me.DataProviderName = "OleDb" Then
-				CType(container.DataAdapter, OleDb.OleDbDataAdapter).Update(container.Table)
-			Else
-				Throw New Exception("Invalid data provider selected")
-			End If
-		End Sub
-
-		Private _SuppressEventRowCreated As Boolean = False
-
-		Protected Overrides Sub DataBindChildren()
+        Protected Overrides Sub DataBindChildren()
 			_SuppressEventRowCreated = True
 			MyBase.DataBindChildren()
 			_SuppressEventRowCreated = False
@@ -168,13 +88,21 @@ Namespace CompuMaster.Data.Web
 			_SuppressEventRowCreated = False
 		End Sub
 
-		Private _IsDataLoaded As Boolean = False
+        Private Function LoadDataForManipulationViaQuickEdit() As CompuMaster.Data.DataManipulationResult
+            Dim Provider As CompuMaster.Data.DataQuery.DataProvider = CompuMaster.Data.DataQuery.DataProvider.LookupDataProvider(Me.DataProviderName)
+            Dim MyCmd As System.Data.IDbCommand = Provider.CreateCommand(Me.DataSelectCommand, Me.DataConnectionString)
+            MyCmd.CommandType = CommandType.Text
+            MyCmd.CommandTimeout = 300 '5 minutes
+            Return CompuMaster.Data.Manipulation.LoadQueryDataForManipulationViaCode(MyCmd)
+        End Function
+
+        Private _IsDataLoaded As Boolean = False
 		Public Sub DataLoad()
 			'Release any data loaded before
 			CloseAndDisposeQuickEditDataContainer()
-			'Load data for manipulation process
-			QuickEditDataContainer = LoadDataForManipulationViaQuickEdit()
-			QuickEditRecordCountBefore = QuickEditDataContainer.Table.Rows.Count
+            'Load data for manipulation process
+            QuickEditDataContainer = LoadDataForManipulationViaQuickEdit()
+            QuickEditRecordCountBefore = QuickEditDataContainer.Table.Rows.Count
 			Me.DataSource = QuickEditDataContainer.Table
 			'Me.DataSource = New ObjectDataSource()
 			_IsDataLoaded = True
@@ -193,8 +121,8 @@ Namespace CompuMaster.Data.Web
 			End Sub
 		End Class
 
-		Public QuickEditDataContainer As DataManipulationResults = Nothing
-		Dim QuickEditRecordCountBefore As Integer = 0
+        Public QuickEditDataContainer As CompuMaster.Data.DataManipulationResult = Nothing
+        Dim QuickEditRecordCountBefore As Integer = 0
 
 		Private QuickUploadCounter As Integer = 0
 		Public Sub QuickEditUploadChanges()
@@ -206,9 +134,9 @@ Namespace CompuMaster.Data.Web
 					recordCountAffected = QuickEditDataContainer.Table.GetChanges.Rows.Count()
 				End If
 
-				'Now let's write the changes back to the database
-				Me.UpdateCodeManipulatedData(QuickEditDataContainer)
-				Dim recordCountAfter As Integer = QuickEditDataContainer.Table.Rows.Count
+                'Now let's write the changes back to the database
+                CompuMaster.Data.Manipulation.UpdateCodeManipulatedData(QuickEditDataContainer)
+                Dim recordCountAfter As Integer = QuickEditDataContainer.Table.Rows.Count
 
 				'Show successful execution state
 				'_UpdateStatus = "Data has been successfully uploaded" & vbNewLine & "Records loaded: " & QuickEditRecordCountBefore & vbNewLine & "Records affected: " & recordCountAffected & vbNewLine & "Records after changes: " & recordCountAfter
