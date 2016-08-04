@@ -19,11 +19,7 @@ Namespace CompuMaster.Data.DataQuery
         End Sub
 
         Public ReadOnly Property Assembly As System.Reflection.Assembly
-        'Private ReadOnly Property AssemblyPath As String
-        '    Get
-        '        Return Assembly.Location
-        '    End Get
-        'End Property
+
         Private ReadOnly Property AssemblyName As String
             Get
                 Return Me.Assembly.FullName.Substring(0, Me.Assembly.FullName.IndexOf(","c))
@@ -32,11 +28,7 @@ Namespace CompuMaster.Data.DataQuery
         Public ReadOnly Property ConnectionType As System.Type
         Public ReadOnly Property CommandBuilderType As System.Type
         Public ReadOnly Property DataAdapterType As System.Type
-        'Private ReadOnly Property ConnectionTypeName As String
-        '    Get
-        '        Return Me.ConnectionType.Name
-        '    End Get
-        'End Property
+
         Public Function CreateConnection() As IDbConnection
             Return CType(Activator.CreateInstance(Me.ConnectionType), IDbConnection)
         End Function
@@ -47,11 +39,7 @@ Namespace CompuMaster.Data.DataQuery
         End Function
 
         Public ReadOnly Property CommandType As System.Type
-        'Private ReadOnly Property CommandTypeName As String
-        '    Get
-        '        Return Me.CommandType.Name
-        '    End Get
-        'End Property
+
         Public Function CreateCommand() As IDbCommand
             Return CType(Activator.CreateInstance(Me.CommandType), IDbCommand)
         End Function
@@ -73,6 +61,11 @@ Namespace CompuMaster.Data.DataQuery
                 Return CType(Activator.CreateInstance(Me.CommandBuilderType), System.Data.Common.DbCommandBuilder)
             End If
         End Function
+        Public Function CreateCommandBuilder(dataAdapter As System.Data.IDbDataAdapter) As System.Data.Common.DbCommandBuilder
+            Dim Result As System.Data.Common.DbCommandBuilder = Me.CreateCommandBuilder
+            Result.DataAdapter = CType(dataAdapter, System.Data.Common.DbDataAdapter)
+            Return Result
+        End Function
         Public Function CreateDataAdapter() As System.Data.IDbDataAdapter
             If Me.DataAdapterType Is Nothing Then
                 Return Nothing
@@ -80,25 +73,12 @@ Namespace CompuMaster.Data.DataQuery
                 Return CType(Activator.CreateInstance(Me.DataAdapterType), System.Data.IDbDataAdapter)
             End If
         End Function
+        Public Function CreateDataAdapter(selectCommand As System.Data.IDbCommand) As System.Data.IDbDataAdapter
+            Dim Result As System.Data.IDbDataAdapter = Me.CreateDataAdapter
+            Result.SelectCommand = selectCommand
+            Return Result
+        End Function
 
-        'Public ReadOnly Property CommandBuilderType As System.Type
-        '    Get
-        '        Static BufferedResult As System.Type
-        '        If BufferedResult Is Nothing Then
-        '            BufferedResult = Me.CreateConnection.CreateCommand.GetType
-        '        End If
-        '        Return BufferedResult
-        '    End Get
-        'End Property
-        'Public ReadOnly Property DataAdapterType As System.Type
-        '    Get
-        '        Static BufferedResult As System.Type
-        '        If BufferedResult Is Nothing Then
-        '            BufferedResult = System.Data.DbProviderFactories.GetFactory(Me.CreateConnection.CreateCommand
-        '        End If
-        '        Return BufferedResult
-        '    End Get
-        'End Property
 
         ''' <summary>
         ''' A common title for the data connector
@@ -119,6 +99,21 @@ Namespace CompuMaster.Data.DataQuery
 
         Public Overrides Function ToString() As String
             Return Me.Title
+        End Function
+
+        Public Shared Function LookupDataProvider(connection As System.Data.IDbConnection) As DataProvider
+            Dim availableProviders As List(Of DataProvider) = AvailableDataProviders()
+            For MyCounter As Integer = 0 To availableProviders.Count - 1
+                If CType(connection, Object).GetType Is availableProviders(MyCounter).ConnectionType Then Return availableProviders(MyCounter)
+            Next
+            Return Nothing
+        End Function
+        Public Shared Function LookupDataProvider(connection As System.Data.IDbConnection, appDomain As AppDomain) As DataProvider
+            Dim availableProviders As List(Of DataProvider) = AvailableDataProviders(appDomain)
+            For MyCounter As Integer = 0 To availableProviders.Count - 1
+                If CType(connection, Object).GetType Is availableProviders(MyCounter).ConnectionType Then Return availableProviders(MyCounter)
+            Next
+            Return Nothing
         End Function
 
         Public Shared Function LookupDataProvider(title As String) As DataProvider

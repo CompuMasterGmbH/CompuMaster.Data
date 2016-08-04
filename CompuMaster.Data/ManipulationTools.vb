@@ -3,11 +3,11 @@ Option Strict Off
 
 Namespace CompuMaster.Data
 
-    Public Class ManipulationTools
+    Friend Class ManipulationTools
 
-        Public Shared Sub IDbDataAdapterUpdate(dataAdapter As System.Data.IDbDataAdapter, dataAdapterType As System.Type, table As System.Data.DataTable)
-            Convert.ChangeType(dataAdapter, dataAdapterType).Update(table)
-        End Sub
+        'Public Shared Sub IDbDataAdapterUpdate(dataAdapter As System.Data.IDbDataAdapter, dataAdapterType As System.Type, table As System.Data.DataTable)
+        '    Convert.ChangeType(dataAdapter, dataAdapterType).Update(table)
+        'End Sub
 
         '    Public Shared Function UpdateCommand(dataAdapter As IDbDataAdapter) As System.Data.IDbCommand
         '        Return dataAdapter.UpdateCommand

@@ -479,103 +479,41 @@ Namespace CompuMaster.Data
         Private Shared Function LoadDataForManipulationViaCode(ByVal dataConnection As IDbConnection, ByVal command As IDbCommand) As CompuMaster.Data.DataManipulationResult
 
             Dim Result As CompuMaster.Data.DataManipulationResult
-
-            If CType(dataConnection, Object).GetType.ToString = "System.Data.SqlClient.SqlConnection" Then
-                Dim MyCmdsPrepareDA As New System.Data.SqlClient.SqlDataAdapter(CType(command, SqlClient.SqlCommand))
-                Dim MyCmdsPrepareCmdBuilder As New System.Data.SqlClient.SqlCommandBuilder(MyCmdsPrepareDA)
-                Dim MyDA As New System.Data.SqlClient.SqlDataAdapter(CType(command, SqlClient.SqlCommand))
-                Dim MyCmdBuilder As New System.Data.SqlClient.SqlCommandBuilder(MyDA)
-
-                'Load the data
-                Result = New CompuMaster.Data.DataManipulationResult(command, MyDA)
-                MyDA.Fill(Result.Table)
-
-                'Auto-Fix delete/insert/update commands to support field names with reserved names by adding brackets [ ] around the field names
-                MyDA.DeleteCommand = MyCmdsPrepareCmdBuilder.GetDeleteCommand()
-                MyDA.InsertCommand = MyCmdsPrepareCmdBuilder.GetInsertCommand()
-                MyDA.UpdateCommand = MyCmdsPrepareCmdBuilder.GetUpdateCommand()
-                'Dim remoteColumnNames As String() = LookupColumnNamesOnRemoteTable(MyDA.InsertCommand.CommandText, MyDA.DeleteCommand.CommandText)
-                Dim remoteColumnNames As String() = LookupColumnNamesOnRemoteTable(Result.Table)
-                For MyCounter As Integer = 0 To remoteColumnNames.Length - 1
-                    Dim remoteTableColumnName As String = remoteColumnNames(MyCounter)
-                    AutoFixCommandColumnNames(MyDA.DeleteCommand, MyDA.InsertCommand, MyDA.UpdateCommand, remoteTableColumnName)
-                Next
-            ElseIf CType(dataConnection, Object).GetType.ToString = "System.Data.Odbc.OdbcConnection" Then
-                Dim MyCmdsPrepareDA As New System.Data.Odbc.OdbcDataAdapter(CType(command, Odbc.OdbcCommand))
-                Dim MyCmdsPrepareCmdBuilder As New System.Data.Odbc.OdbcCommandBuilder(MyCmdsPrepareDA)
-                Dim MyDA As New System.Data.Odbc.OdbcDataAdapter(CType(command, Odbc.OdbcCommand))
-                Dim MyCmdBuilder As New System.Data.Odbc.OdbcCommandBuilder(MyDA)
+            Dim CurrentProvider As Data.DataQuery.DataProvider = Data.DataQuery.DataProvider.LookupDataProvider(dataConnection)
+            If CurrentProvider IsNot Nothing Then
+                Dim MyCmdsPrepareDA As System.Data.IDbDataAdapter = CurrentProvider.CreateDataAdapter(command)
+                Dim MyCmdsPrepareCmdBuilder As System.Data.Common.DbCommandBuilder = CurrentProvider.CreateCommandBuilder(MyCmdsPrepareDA)
+                Dim MyDA As System.Data.IDbDataAdapter = CurrentProvider.CreateDataAdapter(command)
                 'MyDA.MissingSchemaAction = MissingSchemaAction.Add
                 'MyDA.MissingMappingAction = MissingMappingAction.Passthrough
 
                 'Load the data
+                Dim MyCmdBuilder As System.Data.Common.DbCommandBuilder = CurrentProvider.CreateCommandBuilder(MyDA)
                 Result = New CompuMaster.Data.DataManipulationResult(command, MyDA)
-                MyDA.Fill(Result.Table)
+                CType(MyDA, System.Data.Common.DbDataAdapter).Fill(Result.Table)
 
-                'Auto-Fix delete/insert/update commands to support field names with reserved names by adding brackets [ ] around the field names
+                'Create required data manipulation commands
                 MyDA.DeleteCommand = MyCmdsPrepareCmdBuilder.GetDeleteCommand()
                 MyDA.InsertCommand = MyCmdsPrepareCmdBuilder.GetInsertCommand()
                 MyDA.UpdateCommand = MyCmdsPrepareCmdBuilder.GetUpdateCommand()
-                'Dim remoteColumnNames As String() = LookupColumnNamesOnRemoteTable(MyDA.InsertCommand.CommandText, MyDA.DeleteCommand.CommandText)
-                Dim remoteColumnNames As String() = LookupColumnNamesOnRemoteTable(Result.Table)
-                For MyCounter As Integer = 0 To remoteColumnNames.Length - 1
-                    Dim remoteTableColumnName As String = remoteColumnNames(MyCounter)
-                    AutoFixCommandColumnNames(MyDA.DeleteCommand, MyDA.InsertCommand, MyDA.UpdateCommand, remoteTableColumnName)
-                Next
-            ElseIf CType(dataConnection, Object).GetType.ToString = "System.Data.OleDb.OleDbConnection" Then
-                'Dim MyDA As New System.Data.OleDb.OleDbDataAdapter(command)
-                Dim MyCmdsPrepareDA As New System.Data.OleDb.OleDbDataAdapter(CType(command, OleDb.OleDbCommand))
-                Dim MyCmdsPrepareCmdBuilder As New System.Data.OleDb.OleDbCommandBuilder(MyCmdsPrepareDA)
-                Dim MyDA As New System.Data.OleDb.OleDbDataAdapter(CType(command, OleDb.OleDbCommand))
-                Dim MyCmdBuilder As New System.Data.OleDb.OleDbCommandBuilder(MyDA)
-                'MyDA.MissingSchemaAction = MissingSchemaAction.Add
-                'MyDA.MissingMappingAction = MissingMappingAction.Passthrough
 
-                'Load the data
-                Result = New CompuMaster.Data.DataManipulationResult(command, MyDA)
-                MyDA.Fill(Result.Table)
-
-                'Auto-Fix delete/insert/update commands to support field names with reserved names by adding brackets [ ] around the field names
-                MyDA.DeleteCommand = MyCmdsPrepareCmdBuilder.GetDeleteCommand()
-                MyDA.InsertCommand = MyCmdsPrepareCmdBuilder.GetInsertCommand()
-                MyDA.UpdateCommand = MyCmdsPrepareCmdBuilder.GetUpdateCommand()
-                'Dim remoteColumnNames As String() = LookupColumnNamesOnRemoteTable(MyDA.InsertCommand.CommandText, MyDA.DeleteCommand.CommandText)
-                Dim remoteColumnNames As String() = LookupColumnNamesOnRemoteTable(Result.Table)
-                For MyCounter As Integer = 0 To remoteColumnNames.Length - 1
-                    Dim remoteTableColumnName As String = remoteColumnNames(MyCounter)
-                    AutoFixCommandColumnNames(MyDA.DeleteCommand, MyDA.InsertCommand, MyDA.UpdateCommand, remoteTableColumnName)
-                Next
-
+                'Do some provider-specific stuff for better compatibility/stability
+                Select Case CurrentProvider.Title
+                    Case "SqlClient", "OleDb", "ODBC"
+                        'Auto-Fix delete/insert/update commands to support field names with reserved names by adding brackets [ ] around the field names
+                        'Dim remoteColumnNames As String() = LookupColumnNamesOnRemoteTable(MyDA.InsertCommand.CommandText, MyDA.DeleteCommand.CommandText)
+                        Dim remoteColumnNames As String() = LookupColumnNamesOnRemoteTable(Result.Table)
+                        For MyCounter As Integer = 0 To remoteColumnNames.Length - 1
+                            Dim remoteTableColumnName As String = remoteColumnNames(MyCounter)
+                            AutoFixCommandColumnNames(MyDA.DeleteCommand, MyDA.InsertCommand, MyDA.UpdateCommand, remoteTableColumnName)
+                        Next
+                    Case "Npgsql"
+                        MyDA.DeleteCommand.UpdatedRowSource = UpdateRowSource.None
+                        MyDA.InsertCommand.UpdatedRowSource = UpdateRowSource.None
+                        MyDA.UpdateCommand.UpdatedRowSource = UpdateRowSource.None
+                End Select
             Else
-                Dim providers As System.Collections.Generic.List(Of Data.DataQuery.DataProvider)
-                Dim CurrentProvider As Data.DataQuery.DataProvider = Nothing
-                providers = Data.DataQuery.DataProvider.AvailableDataProviders()
-                For MyCounter As Integer = 0 To providers.Count - 1
-                    If providers(MyCounter) Is dataConnection.GetType Then
-                        CurrentProvider = providers(MyCounter)
-                    End If
-                Next
-                If CurrentProvider IsNot Nothing Then
-                    Dim MyCmdsPrepareDA As System.Data.IDbDataAdapter = CurrentProvider.CreateDataAdapter()
-                    MyCmdsPrepareDA.SelectCommand = command
-                    Dim MyCmdsPrepareCmdBuilder As System.Data.Common.DbCommandBuilder = CurrentProvider.CreateCommandBuilder()
-                    MyCmdsPrepareCmdBuilder.DataAdapter = CType(MyCmdsPrepareDA, System.Data.Common.DbDataAdapter)
-                    Dim MyDA As System.Data.IDbDataAdapter = CurrentProvider.CreateDataAdapter()
-                    MyDA.SelectCommand = command
-                    Dim MyCmdBuilder As System.Data.Common.DbCommandBuilder = CurrentProvider.CreateCommandBuilder()
-                    MyCmdBuilder.DataAdapter = CType(MyDA, System.Data.Common.DbDataAdapter)
-                    Result = New CompuMaster.Data.DataManipulationResult(command, MyDA)
-                    CType(MyDA, System.Data.Common.DbDataAdapter).Fill(Result.Table)
-
-                    MyDA.DeleteCommand = MyCmdsPrepareCmdBuilder.GetDeleteCommand()
-                    MyDA.DeleteCommand.UpdatedRowSource = UpdateRowSource.None
-                    MyDA.InsertCommand = MyCmdsPrepareCmdBuilder.GetInsertCommand()
-                    MyDA.InsertCommand.UpdatedRowSource = UpdateRowSource.None
-                    MyDA.UpdateCommand = MyCmdsPrepareCmdBuilder.GetUpdateCommand()
-                    MyDA.UpdateCommand.UpdatedRowSource = UpdateRowSource.None
-                Else
-                    Throw New NotSupportedException("Data provider not supported yet")
-                End If
+                Throw New NotSupportedException("Data provider not supported yet")
             End If
 
             Return Result
@@ -781,7 +719,7 @@ Namespace CompuMaster.Data
                     End If
                 Next
                 If CurrentProvider IsNot Nothing Then
-                    ManipulationTools.IDbDataAdapterUpdate(container.DataAdapter, CurrentProvider.DataAdapterType, container.Table)
+                    CType(container.DataAdapter, System.Data.Common.DbDataAdapter).Update(container.Table)
                 Else
                     Throw New NotSupportedException("Data provider not supported yet")
                 End If
