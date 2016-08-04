@@ -47,7 +47,7 @@ Partial Class _Default
                 Me.FeatureInfoConnectionError.Text = ""
             Catch ex As Exception
                 Me.FeatureInfoConnection.Checked = False
-                Me.FeatureInfoConnectionError.Text = ex.Message
+                Me.FeatureInfoConnectionError.Text = ex.ToString.Replace(vbNewLine, "<br />")
             End Try
         End If
         If SelectedDataProvider.CommandType Is Nothing Then
@@ -62,7 +62,7 @@ Partial Class _Default
                 Me.FeatureInfoCommandError.Text = ""
             Catch ex As Exception
                 Me.FeatureInfoCommand.Checked = False
-                Me.FeatureInfoCommandError.Text = ex.Message
+                Me.FeatureInfoCommandError.Text = ex.ToString.Replace(vbNewLine, "<br />")
             End Try
         End If
         If SelectedDataProvider.CommandBuilderType Is Nothing Then
@@ -77,7 +77,7 @@ Partial Class _Default
                 Me.FeatureInfoCommandBuilderError.Text = ""
             Catch ex As Exception
                 Me.FeatureInfoCommandBuilder.Checked = False
-                Me.FeatureInfoCommandBuilderError.Text = ex.Message
+                Me.FeatureInfoCommandBuilderError.Text = ex.ToString.Replace(vbNewLine, "<br />")
             End Try
         End If
         If SelectedDataProvider.DataAdapterType Is Nothing Then
@@ -92,7 +92,7 @@ Partial Class _Default
                 Me.FeatureInfoDbDataAdapterError.Text = ""
             Catch ex As Exception
                 Me.FeatureInfoDbDataAdapter.Checked = False
-                Me.FeatureInfoDbDataAdapterError.Text = ex.Message
+                Me.FeatureInfoDbDataAdapterError.Text = ex.ToString.Replace(vbNewLine, "<br />")
             End Try
         End If
 

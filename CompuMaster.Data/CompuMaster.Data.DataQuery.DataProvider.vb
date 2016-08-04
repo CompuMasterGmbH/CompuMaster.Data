@@ -152,52 +152,152 @@ Namespace CompuMaster.Data.DataQuery
             Return Result
         End Function
 
+        ''' <summary>
+        ''' GetAssemblyTypes might throw System.Reflection.ReflectionTypeLoadException - by .NET exception handling it's required to put this into a separate method to be able to catch this exception
+        ''' </summary>
+        ''' <param name="assembly"></param>
+        ''' <returns></returns>
+        Private Shared Function GetAssemblyTypes(assembly As System.Reflection.Assembly) As System.Type()
+            Return assembly.GetTypes()
+        End Function
+        Private Shared Function GetAssemblyTypesSafely(assembly As System.Reflection.Assembly) As System.Type()
+            Dim AssemblyTypes As System.Type() = Nothing
+            Try
+                AssemblyTypes = GetAssemblyTypes(assembly)
+            Catch ex As System.Reflection.ReflectionTypeLoadException
+                AssemblyTypes = ex.Types
+            End Try
+            Return AssemblyTypes
+        End Function
+        ''' <summary>
+        ''' GetTypeInterfaces might throw System.Reflection.ReflectionTypeLoadException - by .NET exception handling it's required to put this into a separate method to be able to catch this exception
+        ''' </summary>
+        ''' <param name="type"></param>
+        ''' <returns></returns>
+        Private Shared Function GetTypeInterfaces(type As System.Type) As System.Type()
+            Return type.GetInterfaces()
+        End Function
+        Private Shared Function GetTypeInterfacesSafely(type As System.Type) As System.Type()
+            Dim TypeInterfaces As System.Type() = Nothing
+            Try
+                TypeInterfaces = GetTypeInterfaces(type)
+            Catch ex As System.Reflection.ReflectionTypeLoadException
+                TypeInterfaces = ex.Types
+            End Try
+            Return TypeInterfaces
+        End Function
+        Private Shared Function GetTypePublicProperties(type As System.Type) As System.Reflection.PropertyInfo()
+            Return type.GetProperties(Reflection.BindingFlags.Public)
+        End Function
+        Private Shared Function GetTypePublicPropertiesSafely(type As System.Type) As System.Reflection.PropertyInfo()
+            Dim TypeProperties As System.Reflection.PropertyInfo() = Nothing
+            Try
+                TypeProperties = GetTypePublicProperties(type)
+            Catch ex As System.Reflection.ReflectionTypeLoadException
+                'just ignore this type
+                Return New System.Reflection.PropertyInfo() {}
+            End Try
+            Return TypeProperties
+        End Function
+
+
         Public Shared Function AvailableDataProviders(assembly As System.Reflection.Assembly) As List(Of DataProvider)
             Dim Result As New List(Of DataProvider)
-            For Each t As Type In assembly.GetTypes()
-                For Each iface As Type In t.GetInterfaces()
-                    If iface Is GetType(System.Data.IDbConnection) AndAlso t IsNot GetType(System.Data.Common.DbConnection) Then
-                        Dim IDbCommandType As System.Type = CType(Activator.CreateInstance(t), IDbConnection).CreateCommand.GetType
-                        Dim IDbDataAdapterType As System.Type = FindIDbDataApaterType(assembly, IDbCommandType)
-                        Dim DbCommandBuilderType As System.Type = FindDbCommandBuilder(assembly, IDbDataAdapterType)
-                        Dim Provider As New DataProvider(assembly, t, IDbCommandType, DbCommandBuilderType, IDbDataAdapterType)
-                        Result.Add(Provider)
-                    End If
-                Next
+            For Each t As Type In GetAssemblyTypesSafely(assembly)
+                If t IsNot Nothing Then
+                    For Each iface As Type In GetTypeInterfacesSafely(t)
+                        If iface Is GetType(System.Data.IDbConnection) AndAlso t IsNot GetType(System.Data.Common.DbConnection) Then
+                            Dim IDbCommandType As System.Type
+                            Try
+                                IDbCommandType = CType(Activator.CreateInstance(t), IDbConnection).CreateCommand.GetType
+                            Catch ex As System.Reflection.TargetInvocationException
+                                IDbCommandType = FindIDbCommandType(assembly, t)
+                            End Try
+                            Dim IDbDataAdapterType As System.Type = FindIDbDataApaterType(assembly, IDbCommandType)
+                            Dim DbCommandBuilderType As System.Type = FindDbCommandBuilder(assembly, IDbDataAdapterType)
+                            Dim Provider As New DataProvider(assembly, t, IDbCommandType, DbCommandBuilderType, IDbDataAdapterType)
+                            Result.Add(Provider)
+                        End If
+                    Next
+                End If
             Next
             Return Result
         End Function
 
-        Private Shared Function FindIDbDataApaterType(assembly As System.Reflection.Assembly, targetForCommand As System.Type) As System.Type
-            For Each t As Type In assembly.GetTypes()
-                For Each iface As Type In t.GetInterfaces()
-                    If iface Is GetType(System.Data.IDbDataAdapter) AndAlso t IsNot GetType(System.Data.Common.DbDataAdapter) Then
-                        For Each tContructor As Reflection.ConstructorInfo In t.GetConstructors
-                            For Each tConstructorParameter As Reflection.ParameterInfo In tContructor.GetParameters
-                                If tConstructorParameter.ParameterType Is targetForCommand Then
+        Public Shared ReadOnly Property AvailableDataProvidersFoundExceptions As New List(Of DataProviderDetectionException)
+        Public Shared ReadOnly Property AvailableDataProvidersFoundExceptions(assembly As System.Reflection.Assembly) As DataProviderDetectionException
+            Get
+                For MyCounter As Integer = 0 To DataProvider.AvailableDataProvidersFoundExceptions.Count - 1
+                    If DataProvider.AvailableDataProvidersFoundExceptions()(MyCounter).Assembly Is assembly Then
+                        Return DataProvider.AvailableDataProvidersFoundExceptions()(MyCounter)
+                    End If
+                Next
+                Return Nothing
+            End Get
+        End Property
+
+        Public Class DataProviderDetectionException
+            Inherits Exception
+
+            Friend Sub New(assembly As System.Reflection.Assembly, innerException As Exception)
+                MyBase.New("Reflection of assembly " & assembly.FullName & " failed", innerException)
+                Me.Assembly = assembly
+            End Sub
+
+            Public Property Assembly As System.Reflection.Assembly
+        End Class
+
+        Private Shared Function FindIDbCommandType(assembly As System.Reflection.Assembly, targetForConnection As System.Type) As System.Type
+            For Each t As Type In GetAssemblyTypesSafely(assembly)
+                If t IsNot Nothing Then
+                    For Each iface As Type In GetTypeInterfaces(t)
+                        If iface Is GetType(System.Data.IDbCommand) AndAlso t IsNot GetType(System.Data.Common.DbCommand) Then
+                            For Each tProperty As Reflection.PropertyInfo In GetTypePublicPropertiesSafely(t)
+                                If tProperty.PropertyType Is targetForConnection Then
                                     Return t
                                 End If
                             Next
-                        Next
-                    End If
-                Next
+                        End If
+                    Next
+                End If
+            Next
+            Return Nothing
+        End Function
+
+        Private Shared Function FindIDbDataApaterType(assembly As System.Reflection.Assembly, targetForCommand As System.Type) As System.Type
+            For Each t As Type In GetAssemblyTypesSafely(assembly)
+                If t IsNot Nothing Then
+                    For Each iface As Type In GetTypeInterfaces(t)
+                        If iface Is GetType(System.Data.IDbDataAdapter) AndAlso t IsNot GetType(System.Data.Common.DbDataAdapter) Then
+                            For Each tContructor As Reflection.ConstructorInfo In t.GetConstructors
+                                For Each tConstructorParameter As Reflection.ParameterInfo In tContructor.GetParameters
+                                    If tConstructorParameter.ParameterType Is targetForCommand Then
+                                        Return t
+                                    End If
+                                Next
+                            Next
+                        End If
+                    Next
+                End If
             Next
             Return Nothing
         End Function
 
         Private Shared Function FindDbCommandBuilder(assembly As System.Reflection.Assembly, targetForDataAdapter As System.Type) As System.Type
-            For Each t As Type In assembly.GetTypes()
-                For Each tParent As Type In AllBaseTypes(t)
-                    If tParent Is GetType(System.Data.Common.DbCommandBuilder) AndAlso t IsNot GetType(System.Data.Common.DbCommandBuilder) Then
-                        For Each tContructor As Reflection.ConstructorInfo In t.GetConstructors
-                            For Each tConstructorParameter As Reflection.ParameterInfo In tContructor.GetParameters
-                                If tConstructorParameter.ParameterType Is targetForDataAdapter Then
-                                    Return t
-                                End If
+            For Each t As Type In GetAssemblyTypesSafely(assembly)
+                If t IsNot Nothing Then
+                    For Each tParent As Type In AllBaseTypes(t)
+                        If tParent Is GetType(System.Data.Common.DbCommandBuilder) AndAlso t IsNot GetType(System.Data.Common.DbCommandBuilder) Then
+                            For Each tContructor As Reflection.ConstructorInfo In t.GetConstructors
+                                For Each tConstructorParameter As Reflection.ParameterInfo In tContructor.GetParameters
+                                    If tConstructorParameter.ParameterType Is targetForDataAdapter Then
+                                        Return t
+                                    End If
+                                Next
                             Next
-                        Next
-                    End If
-                Next
+                        End If
+                    Next
+                End If
             Next
             Return Nothing
         End Function

@@ -38,6 +38,29 @@ Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "CompuMaster.Test.Web.Net20"
 		DefaultWebSiteLanguage = "Visual Basic"
 	EndProjectSection
 EndProject
+Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "CompuMaster.Test.Web.Net45", "CompuMaster.Test.Web.Net45\", "{254590D6-9078-4E09-BF6D-59B29F3852F5}"
+	ProjectSection(WebsiteProperties) = preProject
+		TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.5"
+		ProjectReferences = "{3bda1292-0d02-452e-9518-18496ab59231}|CompuMaster.Data.dll;"
+		Debug.AspNetCompiler.VirtualPath = "/localhost_13486"
+		Debug.AspNetCompiler.PhysicalPath = "CompuMaster.Test.Web.Net45\"
+		Debug.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_13486\"
+		Debug.AspNetCompiler.Updateable = "true"
+		Debug.AspNetCompiler.ForceOverwrite = "true"
+		Debug.AspNetCompiler.FixedNames = "false"
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.VirtualPath = "/localhost_13486"
+		Release.AspNetCompiler.PhysicalPath = "CompuMaster.Test.Web.Net45\"
+		Release.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_13486\"
+		Release.AspNetCompiler.Updateable = "true"
+		Release.AspNetCompiler.ForceOverwrite = "true"
+		Release.AspNetCompiler.FixedNames = "false"
+		Release.AspNetCompiler.Debug = "False"
+		VWDPort = "13486"
+		SlnRelativePath = "CompuMaster.Test.Web.Net45\"
+		DefaultWebSiteLanguage = "Visual Basic"
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SubversionScc) = preSolution
 		Svn-Managed = True
@@ -94,7 +117,6 @@ Global
 		{DFF5ACB1-A556-4DD5-A418-2FEE9DC8440B}.Debug|x86.ActiveCfg = Debug|x86
 		{DFF5ACB1-A556-4DD5-A418-2FEE9DC8440B}.Debug|x86.Build.0 = Debug|x86
 		{DFF5ACB1-A556-4DD5-A418-2FEE9DC8440B}.NAnt|Any CPU.ActiveCfg = Release|x86
-		{DFF5ACB1-A556-4DD5-A418-2FEE9DC8440B}.NAnt|Any CPU.Build.0 = Release|x86
 		{DFF5ACB1-A556-4DD5-A418-2FEE9DC8440B}.NAnt|x86.ActiveCfg = Release|x86
 		{DFF5ACB1-A556-4DD5-A418-2FEE9DC8440B}.NAnt|x86.Build.0 = Release|x86
 		{DFF5ACB1-A556-4DD5-A418-2FEE9DC8440B}.Release|Any CPU.ActiveCfg = Release|x86
@@ -105,13 +127,21 @@ Global
 		{F5F48801-5665-470E-B2FE-9A98BE089CAE}.Debug|x86.ActiveCfg = Debug|Any CPU
 		{F5F48801-5665-470E-B2FE-9A98BE089CAE}.Debug|x86.Build.0 = Debug|Any CPU
 		{F5F48801-5665-470E-B2FE-9A98BE089CAE}.NAnt|Any CPU.ActiveCfg = Debug|Any CPU
-		{F5F48801-5665-470E-B2FE-9A98BE089CAE}.NAnt|Any CPU.Build.0 = Debug|Any CPU
 		{F5F48801-5665-470E-B2FE-9A98BE089CAE}.NAnt|x86.ActiveCfg = Debug|Any CPU
 		{F5F48801-5665-470E-B2FE-9A98BE089CAE}.NAnt|x86.Build.0 = Debug|Any CPU
 		{F5F48801-5665-470E-B2FE-9A98BE089CAE}.Release|Any CPU.ActiveCfg = Debug|Any CPU
-		{F5F48801-5665-470E-B2FE-9A98BE089CAE}.Release|Any CPU.Build.0 = Debug|Any CPU
 		{F5F48801-5665-470E-B2FE-9A98BE089CAE}.Release|x86.ActiveCfg = Debug|Any CPU
 		{F5F48801-5665-470E-B2FE-9A98BE089CAE}.Release|x86.Build.0 = Debug|Any CPU
+		{254590D6-9078-4E09-BF6D-59B29F3852F5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{254590D6-9078-4E09-BF6D-59B29F3852F5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{254590D6-9078-4E09-BF6D-59B29F3852F5}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{254590D6-9078-4E09-BF6D-59B29F3852F5}.Debug|x86.Build.0 = Debug|Any CPU
+		{254590D6-9078-4E09-BF6D-59B29F3852F5}.NAnt|Any CPU.ActiveCfg = Debug|Any CPU
+		{254590D6-9078-4E09-BF6D-59B29F3852F5}.NAnt|x86.ActiveCfg = Debug|Any CPU
+		{254590D6-9078-4E09-BF6D-59B29F3852F5}.NAnt|x86.Build.0 = Debug|Any CPU
+		{254590D6-9078-4E09-BF6D-59B29F3852F5}.Release|Any CPU.ActiveCfg = Debug|Any CPU
+		{254590D6-9078-4E09-BF6D-59B29F3852F5}.Release|x86.ActiveCfg = Debug|Any CPU
+		{254590D6-9078-4E09-BF6D-59B29F3852F5}.Release|x86.Build.0 = Debug|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -10,9 +10,10 @@
 <body>
     <form id="form1" runat="server">
         <div>
-            <h1>CompuMaster.Data Test .Net 2.0 with ASP.NET permission set</h1>
-            <h2>Available data providers</h2>
+            <h1>CompuMaster.Data Test .Net 2.0 with medium trust level (=typical ASP.NET permission set)</h1>
+            <h2>Available data providers (<%= Me.AvailableDataProvidersListbox.Items.Count %> data providers)</h2>
             <asp:RadioButtonList runat="server" ID="AvailableDataProvidersListbox" AutoPostBack="true" />
+            <asp:Label runat="server" ID="AvailableDataProvidersError" ForeColor="Red" />
             <asp:Panel runat="server" ID="FeatureShow" visible="false">
                 <h2>Available features</h2>
                 <ul>
@@ -26,6 +27,10 @@
                         <asp:CheckBox runat="server" ID="FeatureInfoDbDataAdapter" Enabled="false" /> <asp:Label runat="server" ID="FeatureInfoDbDataAdapterError" ForeColor="Red" /></li>
                 </ul>
             </asp:Panel>
+            <h2>Loaded assemblies in current AppDomain (<%= Me.LoadedAssembliesList.Items.Count %> assemblies)</h2>
+            <ul>
+                <asp:BulletedList runat="server" ID="LoadedAssembliesList" />
+            </ul>
             <h2>Really good guides to trust levels, etc.</h2>
             <ul>
                 <li><a href="http://www.codemag.com/article/0801031" target="_blank">http://www.codemag.com/article/0801031</a></li>
