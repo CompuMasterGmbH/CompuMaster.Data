@@ -175,7 +175,7 @@ Namespace CompuMaster.Data
             If File.Exists(path) Then
                 fi = New FileInfo(path)
             ElseIf path.ToLower.StartsWith("http://") OrElse path.ToLower.StartsWith("https://") Then
-                Dim LocalCopyOfFileContentFromRemoteUri As String = Utils.ReadStringDataFromUri(path, encoding.EncodingName)
+                Dim LocalCopyOfFileContentFromRemoteUri As String = Utils.ReadStringDataFromUri(path, encoding.WebName)
                 Return ReadDataTableFromCsvString(LocalCopyOfFileContentFromRemoteUri, includesColumnHeaders, columnWidths, convertEmptyStringsToDBNull)
             Else
                 Throw New System.IO.FileNotFoundException("File not found", path)
@@ -439,7 +439,7 @@ Namespace CompuMaster.Data
             If File.Exists(path) Then
                 fi = New FileInfo(path)
             ElseIf path.ToLower.StartsWith("http://") OrElse path.ToLower.StartsWith("https://") Then
-                Dim LocalCopyOfFileContentFromRemoteUri As String = Utils.ReadStringDataFromUri(path, encoding.EncodingName)
+                Dim LocalCopyOfFileContentFromRemoteUri As String = Utils.ReadStringDataFromUri(path, encoding.WebName)
                 Return ReadDataTableFromCsvString(LocalCopyOfFileContentFromRemoteUri, includesColumnHeaders, cultureFormatProvider, recognizeTextBy, recognizeMultipleColumnSeparatorCharsAsOne, convertEmptyStringsToDBNull)
             Else
                 Throw New System.IO.FileNotFoundException("File not found", path)
