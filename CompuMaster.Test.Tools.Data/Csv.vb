@@ -26,6 +26,21 @@ Namespace CompuMaster.Test.Data
             NUnit.Framework.Assert.AreEqual(2, testoutputdata.Rows.Count, "JW #101")
         End Sub
 
+        <Test> Public Sub ReadDataTableFromCsvFileWithColumnSeparatorCharInTextStrings()
+            Dim TestFile As String = AssemblyTestEnvironment.TestFileAbsolutePath("testfiles\country-codes.csv")
+            'TestFile = "https://raw.githubusercontent.com/datasets/country-codes/master/data/country-codes.csv"
+
+            Dim CountryCodesTable As DataTable = CompuMaster.Data.Csv.ReadDataTableFromCsvFile(TestFile, True, System.Text.Encoding.UTF8, System.Globalization.CultureInfo.InvariantCulture, """"c, False, False)
+            Console.WriteLine(CompuMaster.Data.DataTables.ConvertToWikiTable(CountryCodesTable))
+
+            NUnit.Framework.Assert.AreEqual(251, CountryCodesTable.Rows.Count)
+            Dim ColumnHeaders As String() = New String() {"name", "official_name_en", "official_name_fr", "ISO3166-1-Alpha-2", "ISO3166-1-Alpha-3", "ISO3166-1-numeric", "ITU", "MARC", "WMO", "DS", "Dial", "FIFA", "FIPS", "GAUL", "IOC", "ISO4217-currency_alphabetic_code", "ISO4217-currency_country_name", "ISO4217-currency_minor_unit", "ISO4217-currency_name", "ISO4217-currency_numeric_code", "is_independent", "Capital", "Continent", "TLD", "Languages", "geonameid", "EDGAR"}
+            For MyCounter As Integer = 0 To System.Math.Min(CountryCodesTable.Columns.Count, ColumnHeaders.Length) - 1
+                NUnit.Framework.Assert.AreEqual(ColumnHeaders(MyCounter), CountryCodesTable.Columns(MyCounter).ColumnName)
+            Next
+            NUnit.Framework.Assert.AreEqual(ColumnHeaders.Length, CountryCodesTable.Columns.Count)
+        End Sub
+
         <Test()> Public Sub ReadDataTableFromCsvStringSeparatorSeparated(<Values("en-US", "en-GB", "de-DE", "fr-FR", "ja-JP")> cultureContext As String)
             System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.CreateSpecificCulture(cultureContext)
 
