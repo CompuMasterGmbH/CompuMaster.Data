@@ -123,7 +123,9 @@ Namespace CompuMaster.Data
             If File.Exists(path) Then
             ElseIf path.ToLower.StartsWith("http://") OrElse path.ToLower.StartsWith("https://") Then
                 Dim LocalCopyOfFileContentFromRemoteUri As String = Utils.ReadStringDataFromUri(path, encoding)
-                Return ReadDataTableFromCsvString(LocalCopyOfFileContentFromRemoteUri, includesColumnHeaders, columnWidths, convertEmptyStringsToDBNull)
+                Result = ReadDataTableFromCsvString(LocalCopyOfFileContentFromRemoteUri, includesColumnHeaders, columnWidths, convertEmptyStringsToDBNull)
+                Result.TableName = System.IO.Path.GetFileNameWithoutExtension(path)
+                Return Result
             Else
                 Throw New System.IO.FileNotFoundException("File not found", path)
             End If
@@ -172,7 +174,9 @@ Namespace CompuMaster.Data
             If File.Exists(path) Then
             ElseIf path.ToLower.StartsWith("http://") OrElse path.ToLower.StartsWith("https://") Then
                 Dim LocalCopyOfFileContentFromRemoteUri As String = Utils.ReadStringDataFromUri(path, encoding.WebName)
-                Return ReadDataTableFromCsvString(LocalCopyOfFileContentFromRemoteUri, includesColumnHeaders, columnWidths, convertEmptyStringsToDBNull)
+                Result = ReadDataTableFromCsvString(LocalCopyOfFileContentFromRemoteUri, includesColumnHeaders, columnWidths, convertEmptyStringsToDBNull)
+                Result.TableName = System.IO.Path.GetFileNameWithoutExtension(path)
+                Return Result
             Else
                 Throw New System.IO.FileNotFoundException("File not found", path)
             End If
@@ -382,7 +386,9 @@ Namespace CompuMaster.Data
             If File.Exists(path) Then
             ElseIf path.ToLower.StartsWith("http://") OrElse path.ToLower.StartsWith("https://") Then
                 Dim LocalCopyOfFileContentFromRemoteUri As String = Utils.ReadStringDataFromUri(path, encoding)
-                Return ReadDataTableFromCsvString(LocalCopyOfFileContentFromRemoteUri, includesColumnHeaders, columnSeparator, recognizeTextBy, recognizeMultipleColumnSeparatorCharsAsOne, convertEmptyStringsToDBNull)
+                Result = ReadDataTableFromCsvString(LocalCopyOfFileContentFromRemoteUri, includesColumnHeaders, columnSeparator, recognizeTextBy, recognizeMultipleColumnSeparatorCharsAsOne, convertEmptyStringsToDBNull)
+                Result.TableName = System.IO.Path.GetFileNameWithoutExtension(path)
+                Return Result
             Else
                 Throw New System.IO.FileNotFoundException("File not found", path)
             End If
@@ -432,7 +438,9 @@ Namespace CompuMaster.Data
             If File.Exists(path) Then
             ElseIf path.ToLower.StartsWith("http://") OrElse path.ToLower.StartsWith("https://") Then
                 Dim LocalCopyOfFileContentFromRemoteUri As String = Utils.ReadStringDataFromUri(path, encoding.WebName)
-                Return ReadDataTableFromCsvString(LocalCopyOfFileContentFromRemoteUri, includesColumnHeaders, cultureFormatProvider, recognizeTextBy, recognizeMultipleColumnSeparatorCharsAsOne, convertEmptyStringsToDBNull)
+                Result = ReadDataTableFromCsvString(LocalCopyOfFileContentFromRemoteUri, includesColumnHeaders, cultureFormatProvider, recognizeTextBy, recognizeMultipleColumnSeparatorCharsAsOne, convertEmptyStringsToDBNull)
+                Result.TableName = System.IO.Path.GetFileNameWithoutExtension(path)
+                Return Result
             Else
                 Throw New System.IO.FileNotFoundException("File not found", path)
             End If
