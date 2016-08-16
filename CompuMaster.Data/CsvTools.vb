@@ -119,17 +119,14 @@ Namespace CompuMaster.Data
         Friend Shared Function ReadDataTableFromCsvFile(ByVal path As String, ByVal includesColumnHeaders As Boolean, ByVal columnWidths As Integer(), ByVal encoding As String, ByVal convertEmptyStringsToDBNull As Boolean) As DataTable
 
             Dim Result As New DataTable
-            Dim fi As FileInfo
 
             If File.Exists(path) Then
-                fi = New FileInfo(path)
             ElseIf path.ToLower.StartsWith("http://") OrElse path.ToLower.StartsWith("https://") Then
                 Dim LocalCopyOfFileContentFromRemoteUri As String = Utils.ReadStringDataFromUri(path, encoding)
                 Return ReadDataTableFromCsvString(LocalCopyOfFileContentFromRemoteUri, includesColumnHeaders, columnWidths, convertEmptyStringsToDBNull)
             Else
                 Throw New System.IO.FileNotFoundException("File not found", path)
             End If
-            fi = Nothing
 
             Dim reader As StreamReader = Nothing
             Try
@@ -139,6 +136,7 @@ Namespace CompuMaster.Data
                     reader = New StreamReader(path, System.Text.Encoding.GetEncoding(encoding))
                 End If
                 Result = ReadDataTableFromCsvReader(reader, includesColumnHeaders, System.Globalization.CultureInfo.CurrentCulture, columnWidths, convertEmptyStringsToDBNull)
+                Result.TableName = System.IO.Path.GetFileNameWithoutExtension(path)
             Finally
                 If Not reader Is Nothing Then
                     reader.Close()
@@ -170,17 +168,14 @@ Namespace CompuMaster.Data
         Friend Shared Function ReadDataTableFromCsvFile(ByVal path As String, ByVal includesColumnHeaders As Boolean, ByVal columnWidths As Integer(), ByVal encoding As System.Text.Encoding, ByVal cultureFormatProvider As System.Globalization.CultureInfo, ByVal convertEmptyStringsToDBNull As Boolean) As DataTable
 
             Dim Result As New DataTable
-            Dim fi As FileInfo
 
             If File.Exists(path) Then
-                fi = New FileInfo(path)
             ElseIf path.ToLower.StartsWith("http://") OrElse path.ToLower.StartsWith("https://") Then
                 Dim LocalCopyOfFileContentFromRemoteUri As String = Utils.ReadStringDataFromUri(path, encoding.WebName)
                 Return ReadDataTableFromCsvString(LocalCopyOfFileContentFromRemoteUri, includesColumnHeaders, columnWidths, convertEmptyStringsToDBNull)
             Else
                 Throw New System.IO.FileNotFoundException("File not found", path)
             End If
-            fi = Nothing
 
             Dim reader As StreamReader = Nothing
             Try
@@ -190,6 +185,7 @@ Namespace CompuMaster.Data
                     reader = New StreamReader(path, (encoding))
                 End If
                 Result = ReadDataTableFromCsvReader(reader, includesColumnHeaders, cultureFormatProvider, columnWidths, convertEmptyStringsToDBNull)
+                Result.TableName = System.IO.Path.GetFileNameWithoutExtension(path)
             Finally
                 If Not reader Is Nothing Then
                     reader.Close()
@@ -382,17 +378,14 @@ Namespace CompuMaster.Data
         Friend Shared Function ReadDataTableFromCsvFile(ByVal path As String, ByVal includesColumnHeaders As Boolean, ByVal encoding As String, ByVal columnSeparator As Char, ByVal recognizeTextBy As Char, ByVal recognizeMultipleColumnSeparatorCharsAsOne As Boolean, ByVal convertEmptyStringsToDBNull As Boolean) As DataTable
 
             Dim Result As New DataTable
-            Dim fi As FileInfo
 
             If File.Exists(path) Then
-                fi = New FileInfo(path)
             ElseIf path.ToLower.StartsWith("http://") OrElse path.ToLower.StartsWith("https://") Then
                 Dim LocalCopyOfFileContentFromRemoteUri As String = Utils.ReadStringDataFromUri(path, encoding)
                 Return ReadDataTableFromCsvString(LocalCopyOfFileContentFromRemoteUri, includesColumnHeaders, columnSeparator, recognizeTextBy, recognizeMultipleColumnSeparatorCharsAsOne, convertEmptyStringsToDBNull)
             Else
                 Throw New System.IO.FileNotFoundException("File not found", path)
             End If
-            fi = Nothing
 
             Dim reader As StreamReader = Nothing
             Try
@@ -402,6 +395,7 @@ Namespace CompuMaster.Data
                     reader = New StreamReader(path, System.Text.Encoding.GetEncoding(encoding))
                 End If
                 Result = ReadDataTableFromCsvReader(reader, includesColumnHeaders, System.Globalization.CultureInfo.CurrentCulture, columnSeparator, recognizeTextBy, recognizeMultipleColumnSeparatorCharsAsOne, convertEmptyStringsToDBNull)
+                Result.TableName = System.IO.Path.GetFileNameWithoutExtension(path)
             Finally
                 If Not reader Is Nothing Then
                     reader.Close()
@@ -434,17 +428,14 @@ Namespace CompuMaster.Data
         Friend Shared Function ReadDataTableFromCsvFile(ByVal path As String, ByVal includesColumnHeaders As Boolean, ByVal encoding As System.Text.Encoding, ByVal cultureFormatProvider As System.Globalization.CultureInfo, ByVal recognizeTextBy As Char, ByVal recognizeMultipleColumnSeparatorCharsAsOne As Boolean, ByVal convertEmptyStringsToDBNull As Boolean) As DataTable
 
             Dim Result As New DataTable
-            Dim fi As FileInfo
 
             If File.Exists(path) Then
-                fi = New FileInfo(path)
             ElseIf path.ToLower.StartsWith("http://") OrElse path.ToLower.StartsWith("https://") Then
                 Dim LocalCopyOfFileContentFromRemoteUri As String = Utils.ReadStringDataFromUri(path, encoding.WebName)
                 Return ReadDataTableFromCsvString(LocalCopyOfFileContentFromRemoteUri, includesColumnHeaders, cultureFormatProvider, recognizeTextBy, recognizeMultipleColumnSeparatorCharsAsOne, convertEmptyStringsToDBNull)
             Else
                 Throw New System.IO.FileNotFoundException("File not found", path)
             End If
-            fi = Nothing
 
             Dim reader As StreamReader = Nothing
             Try
@@ -454,6 +445,7 @@ Namespace CompuMaster.Data
                     reader = New StreamReader(path, encoding)
                 End If
                 Result = ReadDataTableFromCsvReader(reader, includesColumnHeaders, cultureFormatProvider, Nothing, recognizeTextBy, recognizeMultipleColumnSeparatorCharsAsOne, convertEmptyStringsToDBNull)
+                Result.TableName = System.IO.Path.GetFileNameWithoutExtension(path)
             Finally
                 If Not reader Is Nothing Then
                     reader.Close()
