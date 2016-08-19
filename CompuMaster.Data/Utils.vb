@@ -235,6 +235,209 @@ Namespace CompuMaster.Data
                 Return CType(checkValueIfDBNull, Double)
             End If
         End Function
+        ''' <summary>
+        '''     Checks for DBNull and returns the second value alternatively
+        ''' </summary>
+        ''' <param name="checkValueIfDBNull">The value to be checked</param>
+        ''' <param name="replaceWithThis">The alternative value, null (Nothing in VisualBasic) if not defined</param>
+        ''' <returns>A value which is not DBNull</returns>
+        <DebuggerHidden()> Public Shared Function NoDBNull(ByVal checkValueIfDBNull As Object, ByVal replaceWithThis As Byte) As Byte
+            If IsDBNull(checkValueIfDBNull) Then
+                Return (replaceWithThis)
+            Else
+                Return CType(checkValueIfDBNull, Byte)
+            End If
+        End Function
+
+        ''' <summary>
+        '''     Checks for DBNull and returns null (Nothing in VisualBasic) in that case
+        ''' </summary>
+        ''' <param name="replaceWithThis">The value to be checked</param>
+        ''' <returns>A value which is not DBNull; a DBNull as input will return null (Nothing in VisualBasic)</returns>
+        ''' <remarks>
+        ''' </remarks>
+        <DebuggerHidden()> Public Shared Function NoDBNull(ByVal value As Object, ByVal replaceWithThis As Char?) As Char?
+            If IsDBNull(value) Then
+                Return replaceWithThis
+            Else
+                Return New Char?(CType(value, Char))
+            End If
+        End Function
+
+        ''' -----------------------------------------------------------------------------
+        ''' <summary>
+        '''     Checks for DBNull and returns the second value alternatively
+        ''' </summary>
+        ''' <param name="checkValueIfDBNull">The value to be checked</param>
+        ''' <param name="replaceWithThis">The alternative value, null (Nothing in VisualBasic) if not defined</param>
+        ''' <returns>A value which is not DBNull</returns>
+        ''' <remarks>
+        ''' </remarks>
+        ''' <history>
+        ''' 	[adminwezel]	06.07.2004	Created
+        ''' </history>
+        ''' -----------------------------------------------------------------------------
+        <DebuggerHidden()> Public Shared Function NoDBNull(ByVal checkValueIfDBNull As Object, ByVal replaceWithThis As Integer?) As Integer?
+            If IsDBNull(checkValueIfDBNull) Then
+                Return (replaceWithThis)
+            Else
+                Return New Integer?(CType(checkValueIfDBNull, Integer))
+            End If
+        End Function
+        ''' -----------------------------------------------------------------------------
+        ''' <summary>
+        '''     Checks for DBNull and returns the second value alternatively
+        ''' </summary>
+        ''' <param name="checkValueIfDBNull">The value to be checked</param>
+        ''' <param name="replaceWithThis">The alternative value, null (Nothing in VisualBasic) if not defined</param>
+        ''' <returns>A value which is not DBNull</returns>
+        ''' <remarks>
+        ''' </remarks>
+        ''' <history>
+        ''' 	[adminwezel]	06.07.2004	Created
+        ''' </history>
+        ''' -----------------------------------------------------------------------------
+        <DebuggerHidden()> Public Shared Function NoDBNull(ByVal checkValueIfDBNull As Object, ByVal replaceWithThis As Long?) As Long?
+            If IsDBNull(checkValueIfDBNull) Then
+                Return (replaceWithThis)
+            Else
+                Return New Long?(CType(checkValueIfDBNull, Long))
+            End If
+        End Function
+        ''' -----------------------------------------------------------------------------
+        ''' <summary>
+        '''     Checks for DBNull and returns the second value alternatively
+        ''' </summary>
+        ''' <param name="checkValueIfDBNull">The value to be checked</param>
+        ''' <param name="replaceWithThis">The alternative value, null (Nothing in VisualBasic) if not defined</param>
+        ''' <returns>A value which is not DBNull</returns>
+        ''' <remarks>
+        ''' </remarks>
+        ''' <history>
+        ''' 	[adminwezel]	06.07.2004	Created
+        ''' </history>
+        ''' -----------------------------------------------------------------------------
+        <DebuggerHidden()> Public Shared Function NoDBNull(ByVal checkValueIfDBNull As Object, ByVal replaceWithThis As Decimal?) As Decimal?
+            If IsDBNull(checkValueIfDBNull) Then
+                Return (replaceWithThis)
+            Else
+                Return New Decimal?(CType(checkValueIfDBNull, Decimal))
+            End If
+        End Function
+        ''' -----------------------------------------------------------------------------
+        ''' <summary>
+        '''     Checks for DBNull and returns the second value alternatively
+        ''' </summary>
+        ''' <param name="checkValueIfDBNull">The value to be checked</param>
+        ''' <param name="replaceWithThis">The alternative value, null (Nothing in VisualBasic) if not defined</param>
+        ''' <returns>A value which is not DBNull</returns>
+        ''' <remarks>
+        ''' </remarks>
+        ''' <history>
+        ''' 	[adminwezel]	06.07.2004	Created
+        ''' </history>
+        ''' -----------------------------------------------------------------------------
+        <DebuggerHidden()> Public Shared Function NoDBNull(ByVal checkValueIfDBNull As Object, ByVal replaceWithThis As Short?) As Short?
+            If IsDBNull(checkValueIfDBNull) Then
+                Return (replaceWithThis)
+            Else
+                Return New Short?(CType(checkValueIfDBNull, Short))
+            End If
+        End Function
+        ''' -----------------------------------------------------------------------------
+        ''' <summary>
+        '''     Checks for DBNull and returns the second value alternatively
+        ''' </summary>
+        ''' <param name="checkValueIfDBNull">The value to be checked</param>
+        ''' <param name="replaceWithThis">The alternative value, null (Nothing in VisualBasic) if not defined</param>
+        ''' <returns>A value which is not DBNull</returns>
+        ''' <remarks>
+        ''' </remarks>
+        ''' <history>
+        ''' 	[adminwezel]	06.07.2004	Created
+        ''' </history>
+        ''' -----------------------------------------------------------------------------
+        <DebuggerHidden()> Public Shared Function NoDBNull(ByVal checkValueIfDBNull As Object, ByVal replaceWithThis As Single?) As Single?
+            If IsDBNull(checkValueIfDBNull) Then
+                Return (replaceWithThis)
+            Else
+                Return New Single?(CType(checkValueIfDBNull, Single))
+            End If
+        End Function
+        ''' -----------------------------------------------------------------------------
+        ''' <summary>
+        '''     Checks for DBNull and returns the second value alternatively
+        ''' </summary>
+        ''' <param name="checkValueIfDBNull">The value to be checked</param>
+        ''' <param name="replaceWithThis">The alternative value, null (Nothing in VisualBasic) if not defined</param>
+        ''' <returns>A value which is not DBNull</returns>
+        ''' <remarks>
+        ''' </remarks>
+        ''' <history>
+        ''' 	[adminwezel]	06.07.2004	Created
+        ''' </history>
+        ''' -----------------------------------------------------------------------------
+        <DebuggerHidden()> Public Shared Function NoDBNull(ByVal checkValueIfDBNull As Object, ByVal replaceWithThis As Boolean?) As Boolean?
+            If IsDBNull(checkValueIfDBNull) Then
+                Return (replaceWithThis)
+            Else
+                Return New Boolean?(CType(checkValueIfDBNull, Boolean))
+            End If
+        End Function
+        ''' -----------------------------------------------------------------------------
+        ''' <summary>
+        '''     Checks for DBNull and returns the second value alternatively
+        ''' </summary>
+        ''' <param name="checkValueIfDBNull">The value to be checked</param>
+        ''' <param name="replaceWithThis">The alternative value, null (Nothing in VisualBasic) if not defined</param>
+        ''' <returns>A value which is not DBNull</returns>
+        ''' <remarks>
+        ''' </remarks>
+        ''' <history>
+        ''' 	[adminwezel]	06.07.2004	Created
+        ''' </history>
+        ''' -----------------------------------------------------------------------------
+        <DebuggerHidden()> Public Shared Function NoDBNull(ByVal checkValueIfDBNull As Object, ByVal replaceWithThis As DateTime?) As DateTime?
+            If IsDBNull(checkValueIfDBNull) Then
+                Return (replaceWithThis)
+            Else
+                Return New DateTime?(CType(checkValueIfDBNull, DateTime))
+            End If
+        End Function
+        ''' -----------------------------------------------------------------------------
+        ''' <summary>
+        '''     Checks for DBNull and returns the second value alternatively
+        ''' </summary>
+        ''' <param name="checkValueIfDBNull">The value to be checked</param>
+        ''' <param name="replaceWithThis">The alternative value, null (Nothing in VisualBasic) if not defined</param>
+        ''' <returns>A value which is not DBNull</returns>
+        ''' <remarks>
+        ''' </remarks>
+        ''' <history>
+        ''' 	[adminwezel]	06.07.2004	Created
+        ''' </history>
+        ''' -----------------------------------------------------------------------------
+        <DebuggerHidden()> Public Shared Function NoDBNull(ByVal checkValueIfDBNull As Object, ByVal replaceWithThis As Double?) As Double?
+            If IsDBNull(checkValueIfDBNull) Then
+                Return (replaceWithThis)
+            Else
+                Return New Double?(CType(checkValueIfDBNull, Double))
+            End If
+        End Function
+        ''' <summary>
+        '''     Checks for DBNull and returns the second value alternatively
+        ''' </summary>
+        ''' <param name="checkValueIfDBNull">The value to be checked</param>
+        ''' <param name="replaceWithThis">The alternative value, null (Nothing in VisualBasic) if not defined</param>
+        ''' <returns>A value which is not DBNull</returns>
+        <DebuggerHidden()> Public Shared Function NoDBNull(ByVal checkValueIfDBNull As Object, ByVal replaceWithThis As Byte?) As Byte?
+            If IsDBNull(checkValueIfDBNull) Then
+                Return (replaceWithThis)
+            Else
+                Return New Byte?(CType(checkValueIfDBNull, Byte))
+            End If
+        End Function
+
         ''' -----------------------------------------------------------------------------
         ''' <summary>
         '''     Checks for DBNull and returns the second value alternatively
@@ -275,6 +478,39 @@ Namespace CompuMaster.Data
                 Return CType(checkValueIfDBNull, String)
             End If
         End Function
+
+        ''' <summary>
+        '''     Checks for DBNull and returns the null (Nothing in VisualBasic) alternatively
+        ''' </summary>
+        ''' <param name="checkValueIfDBNull">The value to be checked</param>
+        ''' <returns>A value which is not DBNull, otherwise null (Nothing in VisualBasic)</returns>
+        <DebuggerHidden()> Public Shared Function NoDBNull(Of T)(ByVal checkValueIfDBNull As Object) As T
+            If IsDBNull(checkValueIfDBNull) Then
+                Return Nothing
+            ElseIf checkValueIfDBNull Is Nothing Then
+                Return CType(Nothing, T)
+            ElseIf Nullable.GetUnderlyingType(GetType(T)) IsNot Nothing AndAlso checkValueIfDBNull.GetType.IsValueType AndAlso Nullable.GetUnderlyingType(GetType(T)) IsNot checkValueIfDBNull.GetType Then
+                Dim UnderlyingType As Type = Nullable.GetUnderlyingType(GetType(T))
+                Dim Result As T = CType(Activator.CreateInstance(GetType(T), checkValueIfDBNull), T)
+                Return Result
+            Else
+                Return CType(checkValueIfDBNull, T)
+            End If
+        End Function
+        ''' <summary>
+        '''     Checks for DBNull and returns the second value alternatively
+        ''' </summary>
+        ''' <param name="checkValueIfDBNull">The value to be checked</param>
+        ''' <param name="replaceWithThis">The alternative value, null (Nothing in VisualBasic) if not defined</param>
+        ''' <returns>A value which is not DBNull</returns>
+        <DebuggerHidden()> Public Shared Function NoDBNull(Of T)(ByVal checkValueIfDBNull As Object, ByVal replaceWithThis As T) As T
+            If IsDBNull(checkValueIfDBNull) Then
+                Return (replaceWithThis)
+            Else
+                Return CType(checkValueIfDBNull, T)
+            End If
+        End Function
+
 #End Region
 
 #Region "Type conversions"
@@ -526,6 +762,46 @@ Namespace CompuMaster.Data
         ''' <param name="value">The value to be validated</param>
         ''' <returns></returns>
         ''' <remarks></remarks>
+        <DebuggerHidden(), CLSCompliant(False)> Public Shared Function ValueNotNothingOrDBNull(ByVal value As UInt16) As Object
+            If value = Nothing Then
+                Return DBNull.Value
+            Else
+                Return value
+            End If
+        End Function
+        ''' <summary>
+        '''     Return the value which is not nothing/null/zero or otherwise return DBNull.Value 
+        ''' </summary>
+        ''' <param name="value">The value to be validated</param>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        <DebuggerHidden(), CLSCompliant(False)> Public Shared Function ValueNotNothingOrDBNull(ByVal value As UInt32) As Object
+            If value = Nothing Then
+                Return DBNull.Value
+            Else
+                Return value
+            End If
+        End Function
+        ''' <summary>
+        '''     Return the value which is not nothing/null/zero or otherwise return DBNull.Value 
+        ''' </summary>
+        ''' <param name="value">The value to be validated</param>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        <DebuggerHidden(), CLSCompliant(False)> Public Shared Function ValueNotNothingOrDBNull(ByVal value As UInt64) As Object
+            If value = Nothing Then
+                Return DBNull.Value
+            Else
+                Return value
+            End If
+        End Function
+
+        ''' <summary>
+        '''     Return the value which is not nothing/null/zero or otherwise return DBNull.Value 
+        ''' </summary>
+        ''' <param name="value">The value to be validated</param>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
         <DebuggerHidden()> Public Shared Function ValueNotNothingOrDBNull(ByVal value As Short) As Object
             If value = Nothing Then
                 Return DBNull.Value
@@ -610,6 +886,20 @@ Namespace CompuMaster.Data
         ''' <param name="value">The value to be validated</param>
         ''' <returns></returns>
         ''' <remarks></remarks>
+        <DebuggerHidden()> Public Shared Function ValueNotNothingOrAlternativeValue(ByVal value As TimeSpan, ByVal alternativeValue As TimeSpan) As TimeSpan
+            If value = Nothing Then
+                Return alternativeValue
+            Else
+                Return value
+            End If
+        End Function
+
+        ''' <summary>
+        '''     Return the value which is not nothing/null/zero or otherwise return DBNull.Value 
+        ''' </summary>
+        ''' <param name="value">The value to be validated</param>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
         <DebuggerHidden()> Public Shared Function ValueNotNothingOrAlternativeValue(ByVal value As Single, ByVal alternativeValue As Single) As Single
             If value = Nothing Then
                 Return alternativeValue
@@ -632,6 +922,45 @@ Namespace CompuMaster.Data
             End If
         End Function
 
+        ''' <summary>
+        '''     Return the value which is not nothing/null/zero or otherwise return DBNull.Value 
+        ''' </summary>
+        ''' <param name="value">The value to be validated</param>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        <DebuggerHidden(), CLSCompliant(False)> Public Shared Function ValueNotNothingOrAlternativeValue(ByVal value As Byte, ByVal alternativeValue As UInt16) As UInt16
+            If value = Nothing Then
+                Return alternativeValue
+            Else
+                Return value
+            End If
+        End Function
+        ''' <summary>
+        '''     Return the value which is not nothing/null/zero or otherwise return DBNull.Value 
+        ''' </summary>
+        ''' <param name="value">The value to be validated</param>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        <DebuggerHidden(), CLSCompliant(False)> Public Shared Function ValueNotNothingOrAlternativeValue(ByVal value As Byte, ByVal alternativeValue As UInt32) As UInt32
+            If value = Nothing Then
+                Return alternativeValue
+            Else
+                Return value
+            End If
+        End Function
+        ''' <summary>
+        '''     Return the value which is not nothing/null/zero or otherwise return DBNull.Value 
+        ''' </summary>
+        ''' <param name="value">The value to be validated</param>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        <DebuggerHidden(), CLSCompliant(False)> Public Shared Function ValueNotNothingOrAlternativeValue(ByVal value As Byte, ByVal alternativeValue As UInt64) As UInt64
+            If value = Nothing Then
+                Return alternativeValue
+            Else
+                Return value
+            End If
+        End Function
         ''' <summary>
         '''     Return the value which is not nothing/null/zero or otherwise return DBNull.Value 
         ''' </summary>
@@ -705,6 +1034,64 @@ Namespace CompuMaster.Data
                 Return Nothing
             Else
                 Return value
+            End If
+        End Function
+
+        ''' <summary>
+        '''     Return the value if there is a value or otherwise return DBNull.Value 
+        ''' </summary>
+        ''' <param name="value">The nullable type value to be validated</param>
+        Public Shared Function NullableTypeWithItsValueOrDBNull(Of T As Structure)(ByVal value As Nullable(Of T)) As Object
+            If value.HasValue = False Then
+                Return DBNull.Value
+            Else
+                Return value.Value
+            End If
+        End Function
+
+        ''' <summary>
+        '''     Return the array which is not nothing or otherwise return DBNull.Value 
+        ''' </summary>
+        ''' <param name="values">The array to be validated</param>
+        Public Shared Function ArrayNotNothingOrDBNull(ByVal values As Array) As Object
+            If values Is Nothing Then
+                Return DBNull.Value
+            Else
+                Return values
+            End If
+        End Function
+
+        ''' <summary>
+        '''     Return the array with at least 1 element or otherwise return DBNull.Value 
+        ''' </summary>
+        ''' <param name="values">The array to be validated</param>
+        Public Shared Function ArrayNotEmptyOrDBNull(ByVal values As Array) As Object
+            If values Is Nothing OrElse values.Length = 0 Then
+                Return DBNull.Value
+            Else
+                Return values
+            End If
+        End Function
+        ''' <summary>
+        '''     Return the array with at least 1 element or otherwise return Nothing
+        ''' </summary>
+        ''' <param name="values">The array to be validated</param>
+        Public Shared Function ArrayNotEmptyOrNothing(Of T)(ByVal values As T()) As T()
+            If values Is Nothing OrElse values.Length = 0 Then
+                Return Nothing
+            Else
+                Return values
+            End If
+        End Function
+        ''' <summary>
+        '''     Return the array with at least 0 elements in case it's Nothing
+        ''' </summary>
+        ''' <param name="values">The array to be validated</param>
+        Public Shared Function ArrayNotNothingOrEmpty(Of T)(ByVal values As T()) As T()
+            If values Is Nothing Then
+                Return New T() {}
+            Else
+                Return values
             End If
         End Function
 
