@@ -1,7 +1,7 @@
 language: csharp
 solution: CompuMaster.Data.VS2012.sln
 mono: none
-dotnet: 1.0.0-preview2-003131
+dotnet: latest
 install:
   - nuget restore CompuMaster.Data.VS2012.sln
   - nuget install NUnit.Runners -Version 3.4.1 -OutputDirectory testrunner
