@@ -243,16 +243,16 @@
     <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\CompuMaster.Data\CompuMaster.Data.VS2012.vbproj">
-      <Project>{3bda1292-0d02-452e-9518-18496ab59231}</Project>
-      <Name>CompuMaster.Data.VS2012</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <None Include="packages.config" />
     <Content Include="testfiles\country-codes.csv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\CompuMaster.Data\CompuMaster.Data.VS2012.vbproj">
+      <Project>{3bda1292-0d02-452e-9518-18496ab59231}</Project>
+      <Name>CompuMaster.Data.VS2012</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.VisualBasic.targets" />
   <PropertyGroup>

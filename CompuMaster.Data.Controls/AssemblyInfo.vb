@@ -7,7 +7,7 @@ Imports System.Runtime.CompilerServices
 <Assembly: AssemblyDescription("")> 
 <Assembly: AssemblyCompany("CompuMaster GmbH")> 
 <Assembly: AssemblyProduct("CompuMaster Tools")>
-<Assembly: AssemblyCopyright("2005-2016 CompuMaster GmbH")>
+<Assembly: AssemblyCopyright("2005-2017 CompuMaster GmbH")>
 <Assembly: AssemblyTrademark("CompuMaster")> 
 <Assembly: CLSCompliant(True)> 
 <Assembly: ComVisibleAttribute(False)> 
@@ -15,7 +15,7 @@ Imports System.Runtime.CompilerServices
 
 <Assembly: Guid("FDE425FC-D944-4747-A1D8-082356335D53")>
 
-<Assembly: AssemblyVersion("2.8.2016.0824")>
+<Assembly: AssemblyVersion("2.8.2017.0502")>
 '<Assembly: AssemblyInformationalVersion("2.8.2016.0804-beta3")>
 <Assembly: AssemblyDelaySign(False)>
 

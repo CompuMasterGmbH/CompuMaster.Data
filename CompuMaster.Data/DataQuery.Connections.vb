@@ -42,7 +42,9 @@ Namespace CompuMaster.Data.DataQuery
                 Return CompuMaster.Data.DataQuery.PlatformTools.CreateDataConnection("OleDB", "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" & path & ";User Id=admin;Password=;")
             ElseIf ProbeOleDBProvider(MicrosoftAccessConnectionProviderWorkingStatusForJet4, "Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" & TestFile.FilePath & ";User Id=admin;Password=;") Then
                 Return CompuMaster.Data.DataQuery.PlatformTools.CreateDataConnection("OleDB", "Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" & path & ";User Id=admin;Password=;")
-            ElseIf ProbeOdbcDBProvider(MicrosoftAccessConnectionProviderWorkingStatusForOdbcDriver, "Driver={Microsoft Access Driver (*.mdb)};Dbq=" & TestFile.FilePath & ";Uid=Admin;Pwd=;") Then
+            ElseIf CompuMaster.Data.DataQuery.PlatformTools.CurrentClrRuntime = CompuMaster.Data.DataQuery.PlatformTools.ClrRuntimePlatform.x64 AndAlso ProbeOdbcDBProvider(MicrosoftAccessConnectionProviderWorkingStatusForOdbcDriver, "Driver={Microsoft Access Driver (*.mdb, *.accdb)};Dbq=" & TestFile.FilePath & ";Uid=Admin;Pwd=;") Then
+                Return CompuMaster.Data.DataQuery.PlatformTools.CreateDataConnection("ODBC", "Driver={Microsoft Access Driver (*.mdb, *.accdb)};Dbq=" & path & ";Uid=Admin;Pwd=;")
+            ElseIf CompuMaster.Data.DataQuery.PlatformTools.CurrentClrRuntime = CompuMaster.Data.DataQuery.PlatformTools.ClrRuntimePlatform.x32 AndAlso ProbeOdbcDBProvider(MicrosoftAccessConnectionProviderWorkingStatusForOdbcDriver, "Driver={Microsoft Access Driver (*.mdb)};Dbq=" & TestFile.FilePath & ";Uid=Admin;Pwd=;") Then
                 Return CompuMaster.Data.DataQuery.PlatformTools.CreateDataConnection("ODBC", "Driver={Microsoft Access Driver (*.mdb)};Dbq=" & path & ";Uid=Admin;Pwd=;")
             Else
                 'Let the application find the exception with the most modern provider
@@ -278,6 +280,65 @@ Namespace CompuMaster.Data.DataQuery
         End Class
 
         ''' <summary>
+        ''' Represents a table identifier in an ODBC data source
+        ''' </summary>
+        ''' <remarks></remarks>
+        Public Class OdbcTableDescriptor
+
+            Friend Sub New(ByVal schemaName As String, ByVal tableName As String)
+                If tableName = Nothing Then Throw New ArgumentNullException("tableName")
+                _SchemaName = schemaName
+                _TableName = tableName
+            End Sub
+
+            Private _SchemaName As String
+            ''' <summary>
+            ''' The schema name (if supported by the data source)
+            ''' </summary>
+            ''' <value></value>
+            ''' <returns></returns>
+            ''' <remarks></remarks>
+            Public Property SchemaName() As String
+                Get
+                    Return _SchemaName
+                End Get
+                Set(ByVal value As String)
+                    _SchemaName = value
+                End Set
+            End Property
+
+            Private _TableName As String
+            ''' <summary>
+            ''' The table name
+            ''' </summary>
+            ''' <value></value>
+            ''' <returns></returns>
+            ''' <remarks></remarks>
+            Public Property TableName() As String
+                Get
+                    Return _TableName
+                End Get
+                Set(ByVal value As String)
+                    _TableName = value
+                End Set
+            End Property
+
+            ''' <summary>
+            ''' The full table identifier as it can be used in select statements
+            ''' </summary>
+            ''' <returns></returns>
+            ''' <remarks></remarks>
+            Public Overrides Function ToString() As String
+                If SchemaName = Nothing Then
+                    Return "[" & TableName & "]"
+                Else
+                    Return "[" & SchemaName & "].[" & TableName & "]"
+                End If
+            End Function
+
+        End Class
+
+        ''' <summary>
         ''' Enumerate all tables/views which can be used for SQL SELECT statements
         ''' </summary>
         ''' <param name="openedConnection"></param>
@@ -307,6 +368,24 @@ Namespace CompuMaster.Data.DataQuery
 #End If
         End Function
 
+        ''' <summary>
+        ''' Enumerate all tables/views which can be used for SQL SELECT statements
+        ''' </summary>
+        ''' <param name="openedConnection"></param>
+        ''' <returns>The DictionaryEntry contains the table/view name in the key field, the schema name in the value field</returns>
+        ''' <remarks></remarks>
+        Public Shared Function EnumerateTablesAndViewsInOdbcDataSource(ByVal openedConnection As System.Data.Odbc.OdbcConnection) As OdbcTableDescriptor()
+            Dim DbSchema As DataTable = openedConnection.GetSchema()
+            Dim DbSchemaCollections As String() = CType(CompuMaster.Data.DataTables.ConvertDataTableToArrayList(DbSchema).ToArray(GetType(String)), String())
+            Dim Result As New ArrayList
+            If Array.IndexOf(DbSchemaCollections, "Tables") >= 0 Then
+                Dim tables As DataTable = openedConnection.GetSchema("Tables")
+                For MyCounter As Integer = 0 To tables.Rows.Count - 1
+                    Result.Add(New OdbcTableDescriptor(Utils.NoDBNull(tables.Rows(MyCounter)("TABLE_SCHEM"), CType(Nothing, String)), Utils.NoDBNull(tables.Rows(MyCounter)("TABLE_NAME"), CType(Nothing, String))))
+                Next
+            End If
+            Return CType(Result.ToArray(GetType(OdbcTableDescriptor)), OdbcTableDescriptor())
+        End Function
         ''' <summary>
         ''' In case that no usable data drivers are available on a x64 platform, this exception will be fired
         ''' </summary>

@@ -45,16 +45,49 @@ Namespace CompuMaster.Test.Data.DataQuery
             Assert.AreEqual(3, table.Rows.Count, "Row count for table TestData")
         End Sub
 
-        <Test()> Public Sub EnumerateTablesAndViewsInOleDbDataSource()
-            Dim TestFile As String = AssemblyTestEnvironment.TestFileAbsolutePath("testfiles\test_for_msaccess.mdb")
-            Dim conn As IDbConnection = CompuMaster.Data.DataQuery.Connections.MicrosoftAccessConnection(TestFile)
-            'If CType(conn, Object).GetType Is GetType(System.Data.OleDb.OleDbConnection) Then
+        <Test()> Public Sub EnumerateTablesAndViewsInOdbcDbDataSource()
+            Dim TestDir As String = AssemblyTestEnvironment.TestFileAbsolutePath("testfiles")
+            Dim conn As IDbConnection = New Odbc.OdbcConnection("Driver={Microsoft Text Driver (*.txt; *.csv)};Dbq=" & TestDir & ";Extensions=asc,csv,tab,txt;")
             Try
                 conn.Open()
-                Dim tables As CompuMaster.Data.DataQuery.Connections.OleDbTableDescriptor() = CompuMaster.Data.DataQuery.Connections.EnumerateTablesAndViewsInOleDbDataSource(CType(conn, System.Data.OleDb.OleDbConnection))
+                Dim tables As CompuMaster.Data.DataQuery.Connections.OdbcTableDescriptor() = CompuMaster.Data.DataQuery.Connections.EnumerateTablesAndViewsInOdbcDataSource(CType(conn, System.Data.Odbc.OdbcConnection))
                 Dim tableNames As New System.Collections.Generic.List(Of String)
-                Dim TestDataTable As CompuMaster.Data.DataQuery.Connections.OleDbTableDescriptor = Nothing
-                For Each table As CompuMaster.Data.DataQuery.Connections.OleDbTableDescriptor In tables
+                Dim TestDataTable As CompuMaster.Data.DataQuery.Connections.OdbcTableDescriptor = Nothing
+                For Each table As CompuMaster.Data.DataQuery.Connections.OdbcTableDescriptor In tables
+                    Console.WriteLine(table.ToString)
+                    tableNames.Add(table.ToString)
+                    If table.ToString = "[country-codes.csv]" Then
+                        TestDataTable = table
+                    End If
+                Next
+                Assert.AreNotEqual(0, tables.Length)
+                Assert.IsNotNull(TestDataTable, "Table TestData not found")
+                Assert.AreEqual("country-codes.csv", TestDataTable.TableName)
+                Assert.AreEqual(Nothing, TestDataTable.SchemaName)
+                Assert.AreEqual("[country-codes.csv]", TestDataTable.ToString)
+            Finally
+                CompuMaster.Data.DataQuery.CloseAndDisposeConnection(conn)
+            End Try
+
+            Dim TestFile As String = AssemblyTestEnvironment.TestFileAbsolutePath("testfiles\test_for_msaccess.mdb")
+            If Environment.Is64BitOperatingSystem Then
+                Console.WriteLine("Environment: Is64BitOperatingSystem")
+            Else
+                Console.WriteLine("Environment: Is32BitOperatingSystem")
+            End If
+            If Environment.Is64BitProcess Then
+                Console.WriteLine("Environment: Is64BitProcess")
+                conn = New Odbc.OdbcConnection("Driver={Microsoft Access Driver (*.mdb, *.accdb)};Dbq=" & TestFile & ";Uid=Admin;Pwd=;")
+            Else
+                Console.WriteLine("Environment: Is32BitProcess")
+                conn = New Odbc.OdbcConnection("Driver={Microsoft Access Driver (*.mdb)};Dbq=" & TestFile & ";Uid=Admin;Pwd=;")
+            End If
+            Try
+                conn.Open()
+                Dim tables As CompuMaster.Data.DataQuery.Connections.OdbcTableDescriptor() = CompuMaster.Data.DataQuery.Connections.EnumerateTablesAndViewsInOdbcDataSource(CType(conn, System.Data.Odbc.OdbcConnection))
+                Dim tableNames As New System.Collections.Generic.List(Of String)
+                Dim TestDataTable As CompuMaster.Data.DataQuery.Connections.OdbcTableDescriptor = Nothing
+                For Each table As CompuMaster.Data.DataQuery.Connections.OdbcTableDescriptor In tables
                     Console.WriteLine(table.ToString)
                     tableNames.Add(table.ToString)
                     If table.ToString = "[TestData]" Then
@@ -69,7 +102,35 @@ Namespace CompuMaster.Test.Data.DataQuery
             Finally
                 CompuMaster.Data.DataQuery.CloseAndDisposeConnection(conn)
             End Try
-            'End If
+        End Sub
+
+        <Test()> Public Sub EnumerateTablesAndViewsInOleDbDataSource()
+            Dim TestFile As String = AssemblyTestEnvironment.TestFileAbsolutePath("testfiles\test_for_msaccess.mdb")
+            Dim conn As IDbConnection = CompuMaster.Data.DataQuery.Connections.MicrosoftAccessConnection(TestFile)
+            If CType(conn, Object).GetType Is GetType(System.Data.OleDb.OleDbConnection) Then
+                Try
+                    conn.Open()
+                    Dim tables As CompuMaster.Data.DataQuery.Connections.OleDbTableDescriptor() = CompuMaster.Data.DataQuery.Connections.EnumerateTablesAndViewsInOleDbDataSource(CType(conn, System.Data.OleDb.OleDbConnection))
+                    Dim tableNames As New System.Collections.Generic.List(Of String)
+                    Dim TestDataTable As CompuMaster.Data.DataQuery.Connections.OleDbTableDescriptor = Nothing
+                    For Each table As CompuMaster.Data.DataQuery.Connections.OleDbTableDescriptor In tables
+                        Console.WriteLine(table.ToString)
+                        tableNames.Add(table.ToString)
+                        If table.ToString = "[TestData]" Then
+                            TestDataTable = table
+                        End If
+                    Next
+                    Assert.AreNotEqual(0, tables.Length)
+                    Assert.IsNotNull(TestDataTable, "Table TestData not found")
+                    Assert.AreEqual("TestData", TestDataTable.TableName)
+                    Assert.AreEqual(Nothing, TestDataTable.SchemaName)
+                    Assert.AreEqual("[TestData]", TestDataTable.ToString)
+                Finally
+                    CompuMaster.Data.DataQuery.CloseAndDisposeConnection(conn)
+                End Try
+            Else
+                Assert.Fail("Test environment doesn't contain OleDb provider for current platform x64/x32 - reconfigure test server!")
+            End If
         End Sub
 
         <Test()> Public Sub ReadMsAccessDatabaseEnumeratedTable()
