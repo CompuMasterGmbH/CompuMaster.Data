@@ -133,6 +133,110 @@ Namespace CompuMaster.Test.Data.DataQuery
             End If
         End Sub
 
+        <Test()> Public Sub MicrosoftExcelOdbcConnection()
+            Dim TestFile As String = AssemblyTestEnvironment.TestFileAbsolutePath("testfiles\test_for_lastcell_e50aka95.xls")
+            Dim conn As IDbConnection = CompuMaster.Data.DataQuery.Connections.MicrosoftExcelOdbcConnection(TestFile, False, True)
+            If CType(conn, Object).GetType Is GetType(System.Data.Odbc.OdbcConnection) Then
+                Try
+                    CompuMaster.Data.DataQuery.OpenConnection(conn)
+                    Assert.AreNotEqual(0, CompuMaster.Data.DataQuery.Connections.EnumerateTablesAndViewsInOdbcDataSource(conn).Length)
+                Finally
+                    CompuMaster.Data.DataQuery.CloseAndDisposeConnection(conn)
+                End Try
+                Assert.Pass("Excel XLS opened at " & PlatformDependentProcessBitNumber() & " platform")
+            Else
+                Assert.Fail("Failed to open Excel XLS at " & PlatformDependentProcessBitNumber() & " platform")
+            End If
+        End Sub
+
+        <Test()> Public Sub MicrosoftExcelOledbConnection()
+            Dim TestFile As String = AssemblyTestEnvironment.TestFileAbsolutePath("testfiles\test_for_lastcell_e50aka95.xls")
+            Dim conn As IDbConnection = CompuMaster.Data.DataQuery.Connections.MicrosoftExcelOleDbConnection(TestFile, False, True)
+            If CType(conn, Object).GetType Is GetType(System.Data.OleDb.OleDbConnection) Then
+                Try
+                    CompuMaster.Data.DataQuery.OpenConnection(conn)
+                    Assert.AreNotEqual(0, CompuMaster.Data.DataQuery.Connections.EnumerateTablesAndViewsInOleDbDataSource(conn).Length)
+                Finally
+                    CompuMaster.Data.DataQuery.CloseAndDisposeConnection(conn)
+                End Try
+                Assert.Pass("Excel XLS opened at " & PlatformDependentProcessBitNumber() & " platform")
+            Else
+                Assert.Fail("Failed to open Excel XLS at " & PlatformDependentProcessBitNumber() & " platform")
+            End If
+        End Sub
+
+        <Test()> Public Sub MicrosoftExcelConnection()
+            Dim TestFile As String = AssemblyTestEnvironment.TestFileAbsolutePath("testfiles\test_for_lastcell_e50aka95.xls")
+            Dim conn As IDbConnection = CompuMaster.Data.DataQuery.Connections.MicrosoftExcelConnection(TestFile, False, True)
+            If CType(conn, Object).GetType Is GetType(System.Data.OleDb.OleDbConnection) Then
+                Try
+                    CompuMaster.Data.DataQuery.OpenConnection(conn)
+                    Assert.AreNotEqual(0, CompuMaster.Data.DataQuery.Connections.EnumerateTablesAndViewsInOleDbDataSource(conn).Length)
+                Finally
+                    CompuMaster.Data.DataQuery.CloseAndDisposeConnection(conn)
+                End Try
+                Assert.Pass("Excel XLS opened at " & PlatformDependentProcessBitNumber() & " platform")
+            Else
+                Assert.Fail("Failed to open Excel XLS at " & PlatformDependentProcessBitNumber() & " platform")
+            End If
+        End Sub
+
+        <Test()> Public Sub MicrosoftAccessOdbcConnection()
+            Dim TestFile As String = AssemblyTestEnvironment.TestFileAbsolutePath("testfiles\test_for_msaccess.mdb")
+            Dim conn As IDbConnection = CompuMaster.Data.DataQuery.Connections.MicrosoftAccessOdbcConnection(TestFile)
+            If CType(conn, Object).GetType Is GetType(System.Data.Odbc.OdbcConnection) Then
+                Try
+                    CompuMaster.Data.DataQuery.OpenConnection(conn)
+                    Assert.AreNotEqual(0, CompuMaster.Data.DataQuery.Connections.EnumerateTablesAndViewsInOdbcDataSource(conn).Length)
+                Finally
+                    CompuMaster.Data.DataQuery.CloseAndDisposeConnection(conn)
+                End Try
+                Assert.Pass("Access MDB opened at " & PlatformDependentProcessBitNumber() & " platform")
+            Else
+                Assert.Fail("Failed to open Access MDB at " & PlatformDependentProcessBitNumber() & " platform")
+            End If
+        End Sub
+
+        <Test()> Public Sub MicrosoftAccessOledbConnection()
+            Dim TestFile As String = AssemblyTestEnvironment.TestFileAbsolutePath("testfiles\test_for_msaccess.mdb")
+            Dim conn As IDbConnection = CompuMaster.Data.DataQuery.Connections.MicrosoftAccessOleDbConnection(TestFile)
+            If CType(conn, Object).GetType Is GetType(System.Data.OleDb.OleDbConnection) Then
+                Try
+                    CompuMaster.Data.DataQuery.OpenConnection(conn)
+                    Assert.AreNotEqual(0, CompuMaster.Data.DataQuery.Connections.EnumerateTablesAndViewsInOleDbDataSource(conn).Length)
+                Finally
+                    CompuMaster.Data.DataQuery.CloseAndDisposeConnection(conn)
+                End Try
+                Assert.Pass("Access MDB opened at " & PlatformDependentProcessBitNumber() & " platform")
+            Else
+                Assert.Fail("Failed to open Access MDB at " & PlatformDependentProcessBitNumber() & " platform")
+            End If
+        End Sub
+
+        <Test()> Public Sub MicrosoftAccessConnection()
+            Dim TestFile As String = AssemblyTestEnvironment.TestFileAbsolutePath("testfiles\test_for_msaccess.mdb")
+            Dim conn As IDbConnection = CompuMaster.Data.DataQuery.Connections.MicrosoftAccessConnection(TestFile)
+            If CType(conn, Object).GetType Is GetType(System.Data.OleDb.OleDbConnection) Then
+                Try
+                    CompuMaster.Data.DataQuery.OpenConnection(conn)
+                    Assert.AreNotEqual(0, CompuMaster.Data.DataQuery.Connections.EnumerateTablesAndViewsInOleDbDataSource(conn).Length)
+                Finally
+                    CompuMaster.Data.DataQuery.CloseAndDisposeConnection(conn)
+                End Try
+                Assert.Pass("Access MDB opened at " & PlatformDependentProcessBitNumber() & " platform")
+            Else
+                Assert.Fail("Failed to open Access MDB at " & PlatformDependentProcessBitNumber() & " platform")
+            End If
+        End Sub
+
+        Private Function PlatformDependentProcessBitNumber() As String
+            If Environment.Is64BitProcess Then
+                Return "x64"
+            Else
+                Return "x32"
+            End If
+        End Function
+
         <Test()> Public Sub ReadMsAccessDatabaseEnumeratedTable()
             Dim TestFile As String = AssemblyTestEnvironment.TestFileAbsolutePath("testfiles\test_for_msaccess.mdb")
             Dim MyConn As IDbConnection = CompuMaster.Data.DataQuery.Connections.MicrosoftAccessConnection(TestFile)
