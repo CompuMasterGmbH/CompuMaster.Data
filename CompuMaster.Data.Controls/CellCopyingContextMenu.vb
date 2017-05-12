@@ -206,7 +206,7 @@ Namespace CompuMaster.Data.Windows
         ''' <remarks></remarks>
         Private Sub CopyFullTableToClipboardToolStripMenuItem_Click(sender As System.Object, e As System.EventArgs) Handles CopyFullTableToClipboardToolStripMenuItem.Click
             If Grid.DataSource IsNot Nothing Then
-                Clipboard.SetDataObject(CompuMaster.Data.Csv.ConvertDataTableToText(CType(Grid.DataSource, DataTable), True, PreferredCulture(), ControlChars.Tab))
+                Clipboard.SetDataObject(CompuMaster.Data.Csv.ConvertDataTableToTextAsStringBuilder(CType(Grid.DataSource, DataTable), True, PreferredCulture(), ControlChars.Tab).ToString)
             End If
         End Sub
 
@@ -218,7 +218,7 @@ Namespace CompuMaster.Data.Windows
         ''' <remarks></remarks>
         Private Sub CopySelectedCellsToClipboardwithHeadersToolStripMenuItem_Click(sender As System.Object, e As System.EventArgs) Handles CopySelectedCellsToClipboardWithHeadersToolStripMenuItem.Click
             Dim newTable As DataTable = CreateDataTableFromMarkedCells()
-            Clipboard.SetDataObject(CompuMaster.Data.Csv.ConvertDataTableToText(newTable, True, PreferredCulture(), ControlChars.Tab))
+            Clipboard.SetDataObject(CompuMaster.Data.Csv.ConvertDataTableToTextAsStringBuilder(newTable, True, PreferredCulture(), ControlChars.Tab).ToString)
         End Sub
 
         ''' <summary>
@@ -229,7 +229,7 @@ Namespace CompuMaster.Data.Windows
         ''' <remarks></remarks>
         Private Sub CopySelectedCellsToClipboardwithoutHeadersToolStripMenuItem_Click(sender As System.Object, e As System.EventArgs) Handles CopySelectedCellsToClipboardWithoutHeadersToolStripMenuItem.Click
             Dim newTable As DataTable = CreateDataTableFromMarkedCells()
-            Clipboard.SetDataObject(CompuMaster.Data.Csv.ConvertDataTableToText(newTable, False, PreferredCulture(), ControlChars.Tab))
+            Clipboard.SetDataObject(CompuMaster.Data.Csv.ConvertDataTableToTextAsStringBuilder(newTable, False, PreferredCulture(), ControlChars.Tab).ToString)
         End Sub
 
         ''' <summary>

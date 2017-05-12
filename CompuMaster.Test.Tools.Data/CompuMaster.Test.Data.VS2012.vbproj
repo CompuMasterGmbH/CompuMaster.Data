@@ -188,6 +188,7 @@
     <Compile Include="Ldap.vb">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="TempFile.vb" />
     <Compile Include="Utils.vb" />
     <Compile Include="XlsReader.vb" />
     <Compile Include="TestPlatformTools.vb" />

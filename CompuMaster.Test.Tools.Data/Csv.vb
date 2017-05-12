@@ -269,6 +269,68 @@ Namespace CompuMaster.Test.Data
             Return t
         End Function
 
+        Private Function CellWithLineBreaksAndSpecialCharsSampleTable() As DataTable
+            Dim t As New DataTable("root")
+            t.Columns.Add("col1")
+            t.Columns.Add("col2")
+            Dim r As DataRow = t.NewRow
+            r(0) = "R1C1""" & vbCrLf
+            r(1) = "R1C2""" & vbCr
+            t.Rows.Add(r)
+            r = t.NewRow
+            r(0) = "R2C1""" & vbLf
+            r(1) = "R2C2""" & vbTab
+            t.Rows.Add(r)
+            Return t
+        End Function
+
+        Private Function XxlFactorySampleTableMightCausingOutOfMemoryExceptionWhenInStringInComplete(linesInMillion As Double) As DataTable
+            Dim LinesInTotal As Integer = linesInMillion * 1000 ^ 2 'x Mio.
+            Dim t As New DataTable("root")
+            t.Columns.Add("col1")
+            t.Columns.Add("col2")
+            For MyCounter As Integer = 1 To LinesInTotal
+                Dim r As DataRow = t.NewRow
+                r(0) = "Line no. " & MyCounter.ToString("000,000,000,000")
+                r(1) = "abcdefghijklmnopqrstuvwxyzäöüß|abcdefghijklmnopqrstuvwxyzäöüß|abcdefghijklmnopqrstuvwxyzäöüß|abcdefghijklmnopqrstuvwxyzäöüß|abcdefghijklmnopqrstuvwxyzäöüß|abcdefghijklmnopqrstuvwxyzäöüß|abcdefghijklmnopqrstuvwxyzäöüß|abcdefghijklmnopqrstuvwxyzäöüß"
+                t.Rows.Add(r)
+                If MyCounter Mod 1000 ^ 2 = 0 Then
+                    Console.WriteLine("Created records in test table: " & MyCounter.ToString("#,##0"))
+                End If
+            Next
+            Return t
+        End Function
+
+        <Test> Sub WriteXlDataTableToCsvTextStringAndReRead()
+            WriteFactoryXxlDataTableToCsvTextStringAndReRead(XxlFactorySampleTableMightCausingOutOfMemoryExceptionWhenInStringInComplete(0.01)) '10,000 lines
+        End Sub
+
+        <Test, Ignore("ReadXxl fails and needs additional work")> Sub WriteXxlDataTableToCsvTextStringAndReRead()
+            WriteFactoryXxlDataTableToCsvTextStringAndReRead(XxlFactorySampleTableMightCausingOutOfMemoryExceptionWhenInStringInComplete(1)) '1 mio. lines
+        End Sub
+
+        <Test, Ignore("WriteXxl already fails")> Sub WriteXxxlDataTableToCsvTextStringAndReRead()
+            WriteFactoryXxlDataTableToCsvTextStringAndReRead(XxlFactorySampleTableMightCausingOutOfMemoryExceptionWhenInStringInComplete(500)) '500 mio. lines
+        End Sub
+
+        Sub WriteFactoryXxlDataTableToCsvTextStringAndReRead(t As DataTable)
+            Dim TempFile As New CompuMaster.Test.Data.TemporaryFile(".csv")
+            Console.WriteLine("Using temporary file: " & TempFile.Path)
+
+            'Write to disk
+            Dim Start As DateTime = Now
+            CompuMaster.Data.Csv.WriteDataTableToCsvFile(TempFile.Path, t)
+            Console.WriteLine("CSV written to disk successfully within " & Now.Subtract(Start).TotalSeconds.ToString("#,##0.0") & " sec. with " & t.Rows.Count.ToString("#,##0") & " records and " & (TempFile.FileSize / 1024 / 1024).ToString("#,##0.00") & " MB size")
+
+            'Read from disk
+            Start = Now
+            Dim t2 As DataTable = CompuMaster.Data.Csv.ReadDataTableFromCsvFile(TempFile.Path, True)
+            Console.WriteLine("CSV read from disk successfully within " & Now.Subtract(Start).TotalSeconds.ToString("#,##0.0") & " sec. with " & t2.Rows.Count.ToString("#,##0") & " records")
+
+            'Basic comparisons
+            Assert.AreEqual(t.Rows.Count, t2.Rows.Count) 'should be the very same
+        End Sub
+
         <Test> Sub WriteDataTableToCsvTextStringAndReReadAndReWriteWithoutChanges()
             Dim t As DataTable = SimpleSampleTable()
             Dim bom As String = System.Text.Encoding.UTF8.GetString(System.Text.Encoding.UTF8.GetPreamble())
@@ -278,6 +340,19 @@ Namespace CompuMaster.Test.Data
             Dim csv2 As String
             Assert.AreEqual(t.Columns.Count, t2.Columns.Count) 'should be the very same
             Assert.AreEqual(t.Rows.Count, t2.Rows.Count) 'should be the very same
+            csv2 = CompuMaster.Data.Csv.WriteDataTableToCsvTextString(t2, True)
+            Assert.AreEqual(csv, csv2) 'should be the very same
+        End Sub
+
+        <Test> Sub WriteDataTableToCsvTextStringAndReReadAndReWriteWithoutChangesWithLineBreaksExcelCompatible()
+            Dim t As DataTable = CellWithLineBreaksAndSpecialCharsSampleTable()
+            Dim bom As String = System.Text.Encoding.UTF8.GetString(System.Text.Encoding.UTF8.GetPreamble())
+            Dim csv As String
+            csv = CompuMaster.Data.Csv.WriteDataTableToCsvTextString(t, True)
+            Dim t2 As DataTable = CompuMaster.Data.Csv.ReadDataTableFromCsvString(csv, True)
+            Dim csv2 As String
+            Assert.AreEqual(t.Columns.Count, t2.Columns.Count) 'should be the very same
+            Assert.AreEqual(t.Rows.Count, t2.Rows.Count) 'should be the very same - except line breaks in cells haven't been converted correctly
             csv2 = CompuMaster.Data.Csv.WriteDataTableToCsvTextString(t2, True)
             Assert.AreEqual(csv, csv2) 'should be the very same
         End Sub
