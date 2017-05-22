@@ -2,8 +2,9 @@ language: csharp
 solution: CompuMaster.Data.VS2012.sln
 dotnet: 
   - 1.0.1
-  - latest
+#  - latest
 dist: trusty
+#sudo: required
 mono: none
 install:
   - nuget restore CompuMaster.Data.VS2012.sln
