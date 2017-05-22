@@ -1,7 +1,8 @@
 language: csharp
 solution: CompuMaster.Data.VS2012.sln
 dotnet: 
-  - 1.0.1
+#  - 1.0.1
+  - 2.0.0-Preview1
 #  - latest
 dist: trusty
 #sudo: required
