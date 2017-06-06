@@ -258,18 +258,35 @@ Namespace CompuMaster.Test.Data
             Dim t As DataTable = SimpleSampleTable()
             Dim ExpectedValue As String
             Dim csv As String
+
+            csv = CompuMaster.Data.Csv.WriteDataTableToCsvTextString(t, True, CompuMaster.Data.Csv.WriteLineEncodings.RowBreakCrLf_CellLineBreakCr, "||", """"c, ".")
+            Console.WriteLine(csv)
+            ExpectedValue = """col1""||""col2""" & vbNewLine &
+                """R1C1""||""R1C2""" & vbNewLine &
+                """R2C1""||""R2C2""" & vbNewLine
+            Assert.AreEqual(ExpectedValue, csv, "Not expected: CSV EmptyStringAsRecognizeTextChar")
+
+            'Special: ChrW(0) is handled as NO text recognition character!
+            'ExpectedValue = ChrW(0) & "col1" & ChrW(0) & "||" & ChrW(0) & "col2" & ChrW(0) & vbNewLine &
+            '    ChrW(0) & "R1C1" & ChrW(0) & "||" & ChrW(0) & "R1C2" & ChrW(0) & vbNewLine &
+            '    ChrW(0) & "R2C1" & ChrW(0) & "||" & ChrW(0) & "R2C2" & ChrW(0) & vbNewLine
+            ExpectedValue = "col1||col2" & vbNewLine &
+                "R1C1||R1C2" & vbNewLine &
+                "R2C1||R2C2" & vbNewLine
             csv = CompuMaster.Data.Csv.WriteDataTableToCsvTextString(t, True, CompuMaster.Data.Csv.WriteLineEncodings.RowBreakCrLf_CellLineBreakCr, "||", "", ".")
             Console.WriteLine(csv)
-            ExpectedValue = ChrW(0) & "col1" & ChrW(0) & "||" & ChrW(0) & "col2" & ChrW(0) & vbNewLine &
-                ChrW(0) & "R1C1" & ChrW(0) & "||" & ChrW(0) & "R1C2" & ChrW(0) & vbNewLine &
-                ChrW(0) & "R2C1" & ChrW(0) & "||" & ChrW(0) & "R2C2" & ChrW(0) & vbNewLine
             Assert.AreEqual(ExpectedValue, csv, "Not expected: CSV EmptyStringAsRecognizeTextChar")
+
             csv = CompuMaster.Data.Csv.WriteDataTableToCsvTextString(t, True, CompuMaster.Data.Csv.WriteLineEncodings.RowBreakCrLf_CellLineBreakCr, "||", ChrW(0), ".")
-            ExpectedValue = ChrW(0) & "col1" & ChrW(0) & "||" & ChrW(0) & "col2" & ChrW(0) & vbNewLine &
-                ChrW(0) & "R1C1" & ChrW(0) & "||" & ChrW(0) & "R1C2" & ChrW(0) & vbNewLine &
-                ChrW(0) & "R2C1" & ChrW(0) & "||" & ChrW(0) & "R2C2" & ChrW(0) & vbNewLine
             Console.WriteLine(csv)
             Assert.AreEqual(ExpectedValue, csv, "Not expected: CSV Chrw(0)AsRecognizeTextChar")
+
+            csv = CompuMaster.Data.Csv.WriteDataTableToCsvTextString(t, True, CompuMaster.Data.Csv.WriteLineEncodings.RowBreakCrLf_CellLineBreakCr, "||", ChrW(1), ".")
+            ExpectedValue = ChrW(1) & "col1" & ChrW(1) & "||" & ChrW(1) & "col2" & ChrW(1) & vbNewLine &
+                ChrW(1) & "R1C1" & ChrW(1) & "||" & ChrW(1) & "R1C2" & ChrW(1) & vbNewLine &
+                ChrW(1) & "R2C1" & ChrW(1) & "||" & ChrW(1) & "R2C2" & ChrW(1) & vbNewLine
+            Console.WriteLine(csv)
+            Assert.AreEqual(ExpectedValue, csv, "Not expected: CSV Chrw(1)AsRecognizeTextChar")
         End Sub
 
         Private Function SimpleSampleTable() As DataTable
