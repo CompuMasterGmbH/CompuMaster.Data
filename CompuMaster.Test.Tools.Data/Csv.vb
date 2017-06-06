@@ -254,6 +254,24 @@ Namespace CompuMaster.Test.Data
             Assert.False(csv.Substring(0, bom.Length) = bom, "CSV starts invalidly with BOM signature for UTF-8")
         End Sub
 
+        <Test> Sub WriteDataTableToCsvTextStringRecognizeTextChar()
+            Dim t As DataTable = SimpleSampleTable()
+            Dim ExpectedValue As String
+            Dim csv As String
+            csv = CompuMaster.Data.Csv.WriteDataTableToCsvTextString(t, True, CompuMaster.Data.Csv.WriteLineEncodings.RowBreakCrLf_CellLineBreakCr, "||", "", ".")
+            Console.WriteLine(csv)
+            ExpectedValue = ChrW(0) & "col1" & ChrW(0) & "||" & ChrW(0) & "col2" & ChrW(0) & vbNewLine &
+                ChrW(0) & "R1C1" & ChrW(0) & "||" & ChrW(0) & "R1C2" & ChrW(0) & vbNewLine &
+                ChrW(0) & "R2C1" & ChrW(0) & "||" & ChrW(0) & "R2C2" & ChrW(0) & vbNewLine
+            Assert.AreEqual(ExpectedValue, csv, "Not expected: CSV EmptyStringAsRecognizeTextChar")
+            csv = CompuMaster.Data.Csv.WriteDataTableToCsvTextString(t, True, CompuMaster.Data.Csv.WriteLineEncodings.RowBreakCrLf_CellLineBreakCr, "||", ChrW(0), ".")
+            ExpectedValue = ChrW(0) & "col1" & ChrW(0) & "||" & ChrW(0) & "col2" & ChrW(0) & vbNewLine &
+                ChrW(0) & "R1C1" & ChrW(0) & "||" & ChrW(0) & "R1C2" & ChrW(0) & vbNewLine &
+                ChrW(0) & "R2C1" & ChrW(0) & "||" & ChrW(0) & "R2C2" & ChrW(0) & vbNewLine
+            Console.WriteLine(csv)
+            Assert.AreEqual(ExpectedValue, csv, "Not expected: CSV Chrw(0)AsRecognizeTextChar")
+        End Sub
+
         Private Function SimpleSampleTable() As DataTable
             Dim t As New DataTable("root")
             t.Columns.Add("col1")
@@ -274,12 +292,12 @@ Namespace CompuMaster.Test.Data
             t.Columns.Add("col1")
             t.Columns.Add("col2")
             Dim r As DataRow = t.NewRow
-            r(0) = "R1C1""" & vbCrLf
-            r(1) = "R1C2""" & vbCr
+            r(0) = "R1C1""""" & vbCrLf
+            r(1) = "R1C2""""" & vbCr
             t.Rows.Add(r)
             r = t.NewRow
-            r(0) = "R2C1""" & vbLf
-            r(1) = "R2C2""" & vbTab
+            r(0) = "R2C1""""" & vbLf
+            r(1) = "R2C2""""" & vbTab
             t.Rows.Add(r)
             Return t
         End Function
@@ -349,12 +367,20 @@ Namespace CompuMaster.Test.Data
             Dim bom As String = System.Text.Encoding.UTF8.GetString(System.Text.Encoding.UTF8.GetPreamble())
             Dim csv As String
             csv = CompuMaster.Data.Csv.WriteDataTableToCsvTextString(t, True)
+            Console.WriteLine(csv)
             Dim t2 As DataTable = CompuMaster.Data.Csv.ReadDataTableFromCsvString(csv, True)
+            DataTables.AssertTables(t, t2, "Comparison t vs t2")
             Dim csv2 As String
             Assert.AreEqual(t.Columns.Count, t2.Columns.Count) 'should be the very same
             Assert.AreEqual(t.Rows.Count, t2.Rows.Count) 'should be the very same - except line breaks in cells haven't been converted correctly
             csv2 = CompuMaster.Data.Csv.WriteDataTableToCsvTextString(t2, True)
+            Console.WriteLine(csv2)
             Assert.AreEqual(csv, csv2) 'should be the very same
+        End Sub
+
+        <Test> Sub CsvEncode()
+            Assert.AreEqual("R1C1""""" & vbLf & vbLf, CompuMaster.Data.CsvTools.CsvEncode("R1C1""" & vbNewLine & vbCr, """"c, CompuMaster.Data.Csv.WriteLineEncodings.RowBreakCr_CellLineBreakLf))
+            Assert.AreEqual("R1C1""""""""" & vbLf & vbLf, CompuMaster.Data.CsvTools.CsvEncode("R1C1""""" & vbNewLine & vbCr, """"c, CompuMaster.Data.Csv.WriteLineEncodings.RowBreakCr_CellLineBreakLf))
         End Sub
 
     End Class

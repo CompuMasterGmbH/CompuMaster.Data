@@ -4,6 +4,21 @@ Namespace CompuMaster.Test.Data
 
     <TestFixture(Category:="DataTables")> Public Class DataTables
 
+#Region "TestComparisons"
+        Public Shared Sub AssertTables(table1 As DataTable, table2 As DataTable, assertionTitle As String)
+            Assert.AreEqual(table1.Columns.Count, table2.Columns.Count, assertionTitle & ": Column count must be equal")
+            Assert.AreEqual(table1.Rows.Count, table2.Rows.Count, assertionTitle & ": Row count must be equal")
+            For MyCounter As Integer = 0 To table1.Columns.Count - 1
+                Assert.AreEqual(table1.Columns(MyCounter).DataType, table2.Columns(MyCounter).DataType, assertionTitle & ": DataType must be equal for column index " & MyCounter)
+            Next
+            For MyCounter As Integer = 0 To table1.Columns.Count - 1
+                For MyRowCounter As Integer = 0 To table1.Rows.Count - 1
+                    Assert.AreEqual(table1.Rows(MyRowCounter)(MyCounter), table2.Rows(MyRowCounter)(MyCounter), assertionTitle & ": Cell value must be equal for row index " & MyRowCounter & ", column index " & MyCounter)
+                Next
+            Next
+        End Sub
+#End Region
+
 #Region "Test data"
         Private Function _TestTable1() As DataTable
             Dim Result As New DataTable("test1")

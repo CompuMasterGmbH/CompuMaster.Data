@@ -1325,20 +1325,13 @@ Namespace CompuMaster.Data
 
         End Function
 
-        ''' -----------------------------------------------------------------------------
         ''' <summary>
         '''     Encode a string into CSV encoding
         ''' </summary>
         ''' <param name="value">The unencoded text</param>
         ''' <param name="recognizeTextBy">The character to identify a string in the CSV file</param>
         ''' <returns>The encoded writing style of the given text</returns>
-        ''' <remarks>
-        ''' </remarks>
-        ''' <history>
-        ''' 	[AdminSupport]	29.08.2005	Created
-        ''' </history>
-        ''' -----------------------------------------------------------------------------
-        Private Shared Function CsvEncode(ByVal value As String, ByVal recognizeTextBy As Char, lineEncoding As CompuMaster.Data.Csv.WriteLineEncodings) As String
+        Friend Shared Function CsvEncode(ByVal value As String, ByVal recognizeTextBy As Char, lineEncoding As CompuMaster.Data.Csv.WriteLineEncodings) As String
             Dim Result As String
             If recognizeTextBy <> Nothing Then
                 Result = Replace(value, recognizeTextBy, recognizeTextBy & recognizeTextBy)
@@ -1348,11 +1341,11 @@ Namespace CompuMaster.Data
             Select Case lineEncoding
                 Case Csv.WriteLineEncodings.None
                 Case Csv.WriteLineEncodings.RowBreakCrLf_CellLineBreakLf, Csv.WriteLineEncodings.RowBreakCr_CellLineBreakLf
-                    Result = Replace(value, ControlChars.CrLf, ControlChars.Lf)
-                    Result = Replace(value, ControlChars.Cr, ControlChars.Lf)
+                    Result = Replace(Result, ControlChars.CrLf, ControlChars.Lf)
+                    Result = Replace(Result, ControlChars.Cr, ControlChars.Lf)
                 Case Csv.WriteLineEncodings.RowBreakCrLf_CellLineBreakCr, Csv.WriteLineEncodings.RowBreakLf_CellLineBreakCr
-                    Result = Replace(value, ControlChars.CrLf, ControlChars.Cr)
-                    Result = Replace(value, ControlChars.Lf, ControlChars.Cr)
+                    Result = Replace(Result, ControlChars.CrLf, ControlChars.Cr)
+                    Result = Replace(Result, ControlChars.Lf, ControlChars.Cr)
                 Case Else
                     Throw New NotSupportedException("Not supported/implemented: lineEncoding " & lineEncoding)
             End Select
