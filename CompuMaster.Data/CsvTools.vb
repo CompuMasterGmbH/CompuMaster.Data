@@ -31,7 +31,7 @@ Namespace CompuMaster.Data
         ''' 	[adminsupport]	19.04.2005	Created
         ''' </history>
         ''' -----------------------------------------------------------------------------
-        Private Shared Function ReadDataTableFromCsvReader(ByVal reader As StreamReader, ByVal includesColumnHeaders As Boolean, ByVal cultureFormatProvider As System.Globalization.CultureInfo, ByVal columnWidths As Integer(), ByVal convertEmptyStringsToDBNull As Boolean, lineEncodings As CompuMaster.Data.Csv.ReadLineEncodings) As DataTable
+        Private Shared Function ReadDataTableFromCsvReader(ByVal reader As StreamReader, ByVal includesColumnHeaders As Boolean, ByVal cultureFormatProvider As System.Globalization.CultureInfo, ByVal columnWidths As Integer(), ByVal convertEmptyStringsToDBNull As Boolean, lineEncodings As CompuMaster.Data.Csv.ReadLineEncodings, lineEncodingAutoConversions As CompuMaster.Data.Csv.ReadLineEncodingAutoConversion) As DataTable
 
             If cultureFormatProvider Is Nothing Then
                 cultureFormatProvider = System.Globalization.CultureInfo.InvariantCulture
@@ -116,14 +116,14 @@ Namespace CompuMaster.Data
         ''' 	[adminwezel]	03.07.2004	Created
         ''' </history>
         ''' -----------------------------------------------------------------------------
-        Friend Shared Function ReadDataTableFromCsvFile(ByVal path As String, ByVal includesColumnHeaders As Boolean, ByVal columnWidths As Integer(), ByVal encoding As String, ByVal convertEmptyStringsToDBNull As Boolean, lineEncodings As CompuMaster.Data.Csv.ReadLineEncodings) As DataTable
+        Friend Shared Function ReadDataTableFromCsvFile(ByVal path As String, ByVal includesColumnHeaders As Boolean, ByVal columnWidths As Integer(), ByVal encoding As String, ByVal convertEmptyStringsToDBNull As Boolean, lineEncodings As CompuMaster.Data.Csv.ReadLineEncodings, lineEncodingAutoConversions As CompuMaster.Data.Csv.ReadLineEncodingAutoConversion) As DataTable
 
             Dim Result As New DataTable
 
             If File.Exists(path) Then
             ElseIf path.ToLower.StartsWith("http://") OrElse path.ToLower.StartsWith("https://") Then
                 Dim LocalCopyOfFileContentFromRemoteUri As String = Utils.ReadStringDataFromUri(path, encoding)
-                Result = ReadDataTableFromCsvString(LocalCopyOfFileContentFromRemoteUri, includesColumnHeaders, columnWidths, convertEmptyStringsToDBNull, lineEncodings)
+                Result = ReadDataTableFromCsvString(LocalCopyOfFileContentFromRemoteUri, includesColumnHeaders, columnWidths, convertEmptyStringsToDBNull, lineEncodings, lineEncodingAutoConversions)
                 Result.TableName = System.IO.Path.GetFileNameWithoutExtension(path)
                 Return Result
             Else
@@ -137,7 +137,7 @@ Namespace CompuMaster.Data
                 Else
                     reader = New StreamReader(path, System.Text.Encoding.GetEncoding(encoding))
                 End If
-                Result = ReadDataTableFromCsvReader(reader, includesColumnHeaders, System.Globalization.CultureInfo.CurrentCulture, columnWidths, convertEmptyStringsToDBNull, lineEncodings)
+                Result = ReadDataTableFromCsvReader(reader, includesColumnHeaders, System.Globalization.CultureInfo.CurrentCulture, columnWidths, convertEmptyStringsToDBNull, lineEncodings, lineEncodingAutoConversions)
                 Result.TableName = System.IO.Path.GetFileNameWithoutExtension(path)
             Finally
                 If Not reader Is Nothing Then
@@ -167,14 +167,14 @@ Namespace CompuMaster.Data
         ''' 	[adminwezel]	03.07.2004	Created
         ''' </history>
         ''' -----------------------------------------------------------------------------
-        Friend Shared Function ReadDataTableFromCsvFile(ByVal path As String, ByVal includesColumnHeaders As Boolean, ByVal columnWidths As Integer(), ByVal encoding As System.Text.Encoding, ByVal cultureFormatProvider As System.Globalization.CultureInfo, ByVal convertEmptyStringsToDBNull As Boolean, lineEncodings As CompuMaster.Data.Csv.ReadLineEncodings) As DataTable
+        Friend Shared Function ReadDataTableFromCsvFile(ByVal path As String, ByVal includesColumnHeaders As Boolean, ByVal columnWidths As Integer(), ByVal encoding As System.Text.Encoding, ByVal cultureFormatProvider As System.Globalization.CultureInfo, ByVal convertEmptyStringsToDBNull As Boolean, lineEncodings As CompuMaster.Data.Csv.ReadLineEncodings, lineEncodingAutoConversions As CompuMaster.Data.Csv.ReadLineEncodingAutoConversion) As DataTable
 
             Dim Result As New DataTable
 
             If File.Exists(path) Then
             ElseIf path.ToLower.StartsWith("http://") OrElse path.ToLower.StartsWith("https://") Then
                 Dim LocalCopyOfFileContentFromRemoteUri As String = Utils.ReadStringDataFromUri(path, encoding.WebName)
-                Result = ReadDataTableFromCsvString(LocalCopyOfFileContentFromRemoteUri, includesColumnHeaders, columnWidths, convertEmptyStringsToDBNull, lineEncodings)
+                Result = ReadDataTableFromCsvString(LocalCopyOfFileContentFromRemoteUri, includesColumnHeaders, columnWidths, convertEmptyStringsToDBNull, lineEncodings, lineEncodingAutoConversions)
                 Result.TableName = System.IO.Path.GetFileNameWithoutExtension(path)
                 Return Result
             Else
@@ -188,7 +188,7 @@ Namespace CompuMaster.Data
                 Else
                     reader = New StreamReader(path, (encoding))
                 End If
-                Result = ReadDataTableFromCsvReader(reader, includesColumnHeaders, cultureFormatProvider, columnWidths, convertEmptyStringsToDBNull, lineEncodings)
+                Result = ReadDataTableFromCsvReader(reader, includesColumnHeaders, cultureFormatProvider, columnWidths, convertEmptyStringsToDBNull, lineEncodings, lineEncodingAutoConversions)
                 Result.TableName = System.IO.Path.GetFileNameWithoutExtension(path)
             Finally
                 If Not reader Is Nothing Then
@@ -216,13 +216,13 @@ Namespace CompuMaster.Data
         ''' 	[adminwezel]	03.07.2004	Created
         ''' </history>
         ''' -----------------------------------------------------------------------------
-        Friend Shared Function ReadDataTableFromCsvString(ByVal data As String, ByVal includesColumnHeaders As Boolean, ByVal columnWidths As Integer(), ByVal convertEmptyStringsToDBNull As Boolean, lineEncodings As CompuMaster.Data.Csv.ReadLineEncodings) As DataTable
+        Friend Shared Function ReadDataTableFromCsvString(ByVal data As String, ByVal includesColumnHeaders As Boolean, ByVal columnWidths As Integer(), ByVal convertEmptyStringsToDBNull As Boolean, lineEncodings As CompuMaster.Data.Csv.ReadLineEncodings, lineEncodingAutoConversions As CompuMaster.Data.Csv.ReadLineEncodingAutoConversion) As DataTable
 
             Dim Result As New DataTable
             Dim reader As StreamReader = Nothing
             Try
                 reader = New StreamReader(New MemoryStream(System.Text.Encoding.Unicode.GetBytes(data)), System.Text.Encoding.Unicode, False)
-                Result = ReadDataTableFromCsvReader(reader, includesColumnHeaders, System.Globalization.CultureInfo.CurrentCulture, columnWidths, convertEmptyStringsToDBNull, lineEncodings)
+                Result = ReadDataTableFromCsvReader(reader, includesColumnHeaders, System.Globalization.CultureInfo.CurrentCulture, columnWidths, convertEmptyStringsToDBNull, lineEncodings, lineEncodingAutoConversions)
             Finally
                 If Not reader Is Nothing Then
                     reader.Close()
@@ -250,13 +250,13 @@ Namespace CompuMaster.Data
         ''' 	[adminwezel]	03.07.2004	Created
         ''' </history>
         ''' -----------------------------------------------------------------------------
-        Friend Shared Function ReadDataTableFromCsvString(ByVal data As String, ByVal includesColumnHeaders As Boolean, ByVal cultureFormatProvider As System.Globalization.CultureInfo, ByVal columnWidths As Integer(), ByVal convertEmptyStringsToDBNull As Boolean, lineEncodings As CompuMaster.Data.Csv.ReadLineEncodings) As DataTable
+        Friend Shared Function ReadDataTableFromCsvString(ByVal data As String, ByVal includesColumnHeaders As Boolean, ByVal cultureFormatProvider As System.Globalization.CultureInfo, ByVal columnWidths As Integer(), ByVal convertEmptyStringsToDBNull As Boolean, lineEncodings As CompuMaster.Data.Csv.ReadLineEncodings, lineEncodingAutoConversions As CompuMaster.Data.Csv.ReadLineEncodingAutoConversion) As DataTable
 
             Dim Result As New DataTable
             Dim reader As StreamReader = Nothing
             Try
                 reader = New StreamReader(New MemoryStream(System.Text.Encoding.Unicode.GetBytes(data)), System.Text.Encoding.Unicode, False)
-                Result = ReadDataTableFromCsvReader(reader, includesColumnHeaders, cultureFormatProvider, columnWidths, convertEmptyStringsToDBNull, lineEncodings)
+                Result = ReadDataTableFromCsvReader(reader, includesColumnHeaders, cultureFormatProvider, columnWidths, convertEmptyStringsToDBNull, lineEncodings, lineEncodingAutoConversions)
             Finally
                 If Not reader Is Nothing Then
                     reader.Close()
@@ -379,14 +379,14 @@ Namespace CompuMaster.Data
         ''' 	[adminwezel]	03.07.2004	Created
         ''' </history>
         ''' -----------------------------------------------------------------------------
-        Friend Shared Function ReadDataTableFromCsvFile(ByVal path As String, ByVal includesColumnHeaders As Boolean, ByVal encoding As String, ByVal columnSeparator As Char, ByVal recognizeTextBy As Char, ByVal recognizeMultipleColumnSeparatorCharsAsOne As Boolean, ByVal convertEmptyStringsToDBNull As Boolean, lineEncodings As CompuMaster.Data.Csv.ReadLineEncodings) As DataTable
+        Friend Shared Function ReadDataTableFromCsvFile(ByVal path As String, ByVal includesColumnHeaders As Boolean, ByVal encoding As String, ByVal columnSeparator As Char, ByVal recognizeTextBy As Char, ByVal recognizeMultipleColumnSeparatorCharsAsOne As Boolean, ByVal convertEmptyStringsToDBNull As Boolean, lineEncodings As CompuMaster.Data.Csv.ReadLineEncodings, lineEncodingAutoConversions As CompuMaster.Data.Csv.ReadLineEncodingAutoConversion) As DataTable
 
             Dim Result As New DataTable
 
             If File.Exists(path) Then
             ElseIf path.ToLower.StartsWith("http://") OrElse path.ToLower.StartsWith("https://") Then
                 Dim LocalCopyOfFileContentFromRemoteUri As String = Utils.ReadStringDataFromUri(path, encoding)
-                Result = ReadDataTableFromCsvString(LocalCopyOfFileContentFromRemoteUri, includesColumnHeaders, columnSeparator, recognizeTextBy, recognizeMultipleColumnSeparatorCharsAsOne, convertEmptyStringsToDBNull, lineEncodings)
+                Result = ReadDataTableFromCsvString(LocalCopyOfFileContentFromRemoteUri, includesColumnHeaders, columnSeparator, recognizeTextBy, recognizeMultipleColumnSeparatorCharsAsOne, convertEmptyStringsToDBNull, lineEncodings, lineEncodingAutoConversions)
                 Result.TableName = System.IO.Path.GetFileNameWithoutExtension(path)
                 Return Result
             Else
@@ -400,7 +400,7 @@ Namespace CompuMaster.Data
                 Else
                     reader = New StreamReader(path, System.Text.Encoding.GetEncoding(encoding))
                 End If
-                Result = ReadDataTableFromCsvReader(reader, includesColumnHeaders, System.Globalization.CultureInfo.CurrentCulture, columnSeparator, recognizeTextBy, recognizeMultipleColumnSeparatorCharsAsOne, convertEmptyStringsToDBNull, lineEncodings)
+                Result = ReadDataTableFromCsvReader(reader, includesColumnHeaders, System.Globalization.CultureInfo.CurrentCulture, columnSeparator, recognizeTextBy, recognizeMultipleColumnSeparatorCharsAsOne, convertEmptyStringsToDBNull, lineEncodings, lineEncodingAutoConversions)
                 Result.TableName = System.IO.Path.GetFileNameWithoutExtension(path)
             Finally
                 If Not reader Is Nothing Then
@@ -431,14 +431,14 @@ Namespace CompuMaster.Data
         ''' 	[adminwezel]	03.07.2004	Created
         ''' </history>
         ''' -----------------------------------------------------------------------------
-        Friend Shared Function ReadDataTableFromCsvFile(ByVal path As String, ByVal includesColumnHeaders As Boolean, ByVal encoding As System.Text.Encoding, ByVal cultureFormatProvider As System.Globalization.CultureInfo, ByVal recognizeTextBy As Char, ByVal recognizeMultipleColumnSeparatorCharsAsOne As Boolean, ByVal convertEmptyStringsToDBNull As Boolean, lineEncodings As CompuMaster.Data.Csv.ReadLineEncodings) As DataTable
+        Friend Shared Function ReadDataTableFromCsvFile(ByVal path As String, ByVal includesColumnHeaders As Boolean, ByVal encoding As System.Text.Encoding, ByVal cultureFormatProvider As System.Globalization.CultureInfo, ByVal recognizeTextBy As Char, ByVal recognizeMultipleColumnSeparatorCharsAsOne As Boolean, ByVal convertEmptyStringsToDBNull As Boolean, lineEncodings As CompuMaster.Data.Csv.ReadLineEncodings, lineEncodingAutoConversions As CompuMaster.Data.Csv.ReadLineEncodingAutoConversion) As DataTable
 
             Dim Result As New DataTable
 
             If File.Exists(path) Then
             ElseIf path.ToLower.StartsWith("http://") OrElse path.ToLower.StartsWith("https://") Then
                 Dim LocalCopyOfFileContentFromRemoteUri As String = Utils.ReadStringDataFromUri(path, encoding.WebName)
-                Result = ReadDataTableFromCsvString(LocalCopyOfFileContentFromRemoteUri, includesColumnHeaders, cultureFormatProvider, recognizeTextBy, recognizeMultipleColumnSeparatorCharsAsOne, convertEmptyStringsToDBNull, lineEncodings)
+                Result = ReadDataTableFromCsvString(LocalCopyOfFileContentFromRemoteUri, includesColumnHeaders, cultureFormatProvider, recognizeTextBy, recognizeMultipleColumnSeparatorCharsAsOne, convertEmptyStringsToDBNull, lineEncodings, lineEncodingAutoConversions)
                 Result.TableName = System.IO.Path.GetFileNameWithoutExtension(path)
                 Return Result
             Else
@@ -452,7 +452,7 @@ Namespace CompuMaster.Data
                 Else
                     reader = New StreamReader(path, encoding)
                 End If
-                Result = ReadDataTableFromCsvReader(reader, includesColumnHeaders, cultureFormatProvider, Nothing, recognizeTextBy, recognizeMultipleColumnSeparatorCharsAsOne, convertEmptyStringsToDBNull, lineEncodings)
+                Result = ReadDataTableFromCsvReader(reader, includesColumnHeaders, cultureFormatProvider, Nothing, recognizeTextBy, recognizeMultipleColumnSeparatorCharsAsOne, convertEmptyStringsToDBNull, lineEncodings, lineEncodingAutoConversions)
                 Result.TableName = System.IO.Path.GetFileNameWithoutExtension(path)
             Finally
                 If Not reader Is Nothing Then
@@ -482,7 +482,7 @@ Namespace CompuMaster.Data
         ''' 	[adminsupport]	19.04.2005	Created
         ''' </history>
         ''' -----------------------------------------------------------------------------
-        Private Shared Function ReadDataTableFromCsvReader(ByVal reader As StreamReader, ByVal includesColumnHeaders As Boolean, ByVal cultureFormatProvider As System.Globalization.CultureInfo, ByVal columnSeparator As Char, ByVal recognizeTextBy As Char, ByVal recognizeMultipleColumnSeparatorCharsAsOne As Boolean, ByVal convertEmptyStringsToDBNull As Boolean, lineEncodings As CompuMaster.Data.Csv.ReadLineEncodings) As DataTable
+        Private Shared Function ReadDataTableFromCsvReader(ByVal reader As StreamReader, ByVal includesColumnHeaders As Boolean, ByVal cultureFormatProvider As System.Globalization.CultureInfo, ByVal columnSeparator As Char, ByVal recognizeTextBy As Char, ByVal recognizeMultipleColumnSeparatorCharsAsOne As Boolean, ByVal convertEmptyStringsToDBNull As Boolean, lineEncodings As CompuMaster.Data.Csv.ReadLineEncodings, lineEncodingAutoConversions As CompuMaster.Data.Csv.ReadLineEncodingAutoConversion) As DataTable
 
             If cultureFormatProvider Is Nothing Then
                 cultureFormatProvider = System.Globalization.CultureInfo.InvariantCulture
@@ -513,7 +513,7 @@ Namespace CompuMaster.Data
 
                 'Read the next csv row
                 Dim ColValues As New ArrayList
-                SplitCsvLineIntoCellValues(rdStr, ColValues, CharPosition, columnSeparator, recognizeTextBy, recognizeMultipleColumnSeparatorCharsAsOne, lineEncodings)
+                SplitCsvLineIntoCellValues(rdStr, ColValues, CharPosition, columnSeparator, recognizeTextBy, recognizeMultipleColumnSeparatorCharsAsOne, lineEncodings, lineEncodingAutoConversions)
 
                 'Add it as a new data row (respectively add the columns definition)
                 RowCounter += 1
@@ -568,7 +568,7 @@ Namespace CompuMaster.Data
         ''' 	[AdminSupport]	29.08.2005	Created
         ''' </history>
         ''' -----------------------------------------------------------------------------
-        Private Shared Sub SplitCsvLineIntoCellValues(ByRef lineContent As String, ByVal outputList As ArrayList, ByRef startposition As Integer, ByVal columnSeparator As Char, ByVal recognizeTextBy As Char, ByVal recognizeMultipleColumnSeparatorCharsAsOne As Boolean, lineEncodings As CompuMaster.Data.Csv.ReadLineEncodings)
+        Private Shared Sub SplitCsvLineIntoCellValues(ByRef lineContent As String, ByVal outputList As ArrayList, ByRef startposition As Integer, ByVal columnSeparator As Char, ByVal recognizeTextBy As Char, ByVal recognizeMultipleColumnSeparatorCharsAsOne As Boolean, lineEncodings As CompuMaster.Data.Csv.ReadLineEncodings, lineEncodingAutoConversions As CompuMaster.Data.Csv.ReadLineEncodingAutoConversion)
 
             Dim CurrentColumnValue As New System.Text.StringBuilder
             Dim InQuotationMarks As Boolean
@@ -604,9 +604,6 @@ Namespace CompuMaster.Data
                         End If
                     Case ControlChars.Lf
                         If InQuotationMarks Then
-                            'just add the line-break because it's inside of a cell text
-                            'but add the line break in the format of the current platform
-                            CurrentColumnValue.Append(System.Environment.NewLine)
                             'TODO: read cell line breaks correctly
                             'Select Case lineEncodings
                             '    Case Csv.ReadLineEncodings.None
@@ -619,6 +616,22 @@ Namespace CompuMaster.Data
                             '    Case Else
                             '        Throw New NotImplementedException("Invalid lineEncoding")
                             'End Select
+
+                            'just add the line-break because it's inside of a cell text
+                            Select Case lineEncodingAutoConversions
+                                Case Csv.ReadLineEncodingAutoConversion.NoAutoConversion
+                                    CurrentColumnValue.Append(lineContent.Chars(CharPositionCounter))
+                                Case Csv.ReadLineEncodingAutoConversion.AutoConvertLineBreakToCrLf
+                                    CurrentColumnValue.Append(ControlChars.CrLf)
+                                Case Csv.ReadLineEncodingAutoConversion.AutoConvertLineBreakToCr
+                                    CurrentColumnValue.Append(ControlChars.Cr)
+                                Case Csv.ReadLineEncodingAutoConversion.AutoConvertLineBreakToLf
+                                    CurrentColumnValue.Append(ControlChars.Lf)
+                                Case Csv.ReadLineEncodingAutoConversion.AutoConvertLineBreakToSystemEnvironmentNewLine
+                                    CurrentColumnValue.Append(System.Environment.NewLine)
+                                Case Else
+                                    Throw New NotImplementedException("Invalid lineEncoding")
+                            End Select
                         Else
                             'now it's a line separator
                             'TODO: read cell line breaks correctly
@@ -641,8 +654,6 @@ Namespace CompuMaster.Data
                         End If
                     Case ControlChars.Cr
                         If InQuotationMarks Then
-                            'just add the character as it is because it's inside of a cell text
-                            CurrentColumnValue.Append(lineContent.Chars(CharPositionCounter))
                             'TODO: read cell line breaks correctly
                             'Select Case lineEncodings
                             '    Case Csv.ReadLineEncodings.None
@@ -655,6 +666,22 @@ Namespace CompuMaster.Data
                             '    Case Else
                             '        Throw New NotImplementedException("Invalid lineEncoding")
                             'End Select
+
+                            'just add the character as it is because it's inside of a cell text
+                            Select Case lineEncodingAutoConversions
+                                Case Csv.ReadLineEncodingAutoConversion.NoAutoConversion
+                                    CurrentColumnValue.Append(lineContent.Chars(CharPositionCounter))
+                                Case Csv.ReadLineEncodingAutoConversion.AutoConvertLineBreakToCrLf
+                                    CurrentColumnValue.Append(ControlChars.CrLf)
+                                Case Csv.ReadLineEncodingAutoConversion.AutoConvertLineBreakToCr
+                                    CurrentColumnValue.Append(ControlChars.Cr)
+                                Case Csv.ReadLineEncodingAutoConversion.AutoConvertLineBreakToLf
+                                    CurrentColumnValue.Append(ControlChars.Lf)
+                                Case Csv.ReadLineEncodingAutoConversion.AutoConvertLineBreakToSystemEnvironmentNewLine
+                                    CurrentColumnValue.Append(System.Environment.NewLine)
+                                Case Else
+                                    Throw New NotImplementedException("Invalid lineEncoding")
+                            End Select
                         Else
                             'now it's a line separator
                             'TODO: read cell line breaks correctly
@@ -713,13 +740,13 @@ Namespace CompuMaster.Data
         ''' 	[adminwezel]	03.07.2004	Created
         ''' </history>
         ''' -----------------------------------------------------------------------------
-        Friend Shared Function ReadDataTableFromCsvString(ByVal data As String, ByVal includesColumnHeaders As Boolean, ByVal columnSeparator As Char, ByVal recognizeTextBy As Char, ByVal recognizeMultipleColumnSeparatorCharsAsOne As Boolean, ByVal convertEmptyStringsToDBNull As Boolean, lineEncodings As CompuMaster.Data.Csv.ReadLineEncodings) As DataTable
+        Friend Shared Function ReadDataTableFromCsvString(ByVal data As String, ByVal includesColumnHeaders As Boolean, ByVal columnSeparator As Char, ByVal recognizeTextBy As Char, ByVal recognizeMultipleColumnSeparatorCharsAsOne As Boolean, ByVal convertEmptyStringsToDBNull As Boolean, lineEncodings As CompuMaster.Data.Csv.ReadLineEncodings, lineEncodingAutoConversions As CompuMaster.Data.Csv.ReadLineEncodingAutoConversion) As DataTable
 
             Dim Result As New DataTable
             Dim reader As StreamReader = Nothing
             Try
                 reader = New StreamReader(New MemoryStream(System.Text.Encoding.Unicode.GetBytes(data)), System.Text.Encoding.Unicode, False)
-                Result = ReadDataTableFromCsvReader(reader, includesColumnHeaders, System.Globalization.CultureInfo.CurrentCulture, columnSeparator, recognizeTextBy, recognizeMultipleColumnSeparatorCharsAsOne, convertEmptyStringsToDBNull, lineEncodings)
+                Result = ReadDataTableFromCsvReader(reader, includesColumnHeaders, System.Globalization.CultureInfo.CurrentCulture, columnSeparator, recognizeTextBy, recognizeMultipleColumnSeparatorCharsAsOne, convertEmptyStringsToDBNull, lineEncodings, lineEncodingAutoConversions)
             Finally
                 If Not reader Is Nothing Then
                     reader.Close()
@@ -748,13 +775,13 @@ Namespace CompuMaster.Data
         ''' 	[adminwezel]	03.07.2004	Created
         ''' </history>
         ''' -----------------------------------------------------------------------------
-        Friend Shared Function ReadDataTableFromCsvString(ByVal data As String, ByVal includesColumnHeaders As Boolean, ByVal cultureFormatProvider As System.Globalization.CultureInfo, ByVal recognizeTextBy As Char, ByVal recognizeMultipleColumnSeparatorCharsAsOne As Boolean, ByVal convertEmptyStringsToDBNull As Boolean, lineEncodings As CompuMaster.Data.Csv.ReadLineEncodings) As DataTable
+        Friend Shared Function ReadDataTableFromCsvString(ByVal data As String, ByVal includesColumnHeaders As Boolean, ByVal cultureFormatProvider As System.Globalization.CultureInfo, ByVal recognizeTextBy As Char, ByVal recognizeMultipleColumnSeparatorCharsAsOne As Boolean, ByVal convertEmptyStringsToDBNull As Boolean, lineEncodings As CompuMaster.Data.Csv.ReadLineEncodings, lineEncodingAutoConversions As CompuMaster.Data.Csv.ReadLineEncodingAutoConversion) As DataTable
 
             Dim Result As New DataTable
             Dim reader As StreamReader = Nothing
             Try
                 reader = New StreamReader(New MemoryStream(System.Text.Encoding.Unicode.GetBytes(data)), System.Text.Encoding.Unicode, False)
-                Result = ReadDataTableFromCsvReader(reader, includesColumnHeaders, cultureFormatProvider, Nothing, recognizeTextBy, recognizeMultipleColumnSeparatorCharsAsOne, convertEmptyStringsToDBNull, lineEncodings)
+                Result = ReadDataTableFromCsvReader(reader, includesColumnHeaders, cultureFormatProvider, Nothing, recognizeTextBy, recognizeMultipleColumnSeparatorCharsAsOne, convertEmptyStringsToDBNull, lineEncodings, lineEncodingAutoConversions)
             Finally
                 If Not reader Is Nothing Then
                     reader.Close()

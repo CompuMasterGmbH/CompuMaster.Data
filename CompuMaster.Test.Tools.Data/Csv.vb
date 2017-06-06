@@ -368,8 +368,11 @@ Namespace CompuMaster.Test.Data
             Dim csv As String
             csv = CompuMaster.Data.Csv.WriteDataTableToCsvTextString(t, True)
             Console.WriteLine(csv)
-            Dim t2 As DataTable = CompuMaster.Data.Csv.ReadDataTableFromCsvString(csv, True)
-            DataTables.AssertTables(t, t2, "Comparison t vs t2")
+            Dim t2 As DataTable = CompuMaster.Data.Csv.ReadDataTableFromCsvString(csv, True, CompuMaster.Data.Csv.ReadLineEncodings.RowBreakCrLf_CellLineBreakLf, CompuMaster.Data.Csv.ReadLineEncodingAutoConversion.AutoConvertLineBreakToLf)
+            'DataTables.AssertTables(t, t2, "Comparison t vs t2")
+            'DataTables.AssertTables(CloneTableWithSearchAndReplaceOnStrings(t, vbNewLine, vbLf), t2, "Comparison t vs t2")
+            DataTables.AssertTables(CloneTableWithSearchAndReplaceOnStrings(CloneTableWithSearchAndReplaceOnStrings(t, vbNewLine, vbLf), vbCr, vbLf), t2, "Comparison t vs t2")
+            'DataTables.AssertTables(CloneTableWithSearchAndReplaceOnStrings(CloneTableWithSearchAndReplaceOnStrings(t, vbNewLine, vbLf), vbCr, vbLf), CloneTableWithSearchAndReplaceOnStrings(t2, vbNewLine, vbLf), "Comparison t vs t2")
             Dim csv2 As String
             Assert.AreEqual(t.Columns.Count, t2.Columns.Count) 'should be the very same
             Assert.AreEqual(t.Rows.Count, t2.Rows.Count) 'should be the very same - except line breaks in cells haven't been converted correctly
@@ -379,10 +382,26 @@ Namespace CompuMaster.Test.Data
         End Sub
 
         <Test> Sub CsvEncode()
+            Assert.AreEqual("R1C1""""" & vbLf, CompuMaster.Data.CsvTools.CsvEncode("R1C1""" & vbLf, """"c, CompuMaster.Data.Csv.WriteLineEncodings.RowBreakCr_CellLineBreakLf))
             Assert.AreEqual("R1C1""""" & vbLf & vbLf, CompuMaster.Data.CsvTools.CsvEncode("R1C1""" & vbNewLine & vbCr, """"c, CompuMaster.Data.Csv.WriteLineEncodings.RowBreakCr_CellLineBreakLf))
             Assert.AreEqual("R1C1""""""""" & vbLf & vbLf, CompuMaster.Data.CsvTools.CsvEncode("R1C1""""" & vbNewLine & vbCr, """"c, CompuMaster.Data.Csv.WriteLineEncodings.RowBreakCr_CellLineBreakLf))
+            Assert.AreEqual("R1C1""""" & vbLf & vbLf, CompuMaster.Data.CsvTools.CsvEncode("R1C1""" & vbNewLine & vbCr, """"c, CompuMaster.Data.Csv.WriteLineEncodings.RowBreakCrLf_CellLineBreakLf))
+            Assert.AreEqual("R1C1""""""""" & vbLf & vbLf, CompuMaster.Data.CsvTools.CsvEncode("R1C1""""" & vbNewLine & vbCr, """"c, CompuMaster.Data.Csv.WriteLineEncodings.RowBreakCrLf_CellLineBreakLf))
         End Sub
 
+        Private Function CloneTableWithSearchAndReplaceOnStrings(table As DataTable, searchValue As String, replaceValue As String) As DataTable
+            Dim Result As DataTable = CompuMaster.Data.DataTables.CreateDataTableClone(table)
+            For MyCounter As Integer = 0 To Result.Columns.Count - 1
+                If Result.Columns(MyCounter).DataType Is GetType(String) Then
+                    For MyRowCounter As Integer = 0 To Result.Rows.Count - 1
+                        If IsDBNull(Result.Rows(MyRowCounter)(MyCounter)) = False AndAlso Not Result.Rows(MyRowCounter)(MyCounter) Is Nothing Then
+                            Result.Rows(MyRowCounter)(MyCounter) = CType(Result.Rows(MyRowCounter)(MyCounter), String).Replace(searchValue, replaceValue)
+                        End If
+                    Next
+                End If
+            Next
+            Return Result
+        End Function
     End Class
 
 End Namespace

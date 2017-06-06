@@ -24,6 +24,9 @@ Namespace CompuMaster.Data
         ''' Line encoding of CSV files 
         ''' </summary>
         Public Enum ReadLineEncodings As Byte
+            ''' <summary>
+            ''' Force reading line break in cell value as row break
+            ''' </summary>
             None = 0
             RowBreakCrLf_CellLineBreakLf = 1
             RowBreakCrLf_CellLineBreakCr = 2
@@ -32,6 +35,17 @@ Namespace CompuMaster.Data
             RowBreakCrLfOrCr_CellLineBreakLf = 5
             RowBreakCrLfOrLf_CellLineBreakCr = 6
             [Default] = 5
+        End Enum
+
+        ''' <summary>
+        ''' Auto conversion of detected line breaks in cell to platform specific linebreak
+        ''' </summary>
+        Public Enum ReadLineEncodingAutoConversion As Byte
+            NoAutoConversion = 0
+            AutoConvertLineBreakToCrLf = 1
+            AutoConvertLineBreakToCr = 2
+            AutoConvertLineBreakToLf = 3
+            AutoConvertLineBreakToSystemEnvironmentNewLine = 4
         End Enum
 
         ''' <summary>
@@ -49,7 +63,7 @@ Namespace CompuMaster.Data
         ''' In case of duplicate column names, all additional occurances of the same column name will be modified to use a unique column name
         ''' </remarks>
         Public Shared Function ReadDataTableFromCsvFile(ByVal path As String, ByVal csvContainsColumnHeaders As Boolean, Optional ByVal fileEncoding As String = "UTF-8", Optional ByVal columnSeparator As Char = ","c, Optional ByVal recognizeTextBy As Char = """"c, Optional ByVal recognizeMultipleColumnSeparatorCharsAsOne As Boolean = False, Optional ByVal convertEmptyStringsToDBNull As Boolean = False) As DataTable
-            Return CompuMaster.Data.CsvTools.ReadDataTableFromCsvFile(path, csvContainsColumnHeaders, fileEncoding, columnSeparator, recognizeTextBy, recognizeMultipleColumnSeparatorCharsAsOne, convertEmptyStringsToDBNull, ReadLineEncodings.Default)
+            Return CompuMaster.Data.CsvTools.ReadDataTableFromCsvFile(path, csvContainsColumnHeaders, fileEncoding, columnSeparator, recognizeTextBy, recognizeMultipleColumnSeparatorCharsAsOne, convertEmptyStringsToDBNull, ReadLineEncodings.Default, ReadLineEncodingAutoConversion.AutoConvertLineBreakToSystemEnvironmentNewLine)
         End Function
 
         ''' <summary>
@@ -67,7 +81,7 @@ Namespace CompuMaster.Data
         ''' In case of duplicate column names, all additional occurances of the same column name will be modified to use a unique column name
         ''' </remarks>
         Public Shared Function ReadDataTableFromCsvFile(ByVal path As String, ByVal csvContainsColumnHeaders As Boolean, ByVal fileEncoding As System.Text.Encoding, ByVal cultureFormatProvider As System.Globalization.CultureInfo, Optional ByVal recognizeTextBy As Char = """"c, Optional ByVal recognizeDoubledColumnSeparatorCharAsOne As Boolean = False, Optional ByVal convertEmptyStringsToDBNull As Boolean = False) As DataTable
-            Return CompuMaster.Data.CsvTools.ReadDataTableFromCsvFile(path, csvContainsColumnHeaders, fileEncoding, cultureFormatProvider, recognizeTextBy, recognizeDoubledColumnSeparatorCharAsOne, convertEmptyStringsToDBNull, ReadLineEncodings.Default)
+            Return CompuMaster.Data.CsvTools.ReadDataTableFromCsvFile(path, csvContainsColumnHeaders, fileEncoding, cultureFormatProvider, recognizeTextBy, recognizeDoubledColumnSeparatorCharAsOne, convertEmptyStringsToDBNull, ReadLineEncodings.Default, ReadLineEncodingAutoConversion.AutoConvertLineBreakToSystemEnvironmentNewLine)
         End Function
 
         ''' <summary>
@@ -84,7 +98,7 @@ Namespace CompuMaster.Data
         ''' In case of duplicate column names, all additional occurances of the same column name will be modified to use a unique column name
         ''' </remarks>
         Public Shared Function ReadDataTableFromCsvString(ByVal data As String, ByVal csvContainsColumnHeaders As Boolean, ByVal cultureFormatProvider As System.Globalization.CultureInfo, Optional ByVal recognizeTextBy As Char = """"c, Optional ByVal recognizeDoubledColumnSeparatorCharAsOne As Boolean = False, Optional ByVal convertEmptyStringsToDBNull As Boolean = False) As DataTable
-            Return CompuMaster.Data.CsvTools.ReadDataTableFromCsvString(data, csvContainsColumnHeaders, cultureFormatProvider, recognizeTextBy, recognizeDoubledColumnSeparatorCharAsOne, convertEmptyStringsToDBNull, ReadLineEncodings.Default)
+            Return CompuMaster.Data.CsvTools.ReadDataTableFromCsvString(data, csvContainsColumnHeaders, cultureFormatProvider, recognizeTextBy, recognizeDoubledColumnSeparatorCharAsOne, convertEmptyStringsToDBNull, ReadLineEncodings.Default, ReadLineEncodingAutoConversion.AutoConvertLineBreakToSystemEnvironmentNewLine)
         End Function
 
         ''' <summary>
@@ -101,7 +115,7 @@ Namespace CompuMaster.Data
         ''' In case of duplicate column names, all additional occurances of the same column name will be modified to use a unique column name
         ''' </remarks>
         Public Shared Function ReadDataTableFromCsvString(ByVal data As String, ByVal csvContainsColumnHeaders As Boolean, Optional ByVal columnSeparator As Char = ","c, Optional ByVal recognizeTextBy As Char = """"c, Optional ByVal recognizeDoubledColumnSeparatorCharAsOne As Boolean = False, Optional ByVal convertEmptyStringsToDBNull As Boolean = False) As DataTable
-            Return CompuMaster.Data.CsvTools.ReadDataTableFromCsvString(data, csvContainsColumnHeaders, columnSeparator, recognizeTextBy, recognizeDoubledColumnSeparatorCharAsOne, convertEmptyStringsToDBNull, ReadLineEncodings.Default)
+            Return CompuMaster.Data.CsvTools.ReadDataTableFromCsvString(data, csvContainsColumnHeaders, columnSeparator, recognizeTextBy, recognizeDoubledColumnSeparatorCharAsOne, convertEmptyStringsToDBNull, ReadLineEncodings.Default, ReadLineEncodingAutoConversion.AutoConvertLineBreakToSystemEnvironmentNewLine)
         End Function
 
         ''' <summary>
@@ -117,7 +131,7 @@ Namespace CompuMaster.Data
         ''' In case of duplicate column names, all additional occurances of the same column name will be modified to use a unique column name
         ''' </remarks>
         Public Shared Function ReadDataTableFromCsvFile(ByVal path As String, ByVal csvContainsColumnHeaders As Boolean, ByVal columnWidths As Integer(), Optional ByVal fileEncoding As String = "UTF-8", Optional ByVal convertEmptyStringsToDBNull As Boolean = False) As DataTable
-            Return CompuMaster.Data.CsvTools.ReadDataTableFromCsvFile(path, csvContainsColumnHeaders, columnWidths, fileEncoding, convertEmptyStringsToDBNull, ReadLineEncodings.Default)
+            Return CompuMaster.Data.CsvTools.ReadDataTableFromCsvFile(path, csvContainsColumnHeaders, columnWidths, fileEncoding, convertEmptyStringsToDBNull, ReadLineEncodings.Default, ReadLineEncodingAutoConversion.AutoConvertLineBreakToSystemEnvironmentNewLine)
         End Function
 
         ''' <summary>
@@ -134,7 +148,7 @@ Namespace CompuMaster.Data
         ''' In case of duplicate column names, all additional occurances of the same column name will be modified to use a unique column name
         ''' </remarks>
         Public Shared Function ReadDataTableFromCsvFile(ByVal path As String, ByVal csvContainsColumnHeaders As Boolean, ByVal columnWidths As Integer(), ByVal fileEncoding As System.Text.Encoding, ByVal cultureFormatProvider As System.Globalization.CultureInfo, Optional ByVal convertEmptyStringsToDBNull As Boolean = False) As DataTable
-            Return CompuMaster.Data.CsvTools.ReadDataTableFromCsvFile(path, csvContainsColumnHeaders, columnWidths, fileEncoding, cultureFormatProvider, convertEmptyStringsToDBNull, ReadLineEncodings.Default)
+            Return CompuMaster.Data.CsvTools.ReadDataTableFromCsvFile(path, csvContainsColumnHeaders, columnWidths, fileEncoding, cultureFormatProvider, convertEmptyStringsToDBNull, ReadLineEncodings.Default, ReadLineEncodingAutoConversion.AutoConvertLineBreakToSystemEnvironmentNewLine)
         End Function
 
         ''' <summary>
@@ -150,7 +164,7 @@ Namespace CompuMaster.Data
         ''' In case of duplicate column names, all additional occurances of the same column name will be modified to use a unique column name
         ''' </remarks>
         Public Shared Function ReadDataTableFromCsvString(ByVal data As String, ByVal csvContainsColumnHeaders As Boolean, ByVal cultureFormatProvider As System.Globalization.CultureInfo, ByVal columnWidths As Integer(), Optional ByVal convertEmptyStringsToDBNull As Boolean = False) As DataTable
-            Return CompuMaster.Data.CsvTools.ReadDataTableFromCsvString(data, csvContainsColumnHeaders, cultureFormatProvider, columnWidths, convertEmptyStringsToDBNull, ReadLineEncodings.Default)
+            Return CompuMaster.Data.CsvTools.ReadDataTableFromCsvString(data, csvContainsColumnHeaders, cultureFormatProvider, columnWidths, convertEmptyStringsToDBNull, ReadLineEncodings.Default, ReadLineEncodingAutoConversion.AutoConvertLineBreakToSystemEnvironmentNewLine)
         End Function
 
         ''' <summary>
@@ -165,7 +179,7 @@ Namespace CompuMaster.Data
         ''' In case of duplicate column names, all additional occurances of the same column name will be modified to use a unique column name
         ''' </remarks>
         Public Shared Function ReadDataTableFromCsvString(ByVal data As String, ByVal csvContainsColumnHeaders As Boolean, ByVal columnWidths As Integer(), Optional ByVal convertEmptyStringsToDBNull As Boolean = False) As DataTable
-            Return CompuMaster.Data.CsvTools.ReadDataTableFromCsvString(data, csvContainsColumnHeaders, columnWidths, convertEmptyStringsToDBNull, ReadLineEncodings.Default)
+            Return CompuMaster.Data.CsvTools.ReadDataTableFromCsvString(data, csvContainsColumnHeaders, columnWidths, convertEmptyStringsToDBNull, ReadLineEncodings.Default, ReadLineEncodingAutoConversion.AutoConvertLineBreakToSystemEnvironmentNewLine)
         End Function
 
         ''' <summary>
@@ -182,8 +196,8 @@ Namespace CompuMaster.Data
         ''' <remarks>
         ''' In case of duplicate column names, all additional occurances of the same column name will be modified to use a unique column name
         ''' </remarks>
-        Public Shared Function ReadDataTableFromCsvFile(ByVal path As String, ByVal csvContainsColumnHeaders As Boolean, lineEncodings As CompuMaster.Data.Csv.ReadLineEncodings, Optional ByVal fileEncoding As String = "UTF-8", Optional ByVal columnSeparator As Char = ","c, Optional ByVal recognizeTextBy As Char = """"c, Optional ByVal recognizeMultipleColumnSeparatorCharsAsOne As Boolean = False, Optional ByVal convertEmptyStringsToDBNull As Boolean = False) As DataTable
-            Return CompuMaster.Data.CsvTools.ReadDataTableFromCsvFile(path, csvContainsColumnHeaders, fileEncoding, columnSeparator, recognizeTextBy, recognizeMultipleColumnSeparatorCharsAsOne, convertEmptyStringsToDBNull, lineEncodings)
+        Public Shared Function ReadDataTableFromCsvFile(ByVal path As String, ByVal csvContainsColumnHeaders As Boolean, lineEncodings As CompuMaster.Data.Csv.ReadLineEncodings, lineEncodingAutoConversions As CompuMaster.Data.Csv.ReadLineEncodingAutoConversion, Optional ByVal fileEncoding As String = "UTF-8", Optional ByVal columnSeparator As Char = ","c, Optional ByVal recognizeTextBy As Char = """"c, Optional ByVal recognizeMultipleColumnSeparatorCharsAsOne As Boolean = False, Optional ByVal convertEmptyStringsToDBNull As Boolean = False) As DataTable
+            Return CompuMaster.Data.CsvTools.ReadDataTableFromCsvFile(path, csvContainsColumnHeaders, fileEncoding, columnSeparator, recognizeTextBy, recognizeMultipleColumnSeparatorCharsAsOne, convertEmptyStringsToDBNull, lineEncodings, lineEncodingAutoConversions)
         End Function
 
         ''' <summary>
@@ -200,8 +214,8 @@ Namespace CompuMaster.Data
         ''' <remarks>
         ''' In case of duplicate column names, all additional occurances of the same column name will be modified to use a unique column name
         ''' </remarks>
-        Public Shared Function ReadDataTableFromCsvFile(ByVal path As String, ByVal csvContainsColumnHeaders As Boolean, lineEncodings As CompuMaster.Data.Csv.ReadLineEncodings, ByVal fileEncoding As System.Text.Encoding, ByVal cultureFormatProvider As System.Globalization.CultureInfo, Optional ByVal recognizeTextBy As Char = """"c, Optional ByVal recognizeDoubledColumnSeparatorCharAsOne As Boolean = False, Optional ByVal convertEmptyStringsToDBNull As Boolean = False) As DataTable
-            Return CompuMaster.Data.CsvTools.ReadDataTableFromCsvFile(path, csvContainsColumnHeaders, fileEncoding, cultureFormatProvider, recognizeTextBy, recognizeDoubledColumnSeparatorCharAsOne, convertEmptyStringsToDBNull, lineEncodings)
+        Public Shared Function ReadDataTableFromCsvFile(ByVal path As String, ByVal csvContainsColumnHeaders As Boolean, lineEncodings As CompuMaster.Data.Csv.ReadLineEncodings, lineEncodingAutoConversions As CompuMaster.Data.Csv.ReadLineEncodingAutoConversion, ByVal fileEncoding As System.Text.Encoding, ByVal cultureFormatProvider As System.Globalization.CultureInfo, Optional ByVal recognizeTextBy As Char = """"c, Optional ByVal recognizeDoubledColumnSeparatorCharAsOne As Boolean = False, Optional ByVal convertEmptyStringsToDBNull As Boolean = False) As DataTable
+            Return CompuMaster.Data.CsvTools.ReadDataTableFromCsvFile(path, csvContainsColumnHeaders, fileEncoding, cultureFormatProvider, recognizeTextBy, recognizeDoubledColumnSeparatorCharAsOne, convertEmptyStringsToDBNull, lineEncodings, lineEncodingAutoConversions)
         End Function
 
         ''' <summary>
@@ -217,8 +231,8 @@ Namespace CompuMaster.Data
         ''' <remarks>
         ''' In case of duplicate column names, all additional occurances of the same column name will be modified to use a unique column name
         ''' </remarks>
-        Public Shared Function ReadDataTableFromCsvString(ByVal data As String, ByVal csvContainsColumnHeaders As Boolean, lineEncodings As CompuMaster.Data.Csv.ReadLineEncodings, ByVal cultureFormatProvider As System.Globalization.CultureInfo, Optional ByVal recognizeTextBy As Char = """"c, Optional ByVal recognizeDoubledColumnSeparatorCharAsOne As Boolean = False, Optional ByVal convertEmptyStringsToDBNull As Boolean = False) As DataTable
-            Return CompuMaster.Data.CsvTools.ReadDataTableFromCsvString(data, csvContainsColumnHeaders, cultureFormatProvider, recognizeTextBy, recognizeDoubledColumnSeparatorCharAsOne, convertEmptyStringsToDBNull, lineEncodings)
+        Public Shared Function ReadDataTableFromCsvString(ByVal data As String, ByVal csvContainsColumnHeaders As Boolean, lineEncodings As CompuMaster.Data.Csv.ReadLineEncodings, lineEncodingAutoConversions As CompuMaster.Data.Csv.ReadLineEncodingAutoConversion, ByVal cultureFormatProvider As System.Globalization.CultureInfo, Optional ByVal recognizeTextBy As Char = """"c, Optional ByVal recognizeDoubledColumnSeparatorCharAsOne As Boolean = False, Optional ByVal convertEmptyStringsToDBNull As Boolean = False) As DataTable
+            Return CompuMaster.Data.CsvTools.ReadDataTableFromCsvString(data, csvContainsColumnHeaders, cultureFormatProvider, recognizeTextBy, recognizeDoubledColumnSeparatorCharAsOne, convertEmptyStringsToDBNull, lineEncodings, lineEncodingAutoConversions)
         End Function
 
         ''' <summary>
@@ -234,8 +248,8 @@ Namespace CompuMaster.Data
         ''' <remarks>
         ''' In case of duplicate column names, all additional occurances of the same column name will be modified to use a unique column name
         ''' </remarks>
-        Public Shared Function ReadDataTableFromCsvString(ByVal data As String, ByVal csvContainsColumnHeaders As Boolean, lineEncodings As CompuMaster.Data.Csv.ReadLineEncodings, Optional ByVal columnSeparator As Char = ","c, Optional ByVal recognizeTextBy As Char = """"c, Optional ByVal recognizeDoubledColumnSeparatorCharAsOne As Boolean = False, Optional ByVal convertEmptyStringsToDBNull As Boolean = False) As DataTable
-            Return CompuMaster.Data.CsvTools.ReadDataTableFromCsvString(data, csvContainsColumnHeaders, columnSeparator, recognizeTextBy, recognizeDoubledColumnSeparatorCharAsOne, convertEmptyStringsToDBNull, lineEncodings)
+        Public Shared Function ReadDataTableFromCsvString(ByVal data As String, ByVal csvContainsColumnHeaders As Boolean, lineEncodings As CompuMaster.Data.Csv.ReadLineEncodings, lineEncodingAutoConversions As CompuMaster.Data.Csv.ReadLineEncodingAutoConversion, Optional ByVal columnSeparator As Char = ","c, Optional ByVal recognizeTextBy As Char = """"c, Optional ByVal recognizeDoubledColumnSeparatorCharAsOne As Boolean = False, Optional ByVal convertEmptyStringsToDBNull As Boolean = False) As DataTable
+            Return CompuMaster.Data.CsvTools.ReadDataTableFromCsvString(data, csvContainsColumnHeaders, columnSeparator, recognizeTextBy, recognizeDoubledColumnSeparatorCharAsOne, convertEmptyStringsToDBNull, lineEncodings, lineEncodingAutoConversions)
         End Function
 
         ''' <summary>
@@ -250,8 +264,8 @@ Namespace CompuMaster.Data
         ''' <remarks>
         ''' In case of duplicate column names, all additional occurances of the same column name will be modified to use a unique column name
         ''' </remarks>
-        Public Shared Function ReadDataTableFromCsvFile(ByVal path As String, ByVal csvContainsColumnHeaders As Boolean, lineEncodings As CompuMaster.Data.Csv.ReadLineEncodings, ByVal columnWidths As Integer(), Optional ByVal fileEncoding As String = "UTF-8", Optional ByVal convertEmptyStringsToDBNull As Boolean = False) As DataTable
-            Return CompuMaster.Data.CsvTools.ReadDataTableFromCsvFile(path, csvContainsColumnHeaders, columnWidths, fileEncoding, convertEmptyStringsToDBNull, lineEncodings)
+        Public Shared Function ReadDataTableFromCsvFile(ByVal path As String, ByVal csvContainsColumnHeaders As Boolean, lineEncodings As CompuMaster.Data.Csv.ReadLineEncodings, lineEncodingAutoConversions As CompuMaster.Data.Csv.ReadLineEncodingAutoConversion, ByVal columnWidths As Integer(), Optional ByVal fileEncoding As String = "UTF-8", Optional ByVal convertEmptyStringsToDBNull As Boolean = False) As DataTable
+            Return CompuMaster.Data.CsvTools.ReadDataTableFromCsvFile(path, csvContainsColumnHeaders, columnWidths, fileEncoding, convertEmptyStringsToDBNull, lineEncodings, lineEncodingAutoConversions)
         End Function
 
         ''' <summary>
@@ -267,8 +281,8 @@ Namespace CompuMaster.Data
         ''' <remarks>
         ''' In case of duplicate column names, all additional occurances of the same column name will be modified to use a unique column name
         ''' </remarks>
-        Public Shared Function ReadDataTableFromCsvFile(ByVal path As String, ByVal csvContainsColumnHeaders As Boolean, lineEncodings As CompuMaster.Data.Csv.ReadLineEncodings, ByVal columnWidths As Integer(), ByVal fileEncoding As System.Text.Encoding, ByVal cultureFormatProvider As System.Globalization.CultureInfo, Optional ByVal convertEmptyStringsToDBNull As Boolean = False) As DataTable
-            Return CompuMaster.Data.CsvTools.ReadDataTableFromCsvFile(path, csvContainsColumnHeaders, columnWidths, fileEncoding, cultureFormatProvider, convertEmptyStringsToDBNull, lineEncodings)
+        Public Shared Function ReadDataTableFromCsvFile(ByVal path As String, ByVal csvContainsColumnHeaders As Boolean, lineEncodings As CompuMaster.Data.Csv.ReadLineEncodings, lineEncodingAutoConversions As CompuMaster.Data.Csv.ReadLineEncodingAutoConversion, ByVal columnWidths As Integer(), ByVal fileEncoding As System.Text.Encoding, ByVal cultureFormatProvider As System.Globalization.CultureInfo, Optional ByVal convertEmptyStringsToDBNull As Boolean = False) As DataTable
+            Return CompuMaster.Data.CsvTools.ReadDataTableFromCsvFile(path, csvContainsColumnHeaders, columnWidths, fileEncoding, cultureFormatProvider, convertEmptyStringsToDBNull, lineEncodings, lineEncodingAutoConversions)
         End Function
 
         ''' <summary>
@@ -283,8 +297,8 @@ Namespace CompuMaster.Data
         ''' <remarks>
         ''' In case of duplicate column names, all additional occurances of the same column name will be modified to use a unique column name
         ''' </remarks>
-        Public Shared Function ReadDataTableFromCsvString(ByVal data As String, ByVal csvContainsColumnHeaders As Boolean, lineEncodings As CompuMaster.Data.Csv.ReadLineEncodings, ByVal cultureFormatProvider As System.Globalization.CultureInfo, ByVal columnWidths As Integer(), Optional ByVal convertEmptyStringsToDBNull As Boolean = False) As DataTable
-            Return CompuMaster.Data.CsvTools.ReadDataTableFromCsvString(data, csvContainsColumnHeaders, cultureFormatProvider, columnWidths, convertEmptyStringsToDBNull, lineEncodings)
+        Public Shared Function ReadDataTableFromCsvString(ByVal data As String, ByVal csvContainsColumnHeaders As Boolean, lineEncodings As CompuMaster.Data.Csv.ReadLineEncodings, lineEncodingAutoConversions As CompuMaster.Data.Csv.ReadLineEncodingAutoConversion, ByVal cultureFormatProvider As System.Globalization.CultureInfo, ByVal columnWidths As Integer(), Optional ByVal convertEmptyStringsToDBNull As Boolean = False) As DataTable
+            Return CompuMaster.Data.CsvTools.ReadDataTableFromCsvString(data, csvContainsColumnHeaders, cultureFormatProvider, columnWidths, convertEmptyStringsToDBNull, lineEncodings, lineEncodingAutoConversions)
         End Function
 
         ''' <summary>
@@ -298,8 +312,8 @@ Namespace CompuMaster.Data
         ''' <remarks>
         ''' In case of duplicate column names, all additional occurances of the same column name will be modified to use a unique column name
         ''' </remarks>
-        Public Shared Function ReadDataTableFromCsvString(ByVal data As String, ByVal csvContainsColumnHeaders As Boolean, lineEncodings As CompuMaster.Data.Csv.ReadLineEncodings, ByVal columnWidths As Integer(), Optional ByVal convertEmptyStringsToDBNull As Boolean = False) As DataTable
-            Return CompuMaster.Data.CsvTools.ReadDataTableFromCsvString(data, csvContainsColumnHeaders, columnWidths, convertEmptyStringsToDBNull, lineEncodings)
+        Public Shared Function ReadDataTableFromCsvString(ByVal data As String, ByVal csvContainsColumnHeaders As Boolean, lineEncodings As CompuMaster.Data.Csv.ReadLineEncodings, lineEncodingAutoConversions As CompuMaster.Data.Csv.ReadLineEncodingAutoConversion, ByVal columnWidths As Integer(), Optional ByVal convertEmptyStringsToDBNull As Boolean = False) As DataTable
+            Return CompuMaster.Data.CsvTools.ReadDataTableFromCsvString(data, csvContainsColumnHeaders, columnWidths, convertEmptyStringsToDBNull, lineEncodings, lineEncodingAutoConversions)
         End Function
 
         ''' <summary>
