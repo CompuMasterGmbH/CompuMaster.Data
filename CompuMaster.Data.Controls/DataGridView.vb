@@ -69,6 +69,30 @@ Namespace CompuMaster.Data.Windows
         End Property
 
         ''' <summary>
+        ''' DataSource of base datagrid should not be used any more, use DataContainer or DataSourceObject property instead
+        ''' </summary>
+        ''' <returns></returns>
+        <Obsolete("Use DataContainer or DataSourceObject instead", True)>
+        Public Shadows Property DataSource As Object
+            Get
+                Return MyBase.DataSource
+            End Get
+            Set(value As Object)
+                MyBase.DataSource = value
+            End Set
+        End Property
+
+        ''' <summary>
+        ''' The DataSource object as used by the underlying DataGridView
+        ''' </summary>
+        ''' <returns></returns>
+        Public ReadOnly Property DataSourceObject As Object
+            Get
+                Return MyBase.DataSource
+            End Get
+        End Property
+
+        ''' <summary>
         ''' Fires when the DataGridView changed data to the underlying data table
         ''' </summary>
         ''' <remarks></remarks>
@@ -81,7 +105,7 @@ Namespace CompuMaster.Data.Windows
         ''' <param name="e"></param>
         ''' <remarks></remarks>
         Private Sub DataGridView_CellEnter(ByVal sender As Object, ByVal e As System.Windows.Forms.DataGridViewCellEventArgs) Handles Me.CellEnter
-            If IsLoading = False AndAlso Me._DataContainer.Table.Rows.Count > 0 AndAlso Not Me.SelectedCells Is Nothing AndAlso Me.SelectedCells.Count <= 1 Then
+            If IsLoading = False AndAlso Not Me.DataContainer Is Nothing AndAlso Me._DataContainer.Table.Rows.Count > 0 AndAlso Not Me.SelectedCells Is Nothing AndAlso Me.SelectedCells.Count <= 1 Then
                 Me.BeginEdit(True)
             End If
         End Sub
@@ -129,12 +153,12 @@ Namespace CompuMaster.Data.Windows
             PreserveCurrentCell()
             PreserveScrollPosition()
             PreserveSortOrder()
-            Me.DataSource = Nothing
+            MyBase.DataSource = Nothing
             If SelectCommand Is Nothing Then Throw New InvalidOperationException("SelectCommand is a required property")
             If SelectCommand.Connection Is Nothing Then Throw New InvalidOperationException("SelectCommand requires a valid connection")
             _DataContainer = Utils.LoadDataForManipulationViaQuickEdit(Me.SelectCommand)
             RestoreColumnSettings()
-            Me.DataSource = _DataContainer.Table
+            MyBase.DataSource = _DataContainer.Table
             RestoreSortOrder()
             RestoreRowSettings()
             RestoreCurrentCell()
@@ -352,7 +376,7 @@ Namespace CompuMaster.Data.Windows
         ''' <param name="e"></param>
         ''' <remarks></remarks>
         Private Sub DataGridViewQuickEdit_DataError(ByVal sender As Object, ByVal e As System.Windows.Forms.DataGridViewDataErrorEventArgs) Handles Me.DataError
-            If CType(Me.DataSource, DataTable).Columns(e.ColumnIndex).DataType Is GetType(Byte()) Then
+            If CType(MyBase.DataSource, DataTable).Columns(e.ColumnIndex).DataType Is GetType(Byte()) Then
                 'Ignore this error
                 'typically, the DataGrid trys to display Byte-arrays as image which may fail depending on provided data.
                 'e.g. upsize_ts columns will always fail here
