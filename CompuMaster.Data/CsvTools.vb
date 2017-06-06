@@ -1060,7 +1060,9 @@ Namespace CompuMaster.Data
                     If ColCounter <> 0 Then
                         writer.Append(columnSeparator)
                     End If
-                    writer.Append(recognizeTextBy & dataTable.Columns(ColCounter).ColumnName.Replace(recognizeTextBy, recognizeTextBy & recognizeTextBy) & recognizeTextBy)
+                    If recognizeTextBy <> Nothing Then writer.Append(recognizeTextBy)
+                    writer.Append(CsvEncode(dataTable.Columns(ColCounter).ColumnName, recognizeTextBy, lineEncodings))
+                    If recognizeTextBy <> Nothing Then writer.Append(recognizeTextBy)
                 Next
                 writer.Append(vbNewLine)
             End If
@@ -1074,7 +1076,9 @@ Namespace CompuMaster.Data
                     If dataTable.Columns(ColCounter).DataType Is GetType(String) Then
                         'Strings
                         If Not dataTable.Rows(RowCounter)(ColCounter) Is DBNull.Value Then
-                            writer.Append(recognizeTextBy & CsvEncode(CType(dataTable.Rows(RowCounter)(ColCounter), String), recognizeTextBy, lineEncodings) & recognizeTextBy)
+                            If recognizeTextBy <> Nothing Then writer.Append(recognizeTextBy)
+                            writer.Append(CsvEncode(CType(dataTable.Rows(RowCounter)(ColCounter), String), recognizeTextBy, lineEncodings))
+                            If recognizeTextBy <> Nothing Then writer.Append(recognizeTextBy)
                         End If
                     ElseIf dataTable.Columns(ColCounter).DataType Is GetType(System.Double) Then
                         'Doubles
@@ -1140,7 +1144,9 @@ Namespace CompuMaster.Data
                         If ColCounter <> 0 Then
                             writer.Write(columnSeparator)
                         End If
-                        writer.Write(recognizeTextBy & dataTable.Columns(ColCounter).ColumnName.Replace(recognizeTextBy, recognizeTextBy & recognizeTextBy) & recognizeTextBy)
+                        If recognizeTextBy <> Nothing Then writer.Write(recognizeTextBy)
+                        writer.Write(CsvEncode(dataTable.Columns(ColCounter).ColumnName, recognizeTextBy, lineEncodings))
+                        If recognizeTextBy <> Nothing Then writer.Write(recognizeTextBy)
                     Next
                     writer.WriteLine()
                 End If
@@ -1154,11 +1160,9 @@ Namespace CompuMaster.Data
                         If dataTable.Columns(ColCounter).DataType Is GetType(String) Then
                             'Strings
                             If Not dataTable.Rows(RowCounter)(ColCounter) Is DBNull.Value Then
-                                If recognizeTextBy = Nothing Then
-                                    writer.Write(CsvEncode(CType(dataTable.Rows(RowCounter)(ColCounter), String), recognizeTextBy, lineEncodings))
-                                Else
-                                    writer.Write(recognizeTextBy & CsvEncode(CType(dataTable.Rows(RowCounter)(ColCounter), String), recognizeTextBy, lineEncodings) & recognizeTextBy)
-                                End If
+                                If recognizeTextBy <> Nothing Then writer.Write(recognizeTextBy)
+                                writer.Write(CsvEncode(CType(dataTable.Rows(RowCounter)(ColCounter), String), recognizeTextBy, lineEncodings))
+                                If recognizeTextBy <> Nothing Then writer.Write(recognizeTextBy)
                             End If
                         ElseIf dataTable.Columns(ColCounter).DataType Is GetType(System.Double) Then
                             'Doubles
@@ -1297,11 +1301,9 @@ Namespace CompuMaster.Data
                         If ColCounter <> 0 Then
                             writer.Write(columnSeparator)
                         End If
-                        If recognizeTextBy = Nothing Then
-                            writer.Write(CsvEncode(dataTable.Columns(ColCounter).ColumnName, recognizeTextBy, lineEncodings))
-                        Else
-                            writer.Write(recognizeTextBy & CsvEncode(dataTable.Columns(ColCounter).ColumnName, recognizeTextBy, lineEncodings) & recognizeTextBy)
-                        End If
+                        If recognizeTextBy <> Nothing Then writer.Write(recognizeTextBy)
+                        writer.Write(CsvEncode(dataTable.Columns(ColCounter).ColumnName, recognizeTextBy, lineEncodings))
+                        If recognizeTextBy <> Nothing Then writer.Write(recognizeTextBy)
                     Next
                     writer.WriteLine()
                 End If
@@ -1315,11 +1317,9 @@ Namespace CompuMaster.Data
                         If dataTable.Columns(ColCounter).DataType Is GetType(String) Then
                             'Strings
                             If Not dataTable.Rows(RowCounter)(ColCounter) Is DBNull.Value Then
-                                If recognizeTextBy = Nothing Then
-                                    writer.Write(CsvEncode(CType(dataTable.Rows(RowCounter)(ColCounter), String), recognizeTextBy, lineEncodings))
-                                Else
-                                    writer.Write(recognizeTextBy & CsvEncode(CType(dataTable.Rows(RowCounter)(ColCounter), String), recognizeTextBy, lineEncodings) & recognizeTextBy)
-                                End If
+                                If recognizeTextBy <> Nothing Then writer.Write(recognizeTextBy)
+                                writer.Write(CsvEncode(CType(dataTable.Rows(RowCounter)(ColCounter), String), recognizeTextBy, lineEncodings))
+                                If recognizeTextBy <> Nothing Then writer.Write(recognizeTextBy)
                             End If
                         ElseIf dataTable.Columns(ColCounter).DataType Is GetType(System.Double) Then
                             'Doubles
@@ -1418,7 +1418,9 @@ Namespace CompuMaster.Data
                         If ColCounter <> 0 Then
                             writer.Write(columnSeparator)
                         End If
-                        writer.Write(recognizeTextBy & DataTable.Columns(ColCounter).ColumnName.Replace(recognizeTextBy, recognizeTextBy & recognizeTextBy) & recognizeTextBy)
+                        If recognizeTextBy <> Nothing Then writer.Write(recognizeTextBy)
+                        writer.Write(CsvEncode(DataTable.Columns(ColCounter).ColumnName, recognizeTextBy, lineEncodings))
+                        If recognizeTextBy <> Nothing Then writer.Write(recognizeTextBy)
                     Next
                     writer.WriteLine()
                 End If
@@ -1432,11 +1434,9 @@ Namespace CompuMaster.Data
                         If DataTable.Columns(ColCounter).DataType Is GetType(String) Then
                             'Strings
                             If Not dataView.Item(RowCounter).Row(ColCounter) Is DBNull.Value Then
-                                If recognizeTextBy = Nothing Then
-                                    writer.Write(CsvEncode(CType(dataView.Item(RowCounter).Row(ColCounter), String), recognizeTextBy, lineEncodings))
-                                Else
-                                    writer.Write(recognizeTextBy & CsvEncode(CType(dataView.Item(RowCounter).Row(ColCounter), String), recognizeTextBy, lineEncodings) & recognizeTextBy)
-                                End If
+                                If recognizeTextBy <> Nothing Then writer.Write(recognizeTextBy)
+                                writer.Write(CsvEncode(CType(dataView.Item(RowCounter).Row(ColCounter), String), recognizeTextBy, lineEncodings))
+                                If recognizeTextBy <> Nothing Then writer.Write(recognizeTextBy)
                             End If
                         ElseIf DataTable.Columns(ColCounter).DataType Is GetType(System.Double) Then
                             'Doubles
@@ -1507,7 +1507,9 @@ Namespace CompuMaster.Data
                         If ColCounter <> 0 Then
                             writer.Write(columnSeparator)
                         End If
-                        writer.Write(recognizeTextBy & DataTable.Columns(ColCounter).ColumnName.Replace(recognizeTextBy, recognizeTextBy & recognizeTextBy) & recognizeTextBy)
+                        If recognizeTextBy <> Nothing Then writer.Write(recognizeTextBy)
+                        writer.Write(CsvEncode(DataTable.Columns(ColCounter).ColumnName, recognizeTextBy, lineEncodings))
+                        If recognizeTextBy <> Nothing Then writer.Write(recognizeTextBy)
                     Next
                     writer.WriteLine()
                 End If
@@ -1521,11 +1523,9 @@ Namespace CompuMaster.Data
                         If DataTable.Columns(ColCounter).DataType Is GetType(String) Then
                             'Strings
                             If Not dataView.Item(RowCounter).Row(ColCounter) Is DBNull.Value Then
-                                If recognizeTextBy = Nothing Then
-                                    writer.Write(CsvEncode(CType(dataView.Item(RowCounter).Row(ColCounter), String), recognizeTextBy, lineEncodings))
-                                Else
-                                    writer.Write(recognizeTextBy & CsvEncode(CType(dataView.Item(RowCounter).Row(ColCounter), String), recognizeTextBy, lineEncodings) & recognizeTextBy)
-                                End If
+                                If recognizeTextBy <> Nothing Then writer.Write(recognizeTextBy)
+                                writer.Write(CsvEncode(CType(dataView.Item(RowCounter).Row(ColCounter), String), recognizeTextBy, lineEncodings))
+                                If recognizeTextBy <> Nothing Then writer.Write(recognizeTextBy)
                             End If
                         ElseIf DataTable.Columns(ColCounter).DataType Is GetType(System.Double) Then
                             'Doubles

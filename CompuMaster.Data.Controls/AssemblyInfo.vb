@@ -15,7 +15,7 @@ Imports System.Runtime.CompilerServices
 
 <Assembly: Guid("FDE425FC-D944-4747-A1D8-082356335D53")>
 
-<Assembly: AssemblyVersion("2.8.2017.0607")>
+<Assembly: AssemblyVersion("2.8.2017.0608")>
 '<Assembly: AssemblyInformationalVersion("2.8.2016.0804-beta3")>
 <Assembly: AssemblyDelaySign(False)>
 
