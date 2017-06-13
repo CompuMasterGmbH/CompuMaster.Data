@@ -1385,6 +1385,14 @@ Namespace CompuMaster.Data
                 Case Csv.WriteLineEncodings.RowBreakCrLf_CellLineBreakCr, Csv.WriteLineEncodings.RowBreakLf_CellLineBreakCr
                     Result = Replace(Result, ControlChars.CrLf, ControlChars.Cr)
                     Result = Replace(Result, ControlChars.Lf, ControlChars.Cr)
+                Case Csv.WriteLineEncodings.RowBreakCrLf_CellLineBreakSpaceChar, Csv.WriteLineEncodings.RowBreakLf_CellLineBreakSpaceChar, Csv.WriteLineEncodings.RowBreakCr_CellLineBreakSpaceChar
+                    Result = Replace(Result, ControlChars.CrLf, " ")
+                    Result = Replace(Result, ControlChars.Lf, " "c)
+                    Result = Replace(Result, ControlChars.Cr, " "c)
+                Case Csv.WriteLineEncodings.RowBreakCrLf_CellLineBreakRemoved, Csv.WriteLineEncodings.RowBreakLf_CellLineBreakRemoved, Csv.WriteLineEncodings.RowBreakCr_CellLineBreakRemoved
+                    Result = Replace(Result, ControlChars.CrLf, "")
+                    Result = Replace(Result, ControlChars.Lf, "")
+                    Result = Replace(Result, ControlChars.Cr, "")
                 Case Else
                     Throw New NotSupportedException("Not supported/implemented: lineEncoding " & lineEncoding)
             End Select

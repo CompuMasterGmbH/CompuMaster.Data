@@ -14,6 +14,12 @@ Namespace CompuMaster.Data
             RowBreakCrLf_CellLineBreakCr = 2
             RowBreakCr_CellLineBreakLf = 3
             RowBreakLf_CellLineBreakCr = 4
+            RowBreakCrLf_CellLineBreakSpaceChar = 10 'replace line breaks into space char
+            RowBreakCr_CellLineBreakSpaceChar = 11 'replace line breaks into space char
+            RowBreakLf_CellLineBreakSpaceChar = 12 'replace line breaks into space char
+            RowBreakCrLf_CellLineBreakRemoved = 13 'remove all line breaks
+            RowBreakCr_CellLineBreakRemoved = 14 'remove all line breaks
+            RowBreakLf_CellLineBreakRemoved = 15 'remove all line breaks
             [Default] = 1
             'Windows = 1
             'Mac = 2

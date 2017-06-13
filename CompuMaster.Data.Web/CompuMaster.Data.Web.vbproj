@@ -96,7 +96,7 @@
       <DependentUpon>Application.myapp</DependentUpon>
     </Compile>
     <Compile Include="GridEditQuery.vb" />
-    <Compile Include="My Project\AssemblyInfo.vb" />
+    <Compile Include="AssemblyInfo.vb" />
     <Compile Include="My Project\Resources.Designer.vb">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
