@@ -1,19 +1,26 @@
 ﻿Public Class TestForm
 
     Private Sub Form1_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
+        Me.Text &= " (" & CompuMaster.Data.DataQuery.PlatformTools.CurrentClrRuntime.ToString & ")"
+        Me.TextBoxConnectionString.Text = CreateNewDbConnection.ConnectionString
         LoadQuery("")
     End Sub
+
+    Private Function CreateNewDbConnection() As IDbConnection
+        Return CompuMaster.Data.DataQuery.Connections.MicrosoftAccessOleDbConnection(System.IO.Path.Combine(My.Application.Info.DirectoryPath, "app_data\country.mdb"))
+    End Function
 
     Private Sub Button5_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button5.Click
         LoadQuery("indepyear < 1900")
     End Sub
 
     Sub LoadQuery(ByVal filter As String)
-        Dim sql As String = "SELECT * FROM country"
+        Dim sql As String = "SELECT * FROM [country]"
         If filter <> Nothing Then sql &= " WHERE " & filter
         sql &= ";"
-        'Dim MyCmd As New SqlClient.SqlCommand(sql, New SqlClient.SqlConnection(Me.TextBoxConnectionString.Text))
-        Dim MyCmd As New Npgsql.NpgsqlCommand(sql, New Npgsql.NpgsqlConnection(Me.TextBoxConnectionString.Text))
+        Dim MyConn As IDbConnection = Me.CreateNewDbConnection
+        Dim MyCmd As IDbCommand = MyConn.CreateCommand
+        MyCmd.CommandText = sql
         Me.DataGridView1.SelectCommand = MyCmd
         Me.DataGridView1.LoadData()
     End Sub
