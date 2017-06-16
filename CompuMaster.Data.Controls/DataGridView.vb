@@ -133,7 +133,11 @@ Namespace CompuMaster.Data.Windows
         ''' </summary>
         ''' <remarks></remarks>
         Public Sub LoadData()
-            Me.LoadData(True)
+            Try
+                Me.LoadData(True)
+            Catch ex As Exception
+                System.Windows.Forms.MessageBox.Show(ex.Message, "Error loading data", System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Error)
+            End Try
         End Sub
 
         ''' <summary>

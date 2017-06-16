@@ -53,6 +53,10 @@ Namespace CompuMaster.Data.Windows
             Me.ResumeLayout()
         End Sub
 
+        ''' <summary>
+        ''' Assign the DataGridView control for target operations of this context menu and register this context menu in the DataGridView control if no other context menu has already been registered
+        ''' </summary>
+        ''' <returns></returns>
         <System.ComponentModel.Category("Data")> Public Property DataGridView As System.Windows.Forms.DataGridView
             Get
                 Return Me.Grid
@@ -137,7 +141,7 @@ Namespace CompuMaster.Data.Windows
         ''' <returns></returns>
         ''' <remarks></remarks>
         Private Function CreateDataTableFromMarkedCells() As DataTable
-            If Me.Grid Is Nothing Then Throw New Exception("DataGridView hasn't been assigned, yet")
+            If Me.Grid Is Nothing Then Throw New InvalidOperationException("DataGridView hasn't been assigned, yet")
             Dim dataSourceTable As DataTable = CType(Me.Grid.DataSource, DataTable)
             Dim newTable As New DataTable
             Dim addedRows As New System.Collections.Generic.List(Of Integer)
@@ -195,6 +199,8 @@ Namespace CompuMaster.Data.Windows
                     CopySelectedCellsToClipboardWithHeadersToolStripMenuItem.Visible = True
                     CopySelectedCellsToClipboardWithoutHeadersToolStripMenuItem.Visible = True
                 End If
+            Else
+                MessageBox.Show(Me, "No DataGridView control selected for target operations", "Missing control assignment", MessageBoxButtons.OK, MessageBoxIcon.Stop)
             End If
         End Sub
 
@@ -205,6 +211,7 @@ Namespace CompuMaster.Data.Windows
         ''' <param name="e"></param>
         ''' <remarks></remarks>
         Private Sub CopyFullTableToClipboardToolStripMenuItem_Click(sender As System.Object, e As System.EventArgs) Handles CopyFullTableToClipboardToolStripMenuItem.Click
+            If Me.Grid Is Nothing Then Throw New InvalidOperationException("DataGridView hasn't been assigned, yet")
             If Grid.DataSource IsNot Nothing Then
                 Clipboard.SetDataObject(CompuMaster.Data.Csv.ConvertDataTableToTextAsStringBuilder(CType(Grid.DataSource, DataTable), True, PreferredCulture(), ControlChars.Tab).ToString)
             End If
@@ -217,6 +224,7 @@ Namespace CompuMaster.Data.Windows
         ''' <param name="e"></param>
         ''' <remarks></remarks>
         Private Sub CopySelectedCellsToClipboardwithHeadersToolStripMenuItem_Click(sender As System.Object, e As System.EventArgs) Handles CopySelectedCellsToClipboardWithHeadersToolStripMenuItem.Click
+            If Me.Grid Is Nothing Then Throw New InvalidOperationException("DataGridView hasn't been assigned, yet")
             Dim newTable As DataTable = CreateDataTableFromMarkedCells()
             Clipboard.SetDataObject(CompuMaster.Data.Csv.ConvertDataTableToTextAsStringBuilder(newTable, True, PreferredCulture(), ControlChars.Tab).ToString)
         End Sub
@@ -228,6 +236,7 @@ Namespace CompuMaster.Data.Windows
         ''' <param name="e"></param>
         ''' <remarks></remarks>
         Private Sub CopySelectedCellsToClipboardwithoutHeadersToolStripMenuItem_Click(sender As System.Object, e As System.EventArgs) Handles CopySelectedCellsToClipboardWithoutHeadersToolStripMenuItem.Click
+            If Me.Grid Is Nothing Then Throw New InvalidOperationException("DataGridView hasn't been assigned, yet")
             Dim newTable As DataTable = CreateDataTableFromMarkedCells()
             Clipboard.SetDataObject(CompuMaster.Data.Csv.ConvertDataTableToTextAsStringBuilder(newTable, False, PreferredCulture(), ControlChars.Tab).ToString)
         End Sub
