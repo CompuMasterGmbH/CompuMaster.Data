@@ -46,7 +46,7 @@ Namespace CompuMaster.Data.DataQuery
                 'Let the application find the exception with the most modern provider
                 If CompuMaster.Data.DataQuery.PlatformTools.CurrentClrRuntime = CompuMaster.Data.DataQuery.PlatformTools.ClrRuntimePlatform.x64 Then
                     '64bit - Requires Office 2010 JET drivers
-                    Throw New Office2010x64OleDbOdbcEngineRequiredException
+                    Throw New Office2010x64OleDbOdbcEngineRequiredException(Nothing)
                 ElseIf path.ToLower.EndsWith(".accdb") Then
                     '32bit - Requires Office 2007 JET drivers
                     Return CompuMaster.Data.DataQuery.PlatformTools.CreateDataConnection("OleDB", "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" & path & ";User Id=admin;Password=;")
@@ -79,7 +79,7 @@ Namespace CompuMaster.Data.DataQuery
                 'Let the application find the exception with the most modern provider
                 If CompuMaster.Data.DataQuery.PlatformTools.CurrentClrRuntime = CompuMaster.Data.DataQuery.PlatformTools.ClrRuntimePlatform.x64 Then
                     '64bit - Requires Office 2010 JET drivers
-                    Throw New Office2010x64OleDbOdbcEngineRequiredException
+                    Throw New Office2010x64OleDbOdbcEngineRequiredException(Nothing)
                 ElseIf path.ToLower.EndsWith(".accdb") Then
                     '32bit - Requires Office 2007 JET drivers
                     Return CompuMaster.Data.DataQuery.PlatformTools.CreateDataConnection("OleDB", "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" & path & ";Jet OLEDB:Database Password=" & databasePassword & ";")
@@ -208,7 +208,7 @@ Namespace CompuMaster.Data.DataQuery
                 'Let the application find the exception with the most modern provider
                 If CompuMaster.Data.DataQuery.PlatformTools.CurrentClrRuntime = CompuMaster.Data.DataQuery.PlatformTools.ClrRuntimePlatform.x64 Then
                     '64bit - Requires Office 2010 JET drivers
-                    Throw New Office2010x64OleDbOdbcEngineRequiredException
+                    Throw New Office2010x64OleDbOdbcEngineRequiredException(Nothing)
                 ElseIf path.ToLower.EndsWith(".accdb") Then
                     '32bit - Requires Office 2007 JET drivers
                     Return CompuMaster.Data.DataQuery.PlatformTools.CreateDataConnection("OleDB", "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" & path & ";User Id=admin;Password=;")
@@ -245,7 +245,7 @@ Namespace CompuMaster.Data.DataQuery
                 'Let the application find the exception with the most modern provider
                 If CompuMaster.Data.DataQuery.PlatformTools.CurrentClrRuntime = CompuMaster.Data.DataQuery.PlatformTools.ClrRuntimePlatform.x64 Then
                     '64bit - Requires Office 2010 JET drivers
-                    Throw New Office2010x64OleDbOdbcEngineRequiredException
+                    Throw New Office2010x64OleDbOdbcEngineRequiredException(Nothing)
                 ElseIf path.ToLower.EndsWith(".accdb") Then
                     '32bit - Requires Office 2007 JET drivers
                     Return CompuMaster.Data.DataQuery.PlatformTools.CreateDataConnection("OleDB", "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" & path & ";Jet OLEDB:Database Password=" & databasePassword & ";")
@@ -290,14 +290,15 @@ Namespace CompuMaster.Data.DataQuery
                 Return CompuMaster.Data.DataQuery.PlatformTools.CreateDataConnection("ODBC", "Driver={Microsoft Excel Driver (*.xls)};Dbq=" & path & ";" & BoolIf(firstRowContainsHeaders, "FirstRowHasNames=1", "FirstRowHasNames=0") & ";" & BoolIf(readAllColumnsAsTextOnly, "ReadOnly=1", "ReadOnly=0") & """;")
             Else
                 Dim result As DictionaryEntry() = CompuMaster.Data.DataQuery.PlatformTools.InstalledOleDbProviders
+                Dim ProbeResults As New System.Collections.Specialized.NameValueCollection
                 For Each item As DictionaryEntry In result
                     Dim provResult As Boolean = ProbeOleDBProvider(TriState.UseDefault, "Provider=" & item.Key.ToString & ";Data Source=" & TestFile.FilePath & ";")
-                    Console.WriteLine(item.Key.ToString & "=" & provResult)
+                    ProbeResults(item.Key.ToString) = provResult.ToString
                 Next
                 'Let the application find the exception with the most modern provider
                 If CompuMaster.Data.DataQuery.PlatformTools.CurrentClrRuntime = CompuMaster.Data.DataQuery.PlatformTools.ClrRuntimePlatform.x64 Then
                     '64bit - Requires Office 2010 JET drivers
-                    Throw New Office2010x64OleDbOdbcEngineRequiredException
+                    Throw New Office2010x64OleDbOdbcEngineRequiredException(ProbeResults)
                 ElseIf path.ToLower.EndsWith(".xlsx") OrElse path.ToLower.EndsWith(".xlsb") OrElse path.ToLower.EndsWith(".xlsm") Then
                     '32bit - Requires Office 2007 JET drivers
                     Return CompuMaster.Data.DataQuery.PlatformTools.CreateDataConnection("OleDB", "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" & path & ";Extended Properties=""Excel 12.0 Xml;HDR=" & BoolIf(firstRowContainsHeaders, "YES", "NO") & ";" & BoolIf(readAllColumnsAsTextOnly, "IMEX=1", "") & """;")
@@ -374,14 +375,15 @@ Namespace CompuMaster.Data.DataQuery
                 Return CompuMaster.Data.DataQuery.PlatformTools.CreateDataConnection("OleDB", "Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" & path & ";Extended Properties=""Excel 8.0;HDR=" & BoolIf(firstRowContainsHeaders, "YES", "NO") & ";" & BoolIf(readAllColumnsAsTextOnly, "IMEX=1", "IMEX=0") & """;")
             Else
                 Dim result As DictionaryEntry() = CompuMaster.Data.DataQuery.PlatformTools.InstalledOleDbProviders
+                Dim ProbeResults As New System.Collections.Specialized.NameValueCollection
                 For Each item As DictionaryEntry In result
                     Dim provResult As Boolean = ProbeOleDBProvider(TriState.UseDefault, "Provider=" & item.Key.ToString & ";Data Source=" & TestFile.FilePath & ";")
-                    Console.WriteLine(item.Key.ToString & "=" & provResult)
+                    ProbeResults(item.Key.ToString) = provResult.ToString
                 Next
                 'Let the application find the exception with the most modern provider
                 If CompuMaster.Data.DataQuery.PlatformTools.CurrentClrRuntime = CompuMaster.Data.DataQuery.PlatformTools.ClrRuntimePlatform.x64 Then
                     '64bit - Requires Office 2010 JET drivers
-                    Throw New Office2010x64OleDbOdbcEngineRequiredException
+                    Throw New Office2010x64OleDbOdbcEngineRequiredException(ProbeResults)
                 ElseIf path.ToLower.EndsWith(".xlsx") OrElse path.ToLower.EndsWith(".xlsb") OrElse path.ToLower.EndsWith(".xlsm") Then
                     '32bit - Requires Office 2007 JET drivers
                     Return CompuMaster.Data.DataQuery.PlatformTools.CreateDataConnection("OleDB", "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" & path & ";Extended Properties=""Excel 12.0 Xml;HDR=" & BoolIf(firstRowContainsHeaders, "YES", "NO") & ";" & BoolIf(readAllColumnsAsTextOnly, "IMEX=1", "") & """;")
@@ -641,8 +643,15 @@ Namespace CompuMaster.Data.DataQuery
         Public Class Office2010x64OleDbOdbcEngineRequiredException
             Inherits System.Exception
 
-            Friend Sub New()
+            Friend Sub New(probeResults As System.Collections.Specialized.NameValueCollection)
+                Me.AlternativeProvidersProbeResults = probeResults
             End Sub
+
+            ''' <summary>
+            ''' A collection of probe results for alternative providers at the running machine
+            ''' </summary>
+            ''' <returns></returns>
+            Public Property AlternativeProvidersProbeResults As System.Collections.Specialized.NameValueCollection
 
             Public Overrides ReadOnly Property Message() As String
                 Get
