@@ -21,11 +21,13 @@ Namespace CompuMaster.Data.Windows
         Private WithEvents CopySelectedCellsToClipboardWithHeadersToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
         Private WithEvents CopySelectedCellsToClipboardWithoutHeadersToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
         Private WithEvents ExportCultureOptionsToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
-        Private WithEvents urrentCultureToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
         Private WithEvents InvariantCultureToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
         Private WithEvents CultureOfOperatingSystemToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
         Private WithEvents EnglishCultureenUSToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
         Private WithEvents CurrentCultureToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+        Friend WithEvents InsertRowsFromClipboardToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+        Friend WithEvents ToolStripSeparatorPasteItems As System.Windows.Forms.ToolStripSeparator
+        Friend WithEvents PasteFromClipboardToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
 
         Public Sub New()
             MyBase.New()
@@ -77,6 +79,8 @@ Namespace CompuMaster.Data.Windows
         Public Property EnglishCultureText As String = "English culture (en-US)"
         Public Property InternationCultureText As String = "International culture"
         Public Property OsCultureText As String = "Culture of operating system"
+        Public Property InsertRowsFromClipboardText As String = "Insert rows from clipboard"
+        Public Property PasteFromClipboardIntoCell As String = "Paste into cell"
 
         Private Sub Initialize()
             Me.CopySelectedCellsToClipboardWithHeadersToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
@@ -87,6 +91,9 @@ Namespace CompuMaster.Data.Windows
             Me.EnglishCultureenUSToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
             Me.InvariantCultureToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
             Me.CultureOfOperatingSystemToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+            Me.ToolStripSeparatorPasteItems = New System.Windows.Forms.ToolStripSeparator()
+            Me.InsertRowsFromClipboardToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+            Me.PasteFromClipboardToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
 
             'Me.Items.Add(Me.CopySelectedCellsToClipboardWithHeadersToolStripMenuItem)
             Me.Name = "ContextMenuStripDataGrid"
@@ -127,8 +134,25 @@ Namespace CompuMaster.Data.Windows
             Me.CultureOfOperatingSystemToolStripMenuItem.Name = "CultureOfOperatingSystemToolStripMenuItem"
             Me.CultureOfOperatingSystemToolStripMenuItem.Size = New System.Drawing.Size(221, 22)
             Me.CultureOfOperatingSystemToolStripMenuItem.Text = OsCultureText
+            '
+            'ToolStripSeparator1
+            '
+            Me.ToolStripSeparatorPasteItems.Name = "ToolStripSeparatorPasteItems"
+            Me.ToolStripSeparatorPasteItems.Size = New System.Drawing.Size(334, 6)
+            '
+            'InsertRowsFromClipboardToolStripMenuItem
+            '
+            Me.InsertRowsFromClipboardToolStripMenuItem.Name = "InsertRowsFromClipboardToolStripMenuItem"
+            Me.InsertRowsFromClipboardToolStripMenuItem.Size = New System.Drawing.Size(337, 22)
+            Me.InsertRowsFromClipboardToolStripMenuItem.Text = InsertRowsFromClipboardText
+            '
+            'PasteFromClipboardToolStripMenuItem
+            '
+            Me.PasteFromClipboardToolStripMenuItem.Name = "PasteFromClipboardToolStripMenuItem"
+            Me.PasteFromClipboardToolStripMenuItem.Size = New System.Drawing.Size(337, 22)
+            Me.PasteFromClipboardToolStripMenuItem.Text = PasteFromClipboardIntoCell
 
-            Me.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.CopyFullTableToClipboardToolStripMenuItem, Me.CopySelectedCellsToClipboardWithHeadersToolStripMenuItem, Me.CopySelectedCellsToClipboardWithoutHeadersToolStripMenuItem, Me.ExportCultureOptionsToolStripMenuItem})
+            Me.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.CopyFullTableToClipboardToolStripMenuItem, Me.CopySelectedCellsToClipboardWithHeadersToolStripMenuItem, Me.CopySelectedCellsToClipboardWithoutHeadersToolStripMenuItem, Me.ExportCultureOptionsToolStripMenuItem, Me.ToolStripSeparatorPasteItems, Me.InsertRowsFromClipboardToolStripMenuItem, Me.PasteFromClipboardToolStripMenuItem})
 
             InitCultureContextMenu()
 
@@ -303,6 +327,43 @@ Namespace CompuMaster.Data.Windows
                 Me.CultureOfOperatingSystemToolStripMenuItem.Dispose()
             End If
             MyBase.Dispose(disposing)
+        End Sub
+
+        Private Sub InsertRowsFromClipboardToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles InsertRowsFromClipboardToolStripMenuItem.Click
+            Try
+                'Dim ClipboardTableText As String = Clipboard.GetText(TextDataFormat.CommaSeparatedValue)
+                Dim ClipboardTableText As String = Clipboard.GetText() 'TextDataFormat.UnicodeText)
+                Dim ClipboardTable As DataTable = CompuMaster.Data.Csv.ReadDataTableFromCsvString(ClipboardTableText, False, Csv.ReadLineEncodings.Default, Csv.ReadLineEncodingAutoConversion.AutoConvertLineBreakToCrLf, ControlChars.Tab, """"c, False, True)
+                Dim check As String = CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(ClipboardTable)
+                For MyCounter As Integer = 0 To ClipboardTable.Rows.Count - 1
+                    Dim ClipboardRow As DataRow = ClipboardTable.Rows(MyCounter)
+                    Dim GridNewRowIndex As Integer = Me.Grid.NewRowIndex
+                    CType(Me.Grid.DataSource, DataTable).Rows.Add(CType(Me.Grid.DataSource, DataTable).NewRow)
+                    'Me.DataGridViewQuickEdit.Rows(GridNewRowIndex).Selected = True
+                    'Me.DataGridViewQuickEdit.BeginEdit(False)
+                    For MyColCounter As Integer = 0 To ClipboardTable.Columns.Count - 1
+                        Dim ClipboardCellValue As String = CompuMaster.Data.Utils.NoDBNull(Of String)(ClipboardRow(MyColCounter))
+                        Me.Grid.Rows(GridNewRowIndex).Cells(MyColCounter).Value = ClipboardCellValue
+                        Me.Grid.Update()
+                    Next
+                    'Me.DataGridViewQuickEdit.EndEdit()
+                Next
+                Me.Grid.Update()
+            Catch ex As Exception
+                MessageBox.Show(Me, ex.Message, "Error on pasting from clipboard", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            End Try
+        End Sub
+
+        Private Sub PasteFromClipboardToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles PasteFromClipboardToolStripMenuItem.Click
+            Try
+                If Clipboard.ContainsImage Then
+                    Me.Grid.CurrentCell.Value = Clipboard.GetImage
+                Else
+                    Me.Grid.CurrentCell.Value = Clipboard.GetText
+                End If
+            Catch ex As Exception
+                MessageBox.Show(Me, ex.Message, "Error on pasting from clipboard", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            End Try
         End Sub
 
         ''' <summary>

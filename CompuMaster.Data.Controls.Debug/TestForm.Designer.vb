@@ -52,6 +52,7 @@ Partial Class TestForm
             Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.DataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
+        Me.DataGridView1.ContextMenuStrip = Me.CellCopyingContextMenu1
         DataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
         DataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Window
         DataGridViewCellStyle2.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
@@ -143,7 +144,7 @@ Partial Class TestForm
         Me.CellCopyingContextMenu1.CopySelectedCellsWithHeadersText = "Copy selected cells to clipboard (with headers)"
         Me.CellCopyingContextMenu1.CopySelectedCellsWithoutHeadersText = "Copy selected cells to clipboard (without headers)"
         Me.CellCopyingContextMenu1.CurrentCultureText = "Current culture"
-        Me.CellCopyingContextMenu1.DataGridView = Nothing
+        Me.CellCopyingContextMenu1.DataGridView = Me.DataGridView1
         Me.CellCopyingContextMenu1.EnglishCultureText = "English culture (en-US)"
         Me.CellCopyingContextMenu1.ExportCultureOptionsText = "Export culture options"
         Me.CellCopyingContextMenu1.InternationCultureText = "International culture"
