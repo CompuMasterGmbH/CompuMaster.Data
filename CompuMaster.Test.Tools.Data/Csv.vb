@@ -254,6 +254,16 @@ Namespace CompuMaster.Test.Data
             Assert.False(csv.Substring(0, bom.Length) = bom, "CSV starts invalidly with BOM signature for UTF-8")
         End Sub
 
+        <Test> Sub ReadWriteCompareDatableWithStringEncoding()
+            Dim Level0CsvData As String = """69100"";"""";"""""""";""Text with quotation mark("""")"";""Space""" & vbNewLine
+            Dim Level1CsvDataTable As DataTable = CompuMaster.Data.Csv.ReadDataTableFromCsvString(Level0CsvData, False, ";"c, """"c, False, False)
+            Dim Level2CsvData As String = CompuMaster.Data.Csv.WriteDataTableToCsvTextString(Level1CsvDataTable, False, ";"c, """"c, "."c)
+            Assert.AreEqual("Text with quotation mark("")", CType(Level1CsvDataTable.Rows(0)(3), String))
+            Assert.AreEqual(Level0CsvData, Level2CsvData)
+            Console.WriteLine(Level2CsvData)
+            Console.WriteLine("Cell 3: " & CType(Level1CsvDataTable.Rows(0)(2), String))
+            Console.WriteLine("Cell 4: " & CType(Level1CsvDataTable.Rows(0)(3), String))
+        End Sub
         <Test> Sub WriteDataTableToCsvTextStringRecognizeTextChar()
             Dim t As DataTable = SimpleSampleTable()
             Dim ExpectedValue As String
