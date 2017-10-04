@@ -557,7 +557,6 @@ Namespace CompuMaster.Data
             Return CompuMaster.Data.DataTablesTools.GetDataTableWithSubsetOfRows(SourceTable, StartAtRow, NumberOfRows)
         End Function
 
-        ''' -----------------------------------------------------------------------------
         ''' <summary>
         '''     Remove those rows in the source column which haven't got the same value in the compare table
         ''' </summary>
@@ -566,17 +565,67 @@ Namespace CompuMaster.Data
         ''' <returns>An arraylist of removed keys</returns>
         ''' <remarks>
         '''     Strings will be compared case-insensitive, DBNull values in the source table will always be removed
+        '''     Attention: result of this function is not an arraylist containing keys!
+        '''                result of this funciton is an arraylist containing object arrays of keys of removed rows!
         ''' </remarks>
-        ''' <history>
-        ''' 	[wezel]	07.10.2005	Created
-        ''' </history>
-        ''' -----------------------------------------------------------------------------
-        Public Shared Function RemoveRowsWithNoCorrespondingValueInComparisonTable(ByVal sourceColumn As DataColumn, _
+        Public Shared Function RemoveRowsWithNoCorrespondingValueInComparisonTable(ByVal sourceColumn As DataColumn,
                                                                                    ByVal valuesMustExistInThisColumnToKeepTheSourceRow As DataColumn) As ArrayList
-            Return CompuMaster.Data.DataTablesTools.RemoveRowsWithNoCorrespondingValueInComparisonTable(sourceColumn, valuesMustExistInThisColumnToKeepTheSourceRow)
+            Return RemoveRowsWithNoCorrespondingValueInComparisonTable(sourceColumn, valuesMustExistInThisColumnToKeepTheSourceRow, True, True)
         End Function
 
-        ''' -----------------------------------------------------------------------------
+        'TO BE IMPLEMENTED: Version with multiple comparison columns
+        '''' <summary>
+        ''''     Remove those rows in the source column which haven't got the same value in the compare table
+        '''' </summary>
+        '''' <param name="sourceColumns">These are the columns of the master table where all operations shall be executed</param>
+        '''' <param name="valuesMustExistInTheseColumnsToKeepTheSourceRow">These are the comparison values against the source table's columns</param>
+        '''' <param name="ignoreCaseInStrings">Strings will be compared case-insensitive</param>
+        '''' <param name="alwaysRemoveDBNullValues">Always remove the source row when it contains a DBNull value</param>
+        '''' <returns>An arraylist with object arrays containing all key values of a row in the order of the source columns</returns>
+        '''' <remarks>
+        ''''     Attention: result of this function is not an arraylist containing keys!
+        ''''                result of this funciton is an arraylist containing object arrays of keys of removed rows!
+        '''' </remarks>
+        'Friend Shared Function RemoveRowsWithNoCorrespondingValueInComparisonTable(ByVal sourceColumns As DataColumn(), ByVal valuesMustExistInTheseColumnsToKeepTheSourceRow As DataColumn(), ByVal ignoreCaseInStrings As Boolean, ByVal alwaysRemoveDBNullValues As Boolean) As System.Collections.Generic.List(Of Object())
+
+        '    'parameters validation
+        '    If sourceColumns Is Nothing Then
+        '        Throw New ArgumentNullException("sourceColumns", "Required column: sourceColumns")
+        '    ElseIf valuesMustExistInTheseColumnsToKeepTheSourceRow Is Nothing Then
+        '        Throw New ArgumentNullException("valuesMustExistInTheseColumnsToKeepTheSourceRow", "Required column: valuesMustExistInTheseColumnsToKeepTheSourceRow")
+        '    ElseIf sourceColumns.Length <> valuesMustExistInTheseColumnsToKeepTheSourceRow.Length Then
+        '        Throw New ArgumentOutOfRangeException("Key definition of both tables must contain the same number of keys")
+        '    Else
+        '        'ToDo: additional testings
+        '        '- Are table references of all source columns the same?
+        '        If sourceColumns.Length > 1 Then
+        '            For MyCounter As Integer = 1 To sourceColumns.Length - 1
+        '                If sourceColumns(MyCounter).Table IsNot sourceColumns(0).Table Then
+        '                    Throw New ArgumentException("sourceColumn", "All source columns must be related to the same table")
+        '                End If
+        '            Next
+        '        End If
+        '        '- Are table references of all comparison columns the same?
+        '        If valuesMustExistInTheseColumnsToKeepTheSourceRow.Length > 1 Then
+        '            For MyCounter As Integer = 1 To valuesMustExistInTheseColumnsToKeepTheSourceRow.Length - 1
+        '                If valuesMustExistInTheseColumnsToKeepTheSourceRow(MyCounter).Table IsNot valuesMustExistInTheseColumnsToKeepTheSourceRow(0).Table Then
+        '                    Throw New ArgumentException("valuesMustExistInTheseColumnsToKeepTheSourceRow", "All comparison columns must be related to the same table")
+        '                End If
+        '            Next
+        '        End If
+        '        '- Are all keys in the source table matching the same datatype as in the comparison table?
+        '        '- Additional checks see already implemented functions
+        '        For MyCounter As Integer = 0 To sourceColumns.Length - 1
+        '            If Not sourceColumns(MyCounter).DataType Is valuesMustExistInTheseColumnsToKeepTheSourceRow(MyCounter).DataType Then
+        '                Throw New InvalidCastException("Data type mismatch: both tables must use the same data types for the comparison columns: """ & sourceColumns(MyCounter).ColumnName & """ vs. """ & valuesMustExistInTheseColumnsToKeepTheSourceRow(MyCounter).ColumnName & """")
+        '            End If
+        '        Next
+        '    End If
+
+        '    'TODO: implementation
+
+        'End Function
+
         ''' <summary>
         '''     Remove those rows in the source column which haven't got the same value in the compare table
         ''' </summary>
@@ -586,17 +635,271 @@ Namespace CompuMaster.Data
         ''' <param name="alwaysRemoveDBNullValues">Always remove the source row when it contains a DBNull value</param>
         ''' <returns>An arraylist of removed keys</returns>
         ''' <remarks>
+        '''     Attention: result of this function is not an arraylist containing keys!
+        '''                result of this funciton is an arraylist containing object arrays of keys of removed rows!
         ''' </remarks>
-        ''' <history>
-        ''' 	[wezel]	07.10.2005	Created
-        ''' </history>
-        ''' -----------------------------------------------------------------------------
-        Public Shared Function RemoveRowsWithNoCorrespondingValueInComparisonTable(ByVal sourceColumn As DataColumn, _
-                                                                                   ByVal valuesMustExistInThisColumnToKeepTheSourceRow As DataColumn, _
-                                                                                   ByVal ignoreCaseInStrings As Boolean, _
+        Public Shared Function RemoveRowsWithNoCorrespondingValueInComparisonTable(ByVal sourceColumn As DataColumn,
+                                                                                   ByVal valuesMustExistInThisColumnToKeepTheSourceRow As DataColumn,
+                                                                                   ByVal ignoreCaseInStrings As Boolean,
                                                                                    ByVal alwaysRemoveDBNullValues As Boolean) As ArrayList
-            Return CompuMaster.Data.DataTablesTools.RemoveRowsWithNoCorrespondingValueInComparisonTable(sourceColumn, valuesMustExistInThisColumnToKeepTheSourceRow, _
-                                                                                                        ignoreCaseInStrings, alwaysRemoveDBNullValues)
+
+            'parameters validation
+            If sourceColumn Is Nothing Then
+                Throw New ArgumentNullException("sourceColumn", "Required column: sourceColumn")
+            ElseIf valuesMustExistInThisColumnToKeepTheSourceRow Is Nothing Then
+                Throw New ArgumentNullException("valuesMustExistInThisColumnToKeepTheSourceRow", "Required column: valuesMustExistInThisColumnToKeepTheSourceRow")
+            ElseIf Not sourceColumn.DataType Is valuesMustExistInThisColumnToKeepTheSourceRow.DataType Then
+                Throw New InvalidCastException("Data type mismatch: both tables must use the same data types for the comparison columns")
+            End If
+
+            'Prepare local variables
+            Dim Result As New ArrayList 'Contains all keys which have been removed
+            Dim sourceTable As DataTable = sourceColumn.Table
+            Dim comparisonTable As DataTable = valuesMustExistInThisColumnToKeepTheSourceRow.Table
+
+            'Loop through the source table and try to find matches in the comparison table
+            For MyCounter As Integer = sourceTable.Rows.Count - 1 To 0 Step -1
+                Dim MatchFound As Boolean = False
+                If sourceColumn.DataType Is GetType(String) Then
+                    'Compare strings
+                    For MyCompCounter As Integer = 0 To comparisonTable.Rows.Count - 1
+                        If IsDBNull(sourceTable.Rows(MyCounter)(sourceColumn)) Then
+                            If alwaysRemoveDBNullValues Then
+                                'Remove this line from source table because it contains a DBNull and those rows shall be removed
+                                MatchFound = False
+                                Exit For
+                            Else
+                                If IsDBNull(comparisonTable.Rows(MyCompCounter)(valuesMustExistInThisColumnToKeepTheSourceRow)) Then
+                                    'This is a match, keep that row!
+                                    MatchFound = True
+                                    Exit For
+                                Else
+                                    'Not identical, continue search
+                                End If
+                            End If
+                        ElseIf IsDBNull(comparisonTable.Rows(MyCompCounter)(valuesMustExistInThisColumnToKeepTheSourceRow)) Then
+                            'Not identical, continue search
+                        ElseIf ignoreCaseInStrings = True AndAlso String.Compare(CType(sourceTable.Rows(MyCounter)(sourceColumn), String), CType(comparisonTable.Rows(MyCompCounter)(valuesMustExistInThisColumnToKeepTheSourceRow), String), True, System.Globalization.CultureInfo.InvariantCulture) = 0 Then
+                            'Case insensitive comparison resulted to successful match
+                            MatchFound = True
+                            Exit For
+                        ElseIf ignoreCaseInStrings = False AndAlso String.Compare(CType(sourceTable.Rows(MyCounter)(sourceColumn), String), CType(comparisonTable.Rows(MyCompCounter)(valuesMustExistInThisColumnToKeepTheSourceRow), String), False, System.Globalization.CultureInfo.InvariantCulture) = 0 Then
+                            'Case sensitive comparison resulted to successful match
+                            MatchFound = True
+                            Exit For
+                        Else
+                            'Not identical, continue search
+                        End If
+                    Next
+                ElseIf sourceColumn.DataType.IsValueType Then
+                    'Compare value types
+                    For MyCompCounter As Integer = 0 To comparisonTable.Rows.Count - 1
+                        If IsDBNull(sourceTable.Rows(MyCounter)(sourceColumn)) Then
+                            If alwaysRemoveDBNullValues Then
+                                'Remove this line from source table because it contains a DBNull and those rows shall be removed
+                                MatchFound = False
+                                Exit For
+                            Else
+                                If IsDBNull(comparisonTable.Rows(MyCompCounter)(valuesMustExistInThisColumnToKeepTheSourceRow)) Then
+                                    'This is a match, keep that row!
+                                    MatchFound = True
+                                    Exit For
+                                Else
+                                    'Not identical, continue search
+                                End If
+                            End If
+                        ElseIf IsDBNull(comparisonTable.Rows(MyCompCounter)(valuesMustExistInThisColumnToKeepTheSourceRow)) Then
+                            'Not identical, continue search
+                        ElseIf CType(sourceTable.Rows(MyCounter)(sourceColumn), ValueType).Equals(comparisonTable.Rows(MyCompCounter)(valuesMustExistInThisColumnToKeepTheSourceRow)) Then
+                            'Values are equal
+                            MatchFound = True
+                            Exit For
+                        Else
+                            'Not identical, continue search
+                        End If
+                    Next
+                ElseIf sourceColumn.DataType.IsValueType = False Then
+                    'Compare objects
+                    For MyCompCounter As Integer = 0 To comparisonTable.Rows.Count - 1
+                        If IsDBNull(sourceTable.Rows(MyCounter)(sourceColumn)) Then
+                            If alwaysRemoveDBNullValues Then
+                                'Remove this line from source table because it contains a DBNull and those rows shall be removed
+                                MatchFound = False
+                                Exit For
+                            Else
+                                If IsDBNull(comparisonTable.Rows(MyCompCounter)(valuesMustExistInThisColumnToKeepTheSourceRow)) Then
+                                    'This is a match, keep that row!
+                                    MatchFound = True
+                                    Exit For
+                                Else
+                                    'Not identical, continue search
+                                End If
+                            End If
+                        ElseIf IsDBNull(comparisonTable.Rows(MyCompCounter)(valuesMustExistInThisColumnToKeepTheSourceRow)) Then
+                            'Not identical, continue search
+                        ElseIf sourceTable.Rows(MyCounter)(sourceColumn) Is comparisonTable.Rows(MyCompCounter)(valuesMustExistInThisColumnToKeepTheSourceRow) Then
+                            'Objects are the same
+                            MatchFound = True
+                            Exit For
+                        Else
+                            'Not identical, continue search
+                        End If
+                    Next
+                End If
+                If MatchFound = False Then
+                    'Add the key of the row to the result list
+                    Result.Insert(0, sourceTable.Rows(MyCounter)(sourceColumn))
+                    'No match found leads to removal of the row in the source table
+                    sourceTable.Rows.RemoveAt(MyCounter)
+                End If
+            Next
+            Return Result
+        End Function
+
+        ''' <summary>
+        '''     Remove those rows in the source column which haven't got the same value in the compare table
+        ''' </summary>
+        ''' <param name="sourceColumn">This is the column of the master table where all operations shall be executed</param>
+        ''' <param name="valuesMustExistInThisColumnToKeepTheSourceRow">This is the comparison value against the source table's column</param>
+        ''' <returns>An arraylist of removed keys</returns>
+        ''' <remarks>
+        '''     Strings will be compared case-insensitive, DBNull values in the source table will always be removed
+        '''     Attention: result of this function is not an arraylist containing keys!
+        '''                result of this funciton is an arraylist containing object arrays of keys of removed rows!
+        ''' </remarks>
+        Public Shared Function RemoveRowsWithCorrespondingValueInComparisonTable(ByVal sourceColumn As DataColumn,
+                                                                                   ByVal valuesMustExistInThisColumnToKeepTheSourceRow As DataColumn) As ArrayList
+            Return RemoveRowsWithCorrespondingValueInComparisonTable(sourceColumn, valuesMustExistInThisColumnToKeepTheSourceRow, True, True)
+        End Function
+
+        ''' <summary>
+        '''     Remove those rows in the source column which have got the same value in the compare table
+        ''' </summary>
+        ''' <param name="sourceColumn">This is the column of the master table where all operations shall be executed</param>
+        ''' <param name="valuesMustExistInThisColumnToKeepTheSourceRow">This is the comparison value against the source table's column</param>
+        ''' <param name="ignoreCaseInStrings">Strings will be compared case-insensitive</param>
+        ''' <param name="alwaysRemoveDBNullValues">Always remove the source row when it contains a DBNull value</param>
+        ''' <returns>An arraylist of removed keys</returns>
+        ''' <remarks>
+        '''     Attention: result of this function is not an arraylist containing keys!
+        '''                result of this funciton is an arraylist containing object arrays of keys of removed rows!
+        ''' </remarks>
+        Public Shared Function RemoveRowsWithCorrespondingValueInComparisonTable(ByVal sourceColumn As DataColumn,
+                                                                                   ByVal valuesMustExistInThisColumnToKeepTheSourceRow As DataColumn,
+                                                                                   ByVal ignoreCaseInStrings As Boolean,
+                                                                                   ByVal alwaysRemoveDBNullValues As Boolean) As ArrayList
+
+            'parameters validation
+            If sourceColumn Is Nothing Then
+                Throw New ArgumentNullException("sourceColumn", "Required column: sourceColumn")
+            ElseIf valuesMustExistInThisColumnToKeepTheSourceRow Is Nothing Then
+                Throw New ArgumentNullException("valuesMustExistInThisColumnToKeepTheSourceRow", "Required column: valuesMustExistInThisColumnToKeepTheSourceRow")
+            ElseIf Not sourceColumn.DataType Is valuesMustExistInThisColumnToKeepTheSourceRow.DataType Then
+                Throw New InvalidCastException("Data type mismatch: both tables must use the same data types for the comparison columns")
+            End If
+
+            'Prepare local variables
+            Dim Result As New ArrayList 'Contains all keys which have been removed
+            Dim sourceTable As DataTable = sourceColumn.Table
+            Dim comparisonTable As DataTable = valuesMustExistInThisColumnToKeepTheSourceRow.Table
+
+            'Loop through the source table and try to find matches in the comparison table
+            For MyCounter As Integer = sourceTable.Rows.Count - 1 To 0 Step -1
+                Dim MatchFound As Boolean = False
+                If sourceColumn.DataType Is GetType(String) Then
+                    'Compare strings
+                    For MyCompCounter As Integer = 0 To comparisonTable.Rows.Count - 1
+                        If IsDBNull(sourceTable.Rows(MyCounter)(sourceColumn)) Then
+                            If alwaysRemoveDBNullValues Then
+                                'Remove this line from source table because it contains a DBNull and those rows shall be removed
+                                MatchFound = True
+                                Exit For
+                            Else
+                                If IsDBNull(comparisonTable.Rows(MyCompCounter)(valuesMustExistInThisColumnToKeepTheSourceRow)) Then
+                                    'This is a match, drop that row!
+                                    MatchFound = True
+                                    Exit For
+                                Else
+                                    'Not identical, continue search
+                                End If
+                            End If
+                        ElseIf IsDBNull(comparisonTable.Rows(MyCompCounter)(valuesMustExistInThisColumnToKeepTheSourceRow)) Then
+                            'Not identical, continue search
+                        ElseIf ignoreCaseInStrings = True AndAlso String.Compare(CType(sourceTable.Rows(MyCounter)(sourceColumn), String), CType(comparisonTable.Rows(MyCompCounter)(valuesMustExistInThisColumnToKeepTheSourceRow), String), True, System.Globalization.CultureInfo.InvariantCulture) = 0 Then
+                            'Case insensitive comparison resulted to successful match
+                            MatchFound = True
+                            Exit For
+                        ElseIf ignoreCaseInStrings = False AndAlso String.Compare(CType(sourceTable.Rows(MyCounter)(sourceColumn), String), CType(comparisonTable.Rows(MyCompCounter)(valuesMustExistInThisColumnToKeepTheSourceRow), String), False, System.Globalization.CultureInfo.InvariantCulture) = 0 Then
+                            'Case sensitive comparison resulted to successful match
+                            MatchFound = True
+                            Exit For
+                        Else
+                            'Not identical, continue search
+                        End If
+                    Next
+                ElseIf sourceColumn.DataType.IsValueType Then
+                    'Compare value types
+                    For MyCompCounter As Integer = 0 To comparisonTable.Rows.Count - 1
+                        If IsDBNull(sourceTable.Rows(MyCounter)(sourceColumn)) Then
+                            If alwaysRemoveDBNullValues Then
+                                'Remove this line from source table because it contains a DBNull and those rows shall be removed
+                                MatchFound = True
+                                Exit For
+                            Else
+                                If IsDBNull(comparisonTable.Rows(MyCompCounter)(valuesMustExistInThisColumnToKeepTheSourceRow)) Then
+                                    'This is a match, drop that row!
+                                    MatchFound = True
+                                    Exit For
+                                Else
+                                    'Not identical, continue search
+                                End If
+                            End If
+                        ElseIf IsDBNull(comparisonTable.Rows(MyCompCounter)(valuesMustExistInThisColumnToKeepTheSourceRow)) Then
+                            'Not identical, continue search
+                        ElseIf CType(sourceTable.Rows(MyCounter)(sourceColumn), ValueType).Equals(comparisonTable.Rows(MyCompCounter)(valuesMustExistInThisColumnToKeepTheSourceRow)) Then
+                            'Values are equal
+                            MatchFound = True
+                            Exit For
+                        Else
+                            'Not identical, continue search
+                        End If
+                    Next
+                ElseIf sourceColumn.DataType.IsValueType = False Then
+                    'Compare objects
+                    For MyCompCounter As Integer = 0 To comparisonTable.Rows.Count - 1
+                        If IsDBNull(sourceTable.Rows(MyCounter)(sourceColumn)) Then
+                            If alwaysRemoveDBNullValues Then
+                                'Remove this line from source table because it contains a DBNull and those rows shall be removed
+                                MatchFound = True
+                                Exit For
+                            Else
+                                If IsDBNull(comparisonTable.Rows(MyCompCounter)(valuesMustExistInThisColumnToKeepTheSourceRow)) Then
+                                    'This is a match, drop that row!
+                                    MatchFound = True
+                                    Exit For
+                                Else
+                                    'Not identical, continue search
+                                End If
+                            End If
+                        ElseIf IsDBNull(comparisonTable.Rows(MyCompCounter)(valuesMustExistInThisColumnToKeepTheSourceRow)) Then
+                            'Not identical, continue search
+                        ElseIf sourceTable.Rows(MyCounter)(sourceColumn) Is comparisonTable.Rows(MyCompCounter)(valuesMustExistInThisColumnToKeepTheSourceRow) Then
+                            'Objects are the same
+                            MatchFound = True
+                            Exit For
+                        Else
+                            'Not identical, continue search
+                        End If
+                    Next
+                End If
+                If MatchFound = True Then
+                    'Add the key of the row to the result list
+                    Result.Insert(0, sourceTable.Rows(MyCounter)(sourceColumn))
+                    'No match found leads to removal of the row in the source table
+                    sourceTable.Rows.RemoveAt(MyCounter)
+                End If
+            Next
+            Return Result
         End Function
 
         ''' -----------------------------------------------------------------------------

@@ -839,31 +839,116 @@ Namespace CompuMaster.Test.Data
         End Sub
 
         <Test()> Public Sub RemoveRowsWithNoCorrespondingValueInComparisonTable()
-            Dim dt As New DataTable
-            dt.Columns.Add("Something")
-            dt.Columns.Add("Something2")
 
-
-            dt.Rows.Add(New String() {"A", "Z"})
-            dt.Rows.Add(New String() {"B", "Y"})
-            dt.Rows.Add(New String() {"C", "X"})
+            Dim dtTemplate As New DataTable
+            dtTemplate.Columns.Add("Something")
+            dtTemplate.Columns.Add("Something2")
+            dtTemplate.Rows.Add(New String() {"A", "Z"})
+            dtTemplate.Rows.Add(New String() {"B", "Y"})
+            dtTemplate.Rows.Add(New String() {"C", "X"})
+            dtTemplate.Rows.Add(New Object() {DBNull.Value, "N"})
 
             Dim dt2 As New DataTable
-
             dt2.Columns.Add("Test")
             dt2.Columns.Add("TestColumn2")
+            dt2.Rows.Add(New String() {"A", "Z2"})
+            dt2.Rows.Add(New String() {"B", "Y2"})
+            dt2.Rows.Add(New String() {"D", "W2"})
 
-            dt2.Rows.Add(New String() {"A", "Z"})
-            dt2.Rows.Add(New String() {"B", "Y"})
-            dt2.Rows.Add(New String() {"D", "W"})
+            Dim dt As DataTable
+            Dim MethodResult As Object
 
-
-            CompuMaster.Data.DataTables.RemoveRowsWithNoCorrespondingValueInComparisonTable(dt.Columns(0), dt2.Columns(0))
+            Console.WriteLine()
+            Console.WriteLine("Test 1 with DBNull at source but with removing source rows with DBNull")
+            dt = CompuMaster.Data.DataTables.CreateDataTableClone(dtTemplate)
+            MethodResult = CompuMaster.Data.DataTables.RemoveRowsWithNoCorrespondingValueInComparisonTable(dt.Columns(0), dt2.Columns(0)).ToArray
+            Console.WriteLine(CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(dt))
+            Assert.AreEqual(New Object() {"C", DBNull.Value}, MethodResult)
             Assert.AreEqual(2, dt.Rows.Count())
             StringAssert.IsMatch("A", dt.Rows.Item(0).Item(0))
             StringAssert.IsMatch("B", dt.Rows.Item(1).Item(0))
             StringAssert.IsMatch("Z", dt.Rows.Item(0).Item(1))
             StringAssert.IsMatch("Y", dt.Rows.Item(1).Item(1))
+
+            Console.WriteLine()
+            Console.WriteLine("Test 2 with DBNull at source but not at comparison table")
+            dt = CompuMaster.Data.DataTables.CreateDataTableClone(dtTemplate)
+            MethodResult = CompuMaster.Data.DataTables.RemoveRowsWithNoCorrespondingValueInComparisonTable(dt.Columns(0), dt2.Columns(0), True, False)
+            Console.WriteLine(CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(dt))
+            Assert.AreEqual(New Object() {"C", DBNull.Value}, MethodResult)
+            Assert.AreEqual(2, dt.Rows.Count())
+            StringAssert.IsMatch("A", dt.Rows.Item(0).Item(0))
+            StringAssert.IsMatch("B", dt.Rows.Item(1).Item(0))
+            StringAssert.IsMatch("Z", dt.Rows.Item(0).Item(1))
+            StringAssert.IsMatch("Y", dt.Rows.Item(1).Item(1))
+
+            Console.WriteLine()
+            Console.WriteLine("Test 3 with DBNull at both sides")
+            dt = CompuMaster.Data.DataTables.CreateDataTableClone(dtTemplate)
+            dt2.Rows.Add(New Object() {DBNull.Value, "N2"})
+            MethodResult = CompuMaster.Data.DataTables.RemoveRowsWithNoCorrespondingValueInComparisonTable(dt.Columns(0), dt2.Columns(0), True, False)
+            Console.WriteLine(CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(dt))
+            Assert.AreEqual(New Object() {"C"}, MethodResult)
+            Assert.AreEqual(3, dt.Rows.Count())
+            StringAssert.IsMatch("A", dt.Rows.Item(0).Item(0))
+            StringAssert.IsMatch("B", dt.Rows.Item(1).Item(0))
+            Assert.AreEqual(DBNull.Value, dt.Rows.Item(2).Item(0))
+            StringAssert.IsMatch("Z", dt.Rows.Item(0).Item(1))
+            StringAssert.IsMatch("Y", dt.Rows.Item(1).Item(1))
+            StringAssert.IsMatch("N", dt.Rows.Item(2).Item(1))
+
+        End Sub
+
+        <Test()> Public Sub RemoveRowsWithCorrespondingValueInComparisonTable()
+
+            Dim dtTemplate As New DataTable
+            dtTemplate.Columns.Add("Something")
+            dtTemplate.Columns.Add("Something2")
+            dtTemplate.Rows.Add(New String() {"A", "Z"})
+            dtTemplate.Rows.Add(New String() {"B", "Y"})
+            dtTemplate.Rows.Add(New String() {"C", "X"})
+            dtTemplate.Rows.Add(New Object() {DBNull.Value, "N"})
+
+            Dim dt2 As New DataTable
+            dt2.Columns.Add("Test")
+            dt2.Columns.Add("TestColumn2")
+            dt2.Rows.Add(New String() {"A", "Z2"})
+            dt2.Rows.Add(New String() {"B", "Y2"})
+            dt2.Rows.Add(New String() {"D", "W2"})
+
+            Dim dt As DataTable
+            Dim MethodResult As Object
+
+            Console.WriteLine()
+            Console.WriteLine("Test 1 with DBNull at source but with removing source rows with DBNull")
+            dt = CompuMaster.Data.DataTables.CreateDataTableClone(dtTemplate)
+            MethodResult = CompuMaster.Data.DataTables.RemoveRowsWithCorrespondingValueInComparisonTable(dt.Columns(0), dt2.Columns(0)).ToArray
+            Console.WriteLine(CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(dt))
+            Assert.AreEqual(New Object() {"A", "B", DBNull.Value}, MethodResult)
+            Assert.AreEqual(1, dt.Rows.Count())
+            StringAssert.IsMatch("C", dt.Rows.Item(0).Item(0))
+            StringAssert.IsMatch("X", dt.Rows.Item(0).Item(1))
+
+            Console.WriteLine()
+            Console.WriteLine("Test 2 with DBNull at source but not at comparison table")
+            dt = CompuMaster.Data.DataTables.CreateDataTableClone(dtTemplate)
+            MethodResult = CompuMaster.Data.DataTables.RemoveRowsWithCorrespondingValueInComparisonTable(dt.Columns(0), dt2.Columns(0), True, False)
+            Console.WriteLine(CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(dt))
+            Assert.AreEqual(2, dt.Rows.Count())
+            StringAssert.IsMatch("C", dt.Rows.Item(0).Item(0))
+            StringAssert.IsMatch("X", dt.Rows.Item(0).Item(1))
+            Assert.AreEqual(DBNull.Value, dt.Rows.Item(1).Item(0))
+            StringAssert.IsMatch("N", dt.Rows.Item(1).Item(1))
+
+            Console.WriteLine()
+            Console.WriteLine("Test 3 with DBNull at both sides")
+            dt = CompuMaster.Data.DataTables.CreateDataTableClone(dtTemplate)
+            dt2.Rows.Add(New Object() {DBNull.Value, "N2"})
+            MethodResult = CompuMaster.Data.DataTables.RemoveRowsWithCorrespondingValueInComparisonTable(dt.Columns(0), dt2.Columns(0), True, False)
+            Console.WriteLine(CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(dt))
+            Assert.AreEqual(1, dt.Rows.Count())
+            StringAssert.IsMatch("C", dt.Rows.Item(0).Item(0))
+            StringAssert.IsMatch("X", dt.Rows.Item(0).Item(1))
 
         End Sub
 
