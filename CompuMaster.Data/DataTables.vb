@@ -3691,6 +3691,267 @@ Namespace CompuMaster.Data
             End If
         End Function
 
+        ''' <summary>
+        ''' Find rows in a table with the specified values in its key columns
+        ''' </summary>
+        ''' <param name="searchedValue">A value which must be present in the key column of the table</param>
+        ''' <param name="table">The table which is to be filtered</param>
+        ''' <returns>All rows which match with the searched values</returns>
+        Public Shared Function FindRowsInTable(searchedValue As Object, table As DataTable) As DataRow()
+            If table.PrimaryKey.Length = 0 Then
+                Throw New ArgumentException("The table doesn't contain a primary key definition")
+            ElseIf table.PrimaryKey.Length <> 1 Then
+                Throw New ArgumentException("A single searched value is specified, but the table contains a primary key collection with more than 1 key column")
+            End If
+            Return FindRowsInTable(New Object() {searchedValue}, table, table.PrimaryKey)
+        End Function
+
+        ''' <summary>
+        ''' Find rows in a table with the specified values in its key columns
+        ''' </summary>
+        ''' <param name="searchedValueSet">A set of values which must be present in the key columns of the table</param>
+        ''' <param name="table">The table which is to be filtered</param>
+        ''' <returns>All rows which match with the searched values</returns>
+        Public Shared Function FindRowsInTable(searchedValueSet As Object(), table As DataTable) As DataRow()
+            Return FindRowsInTable(searchedValueSet, table, table.PrimaryKey)
+        End Function
+
+        ''' <summary>
+        ''' Find rows in a table with the specified values in its key columns
+        ''' </summary>
+        ''' <param name="searchedValue">A value which must be present in the key column of the table</param>
+        ''' <param name="table">The table which is to be filtered</param>
+        ''' <param name="keyColumn">The key column of the table</param>
+        ''' <returns>All rows which match with the searched values</returns>
+        Public Shared Function FindRowsInTable(searchedValue As Object, table As DataTable, keyColumn As String) As DataRow()
+            If keyColumn = Nothing Then
+                Return FindRowsInTable(New Object() {searchedValue}, table, table.PrimaryKey)
+            Else
+                Return FindRowsInTable(New Object() {searchedValue}, table, New String() {keyColumn})
+            End If
+        End Function
+
+        ''' <summary>
+        ''' Find rows in a table with the specified values in its key columns
+        ''' </summary>
+        ''' <param name="searchedValueSet">A set of values which must be present in the key columns of the table</param>
+        ''' <param name="table">The table which is to be filtered</param>
+        ''' <param name="keyColumns">The key columns of the table</param>
+        ''' <returns>All rows which match with the searched values</returns>
+        Public Shared Function FindRowsInTable(searchedValueSet As Object(), table As DataTable, keyColumns As String()) As DataRow()
+            If keyColumns Is Nothing OrElse keyColumns.Length = 0 Then
+                Return FindRowsInTable(searchedValueSet, table, table.PrimaryKey)
+            Else
+                Dim MyKeyColumns As New System.Collections.Generic.List(Of DataColumn)
+                For MyCounter As Integer = 0 To keyColumns.Length - 1
+                    MyKeyColumns.Add(table.Columns(keyColumns(MyCounter)))
+                Next
+                Return FindRowsInTable(searchedValueSet, table, MyKeyColumns.ToArray)
+            End If
+        End Function
+
+        ''' <summary>
+        ''' Find rows in a table with the specified values in its key columns
+        ''' </summary>
+        ''' <param name="searchedValue">A value which must be present in the key column of the table</param>
+        ''' <param name="table">The table which is to be filtered</param>
+        ''' <param name="keyColumnIndex">The key column of the table</param>
+        ''' <returns>All rows which match with the searched values</returns>
+        Public Shared Function FindRowsInTable(searchedValue As Object, table As DataTable, keyColumnIndex As Integer) As DataRow()
+            Return FindRowsInTable(New Object() {searchedValue}, table, table.Columns(keyColumnIndex))
+        End Function
+
+        ''' <summary>
+        ''' Find rows in a table with the specified values in its key columns
+        ''' </summary>
+        ''' <param name="searchedValueSet">A set of values which must be present in the key columns of the table</param>
+        ''' <param name="table">The table which is to be filtered</param>
+        ''' <param name="keyColumnIndexes">The key columns of the table</param>
+        ''' <returns>All rows which match with the searched values</returns>
+        Public Shared Function FindRowsInTable(searchedValueSet As Object(), table As DataTable, keyColumnIndexes As Integer()) As DataRow()
+            If keyColumnIndexes Is Nothing OrElse keyColumnIndexes.Length = 0 Then
+                Return FindRowsInTable(searchedValueSet, table, table.PrimaryKey)
+            Else
+                Dim MyKeyColumns As New System.Collections.Generic.List(Of DataColumn)
+                For MyCounter As Integer = 0 To keyColumnIndexes.Length - 1
+                    MyKeyColumns.Add(table.Columns(keyColumnIndexes(MyCounter)))
+                Next
+                Return FindRowsInTable(searchedValueSet, table, MyKeyColumns.ToArray)
+            End If
+        End Function
+
+        ''' <summary>
+        ''' Find rows in a table with the specified values in its key columns
+        ''' </summary>
+        ''' <param name="searchedValue">A value which must be present in the key column of the table</param>
+        ''' <param name="table">The table which is to be filtered</param>
+        ''' <param name="keyColumn">The key column of the table</param>
+        ''' <returns>All rows which match with the searched values</returns>
+        Public Shared Function FindRowsInTable(searchedValue As Object, table As DataTable, keyColumn As DataColumn) As DataRow()
+            Return FindRowsInTable(New Object() {searchedValue}, table, New DataColumn() {keyColumn})
+        End Function
+
+        ''' <summary>
+        ''' Find rows in a table with the specified values in its key columns
+        ''' </summary>
+        ''' <param name="searchedValueSet">A set of values which must be present in the key columns of the table</param>
+        ''' <param name="table">The table which is to be filtered</param>
+        ''' <param name="keyColumns">The key columns of the table</param>
+        ''' <returns>All rows which match with the searched values</returns>
+        Public Shared Function FindRowsInTable(searchedValueSet As Object(), table As DataTable, keyColumns As DataColumn()) As DataRow()
+            Dim MyKeyColumns As DataColumn() = keyColumns
+            If MyKeyColumns Is Nothing OrElse MyKeyColumns.Length = 0 Then
+                MyKeyColumns = table.PrimaryKey
+            End If
+            If MyKeyColumns Is Nothing OrElse MyKeyColumns.Length = 0 Then
+                Throw New ArgumentException("Key columns haven't been specified and table doesn't contain a primary key defintion")
+            ElseIf searchedValueSet Is Nothing Then
+                Throw New ArgumentNullException("searchedValueSet", "Required argument: searchedValueSet")
+            ElseIf searchedValueSet.Length <> MyKeyColumns.Length Then
+                Throw New ArgumentException("Array lengths must be equal: searchedValueSet and keyColumns")
+            End If
+            Dim Result As New ArrayList()
+            For MyRowCounter As Integer = 0 To table.Rows.Count - 1
+                Dim IsMatch As Boolean = True
+                For MyKeyCounter As Integer = 0 To MyKeyColumns.Length - 1
+                    If SqlJoin_IsEqual(searchedValueSet(MyKeyCounter), table.Rows(MyRowCounter)(MyKeyColumns(MyKeyCounter))) = False Then
+                        IsMatch = False
+                        Exit For
+                    End If
+                Next
+                If IsMatch Then
+                    Result.Add(table.Rows(MyRowCounter))
+                End If
+            Next
+            Return CType(Result.ToArray(GetType(System.Data.DataRow)), DataRow())
+        End Function
+
+        ''' <summary>
+        ''' Find matching rows in a foreign table with the values in specified columns of a source table row
+        ''' </summary>
+        ''' <param name="sourceRow"></param>
+        ''' <param name="foreignTable"></param>
+        ''' <returns></returns>
+        Public Shared Function FindMatchingRowsInForeignTable(sourceRow As DataRow, foreignTable As DataTable) As DataRow()
+            Return FindMatchingRowsInForeignTable(sourceRow, foreignTable, sourceRow.Table.PrimaryKey, foreignTable.PrimaryKey)
+        End Function
+
+        ''' <summary>
+        ''' Find matching rows in a foreign table with the values in specified columns of a source table row
+        ''' </summary>
+        ''' <param name="sourceRow"></param>
+        ''' <param name="foreignTable"></param>
+        ''' <param name="sourceRowKeyColumn"></param>
+        ''' <param name="foreignTableKeyColumn"></param>
+        ''' <returns></returns>
+        Public Shared Function FindMatchingRowsInForeignTable(sourceRow As DataRow, foreignTable As DataTable, sourceRowKeyColumn As String, foreignTableKeyColumn As String) As DataRow()
+            If sourceRowKeyColumn = Nothing Then Throw New ArgumentNullException("leftKeyColumn")
+            If foreignTableKeyColumn = Nothing Then Throw New ArgumentNullException("rightKeyColumn")
+            Return FindMatchingRowsInForeignTable(sourceRow, foreignTable, New String() {sourceRowKeyColumn}, New String() {foreignTableKeyColumn})
+        End Function
+
+        ''' <summary>
+        ''' Find matching rows in a foreign table with the values in specified columns of a source table row
+        ''' </summary>
+        ''' <param name="sourceRow"></param>
+        ''' <param name="foreignTable"></param>
+        ''' <param name="sourceRowKeyColumns"></param>
+        ''' <param name="foreignTableKeyColumns"></param>
+        ''' <returns></returns>
+        Public Shared Function FindMatchingRowsInForeignTable(sourceRow As DataRow, foreignTable As DataTable, sourceRowKeyColumns As String(), foreignTableKeyColumns As String()) As DataRow()
+            Dim MyLeftKeys As DataColumn()
+            If sourceRowKeyColumns Is Nothing OrElse sourceRowKeyColumns.Length = 0 Then
+                MyLeftKeys = sourceRow.Table.PrimaryKey
+            Else
+                Dim MyLeftKeyColumns As New System.Collections.Generic.List(Of DataColumn)
+                For MyCounter As Integer = 0 To sourceRowKeyColumns.Length - 1
+                    MyLeftKeyColumns.Add(sourceRow.Table.Columns(sourceRowKeyColumns(MyCounter)))
+                Next
+                MyLeftKeys = MyLeftKeyColumns.ToArray
+            End If
+            Dim MyRightKeys As DataColumn()
+            If foreignTableKeyColumns Is Nothing OrElse foreignTableKeyColumns.Length = 0 Then
+                MyRightKeys = foreignTable.PrimaryKey
+            Else
+                Dim MyrightKeyColumns As New System.Collections.Generic.List(Of DataColumn)
+                For MyCounter As Integer = 0 To foreignTableKeyColumns.Length - 1
+                    MyrightKeyColumns.Add(foreignTable.Columns(foreignTableKeyColumns(MyCounter)))
+                Next
+                MyRightKeys = MyrightKeyColumns.ToArray
+            End If
+            Return FindMatchingRowsInForeignTable(sourceRow, foreignTable, MyLeftKeys, MyRightKeys)
+        End Function
+
+        ''' <summary>
+        ''' Find matching rows in a foreign table with the values in specified columns of a source table row
+        ''' </summary>
+        ''' <param name="sourceRow"></param>
+        ''' <param name="foreignTable"></param>
+        ''' <param name="sourceRowKeyColumnIndex"></param>
+        ''' <param name="foreignTableKeyColumnIndex"></param>
+        ''' <returns></returns>
+        Public Shared Function FindMatchingRowsInForeignTable(sourceRow As DataRow, foreignTable As DataTable, sourceRowKeyColumnIndex As Integer, foreignTableKeyColumnIndex As Integer) As DataRow()
+            Return FindMatchingRowsInForeignTable(sourceRow, foreignTable, New Integer() {sourceRowKeyColumnIndex}, New Integer() {foreignTableKeyColumnIndex})
+        End Function
+
+        ''' <summary>
+        ''' Find matching rows in a foreign table with the values in specified columns of a source table row
+        ''' </summary>
+        ''' <param name="sourceRow"></param>
+        ''' <param name="foreignTable"></param>
+        ''' <param name="sourceRowKeyColumnIndexes"></param>
+        ''' <param name="foreignTableKeyColumnIndexes"></param>
+        ''' <returns></returns>
+        Public Shared Function FindMatchingRowsInForeignTable(sourceRow As DataRow, foreignTable As DataTable, sourceRowKeyColumnIndexes As Integer(), foreignTableKeyColumnIndexes As Integer()) As DataRow()
+            Dim MyLeftKeys As DataColumn()
+            If sourceRowKeyColumnIndexes Is Nothing OrElse sourceRowKeyColumnIndexes.Length = 0 Then
+                MyLeftKeys = sourceRow.Table.PrimaryKey
+            Else
+                Dim MyLeftKeyColumns As New System.Collections.Generic.List(Of DataColumn)
+                For MyCounter As Integer = 0 To sourceRowKeyColumnIndexes.Length - 1
+                    MyLeftKeyColumns.Add(sourceRow.Table.Columns(sourceRowKeyColumnIndexes(MyCounter)))
+                Next
+                MyLeftKeys = MyLeftKeyColumns.ToArray
+            End If
+            Dim MyRightKeys As DataColumn()
+            If foreignTableKeyColumnIndexes Is Nothing OrElse foreignTableKeyColumnIndexes.Length = 0 Then
+                MyRightKeys = foreignTable.PrimaryKey
+            Else
+                Dim MyrightKeyColumns As New System.Collections.Generic.List(Of DataColumn)
+                For MyCounter As Integer = 0 To foreignTableKeyColumnIndexes.Length - 1
+                    MyrightKeyColumns.Add(foreignTable.Columns(foreignTableKeyColumnIndexes(MyCounter)))
+                Next
+                MyRightKeys = MyrightKeyColumns.ToArray
+            End If
+            Return FindMatchingRowsInForeignTable(sourceRow, foreignTable, MyLeftKeys, MyRightKeys)
+        End Function
+
+        ''' <summary>
+        ''' Find matching rows in a foreign table with the values in specified columns of a source table row
+        ''' </summary>
+        ''' <param name="sourceRow"></param>
+        ''' <param name="foreignTable"></param>
+        ''' <param name="sourceRowKeyColumn"></param>
+        ''' <param name="foreignTableKeyColumn"></param>
+        ''' <returns></returns>
+        Public Shared Function FindMatchingRowsInForeignTable(sourceRow As DataRow, foreignTable As DataTable, sourceRowKeyColumn As DataColumn, foreignTableKeyColumn As DataColumn) As DataRow()
+            If sourceRowKeyColumn Is Nothing Then Throw New ArgumentNullException("leftKeyColumn")
+            If foreignTableKeyColumn Is Nothing Then Throw New ArgumentNullException("rightKeyColumn")
+            Return FindMatchingRowsInForeignTable(sourceRow, foreignTable, New DataColumn() {sourceRowKeyColumn}, New DataColumn() {foreignTableKeyColumn})
+        End Function
+
+        ''' <summary>
+        ''' Find matching rows in a foreign table with the values in specified columns of a source table row
+        ''' </summary>
+        ''' <param name="sourceRow"></param>
+        ''' <param name="foreignTable"></param>
+        ''' <param name="sourceRowKeyColumns"></param>
+        ''' <param name="foreignTableKeyColumns"></param>
+        ''' <returns></returns>
+        Public Shared Function FindMatchingRowsInForeignTable(sourceRow As DataRow, foreignTable As DataTable, sourceRowKeyColumns As DataColumn(), foreignTableKeyColumns As DataColumn()) As DataRow()
+            Return SqlJoin_GetRightTableRows(sourceRow, foreignTable, sourceRowKeyColumns, foreignTableKeyColumns)
+        End Function
+
         Private Shared Function SqlJoin_GetRightTableRows(leftRow As DataRow, rightTable As DataTable, leftKeys As DataColumn(), rightKeys As DataColumn()) As DataRow()
             Dim Result As New ArrayList()
             For MyRowCounter As Integer = 0 To rightTable.Rows.Count - 1
