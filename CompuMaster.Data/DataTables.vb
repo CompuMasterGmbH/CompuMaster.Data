@@ -3810,7 +3810,7 @@ Namespace CompuMaster.Data
             ElseIf searchedValueSet.Length <> MyKeyColumns.Length Then
                 Throw New ArgumentException("Array lengths must be equal: searchedValueSet and keyColumns")
             End If
-            Dim Result As New ArrayList()
+            Dim Result As New System.Collections.Generic.List(Of DataRow)
             For MyRowCounter As Integer = 0 To table.Rows.Count - 1
                 Dim IsMatch As Boolean = True
                 For MyKeyCounter As Integer = 0 To MyKeyColumns.Length - 1
@@ -3823,7 +3823,7 @@ Namespace CompuMaster.Data
                     Result.Add(table.Rows(MyRowCounter))
                 End If
             Next
-            Return CType(Result.ToArray(GetType(System.Data.DataRow)), DataRow())
+            Return Result.ToArray
         End Function
 
         ''' <summary>
@@ -3953,7 +3953,7 @@ Namespace CompuMaster.Data
         End Function
 
         Private Shared Function SqlJoin_GetRightTableRows(leftRow As DataRow, rightTable As DataTable, leftKeys As DataColumn(), rightKeys As DataColumn()) As DataRow()
-            Dim Result As New ArrayList()
+            Dim Result As New System.Collections.Generic.List(Of DataRow)
             For MyRowCounter As Integer = 0 To rightTable.Rows.Count - 1
                 Dim IsMatch As Boolean = True
                 For MyKeyCounter As Integer = 0 To leftKeys.Length - 1
@@ -3966,7 +3966,7 @@ Namespace CompuMaster.Data
                     Result.Add(rightTable.Rows(MyRowCounter))
                 End If
             Next
-            Return CType(Result.ToArray(GetType(System.Data.DataRow)), DataRow())
+            Return Result.ToArray
         End Function
 
         Private Shared Function SqlJoin_IsEqual(value1 As Object, value2 As Object) As Boolean
