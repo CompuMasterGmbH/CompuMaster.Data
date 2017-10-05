@@ -3390,6 +3390,21 @@ Namespace CompuMaster.Data
         End Function
 
         ''' <summary>
+        '''     Execute a table join on two tables using their primary key columns (independent from their dataset, independent from their registered relations, without requirement for existing parent items (unlike to .NET standard behaviour) more like SQL behaviour)
+        ''' </summary>
+        ''' <param name="leftTable">The left table</param>
+        ''' <param name="rightTable">The right table</param>
+        ''' <param name="joinType">Inner, left, right or full join</param>
+        ''' <returns></returns>
+        ''' <remarks>
+        ''' </remarks>
+        Public Shared Function SqlJoinTables(ByVal leftTable As DataTable,
+                                          ByVal rightTable As DataTable,
+                                          ByVal joinType As SqlJoinTypes) As DataTable
+            Return SqlJoinTables(leftTable, CType(Nothing, DataColumn()), CType(Nothing, DataColumn()), rightTable, CType(Nothing, DataColumn()), CType(Nothing, DataColumn()), joinType)
+        End Function
+
+        ''' <summary>
         '''     Execute a table join on two tables (independent from their dataset, independent from their registered relations, without requirement for existing parent items (unlike to .NET standard behaviour) more like SQL behaviour)
         ''' </summary>
         ''' <param name="leftTable">The left table</param>
