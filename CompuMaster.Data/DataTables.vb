@@ -3410,6 +3410,66 @@ Namespace CompuMaster.Data
         '''     Execute a table join on two tables (independent from their dataset, independent from their registered relations, without requirement for existing parent items (unlike to .NET standard behaviour) more like SQL behaviour)
         ''' </summary>
         ''' <param name="leftTable">The left table</param>
+        ''' <param name="leftTableKey">A column to be used as key columns for join (null/Nothing uses PrimaryKeys)</param>
+        ''' <param name="rightTable">The right table</param>
+        ''' <param name="rightTableKey">A column to be used as key columns for join (null/Nothing uses PrimaryKeys)</param>
+        ''' <param name="joinType">Inner, left, right or full join</param>
+        ''' <returns></returns>
+        ''' <remarks>
+        ''' </remarks>
+        Public Shared Function SqlJoinTables(ByVal leftTable As DataTable, leftTableKey As System.Data.DataColumn,
+                                          ByVal rightTable As DataTable, rightTableKey As System.Data.DataColumn,
+                                          ByVal joinType As SqlJoinTypes) As DataTable
+            Dim LeftTableKeys As System.Data.DataColumn()
+            If leftTableKey Is Nothing Then
+                LeftTableKeys = Nothing
+            Else
+                LeftTableKeys = New System.Data.DataColumn() {leftTableKey}
+            End If
+            Dim RightTableKeys As System.Data.DataColumn()
+            If rightTableKey Is Nothing Then
+                RightTableKeys = Nothing
+            Else
+                RightTableKeys = New System.Data.DataColumn() {rightTableKey}
+            End If
+            Return SqlJoinTables(leftTable, LeftTableKeys, Nothing, rightTable, RightTableKeys, Nothing, joinType)
+        End Function
+
+        ''' <summary>
+        '''     Execute a table join on two tables (independent from their dataset, independent from their registered relations, without requirement for existing parent items (unlike to .NET standard behaviour) more like SQL behaviour)
+        ''' </summary>
+        ''' <param name="leftTable">The left table</param>
+        ''' <param name="leftTableKey">A column to be used as key columns for join (null/Nothing uses PrimaryKeys)</param>
+        ''' <param name="leftTableColumnsToCopy">An array of columns to copy from the left table (null/Nothing uses all columns, empty array uses no columns)</param>
+        ''' <param name="rightTable">The right table</param>
+        ''' <param name="rightTableKey">A column to be used as key columns for join (null/Nothing uses PrimaryKeys)</param>
+        ''' <param name="rightTableColumnsToCopy">An array of columns to copy from the right table (null/Nothing uses all columns, empty array uses no columns)</param>
+        ''' <param name="joinType">Inner, left, right or full join</param>
+        ''' <returns></returns>
+        ''' <remarks>
+        ''' </remarks>
+        Public Shared Function SqlJoinTables(ByVal leftTable As DataTable, leftTableKey As System.Data.DataColumn, ByVal leftTableColumnsToCopy As System.Data.DataColumn(),
+                                          ByVal rightTable As DataTable, rightTableKey As System.Data.DataColumn, ByVal rightTableColumnsToCopy As System.Data.DataColumn(),
+                                          ByVal joinType As SqlJoinTypes) As DataTable
+            Dim LeftTableKeys As System.Data.DataColumn()
+            If leftTableKey Is Nothing Then
+                LeftTableKeys = Nothing
+            Else
+                LeftTableKeys = New System.Data.DataColumn() {leftTableKey}
+            End If
+            Dim RightTableKeys As System.Data.DataColumn()
+            If rightTableKey Is Nothing Then
+                RightTableKeys = Nothing
+            Else
+                RightTableKeys = New System.Data.DataColumn() {rightTableKey}
+            End If
+            Return SqlJoinTables(leftTable, LeftTableKeys, leftTableColumnsToCopy, rightTable, RightTableKeys, rightTableColumnsToCopy, joinType)
+        End Function
+
+        ''' <summary>
+        '''     Execute a table join on two tables (independent from their dataset, independent from their registered relations, without requirement for existing parent items (unlike to .NET standard behaviour) more like SQL behaviour)
+        ''' </summary>
+        ''' <param name="leftTable">The left table</param>
         ''' <param name="leftTableKeys">An array of columns to be used as key columns for join (null/Nothing/empty array uses PrimaryKeys)</param>
         ''' <param name="leftTableColumnsToCopy">An array of columns to copy from the left table (null/Nothing uses all columns, empty array uses no columns)</param>
         ''' <param name="rightTable">The right table</param>
@@ -3688,6 +3748,42 @@ Namespace CompuMaster.Data
         '''     Execute a table join on two tables (independent from their dataset, independent from their registered relations, without requirement for existing parent items (unlike to .NET standard behaviour) more like SQL behaviour)
         ''' </summary>
         ''' <param name="leftTable">The left table</param>
+        ''' <param name="indexesOfLeftTableKey">A column index to be used as key columns for join</param>
+        ''' <param name="rightTable">The right table</param>
+        ''' <param name="indexesOfRightTableKey">A column index to be used as key columns for join</param>
+        ''' <param name="joinType">Inner, left, right or full join</param>
+        ''' <returns></returns>
+        ''' <remarks>
+        ''' </remarks>
+        Public Shared Function SqlJoinTables(ByVal leftTable As DataTable, indexesOfLeftTableKey As Integer,
+                                          ByVal rightTable As DataTable, indexesOfRightTableKey As Integer,
+                                          ByVal joinType As SqlJoinTypes) As DataTable
+            Return SqlJoinTables(leftTable, New Integer() {indexesOfLeftTableKey}, Nothing, rightTable, New Integer() {indexesOfRightTableKey}, Nothing, joinType)
+        End Function
+
+        ''' <summary>
+        '''     Execute a table join on two tables (independent from their dataset, independent from their registered relations, without requirement for existing parent items (unlike to .NET standard behaviour) more like SQL behaviour)
+        ''' </summary>
+        ''' <param name="leftTable">The left table</param>
+        ''' <param name="indexesOfLeftTableKey">A column index to be used as key columns for join</param>
+        ''' <param name="indexesOfLeftTableColumnsToCopy">An array of column indexes to copy from the left table (null/Nothing uses all columns, empty array uses no columns)</param>
+        ''' <param name="rightTable">The right table</param>
+        ''' <param name="indexesOfRightTableKey">A column index to be used as key columns for join</param>
+        ''' <param name="indexesOfRightTableColumnsToCopy">An array of column indexes to copy from the right table (null/Nothing uses all columns, empty array uses no columns)</param>
+        ''' <param name="joinType">Inner, left, right or full join</param>
+        ''' <returns></returns>
+        ''' <remarks>
+        ''' </remarks>
+        Public Shared Function SqlJoinTables(ByVal leftTable As DataTable, indexesOfLeftTableKey As Integer, ByVal indexesOfLeftTableColumnsToCopy As Integer(),
+                                          ByVal rightTable As DataTable, indexesOfRightTableKey As Integer, ByVal indexesOfRightTableColumnsToCopy As Integer(),
+                                          ByVal joinType As SqlJoinTypes) As DataTable
+            Return SqlJoinTables(leftTable, New Integer() {indexesOfLeftTableKey}, indexesOfLeftTableColumnsToCopy, rightTable, New Integer() {indexesOfRightTableKey}, indexesOfRightTableColumnsToCopy, joinType)
+        End Function
+
+        ''' <summary>
+        '''     Execute a table join on two tables (independent from their dataset, independent from their registered relations, without requirement for existing parent items (unlike to .NET standard behaviour) more like SQL behaviour)
+        ''' </summary>
+        ''' <param name="leftTable">The left table</param>
         ''' <param name="indexesOfLeftTableKeys">An array of column indexes to be used as key columns for join (null/Nothing/empty array uses PrimaryKeys)</param>
         ''' <param name="indexesOfLeftTableColumnsToCopy">An array of column indexes to copy from the left table (null/Nothing uses all columns, empty array uses no columns)</param>
         ''' <param name="rightTable">The right table</param>
@@ -3756,6 +3852,46 @@ Namespace CompuMaster.Data
                                           ByVal rightTable As DataTable, rightTableKeys As String(),
                                           ByVal joinType As SqlJoinTypes) As DataTable
             Return SqlJoinTables(leftTable, leftTableKeys, Nothing, rightTable, rightTableKeys, Nothing, joinType)
+        End Function
+
+        ''' <summary>
+        '''     Execute a table join on two tables (independent from their dataset, independent from their registered relations, without requirement for existing parent items (unlike to .NET standard behaviour) more like SQL behaviour)
+        ''' </summary>
+        ''' <param name="leftTable">The left table</param>
+        ''' <param name="leftTableKey">A column to be used as key column for join</param>
+        ''' <param name="rightTable">The right table</param>
+        ''' <param name="rightTableKey">A column to be used as key column for join</param>
+        ''' <param name="joinType">Inner, left, right or full join</param>
+        ''' <returns></returns>
+        ''' <remarks>
+        ''' </remarks>
+        Public Shared Function SqlJoinTables(ByVal leftTable As DataTable, leftTableKey As String,
+                                          ByVal rightTable As DataTable, rightTableKey As String,
+                                          ByVal joinType As SqlJoinTypes) As DataTable
+            If leftTableKey = Nothing Then Throw New ArgumentNullException("leftTableKey")
+            If rightTableKey = Nothing Then Throw New ArgumentNullException("rightTableKey")
+            Return SqlJoinTables(leftTable, New String() {leftTableKey}, Nothing, rightTable, New String() {rightTableKey}, Nothing, joinType)
+        End Function
+
+        ''' <summary>
+        '''     Execute a table join on two tables (independent from their dataset, independent from their registered relations, without requirement for existing parent items (unlike to .NET standard behaviour) more like SQL behaviour)
+        ''' </summary>
+        ''' <param name="leftTable">The left table</param>
+        ''' <param name="leftTableKey">A column to be used as key column for join</param>
+        ''' <param name="leftTableColumnsToCopy">An array of columns to copy from the left table (null/Nothing uses all columns, empty array uses no columns)</param>
+        ''' <param name="rightTable">The right table</param>
+        ''' <param name="rightTableKey">A column to be used as key column for join</param>
+        ''' <param name="rightTableColumnsToCopy">An array of columns to copy from the right table (null/Nothing uses all columns, empty array uses no columns)</param>
+        ''' <param name="joinType">Inner, left, right or full join</param>
+        ''' <returns></returns>
+        ''' <remarks>
+        ''' </remarks>
+        Public Shared Function SqlJoinTables(ByVal leftTable As DataTable, leftTableKey As String, ByVal leftTableColumnsToCopy As String(),
+                                          ByVal rightTable As DataTable, rightTableKey As String, ByVal rightTableColumnsToCopy As String(),
+                                          ByVal joinType As SqlJoinTypes) As DataTable
+            If leftTableKey = Nothing Then Throw New ArgumentNullException("leftTableKey")
+            If rightTableKey = Nothing Then Throw New ArgumentNullException("rightTableKey")
+            Return SqlJoinTables(leftTable, New String() {leftTableKey}, leftTableColumnsToCopy, rightTable, New String() {rightTableKey}, rightTableColumnsToCopy, joinType)
         End Function
 
         ''' <summary>
