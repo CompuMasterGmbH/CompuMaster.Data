@@ -3497,6 +3497,25 @@ Namespace CompuMaster.Data
         Public Shared Function SqlJoinTables(ByVal leftTable As DataTable, leftTableKeys As System.Data.DataColumn(), ByVal leftTableColumnsToCopy As System.Data.DataColumn(),
                                           ByVal rightTable As DataTable, rightTableKeys As System.Data.DataColumn(), ByVal rightTableColumnsToCopy As System.Data.DataColumn(),
                                           ByVal joinType As SqlJoinTypes) As DataTable
+            Return SqlJoinTables(leftTable, leftTableKeys, leftTableColumnsToCopy, rightTable, rightTableKeys, rightTableColumnsToCopy, joinType, False)
+        End Function
+
+        ''' <summary>
+        '''     Execute a table join on two tables (independent from their dataset, independent from their registered relations, without requirement for existing parent items (unlike to .NET standard behaviour) more like SQL behaviour)
+        ''' </summary>
+        ''' <param name="leftTable">The left table</param>
+        ''' <param name="leftTableKeys">An array of columns to be used as key columns for join (null/Nothing/empty array uses PrimaryKeys)</param>
+        ''' <param name="leftTableColumnsToCopy">An array of columns to copy from the left table (null/Nothing uses all columns, empty array uses no columns)</param>
+        ''' <param name="rightTable">The right table</param>
+        ''' <param name="rightTableKeys">An array of columns to be used as key columns for join (null/Nothing/empty array uses PrimaryKeys)</param>
+        ''' <param name="rightTableColumnsToCopy">An array of columns to copy from the right table (null/Nothing uses all columns, empty array uses no columns)</param>
+        ''' <param name="joinType">Inner, left, right or full join</param>
+        ''' <returns></returns>
+        ''' <remarks>
+        ''' </remarks>
+        Public Shared Function SqlJoinTables(ByVal leftTable As DataTable, leftTableKeys As System.Data.DataColumn(), ByVal leftTableColumnsToCopy As System.Data.DataColumn(),
+                                          ByVal rightTable As DataTable, rightTableKeys As System.Data.DataColumn(), ByVal rightTableColumnsToCopy As System.Data.DataColumn(),
+                                          ByVal joinType As SqlJoinTypes, compareStringsCaseInsensitive As Boolean) As DataTable
             'Check required arguments
             If leftTable Is Nothing Then
                 Throw New ArgumentNullException("leftTable", "Left table is a required parameter")
@@ -3552,7 +3571,7 @@ Namespace CompuMaster.Data
                 Next
 
                 'Inverse RightJoin to LeftJoin
-                Return SqlJoinTables(rightTable, rightTableKeys, rightTableColumnsToCopy, leftTable, leftTableKeys, leftTableColumnsToCopy, SqlJoinTypes.Left)
+                Return SqlJoinTables(rightTable, rightTableKeys, rightTableColumnsToCopy, leftTable, leftTableKeys, leftTableColumnsToCopy, SqlJoinTypes.Left, compareStringsCaseInsensitive)
             Else
                 'Execute Inner, Left or FullOuter Join
 
@@ -3621,7 +3640,7 @@ Namespace CompuMaster.Data
                 'Fill the rows now with the missing data
                 For MyLeftTableRowCounter As Integer = 0 To leftTable.Rows.Count - 1
                     Dim MyLeftRow As DataRow = leftTable.Rows(MyLeftTableRowCounter)
-                    Dim MyRightRows As DataRow() = SqlJoin_GetRightTableRows(MyLeftRow, rightTable, leftTableKeys, rightTableKeys)
+                    Dim MyRightRows As DataRow() = SqlJoin_GetRightTableRows(MyLeftRow, rightTable, leftTableKeys, rightTableKeys, compareStringsCaseInsensitive)
                     If joinType = SqlJoinTypes.FullOuter Then
                         'only required for FullOuterJoin
                         For MyRightRowCounter As Integer = 0 To MyRightRows.Length - 1
@@ -3799,6 +3818,17 @@ Namespace CompuMaster.Data
         ''' <param name="keyColumns">The key columns of the table</param>
         ''' <returns>All rows which match with the searched values</returns>
         Public Shared Function FindRowsInTable(searchedValueSet As Object(), table As DataTable, keyColumns As DataColumn()) As DataRow()
+            Return FindRowsInTable(searchedValueSet, table, keyColumns, False)
+        End Function
+
+        ''' <summary>
+        ''' Find rows in a table with the specified values in its key columns
+        ''' </summary>
+        ''' <param name="searchedValueSet">A set of values which must be present in the key columns of the table</param>
+        ''' <param name="table">The table which is to be filtered</param>
+        ''' <param name="keyColumns">The key columns of the table</param>
+        ''' <returns>All rows which match with the searched values</returns>
+        Public Shared Function FindRowsInTable(searchedValueSet As Object(), table As DataTable, keyColumns As DataColumn(), compareStringsCaseInsensitive As Boolean) As DataRow()
             Dim MyKeyColumns As DataColumn() = keyColumns
             If MyKeyColumns Is Nothing OrElse MyKeyColumns.Length = 0 Then
                 MyKeyColumns = table.PrimaryKey
@@ -3814,7 +3844,7 @@ Namespace CompuMaster.Data
             For MyRowCounter As Integer = 0 To table.Rows.Count - 1
                 Dim IsMatch As Boolean = True
                 For MyKeyCounter As Integer = 0 To MyKeyColumns.Length - 1
-                    If SqlJoin_IsEqual(searchedValueSet(MyKeyCounter), table.Rows(MyRowCounter)(MyKeyColumns(MyKeyCounter))) = False Then
+                    If SqlJoin_IsEqual(searchedValueSet(MyKeyCounter), table.Rows(MyRowCounter)(MyKeyColumns(MyKeyCounter)), compareStringsCaseInsensitive) = False Then
                         IsMatch = False
                         Exit For
                     End If
@@ -3949,15 +3979,28 @@ Namespace CompuMaster.Data
         ''' <param name="foreignTableKeyColumns"></param>
         ''' <returns></returns>
         Public Shared Function FindMatchingRowsInForeignTable(sourceRow As DataRow, foreignTable As DataTable, sourceRowKeyColumns As DataColumn(), foreignTableKeyColumns As DataColumn()) As DataRow()
-            Return SqlJoin_GetRightTableRows(sourceRow, foreignTable, sourceRowKeyColumns, foreignTableKeyColumns)
+            Return SqlJoin_GetRightTableRows(sourceRow, foreignTable, sourceRowKeyColumns, foreignTableKeyColumns, False)
         End Function
 
-        Private Shared Function SqlJoin_GetRightTableRows(leftRow As DataRow, rightTable As DataTable, leftKeys As DataColumn(), rightKeys As DataColumn()) As DataRow()
+        ''' <summary>
+        ''' Find matching rows in a foreign table with the values in specified columns of a source table row
+        ''' </summary>
+        ''' <param name="sourceRow"></param>
+        ''' <param name="foreignTable"></param>
+        ''' <param name="sourceRowKeyColumns"></param>
+        ''' <param name="foreignTableKeyColumns"></param>
+        ''' <param name="compareStringsCaseInsensitive"></param>
+        ''' <returns></returns>
+        Public Shared Function FindMatchingRowsInForeignTable(sourceRow As DataRow, foreignTable As DataTable, sourceRowKeyColumns As DataColumn(), foreignTableKeyColumns As DataColumn(), compareStringsCaseInsensitive As Boolean) As DataRow()
+            Return SqlJoin_GetRightTableRows(sourceRow, foreignTable, sourceRowKeyColumns, foreignTableKeyColumns, compareStringsCaseInsensitive)
+        End Function
+
+        Private Shared Function SqlJoin_GetRightTableRows(leftRow As DataRow, rightTable As DataTable, leftKeys As DataColumn(), rightKeys As DataColumn(), compareStringsCaseInsensitive As Boolean) As DataRow()
             Dim Result As New System.Collections.Generic.List(Of DataRow)
             For MyRowCounter As Integer = 0 To rightTable.Rows.Count - 1
                 Dim IsMatch As Boolean = True
                 For MyKeyCounter As Integer = 0 To leftKeys.Length - 1
-                    If SqlJoin_IsEqual(leftRow(leftKeys(MyKeyCounter)), rightTable.Rows(MyRowCounter)(rightKeys(MyKeyCounter))) = False Then
+                    If SqlJoin_IsEqual(leftRow(leftKeys(MyKeyCounter)), rightTable.Rows(MyRowCounter)(rightKeys(MyKeyCounter)), compareStringsCaseInsensitive) = False Then
                         IsMatch = False
                         Exit For
                     End If
@@ -3969,11 +4012,13 @@ Namespace CompuMaster.Data
             Return Result.ToArray
         End Function
 
-        Private Shared Function SqlJoin_IsEqual(value1 As Object, value2 As Object) As Boolean
+        Private Shared Function SqlJoin_IsEqual(value1 As Object, value2 As Object, compareStringsCaseInsensitive As Boolean) As Boolean
             If IsDBNull(value1) Xor IsDBNull(value2) Then
                 Return False
             ElseIf IsDBNull(value1) And IsDBNull(value2) Then
                 Return True
+            ElseIf value1.GetType Is GetType(String) AndAlso value2.GetType Is GetType(String) AndAlso compareStringsCaseInsensitive Then
+                Return LCase(CType(value1, String)) = LCase(CType(value2, String))
             ElseIf value1.GetType Is GetType(String) AndAlso value2.GetType Is GetType(String) Then
                 Return CType(value1, String) = CType(value2, String)
             ElseIf value1.GetType Is GetType(System.Decimal) OrElse value2.GetType Is GetType(System.Decimal) Then
