@@ -16,7 +16,7 @@ Imports System.Runtime.CompilerServices
 <Assembly: Guid("FDE425FC-D944-4747-A1D8-082356335D53")>
 
 'HINT: ALWAYS UPDATE AT PROJECTS CM.DATA + CM.DATA.CONTROLS TO THE VERY SAME VERSION NO.
-<Assembly: AssemblyVersion("2.8.2017.1218")>
+<Assembly: AssemblyVersion("2.8.2017.1219")>
 '<Assembly: AssemblyInformationalVersion("2.8.2017.1218-beta3")>
 <Assembly: AssemblyDelaySign(False)>
 

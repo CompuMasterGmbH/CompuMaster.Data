@@ -3877,7 +3877,21 @@ Namespace CompuMaster.Data
         Public Shared Function FindMatchingRowsInForeignTable(sourceRow As DataRow, foreignTable As DataTable, sourceRowKeyColumn As String, foreignTableKeyColumn As String) As DataRow()
             If sourceRowKeyColumn = Nothing Then Throw New ArgumentNullException("leftKeyColumn")
             If foreignTableKeyColumn = Nothing Then Throw New ArgumentNullException("rightKeyColumn")
-            Return FindMatchingRowsInForeignTable(sourceRow, foreignTable, New String() {sourceRowKeyColumn}, New String() {foreignTableKeyColumn})
+            Return FindMatchingRowsInForeignTable(sourceRow, foreignTable, New String() {sourceRowKeyColumn}, New String() {foreignTableKeyColumn}, False)
+        End Function
+
+        ''' <summary>
+        ''' Find matching rows in a foreign table with the values in specified columns of a source table row
+        ''' </summary>
+        ''' <param name="sourceRow"></param>
+        ''' <param name="foreignTable"></param>
+        ''' <param name="sourceRowKeyColumn"></param>
+        ''' <param name="foreignTableKeyColumn"></param>
+        ''' <returns></returns>
+        Public Shared Function FindMatchingRowsInForeignTable(sourceRow As DataRow, foreignTable As DataTable, sourceRowKeyColumn As String, foreignTableKeyColumn As String, compareStringsCaseInsensitive As Boolean) As DataRow()
+            If sourceRowKeyColumn = Nothing Then Throw New ArgumentNullException("leftKeyColumn")
+            If foreignTableKeyColumn = Nothing Then Throw New ArgumentNullException("rightKeyColumn")
+            Return FindMatchingRowsInForeignTable(sourceRow, foreignTable, New String() {sourceRowKeyColumn}, New String() {foreignTableKeyColumn}, compareStringsCaseInsensitive)
         End Function
 
         ''' <summary>
@@ -3889,6 +3903,18 @@ Namespace CompuMaster.Data
         ''' <param name="foreignTableKeyColumns"></param>
         ''' <returns></returns>
         Public Shared Function FindMatchingRowsInForeignTable(sourceRow As DataRow, foreignTable As DataTable, sourceRowKeyColumns As String(), foreignTableKeyColumns As String()) As DataRow()
+            Return FindMatchingRowsInForeignTable(sourceRow, foreignTable, sourceRowKeyColumns, foreignTableKeyColumns, False)
+        End Function
+
+        ''' <summary>
+        ''' Find matching rows in a foreign table with the values in specified columns of a source table row
+        ''' </summary>
+        ''' <param name="sourceRow"></param>
+        ''' <param name="foreignTable"></param>
+        ''' <param name="sourceRowKeyColumns"></param>
+        ''' <param name="foreignTableKeyColumns"></param>
+        ''' <returns></returns>
+        Public Shared Function FindMatchingRowsInForeignTable(sourceRow As DataRow, foreignTable As DataTable, sourceRowKeyColumns As String(), foreignTableKeyColumns As String(), compareStringsCaseInsensitive As Boolean) As DataRow()
             Dim MyLeftKeys As DataColumn()
             If sourceRowKeyColumns Is Nothing OrElse sourceRowKeyColumns.Length = 0 Then
                 MyLeftKeys = sourceRow.Table.PrimaryKey
@@ -3909,7 +3935,7 @@ Namespace CompuMaster.Data
                 Next
                 MyRightKeys = MyrightKeyColumns.ToArray
             End If
-            Return FindMatchingRowsInForeignTable(sourceRow, foreignTable, MyLeftKeys, MyRightKeys)
+            Return FindMatchingRowsInForeignTable(sourceRow, foreignTable, MyLeftKeys, MyRightKeys, compareStringsCaseInsensitive)
         End Function
 
         ''' <summary>
@@ -3921,7 +3947,19 @@ Namespace CompuMaster.Data
         ''' <param name="foreignTableKeyColumnIndex"></param>
         ''' <returns></returns>
         Public Shared Function FindMatchingRowsInForeignTable(sourceRow As DataRow, foreignTable As DataTable, sourceRowKeyColumnIndex As Integer, foreignTableKeyColumnIndex As Integer) As DataRow()
-            Return FindMatchingRowsInForeignTable(sourceRow, foreignTable, New Integer() {sourceRowKeyColumnIndex}, New Integer() {foreignTableKeyColumnIndex})
+            Return FindMatchingRowsInForeignTable(sourceRow, foreignTable, New Integer() {sourceRowKeyColumnIndex}, New Integer() {foreignTableKeyColumnIndex}, False)
+        End Function
+
+        ''' <summary>
+        ''' Find matching rows in a foreign table with the values in specified columns of a source table row
+        ''' </summary>
+        ''' <param name="sourceRow"></param>
+        ''' <param name="foreignTable"></param>
+        ''' <param name="sourceRowKeyColumnIndex"></param>
+        ''' <param name="foreignTableKeyColumnIndex"></param>
+        ''' <returns></returns>
+        Public Shared Function FindMatchingRowsInForeignTable(sourceRow As DataRow, foreignTable As DataTable, sourceRowKeyColumnIndex As Integer, foreignTableKeyColumnIndex As Integer, compareStringsCaseInsensitive As Boolean) As DataRow()
+            Return FindMatchingRowsInForeignTable(sourceRow, foreignTable, New Integer() {sourceRowKeyColumnIndex}, New Integer() {foreignTableKeyColumnIndex}, compareStringsCaseInsensitive)
         End Function
 
         ''' <summary>
@@ -3933,6 +3971,17 @@ Namespace CompuMaster.Data
         ''' <param name="foreignTableKeyColumnIndexes"></param>
         ''' <returns></returns>
         Public Shared Function FindMatchingRowsInForeignTable(sourceRow As DataRow, foreignTable As DataTable, sourceRowKeyColumnIndexes As Integer(), foreignTableKeyColumnIndexes As Integer()) As DataRow()
+            Return FindMatchingRowsInForeignTable(sourceRow, foreignTable, sourceRowKeyColumnIndexes, foreignTableKeyColumnIndexes, False)
+        End Function
+        ''' <summary>
+        ''' Find matching rows in a foreign table with the values in specified columns of a source table row
+        ''' </summary>
+        ''' <param name="sourceRow"></param>
+        ''' <param name="foreignTable"></param>
+        ''' <param name="sourceRowKeyColumnIndexes"></param>
+        ''' <param name="foreignTableKeyColumnIndexes"></param>
+        ''' <returns></returns>
+        Public Shared Function FindMatchingRowsInForeignTable(sourceRow As DataRow, foreignTable As DataTable, sourceRowKeyColumnIndexes As Integer(), foreignTableKeyColumnIndexes As Integer(), compareStringsCaseInsensitive As Boolean) As DataRow()
             Dim MyLeftKeys As DataColumn()
             If sourceRowKeyColumnIndexes Is Nothing OrElse sourceRowKeyColumnIndexes.Length = 0 Then
                 MyLeftKeys = sourceRow.Table.PrimaryKey
@@ -3953,7 +4002,7 @@ Namespace CompuMaster.Data
                 Next
                 MyRightKeys = MyrightKeyColumns.ToArray
             End If
-            Return FindMatchingRowsInForeignTable(sourceRow, foreignTable, MyLeftKeys, MyRightKeys)
+            Return FindMatchingRowsInForeignTable(sourceRow, foreignTable, MyLeftKeys, MyRightKeys, compareStringsCaseInsensitive)
         End Function
 
         ''' <summary>
@@ -3967,7 +4016,21 @@ Namespace CompuMaster.Data
         Public Shared Function FindMatchingRowsInForeignTable(sourceRow As DataRow, foreignTable As DataTable, sourceRowKeyColumn As DataColumn, foreignTableKeyColumn As DataColumn) As DataRow()
             If sourceRowKeyColumn Is Nothing Then Throw New ArgumentNullException("leftKeyColumn")
             If foreignTableKeyColumn Is Nothing Then Throw New ArgumentNullException("rightKeyColumn")
-            Return FindMatchingRowsInForeignTable(sourceRow, foreignTable, New DataColumn() {sourceRowKeyColumn}, New DataColumn() {foreignTableKeyColumn})
+            Return FindMatchingRowsInForeignTable(sourceRow, foreignTable, New DataColumn() {sourceRowKeyColumn}, New DataColumn() {foreignTableKeyColumn}, False)
+        End Function
+
+        ''' <summary>
+        ''' Find matching rows in a foreign table with the values in specified columns of a source table row
+        ''' </summary>
+        ''' <param name="sourceRow"></param>
+        ''' <param name="foreignTable"></param>
+        ''' <param name="sourceRowKeyColumn"></param>
+        ''' <param name="foreignTableKeyColumn"></param>
+        ''' <returns></returns>
+        Public Shared Function FindMatchingRowsInForeignTable(sourceRow As DataRow, foreignTable As DataTable, sourceRowKeyColumn As DataColumn, foreignTableKeyColumn As DataColumn, compareStringsCaseInsensitive As Boolean) As DataRow()
+            If sourceRowKeyColumn Is Nothing Then Throw New ArgumentNullException("leftKeyColumn")
+            If foreignTableKeyColumn Is Nothing Then Throw New ArgumentNullException("rightKeyColumn")
+            Return FindMatchingRowsInForeignTable(sourceRow, foreignTable, New DataColumn() {sourceRowKeyColumn}, New DataColumn() {foreignTableKeyColumn}, compareStringsCaseInsensitive)
         End Function
 
         ''' <summary>
