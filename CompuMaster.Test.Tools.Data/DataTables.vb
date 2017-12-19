@@ -343,6 +343,19 @@ Namespace CompuMaster.Test.Data
             Console.WriteLine(CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(dt, 10))
             Console.WriteLine(CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(dt, 5, 20))
 
+            'Delegated custom formatting
+            dt.Columns.Add("dict", GetType(System.Collections.Generic.Dictionary(Of String, String)))
+            Console.WriteLine(CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(dt, 5, 20, "|", "|", "+", "=", "-", AddressOf ConvertColumnToString))
+            dt.Rows(0)("dict") = New System.Collections.Generic.Dictionary(Of String, String)
+            Console.WriteLine(CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(dt, 5, 20, "|", "|", "+", "=", "-", AddressOf ConvertColumnToString))
+            Dim dict0 As New System.Collections.Generic.Dictionary(Of String, String)
+            dict0.Add("key1", "value1")
+            dict0.Add("key2", "value2")
+            dt.Rows(0)("dict") = dict0
+            dt.Rows.Add(dt.NewRow)
+            Console.WriteLine(CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(dt, 5, 20, "|", "|", "+", "=", "-", AddressOf ConvertColumnToString))
+
+            'Real data table: quiz questions
             dt = _TestTable2()
             Console.WriteLine(CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(dt))
             Console.WriteLine(CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(dt, " :: ", " :: ", "=##=", "=", "="))
@@ -351,6 +364,23 @@ Namespace CompuMaster.Test.Data
 
         End Sub
 
+        Private Function ConvertColumnToString(column As DataColumn, value As Object) As String
+            If IsDBNull(value) Then
+                Return Nothing
+            ElseIf GetType(System.Collections.Generic.Dictionary(Of String, String)).IsInstanceOfType(value) Then
+                Dim dict As System.Collections.Generic.Dictionary(Of String, String) = CType(value, System.Collections.Generic.Dictionary(Of String, String))
+                Dim Result As New System.Text.StringBuilder
+                For Each keyName As String In dict.Keys
+                    If Result.Length <> 0 Then Result.AppendLine()
+                    Result.Append(keyName)
+                    Result.Append(":")
+                    Result.Append(dict(keyName))
+                Next
+                Return Result.ToString
+            Else
+                Return value
+            End If
+        End Function
 
         <Test(), NUnit.Framework.Ignore("NotYetImplemented")> Public Sub ConvertXmlToDataset()
             Throw New NotImplementedException

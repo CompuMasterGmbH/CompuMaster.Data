@@ -1980,7 +1980,7 @@ Namespace CompuMaster.Data
             If dataRows.Length > 0 Then
                 TableName = dataRows(0).Table.TableName
             End If
-            Return _ConvertToPlainTextTableWithFixedColumnWidths(dataRows, TableName, SuggestColumnWidthsForFixedPlainTables(dataRows))
+            Return _ConvertToPlainTextTableWithFixedColumnWidths(dataRows, TableName, SuggestColumnWidthsForFixedPlainTables(dataRows), Nothing)
         End Function
 
         ''' <summary>
@@ -1990,7 +1990,7 @@ Namespace CompuMaster.Data
         ''' <returns>All rows are separated by fixed width. If no rows have been processed, the user will get notified about this fact</returns>
         ''' <remarks></remarks>
         Public Shared Function ConvertToPlainTextTableFixedColumnWidths(ByVal dataRow As DataRow) As String
-            Return _ConvertToPlainTextTableWithFixedColumnWidths(New System.Data.DataRow() {dataRow}, dataRow.Table.TableName, SuggestColumnWidthsForFixedPlainTables(New System.Data.DataRow() {dataRow}))
+            Return _ConvertToPlainTextTableWithFixedColumnWidths(New System.Data.DataRow() {dataRow}, dataRow.Table.TableName, SuggestColumnWidthsForFixedPlainTables(New System.Data.DataRow() {dataRow}), Nothing)
         End Function
 
         ''' <summary>
@@ -2000,7 +2000,7 @@ Namespace CompuMaster.Data
         ''' <returns>All rows are separated by fixed width. If no rows have been processed, the user will get notified about this fact</returns>
         ''' <remarks></remarks>
         Public Shared Function ConvertToPlainTextTableFixedColumnWidths(ByVal dataTable As DataTable) As String
-            Return _ConvertToPlainTextTableWithFixedColumnWidths(dataTable.Rows, dataTable.TableName, SuggestColumnWidthsForFixedPlainTables(dataTable.Rows))
+            Return _ConvertToPlainTextTableWithFixedColumnWidths(dataTable.Rows, dataTable.TableName, SuggestColumnWidthsForFixedPlainTables(dataTable.Rows), Nothing)
         End Function
 
         ''' <summary>
@@ -2010,7 +2010,7 @@ Namespace CompuMaster.Data
         ''' <returns>All rows are separated by fixed width. If no rows have been processed, the user will get notified about this fact</returns>
         ''' <remarks></remarks>
         Public Shared Function ConvertToPlainTextTableFixedColumnWidths(ByVal dataTable As DataTable, ByVal fixedColumnWidths As Integer()) As String
-            Return _ConvertToPlainTextTableWithFixedColumnWidths(dataTable.Rows, dataTable.TableName, fixedColumnWidths)
+            Return _ConvertToPlainTextTableWithFixedColumnWidths(dataTable.Rows, dataTable.TableName, fixedColumnWidths, Nothing)
         End Function
 
         ''' <summary>
@@ -2026,13 +2026,13 @@ Namespace CompuMaster.Data
             For MyCounter As Integer = 0 To dataTable.Columns.Count - 1
                 columnWidths(MyCounter) = standardColumnWidth
             Next
-            Return _ConvertToPlainTextTableWithFixedColumnWidths(dataTable.Rows, dataTable.TableName, columnWidths)
+            Return _ConvertToPlainTextTableWithFixedColumnWidths(dataTable.Rows, dataTable.TableName, columnWidths, Nothing)
 #Else
             Dim columnWidths As New System.Collections.Generic.List(Of Integer)
             For MyCounter As Integer = 0 To dataTable.Columns.Count - 1
                 columnWidths.Add(standardColumnWidth)
             Next
-            Return _ConvertToPlainTextTableWithFixedColumnWidths(dataTable.Rows, dataTable.TableName, columnWidths.ToArray)
+            Return _ConvertToPlainTextTableWithFixedColumnWidths(dataTable.Rows, dataTable.TableName, columnWidths.ToArray, Nothing)
 #End If
         End Function
 
@@ -2044,7 +2044,19 @@ Namespace CompuMaster.Data
         ''' <remarks></remarks>
         Public Shared Function ConvertToPlainTextTableFixedColumnWidths(ByVal dataTable As DataTable, ByVal minimumColumnWidth As Integer, _
                                                                         maximumColumnWidth As Integer) As String
-            Dim columnWidths As Integer() = SuggestColumnWidthsForFixedPlainTables(dataTable.Rows, dataTable, 100)
+            Return ConvertToPlainTextTableFixedColumnWidths(dataTable, minimumColumnWidth, maximumColumnWidth, Nothing)
+        End Function
+
+        ''' <summary>
+        '''     Return a string with all columns and rows, helpfull for debugging purposes
+        ''' </summary>
+        ''' <param name="dataTable">The datatable to retrieve the content from</param>
+        ''' <returns>All rows are separated by fixed width. If no rows have been processed, the user will get notified about this fact</returns>
+        ''' <remarks></remarks>
+        Public Shared Function ConvertToPlainTextTableFixedColumnWidths(ByVal dataTable As DataTable, ByVal minimumColumnWidth As Integer,
+                                                                        maximumColumnWidth As Integer,
+                                                                        columnFormatting As DataColumnToString) As String
+            Dim columnWidths As Integer() = SuggestColumnWidthsForFixedPlainTables(dataTable.Rows, dataTable, 100, columnFormatting)
             If columnWidths Is Nothing Then
                 Dim newWidths(dataTable.Columns.Count - 1) As Integer
                 For MyCounter As Integer = 0 To dataTable.Columns.Count - 1
@@ -2057,7 +2069,7 @@ Namespace CompuMaster.Data
                     If columnWidths(MyCounter) > maximumColumnWidth Then columnWidths(MyCounter) = maximumColumnWidth
                 Next
             End If
-            Return _ConvertToPlainTextTableWithFixedColumnWidths(dataTable.Rows, dataTable.TableName, columnWidths)
+            Return _ConvertToPlainTextTableWithFixedColumnWidths(dataTable.Rows, dataTable.TableName, columnWidths, columnFormatting)
         End Function
 
         ''' <summary>
@@ -2069,8 +2081,8 @@ Namespace CompuMaster.Data
         Public Shared Function ConvertToPlainTextTableFixedColumnWidths(ByVal dataTable As DataTable, verticalSeparatorHeader As String, _
                                                                         verticalSeparatorCells As String, crossSeparator As String, _
                                                                         horizontalSeparatorHeadline As Char, horizontalSeparatorCells As Char) As String
-            Return _ConvertToPlainTextTableWithFixedColumnWidths(dataTable.Rows, dataTable.TableName, SuggestColumnWidthsForFixedPlainTables(dataTable.Rows), verticalSeparatorHeader, verticalSeparatorCells, _
-                                                                 crossSeparator, horizontalSeparatorHeadline, horizontalSeparatorCells)
+            Return _ConvertToPlainTextTableWithFixedColumnWidths(dataTable.Rows, dataTable.TableName, SuggestColumnWidthsForFixedPlainTables(dataTable.Rows), verticalSeparatorHeader, verticalSeparatorCells,
+                                                                 crossSeparator, horizontalSeparatorHeadline, horizontalSeparatorCells, Nothing)
         End Function
 
         ''' <summary>
@@ -2083,8 +2095,8 @@ Namespace CompuMaster.Data
                                                                         verticalSeparatorHeader As String, verticalSeparatorCells As String, _
                                                                         crossSeparator As String, horizontalSeparatorHeadline As Char, _
                                                                         horizontalSeparatorCells As Char) As String
-            Return _ConvertToPlainTextTableWithFixedColumnWidths(dataTable.Rows, dataTable.TableName, fixedColumnWidths, verticalSeparatorHeader, verticalSeparatorCells, crossSeparator, horizontalSeparatorHeadline, _
-                                                                 horizontalSeparatorCells)
+            Return _ConvertToPlainTextTableWithFixedColumnWidths(dataTable.Rows, dataTable.TableName, fixedColumnWidths, verticalSeparatorHeader, verticalSeparatorCells, crossSeparator, horizontalSeparatorHeadline,
+                                                                 horizontalSeparatorCells, Nothing)
         End Function
 
         ''' <summary>
@@ -2101,8 +2113,8 @@ Namespace CompuMaster.Data
             For MyCounter As Integer = 0 To dataTable.Columns.Count - 1
                 columnWidths(MyCounter) = standardColumnWidth
             Next
-            Return _ConvertToPlainTextTableWithFixedColumnWidths(dataTable.Rows, dataTable.TableName, columnWidths, verticalSeparatorHeader, verticalSeparatorCells, _
-                                                                 crossSeparator, horizontalSeparatorHeadline, horizontalSeparatorCells)
+            Return _ConvertToPlainTextTableWithFixedColumnWidths(dataTable.Rows, dataTable.TableName, columnWidths, verticalSeparatorHeader, verticalSeparatorCells,
+                                                                 crossSeparator, horizontalSeparatorHeadline, horizontalSeparatorCells, Nothing)
         End Function
 
         ''' <summary>
@@ -2111,11 +2123,11 @@ Namespace CompuMaster.Data
         ''' <param name="dataTable">The datatable to retrieve the content from</param>
         ''' <returns>All rows are separated by fixed width. If no rows have been processed, the user will get notified about this fact</returns>
         ''' <remarks></remarks>
-        Public Shared Function ConvertToPlainTextTableFixedColumnWidths(ByVal dataTable As DataTable, ByVal minimumColumnWidth As Integer, _
-                                                                        maximumColumnWidth As Integer, verticalSeparatorHeader As String, _
-                                                                        verticalSeparatorCells As String, crossSeparator As String, _
+        Public Shared Function ConvertToPlainTextTableFixedColumnWidths(ByVal dataTable As DataTable, ByVal minimumColumnWidth As Integer,
+                                                                        maximumColumnWidth As Integer, verticalSeparatorHeader As String,
+                                                                        verticalSeparatorCells As String, crossSeparator As String,
                                                                         horizontalSeparatorHeadline As Char, horizontalSeparatorCells As Char) As String
-            Dim columnWidths As Integer() = SuggestColumnWidthsForFixedPlainTables(dataTable.Rows, dataTable, 100)
+            Dim columnWidths As Integer() = SuggestColumnWidthsForFixedPlainTables(dataTable.Rows, dataTable, 100, Nothing)
             If columnWidths Is Nothing Then
                 Dim newWidths(dataTable.Columns.Count - 1) As Integer
                 For MyCounter As Integer = 0 To dataTable.Columns.Count - 1
@@ -2128,9 +2140,38 @@ Namespace CompuMaster.Data
                     If columnWidths(MyCounter) > maximumColumnWidth Then columnWidths(MyCounter) = maximumColumnWidth
                 Next
             End If
-            Return _ConvertToPlainTextTableWithFixedColumnWidths(dataTable.Rows, dataTable.TableName, columnWidths, verticalSeparatorHeader, _
-                                                                 verticalSeparatorCells, crossSeparator, horizontalSeparatorHeadline, _
-                                                                 horizontalSeparatorCells)
+            Return _ConvertToPlainTextTableWithFixedColumnWidths(dataTable.Rows, dataTable.TableName, columnWidths, verticalSeparatorHeader,
+                                                                 verticalSeparatorCells, crossSeparator, horizontalSeparatorHeadline,
+                                                                 horizontalSeparatorCells, Nothing)
+        End Function
+
+        ''' <summary>
+        '''     Return a string with all columns and rows, helpfull for debugging purposes
+        ''' </summary>
+        ''' <param name="dataTable">The datatable to retrieve the content from</param>
+        ''' <returns>All rows are separated by fixed width. If no rows have been processed, the user will get notified about this fact</returns>
+        ''' <remarks></remarks>
+        Public Shared Function ConvertToPlainTextTableFixedColumnWidths(ByVal dataTable As DataTable, ByVal minimumColumnWidth As Integer,
+                                                                        maximumColumnWidth As Integer, verticalSeparatorHeader As String,
+                                                                        verticalSeparatorCells As String, crossSeparator As String,
+                                                                        horizontalSeparatorHeadline As Char, horizontalSeparatorCells As Char,
+                                                                        columnFormatting As DataColumnToString) As String
+            Dim columnWidths As Integer() = SuggestColumnWidthsForFixedPlainTables(dataTable.Rows, dataTable, 100, columnFormatting)
+            If columnWidths Is Nothing Then
+                Dim newWidths(dataTable.Columns.Count - 1) As Integer
+                For MyCounter As Integer = 0 To dataTable.Columns.Count - 1
+                    newWidths(MyCounter) = minimumColumnWidth
+                Next
+                columnWidths = newWidths
+            Else
+                For MyCounter As Integer = 0 To columnWidths.Length - 1
+                    If columnWidths(MyCounter) < minimumColumnWidth Then columnWidths(MyCounter) = minimumColumnWidth
+                    If columnWidths(MyCounter) > maximumColumnWidth Then columnWidths(MyCounter) = maximumColumnWidth
+                Next
+            End If
+            Return _ConvertToPlainTextTableWithFixedColumnWidths(dataTable.Rows, dataTable.TableName, columnWidths, verticalSeparatorHeader,
+                                                                 verticalSeparatorCells, crossSeparator, horizontalSeparatorHeadline,
+                                                                 horizontalSeparatorCells, columnFormatting)
         End Function
 
         ''' <summary>
@@ -2150,14 +2191,38 @@ Namespace CompuMaster.Data
         ''' <summary>
         ''' Create a well-formed table for Wiki
         ''' </summary>
+        ''' <param name="rows"></param>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        Public Shared Function ConvertToWikiTable(ByVal rows As DataRowCollection, columnFormatting As DataColumnToString) As String
+            If rows.Count = 0 Then
+                Return Nothing
+            Else
+                Return ConvertToWikiTable(rows(0).Table)
+            End If
+        End Function
+
+        ''' <summary>
+        ''' Create a well-formed table for Wiki
+        ''' </summary>
         ''' <param name="table"></param>
         ''' <returns></returns>
         ''' <remarks></remarks>
         Public Shared Function ConvertToWikiTable(ByVal table As DataTable) As String
+            Return ConvertToWikiTable(table, Nothing)
+        End Function
+
+        ''' <summary>
+        ''' Create a well-formed table for Wiki
+        ''' </summary>
+        ''' <param name="table"></param>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        Public Shared Function ConvertToWikiTable(ByVal table As DataTable, columnFormatting As DataColumnToString) As String
             'For DokuWiki, use
             Const verticalSeparatorHeader As String = " ^ "
             Const verticalSeparatorCells As String = " | "
-            Dim fixedColumnWidths As Integer() = SuggestColumnWidthsForFixedPlainTables(table.Rows, table, 100)
+            Dim fixedColumnWidths As Integer() = SuggestColumnWidthsForFixedPlainTables(table.Rows, table, 100, columnFormatting)
             Dim Result As New System.Text.StringBuilder
             Dim rows As DataRowCollection = table.Rows
             'Add table name
@@ -2206,7 +2271,13 @@ Namespace CompuMaster.Data
                         Result.Append(verticalSeparatorCells)
                     End If
                     If textAlignmentRight = True Then Result.Append(" ")
-                    Result.Append(TrimStringToFixedWidth(String.Format("{0}", row(column)), fixedColumnWidths(ColCounter)))
+                    Dim RenderValue As Object
+                    If columnFormatting Is Nothing Then
+                        RenderValue = row(column)
+                    Else
+                        RenderValue = columnFormatting(column, row(column))
+                    End If
+                    Result.Append(TrimStringToFixedWidth(String.Format("{0}", RenderValue), fixedColumnWidths(ColCounter)))
                     If ColCounter = table.Columns.Count - 1 Then Result.Append(verticalSeparatorCells.TrimEnd)
                 Next
                 Result.Append(System.Environment.NewLine)
@@ -2221,7 +2292,7 @@ Namespace CompuMaster.Data
         ''' <returns></returns>
         ''' <remarks></remarks>
         Public Shared Function SuggestColumnWidthsForFixedPlainTables(table As System.Data.DataTable) As Integer()
-            Return SuggestColumnWidthsForFixedPlainTables(table.Rows, table, 80)
+            Return SuggestColumnWidthsForFixedPlainTables(table.Rows, table, 80, Nothing)
         End Function
 
         ''' <summary>
@@ -2234,7 +2305,7 @@ Namespace CompuMaster.Data
             If rows.Count = 0 Then
                 Return Nothing
             Else
-                Return SuggestColumnWidthsForFixedPlainTables(rows, rows(0).Table, 80)
+                Return SuggestColumnWidthsForFixedPlainTables(rows, rows(0).Table, 80, Nothing)
             End If
         End Function
 
@@ -2248,10 +2319,47 @@ Namespace CompuMaster.Data
             If rows.Length = 0 Then
                 Return Nothing
             Else
-                Return SuggestColumnWidthsForFixedPlainTables(rows, rows(0).Table, 80)
+                Return SuggestColumnWidthsForFixedPlainTables(rows, rows(0).Table, 80, Nothing)
             End If
         End Function
 
+        ''' <summary>
+        ''' Suggests column widths for a table using as minimum 2 chars, but minimum header string length, but also either full cell length for number/date/time columns or for all other types 80 % of all values should be visible completely
+        ''' </summary>
+        ''' <param name="table"></param>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        Public Shared Function SuggestColumnWidthsForFixedPlainTables(table As System.Data.DataTable, columnFormatting As DataColumnToString) As Integer()
+            Return SuggestColumnWidthsForFixedPlainTables(table.Rows, table, 80, columnFormatting)
+        End Function
+
+        ''' <summary>
+        ''' Suggests column widths for a table using as minimum 2 chars, but minimum header string length, but also either full cell length for number/date/time columns or for all other types 80 % of all values should be visible completely
+        ''' </summary>
+        ''' <param name="rows"></param>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        Public Shared Function SuggestColumnWidthsForFixedPlainTables(rows As System.Data.DataRowCollection, columnFormatting As DataColumnToString) As Integer()
+            If rows.Count = 0 Then
+                Return Nothing
+            Else
+                Return SuggestColumnWidthsForFixedPlainTables(rows, rows(0).Table, 80, columnFormatting)
+            End If
+        End Function
+
+        ''' <summary>
+        ''' Suggests column widths for a table using as minimum 2 chars, but minimum header string length, but also either full cell length for number/date/time columns or for all other types 80 % of all values should be visible completely
+        ''' </summary>
+        ''' <param name="rows"></param>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        Public Shared Function SuggestColumnWidthsForFixedPlainTables(rows As System.Data.DataRow(), columnFormatting As DataColumnToString) As Integer()
+            If rows.Length = 0 Then
+                Return Nothing
+            Else
+                Return SuggestColumnWidthsForFixedPlainTables(rows, rows(0).Table, 80, columnFormatting)
+            End If
+        End Function
         ''' <summary>
         ''' Suggests column widths for a table using as minimum 2 chars, but minimum header string length, but also either full cell length for number/date/time columns or for all other types 80 % of all values should be visible completely
         ''' </summary>
@@ -2260,7 +2368,8 @@ Namespace CompuMaster.Data
         ''' <returns></returns>
         ''' <remarks></remarks>
         Private Shared Function SuggestColumnWidthsForFixedPlainTables(rows As System.Data.DataRow(), table As DataTable,
-                                                                       optimalWidthWhenPercentageNumberOfRowsFitIntoCell As Double) As Integer()
+                                                                       optimalWidthWhenPercentageNumberOfRowsFitIntoCell As Double,
+                                                                       columnFormatting As DataColumnToString) As Integer()
             Dim colWidths As New ArrayList
             For ColCounter As Integer = 0 To table.Columns.Count - 1
                 Dim MinWidthForHeader As Integer
@@ -2280,7 +2389,13 @@ Namespace CompuMaster.Data
                         'string or any other object
                         Dim cellWidths(table.Rows.Count - 1) As Integer
                         For RowCounter As Integer = 0 To table.Rows.Count - 1
-                            cellWidths(RowCounter) = String.Format("{0}", table.Rows(RowCounter)(ColCounter)).Length
+                            Dim RenderValue As Object
+                            If columnFormatting Is Nothing Then
+                                RenderValue = table.Rows(RowCounter)(ColCounter)
+                            Else
+                                RenderValue = columnFormatting(table.Columns(ColCounter), table.Rows(RowCounter)(ColCounter))
+                            End If
+                            cellWidths(RowCounter) = String.Format("{0}", RenderValue).Length
                         Next
                         MinWidthForCells = MaxValueOfFirstXPercent(cellWidths, optimalWidthWhenPercentageNumberOfRowsFitIntoCell)
                     End If
@@ -2297,8 +2412,9 @@ Namespace CompuMaster.Data
         ''' <param name="table"></param>
         ''' <returns></returns>
         ''' <remarks></remarks>
-        Private Shared Function SuggestColumnWidthsForFixedPlainTables(rows As System.Data.DataRowCollection, table As DataTable, _
-                                                                       optimalWidthWhenPercentageNumberOfRowsFitIntoCell As Double) As Integer()
+        Private Shared Function SuggestColumnWidthsForFixedPlainTables(rows As System.Data.DataRowCollection, table As DataTable,
+                                                                       optimalWidthWhenPercentageNumberOfRowsFitIntoCell As Double,
+                                                                       columnFormatting As DataColumnToString) As Integer()
             Dim colWidths As New ArrayList
             For ColCounter As Integer = 0 To table.Columns.Count - 1
                 Dim MinWidthForHeader As Integer
@@ -2319,7 +2435,13 @@ Namespace CompuMaster.Data
                         'string or any other object
                         Dim cellWidths(table.Rows.Count - 1) As Integer
                         For RowCounter As Integer = 0 To table.Rows.Count - 1
-                            cellWidths(RowCounter) = String.Format("{0}", table.Rows(RowCounter)(ColCounter)).Length
+                            Dim RenderValue As Object
+                            If columnFormatting Is Nothing Then
+                                RenderValue = table.Rows(RowCounter)(ColCounter)
+                            Else
+                                RenderValue = columnFormatting(table.Columns(ColCounter), table.Rows(RowCounter)(ColCounter))
+                            End If
+                            cellWidths(RowCounter) = String.Format("{0}", RenderValue).Length
                         Next
                         MinWidthForCells = MaxValueOfFirstXPercent(cellWidths, optimalWidthWhenPercentageNumberOfRowsFitIntoCell)
                     End If
@@ -2338,13 +2460,14 @@ Namespace CompuMaster.Data
         ''' <returns>All rows are with fixed column withs. If no rows have been processed, the user will get notified about this fact</returns>
         ''' <remarks></remarks>
         Private Shared Function _ConvertToPlainTextTableWithFixedColumnWidths(ByVal rows As DataRow(), ByVal label As String,
-                                                                              ByVal fixedColumnWidths As Integer()) As String
+                                                                              ByVal fixedColumnWidths As Integer(),
+                                                                              columnFormatting As DataColumnToString) As String
             Const vSeparatorHeader As String = "|"
             Const hSeparatorHeader As Char = "-"c
             Const hSeparatorCells As Char = Nothing
             Const vSeparatorCells As String = "|"
             Const crossSeparator As String = "+"
-            Return _ConvertToPlainTextTableWithFixedColumnWidths(rows, label, fixedColumnWidths, vSeparatorHeader, vSeparatorCells, crossSeparator, hSeparatorHeader, hSeparatorCells)
+            Return _ConvertToPlainTextTableWithFixedColumnWidths(rows, label, fixedColumnWidths, vSeparatorHeader, vSeparatorCells, crossSeparator, hSeparatorHeader, hSeparatorCells, columnFormatting)
         End Function
 
         ''' <summary>
@@ -2355,14 +2478,15 @@ Namespace CompuMaster.Data
         ''' <param name="fixedColumnWidths">The column sizes in chars</param>
         ''' <returns>All rows are with fixed column withs. If no rows have been processed, the user will get notified about this fact</returns>
         ''' <remarks></remarks>
-        Private Shared Function _ConvertToPlainTextTableWithFixedColumnWidths(ByVal rows As DataRowCollection, ByVal label As String, _
-                                                                              ByVal fixedColumnWidths As Integer()) As String
+        Private Shared Function _ConvertToPlainTextTableWithFixedColumnWidths(ByVal rows As DataRowCollection, ByVal label As String,
+                                                                              ByVal fixedColumnWidths As Integer(),
+                                                                              columnFormatting As DataColumnToString) As String
             Const vSeparatorHeader As String = "|"
             Const hSeparatorHeader As Char = "-"c
             Const hSeparatorCells As Char = Nothing
             Const vSeparatorCells As String = "|"
             Const crossSeparator As String = "+"
-            Return _ConvertToPlainTextTableWithFixedColumnWidths(rows, label, fixedColumnWidths, vSeparatorHeader, vSeparatorCells, crossSeparator, hSeparatorHeader, hSeparatorCells)
+            Return _ConvertToPlainTextTableWithFixedColumnWidths(rows, label, fixedColumnWidths, vSeparatorHeader, vSeparatorCells, crossSeparator, hSeparatorHeader, hSeparatorCells, columnFormatting)
         End Function
 
         ''' <summary>
@@ -2381,7 +2505,8 @@ Namespace CompuMaster.Data
         Private Shared Function _ConvertToPlainTextTableWithFixedColumnWidths(ByVal rows As DataRow(), ByVal label As String,
                                                                               ByVal fixedColumnWidths As Integer(), verticalSeparatorHeader As String,
                                                                               verticalSeparatorCells As String, crossSeparator As String,
-                                                                              horizontalSeparatorHeadline As Char, horizontalSeparatorCells As Char) As String
+                                                                              horizontalSeparatorHeadline As Char, horizontalSeparatorCells As Char,
+                                                                              columnFormatting As DataColumnToString) As String
             If Len(verticalSeparatorCells) <> Len(verticalSeparatorHeader) Then Throw New ArgumentException("Length of verticalSeparatorHeader and verticalSeparatorCells must be equal")
             If (Char.GetNumericValue(horizontalSeparatorHeadline) > 0 OrElse Char.GetNumericValue(horizontalSeparatorCells) > 0) AndAlso Len(crossSeparator) <> Len(verticalSeparatorHeader) Then Throw New ArgumentException("Length of verticalSeparatorHeader and crossSeparator must be equal since horizontal lines are requested")
             Dim Result As New System.Text.StringBuilder
@@ -2419,7 +2544,13 @@ Namespace CompuMaster.Data
                 For ColCounter As Integer = 0 To System.Math.Min(row.Table.Columns.Count, fixedColumnWidths.Length) - 1
                     Dim column As DataColumn = row.Table.Columns(ColCounter)
                     If ColCounter <> 0 Then Result.Append(verticalSeparatorCells)
-                    Result.Append(TrimStringToFixedWidth(String.Format("{0}", row(column)), fixedColumnWidths(ColCounter)))
+                    Dim RenderValue As Object
+                    If columnFormatting Is Nothing Then
+                        RenderValue = row(column)
+                    Else
+                        RenderValue = columnFormatting(column, row(column))
+                    End If
+                    Result.Append(TrimStringToFixedWidth(String.Format("{0}", RenderValue), fixedColumnWidths(ColCounter)))
                 Next
                 Result.Append(System.Environment.NewLine)
                 If horizontalSeparatorCells <> Nothing Then
@@ -2436,6 +2567,8 @@ Namespace CompuMaster.Data
             Return Result.ToString
         End Function
 
+        Public Delegate Function DataColumnToString(column As System.Data.DataColumn, value As Object) As String
+
         ''' <summary>
         '''     Return a string with all columns and rows, helpfull for debugging purposes
         ''' </summary>
@@ -2449,10 +2582,11 @@ Namespace CompuMaster.Data
         ''' <param name="horizontalSeparatorCells"></param>
         ''' <returns>All rows are with fixed column withs. If no rows have been processed, the user will get notified about this fact</returns>
         ''' <remarks></remarks>
-        Private Shared Function _ConvertToPlainTextTableWithFixedColumnWidths(ByVal rows As DataRowCollection, ByVal label As String, _
-                                                                              ByVal fixedColumnWidths As Integer(), verticalSeparatorHeader As String, _
-                                                                              verticalSeparatorCells As String, crossSeparator As String, _
-                                                                              horizontalSeparatorHeadline As Char, horizontalSeparatorCells As Char) As String
+        Private Shared Function _ConvertToPlainTextTableWithFixedColumnWidths(ByVal rows As DataRowCollection, ByVal label As String,
+                                                                              ByVal fixedColumnWidths As Integer(), verticalSeparatorHeader As String,
+                                                                              verticalSeparatorCells As String, crossSeparator As String,
+                                                                              horizontalSeparatorHeadline As Char, horizontalSeparatorCells As Char,
+                                                                              columnFormatting As DataColumnToString) As String
             If Len(verticalSeparatorCells) <> Len(verticalSeparatorHeader) Then Throw New ArgumentException("Length of verticalSeparatorHeader and verticalSeparatorCells must be equal")
             If (Char.GetNumericValue(horizontalSeparatorHeadline) > 0 OrElse Char.GetNumericValue(horizontalSeparatorCells) > 0) AndAlso Len(crossSeparator) <> Len(verticalSeparatorHeader) Then Throw New ArgumentException("Length of verticalSeparatorHeader and crossSeparator must be equal since horizontal lines are requested")
             Dim Result As New System.Text.StringBuilder
@@ -2490,7 +2624,13 @@ Namespace CompuMaster.Data
                 For ColCounter As Integer = 0 To System.Math.Min(row.Table.Columns.Count, fixedColumnWidths.Length) - 1
                     Dim column As DataColumn = row.Table.Columns(ColCounter)
                     If ColCounter <> 0 Then Result.Append(verticalSeparatorCells)
-                    Result.Append(TrimStringToFixedWidth(String.Format("{0}", row(column)), fixedColumnWidths(ColCounter)))
+                    Dim RenderValue As Object
+                    If columnFormatting Is Nothing Then
+                        RenderValue = row(column)
+                    Else
+                        RenderValue = columnFormatting(column, row(column))
+                    End If
+                    Result.Append(TrimStringToFixedWidth(String.Format("{0}", RenderValue), fixedColumnWidths(ColCounter)))
                 Next
                 Result.Append(System.Environment.NewLine)
                 If horizontalSeparatorCells <> Nothing Then
@@ -2599,7 +2739,7 @@ Namespace CompuMaster.Data
         ''' -----------------------------------------------------------------------------
         <Obsolete("Use ConvertToPlainTextTableFixedColumnWidths instead", False), ComponentModel.EditorBrowsable(ComponentModel.EditorBrowsableState.Never)> _
         Public Shared Function ConvertToPlainTextTable(ByVal rows As DataRowCollection, ByVal label As String, ByVal fixedColumnWidths As Integer()) As String
-            Return _ConvertToPlainTextTableWithFixedColumnWidths(rows, label, fixedColumnWidths)
+            Return _ConvertToPlainTextTableWithFixedColumnWidths(rows, label, fixedColumnWidths, Nothing)
         End Function
 
         ''' -----------------------------------------------------------------------------
