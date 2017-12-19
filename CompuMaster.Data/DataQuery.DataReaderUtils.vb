@@ -6,27 +6,14 @@ Namespace CompuMaster.Data.DataQuery
     ''' <summary>
     ''' Methods for simplifying the handling with data readers
     ''' </summary>
-    ''' <remarks>
-    ''' </remarks>
-    ''' <history>
-    ''' 	[wezel]	22.10.2009	Created
-    ''' </history>
-    ''' -----------------------------------------------------------------------------
     Public Class DataReaderUtils
 
-        ''' -----------------------------------------------------------------------------
         ''' <summary>
         ''' Lookup if the reader contains a result column with the requested name
         ''' </summary>
         ''' <param name="reader">A data reader object</param>
         ''' <param name="columnName">The name of the column which shall be identified</param>
         ''' <returns>True if the column exist else False</returns>
-        ''' <remarks>
-        ''' </remarks>
-        ''' <history>
-        ''' 	[wezel]	22.10.2009	Created
-        ''' </history>
-        ''' -----------------------------------------------------------------------------
         Public Shared Function ContainsColumn(ByVal reader As IDataReader, ByVal columnName As String) As Boolean
             If reader Is Nothing Then Throw New ArgumentNullException("reader", "Parameter reader is required")
             If columnName = Nothing Then Throw New ArgumentNullException("columnName", "Parameter columnName can't be an empty value")
@@ -36,18 +23,11 @@ Namespace CompuMaster.Data.DataQuery
             Return False
         End Function
 
-        ''' -----------------------------------------------------------------------------
         ''' <summary>
         ''' Return the column names of a data reader as a String array
         ''' </summary>
         ''' <param name="reader">A data reader object</param>
         ''' <returns></returns>
-        ''' <remarks>
-        ''' </remarks>
-        ''' <history>
-        ''' 	[wezel]	22.10.2009	Created
-        ''' </history>
-        ''' -----------------------------------------------------------------------------
         Public Shared Function ColumnNames(ByVal reader As IDataReader) As String()
             If reader Is Nothing Then Return Nothing
             Dim Result As New ArrayList
@@ -57,18 +37,11 @@ Namespace CompuMaster.Data.DataQuery
             Return CType(Result.ToArray(GetType(String)), String())
         End Function
 
-        ''' -----------------------------------------------------------------------------
         ''' <summary>
         ''' Return the column data types of a data reader as an array
         ''' </summary>
         ''' <param name="reader">A data reader object</param>
         ''' <returns></returns>
-        ''' <remarks>
-        ''' </remarks>
-        ''' <history>
-        ''' 	[wezel]	22.10.2009	Created
-        ''' </history>
-        ''' -----------------------------------------------------------------------------
         Public Shared Function DataTypes(ByVal reader As IDataReader) As Type()
             If reader Is Nothing Then Return Nothing
             Dim Result As New ArrayList

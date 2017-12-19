@@ -2,7 +2,6 @@
 
     Friend Class Utils
 
-        ''' -----------------------------------------------------------------------------
         ''' <summary>
         '''     Converts all line breaks into HTML line breaks (&quot;&lt;br&gt;&quot;)
         ''' </summary>
@@ -11,10 +10,6 @@
         ''' <remarks>
         '''     Supported line breaks are linebreaks of Windows, MacOS as well as Linux/Unix.
         ''' </remarks>
-        ''' <history>
-        ''' 	[adminwezel]	06.07.2004	Created
-        ''' </history>
-        ''' -----------------------------------------------------------------------------
         Public Shared Function HTMLEncodeLineBreaks(ByVal text As String) As String
             If text = Nothing Then
                 Return text
@@ -23,19 +18,12 @@
             End If
         End Function
 
-        ''' -----------------------------------------------------------------------------
         ''' <summary>
         '''     Checks for DBNull and returns the second value alternatively
         ''' </summary>
         ''' <param name="CheckValueIfDBNull">The value to be checked</param>
         ''' <param name="ReplaceWithThis">The alternative value, null (Nothing in VisualBasic) if not defined</param>
         ''' <returns>A value which is not DBNull</returns>
-        ''' <remarks>
-        ''' </remarks>
-        ''' <history>
-        ''' 	[adminwezel]	06.07.2004	Created
-        ''' </history>
-        ''' -----------------------------------------------------------------------------
         Public Shared Function Nz(ByVal CheckValueIfDBNull As Object, ByVal ReplaceWithThis As String) As String
             If IsDBNull(CheckValueIfDBNull) Then
                 Return (ReplaceWithThis)
@@ -44,14 +32,14 @@
             End If
         End Function
 
-		''' <summary>
-		''' Build string from given objects using stringbuilder
-		''' </summary>
-		''' <returns>Builded string</returns>
-		''' <history>
-		''' [clemens] 05.06.2013
-		''' </history>
-		Public Shared Function BuildString(ByVal ParamArray str As Object()) As String
+        ''' <summary>
+        ''' Build string from given objects using stringbuilder
+        ''' </summary>
+        ''' <returns>Builded string</returns>
+        ''' <history>
+        ''' [clemens] 05.06.2013
+        ''' </history>
+        Public Shared Function BuildString(ByVal ParamArray str As Object()) As String
 			Dim sb As Text.StringBuilder = New Text.StringBuilder()
 
 			For counter As Integer = 0 To str.Length - 1

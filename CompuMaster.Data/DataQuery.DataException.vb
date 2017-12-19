@@ -3,16 +3,9 @@ Option Strict On
 
 Namespace CompuMaster.Data.DataQuery
 
-    ''' -----------------------------------------------------------------------------
     ''' <summary>
     '''     Data execution exceptions with details on the executed IDbCommand
     ''' </summary>
-    ''' <remarks>
-    ''' </remarks>
-    ''' <history>
-    ''' 	[adminwezel]	23.06.2005	Created
-    ''' </history>
-    ''' -----------------------------------------------------------------------------
     Public Class DataException
         Inherits System.Exception
 
@@ -35,18 +28,11 @@ Namespace CompuMaster.Data.DataQuery
             End If
         End Sub
 
-        ''' -----------------------------------------------------------------------------
         ''' <summary>
         '''     Convert the collection with all the parameters to a plain text string
         ''' </summary>
         ''' <param name="parameters">An IDataParameterCollection of a IDbCommand</param>
         ''' <returns></returns>
-        ''' <remarks>
-        ''' </remarks>
-        ''' <history>
-        ''' 	[adminwezel]	23.06.2005	Created
-        ''' </history>
-        ''' -----------------------------------------------------------------------------
         Private Function ConvertParameterCollectionToString(ByVal parameters As System.Data.IDataParameterCollection) As String
             Dim Result As String = Nothing
             For MyCounter As Integer = 0 To parameters.Count - 1

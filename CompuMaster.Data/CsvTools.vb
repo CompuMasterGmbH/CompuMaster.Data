@@ -15,7 +15,6 @@ Namespace CompuMaster.Data
 #Region "Read data"
 
 #Region "Fixed columns"
-        ''' -----------------------------------------------------------------------------
         ''' <summary>
         '''     Read from a CSV table
         ''' </summary>
@@ -27,10 +26,6 @@ Namespace CompuMaster.Data
         ''' <remarks>
         ''' In case of duplicate column names, all additional occurances of the same column name will be modified to use a unique column name
         ''' </remarks>
-        ''' <history>
-        ''' 	[adminsupport]	19.04.2005	Created
-        ''' </history>
-        ''' -----------------------------------------------------------------------------
         Private Shared Function ReadDataTableFromCsvReader(ByVal reader As StreamReader, ByVal includesColumnHeaders As Boolean, ByVal cultureFormatProvider As System.Globalization.CultureInfo, ByVal columnWidths As Integer(), ByVal convertEmptyStringsToDBNull As Boolean, lineEncodings As CompuMaster.Data.Csv.ReadLineEncodings, lineEncodingAutoConversions As CompuMaster.Data.Csv.ReadLineEncodingAutoConversion) As DataTable
 
             If cultureFormatProvider Is Nothing Then
@@ -99,7 +94,6 @@ Namespace CompuMaster.Data
 
         End Function
 
-        ''' -----------------------------------------------------------------------------
         ''' <summary>
         '''     Read from a CSV file
         ''' </summary>
@@ -112,10 +106,6 @@ Namespace CompuMaster.Data
         ''' <remarks>
         ''' In case of duplicate column names, all additional occurances of the same column name will be modified to use a unique column name
         ''' </remarks>
-        ''' <history>
-        ''' 	[adminwezel]	03.07.2004	Created
-        ''' </history>
-        ''' -----------------------------------------------------------------------------
         Friend Shared Function ReadDataTableFromCsvFile(ByVal path As String, ByVal includesColumnHeaders As Boolean, ByVal columnWidths As Integer(), ByVal encoding As String, ByVal convertEmptyStringsToDBNull As Boolean, lineEncodings As CompuMaster.Data.Csv.ReadLineEncodings, lineEncodingAutoConversions As CompuMaster.Data.Csv.ReadLineEncodingAutoConversion) As DataTable
 
             Dim Result As New DataTable
@@ -149,7 +139,6 @@ Namespace CompuMaster.Data
 
         End Function
 
-        ''' -----------------------------------------------------------------------------
         ''' <summary>
         '''     Read from a CSV file
         ''' </summary>
@@ -163,10 +152,6 @@ Namespace CompuMaster.Data
         ''' <remarks>
         ''' In case of duplicate column names, all additional occurances of the same column name will be modified to use a unique column name
         ''' </remarks>
-        ''' <history>
-        ''' 	[adminwezel]	03.07.2004	Created
-        ''' </history>
-        ''' -----------------------------------------------------------------------------
         Friend Shared Function ReadDataTableFromCsvFile(ByVal path As String, ByVal includesColumnHeaders As Boolean, ByVal columnWidths As Integer(), ByVal encoding As System.Text.Encoding, ByVal cultureFormatProvider As System.Globalization.CultureInfo, ByVal convertEmptyStringsToDBNull As Boolean, lineEncodings As CompuMaster.Data.Csv.ReadLineEncodings, lineEncodingAutoConversions As CompuMaster.Data.Csv.ReadLineEncodingAutoConversion) As DataTable
 
             Dim Result As New DataTable
@@ -200,7 +185,6 @@ Namespace CompuMaster.Data
 
         End Function
 
-        ''' -----------------------------------------------------------------------------
         ''' <summary>
         '''     Read from a CSV table
         ''' </summary>
@@ -212,10 +196,6 @@ Namespace CompuMaster.Data
         ''' <remarks>
         ''' In case of duplicate column names, all additional occurances of the same column name will be modified to use a unique column name
         ''' </remarks>
-        ''' <history>
-        ''' 	[adminwezel]	03.07.2004	Created
-        ''' </history>
-        ''' -----------------------------------------------------------------------------
         Friend Shared Function ReadDataTableFromCsvString(ByVal data As String, ByVal includesColumnHeaders As Boolean, ByVal columnWidths As Integer(), ByVal convertEmptyStringsToDBNull As Boolean, lineEncodings As CompuMaster.Data.Csv.ReadLineEncodings, lineEncodingAutoConversions As CompuMaster.Data.Csv.ReadLineEncodingAutoConversion) As DataTable
 
             Dim Result As New DataTable
@@ -233,7 +213,6 @@ Namespace CompuMaster.Data
 
         End Function
 
-        ''' -----------------------------------------------------------------------------
         ''' <summary>
         '''     Read from a CSV table
         ''' </summary>
@@ -246,10 +225,6 @@ Namespace CompuMaster.Data
         ''' <remarks>
         ''' In case of duplicate column names, all additional occurances of the same column name will be modified to use a unique column name
         ''' </remarks>
-        ''' <history>
-        ''' 	[adminwezel]	03.07.2004	Created
-        ''' </history>
-        ''' -----------------------------------------------------------------------------
         Friend Shared Function ReadDataTableFromCsvString(ByVal data As String, ByVal includesColumnHeaders As Boolean, ByVal cultureFormatProvider As System.Globalization.CultureInfo, ByVal columnWidths As Integer(), ByVal convertEmptyStringsToDBNull As Boolean, lineEncodings As CompuMaster.Data.Csv.ReadLineEncodings, lineEncodingAutoConversions As CompuMaster.Data.Csv.ReadLineEncodingAutoConversion) As DataTable
 
             Dim Result As New DataTable
@@ -267,7 +242,6 @@ Namespace CompuMaster.Data
 
         End Function
 
-        ''' -----------------------------------------------------------------------------
         ''' <summary>
         '''     Split a line content into separate column values and add them to the output list
         ''' </summary>
@@ -277,10 +251,6 @@ Namespace CompuMaster.Data
         ''' <param name="columnWidths">An array of column widths in their order</param>
         ''' <remarks>
         ''' </remarks>
-        ''' <history>
-        ''' 	[AdminSupport]	29.08.2005	Created
-        ''' </history>
-        ''' -----------------------------------------------------------------------------
         Private Shared Sub SplitFixedCsvLineIntoCellValues(ByRef lineContent As String, ByVal outputList As ArrayList, ByRef startposition As Integer, ByVal columnWidths As Integer())
 
             Dim CurrentColumnValue As System.Text.StringBuilder = Nothing
@@ -324,7 +294,6 @@ Namespace CompuMaster.Data
 
         End Sub
 
-        ''' -----------------------------------------------------------------------------
         ''' <summary>
         '''     Calculate if the current position is the first position of a new column
         ''' </summary>
@@ -332,12 +301,6 @@ Namespace CompuMaster.Data
         ''' <param name="startPosition">The start position to which the columnWidhts are related to</param>
         ''' <param name="columnWidths">An array containing the definitions of the column widths</param>
         ''' <returns>True if the current position identifies a new column value, otherwise False</returns>
-        ''' <remarks>
-        ''' </remarks>
-        ''' <history>
-        ''' 	[adminsupport]	07.03.2006	Created
-        ''' </history>
-        ''' -----------------------------------------------------------------------------
         Private Shared Function SplitFixedCsvLineIntoCellValuesIsNewColumnPosition(ByVal currentPosition As Integer, ByVal startPosition As Integer, ByVal columnWidths As Integer()) As Boolean
             Dim positionDifference As Integer = currentPosition - startPosition
             For MyCounter As Integer = 0 To columnWidths.Length - 1
@@ -360,7 +323,7 @@ Namespace CompuMaster.Data
 #End Region
 
 #Region "Separator separation"
-        ''' -----------------------------------------------------------------------------
+
         ''' <summary>
         '''     Read from a CSV file
         ''' </summary>
@@ -375,10 +338,6 @@ Namespace CompuMaster.Data
         ''' <remarks>
         ''' In case of duplicate column names, all additional occurances of the same column name will be modified to use a unique column name
         ''' </remarks>
-        ''' <history>
-        ''' 	[adminwezel]	03.07.2004	Created
-        ''' </history>
-        ''' -----------------------------------------------------------------------------
         Friend Shared Function ReadDataTableFromCsvFile(ByVal path As String, ByVal includesColumnHeaders As Boolean, ByVal encoding As String, ByVal columnSeparator As Char, ByVal recognizeTextBy As Char, ByVal recognizeMultipleColumnSeparatorCharsAsOne As Boolean, ByVal convertEmptyStringsToDBNull As Boolean, lineEncodings As CompuMaster.Data.Csv.ReadLineEncodings, lineEncodingAutoConversions As CompuMaster.Data.Csv.ReadLineEncodingAutoConversion) As DataTable
 
             Dim Result As New DataTable
@@ -412,7 +371,6 @@ Namespace CompuMaster.Data
 
         End Function
 
-        ''' -----------------------------------------------------------------------------
         ''' <summary>
         '''     Read from a CSV file
         ''' </summary>
@@ -427,10 +385,6 @@ Namespace CompuMaster.Data
         ''' <remarks>
         ''' In case of duplicate column names, all additional occurances of the same column name will be modified to use a unique column name
         ''' </remarks>
-        ''' <history>
-        ''' 	[adminwezel]	03.07.2004	Created
-        ''' </history>
-        ''' -----------------------------------------------------------------------------
         Friend Shared Function ReadDataTableFromCsvFile(ByVal path As String, ByVal includesColumnHeaders As Boolean, ByVal encoding As System.Text.Encoding, ByVal cultureFormatProvider As System.Globalization.CultureInfo, ByVal recognizeTextBy As Char, ByVal recognizeMultipleColumnSeparatorCharsAsOne As Boolean, ByVal convertEmptyStringsToDBNull As Boolean, lineEncodings As CompuMaster.Data.Csv.ReadLineEncodings, lineEncodingAutoConversions As CompuMaster.Data.Csv.ReadLineEncodingAutoConversion) As DataTable
 
             Dim Result As New DataTable
@@ -464,7 +418,6 @@ Namespace CompuMaster.Data
 
         End Function
 
-        ''' -----------------------------------------------------------------------------
         ''' <summary>
         '''     Read from a CSV table
         ''' </summary>
@@ -478,10 +431,6 @@ Namespace CompuMaster.Data
         ''' <remarks>
         ''' In case of duplicate column names, all additional occurances of the same column name will be modified to use a unique column name
         ''' </remarks>
-        ''' <history>
-        ''' 	[adminsupport]	19.04.2005	Created
-        ''' </history>
-        ''' -----------------------------------------------------------------------------
         Private Shared Function ReadDataTableFromCsvReader(ByVal reader As StreamReader, ByVal includesColumnHeaders As Boolean, ByVal cultureFormatProvider As System.Globalization.CultureInfo, ByVal columnSeparator As Char, ByVal recognizeTextBy As Char, ByVal recognizeMultipleColumnSeparatorCharsAsOne As Boolean, ByVal convertEmptyStringsToDBNull As Boolean, lineEncodings As CompuMaster.Data.Csv.ReadLineEncodings, lineEncodingAutoConversions As CompuMaster.Data.Csv.ReadLineEncodingAutoConversion) As DataTable
 
             If cultureFormatProvider Is Nothing Then
@@ -552,7 +501,6 @@ Namespace CompuMaster.Data
 
         End Function
 
-        ''' -----------------------------------------------------------------------------
         ''' <summary>
         '''     Split a line content into separate column values and add them to the output list
         ''' </summary>
@@ -562,12 +510,6 @@ Namespace CompuMaster.Data
         ''' <param name="columnSeparator">Choose the required character for splitting the columns. Set to null (Nothing in VisualBasic) to enable fixed column widths mode</param>
         ''' <param name="recognizeTextBy">A character indicating the start and end of text string</param>
         ''' <param name="recognizeMultipleColumnSeparatorCharsAsOne">Specifies whether we should treat multiple column seperators as one</param>
-        ''' <remarks>
-        ''' </remarks>
-        ''' <history>
-        ''' 	[AdminSupport]	29.08.2005	Created
-        ''' </history>
-        ''' -----------------------------------------------------------------------------
         Private Shared Sub SplitCsvLineIntoCellValues(ByRef lineContent As String, ByVal outputList As ArrayList, ByRef startposition As Integer, ByVal columnSeparator As Char, ByVal recognizeTextBy As Char, ByVal recognizeMultipleColumnSeparatorCharsAsOne As Boolean, lineEncodings As CompuMaster.Data.Csv.ReadLineEncodings, lineEncodingAutoConversions As CompuMaster.Data.Csv.ReadLineEncodingAutoConversion)
 
             Dim CurrentColumnValue As New System.Text.StringBuilder
@@ -722,7 +664,6 @@ Namespace CompuMaster.Data
 
         End Sub
 
-        ''' -----------------------------------------------------------------------------
         ''' <summary>
         '''     Read from a CSV table
         ''' </summary>
@@ -736,10 +677,6 @@ Namespace CompuMaster.Data
         ''' <remarks>
         ''' In case of duplicate column names, all additional occurances of the same column name will be modified to use a unique column name
         ''' </remarks>
-        ''' <history>
-        ''' 	[adminwezel]	03.07.2004	Created
-        ''' </history>
-        ''' -----------------------------------------------------------------------------
         Friend Shared Function ReadDataTableFromCsvString(ByVal data As String, ByVal includesColumnHeaders As Boolean, ByVal columnSeparator As Char, ByVal recognizeTextBy As Char, ByVal recognizeMultipleColumnSeparatorCharsAsOne As Boolean, ByVal convertEmptyStringsToDBNull As Boolean, lineEncodings As CompuMaster.Data.Csv.ReadLineEncodings, lineEncodingAutoConversions As CompuMaster.Data.Csv.ReadLineEncodingAutoConversion) As DataTable
 
             Dim Result As New DataTable
@@ -757,7 +694,6 @@ Namespace CompuMaster.Data
 
         End Function
 
-        ''' -----------------------------------------------------------------------------
         ''' <summary>
         '''     Read from a CSV table
         ''' </summary>
@@ -771,10 +707,6 @@ Namespace CompuMaster.Data
         ''' <remarks>
         ''' In case of duplicate column names, all additional occurances of the same column name will be modified to use a unique column name
         ''' </remarks>
-        ''' <history>
-        ''' 	[adminwezel]	03.07.2004	Created
-        ''' </history>
-        ''' -----------------------------------------------------------------------------
         Friend Shared Function ReadDataTableFromCsvString(ByVal data As String, ByVal includesColumnHeaders As Boolean, ByVal cultureFormatProvider As System.Globalization.CultureInfo, ByVal recognizeTextBy As Char, ByVal recognizeMultipleColumnSeparatorCharsAsOne As Boolean, ByVal convertEmptyStringsToDBNull As Boolean, lineEncodings As CompuMaster.Data.Csv.ReadLineEncodings, lineEncodingAutoConversions As CompuMaster.Data.Csv.ReadLineEncodingAutoConversion) As DataTable
 
             Dim Result As New DataTable
@@ -792,17 +724,10 @@ Namespace CompuMaster.Data
 
         End Function
 
-        ''' -----------------------------------------------------------------------------
         ''' <summary>
         '''     Convert DBNull values to empty strings
         ''' </summary>
         ''' <param name="data">The data which might contain DBNull values</param>
-        ''' <remarks>
-        ''' </remarks>
-        ''' <history>
-        ''' 	[wezel]	14.04.2005	Created
-        ''' </history>
-        ''' -----------------------------------------------------------------------------
         Private Shared Sub ConvertDBNullValuesToEmptyStrings(ByVal data As DataTable)
 
             'Parameter validation
@@ -829,17 +754,10 @@ Namespace CompuMaster.Data
 
         End Sub
 
-        ''' -----------------------------------------------------------------------------
         ''' <summary>
         '''     Convert empty string values to DBNull
         ''' </summary>
         ''' <param name="data">The data which might contain empty strings</param>
-        ''' <remarks>
-        ''' </remarks>
-        ''' <history>
-        ''' 	[wezel]	14.04.2005	Created
-        ''' </history>
-        ''' -----------------------------------------------------------------------------
         Private Shared Sub ConvertEmptyStringsToDBNullValue(ByVal data As DataTable)
 
             'Parameter validation
@@ -922,7 +840,6 @@ Namespace CompuMaster.Data
 
         End Sub
 
-        ''' -----------------------------------------------------------------------------
         ''' <summary>
         '''     Trims a string to exactly the required fix size
         ''' </summary>
@@ -930,12 +847,6 @@ Namespace CompuMaster.Data
         ''' <param name="fixedLengthSize"></param>
         ''' <param name="alignedRight">Add additionally required spaces on the left (True) or on the right (False)</param>
         ''' <returns></returns>
-        ''' <remarks>
-        ''' </remarks>
-        ''' <history>
-        ''' 	[adminsupport]	09.03.2006	Created
-        ''' </history>
-        ''' -----------------------------------------------------------------------------
         Private Shared Function FixedLengthText(ByVal text As String, ByVal fixedLengthSize As Integer, ByVal alignedRight As Boolean) As String
             Dim Result As String = Mid(text, 1, fixedLengthSize)
             If Result.Length < fixedLengthSize Then
@@ -1026,7 +937,6 @@ Namespace CompuMaster.Data
 
         End Function
 
-        ''' -----------------------------------------------------------------------------
         ''' <summary>
         '''     Convert the datatable to a string based, comma-separated format
         ''' </summary>
@@ -1036,12 +946,6 @@ Namespace CompuMaster.Data
         ''' <param name="columnSeparator"></param>
         ''' <param name="recognizeTextBy"></param>
         ''' <returns></returns>
-        ''' <remarks>
-        ''' </remarks>
-        ''' <history>
-        ''' 	[adminsupport]	09.03.2006	Created
-        ''' </history>
-        ''' -----------------------------------------------------------------------------
         Friend Shared Function ConvertDataTableToCsv(ByVal dataTable As System.Data.DataTable, ByVal includesColumnHeaders As Boolean, ByVal cultureFormatProvider As System.Globalization.CultureInfo, ByVal columnSeparator As String, ByVal recognizeTextBy As Char, lineEncodings As CompuMaster.Data.Csv.WriteLineEncodings) As System.Text.StringBuilder
 
             If cultureFormatProvider Is Nothing Then

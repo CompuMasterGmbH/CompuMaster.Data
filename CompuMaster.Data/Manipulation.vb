@@ -281,7 +281,7 @@ Namespace CompuMaster.Data
             Dim reg As New System.Text.RegularExpressions.Regex(pattern)
             Return reg.IsMatch(value)
         End Function
-        ''' -----------------------------------------------------------------------------
+
         ''' <summary>
         ''' Create an SQL command text to create missing columns on the remote database
         ''' </summary>
@@ -292,10 +292,6 @@ Namespace CompuMaster.Data
         ''' <remarks>
         ''' This function doesn't create any column update commands to change existing columns; it just creates commands for adding additional columns.
         ''' </remarks>
-        ''' <history>
-        ''' 	[wezel]	03.12.2009	Created
-        ''' </history>
-        ''' -----------------------------------------------------------------------------
         Private Shared Function AddMissingColumnsCommandText(ByVal sourceTable As DataTable, ByVal destinationTable As DataTable, ByVal ddlLanguage As DdlLanguage) As String
             Dim OpenBrackets, CloseBrackets As String
             If destinationTable.TableName.IndexOf("[") >= 0 AndAlso destinationTable.TableName.IndexOf("]") >= 0 Then
@@ -309,7 +305,7 @@ Namespace CompuMaster.Data
             End If
             Select Case ddlLanguage
 
-                Case ddlLanguage.PostgreSQL
+                Case DdlLanguage.PostgreSQL
                     Dim ColumnCreationArguments As String = Nothing
                     OpenBrackets = """"
                     CloseBrackets = """"
@@ -351,7 +347,7 @@ Namespace CompuMaster.Data
                     If ColumnCreationArguments <> Nothing Then ColumnCreationArguments = "ALTER TABLE " & OpenBrackets & destinationTable.TableName & CloseBrackets & " ADD COLUMN " & ColumnCreationArguments
                     Return ColumnCreationArguments
                     'Return Nothing
-                Case ddlLanguage.MSJetEngine
+                Case DdlLanguage.MSJetEngine
                     Dim ColumnCreationArguments As String = Nothing
                     For Each MyColumn As DataColumn In sourceTable.Columns
                         If destinationTable.Columns.Contains(MyColumn.ColumnName) = False Then
@@ -386,7 +382,7 @@ Namespace CompuMaster.Data
                     Next
                     If ColumnCreationArguments <> Nothing Then ColumnCreationArguments = "ALTER TABLE " & OpenBrackets & destinationTable.TableName & CloseBrackets & " ADD " & ColumnCreationArguments
                     Return ColumnCreationArguments
-                Case ddlLanguage.MSSqlServer
+                Case DdlLanguage.MSSqlServer
                     Dim ColumnCreationArguments As String = Nothing
                     For Each MyColumn As DataColumn In sourceTable.Columns
                         If destinationTable.Columns.Contains(MyColumn.ColumnName) = False Then
@@ -539,18 +535,11 @@ Namespace CompuMaster.Data
             UpdateCommand.CommandText = Replace(UpdateCommand.CommandText, " " & remoteTableColumnName & " = ", " [" & remoteTableColumnName & "] = ")
         End Sub
 
-        ''' -----------------------------------------------------------------------------
         ''' <summary>
         ''' Lookup a full set of column names used in a table
         ''' </summary>
         ''' <param name="table">A data table</param>
         ''' <returns>An array of strings with the column names of the data table</returns>
-        ''' <remarks>
-        ''' </remarks>
-        ''' <history>
-        ''' 	[wezel]	03.12.2009	Created
-        ''' </history>
-        ''' -----------------------------------------------------------------------------
         Private Shared Function LookupColumnNamesOnRemoteTable(ByVal table As DataTable) As String()
             Dim Result As New ArrayList
             For MyCounter As Integer = 0 To table.Columns.Count - 1
@@ -638,17 +627,10 @@ Namespace CompuMaster.Data
         End Function
 
 
-        ''' -----------------------------------------------------------------------------
         ''' <summary>
         '''     Write back changes to the data connection
         ''' </summary>
         ''' <param name="container"></param>
-        ''' <remarks>
-        ''' </remarks>
-        ''' <history>
-        ''' 	[wezel]	23.05.2006	Created
-        ''' </history>
-        ''' -----------------------------------------------------------------------------
         Public Shared Sub UpdateCodeManipulatedData(ByVal container As CompuMaster.Data.DataManipulationResult)
             UpdateCodeManipulatedData(container, True)
         End Sub

@@ -10,19 +10,12 @@ Namespace CompuMaster.Data
     ''' </remarks>
     Friend Class DataTablesTools
 
-        ''' -----------------------------------------------------------------------------
         ''' <summary>
         ''' Remove rows with duplicate values in a given column
         ''' </summary>
         ''' <param name="dataTable">A datatable with duplicate values</param>
         ''' <param name="columnName">Column name of the datatable which contains the duplicate values</param>
         ''' <returns>A datatable with unique records in the specified column</returns>
-        ''' <remarks>
-        ''' </remarks>
-        ''' <history>
-        ''' 	[zeutzheim]	04.05.2007	Created
-        ''' </history>
-        ''' -----------------------------------------------------------------------------
         Friend Shared Function RemoveDuplicates(ByVal dataTable As DataTable, ByVal columnName As String) As DataTable
             Dim hTable As New Hashtable
             Dim duplicateList As New ArrayList
@@ -46,7 +39,6 @@ Namespace CompuMaster.Data
             Return dataTable
         End Function 'RemoveDuplicateRows
 
-        ''' -----------------------------------------------------------------------------
         ''' <summary>
         '''     Drop all columns except the required ones
         ''' </summary>
@@ -56,10 +48,6 @@ Namespace CompuMaster.Data
         '''     If the list of the remaining columns contains some column names which are not existing, then those column names will be ignored. There will be no exception in this case.
         '''     The names of the columns are handled case-insensitive.
         ''' </remarks>
-        ''' <history>
-        ''' 	[adminsupport]	07.03.2006	Created
-        ''' </history>
-        ''' -----------------------------------------------------------------------------
         Friend Shared Sub KeepColumnsAndRemoveAllOthers(ByVal table As DataTable, ByVal remainingColumns As String())
             Dim KeepColFlags(table.Columns.Count - 1) As Boolean
             'Identify unwanted columns
@@ -80,18 +68,11 @@ Namespace CompuMaster.Data
             Next
         End Sub
 
-        ''' -----------------------------------------------------------------------------
         ''' <summary>
         '''     Lookup the row index for a data row in a data table
         ''' </summary>
         ''' <param name="dataRow">The data row whose index number is required</param>
         ''' <returns>An index number for the given data row</returns>
-        ''' <remarks>
-        ''' </remarks>
-        ''' <history>
-        ''' 	[AdminSupport]	12.09.2005	Created
-        ''' </history>
-        ''' -----------------------------------------------------------------------------
         Friend Shared Function RowIndex(ByVal dataRow As DataRow) As Integer
             If dataRow.Table Is Nothing Then
                 Throw New Exception("DataRow must be part of a table to retrieve its row index")
@@ -104,18 +85,11 @@ Namespace CompuMaster.Data
             Throw New Exception("Unexpected error: provided data row can't be identified in its data table. Please contact your software vendor.")
         End Function
 
-        ''' -----------------------------------------------------------------------------
         ''' <summary>
         '''     Lookup the column index for a data column in a data table
         ''' </summary>
         ''' <param name="column">The data column whose index number is required</param>
         ''' <returns>An index number for the given column</returns>
-        ''' <remarks>
-        ''' </remarks>
-        ''' <history>
-        ''' 	[AdminSupport]	12.09.2005	Created
-        ''' </history>
-        ''' -----------------------------------------------------------------------------
         Friend Shared Function ColumnIndex(ByVal column As DataColumn) As Integer
             If column.Table Is Nothing Then
                 Throw New Exception("DataColumn must be part of a table to retrieve its column index")
@@ -128,35 +102,21 @@ Namespace CompuMaster.Data
             Throw New Exception("Unexpected error: provided data column can't be identified in its data table. Please contact your software vendor.")
         End Function
 
-        ''' -----------------------------------------------------------------------------
         ''' <summary>
         '''     Find duplicate values in a given row and calculate the number of occurances of each value in the table
         ''' </summary>
         ''' <param name="column">A column of a datatable</param>
         ''' <returns>A hashtable containing the origin column value as key and the number of occurances as value</returns>
-        ''' <remarks>
-        ''' </remarks>
-        ''' <history>
-        ''' 	[AdminSupport]	30.08.2005	Created
-        ''' </history>
-        ''' -----------------------------------------------------------------------------
         Friend Shared Function FindDuplicates(ByVal column As DataColumn) As Hashtable
             Return FindDuplicates(column, 2)
         End Function
 
-        ''' -----------------------------------------------------------------------------
         ''' <summary>
         '''     Find duplicate values in a given row and calculate the number of occurances of each value in the table
         ''' </summary>
         ''' <param name="column">A column of a datatable</param>
         ''' <param name="minOccurances">Only values with occurances equal or more than this number will be returned</param>
         ''' <returns>A hashtable containing the origin column value as key and the number of occurances as value</returns>
-        ''' <remarks>
-        ''' </remarks>
-        ''' <history>
-        ''' 	[AdminSupport]	30.08.2005	Created
-        ''' </history>
-        ''' -----------------------------------------------------------------------------
         Friend Shared Function FindDuplicates(ByVal column As DataColumn, ByVal minOccurances As Integer) As Hashtable
 
             Dim Table As DataTable = column.Table
@@ -189,18 +149,11 @@ Namespace CompuMaster.Data
 
         End Function
 
-        ''' -----------------------------------------------------------------------------
         ''' <summary>
         '''     Convert the first two columns into objects which can be consumed by the ListControl objects in the System.Windows.Forms or System.Web.WebControl namespaces
         ''' </summary>
         ''' <param name="datatable">The datatable which contains a key column and a value column for the list control</param>
         ''' <returns>An array of ListControlItem</returns>
-        ''' <remarks>
-        ''' </remarks>
-        ''' <history>
-        ''' 	[adminsupport]	29.06.2005	Created
-        ''' </history>
-        ''' -----------------------------------------------------------------------------
         Friend Shared Function ConvertDataTableToListControlItem(ByVal datatable As DataTable) As ListControlItem()
             If datatable Is Nothing Then
                 Return Nothing
@@ -221,12 +174,6 @@ Namespace CompuMaster.Data
         ''' <summary>
         ''' A list item which can be consumed by list controls in namespaces System.Windows as well as in System.Web
         ''' </summary>
-        ''' <remarks>
-        ''' </remarks>
-        ''' <history>
-        ''' 	[wezel]	22.10.2009	Created
-        ''' </history>
-        ''' -----------------------------------------------------------------------------
         Friend Class ListControlItem
 
             Private _Key As Object
@@ -258,18 +205,11 @@ Namespace CompuMaster.Data
             End Property
         End Class
 
-        ''' -----------------------------------------------------------------------------
         ''' <summary>
         '''     Convert a dataset to an xml string with data and schema information
         ''' </summary>
         ''' <param name="dataset"></param>
         ''' <returns></returns>
-        ''' <remarks>
-        ''' </remarks>
-        ''' <history>
-        ''' 	[AdminSupport]	04.05.2005	Created
-        ''' </history>
-        ''' -----------------------------------------------------------------------------
         Friend Shared Function ConvertDatasetToXml(ByVal dataset As DataSet) As String
             Dim sbuilder As New System.Text.StringBuilder
             Dim xmlSW As System.IO.StringWriter = New System.IO.StringWriter(sbuilder)
@@ -278,18 +218,11 @@ Namespace CompuMaster.Data
             Return sbuilder.ToString
         End Function
 
-        ''' -----------------------------------------------------------------------------
         ''' <summary>
         '''     Convert an xml string to a dataset
         ''' </summary>
         ''' <param name="xml"></param>
         ''' <returns></returns>
-        ''' <remarks>
-        ''' </remarks>
-        ''' <history>
-        ''' 	[AdminSupport]	04.05.2005	Created
-        ''' </history>
-        ''' -----------------------------------------------------------------------------
         Friend Shared Function ConvertXmlToDataset(ByVal xml As String) As DataSet
             Dim reader As System.IO.StringReader = New System.IO.StringReader(xml)
             Dim DataSet As New DataSet
@@ -298,24 +231,16 @@ Namespace CompuMaster.Data
             Return DataSet
         End Function
 
-        ''' -----------------------------------------------------------------------------
         ''' <summary>
         '''     Create a new data table clone with only some first rows
         ''' </summary>
         ''' <param name="SourceTable">The source table to be copied</param>
         ''' <param name="NumberOfRows">The number of rows to be copied</param>
         ''' <returns>The new clone of the datatable</returns>
-        ''' <remarks>
-        ''' </remarks>
-        ''' <history>
-        ''' 	[adminwezel]	28.08.2004	Created
-        ''' </history>
-        ''' -----------------------------------------------------------------------------
         Friend Shared Function GetDataTableWithSubsetOfRows(ByVal SourceTable As DataTable, ByVal NumberOfRows As Integer) As DataTable
             Return GetDataTableWithSubsetOfRows(SourceTable, 0, NumberOfRows)
         End Function
 
-        ''' -----------------------------------------------------------------------------
         ''' <summary>
         '''     Create a new data table clone with only some first rows
         ''' </summary>
@@ -323,12 +248,6 @@ Namespace CompuMaster.Data
         ''' <param name="StartAtRow">The position where to start the copy process, the first row is at 0</param>
         ''' <param name="NumberOfRows">The number of rows to be copied</param>
         ''' <returns>The new clone of the datatable</returns>
-        ''' <remarks>
-        ''' </remarks>
-        ''' <history>
-        ''' 	[adminwezel]	28.08.2004	Created
-        ''' </history>
-        ''' -----------------------------------------------------------------------------
         Friend Shared Function GetDataTableWithSubsetOfRows(ByVal SourceTable As DataTable, ByVal StartAtRow As Integer, ByVal NumberOfRows As Integer) As DataTable
             Dim Result As DataTable = SourceTable.Clone
             Dim MyRows As DataRowCollection = SourceTable.Rows
@@ -358,7 +277,6 @@ Namespace CompuMaster.Data
 
         End Function
 
-        ''' -----------------------------------------------------------------------------
         ''' <summary>
         '''     Creates a complete clone of a DataRow with structure as well as data
         ''' </summary>
@@ -367,10 +285,6 @@ Namespace CompuMaster.Data
         ''' <remarks>
         '''     The resulting DataRow has got the schema from the sourceRow's DataTable, but it hasn't been added to the table yet.
         ''' </remarks>
-        ''' <history>
-        ''' 	[baldauf]	2005-07-02  Created
-        ''' </history>
-        ''' -----------------------------------------------------------------------------
         Public Shared Function CreateDataRowClone(ByVal sourceRow As DataRow) As DataRow
             If sourceRow Is Nothing Then Throw New ArgumentNullException("sourceRow")
             Dim Result As DataRow = sourceRow.Table.NewRow
@@ -378,40 +292,25 @@ Namespace CompuMaster.Data
             Return Result
         End Function
 
-        ''' -----------------------------------------------------------------------------
         ''' <summary>
         '''     Creates a complete clone of a DataTable with structure as well as data
         ''' </summary>
         ''' <param name="SourceTable">The source table to be copied</param>
         ''' <returns>The new clone of the datatable</returns>
-        ''' <remarks>
-        ''' </remarks>
-        ''' <history>
-        ''' 	[adminwezel]	03.07.2004	Created
-        ''' </history>
-        ''' -----------------------------------------------------------------------------
         Friend Shared Function GetDataTableClone(ByVal SourceTable As DataTable) As DataTable
             Return GetDataTableClone(SourceTable, Nothing, Nothing)
         End Function
 
-        ''' -----------------------------------------------------------------------------
         ''' <summary>
         '''     Creates a complete clone of a DataTable with structure as well as data
         ''' </summary>
         ''' <param name="SourceTable">The source table to be copied</param>
         ''' <param name="RowFilter">An additional row filter, for all rows set it to null (Nothing in VisualBasic)</param>
         ''' <returns>The new clone of the datatable</returns>
-        ''' <remarks>
-        ''' </remarks>
-        ''' <history>
-        ''' 	[adminwezel]	03.07.2004	Created
-        ''' </history>
-        ''' -----------------------------------------------------------------------------
         Friend Shared Function GetDataTableClone(ByVal SourceTable As DataTable, ByVal RowFilter As String) As DataTable
             Return GetDataTableClone(SourceTable, RowFilter, Nothing)
         End Function
 
-        ''' -----------------------------------------------------------------------------
         ''' <summary>
         '''     Creates a complete clone of a DataTable with structure as well as data
         ''' </summary>
@@ -419,17 +318,10 @@ Namespace CompuMaster.Data
         ''' <param name="RowFilter">An additional row filter, for all rows set it to null (Nothing in VisualBasic)</param>
         ''' <param name="Sort">An additional sort command</param>
         ''' <returns>The new clone of the datatable</returns>
-        ''' <remarks>
-        ''' </remarks>
-        ''' <history>
-        ''' 	[adminwezel]	03.07.2004	Created
-        ''' </history>
-        ''' -----------------------------------------------------------------------------
         Friend Shared Function GetDataTableClone(ByVal SourceTable As DataTable, ByVal RowFilter As String, ByVal Sort As String) As DataTable
             Return GetDataTableClone(SourceTable, RowFilter, Sort, Nothing)
         End Function
 
-        ''' -----------------------------------------------------------------------------
         ''' <summary>
         '''     Creates a complete clone of a DataTable with structure as well as data
         ''' </summary>
@@ -438,12 +330,6 @@ Namespace CompuMaster.Data
         ''' <param name="Sort">An additional sort command</param>
         ''' <param name="topRows">How many rows from top shall be returned as maximum?</param>
         ''' <returns>The new clone of the datatable</returns>
-        ''' <remarks>
-        ''' </remarks>
-        ''' <history>
-        ''' 	[adminwezel]	03.07.2004	Created
-        ''' </history>
-        ''' -----------------------------------------------------------------------------
         Friend Shared Function GetDataTableClone(ByVal SourceTable As DataTable, ByVal RowFilter As String, ByVal Sort As String, ByVal topRows As Integer) As DataTable
             Dim Result As DataTable = SourceTable.Clone
             Dim MyRows As DataRow() = SourceTable.Select(RowFilter, Sort)
@@ -469,18 +355,11 @@ Namespace CompuMaster.Data
 
         End Function
 
-        ''' -----------------------------------------------------------------------------
         ''' <summary>
         '''     Creates a clone of a dataview but as a new data table
         ''' </summary>
         ''' <param name="data">The data view to create the data table from</param>
         ''' <returns></returns>
-        ''' <remarks>
-        ''' </remarks>
-        ''' <history>
-        ''' 	[mecky]	20.10.2004	Created
-        ''' </history>
-        ''' -----------------------------------------------------------------------------
         Friend Shared Function ConvertDataViewToDataTable(ByVal data As DataView) As System.Data.DataTable
             Dim Result As DataTable = data.Table.Clone
             'Dim MyRows As DataRowView() = data.Item
@@ -497,23 +376,15 @@ Namespace CompuMaster.Data
 
         End Function
 
-        ''' -----------------------------------------------------------------------------
         ''' <summary>
         '''     Convert an ArrayList to a datatable
         ''' </summary>
         ''' <param name="arrayList">An ArrayList with some content</param>
         ''' <returns>Datatable with column &quot;key&quot; and &quot;value&quot;</returns>
-        ''' <remarks>
-        ''' </remarks>
-        ''' <history>
-        ''' 	[adminsupport]	08.12.2004	Created
-        ''' </history>
-        ''' -----------------------------------------------------------------------------
         <Obsolete("use ConvertICollectionToDataTable instead", False)> Friend Shared Function ConvertArrayListToDataTable(ByVal arrayList As ArrayList) As DataTable
             Return ConvertICollectionToDataTable(arrayList)
         End Function
 
-        ''' -----------------------------------------------------------------------------
         ''' <summary>
         '''     Convert a data table to a hash table
         ''' </summary>
@@ -523,10 +394,6 @@ Namespace CompuMaster.Data
         ''' <remarks>
         ''' ATTENTION: the very first column is used as key column and must be unique therefore
         ''' </remarks>
-        ''' <history>
-        ''' 	[adminsupport]	15.04.2005	Created
-        ''' </history>
-        ''' -----------------------------------------------------------------------------
         Friend Shared Function ConvertDataTableToHashtable(ByVal keyColumn As DataColumn, ByVal valueColumn As DataColumn) As Hashtable
             If Not keyColumn.Table Is valueColumn.Table Then
                 Throw New Exception("Key column and value column must be from the same table")
@@ -534,7 +401,6 @@ Namespace CompuMaster.Data
             Return ConvertDataTableToHashtable(keyColumn.Table, keyColumn.Ordinal, valueColumn.Ordinal)
         End Function
 
-        ''' -----------------------------------------------------------------------------
         ''' <summary>
         '''     Convert a data table to a hash table
         ''' </summary>
@@ -543,15 +409,10 @@ Namespace CompuMaster.Data
         ''' <remarks>
         '''     ATTENTION: the very first column is used as key column and must be unique therefore
         ''' </remarks>
-        ''' <history>
-        ''' 	[adminsupport]	15.04.2005	Created
-        ''' </history>
-        ''' -----------------------------------------------------------------------------
         Friend Shared Function ConvertDataTableToHashtable(ByVal data As DataTable) As Hashtable
             Return ConvertDataTableToHashtable(data, 0, 1)
         End Function
 
-        ''' -----------------------------------------------------------------------------
         ''' <summary>
         '''     Convert a data table to a hash table
         ''' </summary>
@@ -562,10 +423,6 @@ Namespace CompuMaster.Data
         ''' <remarks>
         '''     ATTENTION: the very first column is used as key column and must be unique therefore
         ''' </remarks>
-        ''' <history>
-        ''' 	[adminsupport]	15.04.2005	Created
-        ''' </history>
-        ''' -----------------------------------------------------------------------------
         Friend Shared Function ConvertDataTableToHashtable(ByVal data As DataTable, ByVal keyColumnIndex As Integer, ByVal valueColumnIndex As Integer) As Hashtable
             If data.Columns(keyColumnIndex).Unique = False Then
                 Throw New Exception("The hashtable requires your key column to be a unique column - make it a unique column, first!")
@@ -577,7 +434,6 @@ Namespace CompuMaster.Data
             Return Result
         End Function
 
-        ''' -----------------------------------------------------------------------------
         ''' <summary>
         '''     Convert a data table to an array of dictionary entries
         ''' </summary>
@@ -586,27 +442,16 @@ Namespace CompuMaster.Data
         ''' <remarks>
         '''     The very first column is used as key column, the second one as the value column
         ''' </remarks>
-        ''' <history>
-        ''' 	[adminsupport]	15.04.2005	Created
-        ''' </history>
-        ''' -----------------------------------------------------------------------------
         Friend Shared Function ConvertDataTableToDictionaryEntryArray(ByVal data As DataTable) As DictionaryEntry()
             Return ConvertDataTableToDictionaryEntryArray(data, 0, 1)
         End Function
 
-        ''' -----------------------------------------------------------------------------
         ''' <summary>
         '''     Convert a data table to an array of dictionary entries
         ''' </summary>
         ''' <param name="keyColumn">This is the key column from the data table</param>
         ''' <param name="valueColumn">A column which contains the values</param>
         ''' <returns></returns>
-        ''' <remarks>
-        ''' </remarks>
-        ''' <history>
-        ''' 	[adminsupport]	15.04.2005	Created
-        ''' </history>
-        ''' -----------------------------------------------------------------------------
         Friend Shared Function ConvertDataTableToDictionaryEntryArray(ByVal keyColumn As DataColumn, ByVal valueColumn As DataColumn) As DictionaryEntry()
             If Not keyColumn.Table Is valueColumn.Table Then
                 Throw New Exception("Key column and value column must be from the same table")
@@ -614,7 +459,6 @@ Namespace CompuMaster.Data
             Return ConvertDataTableToDictionaryEntryArray(keyColumn.Table, keyColumn.Ordinal, valueColumn.Ordinal)
         End Function
 
-        ''' -----------------------------------------------------------------------------
         ''' <summary>
         '''     Convert a data table to an array of dictionary entries
         ''' </summary>
@@ -622,12 +466,6 @@ Namespace CompuMaster.Data
         ''' <param name="keyColumnIndex">This is the key column from the data table</param>
         ''' <param name="valueColumnIndex">A column which contains the values</param>
         ''' <returns></returns>
-        ''' <remarks>
-        ''' </remarks>
-        ''' <history>
-        ''' 	[adminsupport]	15.04.2005	Created
-        ''' </history>
-        ''' -----------------------------------------------------------------------------
         Friend Shared Function ConvertDataTableToDictionaryEntryArray(ByVal data As DataTable, ByVal keyColumnIndex As Integer, ByVal valueColumnIndex As Integer) As DictionaryEntry()
             Dim Result As DictionaryEntry()
             ReDim Result(data.Rows.Count - 1)
@@ -637,35 +475,21 @@ Namespace CompuMaster.Data
             Return Result
         End Function
 
-        ''' -----------------------------------------------------------------------------
         ''' <summary>
         '''     Convert a hashtable to a datatable
         ''' </summary>
         ''' <param name="hashtable">A hashtable with some content</param>
         ''' <returns>Datatable with column &quot;key&quot; and &quot;value&quot;</returns>
-        ''' <remarks>
-        ''' </remarks>
-        ''' <history>
-        ''' 	[adminsupport]	08.12.2004	Created
-        ''' </history>
-        ''' -----------------------------------------------------------------------------
-        <Obsolete("use ConvertIDictionaryToDataTable instead and pay attention to parameter keyIsUnique", False)> _
+        <Obsolete("use ConvertIDictionaryToDataTable instead and pay attention to parameter keyIsUnique", False)>
         Friend Shared Function ConvertHashtableToDataTable(ByVal hashtable As Hashtable) As DataTable
             Return ConvertIDictionaryToDataTable(hashtable, True)
         End Function
 
-        ''' -----------------------------------------------------------------------------
         ''' <summary>
         '''     Convert an ICollection to a datatable
         ''' </summary>
         ''' <param name="collection">An ICollection with some content</param>
         ''' <returns>Datatable with column &quot;key&quot; and &quot;value&quot;</returns>
-        ''' <remarks>
-        ''' </remarks>
-        ''' <history>
-        ''' 	[adminsupport]	08.12.2004	Created
-        ''' </history>
-        ''' -----------------------------------------------------------------------------
         Friend Shared Function ConvertICollectionToDataTable(ByVal collection As ICollection) As DataTable
             Dim Result As New DataTable
             Result.Columns.Add(New DataColumn("value"))
@@ -679,35 +503,21 @@ Namespace CompuMaster.Data
             Return Result
         End Function
 
-        ''' -----------------------------------------------------------------------------
         ''' <summary>
         '''     Convert an IDictionary to a datatable
         ''' </summary>
         ''' <param name="dictionary">An IDictionary with some content</param>
         ''' <returns>Datatable with column &quot;key&quot; and &quot;value&quot;</returns>
-        ''' <remarks>
-        ''' </remarks>
-        ''' <history>
-        ''' 	[adminsupport]	08.12.2004	Created
-        ''' </history>
-        ''' -----------------------------------------------------------------------------
         Friend Shared Function ConvertIDictionaryToDataTable(ByVal dictionary As IDictionary) As DataTable
             Return ConvertIDictionaryToDataTable(dictionary, False)
         End Function
 
-        ''' -----------------------------------------------------------------------------
         ''' <summary>
         '''     Convert an IDictionary to a datatable
         ''' </summary>
         ''' <param name="dictionary">An IDictionary with some content</param>
         ''' <param name="keyIsUnique">If true, the key column in the data table will be marked as unique</param>
         ''' <returns>Datatable with column &quot;key&quot; and &quot;value&quot;</returns>
-        ''' <remarks>
-        ''' </remarks>
-        ''' <history>
-        ''' 	[adminsupport]	08.12.2004	Created
-        ''' </history>
-        ''' -----------------------------------------------------------------------------
         Friend Shared Function ConvertIDictionaryToDataTable(ByVal dictionary As IDictionary, ByVal keyIsUnique As Boolean) As DataTable
             Dim Result As New DataTable
             Result.Columns.Add(New DataColumn("key"))
@@ -748,35 +558,21 @@ Namespace CompuMaster.Data
             Return Result
         End Function
 
-        ''' -----------------------------------------------------------------------------
         ''' <summary>
         '''     Convert a NameValueCollection to a datatable
         ''' </summary>
         ''' <param name="nameValueCollection">An IDictionary with some content</param>
         ''' <returns>Datatable with column &quot;key&quot; and &quot;value&quot;</returns>
-        ''' <remarks>
-        ''' </remarks>
-        ''' <history>
-        ''' 	[adminsupport]	08.12.2004	Created
-        ''' </history>
-        ''' -----------------------------------------------------------------------------
         Friend Shared Function ConvertNameValueCollectionToDataTable(ByVal nameValueCollection As Specialized.NameValueCollection) As DataTable
             Return ConvertNameValueCollectionToDataTable(nameValueCollection, False)
         End Function
 
-        ''' -----------------------------------------------------------------------------
         ''' <summary>
         '''     Convert a NameValueCollection to a datatable
         ''' </summary>
         ''' <param name="nameValueCollection">An IDictionary with some content</param>
         ''' <param name="keyIsUnique">If true, the key column in the data table will be marked as unique</param>
         ''' <returns>Datatable with column &quot;key&quot; and &quot;value&quot;</returns>
-        ''' <remarks>
-        ''' </remarks>
-        ''' <history>
-        ''' 	[adminsupport]	08.12.2004	Created
-        ''' </history>
-        ''' -----------------------------------------------------------------------------
         Friend Shared Function ConvertNameValueCollectionToDataTable(ByVal nameValueCollection As Specialized.NameValueCollection, ByVal keyIsUnique As Boolean) As DataTable
             Dim Result As New DataTable
             Result.Columns.Add(New DataColumn("key"))
@@ -793,7 +589,6 @@ Namespace CompuMaster.Data
             Return Result
         End Function
 
-        ''' -----------------------------------------------------------------------------
         ''' <summary>
         '''     Simplified creation of a DataTable by definition of a SQL statement and a connection string
         ''' </summary>
@@ -801,12 +596,6 @@ Namespace CompuMaster.Data
         ''' <param name="ConnectionString">The connection string to the data source</param>
         ''' <param name="NameOfNewDataTable">The name of the new DataTable</param>
         ''' <returns>A filled DataTable</returns>
-        ''' <remarks>
-        ''' </remarks>
-        ''' <history>
-        ''' 	[adminwezel]	03.07.2004	Created
-        ''' </history>
-        ''' -----------------------------------------------------------------------------
         Friend Shared Function GetDataTableViaODBC(ByVal strSQL As String, ByVal ConnectionString As String, ByVal NameOfNewDataTable As String) As DataTable
 
             Dim MyConn As New Odbc.OdbcConnection(ConnectionString)
@@ -835,7 +624,6 @@ Namespace CompuMaster.Data
 
         End Function
 
-        ''' -----------------------------------------------------------------------------
         ''' <summary>
         '''     Simplified creation of a DataTable by definition of a SQL statement and a connection string
         ''' </summary>
@@ -843,12 +631,6 @@ Namespace CompuMaster.Data
         ''' <param name="ConnectionString">The connection string to the data source</param>
         ''' <param name="NameOfNewDataTable">The name of the new DataTable</param>
         ''' <returns>A filled DataTable</returns>
-        ''' <remarks>
-        ''' </remarks>
-        ''' <history>
-        ''' 	[adminwezel]	03.07.2004	Created
-        ''' </history>
-        ''' -----------------------------------------------------------------------------
         Friend Shared Function GetDataTableViaSqlClient(ByVal strSQL As String, ByVal ConnectionString As String, ByVal NameOfNewDataTable As String) As DataTable
 
             Dim MyConn As New System.Data.SqlClient.SqlConnection(ConnectionString)
@@ -878,57 +660,35 @@ Namespace CompuMaster.Data
 
         End Function
 
-        ''' -----------------------------------------------------------------------------
         ''' <summary>
         '''     Return a string with all columns and rows as an html table
         ''' </summary>
         ''' <param name="dataTable">The datatable to retrieve the content from</param>
         ''' <returns>If no rows have been processed, the return string is nothing</returns>
-        ''' <remarks>
-        ''' </remarks>
-        ''' <history>
-        ''' 	[baldauf]	2005-07-02  Created
-        ''' </history>
-        ''' -----------------------------------------------------------------------------
         Public Shared Function ConvertToHtmlTable(ByVal dataTable As DataTable) As String
             Return CompuMaster.Data.DataTablesTools.ConvertToHtmlTable(dataTable, "<H1>", "</H1>", Nothing)
         End Function
 
-        ''' -----------------------------------------------------------------------------
         ''' <summary>
         '''     Return a string with all columns and rows as an html table
         ''' </summary>
         ''' <param name="rows">The rows to be processed</param>
         ''' <param name="label">An optional title of the rows</param>
         ''' <returns>If no rows have been processed, the return string is nothing</returns>
-        ''' <remarks>
-        ''' </remarks>
-        ''' <history>
-        ''' 	[baldauf]	2005-07-02  Created
-        ''' </history>
-        ''' -----------------------------------------------------------------------------
         Public Shared Function ConvertToHtmlTable(ByVal rows As DataRowCollection, ByVal label As String) As String
             Return CompuMaster.Data.DataTablesTools.ConvertToHtmlTable(rows, label, "<H1>", "</H1>", Nothing)
         End Function
 
-        ''' -----------------------------------------------------------------------------
         ''' <summary>
         '''     Return a string with all columns and rows as an html table
         ''' </summary>
         ''' <param name="rows">The rows to be processed</param>
         ''' <param name="label">An optional title of the rows</param>
         ''' <returns>If no rows have been processed, the return string is nothing</returns>
-        ''' <remarks>
-        ''' </remarks>
-        ''' <history>
-        ''' 	[baldauf]	2005-07-02  Created
-        ''' </history>
-        ''' -----------------------------------------------------------------------------
         Public Shared Function ConvertToHtmlTable(ByVal rows() As DataRow, ByVal label As String) As String
             Return CompuMaster.Data.DataTablesTools.ConvertToHtmlTable(rows, label, "<H1>", "</H1>", Nothing)
         End Function
 
-        ''' -----------------------------------------------------------------------------
         ''' <summary>
         '''     Return a string with all columns and rows as an html table
         ''' </summary>
@@ -937,18 +697,11 @@ Namespace CompuMaster.Data
         ''' <param name="titleTagEnd">The closing tag after the table title</param>
         ''' <param name="additionalTableAttributes">Additional attributes for the rendered table</param>
         ''' <returns>If no rows have been processed, the return string is nothing</returns>
-        ''' <remarks>
-        ''' </remarks>
-        ''' <history>
-        ''' 	[adminsupport]	21.12.2004	Created
-        ''' </history>
-        ''' -----------------------------------------------------------------------------
-        Friend Shared Function ConvertToHtmlTable(ByVal dataTable As DataTable, ByVal titleTagOpener As String, ByVal titleTagEnd As String, _
+        Friend Shared Function ConvertToHtmlTable(ByVal dataTable As DataTable, ByVal titleTagOpener As String, ByVal titleTagEnd As String,
                                                   ByVal additionalTableAttributes As String) As String
             Return ConvertToHtmlTable(dataTable.Rows, dataTable.TableName, titleTagOpener, titleTagEnd, additionalTableAttributes)
         End Function
 
-        ''' -----------------------------------------------------------------------------
         ''' <summary>
         '''     Return a string with all columns and rows as an html table
         ''' </summary>
@@ -958,18 +711,11 @@ Namespace CompuMaster.Data
         ''' <param name="titleTagEnd">The closing tag after the table title</param>
         ''' <param name="additionalTableAttributes">Additional attributes for the rendered table</param>
         ''' <returns>If no rows have been processed, the return string is nothing</returns>
-        ''' <remarks>
-        ''' </remarks>
-        ''' <history>
-        ''' 	[adminwezel]	05.08.2004	Created
-        ''' </history>
-        ''' -----------------------------------------------------------------------------
-        Friend Shared Function ConvertToHtmlTable(ByVal rows As DataRowCollection, ByVal label As String, ByVal titleTagOpener As String, ByVal titleTagEnd As String, _
+        Friend Shared Function ConvertToHtmlTable(ByVal rows As DataRowCollection, ByVal label As String, ByVal titleTagOpener As String, ByVal titleTagEnd As String,
                                                   ByVal additionalTableAttributes As String) As String
             Return ConvertToHtmlTable(rows, label, titleTagOpener, titleTagEnd, additionalTableAttributes, False)
         End Function
 
-        ''' -----------------------------------------------------------------------------
         ''' <summary>
         '''     Return a string with all columns and rows as an html table
         ''' </summary>
@@ -980,14 +726,8 @@ Namespace CompuMaster.Data
         ''' <param name="additionalTableAttributes">Additional attributes for the rendered table</param>
         ''' <param name="htmlEncodeCellContentAndLineBreaks">Encode all output to valid HTML</param>
         ''' <returns>If no rows have been processed, the return string is nothing</returns>
-        ''' <remarks>
-        ''' </remarks>
-        ''' <history>
-        ''' 	[adminwezel]	05.08.2004	Created
-        ''' </history>
-        ''' -----------------------------------------------------------------------------
-        Friend Shared Function ConvertToHtmlTable(ByVal rows As DataRowCollection, ByVal label As String, ByVal titleTagOpener As String, _
-                                                  ByVal titleTagEnd As String, ByVal additionalTableAttributes As String, _
+        Friend Shared Function ConvertToHtmlTable(ByVal rows As DataRowCollection, ByVal label As String, ByVal titleTagOpener As String,
+                                                  ByVal titleTagEnd As String, ByVal additionalTableAttributes As String,
                                                   ByVal htmlEncodeCellContentAndLineBreaks As Boolean) As String
             Dim Result As New System.Text.StringBuilder
             If label <> "" Then
@@ -1042,7 +782,6 @@ Namespace CompuMaster.Data
             Return Result.ToString
         End Function
 
-        ''' -----------------------------------------------------------------------------
         ''' <summary>
         '''     Converts all line breaks into HTML line breaks (&quot;&lt;br&gt;&quot;)
         ''' </summary>
@@ -1051,15 +790,10 @@ Namespace CompuMaster.Data
         ''' <remarks>
         '''     Supported line breaks are linebreaks of Windows, MacOS as well as Linux/Unix.
         ''' </remarks>
-        ''' <history>
-        ''' 	[adminwezel]	06.07.2004	Created
-        ''' </history>
-        ''' -----------------------------------------------------------------------------
         Private Shared Function HtmlEncodeLineBreaks(ByVal Text As String) As String
             Return Text.Replace(ControlChars.CrLf, "<br>").Replace(ControlChars.Cr, "<br>").Replace(ControlChars.Lf, "<br>")
         End Function
 
-        ''' -----------------------------------------------------------------------------
         ''' <summary>
         '''     Return a string with all columns and rows as an html table
         ''' </summary>
@@ -1069,13 +803,7 @@ Namespace CompuMaster.Data
         ''' <param name="titleTagEnd">The closing tag after the table title</param>
         ''' <param name="additionalTableAttributes">Additional attributes for the rendered table</param>
         ''' <returns>If no rows have been processed, the return string is nothing</returns>
-        ''' <remarks>
-        ''' </remarks>
-        ''' <history>
-        ''' 	[adminwezel]	05.08.2004	Created
-        ''' </history>
-        ''' -----------------------------------------------------------------------------
-        Friend Shared Function ConvertToHtmlTable(ByVal rows() As DataRow, ByVal label As String, ByVal titleTagOpener As String, _
+        Friend Shared Function ConvertToHtmlTable(ByVal rows() As DataRow, ByVal label As String, ByVal titleTagOpener As String,
                                                   ByVal titleTagEnd As String, ByVal additionalTableAttributes As String) As String
             Dim Result As New System.Text.StringBuilder
             If label <> "" Then
@@ -1108,35 +836,21 @@ Namespace CompuMaster.Data
             Return Result.ToString
         End Function
 
-        ''' -----------------------------------------------------------------------------
         ''' <summary>
         '''     Return a string with all columns and rows, helpfull for debugging purposes
         ''' </summary>
         ''' <param name="dataTable">The datatable to retrieve the content from</param>
         ''' <returns>All rows are tab separated. If no rows have been processed, the user will get notified about this fact</returns>
-        ''' <remarks>
-        ''' </remarks>
-        ''' <history>
-        ''' 	[adminsupport]	21.12.2004	Created
-        ''' </history>
-        ''' -----------------------------------------------------------------------------
         Friend Shared Function ConvertToPlainTextTable(ByVal dataTable As DataTable) As String
             Return _ConvertToPlainTextTable(dataTable.Rows, dataTable.TableName)
         End Function
 
-        ''' -----------------------------------------------------------------------------
         ''' <summary>
         '''     Return a string with all columns and rows, helpfull for debugging purposes
         ''' </summary>
         ''' <param name="rows">The rows to be processed</param>
         ''' <param name="label">An optional title of the rows</param>
         ''' <returns>All rows are tab separated. If no rows have been processed, the user will get notified about this fact</returns>
-        ''' <remarks>
-        ''' </remarks>
-        ''' <history>
-        ''' 	[adminwezel]	05.08.2004	Created
-        ''' </history>
-        ''' -----------------------------------------------------------------------------
         Friend Shared Function ConvertToPlainTextTable(ByVal rows() As DataRow, ByVal label As String) As String
             Const separator As Char = ControlChars.Tab
             Dim Result As New System.Text.StringBuilder
@@ -1166,19 +880,12 @@ Namespace CompuMaster.Data
             Return Result.ToString
         End Function
 
-        ''' -----------------------------------------------------------------------------
         ''' <summary>
         '''     Return a string with all columns and rows, helpfull for debugging purposes
         ''' </summary>
         ''' <param name="rows">The rows to be processed</param>
         ''' <param name="label">An optional title of the rows</param>
         ''' <returns>All rows are tab separated. If no rows have been processed, the user will get notified about this fact</returns>
-        ''' <remarks>
-        ''' </remarks>
-        ''' <history>
-        ''' 	[adminwezel]	05.08.2004	Created
-        ''' </history>
-        ''' -----------------------------------------------------------------------------
         Private Shared Function _ConvertToPlainTextTable(ByVal rows As DataRowCollection, ByVal label As String) As String
             Const separator As Char = ControlChars.Tab
             Dim Result As New System.Text.StringBuilder
@@ -1210,7 +917,6 @@ Namespace CompuMaster.Data
             Return Result.ToString
         End Function
 
-        ''' -----------------------------------------------------------------------------
         ''' <summary>
         '''     Remove the specified columns if they exist
         ''' </summary>
@@ -1219,10 +925,6 @@ Namespace CompuMaster.Data
         ''' <remarks>
         '''     The columns will only be removed if they exist. If a column name doesn't exist, it will be ignored.
         ''' </remarks>
-        ''' <history>
-        ''' 	[adminwezel]	07.07.2005	Created
-        ''' </history>
-        ''' -----------------------------------------------------------------------------
         Public Shared Sub RemoveColumns(ByVal datatable As System.Data.DataTable, ByVal columnNames As String())
             If Not columnNames Is Nothing Then
                 For MyRemoveCounter As Integer = 0 To columnNames.Length - 1
@@ -1235,35 +937,21 @@ Namespace CompuMaster.Data
             End If
         End Sub
 
-        ''' -----------------------------------------------------------------------------
         ''' <summary>
         '''     Return a string with all columns and rows, helpfull for debugging purposes
         ''' </summary>
         ''' <param name="rows">The rows to be processed</param>
         ''' <param name="label">An optional title of the rows</param>
         ''' <returns>All rows are tab separated. If no rows have been processed, the user will get notified about this fact</returns>
-        ''' <remarks>
-        ''' </remarks>
-        ''' <history>
-        ''' 	[adminwezel]	05.08.2004	Created
-        ''' </history>
-        ''' -----------------------------------------------------------------------------
         Friend Shared Function ConvertToPlainTextTable(ByVal rows As DataRowCollection, ByVal label As String) As String
             Return _ConvertToPlainTextTable(rows, label)
         End Function
 
-        ''' -----------------------------------------------------------------------------
         ''' <summary>
         '''     Convert any opened datareader into a dataset
         ''' </summary>
         ''' <param name="dataReader">An already opened dataReader</param>
         ''' <returns>A dataset containing all datatables the dataReader was able to read</returns>
-        ''' <remarks>
-        ''' </remarks>
-        ''' <history>
-        ''' 	[wezel]	13.01.2005	Created
-        ''' </history>
-        ''' -----------------------------------------------------------------------------
         Friend Shared Function ConvertDataReaderToDataSet(ByVal datareader As IDataReader) As DataSet
             Dim Result As New DataSet
             Dim DRA As New DataReaderAdapter
@@ -1271,35 +959,21 @@ Namespace CompuMaster.Data
             Return Result
         End Function
 
-        ''' -----------------------------------------------------------------------------
         ''' <summary>
         '''     Convert any opened datareader into a data table
         ''' </summary>
         ''' <param name="dataReader">An already opened dataReader</param>
         ''' <returns>A data table containing all data the dataReader was able to read</returns>
-        ''' <remarks>
-        ''' </remarks>
-        ''' <history>
-        ''' 	[wezel]	13.01.2005	Created
-        ''' </history>
-        ''' -----------------------------------------------------------------------------
         Friend Shared Function ConvertDataReaderToDataTable(ByVal dataReader As IDataReader) As DataTable
             Return ConvertDataReaderToDataTable(dataReader, Nothing)
         End Function
 
-        ''' -----------------------------------------------------------------------------
         ''' <summary>
         '''     Convert any opened datareader into a data table
         ''' </summary>
         ''' <param name="dataReader">An already opened dataReader</param>
         ''' <param name="tableName">The name for the new table</param>
         ''' <returns>A data table containing all data the dataReader was able to read</returns>
-        ''' <remarks>
-        ''' </remarks>
-        ''' <history>
-        ''' 	[wezel]	13.01.2005	Created
-        ''' </history>
-        ''' -----------------------------------------------------------------------------
         Friend Shared Function ConvertDataReaderToDataTable(ByVal dataReader As IDataReader, ByVal tableName As String) As DataTable
 
             Dim Result As DataTable
@@ -1314,20 +988,9 @@ Namespace CompuMaster.Data
 
         End Function
 
-        ''' -----------------------------------------------------------------------------
-        ''' Project	 : SqlServerCommandExecutionTimeStopper
-        ''' Class	 : CompuMaster.Tools.Data.DataTables.DataReaderAdapter
-        ''' 
-        ''' -----------------------------------------------------------------------------
         ''' <summary>
         '''     A data adapter for data readers making the real conversion
         ''' </summary>
-        ''' <remarks>
-        ''' </remarks>
-        ''' <history>
-        ''' 	[wezel]	13.01.2005	Created
-        ''' </history>
-        ''' -----------------------------------------------------------------------------
         Private Class DataReaderAdapter
             Inherits System.Data.Common.DbDataAdapter
 
@@ -1339,14 +1002,14 @@ Namespace CompuMaster.Data
                 Return Me.Fill(dataSet, "Table", dataReader, 0, 0)
             End Function
 
-            Protected Overrides Function CreateRowUpdatedEvent(ByVal dataRow As System.Data.DataRow, ByVal command As System.Data.IDbCommand, _
-                                                               ByVal statementType As System.Data.StatementType, _
+            Protected Overrides Function CreateRowUpdatedEvent(ByVal dataRow As System.Data.DataRow, ByVal command As System.Data.IDbCommand,
+                                                               ByVal statementType As System.Data.StatementType,
                                                                ByVal tableMapping As System.Data.Common.DataTableMapping) As System.Data.Common.RowUpdatedEventArgs
                 Return Nothing
             End Function
 
-            Protected Overrides Function CreateRowUpdatingEvent(ByVal dataRow As System.Data.DataRow, ByVal command As System.Data.IDbCommand, _
-                                                                ByVal statementType As System.Data.StatementType, _
+            Protected Overrides Function CreateRowUpdatingEvent(ByVal dataRow As System.Data.DataRow, ByVal command As System.Data.IDbCommand,
+                                                                ByVal statementType As System.Data.StatementType,
                                                                 ByVal tableMapping As System.Data.Common.DataTableMapping) As System.Data.Common.RowUpdatingEventArgs
                 Return Nothing
             End Function
@@ -1359,64 +1022,28 @@ Namespace CompuMaster.Data
 
         End Class
 
-        ''' -----------------------------------------------------------------------------
         ''' <summary>
         '''     Table join types
         ''' </summary>
-        ''' <remarks>
-        ''' </remarks>
-        ''' <history>
-        ''' 	[adminwezel]	22.03.2005	Created
-        ''' </history>
-        ''' -----------------------------------------------------------------------------
         Friend Enum JoinTypes As Integer
-            ''' -----------------------------------------------------------------------------
             ''' <summary>
             '''     The result contains only those rows which exist in both tables
             ''' </summary>
-            ''' <remarks>
-            ''' </remarks>
-            ''' <history>
-            ''' 	[adminwezel]	17.01.2006	Created
-            ''' </history>
-            ''' -----------------------------------------------------------------------------
             Inner = 0
-            ''' -----------------------------------------------------------------------------
             ''' <summary>
             '''     The result contains all rows of the left, parent table and only those rows of the other table which are related to the rows of the left table
             ''' </summary>
-            ''' <remarks>
-            ''' </remarks>
-            ''' <history>
-            ''' 	[adminwezel]	17.01.2006	Created
-            ''' </history>
-            ''' -----------------------------------------------------------------------------
             Left = 1
-            '''' -----------------------------------------------------------------------------
             '''' <summary>
             ''''     The result contains all rows of the left, parent table and all rows of the right, child table. Missing values on the other side will be of value DBNull 
             '''' </summary>
-            '''' <remarks>
-            '''' </remarks>
-            '''' <history>
-            '''' 	[adminwezel]	17.01.2006	Created
-            '''' </history>
-            '''' -----------------------------------------------------------------------------
             'Full = 2
-            '''' -----------------------------------------------------------------------------
             '''' <summary>
             ''''     The result contains all rows of the right, parent table and only those rows of the other table which are related to the rows of the right table
             '''' </summary>
-            '''' <remarks>
-            '''' </remarks>
-            '''' <history>
-            '''' 	[adminwezel]	17.01.2006	Created
-            '''' </history>
-            '''' -----------------------------------------------------------------------------
             'Right=3
         End Enum
 
-        ''' -----------------------------------------------------------------------------
         ''' <summary>
         '''     Execute a table join on two tables of the same dataset based on the first relation found
         ''' </summary>
@@ -1424,12 +1051,6 @@ Namespace CompuMaster.Data
         ''' <param name="rightChildTable"></param>
         ''' <param name="joinType">Inner or left join</param>
         ''' <returns></returns>
-        ''' <remarks>
-        ''' </remarks>
-        ''' <history>
-        ''' 	[adminwezel]	22.03.2005	Created
-        ''' </history>
-        ''' -----------------------------------------------------------------------------
         Friend Shared Function JoinTables(ByVal leftParentTable As DataTable, ByVal rightChildTable As DataTable, ByVal joinType As JoinTypes) As DataTable
 
             'Find the appropriate relation information
@@ -1445,7 +1066,6 @@ Namespace CompuMaster.Data
 
         End Function
 
-        ''' -----------------------------------------------------------------------------
         ''' <summary>
         '''     Execute a table join on two tables of the same dataset which have got a defined relation
         ''' </summary>
@@ -1462,11 +1082,7 @@ Namespace CompuMaster.Data
         '''         <item>LEFT JOIN: all columns from the right child table</item>
         '''     </list>
         ''' </remarks>
-        ''' <history>
-        ''' 	[adminwezel]	22.03.2005	Created
-        ''' </history>
-        ''' -----------------------------------------------------------------------------
-        Friend Shared Function JoinTables(ByVal leftParentTable As DataTable, ByVal rightChildTable As DataTable, ByVal relation As DataRelation, _
+        Friend Shared Function JoinTables(ByVal leftParentTable As DataTable, ByVal rightChildTable As DataTable, ByVal relation As DataRelation,
                                           ByVal joinType As JoinTypes) As DataTable
 
             'Verify parameters
@@ -1510,7 +1126,6 @@ Namespace CompuMaster.Data
 
         End Function
 
-        ''' -----------------------------------------------------------------------------
         ''' <summary>
         '''     Execute a table join on two tables of the same dataset which have got a defined relation
         ''' </summary>
@@ -1520,13 +1135,7 @@ Namespace CompuMaster.Data
         ''' <param name="rightTableColumnsToCopy">An array of columns to copy from the right table</param>
         ''' <param name="joinType">Inner or left join</param>
         ''' <returns></returns>
-        ''' <remarks>
-        ''' </remarks>
-        ''' <history>
-        ''' 	[adminwezel]	22.03.2005	Created
-        ''' </history>
-        ''' -----------------------------------------------------------------------------
-        Friend Shared Function JoinTables(ByVal leftParentTable As DataTable, ByVal leftTableColumnsToCopy As DataColumn(), _
+        Friend Shared Function JoinTables(ByVal leftParentTable As DataTable, ByVal leftTableColumnsToCopy As DataColumn(),
                                           ByVal rightChildTable As DataTable, ByVal rightTableColumnsToCopy As DataColumn(), ByVal joinType As JoinTypes) As DataTable
 
             'Find the appropriate relation information
@@ -1561,7 +1170,6 @@ Namespace CompuMaster.Data
 
         End Function
 
-        ''' -----------------------------------------------------------------------------
         ''' <summary>
         '''     Execute a table join on two tables of the same dataset which have got a defined relation
         ''' </summary>
@@ -1571,14 +1179,8 @@ Namespace CompuMaster.Data
         ''' <param name="indexesOfRightTableColumnsToCopy">An array of column indexes to copy from the right table</param>
         ''' <param name="joinType">Inner or left join</param>
         ''' <returns></returns>
-        ''' <remarks>
-        ''' </remarks>
-        ''' <history>
-        ''' 	[adminwezel]	22.03.2005	Created
-        ''' </history>
-        ''' -----------------------------------------------------------------------------
-        Friend Shared Function JoinTables(ByVal leftParentTable As DataTable, ByVal indexesOfLeftTableColumnsToCopy As Integer(), _
-                                          ByVal rightChildTable As DataTable, ByVal indexesOfRightTableColumnsToCopy As Integer(), _
+        Friend Shared Function JoinTables(ByVal leftParentTable As DataTable, ByVal indexesOfLeftTableColumnsToCopy As Integer(),
+                                          ByVal rightChildTable As DataTable, ByVal indexesOfRightTableColumnsToCopy As Integer(),
                                           ByVal joinType As JoinTypes) As DataTable
 
             'Find the appropriate relation information
@@ -1594,7 +1196,6 @@ Namespace CompuMaster.Data
 
         End Function
 
-        ''' -----------------------------------------------------------------------------
         ''' <summary>
         '''     Execute a table join on two tables of the same dataset which have got a defined relation
         ''' </summary>
@@ -1605,14 +1206,8 @@ Namespace CompuMaster.Data
         ''' <param name="relation">A data table relation which shall be used for the joining</param>
         ''' <param name="joinType">Inner or left join</param>
         ''' <returns></returns>
-        ''' <remarks>
-        ''' </remarks>
-        ''' <history>
-        ''' 	[adminwezel]	22.03.2005	Created
-        ''' </history>
-        ''' -----------------------------------------------------------------------------
-        Friend Shared Function JoinTables(ByVal leftParentTable As DataTable, ByVal indexesOfLeftTableColumnsToCopy As Integer(), _
-                                          ByVal rightChildTable As DataTable, ByVal indexesOfRightTableColumnsToCopy As Integer(), _
+        Friend Shared Function JoinTables(ByVal leftParentTable As DataTable, ByVal indexesOfLeftTableColumnsToCopy As Integer(),
+                                          ByVal rightChildTable As DataTable, ByVal indexesOfRightTableColumnsToCopy As Integer(),
                                           ByVal relation As DataRelation, ByVal joinType As JoinTypes) As DataTable
 
             'Verify parameters
@@ -1731,7 +1326,6 @@ Namespace CompuMaster.Data
 
         End Function
 
-        ''' -----------------------------------------------------------------------------
         ''' <summary>
         '''     Cross join of two tables
         ''' </summary>
@@ -1740,13 +1334,7 @@ Namespace CompuMaster.Data
         ''' <param name="rightTable">A second datatable</param>
         ''' <param name="indexesOfRightTableColumnsToCopy">An array of column indexes to copy from the right table</param>
         ''' <returns></returns>
-        ''' <remarks>
-        ''' </remarks>
-        ''' <history>
-        ''' 	[adminwezel]	27.05.2005	Created
-        ''' </history>
-        ''' -----------------------------------------------------------------------------
-        Friend Shared Function CrossJoinTables(ByVal leftTable As DataTable, ByVal indexesOfLeftTableColumnsToCopy As Integer(), _
+        Friend Shared Function CrossJoinTables(ByVal leftTable As DataTable, ByVal indexesOfLeftTableColumnsToCopy As Integer(),
                                                ByVal rightTable As DataTable, ByVal indexesOfRightTableColumnsToCopy As Integer()) As DataTable
             'TODO: verify/fix exceptions when left AND right table contain rows not matching to the other side (FULL OUTER JOIN situations)
             'TODO: above ToDo "verify/fix exceptions" might not be applicable here?!? --> to remove ?!?
@@ -1848,19 +1436,12 @@ Namespace CompuMaster.Data
 
         End Function
 
-        ''' -----------------------------------------------------------------------------
         ''' <summary>
         '''     Add a prefix to the names of the columns
         ''' </summary>
         ''' <param name="dataTable"></param>
         ''' <param name="columnIndexes"></param>
         ''' <param name="prefix">e. g. "orders."</param>
-        ''' <remarks>
-        ''' </remarks>
-        ''' <history>
-        ''' 	[adminwezel]	27.05.2005	Created
-        ''' </history>
-        ''' -----------------------------------------------------------------------------
         Friend Shared Sub AddPrefixesToColumnNames(ByVal dataTable As DataTable, ByVal columnIndexes As Integer(), ByVal prefix As String)
 
             'all columns if nothing is given
@@ -1877,19 +1458,12 @@ Namespace CompuMaster.Data
 
         End Sub
 
-        ''' -----------------------------------------------------------------------------
         ''' <summary>
         '''     Add a suffix to the names of the columns
         ''' </summary>
         ''' <param name="dataTable"></param>
         ''' <param name="columnIndexes"></param>
         ''' <param name="suffix">e. g. "-orders"</param>
-        ''' <remarks>
-        ''' </remarks>
-        ''' <history>
-        ''' 	[adminwezel]	27.05.2005	Created
-        ''' </history>
-        ''' -----------------------------------------------------------------------------
         Friend Shared Sub AddSuffixesToColumnNames(ByVal dataTable As DataTable, ByVal columnIndexes As Integer(), ByVal suffix As String)
 
             'all columns if nothing is given
@@ -1906,19 +1480,12 @@ Namespace CompuMaster.Data
 
         End Sub
 
-        ''' -----------------------------------------------------------------------------
         ''' <summary>
         '''     Lookup a new unique column name for a data table
         ''' </summary>
         ''' <param name="dataTable">The data table which shall get a new data column</param>
         ''' <param name="suggestedColumnName">A column name suggestion</param>
         ''' <returns>The suggested column name as it is or modified column name to be unique</returns>
-        ''' <remarks>
-        ''' </remarks>
-        ''' <history>
-        ''' 	[adminwezel]	22.03.2005	Created
-        ''' </history>
-        ''' -----------------------------------------------------------------------------
         Friend Shared Function LookupUniqueColumnName(ByVal dataTable As DataTable, ByVal suggestedColumnName As String) As String
 
             Dim ColumnNameAlreadyExistant As Boolean = False
@@ -1965,19 +1532,12 @@ Namespace CompuMaster.Data
 
         End Function
 
-        ''' -----------------------------------------------------------------------------
         ''' <summary>
         '''     Rearrange columns
         ''' </summary>
         ''' <param name="source">The source table with data</param>
         ''' <param name="columnsToCopy">An array of column names which shall be copied in the specified order from the source table</param>
         ''' <returns>A new and independent data table with copied data</returns>
-        ''' <remarks>
-        ''' </remarks>
-        ''' <history>
-        ''' 	[adminwezel]	07.07.2005	Created
-        ''' </history>
-        ''' -----------------------------------------------------------------------------
         Friend Shared Function ReArrangeDataColumns(ByVal source As DataTable, ByVal columnsToCopy As String()) As DataTable
             Dim columns As New ArrayList
             For MyCounter As Integer = 0 To columnsToCopy.Length - 1
@@ -1986,7 +1546,6 @@ Namespace CompuMaster.Data
             Return ReArrangeDataColumns(source, CType(columns.ToArray(GetType(System.Data.DataColumn)), System.Data.DataColumn()))
         End Function
 
-        ''' -----------------------------------------------------------------------------
         ''' <summary>
         '''     Rearrange columns and also change their data types
         ''' </summary>
@@ -2001,15 +1560,10 @@ Namespace CompuMaster.Data
         '''         ReArrangeDataColumns(source, New System.Data.DataColumn() {New DataColumn("column1Name", GetType(String)), New DataColumn("column2Name", GetType(Integer))})
         '''     </code>
         ''' </example>
-        ''' <history>
-        ''' 	[wezel]	14.04.2005	Created
-        ''' </history>
-        ''' -----------------------------------------------------------------------------
         Public Shared Function ReArrangeDataColumns(ByVal source As DataTable, ByVal destinationColumnSet As DataColumn()) As DataTable
             Return ReArrangeDataColumns(source, destinationColumnSet, Nothing)
         End Function
 
-        ''' -----------------------------------------------------------------------------
         ''' <summary>
         '''     Rearrange columns and also change their data types
         ''' </summary>
@@ -2025,11 +1579,7 @@ Namespace CompuMaster.Data
         '''         ReArrangeDataColumns(source, New System.Data.DataColumn() {New DataColumn("column1Name", GetType(String)), New DataColumn("column2Name", GetType(Integer))})
         '''     </code>
         ''' </example>
-        ''' <history>
-        ''' 	[wezel]	14.04.2005	Created
-        ''' </history>
-        ''' -----------------------------------------------------------------------------
-        Public Shared Function ReArrangeDataColumns(ByVal source As DataTable, ByVal destinationColumnSet As DataColumn(), _
+        Public Shared Function ReArrangeDataColumns(ByVal source As DataTable, ByVal destinationColumnSet As DataColumn(),
                                                     ByVal ignoreConversionExceptionAndLogThemHere As ArrayList) As DataTable
 
             'Parameter validation

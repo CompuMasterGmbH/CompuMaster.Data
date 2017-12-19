@@ -3,31 +3,17 @@ Option Strict On
 
 Namespace CompuMaster.Data
 
-    ''' -----------------------------------------------------------------------------
     ''' <summary>
     '''     Provides simplified read access to XLS(X/M/B) files via MS OLE-DB/ODBC Jet Providers
     ''' </summary>
-    ''' <remarks>
-    ''' </remarks>
-    ''' <history>
-    ''' 	[baldauf]	2005-07-02  Created
-    ''' </history>
-    ''' -----------------------------------------------------------------------------
     Public Class XlsReader
 
-        ''' -----------------------------------------------------------------------------
         ''' <summary>
         '''     Read from an excel file
         ''' </summary>
         ''' <param name="path">The path of the .XLS file</param>
         ''' <param name="sheetName">A name of a sheet where the read operations shall execute</param>
         ''' <returns>A new and independent datatable with the content of the sheet</returns>
-        ''' <remarks>
-        ''' </remarks>
-        ''' <history>
-        ''' 	[baldauf]	2005-07-02  Created
-        ''' </history>
-        ''' -----------------------------------------------------------------------------
         Public Shared Function ReadDataTableFromXlsFile(ByVal path As String, ByVal sheetName As String) As DataTable
             Return ReadDataTableFromXlsFile(path, sheetName, "SELECT * FROM [" & sheetName & "$]")
         End Function
