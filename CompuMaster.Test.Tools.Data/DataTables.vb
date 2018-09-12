@@ -1510,7 +1510,7 @@ Namespace CompuMaster.Test.Data
 
         End Sub
 
-        Private Function CreateInnerJoinTableSet1() As JoinTableSet
+        Private Function CreateInnerJoinTableSet1(shiftStepFor2ndTable As Integer) As JoinTableSet
             'Inner join test'
             Dim right As New DataTable
             Dim left As New DataTable
@@ -1539,7 +1539,7 @@ Namespace CompuMaster.Test.Data
                 rightrow.Item(0) = i
                 rightrow.Item(1) = i + 1
                 rightrow.Item(2) = i + 2
-                right.Rows.Add(rightrow)
+                If i >= shiftStepFor2ndTable Then right.Rows.Add(rightrow)
             Next i
 
             Dim ds As New DataSet
@@ -1553,8 +1553,29 @@ Namespace CompuMaster.Test.Data
 
         End Function
 
-        <Test()> Public Sub InnerJoinTables()
-            Dim TestTables As JoinTableSet = Me.CreateInnerJoinTableSet1
+        <Test()> Public Sub InnerJoinTables_UniqueColumnNamesAfterJoin()
+            Dim TestTables As JoinTableSet = Me.CreateInnerJoinTableSet1(0)
+            TestTables.WriteToConsole()
+
+            Dim InnerJoined As DataTable
+            InnerJoined = CompuMaster.Data.DataTables.JoinTables(TestTables.LeftTable, TestTables.RightTable, TestTables.LeftTable.DataSet.Relations(0), CompuMaster.Data.DataTables.JoinTypes.Inner)
+
+            Console.WriteLine("INNER-JOINED TABLE CONTENTS: " & TestTables.TableSetName)
+            Console.WriteLine(CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(InnerJoined))
+
+            'Acceptance Criteria: 
+            '- column of 2nd table must be renamed if 1st table already contains the same column name
+            '- renamed column (e.g. "column1") must not exist in list of selected columns (incl. PKs) from 1st and 2nd table           
+            Assert.AreEqual(0, CInt(InnerJoined.Rows(0)("left1")))
+            Assert.AreEqual(3, CInt(InnerJoined.Rows(0)("test")))
+            Assert.AreEqual(2, CInt(InnerJoined.Rows(0)("test1")))
+
+            StringAssert.IsMatch("3", InnerJoined.Rows.Item(0).Item("test"))
+            StringAssert.IsMatch("2", InnerJoined.Rows.Item(0).Item("test1"))
+        End Sub
+
+        <Test()> Public Sub InnerJoinTables_TablesWithEqualPKs()
+            Dim TestTables As JoinTableSet = Me.CreateInnerJoinTableSet1(0)
             TestTables.WriteToConsole()
 
             Dim InnerJoined As DataTable
@@ -1568,42 +1589,72 @@ Namespace CompuMaster.Test.Data
                 Assert.AreEqual("left" & i, InnerJoined.Columns(i - 1).ColumnName)
             Next i
             StringAssert.IsMatch("left1", InnerJoined.Columns(0).ColumnName)
-            StringAssert.IsMatch("left2", innerJoined.Columns(1).ColumnName)
-            StringAssert.IsMatch("left3", innerJoined.Columns(2).ColumnName)
-            StringAssert.IsMatch("test", innerJoined.Columns(3).ColumnName)
-            StringAssert.IsMatch("right1", innerJoined.Columns(4).ColumnName)
-            StringAssert.IsMatch("right2", innerJoined.Columns(5).ColumnName)
-            StringAssert.IsMatch("test", innerJoined.Columns(6).ColumnName)
+            StringAssert.IsMatch("left2", InnerJoined.Columns(1).ColumnName)
+            StringAssert.IsMatch("left3", InnerJoined.Columns(2).ColumnName)
+            StringAssert.IsMatch("test", InnerJoined.Columns(3).ColumnName)
+            StringAssert.IsMatch("right1", InnerJoined.Columns(4).ColumnName)
+            StringAssert.IsMatch("right2", InnerJoined.Columns(5).ColumnName)
+            StringAssert.IsMatch("test", InnerJoined.Columns(6).ColumnName)
             Assert.AreEqual(7, InnerJoined.Columns.Count())
 
-            'Verify row (content)
+            'Verify row count and accessibility
             Assert.AreEqual(6, InnerJoined.Rows.Count())
 
-            StringAssert.IsMatch("3", innerJoined.Rows.Item(0).Item(3))
-            StringAssert.IsMatch("2", innerJoined.Rows.Item(0).Item(6))
+            'Verify row (content)
+            StringAssert.IsMatch("3", InnerJoined.Rows.Item(0).Item(3))
+            StringAssert.IsMatch("2", InnerJoined.Rows.Item(0).Item(6))
 
-            For i As Integer = 0 To 5
-                Assert.AreEqual(0 + i, CInt(innerJoined.Rows(i)(0)))
-                Assert.AreEqual(1 + i, CInt(innerJoined.Rows(i)(1)))
-                Assert.AreEqual(2 + i, CInt(innerJoined.Rows(i)(2)))
-                Assert.AreEqual(0 + i, CInt(innerJoined.Rows(i)(3)))
-                Assert.AreEqual(1 + i, CInt(innerJoined.Rows(i)(4)))
-                Assert.AreEqual(2 + i, CInt(innerJoined.Rows(i)(5)))
+            For RowCounter As Integer = 0 To 5
+                Assert.AreEqual(0 + RowCounter, CInt(InnerJoined.Rows(RowCounter)(0)), "RowCounter=" & RowCounter)
+                Assert.AreEqual(1 + RowCounter, CInt(InnerJoined.Rows(RowCounter)(1)), "RowCounter=" & RowCounter)
+                Assert.AreEqual(2 + RowCounter, CInt(InnerJoined.Rows(RowCounter)(2)), "RowCounter=" & RowCounter)
+                Assert.AreEqual(3 + RowCounter, CInt(InnerJoined.Rows(RowCounter)(3)), "RowCounter=" & RowCounter)
+                Assert.AreEqual(0 + RowCounter, CInt(InnerJoined.Rows(RowCounter)(4)), "RowCounter=" & RowCounter)
+                Assert.AreEqual(1 + RowCounter, CInt(InnerJoined.Rows(RowCounter)(5)), "RowCounter=" & RowCounter)
+                Assert.AreEqual(2 + RowCounter, CInt(InnerJoined.Rows(RowCounter)(6)), "RowCounter=" & RowCounter)
+            Next RowCounter
+
+        End Sub
+
+        <Test()> Public Sub InnerJoinTables_TablesWithSomeEqualPKs()
+            Dim TestTables As JoinTableSet = Me.CreateInnerJoinTableSet1(1)
+            TestTables.WriteToConsole()
+
+            Dim InnerJoined As DataTable
+            InnerJoined = CompuMaster.Data.DataTables.JoinTables(TestTables.LeftTable, TestTables.RightTable, TestTables.LeftTable.DataSet.Relations(0), CompuMaster.Data.DataTables.JoinTypes.Inner)
+
+            Console.WriteLine("INNER-JOINED TABLE CONTENTS: " & TestTables.TableSetName)
+            Console.WriteLine(CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(InnerJoined))
+
+            'Verify column (names)
+            For i As Integer = 1 To 3
+                Assert.AreEqual("left" & i, InnerJoined.Columns(i - 1).ColumnName)
             Next i
+            StringAssert.IsMatch("left1", InnerJoined.Columns(0).ColumnName)
+            StringAssert.IsMatch("left2", InnerJoined.Columns(1).ColumnName)
+            StringAssert.IsMatch("left3", InnerJoined.Columns(2).ColumnName)
+            StringAssert.IsMatch("test", InnerJoined.Columns(3).ColumnName)
+            StringAssert.IsMatch("right1", InnerJoined.Columns(4).ColumnName)
+            StringAssert.IsMatch("right2", InnerJoined.Columns(5).ColumnName)
+            StringAssert.IsMatch("test", InnerJoined.Columns(6).ColumnName)
+            Assert.AreEqual(7, InnerJoined.Columns.Count())
 
-            StringAssert.IsMatch("3", innerJoined.Rows.Item(0).Item("test"))
-            StringAssert.IsMatch("2", innerJoined.Rows.Item(0).Item(6))
+            'Verify row count and accessibility
+            Assert.AreEqual(5, InnerJoined.Rows.Count())
 
-            Assert.AreEqual("", innerJoined.Rows(1)(2))
-            Assert.AreEqual("", innerJoined.Rows(1)(3))
+            'Verify row (content)
+            StringAssert.IsMatch("4", InnerJoined.Rows.Item(0).Item(3))
+            StringAssert.IsMatch("3", InnerJoined.Rows.Item(0).Item(6))
 
-
-
-            'Throw New NotImplementedException
-            'TODO: implementation of test code for InnerJoinTables -done
-            'TODO: implementation of test code for RightJoinTables
-            'TODO: implementation of test code for FullJoinTables -done
-            'TODO: implementation of test code for CrossJoinTables -done
+            For RowCounter As Integer = 0 To 4
+                Assert.AreEqual(0 + 1 + RowCounter, CInt(InnerJoined.Rows(RowCounter)(0)), "RowCounter=" & RowCounter)
+                Assert.AreEqual(1 + 1 + RowCounter, CInt(InnerJoined.Rows(RowCounter)(1)), "RowCounter=" & RowCounter)
+                Assert.AreEqual(2 + 1 + RowCounter, CInt(InnerJoined.Rows(RowCounter)(2)), "RowCounter=" & RowCounter)
+                Assert.AreEqual(3 + 1 + RowCounter, CInt(InnerJoined.Rows(RowCounter)(3)), "RowCounter=" & RowCounter)
+                Assert.AreEqual(0 + 1 + RowCounter, CInt(InnerJoined.Rows(RowCounter)(4)), "RowCounter=" & RowCounter)
+                Assert.AreEqual(1 + 1 + RowCounter, CInt(InnerJoined.Rows(RowCounter)(5)), "RowCounter=" & RowCounter)
+                Assert.AreEqual(2 + 1 + RowCounter, CInt(InnerJoined.Rows(RowCounter)(6)), "RowCounter=" & RowCounter)
+            Next RowCounter
 
         End Sub
 
@@ -1690,6 +1741,11 @@ Namespace CompuMaster.Test.Data
             Assert.AreEqual(10, CInt(LeftJoined.Rows(0)(1)))
             Assert.AreEqual(5, CInt(LeftJoined.Rows(0)(2)))
             Assert.AreEqual(99, CInt(LeftJoined.Rows(1)(1)))
+        End Sub
+
+        <Test()> Public Sub SqlJoinTables_Inner()
+            'result rows always with partner in other table
+            Throw New NotImplementedException
         End Sub
 
         <Test()> Public Sub SqlJoinTables_Left()
