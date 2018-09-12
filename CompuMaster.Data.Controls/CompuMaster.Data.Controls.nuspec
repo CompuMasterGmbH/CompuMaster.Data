@@ -12,7 +12,7 @@
     <requireLicenseAcceptance>true</requireLicenseAcceptance>
     <description>.NET library for Windows Forms applications with common methods for simplified data access, data table arrangements and data IO (based on CompuMaster.Data)</description>
     <releaseNotes></releaseNotes>
-    <copyright>2005-2017 CompuMaster GmbH</copyright>
+    <copyright>2005-2018 CompuMaster GmbH</copyright>
     <tags>CompuMaster Data Common Utils DataTable DataManipulation WinForm</tags>
     <dependencies>
       <dependency id="CompuMaster.Data" version="[$version$]" />
