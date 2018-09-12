@@ -10,6 +10,7 @@ Namespace CompuMaster.Data.DataQuery
     Friend Class TestFile
         Implements IDisposable
 
+        Private disposed As Boolean
         Private path As String
 
         Public ReadOnly Property FilePath() As String
@@ -26,7 +27,7 @@ Namespace CompuMaster.Data.DataQuery
 
         Public Sub New(ByVal fileType As TestFileType)
             Dim TempFile As String
-            TempFile = System.IO.Path.GetTempFileName
+            TempFile = System.IO.Path.GetTempFileName()
             If fileType = TestFileType.MsExcel95Xls Then
                 CompuMaster.Data.DatabaseManagement.CreateMsExcelFile(TempFile, DatabaseManagement.MsExcelFileType.MsExcel95Xls)
             ElseIf fileType = TestFileType.MsExcel2007Xlsx Then
@@ -39,12 +40,29 @@ Namespace CompuMaster.Data.DataQuery
             path = TempFile
         End Sub
 
-        Public Sub Dispose() Implements System.IDisposable.Dispose
+        Protected Overridable Sub Dispose(disposing As Boolean)
+            If Me.disposed Then
+                Return
+            End If
             Try
-                If System.IO.File.Exists(path) Then System.IO.File.Delete(path)
+                If System.IO.File.Exists(path) Then
+                    System.IO.File.Delete(path)
+                End If
             Catch
             End Try
+            Me.disposed = True
+            Me.path = Nothing
         End Sub
+        Public Sub Dispose() Implements System.IDisposable.Dispose
+            Dispose(True)
+            GC.SuppressFinalize(Me)
+        End Sub
+
+        Protected Overrides Sub Finalize()
+            Dispose(False)
+        End Sub
+
+
 
     End Class
 
