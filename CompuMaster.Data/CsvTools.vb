@@ -448,6 +448,10 @@ Namespace CompuMaster.Data
             Dim Result As New DataTable
             Dim rdStr As String
             Dim RowCounter As Integer
+            Dim detectCompletedRowLineBasedOnRequiredColumnCount As Integer = 0
+            If lineEncodings = Csv.ReadLineEncodings.RowBreakCrLfOrCrOrLf_CellLineBreakCrLfOrCrOrLf AndAlso includesColumnHeaders = False Then
+                Throw New Exception("Line endings setting RowBreakCrLfOrCrOrLf_CellLineBreakCrLfOrCrOrLf requires the CSV data to provide column headers")
+            End If
 
             'Read file content
             rdStr = reader.ReadToEnd 'WARNING: might cause System.OutOfMemoryException on too large files
@@ -460,9 +464,15 @@ Namespace CompuMaster.Data
             Dim CharPosition As Integer = 0
             While CharPosition < rdStr.Length
 
+                If lineEncodings = Csv.ReadLineEncodings.RowBreakCrLfOrCrOrLf_CellLineBreakCrLfOrCrOrLf AndAlso detectCompletedRowLineBasedOnRequiredColumnCount = 0 Then
+                    If Not (RowCounter = 0) Then 'already includesColumnHeaders required since lineEncodings check on method head
+                        Throw New ArgumentNullException("detectCompletedRowLineBasedOnRequiredColumnCount", "Argument detectCompletedRowLineBasedOnRequiredColumnCount required for reading with line endings RowBreakCrLfOrCrOrLf_CellLineBreakCrLfOrCrOrLf")
+                    End If
+                End If
+
                 'Read the next csv row
                 Dim ColValues As New ArrayList
-                SplitCsvLineIntoCellValues(rdStr, ColValues, CharPosition, columnSeparator, recognizeTextBy, recognizeMultipleColumnSeparatorCharsAsOne, lineEncodings, lineEncodingAutoConversions)
+                SplitCsvLineIntoCellValues(rdStr, ColValues, CharPosition, columnSeparator, recognizeTextBy, recognizeMultipleColumnSeparatorCharsAsOne, lineEncodings, lineEncodingAutoConversions, detectCompletedRowLineBasedOnRequiredColumnCount)
 
                 'Add it as a new data row (respectively add the columns definition)
                 RowCounter += 1
@@ -476,13 +486,19 @@ Namespace CompuMaster.Data
                             Result.Columns.Add(New DataColumn(DataTables.LookupUniqueColumnName(Result, colName), GetType(String)))
                         End If
                     Next
+                    'Save current column count
+                    detectCompletedRowLineBasedOnRequiredColumnCount = Result.Columns.Count
                 Else
                     'Read line as data and automatically add required additional columns on the fly
                     Dim MyRow As DataRow = Result.NewRow
                     For ColCounter As Integer = 0 To ColValues.Count - 1
                         Dim colValue As String = Trim(CType(ColValues(ColCounter), String))
                         If Result.Columns.Count <= ColCounter Then
-                            Result.Columns.Add(New DataColumn(Nothing, GetType(String)))
+                            If lineEncodings = Csv.ReadLineEncodings.RowBreakCrLfOrCrOrLf_CellLineBreakCrLfOrCrOrLf Then
+                                Throw New Exception("Line endings setting RowBreakCrLfOrCrOrLf_CellLineBreakCrLfOrCrOrLf requires the CSV data to provide the same column count in each row: error reading cell """ & colValue & """")
+                            Else
+                                Result.Columns.Add(New DataColumn(Nothing, GetType(String)))
+                            End If
                         End If
                         MyRow(ColCounter) = colValue
                     Next
@@ -510,8 +526,8 @@ Namespace CompuMaster.Data
         ''' <param name="columnSeparator">Choose the required character for splitting the columns. Set to null (Nothing in VisualBasic) to enable fixed column widths mode</param>
         ''' <param name="recognizeTextBy">A character indicating the start and end of text string</param>
         ''' <param name="recognizeMultipleColumnSeparatorCharsAsOne">Specifies whether we should treat multiple column seperators as one</param>
-        Private Shared Sub SplitCsvLineIntoCellValues(ByRef lineContent As String, ByVal outputList As ArrayList, ByRef startposition As Integer, ByVal columnSeparator As Char, ByVal recognizeTextBy As Char, ByVal recognizeMultipleColumnSeparatorCharsAsOne As Boolean, lineEncodings As CompuMaster.Data.Csv.ReadLineEncodings, lineEncodingAutoConversions As CompuMaster.Data.Csv.ReadLineEncodingAutoConversion)
-
+        ''' <param name="detectCompletedRowLineBasedOnRequiredColumnCount">When reading CSV files with equal line break and cell break encoding, detect full row lines by column count</param>
+        Private Shared Sub SplitCsvLineIntoCellValues(ByRef lineContent As String, ByVal outputList As ArrayList, ByRef startposition As Integer, ByVal columnSeparator As Char, ByVal recognizeTextBy As Char, ByVal recognizeMultipleColumnSeparatorCharsAsOne As Boolean, lineEncodings As CompuMaster.Data.Csv.ReadLineEncodings, lineEncodingAutoConversions As CompuMaster.Data.Csv.ReadLineEncodingAutoConversion, detectCompletedRowLineBasedOnRequiredColumnCount As Integer)
             Dim CurrentColumnValue As New System.Text.StringBuilder
             Dim InQuotationMarks As Boolean
             Dim CharPositionCounter As Integer
@@ -545,7 +561,7 @@ Namespace CompuMaster.Data
                             End If
                         End If
                     Case ControlChars.Lf
-                        If InQuotationMarks Then
+                        If InQuotationMarks OrElse (lineEncodings = Csv.ReadLineEncodings.RowBreakCrLfOrCrOrLf_CellLineBreakCrLfOrCrOrLf AndAlso outputList.Count < detectCompletedRowLineBasedOnRequiredColumnCount - 1) Then
                             'TODO: read cell line breaks correctly
                             'Select Case lineEncodings
                             '    Case Csv.ReadLineEncodings.None
@@ -575,7 +591,7 @@ Namespace CompuMaster.Data
                                     Throw New NotImplementedException("Invalid lineEncoding")
                             End Select
                         Else
-                            'now it's a line separator
+                            'now it's a row line separator
                             'TODO: read cell line breaks correctly
                             'Select Case lineEncodings
                             '    Case Csv.ReadLineEncodings.None
@@ -595,7 +611,7 @@ Namespace CompuMaster.Data
                             Exit For
                         End If
                     Case ControlChars.Cr
-                        If InQuotationMarks Then
+                        If InQuotationMarks OrElse (lineEncodings = Csv.ReadLineEncodings.RowBreakCrLfOrCrOrLf_CellLineBreakCrLfOrCrOrLf AndAlso outputList.Count < detectCompletedRowLineBasedOnRequiredColumnCount - 1) Then
                             'TODO: read cell line breaks correctly
                             'Select Case lineEncodings
                             '    Case Csv.ReadLineEncodings.None
@@ -625,7 +641,7 @@ Namespace CompuMaster.Data
                                     Throw New NotImplementedException("Invalid lineEncoding")
                             End Select
                         Else
-                            'now it's a line separator
+                            'now it's a row line separator
                             'TODO: read cell line breaks correctly
                             'Select Case lineEncodings
                             '    Case Csv.ReadLineEncodings.None

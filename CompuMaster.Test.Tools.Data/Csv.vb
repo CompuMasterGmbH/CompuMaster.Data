@@ -429,6 +429,71 @@ Namespace CompuMaster.Test.Data
             Next
             Return Result
         End Function
+
+        <Test> Sub SupportReadLineBreakCrLfWithCellBreakCrLf()
+            Dim Result As DataTable = CompuMaster.Data.Csv.ReadDataTableFromCsvFile(AssemblyTestEnvironment.TestFileAbsolutePath("testfiles\test_linebreak_crlf_cellbreak_crlf.csv"), True, CompuMaster.Data.Csv.ReadLineEncodings.RowBreakCrLfOrCrOrLf_CellLineBreakCrLfOrCrOrLf, CompuMaster.Data.Csv.ReadLineEncodingAutoConversion.NoAutoConversion, "UTF-8", ";"c, """"c, False, True)
+
+            'Test output
+            Console.WriteLine(CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(Result, "|", "|", "+", "=", "-"))
+
+            'Some simple tests with 1-liners
+            For MyColCounter As Integer = 0 To 2
+                Assert.AreEqual("1linerNoQuotes" & (MyColCounter + 1).ToString, Result.Rows(0)(MyColCounter))
+            Next
+            For MyColCounter As Integer = 0 To 2
+                Assert.AreEqual("1liner" & (MyColCounter + 1).ToString, Result.Rows(1)(MyColCounter))
+            Next
+
+            'Some simple tests with multiliners but every cell with quotation marks
+            For MyColCounter As Integer = 0 To 2
+                Assert.AreEqual("1stLine" & ControlChars.CrLf & "2ndLine", Result.Rows(2)(MyColCounter))
+            Next
+
+            'Given are following 2 record rows:
+            '---
+            'Line 1: 1stLineA1NoQuotes
+            'Line 2: 2ndLineA1NoQuotes;1stLineA2NoQuotes
+            'Line 3: 2ndLineA2NoQuotes;1stLineA3NoQuotes
+            'Line 4: 2ndLineA3NoQuotes
+            'Line 5: 1stLineB1NoQuotes
+            'Line 6: 2ndLineB1NoQuotes;1stLineB2NoQuotes
+            'Line 7: 2ndLineB2NoQuotes;1stLineB3NoQuotes
+            'Line 8: 2ndLineB3NoQuotes
+            '---
+            'Line 4 + 5 values must be considered being part of 2nd record appearing with cell 2ndLineB1NoQuotes in line 6
+            For MyColCounter As Integer = 0 To 1
+                Assert.AreEqual("1stLineA" & (MyColCounter + 1) & "NoQuotes" & ControlChars.CrLf & "2ndLineA" & (MyColCounter + 1) & "NoQuotes", Result.Rows(3)(MyColCounter))
+            Next
+            Assert.AreEqual("1stLineA3NoQuotes", Result.Rows(3)(2))
+            Assert.AreEqual("2ndLineA3NoQuotes" & ControlChars.CrLf & "1stLineB1NoQuotes" & ControlChars.CrLf & "2ndLineB1NoQuotes", Result.Rows(4)(0))
+            For MyColCounter As Integer = 1 To 2
+                'Assert.AreEqual("1stLineB" & (MyColCounter + 1) & "NoQuotes" & ControlChars.CrLf & "2ndLineB" & (MyColCounter + 1) & "NoQuotes", Result.Rows(4)(MyColCounter))
+            Next
+
+            'Given are following 2 record rows:
+            '---
+            'Line 1: "1stLineAWith""SemiColon;
+            'Line 2: 2ndLineAWith""SemiColon;";"1stLineAWithSemiColon;
+            'Line 3: 2ndLineAWith""SemiColon;";"1stLineAWithSemiColon;
+            'Line 4: 2ndLineAWith""SemiColon;"
+            'Line 5: "1stLineBWith""SemiColon;
+            'Line 6: 2ndLineBWith""SemiColon;";"1stLineBWithSemiColon;
+            'Line 7: 2ndLineBWith""SemiColon;";"1stLineBWithSemiColon;
+            'Line 8: 2ndLineBWith""SemiColon;"
+            '---
+            'Line 1 and line 5 are correctly recognized as new record rows
+            For MyColCounter As Integer = 0 To 2
+                Assert.AreEqual("1stLineAWith""SemiColon;" & ControlChars.CrLf & "2ndLineAWith""SemiColon;", Result.Rows(5)(MyColCounter))
+            Next
+            For MyColCounter As Integer = 0 To 2
+                Assert.AreEqual("1stLineBWith""SemiColon;" & ControlChars.CrLf & "2ndLineBWith""SemiColon;", Result.Rows(6)(MyColCounter))
+            Next
+
+            'Total table summary
+            Assert.AreEqual(3, Result.Columns.Count)
+            Assert.AreEqual(7, Result.Rows.Count)
+        End Sub
+
     End Class
 
 End Namespace

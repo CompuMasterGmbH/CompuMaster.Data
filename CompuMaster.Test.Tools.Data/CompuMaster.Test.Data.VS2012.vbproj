@@ -223,6 +223,9 @@
     <Content Include="testfiles\country-codes.csv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="testfiles\test_linebreak_crlf_cellbreak_crlf.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CompuMaster.Data\CompuMaster.Data.VS2012.vbproj">
