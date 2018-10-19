@@ -472,6 +472,7 @@ Namespace CompuMaster.Data
 
                 'Read the next csv row
                 Dim ColValues As New ArrayList
+                Dim CurrentRowStartPosition As Integer = CharPosition
                 SplitCsvLineIntoCellValues(rdStr, ColValues, CharPosition, columnSeparator, recognizeTextBy, recognizeMultipleColumnSeparatorCharsAsOne, lineEncodings, lineEncodingAutoConversions, detectCompletedRowLineBasedOnRequiredColumnCount)
 
                 'Add it as a new data row (respectively add the columns definition)
@@ -495,7 +496,7 @@ Namespace CompuMaster.Data
                         Dim colValue As String = Trim(CType(ColValues(ColCounter), String))
                         If Result.Columns.Count <= ColCounter Then
                             If lineEncodings = Csv.ReadLineEncodings.RowBreakCrLfOrCrOrLf_CellLineBreakCrLfOrCrOrLf Then
-                                Throw New Exception("Line endings setting RowBreakCrLfOrCrOrLf_CellLineBreakCrLfOrCrOrLf requires the CSV data to provide the same column count in each row: error reading cell """ & colValue & """")
+                                Throw New Exception("Line endings setting RowBreakCrLfOrCrOrLf_CellLineBreakCrLfOrCrOrLf requires the CSV data to provide the same column count in each row: error reading record row " & Result.Rows.Count + 1 & " and cell """ & colValue & """ - full raw row data:" & vbNewLine & rdStr.Substring(CurrentRowStartPosition, CharPosition - CurrentRowStartPosition))
                             Else
                                 Result.Columns.Add(New DataColumn(Nothing, GetType(String)))
                             End If
