@@ -1,15 +1,15 @@
 language: csharp
 solution: CompuMaster.Data.VS2012.sln
 
-#mono:
-#  - latest
+mono:
+  - latest
   
 #dotnet: 
 #  - 1.0.1
 #  - 2.0.0-Preview1
 #  - latest
-os: windows
-#dist: trusty
+#os: windows
+dist: trusty
 #sudo: required
 #mono: none
 install:
