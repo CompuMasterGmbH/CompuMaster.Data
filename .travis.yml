@@ -16,5 +16,5 @@ install:
   - nuget restore CompuMaster.Data.VS2012.sln
   - nuget install NUnit.Runners -Version 3.4.1 -OutputDirectory testrunner
 script:
-  - msbuild /p:Configuration=Release /p:Platform="Any CPU" /p:PostBuildEvent="" CompuMaster.Data.VS2012.sln
+  - msbuild /p:Configuration=TravisCI /p:Platform="Any CPU" /p:PostBuildEvent="" CompuMaster.Data.VS2012.sln
   - ./testrunner/NUnit.ConsoleRunner.3.4.1/tools/nunit3-console.exe ./CompuMaster.Test.Tools.Data/bin/CompuMaster.Test.Tools.Data.dll
