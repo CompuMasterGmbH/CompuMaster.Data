@@ -1,2 +1,4 @@
 platform: Any CPU
 configuration: TravisCI
+after_build:
+- ps: rem do-nothing
