@@ -1,4 +1,4 @@
-Imports NUnit.Framework
+ï»¿Imports NUnit.Framework
 
 Namespace CompuMaster.Test.Data
 
@@ -18,7 +18,7 @@ Namespace CompuMaster.Test.Data
             Dim testoutputdata As DataTable
 
             testinputdata = "ID;""Description"";DateValue" & vbNewLine &
-                "5;""line1 ü content"";2005-08-29" & vbNewLine &
+                "5;""line1 Ã¼ content"";2005-08-29" & vbNewLine &
                 ";""line 2 """" content"";""2005-08-27"""
             testoutputdata = CompuMaster.Data.Csv.ReadDataTableFromCsvString(testinputdata, True, System.Threading.Thread.CurrentThread.CurrentCulture)
             'Throw New Exception(CompuMaster.Data.DataTables.ConvertToPlainTextTable(testoutputdata))
@@ -28,6 +28,7 @@ Namespace CompuMaster.Test.Data
 
         <Test> Public Sub ReadDataTableFromCsvFileWithColumnSeparatorCharInTextStrings()
             Dim TestFile As String = AssemblyTestEnvironment.TestFileAbsolutePath("testfiles\country-codes.csv")
+            System.Console.WriteLine("TestFile=" & TestFile)
             'TestFile = "https://raw.githubusercontent.com/datasets/country-codes/master/data/country-codes.csv"
 
             Dim CountryCodesTable As DataTable = CompuMaster.Data.Csv.ReadDataTableFromCsvFile(TestFile, True, System.Text.Encoding.UTF8, System.Globalization.CultureInfo.InvariantCulture, """"c, False, False)
@@ -48,7 +49,7 @@ Namespace CompuMaster.Test.Data
             Dim testoutputdata As DataTable
 
             testinputdata = "ID;""Description"";DateValue" & vbNewLine &
-                "5;""line1 ü content"";2005-08-29" & vbNewLine &
+                "5;""line1 Ã¼ content"";2005-08-29" & vbNewLine &
                 ";""line 2 """" content"";""2005-08-27"""
             testoutputdata = CompuMaster.Data.Csv.ReadDataTableFromCsvString(testinputdata, True, System.Globalization.CultureInfo.CreateSpecificCulture("de-DE"))
             'Throw New Exception(CompuMaster.Data.DataTables.ConvertToPlainTextTable(testoutputdata))
@@ -58,14 +59,14 @@ Namespace CompuMaster.Test.Data
             NUnit.Framework.Assert.AreEqual("Description", testoutputdata.Columns(1).ColumnName, "JW #103")
             NUnit.Framework.Assert.AreEqual("DateValue", testoutputdata.Columns(2).ColumnName, "JW #104")
             NUnit.Framework.Assert.AreEqual("5", testoutputdata.Rows(0)(0), "JW #105")
-            NUnit.Framework.Assert.AreEqual("line1 ü content", testoutputdata.Rows(0)(1), "JW #106")
+            NUnit.Framework.Assert.AreEqual("line1 Ã¼ content", testoutputdata.Rows(0)(1), "JW #106")
             NUnit.Framework.Assert.AreEqual("2005-08-29", testoutputdata.Rows(0)(2), "JW #107")
             NUnit.Framework.Assert.AreEqual("", testoutputdata.Rows(1)(0), "JW #108")
             NUnit.Framework.Assert.AreEqual("line 2 "" content", testoutputdata.Rows(1)(1), "JW #109")
             NUnit.Framework.Assert.AreEqual("2005-08-27", testoutputdata.Rows(1)(2), "JW #110")
 
             testinputdata = "ID;""Description"";DateValue" & vbNewLine &
-                "5;""line1 ü content"";2005-08-29" & ControlChars.Lf &
+                "5;""line1 Ã¼ content"";2005-08-29" & ControlChars.Lf &
                 ";""line 2 " & ControlChars.Lf & "newline content"";""2005-08-27"";" & vbNewLine
             testoutputdata = CompuMaster.Data.Csv.ReadDataTableFromCsvString(testinputdata, True, System.Globalization.CultureInfo.CreateSpecificCulture("de-DE"))
             NUnit.Framework.Assert.AreEqual(4, testoutputdata.Columns.Count, "JW #200")
@@ -74,7 +75,7 @@ Namespace CompuMaster.Test.Data
             NUnit.Framework.Assert.AreEqual("Description", testoutputdata.Columns(1).ColumnName, "JW #203")
             NUnit.Framework.Assert.AreEqual("DateValue", testoutputdata.Columns(2).ColumnName, "JW #204")
             NUnit.Framework.Assert.AreEqual("5", testoutputdata.Rows(0)(0), "JW #205")
-            NUnit.Framework.Assert.AreEqual("line1 ü content", testoutputdata.Rows(0)(1), "JW #206")
+            NUnit.Framework.Assert.AreEqual("line1 Ã¼ content", testoutputdata.Rows(0)(1), "JW #206")
             NUnit.Framework.Assert.AreEqual("2005-08-29", testoutputdata.Rows(0)(2), "JW #207")
             NUnit.Framework.Assert.AreEqual("", testoutputdata.Rows(0)(3), "JW #211")
             NUnit.Framework.Assert.AreEqual("", testoutputdata.Rows(1)(0), "JW #208")
@@ -83,7 +84,7 @@ Namespace CompuMaster.Test.Data
             NUnit.Framework.Assert.AreEqual("", testoutputdata.Rows(1)(3), "JW #211")
 
             testinputdata = "ID,""Description"",DateValue" & vbNewLine &
-                "5,""line1 ü content"",2005-08-29" & vbNewLine &
+                "5,""line1 Ã¼ content"",2005-08-29" & vbNewLine &
                 ",""line 2 """" content"",""2005-08-27"""
             testoutputdata = CompuMaster.Data.Csv.ReadDataTableFromCsvString(testinputdata, True, System.Globalization.CultureInfo.CreateSpecificCulture("en-GB"))
             'Throw New Exception(CompuMaster.Data.DataTables.ConvertToPlainTextTable(testoutputdata))
@@ -93,14 +94,14 @@ Namespace CompuMaster.Test.Data
             NUnit.Framework.Assert.AreEqual("Description", testoutputdata.Columns(1).ColumnName, "JW #703")
             NUnit.Framework.Assert.AreEqual("DateValue", testoutputdata.Columns(2).ColumnName, "JW #704")
             NUnit.Framework.Assert.AreEqual("5", testoutputdata.Rows(0)(0), "JW #705")
-            NUnit.Framework.Assert.AreEqual("line1 ü content", testoutputdata.Rows(0)(1), "JW #706")
+            NUnit.Framework.Assert.AreEqual("line1 Ã¼ content", testoutputdata.Rows(0)(1), "JW #706")
             NUnit.Framework.Assert.AreEqual("2005-08-29", testoutputdata.Rows(0)(2), "JW #707")
             NUnit.Framework.Assert.AreEqual("", testoutputdata.Rows(1)(0), "JW #708")
             NUnit.Framework.Assert.AreEqual("line 2 "" content", testoutputdata.Rows(1)(1), "JW #709")
             NUnit.Framework.Assert.AreEqual("2005-08-27", testoutputdata.Rows(1)(2), "JW #710")
 
             testinputdata = "ID,""Description"",DateValue" & vbNewLine &
-                "5,""line1 ü content"",2005-08-29" & ControlChars.Lf &
+                "5,""line1 Ã¼ content"",2005-08-29" & ControlChars.Lf &
                 ",""line 2 " & ControlChars.Lf & "newline content"",""2005-08-27""," & vbNewLine
             testoutputdata = CompuMaster.Data.Csv.ReadDataTableFromCsvString(testinputdata, True, System.Globalization.CultureInfo.CreateSpecificCulture("en-GB"))
             NUnit.Framework.Assert.AreEqual(4, testoutputdata.Columns.Count, "JW #800")
@@ -109,7 +110,7 @@ Namespace CompuMaster.Test.Data
             NUnit.Framework.Assert.AreEqual("Description", testoutputdata.Columns(1).ColumnName, "JW #803")
             NUnit.Framework.Assert.AreEqual("DateValue", testoutputdata.Columns(2).ColumnName, "JW #804")
             NUnit.Framework.Assert.AreEqual("5", testoutputdata.Rows(0)(0), "JW #805")
-            NUnit.Framework.Assert.AreEqual("line1 ü content", testoutputdata.Rows(0)(1), "JW #806")
+            NUnit.Framework.Assert.AreEqual("line1 Ã¼ content", testoutputdata.Rows(0)(1), "JW #806")
             NUnit.Framework.Assert.AreEqual("2005-08-29", testoutputdata.Rows(0)(2), "JW #807")
             NUnit.Framework.Assert.AreEqual("", testoutputdata.Rows(0)(3), "JW #811")
             NUnit.Framework.Assert.AreEqual("", testoutputdata.Rows(1)(0), "JW #808")
@@ -120,7 +121,7 @@ Namespace CompuMaster.Test.Data
             'Again the same tests from above - but this time without culture parameter but some manual info on separator etc.
 
             testinputdata = "ID;""Description"";DateValue" & vbNewLine &
-                "5;""line1 ü content"";2005-08-29" & vbNewLine &
+                "5;""line1 Ã¼ content"";2005-08-29" & vbNewLine &
                 ";""line 2 """" content"";""2005-08-27"""
             testoutputdata = CompuMaster.Data.Csv.ReadDataTableFromCsvString(testinputdata, True, ";"c, """"c, False, False)
             'Throw New Exception(CompuMaster.Data.DataTables.ConvertToPlainTextTable(testoutputdata))
@@ -130,14 +131,14 @@ Namespace CompuMaster.Test.Data
             NUnit.Framework.Assert.AreEqual("Description", testoutputdata.Columns(1).ColumnName, "JW #103")
             NUnit.Framework.Assert.AreEqual("DateValue", testoutputdata.Columns(2).ColumnName, "JW #104")
             NUnit.Framework.Assert.AreEqual("5", testoutputdata.Rows(0)(0), "JW #105")
-            NUnit.Framework.Assert.AreEqual("line1 ü content", testoutputdata.Rows(0)(1), "JW #106")
+            NUnit.Framework.Assert.AreEqual("line1 Ã¼ content", testoutputdata.Rows(0)(1), "JW #106")
             NUnit.Framework.Assert.AreEqual("2005-08-29", testoutputdata.Rows(0)(2), "JW #107")
             NUnit.Framework.Assert.AreEqual("", testoutputdata.Rows(1)(0), "JW #108")
             NUnit.Framework.Assert.AreEqual("line 2 "" content", testoutputdata.Rows(1)(1), "JW #109")
             NUnit.Framework.Assert.AreEqual("2005-08-27", testoutputdata.Rows(1)(2), "JW #110")
 
             testinputdata = "ID;""Description"";DateValue" & vbNewLine &
-                "5;""line1 ü content"";2005-08-29" & ControlChars.Lf &
+                "5;""line1 Ã¼ content"";2005-08-29" & ControlChars.Lf &
                 ";""line 2 " & ControlChars.Lf & "newline content"";""2005-08-27"";" & vbNewLine
             testoutputdata = CompuMaster.Data.Csv.ReadDataTableFromCsvString(testinputdata, True, ";"c, """"c, False, False)
             NUnit.Framework.Assert.AreEqual(4, testoutputdata.Columns.Count, "JW #200")
@@ -146,7 +147,7 @@ Namespace CompuMaster.Test.Data
             NUnit.Framework.Assert.AreEqual("Description", testoutputdata.Columns(1).ColumnName, "JW #203")
             NUnit.Framework.Assert.AreEqual("DateValue", testoutputdata.Columns(2).ColumnName, "JW #204")
             NUnit.Framework.Assert.AreEqual("5", testoutputdata.Rows(0)(0), "JW #205")
-            NUnit.Framework.Assert.AreEqual("line1 ü content", testoutputdata.Rows(0)(1), "JW #206")
+            NUnit.Framework.Assert.AreEqual("line1 Ã¼ content", testoutputdata.Rows(0)(1), "JW #206")
             NUnit.Framework.Assert.AreEqual("2005-08-29", testoutputdata.Rows(0)(2), "JW #207")
             NUnit.Framework.Assert.AreEqual("", testoutputdata.Rows(0)(3), "JW #211")
             NUnit.Framework.Assert.AreEqual("", testoutputdata.Rows(1)(0), "JW #208")
@@ -155,7 +156,7 @@ Namespace CompuMaster.Test.Data
             NUnit.Framework.Assert.AreEqual("", testoutputdata.Rows(1)(3), "JW #211")
 
             testinputdata = "ID,""Description"",DateValue" & vbNewLine &
-                "5,""line1 ü content"",2005-08-29" & vbNewLine &
+                "5,""line1 Ã¼ content"",2005-08-29" & vbNewLine &
                 ",""line 2 """" content"",""2005-08-27"""
             testoutputdata = CompuMaster.Data.Csv.ReadDataTableFromCsvString(testinputdata, True)
             'Throw New Exception(CompuMaster.Data.DataTables.ConvertToPlainTextTable(testoutputdata))
@@ -165,14 +166,14 @@ Namespace CompuMaster.Test.Data
             NUnit.Framework.Assert.AreEqual("Description", testoutputdata.Columns(1).ColumnName, "JW #703")
             NUnit.Framework.Assert.AreEqual("DateValue", testoutputdata.Columns(2).ColumnName, "JW #704")
             NUnit.Framework.Assert.AreEqual("5", testoutputdata.Rows(0)(0), "JW #705")
-            NUnit.Framework.Assert.AreEqual("line1 ü content", testoutputdata.Rows(0)(1), "JW #706")
+            NUnit.Framework.Assert.AreEqual("line1 Ã¼ content", testoutputdata.Rows(0)(1), "JW #706")
             NUnit.Framework.Assert.AreEqual("2005-08-29", testoutputdata.Rows(0)(2), "JW #707")
             NUnit.Framework.Assert.AreEqual("", testoutputdata.Rows(1)(0), "JW #708")
             NUnit.Framework.Assert.AreEqual("line 2 "" content", testoutputdata.Rows(1)(1), "JW #709")
             NUnit.Framework.Assert.AreEqual("2005-08-27", testoutputdata.Rows(1)(2), "JW #710")
 
             testinputdata = "ID,""Description"",DateValue" & vbNewLine &
-                "5,""line1 ü content"",2005-08-29" & ControlChars.Lf &
+                "5,""line1 Ã¼ content"",2005-08-29" & ControlChars.Lf &
                 ",""line 2 " & ControlChars.Lf & "newline content"",""2005-08-27""," & vbNewLine
             testoutputdata = CompuMaster.Data.Csv.ReadDataTableFromCsvString(testinputdata, True)
             NUnit.Framework.Assert.AreEqual(4, testoutputdata.Columns.Count, "JW #800")
@@ -181,7 +182,7 @@ Namespace CompuMaster.Test.Data
             NUnit.Framework.Assert.AreEqual("Description", testoutputdata.Columns(1).ColumnName, "JW #803")
             NUnit.Framework.Assert.AreEqual("DateValue", testoutputdata.Columns(2).ColumnName, "JW #804")
             NUnit.Framework.Assert.AreEqual("5", testoutputdata.Rows(0)(0), "JW #805")
-            NUnit.Framework.Assert.AreEqual("line1 ü content", testoutputdata.Rows(0)(1), "JW #806")
+            NUnit.Framework.Assert.AreEqual("line1 Ã¼ content", testoutputdata.Rows(0)(1), "JW #806")
             NUnit.Framework.Assert.AreEqual("2005-08-29", testoutputdata.Rows(0)(2), "JW #807")
             NUnit.Framework.Assert.AreEqual("", testoutputdata.Rows(0)(3), "JW #811")
             NUnit.Framework.Assert.AreEqual("", testoutputdata.Rows(1)(0), "JW #808")
@@ -217,7 +218,7 @@ Namespace CompuMaster.Test.Data
             NUnit.Framework.Assert.AreEqual("567890", testoutputdata.Rows(1)(3), "JW #311")
 
             'testinputdata = "ID;""Description"";DateValue" & vbNewLine & _
-            '    "5;""line1 ü content"";2005-08-29" & vbNewLine & _
+            '    "5;""line1 Ã¼ content"";2005-08-29" & vbNewLine & _
             '    ";""line 2 " & ControlChars.Lf & "newline content"";""2005-08-27"";" & vbNewLine
             'testoutputdata = CompuMaster.Data.Csv.ReadDataTableFromCsvString(testinputdata, True)
             'NUnit.Framework.Assert.AreEqual(4, testoutputdata.Columns.Count, "JW #400")
@@ -226,7 +227,7 @@ Namespace CompuMaster.Test.Data
             'NUnit.Framework.Assert.AreEqual("Description", testoutputdata.Columns(1).ColumnName, "JW #403")
             'NUnit.Framework.Assert.AreEqual("DateValue", testoutputdata.Columns(2).ColumnName, "JW #404")
             'NUnit.Framework.Assert.AreEqual("5", testoutputdata.Rows(0)(0), "JW #405")
-            'NUnit.Framework.Assert.AreEqual("line1 ü content", testoutputdata.Rows(0)(1), "JW #406")
+            'NUnit.Framework.Assert.AreEqual("line1 Ã¼ content", testoutputdata.Rows(0)(1), "JW #406")
             'NUnit.Framework.Assert.AreEqual("2005-08-29", testoutputdata.Rows(0)(2), "JW #407")
             'NUnit.Framework.Assert.AreEqual("", testoutputdata.Rows(0)(3), "JW #411")
             'NUnit.Framework.Assert.AreEqual("", testoutputdata.Rows(1)(0), "JW #408")
@@ -255,7 +256,7 @@ Namespace CompuMaster.Test.Data
         End Sub
 
         <Test> Sub ReadWriteCompareDatableWithStringEncoding()
-            Dim Level0CsvData As String = """69100"";"""";"""""""";""Text with quotation mark("""")"";""Space""" & vbNewLine
+            Dim Level0CsvData As String = """69100"";"""";"""""""";""Text with quotation mark("""")"";""Space""" & System.Environment.NewLine
             Dim Level1CsvDataTable As DataTable = CompuMaster.Data.Csv.ReadDataTableFromCsvString(Level0CsvData, False, ";"c, """"c, False, False)
             Dim Level2CsvData As String = CompuMaster.Data.Csv.WriteDataTableToCsvTextString(Level1CsvDataTable, False, ";"c, """"c, "."c)
             Assert.AreEqual("Text with quotation mark("")", CType(Level1CsvDataTable.Rows(0)(3), String))
@@ -337,7 +338,7 @@ Namespace CompuMaster.Test.Data
             For MyCounter As Integer = 1 To LinesInTotal
                 Dim r As DataRow = t.NewRow
                 r(0) = "Line no. " & MyCounter.ToString("000,000,000,000")
-                r(1) = "abcdefghijklmnopqrstuvwxyzäöüß|abcdefghijklmnopqrstuvwxyzäöüß|abcdefghijklmnopqrstuvwxyzäöüß|abcdefghijklmnopqrstuvwxyzäöüß|abcdefghijklmnopqrstuvwxyzäöüß|abcdefghijklmnopqrstuvwxyzäöüß|abcdefghijklmnopqrstuvwxyzäöüß|abcdefghijklmnopqrstuvwxyzäöüß"
+                r(1) = "abcdefghijklmnopqrstuvwxyzÃ¤Ã¶Ã¼ÃŸ|abcdefghijklmnopqrstuvwxyzÃ¤Ã¶Ã¼ÃŸ|abcdefghijklmnopqrstuvwxyzÃ¤Ã¶Ã¼ÃŸ|abcdefghijklmnopqrstuvwxyzÃ¤Ã¶Ã¼ÃŸ|abcdefghijklmnopqrstuvwxyzÃ¤Ã¶Ã¼ÃŸ|abcdefghijklmnopqrstuvwxyzÃ¤Ã¶Ã¼ÃŸ|abcdefghijklmnopqrstuvwxyzÃ¤Ã¶Ã¼ÃŸ|abcdefghijklmnopqrstuvwxyzÃ¤Ã¶Ã¼ÃŸ"
                 t.Rows.Add(r)
                 If MyCounter Mod 1000 ^ 2 = 0 Then
                     Console.WriteLine("Created records in test table: " & MyCounter.ToString("#,##0"))
@@ -430,7 +431,17 @@ Namespace CompuMaster.Test.Data
             Return Result
         End Function
 
-        <Test> Sub SupportReadLineBreakCrLfWithCellBreakCrLf()
+#If Not CI_Build Then
+        <Test> Sub SupportReadLineBreaks_ProskeFiles()
+            'Dim importFile As String = "D:\OwnCloud_CM\Viega FHW-Tool ScopeVisio\EinfÃ¼hrung Proske\Exporte_Proske_SQL+Skripte\SQL_EXPORTE\20181015_AllContactPersonsWithAddresses.csv"
+            Dim importFile As String = "D:\OwnCloud_CM\Viega FHW-Tool ScopeVisio\EinfÃ¼hrung Proske\Exporte_Proske_SQL+Skripte\SQL_EXPORTE\20181015_CustomersWithMainAddressesAndBankAccount_cleaned.csv"
+            Dim dt As DataTable
+            dt = CompuMaster.Data.Csv.ReadDataTableFromCsvFile(importFile, True, CompuMaster.Data.Csv.ReadLineEncodings.RowBreakCrLfOrCrOrLf_CellLineBreakCrLfOrCrOrLf, CompuMaster.Data.Csv.ReadLineEncodingAutoConversion.NoAutoConversion, "UTF-8", ";"c, ControlChars.Quote, False, True)
+
+        End Sub
+#End If
+
+        <Test, Ignore("NotYetImplementedCompletely")> Sub SupportReadLineBreakCrLfWithCellBreakCrLf()
             Dim Result As DataTable = CompuMaster.Data.Csv.ReadDataTableFromCsvFile(AssemblyTestEnvironment.TestFileAbsolutePath("testfiles\test_linebreak_crlf_cellbreak_crlf.csv"), True, CompuMaster.Data.Csv.ReadLineEncodings.RowBreakCrLfOrCrOrLf_CellLineBreakCrLfOrCrOrLf, CompuMaster.Data.Csv.ReadLineEncodingAutoConversion.NoAutoConversion, "UTF-8", ";"c, """"c, False, True)
 
             'Test output
