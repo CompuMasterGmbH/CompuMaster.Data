@@ -8,7 +8,8 @@ cache:
 
 install:
   - ps: 'Write-Host "Installing 2007 Office System Driver: Data Connectivity Components..."'
-  - ps: '(New-Object Net.WebClient).DownloadFile("https://www.microsoft.com/en-us/download/confirmation.aspx?id=54920&6B49FDFB-8E5B-4B07-BC31-15695C5A2143=1", "$env:APPVEYOR_BUILD_FOLDER\install-packages\AccessDatabaseEngine.exe")'
+  - ps: New-Item -ItemType Directory -Force -Path ".\install-packages"
+  - ps: '(New-Object Net.WebClient).DownloadFile("https://download.microsoft.com/download/3/5/C/35C84C36-661A-44E6-9324-8786B8DBE231/AccessDatabaseEngine.exe", "$env:APPVEYOR_BUILD_FOLDER\install-packages\AccessDatabaseEngine.exe")'
   - ps: .\install-packages\AccessDatabaseEngine.exe /quiet
   - ps: 'Write-Host "OK" -foregroundcolor Green'
 before_build:
