@@ -137,6 +137,7 @@ Namespace CompuMaster.Test.Data
             Assert.AreEqual(2, Data.Tables.Count)
         End Sub
 
+#If Not CI_Build Then
         <Test()> Public Sub ConvertDataReaderToDataTable()
             Dim TestFile As String = AssemblyTestEnvironment.TestFileAbsolutePath("testfiles\test_for_msaccess.mdb")
             Dim MyConn As IDbConnection = CompuMaster.Data.DataQuery.Connections.MicrosoftAccessConnection(TestFile)
@@ -148,6 +149,7 @@ Namespace CompuMaster.Test.Data
             Assert.AreEqual("mytablename", Data.TableName)
             Assert.AreNotEqual(0, Data.Rows.Count)
         End Sub
+#End If
 
         <Test(), NUnit.Framework.Ignore("NotYetImplemented")> Public Sub ConvertDatasetToXml()
             Throw New NotImplementedException
@@ -1572,10 +1574,10 @@ Namespace CompuMaster.Test.Data
             '- renamed column (e.g. "column1") must not exist in list of selected columns (incl. PKs) from 1st and 2nd table           
             Assert.AreEqual(0, CInt(InnerJoined.Rows(0)("left1")))
             Assert.AreEqual(3, CInt(InnerJoined.Rows(0)("test")))
-            Assert.AreEqual(2, CInt(InnerJoined.Rows(0)("test1")))
+            Assert.AreEqual(2, CInt(InnerJoined.Rows(0)("ClientTable_test")))
 
             StringAssert.IsMatch("3", InnerJoined.Rows.Item(0).Item("test"))
-            StringAssert.IsMatch("2", InnerJoined.Rows.Item(0).Item("test1"))
+            StringAssert.IsMatch("2", InnerJoined.Rows.Item(0).Item("ClientTable_test"))
         End Sub
 
         <Test()> Public Sub InnerJoinTables_TablesWithEqualPKs()
@@ -1747,7 +1749,7 @@ Namespace CompuMaster.Test.Data
             Assert.AreEqual(99, CInt(LeftJoined.Rows(1)(1)))
         End Sub
 
-        <Test()> Public Sub SqlJoinTables_Inner()
+        <Test(), Ignore("ToBeImplemented")> Public Sub SqlJoinTables_Inner()
             'result rows always with partner in other table
             Throw New NotImplementedException
         End Sub

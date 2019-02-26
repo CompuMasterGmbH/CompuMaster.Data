@@ -35,6 +35,7 @@ Namespace CompuMaster.Test.Data.DataQuery
             'TODO: Sinnvolles Testing
         End Sub
 
+#If Not CI_Build Then
         <Test()> Public Sub ReadMsAccessDatabase()
             Dim TestFile As String = AssemblyTestEnvironment.TestFileAbsolutePath("testfiles\test_for_msaccess.mdb")
             Dim MyConn As IDbConnection = CompuMaster.Data.DataQuery.Connections.MicrosoftAccessConnection(TestFile)
@@ -132,6 +133,7 @@ Namespace CompuMaster.Test.Data.DataQuery
                 Assert.Fail("Test environment doesn't contain OleDb provider for current platform x64/x32 - reconfigure test server!")
             End If
         End Sub
+#End If
 
 #If Not CI_Build Then
         <Test()> Public Sub MicrosoftExcelOdbcConnection()

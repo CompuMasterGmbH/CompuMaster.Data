@@ -4,6 +4,7 @@ Namespace CompuMaster.Test.Data
 
     <TestFixture(Category:="LDAP with security")> Public Class Ldap
 
+#If Not CI_Build Then
         <Test()> Public Sub CurrentRootDomain()
             Console.WriteLine("First domain in forest=" & CompuMaster.Data.Ldap.GetRootDomain)
         End Sub
@@ -12,7 +13,6 @@ Namespace CompuMaster.Test.Data
             Console.WriteLine("Domains in current forest:" & vbNewLine & Strings.Join(CompuMaster.Data.Ldap.GetDomains, vbNewLine))
         End Sub
 
-#If Not CI_Build Then
         <Test()> Public Sub Query()
             Dim testTable As DataTable = CompuMaster.Data.Ldap.Query("compumaster", "(objectCategory=user)")
             Console.WriteLine(CompuMaster.Data.DataTables.ConvertToPlainTextTable(testTable))

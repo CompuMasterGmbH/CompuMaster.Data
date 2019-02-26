@@ -4,7 +4,7 @@ configuration: AppVeyorCI
 # build cache to preserve files/folders between builds
 cache:
   - packages -> **\packages.config  # preserve "packages" directory in the root of build folder but will reset it if packages.config is modified
-  - install-packages
+#  - install-packages
 
 install:
 #  - ps: 'Write-Host "Installing 2007 Office System Driver: Data Connectivity Components..."'
