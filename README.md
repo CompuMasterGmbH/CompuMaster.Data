@@ -5,7 +5,9 @@
 [![NuGet CompuMaster.Data](https://img.shields.io/nuget/v/CompuMaster.Data.svg?maxAge=2592000&label=NuGet%20CM.Data)](https://www.nuget.org/packages/CompuMaster.Data/) 
 [![NuGet CompuMaster.Data.Controls](https://img.shields.io/nuget/v/CompuMaster.Data.Controls.svg?maxAge=2592000&label=NuGet%20CM.Data.Controls)](https://www.nuget.org/packages/CompuMaster.Data.Controls) 
 
-[![Travis](https://img.shields.io/travis/CompuMasterGmbH/CompuMaster.Data.svg?maxAge=2592000&label=Build%20with%20Travis%2FMono)](https://travis-ci.org/CompuMasterGmbH/CompuMaster.Data/) ![AppVeyor](https://img.shields.io/appveyor/ci/jochenwezel/compumaster-data.svg?maxAge=2592000&label=Build%20with%20AppVeyor%2FWindows) ![AppVeyor tests](https://img.shields.io/appveyor/tests/jochenwezel/compumaster-data.svg?maxAge=2592000&label=Tests%20with%20AppVeyor%2FWindows)
+[![Travis](https://img.shields.io/travis/CompuMasterGmbH/CompuMaster.Data.svg?maxAge=2592000&label=Build%20with%20Travis%2FMono)](https://travis-ci.org/CompuMasterGmbH/CompuMaster.Data/) 
+[![AppVeyor](https://img.shields.io/appveyor/ci/jochenwezel/compumaster-data.svg?maxAge=2592000&label=Build%20with%20AppVeyor%2FWindows)](https://ci.appveyor.com/project/jochenwezel/compumaster-data) 
+[![AppVeyor tests](https://img.shields.io/appveyor/tests/jochenwezel/compumaster-data.svg?maxAge=2592000&label=Tests%20with%20AppVeyor%2FWindows)](https://ci.appveyor.com/project/jochenwezel/compumaster-data/build/tests)
 
 
 
