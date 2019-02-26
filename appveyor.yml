@@ -4,11 +4,12 @@ configuration: AppVeyorCI
 # build cache to preserve files/folders between builds
 cache:
   - packages -> **\packages.config  # preserve "packages" directory in the root of build folder but will reset it if packages.config is modified
+  - install-packages
 
 install:
   - ps: 'Write-Host "Installing 2007 Office System Driver: Data Connectivity Components..."'
-  - ps: '(New-Object Net.WebClient).DownloadFile("https://download.microsoft.com/download/f/d/8/fd8c20d8-e38a-48b6-8691-542403b91da1/AccessDatabaseEngine.exe", "$env:APPVEYOR_BUILD_FOLDER\AccessDatabaseEngine.exe")'
-  - ps: .\AccessDatabaseEngine.exe /quiet
+  - ps: '(New-Object Net.WebClient).DownloadFile("https://download.microsoft.com/download/f/d/8/fd8c20d8-e38a-48b6-8691-542403b91da1/AccessDatabaseEngine.exe", "$env:APPVEYOR_BUILD_FOLDER\install-packages\AccessDatabaseEngine.exe")'
+  - ps: .\install-packages\AccessDatabaseEngine.exe /quiet
   - ps: 'Write-Host "OK" -foregroundcolor Green'
 before_build:
   - nuget restore
