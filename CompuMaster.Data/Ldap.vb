@@ -8,6 +8,26 @@ Namespace CompuMaster.Data
     ''' </summary>
     Public Class Ldap
 
+        Friend Shared Function GetRootDomain() As String
+            If Not System.DirectoryServices.ActiveDirectory.Forest.GetCurrentForest Is Nothing Then
+                Return System.DirectoryServices.ActiveDirectory.Forest.GetCurrentForest.Name
+            Else
+                Return Nothing
+            End If
+        End Function
+
+        Public Shared Function GetDomains() As String()
+            If Not System.DirectoryServices.ActiveDirectory.Forest.GetCurrentForest Is Nothing Then
+                Dim Result As New System.Collections.Generic.List(Of String)
+                For Each d As System.DirectoryServices.ActiveDirectory.Domain In System.DirectoryServices.ActiveDirectory.Forest.GetCurrentForest.Domains
+                    Result.Add(d.Name)
+                Next
+                Return Result.ToArray
+            Else
+                Return Nothing
+            End If
+        End Function
+
         Public Shared Function QueryRecordCount(ByVal domain As String, ByVal searchFilterExpression As String) As Integer
             Return QueryRecordCount(domain, searchFilterExpression, "", "")
         End Function
