@@ -2,9 +2,8 @@ platform: Any CPU
 configuration: AppVeyorCI
 install:
   - Write-Host "Installing 2007 Office System Driver: Data Connectivity Components..."
-(New-Object Net.WebClient).DownloadFile('https://download.microsoft.com/download/f/d/8/fd8c20d8-e38a-48b6-8691-542403b91da1/AccessDatabaseEngine.exe
-', "$env:APPVEYOR_BUILD_FOLDER\AccessDatabaseEngine.exe")
-.\AccessDatabaseEngine.exe /quiet
+  - (New-Object Net.WebClient).DownloadFile('https://download.microsoft.com/download/f/d/8/fd8c20d8-e38a-48b6-8691-542403b91da1/AccessDatabaseEngine.exe', "$env:APPVEYOR_BUILD_FOLDER\AccessDatabaseEngine.exe")
+  - .\AccessDatabaseEngine.exe /quiet
   - Write-Host "OK" -foregroundcolor Green
 before_build:
   - nuget restore
