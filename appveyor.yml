@@ -1,4 +1,4 @@
 platform: Any CPU
 configuration: TravisCI
-after_build:
-- ps: rem do-nothing
+before_build:
+  - nuget restore
