@@ -4,6 +4,7 @@ Namespace CompuMaster.Test.Data.DataQuery
 
     <TestFixture(Category:="DataQueryAnyIDataProvider")> Public Class DataQueryAnyIDataProvider
 
+#If Not CI_Build Then
         <Test()> Public Sub ExecuteReaderAndPutFirstColumnIntoGenericList()
             Dim TestFile As String = AssemblyTestEnvironment.TestFileAbsolutePath("testfiles\test_for_msaccess.mdb")
             Dim MyConn As IDbConnection = CompuMaster.Data.DataQuery.Connections.MicrosoftAccessConnection(TestFile)
@@ -121,6 +122,7 @@ Namespace CompuMaster.Test.Data.DataQuery
             Assert.AreEqual(3, Keys.Count, "Keys count")
             Assert.AreEqual(3, IntegerStringDictionary.Count, "Records count")
         End Sub
+#End If
 
     End Class
 

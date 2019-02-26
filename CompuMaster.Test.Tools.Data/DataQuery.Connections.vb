@@ -133,6 +133,7 @@ Namespace CompuMaster.Test.Data.DataQuery
             End If
         End Sub
 
+#If Not CI_Build Then
         <Test()> Public Sub MicrosoftExcelOdbcConnection()
             Dim TestFile As String = AssemblyTestEnvironment.TestFileAbsolutePath("testfiles\test_for_lastcell_e50aka95.xls")
             Dim conn As IDbConnection = CompuMaster.Data.DataQuery.Connections.MicrosoftExcelOdbcConnection(TestFile, False, True)
@@ -228,6 +229,7 @@ Namespace CompuMaster.Test.Data.DataQuery
                 Assert.Fail("Failed to open Access MDB at " & PlatformDependentProcessBitNumber() & " platform")
             End If
         End Sub
+#End If
 
         Private Function PlatformDependentProcessBitNumber() As String
             If Environment.Is64BitProcess Then
@@ -237,6 +239,7 @@ Namespace CompuMaster.Test.Data.DataQuery
             End If
         End Function
 
+#If Not CI_Build Then
         <Test()> Public Sub ReadMsAccessDatabaseEnumeratedTable()
             Dim TestFile As String = AssemblyTestEnvironment.TestFileAbsolutePath("testfiles\test_for_msaccess.mdb")
             Dim MyConn As IDbConnection = CompuMaster.Data.DataQuery.Connections.MicrosoftAccessConnection(TestFile)
@@ -254,6 +257,7 @@ Namespace CompuMaster.Test.Data.DataQuery
             End Try
             Assert.AreNotEqual(0, table.Columns.Count, "Column count for random, enumerated table")
         End Sub
+#End If
 
     End Class
 

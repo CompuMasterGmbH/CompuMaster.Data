@@ -318,8 +318,10 @@ Namespace CompuMaster.Test.Data
 
             Console.WriteLine(CompuMaster.Data.DataTables.ConvertToWikiTable(dt))
 
+#If Not CI_Build Then
             dt = _TestTable2()
             Console.WriteLine(CompuMaster.Data.DataTables.ConvertToWikiTable(dt))
+#End If
 
         End Sub
 
@@ -355,12 +357,14 @@ Namespace CompuMaster.Test.Data
             dt.Rows.Add(dt.NewRow)
             Console.WriteLine(CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(dt, 5, 20, "|", "|", "+", "=", "-", AddressOf ConvertColumnToString))
 
+#If Not CI_Build Then
             'Real data table: quiz questions
             dt = _TestTable2()
             Console.WriteLine(CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(dt))
             Console.WriteLine(CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(dt, " :: ", " :: ", "=##=", "=", "="))
             Console.WriteLine(CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(dt, 10))
             Console.WriteLine(CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(dt, 5, 20))
+#End If
 
         End Sub
 

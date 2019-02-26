@@ -4,6 +4,7 @@ Namespace CompuMaster.Test.Data
 
     <TestFixture(Category:="XLS Reader")> Public Class XlsReader
 
+#If Not CI_Build Then
         <Test()> Public Sub ReadLastCell()
             Dim TestFile As String = AssemblyTestEnvironment.TestFileAbsolutePath("testfiles\test_for_lastcell_e50aka95.xls")
 
@@ -48,6 +49,7 @@ Namespace CompuMaster.Test.Data
             Dim TestFile As String = AssemblyTestEnvironment.TestFileAbsolutePath("testfiles\test_for_lastcell_e12aka2007.xlsm")
             CompuMaster.Data.XlsReader.ReadDataTableFromXlsFile(TestFile, "test")
         End Sub
+#End If
 
     End Class
 
