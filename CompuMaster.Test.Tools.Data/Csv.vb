@@ -431,15 +431,12 @@ Namespace CompuMaster.Test.Data
             Return Result
         End Function
 
-#If Not CI_Build Then
-        <Test> Sub SupportReadLineBreaks_ProskeFiles()
-            'Dim importFile As String = "D:\OwnCloud_CM\Viega FHW-Tool ScopeVisio\Einführung Proske\Exporte_Proske_SQL+Skripte\SQL_EXPORTE\20181015_AllContactPersonsWithAddresses.csv"
-            Dim importFile As String = "D:\OwnCloud_CM\Viega FHW-Tool ScopeVisio\Einführung Proske\Exporte_Proske_SQL+Skripte\SQL_EXPORTE\20181015_CustomersWithMainAddressesAndBankAccount_cleaned.csv"
+        <Test, Ignore("NotYetImplementedCompletely OR ChallengeNotPossibleToSolve")> Sub SupportReadLineBreaks_SqlServerExportFileWithStandardExportSettings()
+            Dim importFile As String = AssemblyTestEnvironment.TestFileAbsolutePath("testfiles\sql-server-export.csv")
             Dim dt As DataTable
             dt = CompuMaster.Data.Csv.ReadDataTableFromCsvFile(importFile, True, CompuMaster.Data.Csv.ReadLineEncodings.RowBreakCrLfOrCrOrLf_CellLineBreakCrLfOrCrOrLf, CompuMaster.Data.Csv.ReadLineEncodingAutoConversion.NoAutoConversion, "UTF-8", ";"c, ControlChars.Quote, False, True)
 
         End Sub
-#End If
 
         <Test, Ignore("NotYetImplementedCompletely")> Sub SupportReadLineBreakCrLfWithCellBreakCrLf()
             Dim Result As DataTable = CompuMaster.Data.Csv.ReadDataTableFromCsvFile(AssemblyTestEnvironment.TestFileAbsolutePath("testfiles\test_linebreak_crlf_cellbreak_crlf.csv"), True, CompuMaster.Data.Csv.ReadLineEncodings.RowBreakCrLfOrCrOrLf_CellLineBreakCrLfOrCrOrLf, CompuMaster.Data.Csv.ReadLineEncodingAutoConversion.NoAutoConversion, "UTF-8", ";"c, """"c, False, True)
