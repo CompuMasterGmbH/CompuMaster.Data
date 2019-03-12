@@ -20,8 +20,13 @@ Namespace CompuMaster.Test.Data
         End Sub
 
         <Test()> Public Sub ReadTestFileQnA()
-            Dim file As String = AssemblyTestEnvironment.TestFileAbsolutePath("testfiles\Q&A.xls")
-            Dim dt As DataTable = CompuMaster.Data.XlsReader.ReadDataTableFromXlsFile(file, "Rund um das NT")
+            Dim file As String
+            Dim dt As DataTable
+            file = AssemblyTestEnvironment.TestFileAbsolutePath("testfiles\Q&A.xlsx")
+            dt = CompuMaster.Data.XlsReader.ReadDataTableFromXlsFile(file, "Rund um das NT")
+            Assert.AreEqual(35, dt.Rows.Count, "Row-Length")
+            file = AssemblyTestEnvironment.TestFileAbsolutePath("testfiles\Q&A.xls")
+            dt = CompuMaster.Data.XlsReader.ReadDataTableFromXlsFile(file, "Rund um das NT")
             Assert.AreEqual(35, dt.Rows.Count, "Row-Length")
         End Sub
 
