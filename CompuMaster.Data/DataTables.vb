@@ -147,34 +147,41 @@ Namespace CompuMaster.Data
             For RowCounter As Integer = column.Table.Rows.Count - 1 To 0 Step -1
                 Dim rowValue As Object = column.Table.Rows(RowCounter)(column)
                 For ValueCounter As Integer = 0 To values.Length - 1
+                    Dim IgnoreValueChecks As Boolean = False
                     If IsDBNull(values(ValueCounter)) AndAlso IsDBNull(rowValue) Then
                         column.Table.Rows.RemoveAt(RowCounter)
                         Exit For
-                    ElseIf column.DataType Is GetType(String) Then
-                        If CType(values(ValueCounter), String) = CType(rowValue, String) Then
-                            column.Table.Rows.RemoveAt(RowCounter)
-                            Exit For
-                        End If
-                    ElseIf column.DataType Is GetType(Int16) Then
-                        If CType(values(ValueCounter), Int16) = CType(rowValue, Int16) Then
-                            column.Table.Rows.RemoveAt(RowCounter)
-                            Exit For
-                        End If
-                    ElseIf column.DataType Is GetType(Int32) Then
-                        If CType(values(ValueCounter), Int32) = CType(rowValue, Int32) Then
-                            column.Table.Rows.RemoveAt(RowCounter)
-                            Exit For
-                        End If
-                    ElseIf column.DataType Is GetType(Int64) Then
-                        If CType(values(ValueCounter), Int64) = CType(rowValue, Int64) Then
-                            column.Table.Rows.RemoveAt(RowCounter)
-                            Exit For
-                        End If
-                    ElseIf column.DataType Is GetType(Boolean) Then
-                        If CType(values(ValueCounter), Boolean) = CType(rowValue, Boolean) Then
-                            column.Table.Rows.RemoveAt(RowCounter)
-                            Exit For
-                        End If
+                    ElseIf Not IsDBNull(values(ValueCounter)) AndAlso IsDBNull(rowValue) Then
+                        IgnoreValueChecks = True
+                    ElseIf IsDBNull(values(ValueCounter)) AndAlso Not IsDBNull(rowValue) Then
+                        IgnoreValueChecks = True
+                    End If
+                    If IgnoreValueChecks = False Then
+                        If column.DataType Is GetType(String) Then
+                            If CType(values(ValueCounter), String) = CType(rowValue, String) Then
+                                column.Table.Rows.RemoveAt(RowCounter)
+                                Exit For
+                            End If
+                        ElseIf column.DataType Is GetType(Int16) Then
+                            If CType(values(ValueCounter), Int16) = CType(rowValue, Int16) Then
+                                column.Table.Rows.RemoveAt(RowCounter)
+                                Exit For
+                            End If
+                        ElseIf column.DataType Is GetType(Int32) Then
+                            If CType(values(ValueCounter), Int32) = CType(rowValue, Int32) Then
+                                column.Table.Rows.RemoveAt(RowCounter)
+                                Exit For
+                            End If
+                        ElseIf column.DataType Is GetType(Int64) Then
+                            If CType(values(ValueCounter), Int64) = CType(rowValue, Int64) Then
+                                column.Table.Rows.RemoveAt(RowCounter)
+                                Exit For
+                            End If
+                        ElseIf column.DataType Is GetType(Boolean) Then
+                            If CType(values(ValueCounter), Boolean) = CType(rowValue, Boolean) Then
+                                column.Table.Rows.RemoveAt(RowCounter)
+                                Exit For
+                            End If
 #If NET_1_1 Then
                     ElseIf column.DataType Is GetType(UInt16) Then
                         If CType(values(ValueCounter), System.UInt16).ToString = CType(rowValue, System.UInt16).ToString Then
@@ -197,52 +204,53 @@ Namespace CompuMaster.Data
                             Exit For
                         End If
 #Else
-                    ElseIf column.DataType Is GetType(UInt16) Then
-                        If CType(values(ValueCounter), System.UInt16) = CType(rowValue, System.UInt16) Then
-                            column.Table.Rows.RemoveAt(RowCounter)
-                            Exit For
-                        End If
-                    ElseIf column.DataType Is GetType(UInt32) Then
-                        If CType(values(ValueCounter), UInt32) = CType(rowValue, UInt32) Then
-                            column.Table.Rows.RemoveAt(RowCounter)
-                            Exit For
-                        End If
-                    ElseIf column.DataType Is GetType(UInt64) Then
-                        If CType(values(ValueCounter), UInt64) = CType(rowValue, UInt64) Then
-                            column.Table.Rows.RemoveAt(RowCounter)
-                            Exit For
-                        End If
-                    ElseIf column.DataType Is GetType(TimeSpan) Then
-                        If CType(values(ValueCounter), TimeSpan) = CType(rowValue, TimeSpan) Then
-                            column.Table.Rows.RemoveAt(RowCounter)
-                            Exit For
-                        End If
+                        ElseIf column.DataType Is GetType(UInt16) Then
+                            If CType(values(ValueCounter), System.UInt16) = CType(rowValue, System.UInt16) Then
+                                column.Table.Rows.RemoveAt(RowCounter)
+                                Exit For
+                            End If
+                        ElseIf column.DataType Is GetType(UInt32) Then
+                            If CType(values(ValueCounter), UInt32) = CType(rowValue, UInt32) Then
+                                column.Table.Rows.RemoveAt(RowCounter)
+                                Exit For
+                            End If
+                        ElseIf column.DataType Is GetType(UInt64) Then
+                            If CType(values(ValueCounter), UInt64) = CType(rowValue, UInt64) Then
+                                column.Table.Rows.RemoveAt(RowCounter)
+                                Exit For
+                            End If
+                        ElseIf column.DataType Is GetType(TimeSpan) Then
+                            If CType(values(ValueCounter), TimeSpan) = CType(rowValue, TimeSpan) Then
+                                column.Table.Rows.RemoveAt(RowCounter)
+                                Exit For
+                            End If
 #End If
-                    ElseIf column.DataType Is GetType(Date) Then
-                        If CType(values(ValueCounter), Date) = CType(rowValue, Date) Then
-                            column.Table.Rows.RemoveAt(RowCounter)
-                            Exit For
-                        End If
-                    ElseIf column.DataType Is GetType(Decimal) Then
-                        If CType(values(ValueCounter), Decimal) = CType(rowValue, Decimal) Then
-                            column.Table.Rows.RemoveAt(RowCounter)
-                            Exit For
-                        End If
-                    ElseIf column.DataType Is GetType(Single) Then
-                        If CType(values(ValueCounter), Single) = CType(rowValue, Single) Then
-                            column.Table.Rows.RemoveAt(RowCounter)
-                            Exit For
-                        End If
-                    ElseIf column.DataType Is GetType(Double) Then
-                        If CType(values(ValueCounter), Double) = CType(rowValue, Double) Then
-                            column.Table.Rows.RemoveAt(RowCounter)
-                            Exit For
-                        End If
-                    Else
-                        'object type
-                        If values(ValueCounter) Is rowValue Then
-                            column.Table.Rows.RemoveAt(RowCounter)
-                            Exit For
+                        ElseIf column.DataType Is GetType(Date) Then
+                            If CType(values(ValueCounter), Date) = CType(rowValue, Date) Then
+                                column.Table.Rows.RemoveAt(RowCounter)
+                                Exit For
+                            End If
+                        ElseIf column.DataType Is GetType(Decimal) Then
+                            If CType(values(ValueCounter), Decimal) = CType(rowValue, Decimal) Then
+                                column.Table.Rows.RemoveAt(RowCounter)
+                                Exit For
+                            End If
+                        ElseIf column.DataType Is GetType(Single) Then
+                            If CType(values(ValueCounter), Single) = CType(rowValue, Single) Then
+                                column.Table.Rows.RemoveAt(RowCounter)
+                                Exit For
+                            End If
+                        ElseIf column.DataType Is GetType(Double) Then
+                            If CType(values(ValueCounter), Double) = CType(rowValue, Double) Then
+                                column.Table.Rows.RemoveAt(RowCounter)
+                                Exit For
+                            End If
+                        Else
+                            'object type
+                            If values(ValueCounter) Is rowValue Then
+                                column.Table.Rows.RemoveAt(RowCounter)
+                                Exit For
+                            End If
                         End If
                     End If
                 Next
