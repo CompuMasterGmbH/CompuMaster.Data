@@ -41,8 +41,11 @@ Namespace CompuMaster.Data
             RowBreakCrLfOrCr_CellLineBreakLf = 5
             RowBreakCrLfOrLf_CellLineBreakCr = 6
             ''' <summary>
-            ''' Read lines for rows and detect cell line breaks by incomplete column data per row
+            ''' WARNING: FEATURE STILL BETA DUE TO DESIGN ISSUES: Read lines for rows and detect cell line breaks by incomplete column data per row
             ''' </summary>
+            ''' <remarks>
+            ''' CURRENT DESIGN ISSUE WITH TROUBLE: LineBreaks in first and last column can't be identified if its for the previous row or for the next row since this data is missing in CSV file
+            ''' </remarks>
             RowBreakCrLfOrCrOrLf_CellLineBreakCrLfOrCrOrLf = 7
             [Default] = 5
         End Enum
