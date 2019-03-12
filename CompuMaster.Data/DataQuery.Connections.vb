@@ -309,7 +309,7 @@ Namespace CompuMaster.Data.DataQuery
                 Else
                     TestFile = New TestFile(DataQuery.TestFile.TestFileType.MsExcel2007Xlsx)
                 End If
-                For MyCounter As Integer = 20 To 15 Step -1
+                For MyCounter As Integer = (System.DateTime.Now.Year + 1 - 2000) To 15 Step -1 'try all MS Office releases since 2015 up to current year + 1
                     If ProbeOleDBProvider(MicrosoftExcelConnectionProviderWorkingStatusForACEDynList(MyCounter), "Provider=Microsoft.ACE.OLEDB." & MyCounter & ".0;Data Source=" & TestFile.FilePath & ";Extended Properties=""Excel " & MyCounter & ".0 Xml;HDR=YES;IMEX=0"";") Then
                         Return CompuMaster.Data.DataQuery.PlatformTools.CreateDataConnection("OleDB", "Provider=Microsoft.ACE.OLEDB." & MyCounter & ".0;Data Source=" & path & ";Extended Properties=""Excel " & MyCounter & ".0 Xml;HDR=" & BoolIf(firstRowContainsHeaders, "YES", "NO") & ";" & BoolIf(readAllColumnsAsTextOnly, "IMEX=1", "IMEX=0") & """;")
                     End If
