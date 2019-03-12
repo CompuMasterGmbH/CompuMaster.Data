@@ -874,6 +874,44 @@ Namespace CompuMaster.Test.Data
             Assert.AreEqual(1, dt.Rows.Count())
         End Sub
 
+        <Test> Public Sub RemoveRowsWithWithoutRequiredValuesInColumn()
+
+            Dim dtTemplate As New DataTable
+            dtTemplate.Columns.Add("Something")
+            dtTemplate.Columns.Add("Something2")
+            dtTemplate.Rows.Add(New String() {"A", "Z"})
+            dtTemplate.Rows.Add(New String() {"B", "Y"})
+            dtTemplate.Rows.Add(New String() {"C", "X"})
+            dtTemplate.Rows.Add(New Object() {DBNull.Value, "N"})
+            Assert.IsNotNull(dtTemplate.Rows(3)(0), "Not Nothing expected")
+            Assert.IsTrue(IsDBNull(dtTemplate.Rows(3)(0)), "DBNull expected")
+            dtTemplate.Rows.Add(New Object() {"", "N"})
+            dtTemplate.Rows.Add(New Object() {Nothing, "N"})
+            Assert.IsNotNull(dtTemplate.Rows(5)(0), "Not Nothing expected because of .NET logic to translate into DBNull.value")
+            Assert.IsTrue(IsDBNull(dtTemplate.Rows(5)(0)), "DBNull expected because of .NET logic to translate into DBNull.value")
+            Dim dt As DataTable
+
+            Console.WriteLine()
+            Console.WriteLine("Test 1 with DBNull/Empty/Null")
+            dt = CompuMaster.Data.DataTables.CreateDataTableClone(dtTemplate)
+            CompuMaster.Data.DataTables.RemoveRowsWithWithoutRequiredValuesInColumn(dt.Columns(0), New Object() {DBNull.Value, "", Nothing})
+            Console.WriteLine(CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(dt))
+            Assert.AreEqual(3, dt.Rows.Count())
+            StringAssert.IsMatch("N", dt.Rows.Item(0).Item(1))
+            StringAssert.IsMatch("N", dt.Rows.Item(1).Item(1))
+            StringAssert.IsMatch("N", dt.Rows.Item(2).Item(1))
+
+            Console.WriteLine()
+            Console.WriteLine("Test 2 with DBNull/Empty/Null")
+            dt = CompuMaster.Data.DataTables.CreateDataTableClone(dtTemplate)
+            CompuMaster.Data.DataTables.RemoveRowsWithWithoutRequiredValuesInColumn(dt.Columns(0), New Object() {"A", "B", "C"})
+            Console.WriteLine(CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(dt))
+            Assert.AreEqual(3, dt.Rows.Count())
+            StringAssert.IsMatch("A", dt.Rows.Item(0).Item(0))
+            StringAssert.IsMatch("B", dt.Rows.Item(1).Item(0))
+            StringAssert.IsMatch("C", dt.Rows.Item(2).Item(0))
+        End Sub
+
         <Test()> Public Sub RemoveRowsWithNoCorrespondingValueInComparisonTable()
 
             Dim dtTemplate As New DataTable
