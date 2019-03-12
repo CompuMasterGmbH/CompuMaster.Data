@@ -18,54 +18,7 @@ Namespace CompuMaster.Data.DataQuery
         ''' <exception cref="Office2010x64OleDbOdbcEngineRequiredException" />
         Public Shared Function MicrosoftAccessOleDbConnection(ByVal path As String) As IDbConnection
             If path = Nothing Then Throw New ArgumentNullException("path")
-            Dim TestFile As TestFile = Nothing
-            Try
-                'Try to create a temporary file - might fail in environments which are not fully trusted
-                TestFile = New TestFile(DataQuery.TestFile.TestFileType.MsAccess)
-            Catch ex As Exception
-                'Non-full-trust or not enough priviledges/rights to create the temporary file
-                'Use a safe way to get a working data connection to the MS Access database
-                If CompuMaster.Data.DataQuery.PlatformTools.CurrentClrRuntime = CompuMaster.Data.DataQuery.PlatformTools.ClrRuntimePlatform.x64 Then
-                    '64bit - Requires Office 2010 JET drivers, but are called "Microsoft.ACE.OLEDB.12.0", too
-                    Return CompuMaster.Data.DataQuery.PlatformTools.CreateDataConnection("OleDB", "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" & path & ";User Id=admin;Password=;")
-                ElseIf path.ToLower.EndsWith(".accdb") Then
-                    '32bit - Requires Office 2007 JET drivers
-                    Return CompuMaster.Data.DataQuery.PlatformTools.CreateDataConnection("OleDB", "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" & path & ";User Id=admin;Password=;")
-                Else
-                    '32bit - Requires basic JET drivers
-                    Return CompuMaster.Data.DataQuery.PlatformTools.CreateDataConnection("ODBC", "Driver={Microsoft Access Driver (*.mdb)};Dbq=" & path & ";Uid=Admin;Pwd=;")
-                End If
-            Finally
-                If Not TestFile Is Nothing Then
-                    TestFile.Dispose()
-                End If
-            End Try
-            Try
-                If ProbeOleDBProvider(MicrosoftAccessConnectionProviderWorkingStatusForACE14, "Provider=Microsoft.ACE.OLEDB.14.0;Data Source=" & TestFile.FilePath & ";User Id=admin;Password=;") Then
-                    Return CompuMaster.Data.DataQuery.PlatformTools.CreateDataConnection("OleDB", "Provider=Microsoft.ACE.OLEDB.14.0;Data Source=" & path & ";User Id=admin;Password=;")
-                ElseIf ProbeOleDBProvider(MicrosoftAccessConnectionProviderWorkingStatusForACE12, "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" & TestFile.FilePath & ";User Id=admin;Password=;") Then
-                    Return CompuMaster.Data.DataQuery.PlatformTools.CreateDataConnection("OleDB", "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" & path & ";User Id=admin;Password=;")
-                ElseIf ProbeOleDBProvider(MicrosoftAccessConnectionProviderWorkingStatusForJet4, "Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" & TestFile.FilePath & ";User Id=admin;Password=;") Then
-                    Return CompuMaster.Data.DataQuery.PlatformTools.CreateDataConnection("OleDB", "Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" & path & ";User Id=admin;Password=;")
-                Else
-                    'Let the application find the exception with the most modern provider
-                    If CompuMaster.Data.DataQuery.PlatformTools.CurrentClrRuntime = CompuMaster.Data.DataQuery.PlatformTools.ClrRuntimePlatform.x64 Then
-                        '64bit - Requires Office 2010 JET drivers
-                        Throw New Office2010x64OleDbOdbcEngineRequiredException(Nothing)
-                    ElseIf path.ToLower.EndsWith(".accdb") Then
-                        '32bit - Requires Office 2007 JET drivers
-                        Return CompuMaster.Data.DataQuery.PlatformTools.CreateDataConnection("OleDB", "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" & path & ";User Id=admin;Password=;")
-                    Else
-                        '32bit - Requires basic JET drivers
-                        Return CompuMaster.Data.DataQuery.PlatformTools.CreateDataConnection("OleDB", "Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" & path & ";User Id=admin;Password=;")
-                    End If
-                End If
-            Finally
-                If Not TestFile Is Nothing Then
-                    TestFile.Dispose()
-                End If
-            End Try
-
+            Return MicrosoftAccessOleDbConnection(path, "")
         End Function
 
         ''' <summary>
@@ -78,8 +31,38 @@ Namespace CompuMaster.Data.DataQuery
         ''' <exception cref="Office2010x64OleDbOdbcEngineRequiredException" />
         Public Shared Function MicrosoftAccessOleDbConnection(ByVal path As String, ByVal databasePassword As String) As IDbConnection
             If path = Nothing Then Throw New ArgumentNullException("path")
-            If databasePassword = Nothing Then Return MicrosoftAccessOleDbConnection(path)
-            Using TestFile As New TestFile(DataQuery.TestFile.TestFileType.MsAccess)
+            Dim TestFile As TestFile = Nothing
+            Try
+                'Try to create a temporary file - might fail in environments which are not fully trusted
+                If path.ToLowerInvariant.EndsWith(".mdb") Then
+                    TestFile = New TestFile(DataQuery.TestFile.TestFileType.MsAccessMdb)
+                Else
+                    TestFile = New TestFile(DataQuery.TestFile.TestFileType.MsAccessAccdb)
+                End If
+            Catch ex As Exception
+                'Non-full-trust or not enough priviledges/rights to create the temporary file
+                'Use a safe way to get a working data connection to the MS Access database
+                If CompuMaster.Data.DataQuery.PlatformTools.CurrentClrRuntime = CompuMaster.Data.DataQuery.PlatformTools.ClrRuntimePlatform.x64 Then
+                    '64bit - Requires Office 2010 JET drivers, but are called "Microsoft.ACE.OLEDB.12.0", too
+                    Return CompuMaster.Data.DataQuery.PlatformTools.CreateDataConnection("OleDB", "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" & path & ";User Id=admin;Password=" & databasePassword & ";")
+                ElseIf path.ToLower.EndsWith(".accdb") Then
+                    '32bit - Requires Office 2007 JET drivers
+                    Return CompuMaster.Data.DataQuery.PlatformTools.CreateDataConnection("OleDB", "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" & path & ";User Id=admin;Password=" & databasePassword & ";")
+                Else
+                    '32bit - Requires basic JET drivers
+                    Return CompuMaster.Data.DataQuery.PlatformTools.CreateDataConnection("OleDB", "Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" & path & ";Jet OLEDB:Database Password=" & databasePassword & ";")
+                End If
+            Finally
+                If Not TestFile Is Nothing Then
+                    TestFile.Dispose()
+                End If
+            End Try
+            Try
+                For MyCounter As Integer = (System.DateTime.Now.Year + 1 - 2000) To 15 Step -1 'try all MS Office releases since 2015 up to current year + 1
+                    If ProbeOleDBProvider(MicrosoftAccessConnectionProviderWorkingStatusForACEDynList(MyCounter), "Provider=Microsoft.ACE.OLEDB." & MyCounter & ".0;Data Source=" & TestFile.FilePath & ";User Id=admin;Password=" & databasePassword & ";") Then
+                        Return CompuMaster.Data.DataQuery.PlatformTools.CreateDataConnection("OleDB", "Provider=Microsoft.ACE.OLEDB." & MyCounter & ".0;Data Source=" & path & ";User Id=admin;Password=" & databasePassword & ";")
+                    End If
+                Next
                 If ProbeOleDBProvider(MicrosoftAccessConnectionProviderWorkingStatusForACE14, "Provider=Microsoft.ACE.OLEDB.14.0;Data Source=" & TestFile.FilePath & ";User Id=admin;Password=" & databasePassword & ";") Then
                     Return CompuMaster.Data.DataQuery.PlatformTools.CreateDataConnection("OleDB", "Provider=Microsoft.ACE.OLEDB.14.0;Data Source=" & path & ";Jet OLEDB:Database Password=" & databasePassword & ";")
                 ElseIf ProbeOleDBProvider(MicrosoftAccessConnectionProviderWorkingStatusForACE12, "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" & TestFile.FilePath & ";User Id=admin;Password=" & databasePassword & ";") Then
@@ -99,7 +82,11 @@ Namespace CompuMaster.Data.DataQuery
                         Return CompuMaster.Data.DataQuery.PlatformTools.CreateDataConnection("OleDB", "Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" & path & ";Jet OLEDB:Database Password=" & databasePassword & ";")
                     End If
                 End If
-            End Using
+            Finally
+                If Not TestFile Is Nothing Then
+                    TestFile.Dispose()
+                End If
+            End Try
         End Function
 
         ''' <summary>
@@ -111,10 +98,27 @@ Namespace CompuMaster.Data.DataQuery
         ''' <exception cref="Office2010x64OleDbOdbcEngineRequiredException" />
         Public Shared Function MicrosoftAccessOdbcConnection(ByVal path As String) As IDbConnection
             If path = Nothing Then Throw New ArgumentNullException("path")
+            Return MicrosoftAccessOdbcConnection(path, "")
+        End Function
+
+        ''' <summary>
+        ''' A most probably working Microsoft Access connection which uses the most appropriate, installed ODBC driver of the current machine
+        ''' </summary>
+        ''' <param name="path"></param>
+        ''' <param name="databasePassword"></param>
+        ''' <returns>An ODBC data connection to the requested file</returns>
+        ''' <remarks></remarks>
+        ''' <exception cref="Office2010x64OleDbOdbcEngineRequiredException" />
+        Public Shared Function MicrosoftAccessOdbcConnection(ByVal path As String, ByVal databasePassword As String) As IDbConnection
+            If path = Nothing Then Throw New ArgumentNullException("path")
             Dim TestFile As TestFile = Nothing
             Try
                 'Try to create a temporary file - might fail in environments which are not fully trusted
-                TestFile = New TestFile(DataQuery.TestFile.TestFileType.MsAccess)
+                If path.ToLowerInvariant.EndsWith(".mdb") Then
+                    TestFile = New TestFile(DataQuery.TestFile.TestFileType.MsAccessMdb)
+                Else
+                    TestFile = New TestFile(DataQuery.TestFile.TestFileType.MsAccessAccdb)
+                End If
             Catch ex As Exception
                 'Non-full-trust or not enough priviledges/rights to create the temporary file
                 'Use a safe way to get a working data connection to the MS Access database
@@ -134,43 +138,6 @@ Namespace CompuMaster.Data.DataQuery
                 End If
             End Try
             Try
-                If CompuMaster.Data.DataQuery.PlatformTools.CurrentClrRuntime = CompuMaster.Data.DataQuery.PlatformTools.ClrRuntimePlatform.x64 AndAlso ProbeOdbcDBProvider(MicrosoftAccessConnectionProviderWorkingStatusForOdbcDriver, "Driver={Microsoft Access Driver (*.mdb, *.accdb)};Dbq=" & TestFile.FilePath & ";Uid=Admin;Pwd=;") Then
-                    Return CompuMaster.Data.DataQuery.PlatformTools.CreateDataConnection("ODBC", "Driver={Microsoft Access Driver (*.mdb, *.accdb)};Dbq=" & path & ";Uid=Admin;Pwd=;")
-                ElseIf CompuMaster.Data.DataQuery.PlatformTools.CurrentClrRuntime = CompuMaster.Data.DataQuery.PlatformTools.ClrRuntimePlatform.x32 AndAlso ProbeOdbcDBProvider(MicrosoftAccessConnectionProviderWorkingStatusForOdbcDriver, "Driver={Microsoft Access Driver (*.mdb)};Dbq=" & TestFile.FilePath & ";Uid=Admin;Pwd=;") Then
-                    Return CompuMaster.Data.DataQuery.PlatformTools.CreateDataConnection("ODBC", "Driver={Microsoft Access Driver (*.mdb)};Dbq=" & path & ";Uid=Admin;Pwd=;")
-                Else
-                    'Let the application find the exception with the most modern provider
-                    If CompuMaster.Data.DataQuery.PlatformTools.CurrentClrRuntime = CompuMaster.Data.DataQuery.PlatformTools.ClrRuntimePlatform.x64 Then
-                        '64bit 
-                        Return CompuMaster.Data.DataQuery.PlatformTools.CreateDataConnection("ODBC", "Driver={Microsoft Access Driver (*.mdb, *.accdb)};Dbq=" & path & ";Uid=Admin;Pwd=;")
-                    ElseIf path.ToLower.EndsWith(".accdb") Then
-                        '32bit but .accdb
-                        Return CompuMaster.Data.DataQuery.PlatformTools.CreateDataConnection("ODBC", "Driver={Microsoft Access Driver (*.mdb, *.accdb)};Dbq=" & path & ";Uid=Admin;Pwd=;")
-                    Else
-                        '32bit .mdb
-                        Return CompuMaster.Data.DataQuery.PlatformTools.CreateDataConnection("ODBC", "Driver={Microsoft Access Driver (*.mdb)};Dbq=" & path & ";Uid=Admin;Pwd=;")
-                    End If
-                End If
-            Finally
-                If Not TestFile Is Nothing Then
-                    TestFile.Dispose()
-                End If
-            End Try
-
-        End Function
-
-        ''' <summary>
-        ''' A most probably working Microsoft Access connection which uses the most appropriate, installed ODBC driver of the current machine
-        ''' </summary>
-        ''' <param name="path"></param>
-        ''' <param name="databasePassword"></param>
-        ''' <returns>An ODBC data connection to the requested file</returns>
-        ''' <remarks></remarks>
-        ''' <exception cref="Office2010x64OleDbOdbcEngineRequiredException" />
-        Public Shared Function MicrosoftAccessOdbcConnection(ByVal path As String, ByVal databasePassword As String) As IDbConnection
-            If path = Nothing Then Throw New ArgumentNullException("path")
-            If databasePassword = Nothing Then Return MicrosoftAccessOdbcConnection(path)
-            Using TestFile As New TestFile(DataQuery.TestFile.TestFileType.MsAccess)
                 If CompuMaster.Data.DataQuery.PlatformTools.CurrentClrRuntime = CompuMaster.Data.DataQuery.PlatformTools.ClrRuntimePlatform.x64 AndAlso ProbeOdbcDBProvider(MicrosoftAccessConnectionProviderWorkingStatusForOdbcDriver, "Driver={Microsoft Access Driver (*.mdb, *.accdb)};Dbq=" & TestFile.FilePath & ";Uid=Admin;Pwd=" & databasePassword & ";") Then
                     Return CompuMaster.Data.DataQuery.PlatformTools.CreateDataConnection("ODBC", "Driver={Microsoft Access Driver (*.mdb, *.accdb)};Dbq=" & path & ";Uid=Admin;Pwd=" & databasePassword & ";")
                 ElseIf CompuMaster.Data.DataQuery.PlatformTools.CurrentClrRuntime = CompuMaster.Data.DataQuery.PlatformTools.ClrRuntimePlatform.x32 AndAlso ProbeOdbcDBProvider(MicrosoftAccessConnectionProviderWorkingStatusForOdbcDriver, "Driver={Microsoft Access Driver (*.mdb)};Dbq=" & TestFile.FilePath & ";Uid=Admin;Pwd=" & databasePassword & ";") Then
@@ -188,7 +155,11 @@ Namespace CompuMaster.Data.DataQuery
                         Return CompuMaster.Data.DataQuery.PlatformTools.CreateDataConnection("ODBC", "Driver={Microsoft Access Driver (*.mdb)};Dbq=" & path & ";Uid=Admin;Pwd=" & databasePassword & ";")
                     End If
                 End If
-            End Using
+            Finally
+                If Not TestFile Is Nothing Then
+                    TestFile.Dispose()
+                End If
+            End Try
         End Function
 
         ''' <summary>
@@ -200,10 +171,27 @@ Namespace CompuMaster.Data.DataQuery
         ''' <exception cref="Office2010x64OleDbOdbcEngineRequiredException" />
         Public Shared Function MicrosoftAccessConnection(ByVal path As String) As IDbConnection
             If path = Nothing Then Throw New ArgumentNullException("path")
+            Return MicrosoftAccessConnection(path, "")
+        End Function
+
+        ''' <summary>
+        ''' A most probably working Microsoft Access connection which uses the most appropriate, installed OleDB provider or ODBC driver of the current machine
+        ''' </summary>
+        ''' <param name="path"></param>
+        ''' <param name="databasePassword"></param>
+        ''' <returns>An OleDB or ODBC data connection to the requested file</returns>
+        ''' <remarks></remarks>
+        ''' <exception cref="Office2010x64OleDbOdbcEngineRequiredException" />
+        Public Shared Function MicrosoftAccessConnection(ByVal path As String, ByVal databasePassword As String) As IDbConnection
+            If path = Nothing Then Throw New ArgumentNullException("path")
             Dim TestFile As TestFile = Nothing
             Try
                 'Try to create a temporary file - might fail in environments which are not fully trusted
-                TestFile = New TestFile(DataQuery.TestFile.TestFileType.MsAccess)
+                If path.ToLowerInvariant.EndsWith(".mdb") Then
+                    TestFile = New TestFile(DataQuery.TestFile.TestFileType.MsAccessMdb)
+                Else
+                    TestFile = New TestFile(DataQuery.TestFile.TestFileType.MsAccessAccdb)
+                End If
             Catch ex As Exception
                 'Non-full-trust or not enough priviledges/rights to create the temporary file
                 'Use a safe way to get a working data connection to the MS Access database
@@ -223,48 +211,11 @@ Namespace CompuMaster.Data.DataQuery
                 End If
             End Try
             Try
-                If ProbeOleDBProvider(MicrosoftAccessConnectionProviderWorkingStatusForACE14, "Provider=Microsoft.ACE.OLEDB.14.0;Data Source=" & TestFile.FilePath & ";User Id=admin;Password=;") Then
-                    Return CompuMaster.Data.DataQuery.PlatformTools.CreateDataConnection("OleDB", "Provider=Microsoft.ACE.OLEDB.14.0;Data Source=" & path & ";User Id=admin;Password=;")
-                ElseIf ProbeOleDBProvider(MicrosoftAccessConnectionProviderWorkingStatusForACE12, "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" & TestFile.FilePath & ";User Id=admin;Password=;") Then
-                    Return CompuMaster.Data.DataQuery.PlatformTools.CreateDataConnection("OleDB", "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" & path & ";User Id=admin;Password=;")
-                ElseIf ProbeOleDBProvider(MicrosoftAccessConnectionProviderWorkingStatusForJet4, "Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" & TestFile.FilePath & ";User Id=admin;Password=;") Then
-                    Return CompuMaster.Data.DataQuery.PlatformTools.CreateDataConnection("OleDB", "Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" & path & ";User Id=admin;Password=;")
-                ElseIf CompuMaster.Data.DataQuery.PlatformTools.CurrentClrRuntime = CompuMaster.Data.DataQuery.PlatformTools.ClrRuntimePlatform.x64 AndAlso ProbeOdbcDBProvider(MicrosoftAccessConnectionProviderWorkingStatusForOdbcDriver, "Driver={Microsoft Access Driver (*.mdb, *.accdb)};Dbq=" & TestFile.FilePath & ";Uid=Admin;Pwd=;") Then
-                    Return CompuMaster.Data.DataQuery.PlatformTools.CreateDataConnection("ODBC", "Driver={Microsoft Access Driver (*.mdb, *.accdb)};Dbq=" & path & ";Uid=Admin;Pwd=;")
-                ElseIf CompuMaster.Data.DataQuery.PlatformTools.CurrentClrRuntime = CompuMaster.Data.DataQuery.PlatformTools.ClrRuntimePlatform.x32 AndAlso ProbeOdbcDBProvider(MicrosoftAccessConnectionProviderWorkingStatusForOdbcDriver, "Driver={Microsoft Access Driver (*.mdb)};Dbq=" & TestFile.FilePath & ";Uid=Admin;Pwd=;") Then
-                    Return CompuMaster.Data.DataQuery.PlatformTools.CreateDataConnection("ODBC", "Driver={Microsoft Access Driver (*.mdb)};Dbq=" & path & ";Uid=Admin;Pwd=;")
-                Else
-                    'Let the application find the exception with the most modern provider
-                    If CompuMaster.Data.DataQuery.PlatformTools.CurrentClrRuntime = CompuMaster.Data.DataQuery.PlatformTools.ClrRuntimePlatform.x64 Then
-                        '64bit - Requires Office 2010 JET drivers
-                        Throw New Office2010x64OleDbOdbcEngineRequiredException(Nothing)
-                    ElseIf path.ToLower.EndsWith(".accdb") Then
-                        '32bit - Requires Office 2007 JET drivers
-                        Return CompuMaster.Data.DataQuery.PlatformTools.CreateDataConnection("OleDB", "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" & path & ";User Id=admin;Password=;")
-                    Else
-                        '32bit - Requires basic JET drivers
-                        Return CompuMaster.Data.DataQuery.PlatformTools.CreateDataConnection("OleDB", "Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" & path & ";User Id=admin;Password=;")
+                For MyCounter As Integer = (System.DateTime.Now.Year + 1 - 2000) To 15 Step -1 'try all MS Office releases since 2015 up to current year + 1
+                    If ProbeOleDBProvider(MicrosoftAccessConnectionProviderWorkingStatusForACEDynList(MyCounter), "Provider=Microsoft.ACE.OLEDB." & MyCounter & ".0;Data Source=" & TestFile.FilePath & ";User Id=admin;Password=" & databasePassword & ";") Then
+                        Return CompuMaster.Data.DataQuery.PlatformTools.CreateDataConnection("OleDB", "Provider=Microsoft.ACE.OLEDB." & MyCounter & ".0;Data Source=" & path & ";User Id=admin;Password=" & databasePassword & ";")
                     End If
-                End If
-            Finally
-                If Not TestFile Is Nothing Then
-                    TestFile.Dispose()
-                End If
-            End Try
-        End Function
-
-        ''' <summary>
-        ''' A most probably working Microsoft Access connection which uses the most appropriate, installed OleDB provider or ODBC driver of the current machine
-        ''' </summary>
-        ''' <param name="path"></param>
-        ''' <param name="databasePassword"></param>
-        ''' <returns>An OleDB or ODBC data connection to the requested file</returns>
-        ''' <remarks></remarks>
-        ''' <exception cref="Office2010x64OleDbOdbcEngineRequiredException" />
-        Public Shared Function MicrosoftAccessConnection(ByVal path As String, ByVal databasePassword As String) As IDbConnection
-            If path = Nothing Then Throw New ArgumentNullException("path")
-            If databasePassword = Nothing Then Return MicrosoftAccessConnection(path)
-            Using TestFile As New TestFile(DataQuery.TestFile.TestFileType.MsAccess)
+                Next
                 If ProbeOleDBProvider(MicrosoftAccessConnectionProviderWorkingStatusForACE14, "Provider=Microsoft.ACE.OLEDB.14.0;Data Source=" & TestFile.FilePath & ";User Id=admin;Password=" & databasePassword & ";") Then
                     Return CompuMaster.Data.DataQuery.PlatformTools.CreateDataConnection("OleDB", "Provider=Microsoft.ACE.OLEDB.14.0;Data Source=" & path & ";Jet OLEDB:Database Password=" & databasePassword & ";")
                 ElseIf ProbeOleDBProvider(MicrosoftAccessConnectionProviderWorkingStatusForACE12, "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" & TestFile.FilePath & ";User Id=admin;Password=" & databasePassword & ";") Then
@@ -288,7 +239,11 @@ Namespace CompuMaster.Data.DataQuery
                         Return CompuMaster.Data.DataQuery.PlatformTools.CreateDataConnection("OleDB", "Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" & path & ";Jet OLEDB:Database Password=" & databasePassword & ";")
                     End If
                 End If
-            End Using
+            Finally
+                If Not TestFile Is Nothing Then
+                    TestFile.Dispose()
+                End If
+            End Try
         End Function
 
         ''' <summary>
@@ -311,6 +266,7 @@ Namespace CompuMaster.Data.DataQuery
                 End If
                 For MyCounter As Integer = (System.DateTime.Now.Year + 1 - 2000) To 15 Step -1 'try all MS Office releases since 2015 up to current year + 1
                     If ProbeOleDBProvider(MicrosoftExcelConnectionProviderWorkingStatusForACEDynList(MyCounter), "Provider=Microsoft.ACE.OLEDB." & MyCounter & ".0;Data Source=" & TestFile.FilePath & ";Extended Properties=""Excel " & MyCounter & ".0 Xml;HDR=YES;IMEX=0"";") Then
+                        'If ProbeOleDBProvider(MicrosoftExcelConnectionProviderWorkingStatusForACEDynList(MyCounter), "Provider=Microsoft.ACE.OLEDB." & MyCounter & ".0;Data Source=" & TestFile.FilePath & ";HDR=YES;IMEX=0"";") Then
                         Return CompuMaster.Data.DataQuery.PlatformTools.CreateDataConnection("OleDB", "Provider=Microsoft.ACE.OLEDB." & MyCounter & ".0;Data Source=" & path & ";Extended Properties=""Excel " & MyCounter & ".0 Xml;HDR=" & BoolIf(firstRowContainsHeaders, "YES", "NO") & ";" & BoolIf(readAllColumnsAsTextOnly, "IMEX=1", "IMEX=0") & """;")
                     End If
                 Next
@@ -449,6 +405,16 @@ Namespace CompuMaster.Data.DataQuery
 
         End Function
 
+        Private Shared _MicrosoftAccessConnectionProviderWorkingStatusForACEDynList As New Generic.Dictionary(Of Integer, TriState)
+        Private Shared ReadOnly Property MicrosoftAccessConnectionProviderWorkingStatusForACEDynList(officeMainVersion As Integer) As TriState
+            Get
+                If _MicrosoftAccessConnectionProviderWorkingStatusForACEDynList.ContainsKey(officeMainVersion) = False Then
+                    _MicrosoftAccessConnectionProviderWorkingStatusForACEDynList(officeMainVersion) = TriState.UseDefault
+                End If
+                Return _MicrosoftAccessConnectionProviderWorkingStatusForACEDynList(officeMainVersion)
+            End Get
+        End Property
+
         Private Shared _MicrosoftExcelConnectionProviderWorkingStatusForACEDynList As New Generic.Dictionary(Of Integer, TriState)
         Private Shared ReadOnly Property MicrosoftExcelConnectionProviderWorkingStatusForACEDynList(officeMainVersion As Integer) As TriState
             Get
@@ -468,6 +434,11 @@ Namespace CompuMaster.Data.DataQuery
         Private Shared MicrosoftAccessConnectionProviderWorkingStatusForOdbcDriver As TriState = TriState.UseDefault
 
         ''' <summary>
+        ''' Verbose mode creates some additional console output on probe exceptions
+        ''' </summary>
+        Friend Shared ProbeOleDbOrOdbcProviderVerboseMode As Boolean = False
+
+        ''' <summary>
         ''' Test an OLE DB connection if result hasn't been cached, yet
         ''' </summary>
         ''' <param name="resultCache">A reference to a cache variable</param>
@@ -482,14 +453,17 @@ Namespace CompuMaster.Data.DataQuery
                     TestConnection.Open()
                     resultCache = TriState.True
                 Catch ex As Exception
+                    If ProbeOleDbOrOdbcProviderVerboseMode = True Then Console.WriteLine("Exception at ProbeOleDBProvider: " & ex.Message)
                     resultCache = TriState.False
                 Finally
                     CompuMaster.Data.DataQuery.CloseAndDisposeConnection(TestConnection)
                 End Try
             End If
             If resultCache = TriState.True Then
+                If ProbeOleDbOrOdbcProviderVerboseMode = True Then Console.WriteLine("Working ProbeOleDBProvider (cached result): " & connectionString)
                 Return True
             Else
+                If ProbeOleDbOrOdbcProviderVerboseMode = True Then Console.WriteLine("Failing ProbeOleDBProvider (cached result): " & connectionString)
                 Return False
             End If
         End Function
@@ -509,14 +483,17 @@ Namespace CompuMaster.Data.DataQuery
                     TestConnection.Open()
                     resultCache = TriState.True
                 Catch ex As Exception
+                    If ProbeOleDbOrOdbcProviderVerboseMode = True Then Console.WriteLine("Exception at ProbeOdbcProvider: " & ex.Message)
                     resultCache = TriState.False
                 Finally
                     CompuMaster.Data.DataQuery.CloseAndDisposeConnection(TestConnection)
                 End Try
             End If
             If resultCache = TriState.True Then
+                If ProbeOleDbOrOdbcProviderVerboseMode = True Then Console.WriteLine("Working ProbeOdbcProvider (cached result): " & connectionString)
                 Return True
             Else
+                If ProbeOleDbOrOdbcProviderVerboseMode = True Then Console.WriteLine("Failing ProbeOdbcProvider (cached result): " & connectionString)
                 Return False
             End If
         End Function

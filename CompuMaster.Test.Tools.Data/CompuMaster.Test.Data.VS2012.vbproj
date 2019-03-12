@@ -189,6 +189,9 @@
     <Content Include="testfiles\Q&amp;A.xls">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="testfiles\test_for_msaccess.accdb">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="testfiles\test_for_msaccess.mdb">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -234,6 +237,12 @@
   <ItemGroup>
     <None Include="packages.config" />
     <Content Include="testfiles\country-codes.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="testfiles\test_for_msaccess_2000.mdb">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="testfiles\test_for_msaccess_2002-2003.mdb">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="testfiles\test_linebreak_crlf_cellbreak_crlf.csv">
