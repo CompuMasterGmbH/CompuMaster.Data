@@ -29,10 +29,13 @@ Namespace CompuMaster.Data.DataQuery
             Dim TempFile As String
             TempFile = System.IO.Path.GetTempFileName()
             If fileType = TestFileType.MsExcel95Xls Then
+                TempFile = TempFile & ".xls"
                 CompuMaster.Data.DatabaseManagement.CreateMsExcelFile(TempFile, DatabaseManagement.MsExcelFileType.MsExcel95Xls)
             ElseIf fileType = TestFileType.MsExcel2007Xlsx Then
+                TempFile = TempFile & ".xlsx"
                 CompuMaster.Data.DatabaseManagement.CreateMsExcelFile(TempFile, DatabaseManagement.MsExcelFileType.MsExcel2007Xlsx)
             ElseIf fileType = TestFileType.MsAccess Then
+                TempFile = TempFile & ".mdb"
                 CompuMaster.Data.DatabaseManagement.CreateDatabaseFile(TempFile, DatabaseManagement.DatabaseFileType.MsAccess2002Mdb)
             Else
                 Throw New ArgumentException("Invalid value for parameter fileType", "fileType")
