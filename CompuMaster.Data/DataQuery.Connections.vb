@@ -52,10 +52,6 @@ Namespace CompuMaster.Data.DataQuery
                     '32bit - Requires basic JET drivers
                     Return CompuMaster.Data.DataQuery.PlatformTools.CreateDataConnection("OleDB", "Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" & path & ";Jet OLEDB:Database Password=" & databasePassword & ";")
                 End If
-            Finally
-                If Not TestFile Is Nothing Then
-                    TestFile.Dispose()
-                End If
             End Try
             Try
                 For MyCounter As Integer = (System.DateTime.Now.Year + 1 - 2000) To 15 Step -1 'try all MS Office releases since 2015 up to current year + 1
@@ -204,10 +200,6 @@ Namespace CompuMaster.Data.DataQuery
                 Else
                     '32bit - Requires basic JET drivers
                     Return CompuMaster.Data.DataQuery.PlatformTools.CreateDataConnection("ODBC", "Driver={Microsoft Access Driver (*.mdb)};Dbq=" & path & ";Uid=Admin;Pwd=;")
-                End If
-            Finally
-                If Not TestFile Is Nothing Then
-                    TestFile.Dispose()
                 End If
             End Try
             Try
