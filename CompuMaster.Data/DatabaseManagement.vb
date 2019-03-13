@@ -45,6 +45,12 @@ Namespace CompuMaster.Data
             End Select
         End Sub
 
+        Public Shared Sub CreateTextCsvDatabaseFile(ByVal path As String)
+            Dim ParentPath As String = System.IO.Path.GetDirectoryName(path)
+            If System.IO.Directory.Exists(ParentPath) = False Then System.IO.Directory.CreateDirectory(ParentPath)
+            System.IO.File.WriteAllText(path, "Column1" & vbNewLine & "Value1" & vbNewLine & "Value2")
+        End Sub
+
         ''' <summary>
         ''' Create a database file on the specified location, supported file types are .mdb, .accdb
         ''' </summary>

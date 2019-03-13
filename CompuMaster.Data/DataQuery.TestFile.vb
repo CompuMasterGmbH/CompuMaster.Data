@@ -25,6 +25,7 @@ Namespace CompuMaster.Data.DataQuery
             <Obsolete("Use MsAccessMdb instead"), System.ComponentModel.EditorBrowsable(ComponentModel.EditorBrowsableState.Never)> MsAccess = 2
             MsAccessMdb = 3
             MsAccessAccdb = 4
+            TextCsv = 10
         End Enum
 
         Public Sub New(ByVal fileType As TestFileType)
@@ -42,6 +43,9 @@ Namespace CompuMaster.Data.DataQuery
             ElseIf fileType = TestFileType.MsAccessaccdb Then
                 TempFile = TempFile & ".accdb"
                 CompuMaster.Data.DatabaseManagement.CreateDatabaseFile(TempFile, DatabaseManagement.DatabaseFileType.MsAccess2007Accdb)
+            ElseIf fileType = TestFileType.TextCsv Then
+                TempFile = TempFile & ".dir\testdata.csv"
+                CompuMaster.Data.DatabaseManagement.CreateTextCsvDatabaseFile(TempFile)
             Else
                 Throw New ArgumentException("Invalid value for parameter fileType", "fileType")
             End If
@@ -69,8 +73,6 @@ Namespace CompuMaster.Data.DataQuery
         Protected Overrides Sub Finalize()
             Dispose(False)
         End Sub
-
-
 
     End Class
 

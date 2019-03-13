@@ -128,10 +128,6 @@ Namespace CompuMaster.Data.DataQuery
                     '32bit .mdb
                     Return CompuMaster.Data.DataQuery.PlatformTools.CreateDataConnection("ODBC", "Driver={Microsoft Access Driver (*.mdb)};Dbq=" & path & ";Uid=Admin;Pwd=;")
                 End If
-            Finally
-                If Not TestFile Is Nothing Then
-                    TestFile.Dispose()
-                End If
             End Try
             Try
                 If CompuMaster.Data.DataQuery.PlatformTools.CurrentClrRuntime = CompuMaster.Data.DataQuery.PlatformTools.ClrRuntimePlatform.x64 AndAlso ProbeOdbcDBProvider(MicrosoftAccessConnectionProviderWorkingStatusForOdbcDriver, "Driver={Microsoft Access Driver (*.mdb, *.accdb)};Dbq=" & TestFile.FilePath & ";Uid=Admin;Pwd=" & databasePassword & ";") Then
@@ -150,6 +146,47 @@ Namespace CompuMaster.Data.DataQuery
                         '32bit .mdb
                         Return CompuMaster.Data.DataQuery.PlatformTools.CreateDataConnection("ODBC", "Driver={Microsoft Access Driver (*.mdb)};Dbq=" & path & ";Uid=Admin;Pwd=" & databasePassword & ";")
                     End If
+                End If
+            Finally
+                If Not TestFile Is Nothing Then
+                    TestFile.Dispose()
+                End If
+            End Try
+        End Function
+
+        ''' <summary>
+        ''' A most probably working Microsoft Access connection which uses the most appropriate, installed ODBC driver of the current machine
+        ''' </summary>
+        ''' <param name="path"></param>
+        ''' <returns>An ODBC data connection to the requested file</returns>
+        ''' <remarks></remarks>
+        ''' <exception cref="Office2010x64OleDbOdbcEngineRequiredException" />
+        Public Shared Function TextCsvConnection(ByVal path As String) As IDbConnection
+            If path = Nothing Then Throw New ArgumentNullException("path")
+            If System.IO.Directory.Exists(path) = False Then Throw New ArgumentException("Path must be a an existing directory", "path")
+            Dim TestFile As TestFile = Nothing
+            Try
+                'Try to create a temporary file - might fail in environments which are not fully trusted
+                TestFile = New TestFile(DataQuery.TestFile.TestFileType.TextCsv)
+            Catch ex As Exception
+                'Non-full-trust or not enough priviledges/rights to create the temporary file
+                'Use a safe way to get a working data connection to the MS Access database
+                If CompuMaster.Data.DataQuery.PlatformTools.CurrentClrRuntime = CompuMaster.Data.DataQuery.PlatformTools.ClrRuntimePlatform.x64 Then
+                    '64bit 
+                    Return CompuMaster.Data.DataQuery.PlatformTools.CreateDataConnection("ODBC", "Driver={Microsoft Access Text Driver (*.txt, *.csv)};Dbq=" & path & ";Extensions=asc,csv,tab,txt;")
+                Else
+                    '32bit
+                    Return CompuMaster.Data.DataQuery.PlatformTools.CreateDataConnection("ODBC", "Driver={Microsoft Text Driver (*.txt; *.csv)};Dbq=" & path & ";Extensions=asc,csv,tab,txt;")
+                End If
+            End Try
+            Try
+                Dim CsvDataDir As String = System.IO.Path.GetDirectoryName(TestFile.FilePath)
+                If ProbeOdbcDBProvider(MicrosoftAccessTextCsvConnectionProviderWorkingStatusForOdbcDriver, "Driver={Microsoft Access Text Driver (*.txt, *.csv)};Dbq=" & CsvDataDir & ";Extensions=asc,csv,tab,txt;") Then
+                    Return CompuMaster.Data.DataQuery.PlatformTools.CreateDataConnection("ODBC", "Driver={Microsoft Access Text Driver (*.txt, *.csv)};Dbq=" & path & ";Extensions=asc,csv,tab,txt;")
+                ElseIf ProbeOdbcDBProvider(MicrosoftTextCsvConnectionProviderWorkingStatusForOdbcDriver, "Driver={Microsoft Text Driver (*.txt; *.csv)};Dbq=" & CsvDataDir & ";Extensions=asc,csv,tab,txt;") Then
+                    Return CompuMaster.Data.DataQuery.PlatformTools.CreateDataConnection("ODBC", "Driver={Microsoft Text Driver (*.txt; *.csv)};Dbq=" & path & ";Extensions=asc,csv,tab,txt;")
+                Else
+                    Return CompuMaster.Data.DataQuery.PlatformTools.CreateDataConnection("ODBC", "Driver={Microsoft Text Driver (*.txt; *.csv)};Dbq=" & path & ";Extensions=asc,csv,tab,txt;")
                 End If
             Finally
                 If Not TestFile Is Nothing Then
@@ -394,7 +431,6 @@ Namespace CompuMaster.Data.DataQuery
                     TestFile.Dispose()
                 End If
             End Try
-
         End Function
 
         Private Shared _MicrosoftAccessConnectionProviderWorkingStatusForACEDynList As New Generic.Dictionary(Of Integer, TriState)
@@ -424,6 +460,8 @@ Namespace CompuMaster.Data.DataQuery
         Private Shared MicrosoftAccessConnectionProviderWorkingStatusForACE12 As TriState = TriState.UseDefault
         Private Shared MicrosoftAccessConnectionProviderWorkingStatusForJet4 As TriState = TriState.UseDefault
         Private Shared MicrosoftAccessConnectionProviderWorkingStatusForOdbcDriver As TriState = TriState.UseDefault
+        Private Shared MicrosoftAccessTextCsvConnectionProviderWorkingStatusForOdbcDriver As TriState = TriState.UseDefault
+        Private Shared MicrosoftTextCsvConnectionProviderWorkingStatusForOdbcDriver As TriState = TriState.UseDefault
 
         ''' <summary>
         ''' Verbose mode creates some additional console output on probe exceptions

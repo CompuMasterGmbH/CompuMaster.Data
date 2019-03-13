@@ -67,9 +67,21 @@ Namespace CompuMaster.Test.Data.DataQuery
             ReadMsAccessDatabaseMdb_Execute("testfiles\test_for_msaccess.accdb")
         End Sub
 
+        <Test> Public Sub TextCsvConnection()
+            CompuMaster.Data.DataQuery.Connections.ProbeOleDbOrOdbcProviderVerboseMode = True 'add some additional output to console
+            Dim conn As IDbConnection = CompuMaster.Data.DataQuery.Connections.TextCsvConnection(AssemblyTestEnvironment.TestFileAbsolutePath("testfiles"))
+            Assert.NotNull(conn, "CSV provider not found")
+            Console.WriteLine("Evaluated data provider connection string for current platform: " & conn.ConnectionString)
+            Dim Cmd As IDbCommand = conn.CreateCommand()
+            Cmd.CommandType = CommandType.Text
+            Cmd.CommandText = "SELECT * FROM [country-codes.csv]"
+            Dim table As DataTable = CompuMaster.Data.DataQuery.FillDataTable(Cmd, CompuMaster.Data.DataQuery.Automations.AutoOpenAndCloseAndDisposeConnection, "testdata")
+            Assert.AreEqual(3, table.Rows.Count, "Row count for table TestData")
+        End Sub
+
         <Test()> Public Sub EnumerateTablesAndViewsInOdbcDbDataSource()
             Dim TestDir As String = AssemblyTestEnvironment.TestFileAbsolutePath("testfiles")
-            Dim conn As IDbConnection = New Odbc.OdbcConnection("Driver={Microsoft Text Driver (*.txt; *.csv)};Dbq=" & TestDir & ";Extensions=asc,csv,tab,txt;")
+            Dim conn As IDbConnection = CompuMaster.Data.DataQuery.Connections.TextCsvConnection(TestDir)
             Try
                 conn.Open()
                 Dim tables As CompuMaster.Data.DataQuery.Connections.OdbcTableDescriptor() = CompuMaster.Data.DataQuery.Connections.EnumerateTablesAndViewsInOdbcDataSource(CType(conn, System.Data.Odbc.OdbcConnection))
@@ -92,18 +104,7 @@ Namespace CompuMaster.Test.Data.DataQuery
             End Try
 
             Dim TestFile As String = AssemblyTestEnvironment.TestFileAbsolutePath("testfiles\test_for_msaccess.mdb")
-            If Environment.Is64BitOperatingSystem Then
-                Console.WriteLine("Environment: Is64BitOperatingSystem")
-            Else
-                Console.WriteLine("Environment: Is32BitOperatingSystem")
-            End If
-            If Environment.Is64BitProcess Then
-                Console.WriteLine("Environment: Is64BitProcess")
-                conn = New Odbc.OdbcConnection("Driver={Microsoft Access Driver (*.mdb, *.accdb)};Dbq=" & TestFile & ";Uid=Admin;Pwd=;")
-            Else
-                Console.WriteLine("Environment: Is32BitProcess")
-                conn = New Odbc.OdbcConnection("Driver={Microsoft Access Driver (*.mdb)};Dbq=" & TestFile & ";Uid=Admin;Pwd=;")
-            End If
+            conn = CompuMaster.Data.DataQuery.Connections.MicrosoftAccessOdbcConnection(TestFile)
             Try
                 conn.Open()
                 Dim tables As CompuMaster.Data.DataQuery.Connections.OdbcTableDescriptor() = CompuMaster.Data.DataQuery.Connections.EnumerateTablesAndViewsInOdbcDataSource(CType(conn, System.Data.Odbc.OdbcConnection))
@@ -325,7 +326,6 @@ Namespace CompuMaster.Test.Data.DataQuery
             Else
                 Assert.Pass("All files tested successfully with OLEDB + ODBC")
             End If
-
         End Sub
 
         Private Function MicrosoftAccessOrExcelConnectionMatrixByProviderAndAccessOrExcelFileFormatVersion_TryOpenConnectionTest(conn As IDbConnection, ByRef TestFails As Boolean) As String
@@ -422,6 +422,46 @@ Namespace CompuMaster.Test.Data.DataQuery
                 Assert.Fail("Failed to open Access MDB at " & PlatformDependentProcessBitNumber() & " platform")
             End If
         End Sub
+
+        <Test()> Public Sub MicrosoftAccessConnection_MediumTrust()
+            'Permission required to read the providers application name And access config
+            Dim permissions As New System.Security.PermissionSet(System.Security.Permissions.PermissionState.None)
+            permissions.AddPermission(New System.Web.AspNetHostingPermission(System.Web.AspNetHostingPermissionLevel.Minimal))
+            permissions.AddPermission(New System.Security.Permissions.FileIOPermission(System.Security.Permissions.PermissionState.Unrestricted))
+            permissions.Assert()
+
+            Console.WriteLine("Current trust level for code security: " & GetCurrentTrustLevel.ToString)
+            Console.WriteLine("Current trust level for app domain security: IsUnrestricted=" & AppDomain.CurrentDomain.ApplicationTrust.DefaultGrantSet.PermissionSet.IsUnrestricted())
+            If (System.Web.AspNetHostingPermissionLevel.Medium <> GetCurrentTrustLevel()) Then
+                Assert.Ignore("Code access security trust level must be set to medium trust for this test")
+            End If
+            MicrosoftAccessConnection()
+
+            System.Security.PermissionSet.RevertAssert()
+
+        End Sub
+
+        Private Function GetCurrentTrustLevel() As System.Web.AspNetHostingPermissionLevel
+            Dim CheckTrustLevels As System.Web.AspNetHostingPermissionLevel()
+            CheckTrustLevels = New System.Web.AspNetHostingPermissionLevel() {
+                    System.Web.AspNetHostingPermissionLevel.Unrestricted,
+                    System.Web.AspNetHostingPermissionLevel.High,
+                    System.Web.AspNetHostingPermissionLevel.Medium,
+                    System.Web.AspNetHostingPermissionLevel.Low,
+                    System.Web.AspNetHostingPermissionLevel.Minimal
+                }
+            For Each trustLevel As System.Web.AspNetHostingPermissionLevel In CheckTrustLevels
+                Try
+                    Dim TestPermissionLevel As System.Web.AspNetHostingPermission = New System.Web.AspNetHostingPermission(trustLevel)
+                    TestPermissionLevel.Demand()
+                Catch ex As System.Security.SecurityException
+                    Continue For
+                End Try
+                Return trustLevel
+            Next
+
+            Return System.Web.AspNetHostingPermissionLevel.None
+        End Function
 
         <Test()> Public Sub MicrosoftAccessConnection()
             Console.WriteLine("Trying to find appropriate data provider for platform " & PlatformDependentProcessBitNumber())
