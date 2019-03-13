@@ -150,7 +150,7 @@ Namespace CompuMaster.Data.DataQuery
                 Dim TryToFindDataConnectorsInAssembly As Boolean
                 If asmName = "system.data" OrElse asmName = "system.data.oracleclient" Then
                     TryToFindDataConnectorsInAssembly = True
-                ElseIf asmName = "system" OrElse asmName.StartsWith("system.") OrElse asmName.StartsWith("compumaster.data") OrElse asmName.StartsWith("digitalrune.windows") OrElse asmName.StartsWith("mscorlib") OrElse asmName.StartsWith("mono.security") OrElse asmName.StartsWith("microsoft.") OrElse asmName.StartsWith("vshost") Then
+                ElseIf asmName = "system" OrElse asmName.StartsWith("system.") OrElse asmName.StartsWith("compumaster.data") OrElse asmName.StartsWith("mscorlib") OrElse asmName.StartsWith("mono.security") OrElse asmName.StartsWith("vshost") Then
                     TryToFindDataConnectorsInAssembly = False
                 Else
                     TryToFindDataConnectorsInAssembly = True
