@@ -6,7 +6,7 @@ Namespace CompuMaster.Test.Data
 
 #If Not CI_Build Then
         <Test()> Public Sub ReadLastCell()
-            Dim TestFile As String = AssemblyTestEnvironment.TestFileAbsolutePath("testfiles\test_for_lastcell_e50aka95.xls")
+            Dim TestFile As String = AssemblyTestEnvironment.TestFileAbsolutePath("testfiles\test_for_lastcell_e70aka97-2003.xls")
 
             'Read and compare written test data
             '==================================
@@ -22,9 +22,6 @@ Namespace CompuMaster.Test.Data
         <Test()> Public Sub ReadTestFileQnA()
             Dim file As String
             Dim dt As DataTable
-            file = AssemblyTestEnvironment.TestFileAbsolutePath("testfiles\Q&A.xlsx")
-            dt = CompuMaster.Data.XlsReader.ReadDataTableFromXlsFile(file, "Rund um das NT")
-            Assert.AreEqual(35, dt.Rows.Count, "Row-Length")
             file = AssemblyTestEnvironment.TestFileAbsolutePath("testfiles\Q&A.xls")
             dt = CompuMaster.Data.XlsReader.ReadDataTableFromXlsFile(file, "Rund um das NT")
             Assert.AreEqual(35, dt.Rows.Count, "Row-Length")
