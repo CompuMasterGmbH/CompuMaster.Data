@@ -160,7 +160,7 @@ Namespace CompuMaster.Test.Data.DataQuery
 #If Not CI_Build Then
         <Test()> Public Sub MicrosoftExcelOdbcConnection()
             Console.WriteLine("Trying to find appropriate data provider for platform " & PlatformDependentProcessBitNumber())
-            Dim TestFile As String = AssemblyTestEnvironment.TestFileAbsolutePath("testfiles\test_for_lastcell_e50aka95.xls")
+            Dim TestFile As String = AssemblyTestEnvironment.TestFileAbsolutePath("testfiles\test_for_lastcell_e70aka97-2003.xls")
             Dim conn As IDbConnection = CompuMaster.Data.DataQuery.Connections.MicrosoftExcelOdbcConnection(TestFile, False, True)
             Console.WriteLine("Evaluated data provider connection string for current platform: " & conn.ConnectionString)
             If CType(conn, Object).GetType Is GetType(System.Data.Odbc.OdbcConnection) Then
@@ -352,7 +352,7 @@ Namespace CompuMaster.Test.Data.DataQuery
 
         <Test()> Public Sub MicrosoftExcelOledbConnection()
             Console.WriteLine("Trying to find appropriate data provider for platform " & PlatformDependentProcessBitNumber())
-            Dim TestFile As String = AssemblyTestEnvironment.TestFileAbsolutePath("testfiles\test_for_lastcell_e50aka95.xls")
+            Dim TestFile As String = AssemblyTestEnvironment.TestFileAbsolutePath("testfiles\test_for_lastcell_e70aka97-2003.xls")
             Dim conn As IDbConnection = CompuMaster.Data.DataQuery.Connections.MicrosoftExcelOleDbConnection(TestFile, False, True)
             Console.WriteLine("Evaluated data provider connection string for current platform: " & conn.ConnectionString)
             If CType(conn, Object).GetType Is GetType(System.Data.OleDb.OleDbConnection) Then
@@ -370,7 +370,7 @@ Namespace CompuMaster.Test.Data.DataQuery
 
         <Test()> Public Sub MicrosoftExcelConnection()
             Console.WriteLine("Trying to find appropriate data provider for platform " & PlatformDependentProcessBitNumber())
-            Dim TestFile As String = AssemblyTestEnvironment.TestFileAbsolutePath("testfiles\test_for_lastcell_e50aka95.xls")
+            Dim TestFile As String = AssemblyTestEnvironment.TestFileAbsolutePath("testfiles\test_for_lastcell_e70aka97-2003.xls")
             Dim conn As IDbConnection = CompuMaster.Data.DataQuery.Connections.MicrosoftExcelConnection(TestFile, False, True)
             Console.WriteLine("Evaluated data provider connection string for current platform: " & conn.ConnectionString)
             If CType(conn, Object).GetType Is GetType(System.Data.OleDb.OleDbConnection) Then
