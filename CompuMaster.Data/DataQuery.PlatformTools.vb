@@ -62,12 +62,16 @@ Namespace CompuMaster.Data.DataQuery
         ''' <returns></returns>
         ''' <remarks></remarks>
         Public Shared Function InstalledOdbcDrivers(platform As TargetPlatform) As String()
-            If  platform = TargetPlatform.x32 AndAlso CurrentClrRuntime() = ClrRuntimePlatform.x64 Then
-                Return Microsoft.Win32.Registry.LocalMachine.OpenSubKey("SOFTWARE\\Wow6432Node\\ODBC\\ODBCINST.INI\ODBC Drivers").GetValueNames()
-            ElseIf platform = TargetPlatform.x64 AndAlso CurrentClrRuntime() = ClrRuntimePlatform.x32 Then
-                Throw New NotSupportedException("64 bit data not available on 32 bit platform")
+            If System.Environment.OSVersion.Platform = PlatformID.Win32NT Then
+                If platform = TargetPlatform.x32 AndAlso CurrentClrRuntime() = ClrRuntimePlatform.x64 Then
+                    Return Microsoft.Win32.Registry.LocalMachine.OpenSubKey("SOFTWARE\\Wow6432Node\\ODBC\\ODBCINST.INI\ODBC Drivers").GetValueNames()
+                ElseIf platform = TargetPlatform.x64 AndAlso CurrentClrRuntime() = ClrRuntimePlatform.x32 Then
+                    Throw New NotSupportedException("64 bit data not available on 32 bit platform")
+                Else
+                    Return Microsoft.Win32.Registry.LocalMachine.OpenSubKey("SOFTWARE\\ODBC\\ODBCINST.INI\ODBC Drivers").GetValueNames()
+                End If
             Else
-                Return Microsoft.Win32.Registry.LocalMachine.OpenSubKey("SOFTWARE\\ODBC\\ODBCINST.INI\ODBC Drivers").GetValueNames()
+                Throw New NotImplementedException("Support for this method at the current platform not yet implemented")
             End If
         End Function
 
@@ -80,39 +84,43 @@ Namespace CompuMaster.Data.DataQuery
         ''' <para>CONTENT WARNING: the enumeration will return ALL registered providers, but you may not be able to use them because of 32bit vs. 64bit loading problems</para>
         ''' </remarks>
         Public Shared Function InstalledOleDbProviders() As DictionaryEntry()
-            Dim Providers As New ArrayList
+            If System.Environment.OSVersion.Platform = PlatformID.Win32NT Then
+                Dim Providers As New ArrayList
 
-            ' I am only interested in the CLSID subtree
-            'Dim keyCLSID As Microsoft.Win32.RegistryKey = Microsoft.Win32.Registry.ClassesRoot.OpenSubKey("CLSID", False)
-            Dim keyCLSID As Microsoft.Win32.RegistryKey = Microsoft.Win32.Registry.ClassesRoot.OpenSubKey("CLSID", Microsoft.Win32.RegistryKeyPermissionCheck.ReadSubTree, Security.AccessControl.RegistryRights.ReadKey)
-            Dim keys() As String = keyCLSID.GetSubKeyNames()
-            Dim de As DictionaryEntry
-            Dim i As Int32
+                ' I am only interested in the CLSID subtree
+                'Dim keyCLSID As Microsoft.Win32.RegistryKey = Microsoft.Win32.Registry.ClassesRoot.OpenSubKey("CLSID", False)
+                Dim keyCLSID As Microsoft.Win32.RegistryKey = Microsoft.Win32.Registry.ClassesRoot.OpenSubKey("CLSID", Microsoft.Win32.RegistryKeyPermissionCheck.ReadSubTree, Security.AccessControl.RegistryRights.ReadKey)
+                Dim keys() As String = keyCLSID.GetSubKeyNames()
+                Dim de As DictionaryEntry
+                Dim i As Int32
 
-            Dim AccessErrors As New Generic.List(Of Exception)
-            ' Search through the tree just one level
-            For i = 0 To keys.Length - 1
-                Dim key As Microsoft.Win32.RegistryKey = Nothing
-                Try
-                    'Dim key As Microsoft.Win32.RegistryKey = keyCLSID.OpenSubKey(keys(i), False)
-                    key = keyCLSID.OpenSubKey(keys(i), Microsoft.Win32.RegistryKeyPermissionCheck.ReadSubTree, Security.AccessControl.RegistryRights.ReadKey)
+                Dim AccessErrors As New Generic.List(Of Exception)
+                ' Search through the tree just one level
+                For i = 0 To keys.Length - 1
+                    Dim key As Microsoft.Win32.RegistryKey = Nothing
+                    Try
+                        'Dim key As Microsoft.Win32.RegistryKey = keyCLSID.OpenSubKey(keys(i), False)
+                        key = keyCLSID.OpenSubKey(keys(i), Microsoft.Win32.RegistryKeyPermissionCheck.ReadSubTree, Security.AccessControl.RegistryRights.ReadKey)
 
-                    ' Search for OLE DB Providers
-                    de = InstalledOleDbProviders_SearchKeys(key)
-                    If Not (de.Key Is Nothing) Then
-                        ' Found one, add it to the Dictionary
-                        Providers.Add(de)
-                    End If
-                Catch ex As Exception
-                    AccessErrors.Add(New Exception("ERROR at " & keyCLSID.ToString & "\" & keys(i)))
-                Finally
-                    If Not key Is Nothing Then key.Close()
-                End Try
-            Next
-            'If AccessErrors.Count > keys.Length / 40 Then '1 access error is usual at Win10 - error situation is with more than 40% errors on all existing sub-keys
-            '    Throw New Exception("AccessErrors=" & AccessErrors.Count)
-            'End If
-            Return CType(Providers.ToArray(GetType(DictionaryEntry)), DictionaryEntry())
+                        ' Search for OLE DB Providers
+                        de = InstalledOleDbProviders_SearchKeys(key)
+                        If Not (de.Key Is Nothing) Then
+                            ' Found one, add it to the Dictionary
+                            Providers.Add(de)
+                        End If
+                    Catch ex As Exception
+                        AccessErrors.Add(New Exception("ERROR at " & keyCLSID.ToString & "\" & keys(i)))
+                    Finally
+                        If Not key Is Nothing Then key.Close()
+                    End Try
+                Next
+                'If AccessErrors.Count > keys.Length / 40 Then '1 access error is usual at Win10 - error situation is with more than 40% errors on all existing sub-keys
+                '    Throw New Exception("AccessErrors=" & AccessErrors.Count)
+                'End If
+                Return CType(Providers.ToArray(GetType(DictionaryEntry)), DictionaryEntry())
+            Else
+                Throw New NotImplementedException("Support for this method at the current platform not yet implemented")
+            End If
         End Function
 
         ''' <summary>
