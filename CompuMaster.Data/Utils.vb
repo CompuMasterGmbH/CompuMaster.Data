@@ -1007,16 +1007,30 @@ Namespace CompuMaster.Data
                 End If
                 Return encoding.GetString(bytes)
 #Else
+                    Dim Result As String
                     If postData Is Nothing Then
-                        Return client.DownloadString(uri)
+                        Result = client.DownloadString(uri)
                     Else
-                        Return client.UploadString(uri, postData)
+                        Result = client.UploadString(uri, postData)
+                    End If
+                    If client.ResponseHeaders("Content-Type") IsNot Nothing Then
+                        'HACK: download twice, but now with 1st response's charset encoding information
+                        Dim ResultCharsetEncodingName As String = New System.Net.Mime.ContentType(client.ResponseHeaders("Content-Type")).CharSet
+                        Dim bytes As Byte()
+                        If postData Is Nothing Then
+                            bytes = client.DownloadData(uri)
+                        Else
+                            bytes = client.UploadData(uri, System.Text.Encoding.GetEncoding(encodingName).GetBytes(postData))
+                        End If
+                        Return System.Text.Encoding.GetEncoding(ResultCharsetEncodingName).GetString(bytes)
+                    Else
+                        Return Result 'no content encoding information available, return downloaded string as is
                     End If
 #End If
                 End If
 #If Not NET_1_1 Then
             Finally
-                System.Net.ServicePointManager.ServerCertificateValidationCallback = CurrentValidationCallback
+            System.Net.ServicePointManager.ServerCertificateValidationCallback = CurrentValidationCallback
             End Try
 #End If
         End Function

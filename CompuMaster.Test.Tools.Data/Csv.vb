@@ -26,6 +26,52 @@ Namespace CompuMaster.Test.Data
             NUnit.Framework.Assert.AreEqual(2, testoutputdata.Rows.Count, "JW #101")
         End Sub
 
+        <Test> Public Sub ReadDataTableFromCsvFileViaHttpRequestWithCorrectCharsetEncoding(<Values(1, 2, 3)> testType As Byte)
+            Const GithubCountryCodesTestUrl As String = "https://raw.githubusercontent.com/datasets/country-codes/master/data/country-codes.csv"
+            Dim CheckEntries As String() = New String() {"CHN", "RUS", "FRA", "ZWE"} 'ISO3166-1-Alpha-3
+
+            Dim CsvTableFromUrl As DataTable, CsvStringTableFromUrl As String
+
+            Select Case testType
+                Case 1
+                    Console.WriteLine("test of column-separator method type with text encoding """" meaning autodetect")
+                    CsvTableFromUrl = CompuMaster.Data.Csv.ReadDataTableFromCsvFile(GithubCountryCodesTestUrl, True, "", ","c, """"c, False, False)
+                    CompuMaster.Data.DataTables.RemoveRowsWithWithoutRequiredValuesInColumn(CsvTableFromUrl.Columns("ISO3166-1-Alpha-3"), CheckEntries)
+                    Console.WriteLine(CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(CsvTableFromUrl))
+                    Assert.AreEqual(CheckEntries.Length, CsvTableFromUrl.Rows.Count)
+                    CsvStringTableFromUrl = CompuMaster.Data.DataTables.ConvertToPlainTextTable(CsvTableFromUrl)
+                    Assert.IsTrue(CsvStringTableFromUrl.Contains("Russian Federation"))
+                    Assert.IsTrue(CsvStringTableFromUrl.Contains("俄罗斯联邦"))
+                    Assert.IsTrue(CsvStringTableFromUrl.Contains("الاتحاد الروسي"))
+
+                Case 2
+                    Console.WriteLine()
+                    Console.WriteLine("test of fixed column method type")
+                    CsvTableFromUrl = CompuMaster.Data.Csv.ReadDataTableFromCsvFile(GithubCountryCodesTestUrl, True, New Integer() {}, CType(Nothing, System.Text.Encoding), System.Globalization.CultureInfo.GetCultureInfo("en-US"), False)
+                    CsvStringTableFromUrl = CompuMaster.Data.DataTables.ConvertToPlainTextTable(CsvTableFromUrl)
+                    Console.WriteLine(CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(CsvTableFromUrl))
+                    Assert.IsTrue(CsvStringTableFromUrl.Contains("Russian Federation"))
+                    Assert.IsTrue(CsvStringTableFromUrl.Contains("俄罗斯联邦"))
+                    Assert.IsTrue(CsvStringTableFromUrl.Contains("الاتحاد الروسي"))
+
+                Case 3
+                    Console.WriteLine()
+                    Console.WriteLine("test of column-separator method type with text encoding Nothing/null meaning autodetect")
+                    CsvTableFromUrl = CompuMaster.Data.Csv.ReadDataTableFromCsvFile(GithubCountryCodesTestUrl, True, CType(Nothing, System.Text.Encoding), System.Globalization.CultureInfo.GetCultureInfo("en-US"), """"c, False, False)
+                    CompuMaster.Data.DataTables.RemoveRowsWithWithoutRequiredValuesInColumn(CsvTableFromUrl.Columns("ISO3166-1-Alpha-3"), CheckEntries)
+                    Console.WriteLine(CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(CsvTableFromUrl))
+                    Assert.AreEqual(CheckEntries.Length, CsvTableFromUrl.Rows.Count)
+                    CsvStringTableFromUrl = CompuMaster.Data.DataTables.ConvertToPlainTextTable(CsvTableFromUrl)
+                    Assert.IsTrue(CsvStringTableFromUrl.Contains("Russian Federation"))
+                    Assert.IsTrue(CsvStringTableFromUrl.Contains("俄罗斯联邦"))
+                    Assert.IsTrue(CsvStringTableFromUrl.Contains("الاتحاد الروسي"))
+
+                Case Else
+                    Throw New NotImplementedException
+            End Select
+
+        End Sub
+
         <Test> Public Sub ReadDataTableFromCsvFileWithColumnSeparatorCharInTextStrings()
             Dim TestFile As String = AssemblyTestEnvironment.TestFileAbsolutePath("testfiles\country-codes.csv")
             System.Console.WriteLine("TestFile=" & TestFile)

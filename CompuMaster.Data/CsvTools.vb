@@ -158,7 +158,13 @@ Namespace CompuMaster.Data
 
             If File.Exists(path) Then
             ElseIf path.ToLower.StartsWith("http://") OrElse path.ToLower.StartsWith("https://") Then
-                Dim LocalCopyOfFileContentFromRemoteUri As String = Utils.ReadStringDataFromUri(path, encoding.WebName)
+                Dim EncodingWebName As String
+                If encoding Is Nothing Then
+                    EncodingWebName = Nothing
+                Else
+                    EncodingWebName = encoding.WebName
+                End If
+                Dim LocalCopyOfFileContentFromRemoteUri As String = Utils.ReadStringDataFromUri(path, EncodingWebName)
                 Result = ReadDataTableFromCsvString(LocalCopyOfFileContentFromRemoteUri, includesColumnHeaders, columnWidths, convertEmptyStringsToDBNull, lineEncodings, lineEncodingAutoConversions)
                 Result.TableName = System.IO.Path.GetFileNameWithoutExtension(path)
                 Return Result
@@ -391,7 +397,13 @@ Namespace CompuMaster.Data
 
             If File.Exists(path) Then
             ElseIf path.ToLower.StartsWith("http://") OrElse path.ToLower.StartsWith("https://") Then
-                Dim LocalCopyOfFileContentFromRemoteUri As String = Utils.ReadStringDataFromUri(path, encoding.WebName)
+                Dim EncodingWebName As String
+                If encoding Is Nothing Then
+                    EncodingWebName = Nothing
+                Else
+                    EncodingWebName = encoding.WebName
+                End If
+                Dim LocalCopyOfFileContentFromRemoteUri As String = Utils.ReadStringDataFromUri(path, EncodingWebName)
                 Result = ReadDataTableFromCsvString(LocalCopyOfFileContentFromRemoteUri, includesColumnHeaders, cultureFormatProvider, recognizeTextBy, recognizeMultipleColumnSeparatorCharsAsOne, convertEmptyStringsToDBNull, lineEncodings, lineEncodingAutoConversions)
                 Result.TableName = System.IO.Path.GetFileNameWithoutExtension(path)
                 Return Result
