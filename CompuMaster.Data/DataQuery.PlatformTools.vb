@@ -98,7 +98,7 @@ Namespace CompuMaster.Data.DataQuery
                     key = keyCLSID.OpenSubKey(keys(i), Microsoft.Win32.RegistryKeyPermissionCheck.ReadSubTree, Security.AccessControl.RegistryRights.ReadKey)
 
                     ' Search for OLE DB Providers
-                    de = SearchKeys(key)
+                    de = InstalledOleDbProviders_SearchKeys(key)
                     If Not (de.Key Is Nothing) Then
                         ' Found one, add it to the Dictionary
                         Providers.Add(de)
@@ -109,9 +109,9 @@ Namespace CompuMaster.Data.DataQuery
                     If Not key Is Nothing Then key.Close()
                 End Try
             Next
-            If AccessErrors.Count > keys.Length / 40 Then '1 access error is usual at Win10 - error situation is with more than 40% errors on all existing sub-keys
-                Throw New Exception("AccessErrors=" & AccessErrors.Count)
-            End If
+            'If AccessErrors.Count > keys.Length / 40 Then '1 access error is usual at Win10 - error situation is with more than 40% errors on all existing sub-keys
+            '    Throw New Exception("AccessErrors=" & AccessErrors.Count)
+            'End If
             Return CType(Providers.ToArray(GetType(DictionaryEntry)), DictionaryEntry())
         End Function
 
@@ -121,7 +121,7 @@ Namespace CompuMaster.Data.DataQuery
         ''' <param name="key"></param>
         ''' <returns></returns>
         ''' <remarks></remarks>
-        Private Shared Function SearchKeys(ByVal key As Microsoft.Win32.RegistryKey) As DictionaryEntry
+        Private Shared Function InstalledOleDbProviders_SearchKeys(ByVal key As Microsoft.Win32.RegistryKey) As DictionaryEntry
             Dim de As DictionaryEntry
 
             Try
