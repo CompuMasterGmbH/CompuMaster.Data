@@ -20,20 +20,32 @@ Namespace CompuMaster.Data.DataQuery
         End Property
 
         Public Enum TestFileType As Byte
-            MsExcel95Xls
-            MsExcel2007Xlsx
-            MsAccess
+            MsExcel95Xls = 0
+            MsExcel2007Xlsx = 1
+            <Obsolete("Use MsAccessMdb instead"), System.ComponentModel.EditorBrowsable(ComponentModel.EditorBrowsableState.Never)> MsAccess = 2
+            MsAccessMdb = 3
+            MsAccessAccdb = 4
+            TextCsv = 10
         End Enum
 
         Public Sub New(ByVal fileType As TestFileType)
             Dim TempFile As String
             TempFile = System.IO.Path.GetTempFileName()
             If fileType = TestFileType.MsExcel95Xls Then
+                TempFile = TempFile & ".xls"
                 CompuMaster.Data.DatabaseManagement.CreateMsExcelFile(TempFile, DatabaseManagement.MsExcelFileType.MsExcel95Xls)
             ElseIf fileType = TestFileType.MsExcel2007Xlsx Then
+                TempFile = TempFile & ".xlsx"
                 CompuMaster.Data.DatabaseManagement.CreateMsExcelFile(TempFile, DatabaseManagement.MsExcelFileType.MsExcel2007Xlsx)
-            ElseIf fileType = TestFileType.MsAccess Then
+            ElseIf fileType = TestFileType.MsAccessmdb Then
+                TempFile = TempFile & ".mdb"
                 CompuMaster.Data.DatabaseManagement.CreateDatabaseFile(TempFile, DatabaseManagement.DatabaseFileType.MsAccess2002Mdb)
+            ElseIf fileType = TestFileType.MsAccessaccdb Then
+                TempFile = TempFile & ".accdb"
+                CompuMaster.Data.DatabaseManagement.CreateDatabaseFile(TempFile, DatabaseManagement.DatabaseFileType.MsAccess2007Accdb)
+            ElseIf fileType = TestFileType.TextCsv Then
+                TempFile = TempFile & ".dir\testdata.csv"
+                CompuMaster.Data.DatabaseManagement.CreateTextCsvDatabaseFile(TempFile)
             Else
                 Throw New ArgumentException("Invalid value for parameter fileType", "fileType")
             End If
@@ -61,8 +73,6 @@ Namespace CompuMaster.Data.DataQuery
         Protected Overrides Sub Finalize()
             Dispose(False)
         End Sub
-
-
 
     End Class
 

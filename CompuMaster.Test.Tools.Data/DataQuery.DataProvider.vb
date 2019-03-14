@@ -27,6 +27,11 @@ Namespace CompuMaster.Test.Data.DataQuery
         <Test> Public Sub AvailableDataProvidersTest()
             LoadedAssembliesInCurrentAppDomain()
             Dim providers As List(Of CompuMaster.Data.DataQuery.DataProvider) = CompuMaster.Data.DataQuery.DataProvider.AvailableDataProviders
+            Console.WriteLine()
+            Console.WriteLine("Found AvailableDataProviders:")
+            For Each MyProvider As CompuMaster.Data.DataQuery.DataProvider In providers
+                Console.WriteLine(MyProvider.Title & " - " & MyProvider.ConnectionType.FullName & " - " & MyProvider.Assembly.FullName)
+            Next
             Assert.GreaterOrEqual(providers.Count, 3)
         End Sub
 
