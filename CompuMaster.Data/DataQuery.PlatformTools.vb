@@ -83,6 +83,7 @@ Namespace CompuMaster.Data.DataQuery
         ''' <para>DELAY WARNING: the enumeration by registry keys will take approx. 1,000 ms (!)</para>
         ''' <para>CONTENT WARNING: the enumeration will return ALL registered providers, but you may not be able to use them because of 32bit vs. 64bit loading problems</para>
         ''' </remarks>
+        ''' <exception cref="NotImplementedException">Non-Windows(Win32NT)-Platforms are not yet supported</exception>
         Public Shared Function InstalledOleDbProviders() As DictionaryEntry()
             If System.Environment.OSVersion.Platform = PlatformID.Win32NT Then
                 Dim Providers As New ArrayList
@@ -129,6 +130,7 @@ Namespace CompuMaster.Data.DataQuery
         ''' <param name="key"></param>
         ''' <returns></returns>
         ''' <remarks></remarks>
+        ''' <exception cref="NotImplementedException">Non-Windows(Win32NT)-Platforms are not yet supported</exception>
         Private Shared Function InstalledOleDbProviders_SearchKeys(ByVal key As Microsoft.Win32.RegistryKey) As DictionaryEntry
             Dim de As DictionaryEntry
 
