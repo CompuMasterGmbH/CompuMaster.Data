@@ -34,7 +34,7 @@ Namespace CompuMaster.Data.DataQuery
             Dim TestFile As TestFile = Nothing
             Try
                 'Try to create a temporary file - might fail in environments which are not fully trusted
-                If path.ToLowerInvariant.EndsWith(".mdb") Then
+                If path.ToLowerInvariant.EndsWith(".mdb") OrElse path.ToLowerInvariant.EndsWith(".mde") Then
                     TestFile = New TestFile(DataQuery.TestFile.TestFileType.MsAccessMdb)
                 Else
                     TestFile = New TestFile(DataQuery.TestFile.TestFileType.MsAccessAccdb)
@@ -45,7 +45,7 @@ Namespace CompuMaster.Data.DataQuery
                 If CompuMaster.Data.DataQuery.PlatformTools.CurrentClrRuntime = CompuMaster.Data.DataQuery.PlatformTools.ClrRuntimePlatform.x64 Then
                     '64bit - Requires Office 2010 JET drivers, but are called "Microsoft.ACE.OLEDB.12.0", too
                     Return CompuMaster.Data.DataQuery.PlatformTools.CreateDataConnection("OleDB", "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" & path & ";User Id=admin;Password=" & databasePassword & ";")
-                ElseIf path.ToLower.EndsWith(".accdb") Then
+                ElseIf path.ToLowerInvariant.EndsWith(".accdb") OrElse path.ToLowerInvariant.EndsWith(".accde") Then
                     '32bit - Requires Office 2007 JET drivers
                     Return CompuMaster.Data.DataQuery.PlatformTools.CreateDataConnection("OleDB", "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" & path & ";User Id=admin;Password=" & databasePassword & ";")
                 Else
@@ -110,7 +110,7 @@ Namespace CompuMaster.Data.DataQuery
             Dim TestFile As TestFile = Nothing
             Try
                 'Try to create a temporary file - might fail in environments which are not fully trusted
-                If path.ToLowerInvariant.EndsWith(".mdb") Then
+                If path.ToLowerInvariant.EndsWith(".mdb") OrElse path.ToLowerInvariant.EndsWith(".mde") Then
                     TestFile = New TestFile(DataQuery.TestFile.TestFileType.MsAccessMdb)
                 Else
                     TestFile = New TestFile(DataQuery.TestFile.TestFileType.MsAccessAccdb)
@@ -121,7 +121,7 @@ Namespace CompuMaster.Data.DataQuery
                 If CompuMaster.Data.DataQuery.PlatformTools.CurrentClrRuntime = CompuMaster.Data.DataQuery.PlatformTools.ClrRuntimePlatform.x64 Then
                     '64bit 
                     Return CompuMaster.Data.DataQuery.PlatformTools.CreateDataConnection("ODBC", "Driver={Microsoft Access Driver (*.mdb, *.accdb)};Dbq=" & path & ";Uid=Admin;Pwd=;")
-                ElseIf path.ToLower.EndsWith(".accdb") Then
+                ElseIf path.ToLowerInvariant.EndsWith(".accdb") OrElse path.ToLowerInvariant.EndsWith(".accde") Then
                     '32bit but .accdb
                     Return CompuMaster.Data.DataQuery.PlatformTools.CreateDataConnection("ODBC", "Driver={Microsoft Access Driver (*.mdb, *.accdb)};Dbq=" & path & ";Uid=Admin;Pwd=;")
                 Else
@@ -139,7 +139,7 @@ Namespace CompuMaster.Data.DataQuery
                     If CompuMaster.Data.DataQuery.PlatformTools.CurrentClrRuntime = CompuMaster.Data.DataQuery.PlatformTools.ClrRuntimePlatform.x64 Then
                         '64bit 
                         Return CompuMaster.Data.DataQuery.PlatformTools.CreateDataConnection("ODBC", "Driver={Microsoft Access Driver (*.mdb, *.accdb)};Dbq=" & path & ";Uid=Admin;Pwd=" & databasePassword & ";")
-                    ElseIf path.ToLower.EndsWith(".accdb") Then
+                    ElseIf path.ToLowerInvariant.EndsWith(".accdb") OrElse path.ToLowerInvariant.EndsWith(".accde") Then
                         '32bit but .accdb
                         Return CompuMaster.Data.DataQuery.PlatformTools.CreateDataConnection("ODBC", "Driver={Microsoft Access Driver (*.mdb, *.accdb)};Dbq=" & path & ";Uid=Admin;Pwd=" & databasePassword & ";")
                     Else
@@ -220,7 +220,7 @@ Namespace CompuMaster.Data.DataQuery
             Dim TestFile As TestFile = Nothing
             Try
                 'Try to create a temporary file - might fail in environments which are not fully trusted
-                If path.ToLowerInvariant.EndsWith(".mdb") Then
+                If path.ToLowerInvariant.EndsWith(".mdb") OrElse path.ToLowerInvariant.EndsWith(".mde") Then
                     TestFile = New TestFile(DataQuery.TestFile.TestFileType.MsAccessMdb)
                 Else
                     TestFile = New TestFile(DataQuery.TestFile.TestFileType.MsAccessAccdb)
@@ -231,7 +231,7 @@ Namespace CompuMaster.Data.DataQuery
                 If CompuMaster.Data.DataQuery.PlatformTools.CurrentClrRuntime = CompuMaster.Data.DataQuery.PlatformTools.ClrRuntimePlatform.x64 Then
                     '64bit - Requires Office 2010 JET drivers, but are called "Microsoft.ACE.OLEDB.12.0", too
                     Return CompuMaster.Data.DataQuery.PlatformTools.CreateDataConnection("OleDB", "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" & path & ";User Id=admin;Password=;")
-                ElseIf path.ToLower.EndsWith(".accdb") Then
+                ElseIf path.ToLowerInvariant.EndsWith(".accdb") OrElse path.ToLowerInvariant.EndsWith(".accde") Then
                     '32bit - Requires Office 2007 JET drivers
                     Return CompuMaster.Data.DataQuery.PlatformTools.CreateDataConnection("OleDB", "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" & path & ";User Id=admin;Password=;")
                 Else
@@ -260,7 +260,7 @@ Namespace CompuMaster.Data.DataQuery
                     If CompuMaster.Data.DataQuery.PlatformTools.CurrentClrRuntime = CompuMaster.Data.DataQuery.PlatformTools.ClrRuntimePlatform.x64 Then
                         '64bit - Requires Office 2010 JET drivers
                         Throw New Office2010x64OleDbOdbcEngineRequiredException(Nothing)
-                    ElseIf path.ToLower.EndsWith(".accdb") Then
+                    ElseIf path.ToLowerInvariant.EndsWith(".accdb") OrElse path.ToLowerInvariant.EndsWith(".accde") Then
                         '32bit - Requires Office 2007 JET drivers
                         Return CompuMaster.Data.DataQuery.PlatformTools.CreateDataConnection("OleDB", "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" & path & ";Jet OLEDB:Database Password=" & databasePassword & ";")
                     Else
