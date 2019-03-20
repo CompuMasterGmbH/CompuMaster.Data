@@ -1021,7 +1021,7 @@ Namespace CompuMaster.Data
                         If postData Is Nothing Then
                             bytes = client.DownloadData(uri)
                         Else
-                            bytes = client.UploadData(uri, System.Text.Encoding.GetEncoding(encodingName).GetBytes(postData))
+                            bytes = client.UploadData(uri, System.Text.Encoding.GetEncoding(ResultCharsetEncodingName).GetBytes(postData))
                         End If
                         Return System.Text.Encoding.GetEncoding(ResultCharsetEncodingName).GetString(bytes)
                     Else
