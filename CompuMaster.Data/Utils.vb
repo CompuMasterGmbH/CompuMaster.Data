@@ -1016,6 +1016,7 @@ Namespace CompuMaster.Data
                     If client.ResponseHeaders("Content-Type") IsNot Nothing Then
                         'HACK: download twice, but now with 1st response's charset encoding information
                         Dim ResultCharsetEncodingName As String = New System.Net.Mime.ContentType(client.ResponseHeaders("Content-Type")).CharSet
+                        If ResultCharsetEncodingName = Nothing Then ResultCharsetEncodingName = "utf-8"
                         Dim bytes As Byte()
                         If postData Is Nothing Then
                             bytes = client.DownloadData(uri)
