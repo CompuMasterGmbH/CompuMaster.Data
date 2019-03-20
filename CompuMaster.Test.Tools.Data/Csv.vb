@@ -50,6 +50,11 @@ Namespace CompuMaster.Test.Data
                 Console.WriteLine(CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(dt))
                 Assert.Greater(dt.Columns.Count, 0)
                 Assert.Greater(dt.Rows.Count, 0)
+                'Test 4
+                dt = CompuMaster.Data.Csv.ReadDataTableFromCsvFile(Url, True, CompuMaster.Data.Csv.ReadLineEncodings.RowBreakCrLfOrCr_CellLineBreakLf, CompuMaster.Data.Csv.ReadLineEncodingAutoConversion.NoAutoConversion, "", ","c, """"c, False, False)
+                Console.WriteLine(CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(dt))
+                Assert.Greater(dt.Columns.Count, 0)
+                Assert.Greater(dt.Rows.Count, 0)
             Finally
                 ws.Stop()
             End Try
