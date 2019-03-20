@@ -264,6 +264,10 @@
       <Project>{3bda1292-0d02-452e-9518-18496ab59231}</Project>
       <Name>CompuMaster.Data.VS2012</Name>
     </ProjectReference>
+    <ProjectReference Include="..\CompuMaster.Test.TinyWebServerAdvanced\CompuMaster.Test.TinyWebServerAdvanced.csproj">
+      <Project>{8e5448f8-484e-43d5-8638-1c35f44eb9b7}</Project>
+      <Name>CompuMaster.Test.TinyWebServerAdvanced</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.VisualBasic.targets" />
   <PropertyGroup>

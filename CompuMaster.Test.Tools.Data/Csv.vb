@@ -27,11 +27,15 @@ Namespace CompuMaster.Test.Data
         ''' <remarks>
         ''' The CSV file is returned as UTF-8 bytes
         ''' </remarks>
-        <Test> Public Sub ReadDataTableFromCsvUrlAtLocalhostWithoutCharsetUnset()
+        <Test> Public Sub ReadDataTableFromCsvUrlAtLocalhostWithContentTypeButWithoutCharset(<Values(Nothing, "text/csv", "text/csv; charset=utf-8")> headerContentType As String)
             Dim Url As String = "http://localhost:8035/"
             Dim CsvCulture As System.Globalization.CultureInfo = System.Globalization.CultureInfo.CreateSpecificCulture("en-US")
             Dim FileEncoding As System.Text.Encoding = Nothing
-            Dim ws As New TinyWebServer.WebServer(AddressOf ReadDataTableLocalhostTestWebserver, Url)
+            Dim Headers As New System.Collections.Specialized.NameValueCollection
+            If headerContentType <> Nothing Then
+                Headers("content-type") = headerContentType
+            End If
+            Dim ws As New CompuMaster.Test.Tools.TinyWebServerAdvanced.WebServer(AddressOf ReadDataTableLocalhostTestWebserver, Headers, Url)
             Try
                 ws.Run()
                 Dim dt As DataTable

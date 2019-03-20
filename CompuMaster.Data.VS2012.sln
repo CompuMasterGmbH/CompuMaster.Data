@@ -85,6 +85,8 @@ Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "CompuMaster.Test.Web.DataUp
 		SlnRelativePath = "CompuMaster.Test.Web.DataUpdate\"
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CompuMaster.Test.TinyWebServerAdvanced", "CompuMaster.Test.TinyWebServerAdvanced\CompuMaster.Test.TinyWebServerAdvanced.csproj", "{8E5448F8-484E-43D5-8638-1C35F44EB9B7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		AppVeyorCI|Any CPU = AppVeyorCI|Any CPU
@@ -243,6 +245,26 @@ Global
 		{2B69F017-7DD3-4195-99AA-278C3064C1E7}.TravisCI|Any CPU.ActiveCfg = Debug|Any CPU
 		{2B69F017-7DD3-4195-99AA-278C3064C1E7}.TravisCI|x86.ActiveCfg = Debug|Any CPU
 		{2B69F017-7DD3-4195-99AA-278C3064C1E7}.TravisCI|x86.Build.0 = Debug|Any CPU
+		{8E5448F8-484E-43D5-8638-1C35F44EB9B7}.AppVeyorCI|Any CPU.ActiveCfg = Release|Any CPU
+		{8E5448F8-484E-43D5-8638-1C35F44EB9B7}.AppVeyorCI|Any CPU.Build.0 = Release|Any CPU
+		{8E5448F8-484E-43D5-8638-1C35F44EB9B7}.AppVeyorCI|x86.ActiveCfg = Release|Any CPU
+		{8E5448F8-484E-43D5-8638-1C35F44EB9B7}.AppVeyorCI|x86.Build.0 = Release|Any CPU
+		{8E5448F8-484E-43D5-8638-1C35F44EB9B7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8E5448F8-484E-43D5-8638-1C35F44EB9B7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8E5448F8-484E-43D5-8638-1C35F44EB9B7}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{8E5448F8-484E-43D5-8638-1C35F44EB9B7}.Debug|x86.Build.0 = Debug|Any CPU
+		{8E5448F8-484E-43D5-8638-1C35F44EB9B7}.NAnt|Any CPU.ActiveCfg = Release|Any CPU
+		{8E5448F8-484E-43D5-8638-1C35F44EB9B7}.NAnt|Any CPU.Build.0 = Release|Any CPU
+		{8E5448F8-484E-43D5-8638-1C35F44EB9B7}.NAnt|x86.ActiveCfg = Release|Any CPU
+		{8E5448F8-484E-43D5-8638-1C35F44EB9B7}.NAnt|x86.Build.0 = Release|Any CPU
+		{8E5448F8-484E-43D5-8638-1C35F44EB9B7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8E5448F8-484E-43D5-8638-1C35F44EB9B7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8E5448F8-484E-43D5-8638-1C35F44EB9B7}.Release|x86.ActiveCfg = Release|Any CPU
+		{8E5448F8-484E-43D5-8638-1C35F44EB9B7}.Release|x86.Build.0 = Release|Any CPU
+		{8E5448F8-484E-43D5-8638-1C35F44EB9B7}.TravisCI|Any CPU.ActiveCfg = Release|Any CPU
+		{8E5448F8-484E-43D5-8638-1C35F44EB9B7}.TravisCI|Any CPU.Build.0 = Release|Any CPU
+		{8E5448F8-484E-43D5-8638-1C35F44EB9B7}.TravisCI|x86.ActiveCfg = Release|Any CPU
+		{8E5448F8-484E-43D5-8638-1C35F44EB9B7}.TravisCI|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

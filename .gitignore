@@ -40,3 +40,5 @@
 /CompuMaster.Test.Web.DataUpdate/Bin/CompuMaster.Data.Web.dll
 CompuMaster.Test.Web.DataUpdate/Bin/Npgsql.pdb
 CompuMaster.Test.Web.DataUpdate/Bin/CompuMaster.Data.pdb
+/CompuMaster.Test.TinyWebServerAdvanced/bin
+/CompuMaster.Test.TinyWebServerAdvanced/obj
