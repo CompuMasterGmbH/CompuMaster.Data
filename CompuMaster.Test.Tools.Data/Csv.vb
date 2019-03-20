@@ -11,6 +11,59 @@ Namespace CompuMaster.Test.Data
             System.Threading.Thread.CurrentThread.CurrentCulture = _OriginCulture
         End Sub
 
+        <Test> Public Sub ReadDataTableFromCsvUrlWithTls12Required()
+            Dim Url As String = "https://data.cityofnewyork.us/api/views/kku6-nxdu/rows.csv?accessType=DOWNLOAD"
+            Dim CsvCulture As System.Globalization.CultureInfo = System.Globalization.CultureInfo.CreateSpecificCulture("en-US")
+            Dim FileEncoding As System.Text.Encoding = Nothing
+            Dim dt As DataTable = CompuMaster.Data.Csv.ReadDataTableFromCsvFile(Url, True, FileEncoding, CsvCulture, """"c, False, True)
+            Console.WriteLine(CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(dt))
+            Assert.Greater(dt.Columns.Count, 0)
+            Assert.Greater(dt.Rows.Count, 0)
+        End Sub
+
+        ''' <summary>
+        ''' Test from a mini-webserver providing a CSV download with missing response header content-type/charset 
+        ''' </summary>
+        ''' <remarks>
+        ''' The CSV file is returned as UTF-8 bytes
+        ''' </remarks>
+        <Test> Public Sub ReadDataTableFromCsvUrlAtLocalhostWithoutCharsetUnset()
+            Dim Url As String = "http://localhost:8035/"
+            Dim CsvCulture As System.Globalization.CultureInfo = System.Globalization.CultureInfo.CreateSpecificCulture("en-US")
+            Dim FileEncoding As System.Text.Encoding = Nothing
+            Dim ws As New TinyWebServer.WebServer(AddressOf ReadDataTableLocalhostTestWebserver, Url)
+            Try
+                ws.Run()
+                Dim dt As DataTable
+                'Test 1
+                dt = CompuMaster.Data.Csv.ReadDataTableFromCsvFile(Url, True, FileEncoding, CsvCulture, """"c, False, True)
+                Console.WriteLine(CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(dt))
+                Assert.Greater(dt.Columns.Count, 0)
+                Assert.Greater(dt.Rows.Count, 0)
+                'Test 2
+                dt = CompuMaster.Data.Csv.ReadDataTableFromCsvFile(Url, True, "", ","c, """"c, False, True)
+                Console.WriteLine(CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(dt))
+                Assert.Greater(dt.Columns.Count, 0)
+                Assert.Greater(dt.Rows.Count, 0)
+                'Test 3
+                dt = CompuMaster.Data.Csv.ReadDataTableFromCsvFile(Url, True, CType(Nothing, String), ","c, """"c, False, True)
+                Console.WriteLine(CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(dt))
+                Assert.Greater(dt.Columns.Count, 0)
+                Assert.Greater(dt.Rows.Count, 0)
+            Finally
+                ws.Stop()
+            End Try
+        End Sub
+
+        ''' <summary>
+        ''' A test CSV file with unicode characters
+        ''' </summary>
+        ''' <param name="handler"></param>
+        ''' <returns></returns>
+        Private Shared Function ReadDataTableLocalhostTestWebserver(handler As System.Net.HttpListenerRequest) As String
+            Return "Test,Column" & vbNewLine & "1,äöüßÄÖÜ2"
+        End Function
+
         <Test()> Public Sub ReadDataTableFromCsvStringSeparatorSeparatedMustFailsBecauseOfWrongCulture(<Values("en-US", "en-GB", "ja-JP")> cultureContext As String)
             System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.CreateSpecificCulture(cultureContext)
 
