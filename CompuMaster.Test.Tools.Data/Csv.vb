@@ -423,6 +423,45 @@ Namespace CompuMaster.Test.Data
             Return t
         End Function
 
+        Private Function SeveralTypesSampleTable() As DataTable
+            Dim t As New DataTable("root")
+            t.Columns.Add("col1")
+            t.Columns.Add("col2")
+            t.Columns.Add("dbl", GetType(Double))
+            t.Columns.Add("dec", GetType(Decimal))
+            t.Columns.Add("date", GetType(DateTime))
+            t.Columns.Add("integer", GetType(Integer))
+            't.Columns.Add("bytes", GetType(Byte())) 'not supported: stable/safe byte-array-to-string-conversion and back re-reading -> general CSV design issue?!
+            Dim r As DataRow = t.NewRow
+            r(0) = "R1C1"
+            r(1) = "R1C2"
+            r(2) = 1000.0001
+            r(3) = 1000.0001D
+            r(4) = Now
+            r(5) = 1000
+            'r(6) = New Byte() {AscW("-"c), AscW(","c), AscW("."c), AscW("-"c)}
+            t.Rows.Add(r)
+            r = t.NewRow
+            r(0) = "R2C1"
+            r(1) = "R2C2"
+            r(2) = DBNull.Value
+            r(3) = DBNull.Value
+            r(4) = DBNull.Value
+            r(5) = DBNull.Value
+            'r(6) = DBNull.Value
+            t.Rows.Add(r)
+            r = t.NewRow
+            r(0) = ""
+            r(1) = Nothing
+            r(2) = DBNull.Value
+            r(3) = DBNull.Value
+            r(4) = DBNull.Value
+            r(5) = DBNull.Value
+            'r(6) = Nothing
+            t.Rows.Add(r)
+            Return t
+        End Function
+
         Private Function CellWithLineBreaksAndSpecialCharsSampleTable() As DataTable
             Dim t As New DataTable("root")
             t.Columns.Add("col1")
@@ -496,6 +535,56 @@ Namespace CompuMaster.Test.Data
             Assert.AreEqual(t.Rows.Count, t2.Rows.Count) 'should be the very same
             csv2 = CompuMaster.Data.Csv.WriteDataTableToCsvTextString(t2, True)
             Assert.AreEqual(csv, csv2) 'should be the very same
+        End Sub
+
+        Private Function DataTypesOfColumns(columns As System.Data.DataColumnCollection) As String()
+            Dim Result As New System.Collections.Generic.List(Of String)
+            For Each column As System.Data.DataColumn In columns
+                Result.Add(column.DataType.ToString)
+            Next
+            Return Result.ToArray
+        End Function
+
+        <Test, Ignore("Column data type auto-detection not yet implemented in CSV read")> Sub WriteDataTableToCsvTextStringAndReReadAndReWriteWithoutChanges_DataTypesReDetection()
+            Dim t As DataTable = SeveralTypesSampleTable()
+            Dim initialColumnDataTypes As String() = DataTypesOfColumns(t.Columns)
+            Console.WriteLine("Initial column data types: " & String.Join(", ", initialColumnDataTypes) & vbNewLine & vbNewLine)
+            Dim bom As String = System.Text.Encoding.UTF8.GetString(System.Text.Encoding.UTF8.GetPreamble())
+            Dim csv As String
+            csv = CompuMaster.Data.Csv.WriteDataTableToCsvTextString(t, True)
+            Console.WriteLine("Initial table" & vbNewLine & vbNewLine)
+            Console.WriteLine(csv)
+            Dim t2 As DataTable = CompuMaster.Data.Csv.ReadDataTableFromCsvString(csv, True)
+            Dim csv2 As String
+            Assert.AreEqual(t.Columns.Count, t2.Columns.Count) 'should be the very same
+            Assert.AreEqual(t.Rows.Count, t2.Rows.Count) 'should be the very same
+            csv2 = CompuMaster.Data.Csv.WriteDataTableToCsvTextString(t2, True)
+            Console.WriteLine("Reread column data types: " & String.Join(", ", DataTypesOfColumns(t2.Columns)) & vbNewLine & vbNewLine)
+            Console.WriteLine("Rewritten table" & vbNewLine & vbNewLine)
+            Console.WriteLine(csv2)
+            Assert.AreEqual(csv, csv2) 'should be the very same
+            Assert.AreEqual(initialColumnDataTypes, DataTypesOfColumns(t2.Columns))
+        End Sub
+
+        <Test> Sub WriteDataTableToCsvTextStringAndReReadAndReWriteWithoutChanges_ComlumnSeparatorInjectionTrials()
+            Dim t As DataTable = SeveralTypesSampleTable()
+            Dim initialColumnDataTypes As String() = DataTypesOfColumns(t.Columns)
+            Console.WriteLine("Column data types: " & String.Join(", ", initialColumnDataTypes) & vbNewLine & vbNewLine)
+            Dim bom As String = System.Text.Encoding.UTF8.GetString(System.Text.Encoding.UTF8.GetPreamble())
+            Dim csv As String
+            csv = CompuMaster.Data.Csv.WriteDataTableToCsvTextString(t, True)
+            Console.WriteLine("Current culture formatted table" & vbNewLine & vbNewLine)
+            Console.WriteLine(csv)
+            Assert.IsFalse(csv.Contains("""1000,0001"""))
+            Dim t2 As DataTable = SeveralTypesSampleTable()
+            Dim csv2 As String
+            Assert.AreEqual(t.Columns.Count, t2.Columns.Count) 'should be the very same
+            Assert.AreEqual(t.Rows.Count, t2.Rows.Count) 'should be the very same
+            csv2 = CompuMaster.Data.Csv.WriteDataTableToCsvTextString(t2, True, ","c, """"c, ","c)
+            Console.WriteLine("Decimal separator equalling to column separator table" & vbNewLine & vbNewLine)
+            Console.WriteLine(csv2)
+            Assert.IsTrue(csv2.Contains("""1000,0001"""))
+            Assert.AreNotEqual(csv, csv2) 'should be the very same
         End Sub
 
         <Test> Sub WriteDataTableToCsvTextStringAndReReadAndReWriteWithoutChangesWithLineBreaksExcelCompatible()

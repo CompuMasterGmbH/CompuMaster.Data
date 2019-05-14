@@ -890,7 +890,7 @@ Namespace CompuMaster.Data
         End Function
 
         ''' <summary>
-        '''     Convert the datatable to a string based, comma-separated format
+        '''     Convert the datatable to a string based, fixed-column format
         ''' </summary>
         ''' <param name="dataTable"></param>
         ''' <param name="includesColumnHeaders"></param>
@@ -1006,42 +1006,7 @@ Namespace CompuMaster.Data
                     If ColCounter <> 0 Then
                         writer.Append(columnSeparator)
                     End If
-                    If dataTable.Columns(ColCounter).DataType Is GetType(String) Then
-                        'Strings
-                        If Not dataTable.Rows(RowCounter)(ColCounter) Is DBNull.Value Then
-                            If recognizeTextBy <> Nothing Then writer.Append(recognizeTextBy)
-                            writer.Append(CsvEncode(CType(dataTable.Rows(RowCounter)(ColCounter), String), recognizeTextBy, lineEncodings))
-                            If recognizeTextBy <> Nothing Then writer.Append(recognizeTextBy)
-                        End If
-                    ElseIf dataTable.Columns(ColCounter).DataType Is GetType(System.Double) Then
-                        'Doubles
-                        If Not dataTable.Rows(RowCounter)(ColCounter) Is DBNull.Value Then
-                            'Other data types which do not require textual handling
-                            writer.Append(CType(dataTable.Rows(RowCounter)(ColCounter), Double).ToString(cultureFormatProvider))
-                        End If
-                    ElseIf dataTable.Columns(ColCounter).DataType Is GetType(System.Decimal) Then
-                        'Decimals
-                        If Not dataTable.Rows(RowCounter)(ColCounter) Is DBNull.Value Then
-                            'Other data types which do not require textual handling
-                            writer.Append(CType(dataTable.Rows(RowCounter)(ColCounter), Decimal).ToString(cultureFormatProvider))
-                        End If
-                    ElseIf dataTable.Columns(ColCounter).DataType Is GetType(System.DateTime) Then
-                        'Datetime
-                        If Not dataTable.Rows(RowCounter)(ColCounter) Is DBNull.Value Then
-                            'Other data types which do not require textual handling
-                            If cultureFormatProvider Is Globalization.CultureInfo.InvariantCulture Then
-                                writer.Append(CType(dataTable.Rows(RowCounter)(ColCounter), DateTime).ToString("yyyy-MM-dd HH:mm:ss.fff"))
-                            Else
-                                writer.Append(CType(dataTable.Rows(RowCounter)(ColCounter), DateTime).ToString(cultureFormatProvider))
-                            End If
-                        End If
-                    Else
-                        'Other data types
-                        If Not dataTable.Rows(RowCounter)(ColCounter) Is DBNull.Value Then
-                            'Other data types which do not require textual handling
-                            writer.Append(dataTable.Rows(RowCounter)(ColCounter).ToString)
-                        End If
-                    End If
+                    WriteCellValue(dataTable.Columns(ColCounter).DataType, dataTable.Rows(RowCounter)(ColCounter), recognizeTextBy, columnSeparator, cultureFormatProvider, lineEncodings, Nothing, writer)
                 Next
                 writer.Append(vbNewLine)
             Next
@@ -1090,42 +1055,7 @@ Namespace CompuMaster.Data
                         If ColCounter <> 0 Then
                             writer.Write(columnSeparator)
                         End If
-                        If dataTable.Columns(ColCounter).DataType Is GetType(String) Then
-                            'Strings
-                            If Not dataTable.Rows(RowCounter)(ColCounter) Is DBNull.Value Then
-                                If recognizeTextBy <> Nothing Then writer.Write(recognizeTextBy)
-                                writer.Write(CsvEncode(CType(dataTable.Rows(RowCounter)(ColCounter), String), recognizeTextBy, lineEncodings))
-                                If recognizeTextBy <> Nothing Then writer.Write(recognizeTextBy)
-                            End If
-                        ElseIf dataTable.Columns(ColCounter).DataType Is GetType(System.Double) Then
-                            'Doubles
-                            If Not dataTable.Rows(RowCounter)(ColCounter) Is DBNull.Value Then
-                                'Other data types which do not require textual handling
-                                writer.Write(CType(dataTable.Rows(RowCounter)(ColCounter), Double).ToString(cultureFormatProvider))
-                            End If
-                        ElseIf dataTable.Columns(ColCounter).DataType Is GetType(System.Decimal) Then
-                            'Decimals
-                            If Not dataTable.Rows(RowCounter)(ColCounter) Is DBNull.Value Then
-                                'Other data types which do not require textual handling
-                                writer.Write(CType(dataTable.Rows(RowCounter)(ColCounter), Decimal).ToString(cultureFormatProvider))
-                            End If
-                        ElseIf dataTable.Columns(ColCounter).DataType Is GetType(System.DateTime) Then
-                            'Datetime
-                            If Not dataTable.Rows(RowCounter)(ColCounter) Is DBNull.Value Then
-                                'Other data types which do not require textual handling
-                                If cultureFormatProvider Is Globalization.CultureInfo.InvariantCulture Then
-                                    writer.Write(CType(dataTable.Rows(RowCounter)(ColCounter), DateTime).ToString("yyyy-MM-dd HH:mm:ss.fff"))
-                                Else
-                                    writer.Write(CType(dataTable.Rows(RowCounter)(ColCounter), DateTime).ToString(cultureFormatProvider))
-                                End If
-                            End If
-                        Else
-                            'Other data types
-                            If Not dataTable.Rows(RowCounter)(ColCounter) Is DBNull.Value Then
-                                'Other data types which do not require textual handling
-                                writer.Write(dataTable.Rows(RowCounter)(ColCounter).ToString)
-                            End If
-                        End If
+                        WriteCellValue(dataTable.Columns(ColCounter).DataType, dataTable.Rows(RowCounter)(ColCounter), recognizeTextBy, columnSeparator, cultureFormatProvider, lineEncodings, writer, Nothing)
                     Next
                     writer.WriteLine()
                 Next
@@ -1247,42 +1177,7 @@ Namespace CompuMaster.Data
                         If ColCounter <> 0 Then
                             writer.Write(columnSeparator)
                         End If
-                        If dataTable.Columns(ColCounter).DataType Is GetType(String) Then
-                            'Strings
-                            If Not dataTable.Rows(RowCounter)(ColCounter) Is DBNull.Value Then
-                                If recognizeTextBy <> Nothing Then writer.Write(recognizeTextBy)
-                                writer.Write(CsvEncode(CType(dataTable.Rows(RowCounter)(ColCounter), String), recognizeTextBy, lineEncodings))
-                                If recognizeTextBy <> Nothing Then writer.Write(recognizeTextBy)
-                            End If
-                        ElseIf dataTable.Columns(ColCounter).DataType Is GetType(System.Double) Then
-                            'Doubles
-                            If Not dataTable.Rows(RowCounter)(ColCounter) Is DBNull.Value Then
-                                'Other data types which do not require textual handling
-                                writer.Write(CType(dataTable.Rows(RowCounter)(ColCounter), Double).ToString(cultureFormatProvider))
-                            End If
-                        ElseIf dataTable.Columns(ColCounter).DataType Is GetType(System.Decimal) Then
-                            'Decimals
-                            If Not dataTable.Rows(RowCounter)(ColCounter) Is DBNull.Value Then
-                                'Other data types which do not require textual handling
-                                writer.Write(CType(dataTable.Rows(RowCounter)(ColCounter), Decimal).ToString(cultureFormatProvider))
-                            End If
-                        ElseIf dataTable.Columns(ColCounter).DataType Is GetType(System.DateTime) Then
-                            'Datetime
-                            If Not dataTable.Rows(RowCounter)(ColCounter) Is DBNull.Value Then
-                                'Other data types which do not require textual handling
-                                If cultureFormatProvider Is Globalization.CultureInfo.InvariantCulture Then
-                                    writer.Write(CType(dataTable.Rows(RowCounter)(ColCounter), DateTime).ToString("yyyy-MM-dd HH:mm:ss.fff"))
-                                Else
-                                    writer.Write(CType(dataTable.Rows(RowCounter)(ColCounter), DateTime).ToString(cultureFormatProvider))
-                                End If
-                            End If
-                        Else
-                            'Other data types
-                            If Not dataTable.Rows(RowCounter)(ColCounter) Is DBNull.Value Then
-                                'Other data types which do not require textual handling
-                                writer.Write(CType(dataTable.Rows(RowCounter)(ColCounter), String))
-                            End If
-                        End If
+                        WriteCellValue(dataTable.Columns(ColCounter).DataType, dataTable.Rows(RowCounter)(ColCounter), recognizeTextBy, columnSeparator, cultureFormatProvider, lineEncodings, writer, Nothing)
                     Next
                     writer.WriteLine()
                 Next
@@ -1372,42 +1267,7 @@ Namespace CompuMaster.Data
                         If ColCounter <> 0 Then
                             writer.Write(columnSeparator)
                         End If
-                        If DataTable.Columns(ColCounter).DataType Is GetType(String) Then
-                            'Strings
-                            If Not dataView.Item(RowCounter).Row(ColCounter) Is DBNull.Value Then
-                                If recognizeTextBy <> Nothing Then writer.Write(recognizeTextBy)
-                                writer.Write(CsvEncode(CType(dataView.Item(RowCounter).Row(ColCounter), String), recognizeTextBy, lineEncodings))
-                                If recognizeTextBy <> Nothing Then writer.Write(recognizeTextBy)
-                            End If
-                        ElseIf DataTable.Columns(ColCounter).DataType Is GetType(System.Double) Then
-                            'Doubles
-                            If Not dataView.Item(RowCounter).Row(ColCounter) Is DBNull.Value Then
-                                'Other data types which do not require textual handling
-                                writer.Write(CType(dataView.Item(RowCounter).Row(ColCounter), Double).ToString(cultureFormatProvider))
-                            End If
-                        ElseIf DataTable.Columns(ColCounter).DataType Is GetType(System.Decimal) Then
-                            'Decimals
-                            If Not dataView.Item(RowCounter).Row(ColCounter) Is DBNull.Value Then
-                                'Other data types which do not require textual handling
-                                writer.Write(CType(dataView.Item(RowCounter).Row(ColCounter), Decimal).ToString(cultureFormatProvider))
-                            End If
-                        ElseIf DataTable.Columns(ColCounter).DataType Is GetType(System.DateTime) Then
-                            'Datetime
-                            If Not dataView.Item(RowCounter).Row(ColCounter) Is DBNull.Value Then
-                                'Other data types which do not require textual handling
-                                If cultureFormatProvider Is Globalization.CultureInfo.InvariantCulture Then
-                                    writer.Write(CType(DataTable.Rows(RowCounter)(ColCounter), DateTime).ToString("yyyy-MM-dd HH:mm:ss.fff"))
-                                Else
-                                    writer.Write(CType(DataTable.Rows(RowCounter)(ColCounter), DateTime).ToString(cultureFormatProvider))
-                                End If
-                            End If
-                        Else
-                            'Other data types
-                            If Not dataView.Item(RowCounter).Row(ColCounter) Is DBNull.Value Then
-                                'Other data types which do not require textual handling
-                                writer.Write(CType(dataView.Item(RowCounter).Row(ColCounter), String))
-                            End If
-                        End If
+                        WriteCellValue(DataTable.Columns(ColCounter).DataType, dataView.Item(RowCounter).Row(ColCounter), recognizeTextBy, columnSeparator, cultureFormatProvider, lineEncodings, writer, Nothing)
                     Next
                 Next
 
@@ -1461,42 +1321,7 @@ Namespace CompuMaster.Data
                         If ColCounter <> 0 Then
                             writer.Write(columnSeparator)
                         End If
-                        If DataTable.Columns(ColCounter).DataType Is GetType(String) Then
-                            'Strings
-                            If Not dataView.Item(RowCounter).Row(ColCounter) Is DBNull.Value Then
-                                If recognizeTextBy <> Nothing Then writer.Write(recognizeTextBy)
-                                writer.Write(CsvEncode(CType(dataView.Item(RowCounter).Row(ColCounter), String), recognizeTextBy, lineEncodings))
-                                If recognizeTextBy <> Nothing Then writer.Write(recognizeTextBy)
-                            End If
-                        ElseIf DataTable.Columns(ColCounter).DataType Is GetType(System.Double) Then
-                            'Doubles
-                            If Not dataView.Item(RowCounter).Row(ColCounter) Is DBNull.Value Then
-                                'Other data types which do not require textual handling
-                                writer.Write(CType(dataView.Item(RowCounter).Row(ColCounter), Double).ToString(cultureFormatProvider))
-                            End If
-                        ElseIf DataTable.Columns(ColCounter).DataType Is GetType(System.Decimal) Then
-                            'Decimals
-                            If Not dataView.Item(RowCounter).Row(ColCounter) Is DBNull.Value Then
-                                'Other data types which do not require textual handling
-                                writer.Write(CType(dataView.Item(RowCounter).Row(ColCounter), Decimal).ToString(cultureFormatProvider))
-                            End If
-                        ElseIf DataTable.Columns(ColCounter).DataType Is GetType(System.DateTime) Then
-                            'Datetime
-                            If Not dataView.Item(RowCounter).Row(ColCounter) Is DBNull.Value Then
-                                'Other data types which do not require textual handling
-                                If cultureFormatProvider Is Globalization.CultureInfo.InvariantCulture Then
-                                    writer.Write(CType(DataTable.Rows(RowCounter)(ColCounter), DateTime).ToString("yyyy-MM-dd HH:mm:ss.fff"))
-                                Else
-                                    writer.Write(CType(DataTable.Rows(RowCounter)(ColCounter), DateTime).ToString(cultureFormatProvider))
-                                End If
-                            End If
-                        Else
-                            'Other data types
-                            If Not dataView.Item(RowCounter).Row(ColCounter) Is DBNull.Value Then
-                                'Other data types which do not require textual handling
-                                writer.Write(CType(dataView.Item(RowCounter).Row(ColCounter), String))
-                            End If
-                        End If
+                        WriteCellValue(DataTable.Columns(ColCounter).DataType, dataView.Item(RowCounter).Row(ColCounter), recognizeTextBy, columnSeparator, cultureFormatProvider, lineEncodings, writer, Nothing)
                     Next
                     writer.WriteLine()
                 Next
@@ -1507,6 +1332,84 @@ Namespace CompuMaster.Data
                 End If
             End Try
 
+        End Sub
+
+        ''' <summary>
+        ''' Test for provided writer object and use it to write back the value
+        ''' </summary>
+        ''' <param name="value"></param>
+        ''' <param name="writerStream"></param>
+        ''' <param name="writerStringBuilder"></param>
+        Private Shared Sub WriteCellValueToWriter(value As String, writerStream As System.IO.StreamWriter, writerStringBuilder As System.Text.StringBuilder)
+            If writerStream IsNot Nothing Then
+                writerStream.Write(value)
+            Else
+                writerStringBuilder.Append(value)
+            End If
+        End Sub
+
+        ''' <summary>
+        ''' Write the cell value to the given writer object
+        ''' </summary>
+        ''' <param name="cellColumnDataType"></param>
+        ''' <param name="cellValue"></param>
+        ''' <param name="recognizeTextBy"></param>
+        ''' <param name="columnSeparator"></param>
+        ''' <param name="cultureFormatProvider"></param>
+        ''' <param name="lineEncodings"></param>
+        ''' <param name="writerStream"></param>
+        ''' <param name="writerStringBuilder"></param>
+        Private Shared Sub WriteCellValue(cellColumnDataType As Type, cellValue As Object, recognizeTextBy As Char, columnSeparator As String, cultureFormatProvider As System.Globalization.CultureInfo, lineEncodings As CompuMaster.Data.Csv.WriteLineEncodings,
+                                          writerStream As System.IO.StreamWriter, writerStringBuilder As System.Text.StringBuilder)
+            If cellColumnDataType Is GetType(String) Then
+                'Strings
+                If Not cellValue Is DBNull.Value Then
+                    If recognizeTextBy <> Nothing Then WriteCellValueToWriter(recognizeTextBy, writerStream, writerStringBuilder)
+                    WriteCellValueToWriter(CsvEncode(CType(cellValue, String), recognizeTextBy, lineEncodings), writerStream, writerStringBuilder)
+                    If recognizeTextBy <> Nothing Then WriteCellValueToWriter(recognizeTextBy, writerStream, writerStringBuilder)
+                End If
+            ElseIf cellColumnDataType Is GetType(System.Double) Then
+                'Doubles
+                If Not cellValue Is DBNull.Value Then
+                    'Other data types which do not require textual handling
+                    Dim Value As String = CType(cellValue, Double).ToString(cultureFormatProvider)
+                    If Value <> "" AndAlso Value.Contains(columnSeparator) Then WriteCellValueToWriter(recognizeTextBy, writerStream, writerStringBuilder)
+                    WriteCellValueToWriter(Value, writerStream, writerStringBuilder)
+                    If Value <> "" AndAlso Value.Contains(columnSeparator) Then WriteCellValueToWriter(recognizeTextBy, writerStream, writerStringBuilder)
+                End If
+            ElseIf cellColumnDataType Is GetType(System.Decimal) Then
+                'Decimals
+                If Not cellValue Is DBNull.Value Then
+                    'Other data types which do not require textual handling
+                    Dim Value As String = CType(cellValue, Decimal).ToString(cultureFormatProvider)
+                    If Value <> "" AndAlso Value.Contains(columnSeparator) Then WriteCellValueToWriter(recognizeTextBy, writerStream, writerStringBuilder)
+                    WriteCellValueToWriter(Value, writerStream, writerStringBuilder)
+                    If Value <> "" AndAlso Value.Contains(columnSeparator) Then WriteCellValueToWriter(recognizeTextBy, writerStream, writerStringBuilder)
+                End If
+            ElseIf cellColumnDataType Is GetType(System.DateTime) Then
+                'Datetime
+                If Not cellValue Is DBNull.Value Then
+                    'Other data types which do not require textual handling
+                    Dim Value As String
+                    If cultureFormatProvider Is Globalization.CultureInfo.InvariantCulture Then
+                        Value = (CType(cellValue, DateTime).ToString("yyyy-MM-dd HH:mm:ss.fff"))
+                    Else
+                        Value = (CType(cellValue, DateTime).ToString(cultureFormatProvider))
+                    End If
+                    If Value <> "" AndAlso Value.Contains(columnSeparator) Then WriteCellValueToWriter(recognizeTextBy, writerStream, writerStringBuilder)
+                    WriteCellValueToWriter(Value, writerStream, writerStringBuilder)
+                    If Value <> "" AndAlso Value.Contains(columnSeparator) Then WriteCellValueToWriter(recognizeTextBy, writerStream, writerStringBuilder)
+                End If
+            Else
+                'Other data types
+                If Not cellValue Is DBNull.Value Then
+                    'Other data types which do not require textual handling
+                    Dim Value As String = CType(cellValue, String)
+                    If Value <> "" AndAlso Value.Contains(columnSeparator) Then WriteCellValueToWriter(recognizeTextBy, writerStream, writerStringBuilder)
+                    WriteCellValueToWriter(Value, writerStream, writerStringBuilder)
+                    If Value <> "" AndAlso Value.Contains(columnSeparator) Then WriteCellValueToWriter(recognizeTextBy, writerStream, writerStringBuilder)
+                End If
+            End If
         End Sub
 
 #End Region
