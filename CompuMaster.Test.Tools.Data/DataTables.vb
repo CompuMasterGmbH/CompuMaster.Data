@@ -814,6 +814,32 @@ Namespace CompuMaster.Test.Data
 
         End Sub
 
+        <Test()> Public Sub AddColumns()
+            Dim dt As DataTable
+            dt = Me._TestTable1()
+            Assert.AreEqual(2, dt.Columns.Count)
+
+            CompuMaster.Data.DataTables.AddColumns(dt, "SomeStringColumn")
+            Assert.AreEqual(3, dt.Columns.Count)
+            Assert.AreEqual("SomeStringColumn", dt.Columns(2).ColumnName)
+            Assert.AreEqual(GetType(String), dt.Columns(2).DataType)
+
+            CompuMaster.Data.DataTables.AddColumns(dt, "SomeIntColumn", GetType(Integer))
+            Assert.AreEqual(4, dt.Columns.Count)
+            Assert.AreEqual("SomeIntColumn", dt.Columns(3).ColumnName)
+            Assert.AreEqual(GetType(Integer), dt.Columns(3).DataType)
+
+            CompuMaster.Data.DataTables.AddColumns(dt, New String() {"SomeStringColumn1", "SomeStringColumn2"})
+            Assert.AreEqual(6, dt.Columns.Count)
+            Assert.AreEqual("SomeStringColumn1", dt.Columns(4).ColumnName)
+            Assert.AreEqual("SomeStringColumn2", dt.Columns(5).ColumnName)
+            Assert.AreEqual(GetType(String), dt.Columns(2).DataType)
+
+            CompuMaster.Data.DataTables.AddColumns(dt, New String() {"ID", "Value"}) 'already existing columns - nothing should be added
+            Assert.AreEqual(6, dt.Columns.Count)
+
+        End Sub
+
         <Test()> Public Sub RemoveColumns()
             Dim dt As New DataTable
             dt.Columns.Add("SomeColumn")

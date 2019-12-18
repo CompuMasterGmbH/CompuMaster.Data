@@ -2958,6 +2958,65 @@ Namespace CompuMaster.Data
         End Function
 
         ''' <summary>
+        '''     Add the specified columns if they don't exist
+        ''' </summary>
+        ''' <param name="datatable">A datatable where the operations shall be made</param>
+        ''' <param name="columnName">The name of the String column which shall be added</param>
+        ''' <remarks>
+        '''     The columns will only be added if they don't exist. If a column name exists, it will be ignored.
+        ''' </remarks>
+        Public Shared Sub AddColumns(ByVal datatable As System.Data.DataTable, ByVal columnName As String)
+            Dim NewColumn As New DataColumn(columnName, GetType(String))
+            AddColumns(datatable, New DataColumn() {NewColumn})
+        End Sub
+
+        ''' <summary>
+        '''     Add the specified columns if they don't exist
+        ''' </summary>
+        ''' <param name="datatable">A datatable where the operations shall be made</param>
+        ''' <param name="columnName">The name of the column which shall be added</param>
+        ''' <param name="dataType">The type of the column which shall be added</param>
+        ''' <remarks>
+        '''     The columns will only be added if they don't exist. If a column name exists, it will be ignored.
+        ''' </remarks>
+        Public Shared Sub AddColumns(ByVal datatable As System.Data.DataTable, ByVal columnName As String, dataType As Type)
+            Dim NewColumn As New DataColumn(columnName, dataType)
+            AddColumns(datatable, New DataColumn() {NewColumn})
+        End Sub
+
+        ''' <summary>
+        '''     Add the specified columns if they don't exist
+        ''' </summary>
+        ''' <param name="datatable">A datatable where the operations shall be made</param>
+        ''' <param name="columnNames">The names of the columns which shall be added</param>
+        ''' <remarks>
+        '''     The columns will only be added if they don't exist. If a column name exists, it will be ignored.
+        ''' </remarks>
+        Public Shared Sub AddColumns(ByVal datatable As System.Data.DataTable, ByVal columnNames As String())
+            Dim NewColumns As New System.Collections.Generic.List(Of DataColumn)
+            For Each ColumnName As String In columnNames
+                NewColumns.Add(New DataColumn(ColumnName, GetType(String)))
+            Next
+            AddColumns(datatable, NewColumns.ToArray)
+        End Sub
+
+        ''' <summary>
+        '''     Add the specified columns if they don't exist
+        ''' </summary>
+        ''' <param name="datatable">A datatable where the operations shall be made</param>
+        ''' <param name="columns">The columns which shall be added</param>
+        ''' <remarks>
+        '''     The columns will only be added if they don't exist. If a column name exists, it will be ignored.
+        ''' </remarks>
+        Public Shared Sub AddColumns(ByVal datatable As System.Data.DataTable, ByVal columns As DataColumn())
+            For Each Column As DataColumn In columns
+                If datatable.Columns.Contains(Column.ColumnName) = False Then
+                    datatable.Columns.Add(Column)
+                End If
+            Next
+        End Sub
+
+        ''' <summary>
         '''     Add a prefix to the names of the columns
         ''' </summary>
         ''' <param name="dataTable"></param>
