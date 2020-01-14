@@ -7,7 +7,7 @@ Imports System.Runtime.CompilerServices
 <Assembly: AssemblyDescription(".NET library with common methods for simplified data access, data table arrangements and data IO")>
 <Assembly: AssemblyCompany("CompuMaster GmbH")> 
 <Assembly: AssemblyProduct("CompuMaster Tools")>
-<Assembly: AssemblyCopyright("2005-2019 CompuMaster GmbH")>
+<Assembly: AssemblyCopyright("2005-2020 CompuMaster GmbH")>
 <Assembly: AssemblyTrademark("CompuMaster")>
 <Assembly: CLSCompliant(True)> 
 <Assembly: ComVisibleAttribute(False)> 
@@ -16,7 +16,7 @@ Imports System.Runtime.CompilerServices
 <Assembly: Guid("ECE425FC-D944-4747-A1D8-08235073C9B7")>
 
 'HINT: ALWAYS UPDATE AT PROJECTS CM.DATA + CM.DATA.CONTROLS TO THE VERY SAME VERSION NO.
-<Assembly: AssemblyVersion("2.8.2019.1218")>
+<Assembly: AssemblyVersion("2.8.2020.0114")>
 '<Assembly: AssemblyInformationalVersion("2.8.2019.0312a-beta1")>
 <Assembly: AssemblyDelaySign(False)>
 

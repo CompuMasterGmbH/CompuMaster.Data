@@ -1,19 +1,23 @@
 ﻿Imports NUnit.Framework
 
-<TestFixture(Category:="PlatformTools")> Public Class TestPlatformTools
+Namespace CompuMaster.Test.Data
 
-    <Test> Public Sub InstalledOleDbProviders()
-        Dim result As DictionaryEntry() = CompuMaster.Data.DataQuery.PlatformTools.InstalledOleDbProviders
-        For Each item As DictionaryEntry In result
-            Console.WriteLine(item.Key & "=" & item.Value)
-        Next
-    End Sub
+    <TestFixture(Category:="PlatformTools")> Public Class TestPlatformTools
 
-    <Test> Public Sub InstalledOdbcDrivers()
-        Dim result As String() = CompuMaster.Data.DataQuery.PlatformTools.InstalledOdbcDrivers(CompuMaster.Data.DataQuery.PlatformTools.TargetPlatform.Current)
-        For Each item As String In result
-            Console.WriteLine(item)
-        Next
-    End Sub
+        <Test> Public Sub InstalledOleDbProviders()
+            Dim result As DictionaryEntry() = CompuMaster.Data.DataQuery.PlatformTools.InstalledOleDbProviders
+            For Each item As DictionaryEntry In result
+                Console.WriteLine(item.Key & "=" & item.Value)
+            Next
+        End Sub
 
-End Class
+        <Test> Public Sub InstalledOdbcDrivers()
+            Dim result As String() = CompuMaster.Data.DataQuery.PlatformTools.InstalledOdbcDrivers(CompuMaster.Data.DataQuery.PlatformTools.TargetPlatform.Current)
+            For Each item As String In result
+                Console.WriteLine(item)
+            Next
+        End Sub
+
+    End Class
+
+End Namespace

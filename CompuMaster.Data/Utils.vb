@@ -362,6 +362,38 @@ Namespace CompuMaster.Data
                 Return CType(checkValueIfDBNull, T)
             End If
         End Function
+
+
+        Public Shared Function NoDBNullArrayFromString(Of T)(ByVal arrayData As Object, splitChar As Char) As T()
+            Dim ListResult As Generic.List(Of T) = NoDBNullListFromString(Of T)(arrayData, splitChar)
+            If ListResult Is Nothing Then
+                Return Nothing
+            Else
+                Return ListResult.ToArray
+            End If
+        End Function
+
+        Public Shared Function NoDBNullListFromString(Of T)(ByVal arrayData As Object, splitChar As Char) As Generic.List(Of T)
+            If IsDBNull(arrayData) OrElse arrayData Is Nothing Then
+                Return Nothing
+            ElseIf CType(arrayData, String) = "" Then
+                Return New Generic.List(Of T)
+            Else
+                Dim Result As New Generic.List(Of T)
+                For Each SplitValue As String In CType(arrayData, String).Split(splitChar)
+                    If Nullable.GetUnderlyingType(GetType(T)) IsNot Nothing AndAlso GetType(T).IsValueType AndAlso Nullable.GetUnderlyingType(GetType(T)) IsNot GetType(T) Then
+                        Dim UnderlyingType As Type = Nullable.GetUnderlyingType(GetType(T)) 'e.g.: T = Nullable(Of Integer) -> UnderlyingType = Integer
+                        Dim SplitValueOrNothing As String = StringNotEmptyOrNothing(SplitValue)
+                        Dim SplitValueAsT As T = CType(Convert.ChangeType(SplitValueOrNothing, UnderlyingType), T)
+                        Result.Add(CType(Activator.CreateInstance(GetType(T), SplitValueAsT), T))
+                    Else
+                        Result.Add(CType(CType(SplitValue, Object), T))
+                    End If
+                Next
+                Return Result
+            End If
+        End Function
+
         ''' <summary>
         '''     Checks for DBNull and returns the second value alternatively
         ''' </summary>

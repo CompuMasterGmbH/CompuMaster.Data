@@ -76,6 +76,29 @@ Namespace CompuMaster.Test.Data
 
         End Sub
 
+        <Test> Public Sub NoDBNullArrayOrListFromString()
+            'DBNull.Value
+            Assert.AreEqual(Nothing, CompuMaster.Data.Utils.NoDBNullArrayFromString(Of String)(DBNull.Value, ","))
+            Assert.AreEqual(Nothing, CompuMaster.Data.Utils.NoDBNullArrayFromString(Of Object)(DBNull.Value, ","))
+            Assert.AreEqual(Nothing, CompuMaster.Data.Utils.NoDBNullArrayFromString(Of Integer)(DBNull.Value, ","))
+            Assert.AreEqual(Nothing, CompuMaster.Data.Utils.NoDBNullArrayFromString(Of Integer?)(DBNull.Value, ","))
+            'Empty String
+            Assert.AreEqual(New String() {}, CompuMaster.Data.Utils.NoDBNullArrayFromString(Of String)("", ","))
+            Assert.AreEqual(New Object() {}, CompuMaster.Data.Utils.NoDBNullArrayFromString(Of Object)("", ","))
+            Assert.AreEqual(New Integer() {}, CompuMaster.Data.Utils.NoDBNullArrayFromString(Of Integer)("", ","))
+            Assert.AreEqual(New Integer?() {}, CompuMaster.Data.Utils.NoDBNullArrayFromString(Of Integer?)("", ","))
+            'Single String
+            Assert.AreEqual(New String() {"Test"}, CompuMaster.Data.Utils.NoDBNullArrayFromString(Of String)("Test", ","))
+            'Assert.AreEqual(New Object() {New Object}, CompuMaster.Data.Utils.NoDBNullArrayFromString(Of Object)(New Object.ToString, ","))
+            Assert.AreEqual(New Integer() {1}, CompuMaster.Data.Utils.NoDBNullArrayFromString(Of Integer)("1", ","))
+            Assert.AreEqual(New Integer?() {1}, CompuMaster.Data.Utils.NoDBNullArrayFromString(Of Integer?)("1", ","))
+            'Separatable String
+            Assert.AreEqual(New String() {"Test1", "Test2", "Test3"}, CompuMaster.Data.Utils.NoDBNullArrayFromString(Of String)("Test1,Test2,Test3", ","))
+            'Assert.AreEqual(New Object() {}, CompuMaster.Data.Utils.NoDBNullArrayFromString(Of Object)("", ","))
+            Assert.AreEqual(New Integer() {1, 2, 3}, CompuMaster.Data.Utils.NoDBNullArrayFromString(Of Integer)("1,2,3", ","))
+            Assert.AreEqual(New Integer?() {1, 2, 3}, CompuMaster.Data.Utils.NoDBNullArrayFromString(Of Integer?)("1,2,3", ","))
+        End Sub
+
         <Test> Public Sub NullableTypeWithItsValueOrDBNull()
             Assert.AreNotEqual(GetType(Integer?), CompuMaster.Data.Utils.NullableTypeWithItsValueOrDBNull(Of Integer)(New Integer?(1)).GetType)
             Assert.AreEqual(GetType(Integer), CompuMaster.Data.Utils.NullableTypeWithItsValueOrDBNull(Of Integer)(New Integer?(1)).GetType)
