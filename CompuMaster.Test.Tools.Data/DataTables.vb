@@ -833,10 +833,18 @@ Namespace CompuMaster.Test.Data
             Assert.AreEqual(6, dt.Columns.Count)
             Assert.AreEqual("SomeStringColumn1", dt.Columns(4).ColumnName)
             Assert.AreEqual("SomeStringColumn2", dt.Columns(5).ColumnName)
-            Assert.AreEqual(GetType(String), dt.Columns(2).DataType)
+            Assert.AreEqual(GetType(String), dt.Columns(4).DataType)
+            Assert.AreEqual(GetType(String), dt.Columns(5).DataType)
 
             CompuMaster.Data.DataTables.AddColumns(dt, New String() {"ID", "Value"}) 'already existing columns - nothing should be added
             Assert.AreEqual(6, dt.Columns.Count)
+
+            CompuMaster.Data.DataTables.AddColumns(dt, New String() {"SomeIntegerColumn1", "SomeIntegerColumn2"}, GetType(Integer))
+            Assert.AreEqual(8, dt.Columns.Count)
+            Assert.AreEqual("SomeIntegerColumn1", dt.Columns(6).ColumnName)
+            Assert.AreEqual("SomeIntegerColumn2", dt.Columns(7).ColumnName)
+            Assert.AreEqual(GetType(Integer), dt.Columns(6).DataType)
+            Assert.AreEqual(GetType(Integer), dt.Columns(7).DataType)
 
         End Sub
 

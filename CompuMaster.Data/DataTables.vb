@@ -3017,6 +3017,22 @@ Namespace CompuMaster.Data
         End Sub
 
         ''' <summary>
+        '''     Add the specified columns if they don't exist
+        ''' </summary>
+        ''' <param name="datatable">A datatable where the operations shall be made</param>
+        ''' <param name="columnNames">The columns which shall be added</param>
+        ''' <remarks>
+        '''     The columns will only be added if they don't exist. If a column name exists, it will be ignored.
+        ''' </remarks>
+        Public Shared Sub AddColumns(ByVal datatable As System.Data.DataTable, ByVal columnNames As String(), dataType As Type)
+            Dim NewColumns As New System.Collections.Generic.List(Of DataColumn)
+            For Each ColumnName As String In columnNames
+                NewColumns.Add(New DataColumn(ColumnName, dataType))
+            Next
+            AddColumns(datatable, NewColumns.ToArray)
+        End Sub
+
+        ''' <summary>
         '''     Add a prefix to the names of the columns
         ''' </summary>
         ''' <param name="dataTable"></param>
