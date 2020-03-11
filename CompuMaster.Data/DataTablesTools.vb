@@ -150,6 +150,53 @@ Namespace CompuMaster.Data
         End Function
 
         ''' <summary>
+        '''     Find duplicate values in a given row and calculate the number of occurances of each value in the table
+        ''' </summary>
+        ''' <param name="column">A column of a datatable</param>
+        ''' <returns>A hashtable containing the origin column value as key and the number of occurances as value</returns>
+        Friend Shared Function FindDuplicates(Of T)(ByVal column As DataColumn) As System.Collections.Generic.Dictionary(Of T, Integer)
+            Return FindDuplicates(Of T)(column, 2)
+        End Function
+
+        ''' <summary>
+        '''     Find duplicate values in a given row and calculate the number of occurances of each value in the table
+        ''' </summary>
+        ''' <param name="column">A column of a datatable</param>
+        ''' <param name="minOccurances">Only values with occurances equal or more than this number will be returned</param>
+        ''' <returns>A hashtable containing the origin column value as key and the number of occurances as value</returns>
+        Friend Shared Function FindDuplicates(Of T)(ByVal column As DataColumn, ByVal minOccurances As Integer) As System.Collections.Generic.Dictionary(Of T, Integer)
+
+            Dim Table As DataTable = column.Table
+            Dim Result As New System.Collections.Generic.Dictionary(Of T, Integer)
+
+            'Find all elements and count their duplicates number
+            For MyCounter As Integer = 0 To Table.Rows.Count - 1
+                Dim key As T = CType(Table.Rows(MyCounter)(column), T)
+                If Result.ContainsKey(key) Then
+                    'Increase counter for this existing value by 1
+                    Result.Item(key) = CType(Result.Item(key), Integer) + 1
+                Else
+                    'Add new element
+                    Result.Add(key, 1)
+                End If
+            Next
+
+            'Remove all elements with occurances lesser than the required number
+            Dim removeTheseKeys As New System.Collections.Generic.List(Of T)
+            For Each MyKey As System.Collections.Generic.KeyValuePair(Of T, Integer) In Result
+                If CType(MyKey.Value, Integer) < minOccurances Then
+                    removeTheseKeys.Add(MyKey.Key)
+                End If
+            Next
+            For MyCounter As Integer = 0 To removeTheseKeys.Count - 1
+                Result.Remove(removeTheseKeys(MyCounter))
+            Next
+
+            Return Result
+
+        End Function
+
+        ''' <summary>
         '''     Convert the first two columns into objects which can be consumed by the ListControl objects in the System.Windows.Forms or System.Web.WebControl namespaces
         ''' </summary>
         ''' <param name="datatable">The datatable which contains a key column and a value column for the list control</param>

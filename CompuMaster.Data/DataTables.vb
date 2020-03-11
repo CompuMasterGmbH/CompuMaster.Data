@@ -395,6 +395,25 @@ Namespace CompuMaster.Data
         End Function
 
         ''' <summary>
+        '''     Find duplicate values in a given row and calculate the number of occurances of each value in the table
+        ''' </summary>
+        ''' <param name="column">A column of a datatable</param>
+        ''' <returns>A hashtable containing the origin column value as key and the number of occurances as value</returns>
+        Public Shared Function FindDuplicates(Of t)(ByVal column As DataColumn) As System.Collections.Generic.Dictionary(Of t, Integer)
+            Return CompuMaster.Data.DataTablesTools.FindDuplicates(Of t)(column)
+        End Function
+
+        ''' <summary>
+        '''     Find duplicate values in a given row and calculate the number of occurances of each value in the table
+        ''' </summary>
+        ''' <param name="column">A column of a datatable</param>
+        ''' <param name="minOccurances">Only values with occurances equal or more than this number will be returned</param>
+        ''' <returns>A hashtable containing the origin column value as key and the number of occurances as value</returns>
+        Public Shared Function FindDuplicates(Of t)(ByVal column As DataColumn, ByVal minOccurances As Integer) As System.Collections.Generic.Dictionary(Of t, Integer)
+            Return CompuMaster.Data.DataTablesTools.FindDuplicates(Of t)(column, minOccurances)
+        End Function
+
+        ''' <summary>
         ''' Remove rows with duplicate values in a given column
         ''' </summary>
         ''' <param name="dataTable">A datatable with duplicate values</param>
@@ -2952,6 +2971,39 @@ Namespace CompuMaster.Data
                     'do not add DbNulls to result
                 ElseIf Not Result.Contains(table.Rows(MyCounter)(column)) Then
                     Result.Add(table.Rows(MyCounter)(column))
+                End If
+            Next
+            Return Result
+        End Function
+
+        ''' <summary>
+        ''' Find unique values in a column
+        ''' </summary>
+        ''' <param name="column">The DataColumn which holds the data</param>
+        ''' <returns></returns>
+        Public Shared Function FindUniqueValues(Of T)(ByVal column As DataColumn) As System.Collections.Generic.List(Of T)
+            Return FindUniqueValues(Of T)(column, False)
+        End Function
+
+        ''' <summary>
+        ''' Returns unique values in a column
+        ''' </summary>
+        ''' <param name="column">The DataColumn which holds the data</param>
+        ''' <param name="ignoreDBNull">True never results a DBNull value</param>
+        ''' <returns></returns>
+        Public Shared Function FindUniqueValues(Of T)(ByVal column As DataColumn, ByVal ignoreDBNull As Boolean) As System.Collections.Generic.List(Of T)
+            Dim table As DataTable = column.Table
+            Dim Result As New System.Collections.Generic.List(Of T)
+            For MyCounter As Integer = 0 To table.Rows.Count - 1
+                If ignoreDBNull = True AndAlso IsDBNull(table.Rows(MyCounter)(column)) Then
+                    'do not add DbNulls to result
+                ElseIf ignoreDBNull = False AndAlso IsDBNull(table.Rows(MyCounter)(column)) Then
+                    Result.Add(Nothing)
+                Else
+                    Dim Value As T = CType(table.Rows(MyCounter)(column), T)
+                    If Not Result.Contains(Value) Then
+                        Result.Add(Value)
+                    End If
                 End If
             Next
             Return Result
