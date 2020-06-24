@@ -292,9 +292,24 @@ Namespace CompuMaster.Data
         ''' <remarks>
         ''' This function doesn't create any column update commands to change existing columns; it just creates commands for adding additional columns.
         ''' </remarks>
-        Private Shared Function AddMissingColumnsCommandText(ByVal sourceTable As DataTable, ByVal destinationTable As DataTable, ByVal ddlLanguage As DdlLanguage) As String
+        Public Shared Function AddMissingColumnsCommandText(ByVal sourceTable As DataTable, ByVal destinationTable As DataTable, ByVal ddlLanguage As DdlLanguage) As String
+            Return AddMissingColumnsCommandText(sourceTable, destinationTable, destinationTable.TableName, ddlLanguage)
+        End Function
+
+        ''' <summary>
+        ''' Create an SQL command text to create missing columns on the remote database
+        ''' </summary>
+        ''' <param name="sourceTable">The table which shall be written into the remote database</param>
+        ''' <param name="destinationTable">The table as it is currently on the remote database</param>
+        ''' <param name="remoteTableName">The table name at the remote server</param>
+        ''' <param name="ddlLanguage">The SQL language which shall be used</param>
+        ''' <returns>A valid command text to create missing columns on the remote database</returns>
+        ''' <remarks>
+        ''' This function doesn't create any column update commands to change existing columns; it just creates commands for adding additional columns.
+        ''' </remarks>
+        Public Shared Function AddMissingColumnsCommandText(ByVal sourceTable As DataTable, ByVal destinationTable As DataTable, remoteTableName As String, ByVal ddlLanguage As DdlLanguage) As String
             Dim OpenBrackets, CloseBrackets As String
-            If destinationTable.TableName.IndexOf("[") >= 0 AndAlso destinationTable.TableName.IndexOf("]") >= 0 Then
+            If remoteTableName.IndexOf("[") >= 0 AndAlso remoteTableName.IndexOf("]") >= 0 Then
                 'table name already in a well-formed syntax, e.g. "dbo.[Test - 123]"
                 OpenBrackets = Nothing
                 CloseBrackets = Nothing
@@ -309,6 +324,15 @@ Namespace CompuMaster.Data
                     Dim ColumnCreationArguments As String = Nothing
                     OpenBrackets = """"
                     CloseBrackets = """"
+                    Dim TableOpenBrackets As String = Nothing
+                    Dim TableCloseBrackets As String = Nothing
+                    If remoteTableName.Contains(".""") = False Then
+                        TableOpenBrackets = """"
+                        TableCloseBrackets = """"
+                    Else
+                        TableOpenBrackets = Nothing
+                        TableCloseBrackets = Nothing
+                    End If
                     For Each MyColumn As DataColumn In sourceTable.Columns
                         '  Dim myColumnName As String = IIf(MyColumn.ColumnName.Contains(" "), MyColumn
                         If destinationTable.Columns.Contains(MyColumn.ColumnName) = False Then
@@ -344,7 +368,7 @@ Namespace CompuMaster.Data
                             ColumnCreationArguments &= " NULL" & vbNewLine
                         End If
                     Next
-                    If ColumnCreationArguments <> Nothing Then ColumnCreationArguments = "ALTER TABLE " & OpenBrackets & destinationTable.TableName & CloseBrackets & " ADD COLUMN " & ColumnCreationArguments
+                    If ColumnCreationArguments <> Nothing Then ColumnCreationArguments = "ALTER TABLE " & TableOpenBrackets & remoteTableName & TableCloseBrackets & " ADD COLUMN " & ColumnCreationArguments
                     Return ColumnCreationArguments
                     'Return Nothing
                 Case DdlLanguage.MSJetEngine
@@ -380,7 +404,7 @@ Namespace CompuMaster.Data
                             ColumnCreationArguments &= " NULL" & vbNewLine
                         End If
                     Next
-                    If ColumnCreationArguments <> Nothing Then ColumnCreationArguments = "ALTER TABLE " & OpenBrackets & destinationTable.TableName & CloseBrackets & " ADD " & ColumnCreationArguments
+                    If ColumnCreationArguments <> Nothing Then ColumnCreationArguments = "ALTER TABLE " & OpenBrackets & remoteTableName & CloseBrackets & " ADD " & ColumnCreationArguments
                     Return ColumnCreationArguments
                 Case DdlLanguage.MSSqlServer
                     Dim ColumnCreationArguments As String = Nothing
@@ -413,7 +437,7 @@ Namespace CompuMaster.Data
                             ColumnCreationArguments &= " NULL" & vbNewLine
                         End If
                     Next
-                    If ColumnCreationArguments <> Nothing Then ColumnCreationArguments = "ALTER TABLE " & OpenBrackets & destinationTable.TableName & CloseBrackets & " ADD " & ColumnCreationArguments
+                    If ColumnCreationArguments <> Nothing Then ColumnCreationArguments = "ALTER TABLE " & OpenBrackets & remoteTableName & CloseBrackets & " ADD " & ColumnCreationArguments
                     Return ColumnCreationArguments
                 Case Else
                     Throw New NotSupportedException("AddMissingColumnsCommandText not supported for " & ddlLanguage.ToString)
@@ -463,11 +487,16 @@ Namespace CompuMaster.Data
                 OpenBrackets = "["
                 CloseBrackets = "]"
             End If
-            If (CType(dataConnection, Object).GetType.ToString) = "Npgsql.NpgsqlConnection" Then
-                OpenBrackets = """"
-                CloseBrackets = """"
+            If CType(dataConnection, Object).GetType.ToString = "Npgsql.NpgsqlConnection" Then
+                If tableName.Contains(".""") = False Then
+                    OpenBrackets = """"
+                    CloseBrackets = """"
+                Else
+                    OpenBrackets = Nothing
+                    CloseBrackets = Nothing
+                End If
             End If
-            If isSafeTableName Then
+                If isSafeTableName Then
                 'table name already in a well-formed syntax, e.g. "dbo.[Test - 123]"
                 OpenBrackets = Nothing
                 CloseBrackets = Nothing
@@ -744,10 +773,14 @@ Namespace CompuMaster.Data
                 OpenBrackets = "["
                 CloseBrackets = "]"
             End If
-
             If CType(dataConnection, Object).GetType.ToString = "Npgsql.NpgsqlConnection" Then
-                OpenBrackets = """"
-                CloseBrackets = """"
+                If tableName.Contains(".""") = False Then
+                    OpenBrackets = """"
+                    CloseBrackets = """"
+                Else
+                    OpenBrackets = Nothing
+                    CloseBrackets = Nothing
+                End If
             End If
 
             Try
