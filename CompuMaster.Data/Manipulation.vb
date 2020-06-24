@@ -428,7 +428,7 @@ Namespace CompuMaster.Data
         ''' <returns>An DataManipulationResults object with the returned data</returns>
         ''' <remarks></remarks>
         Public Shared Function LoadTableDataForManipulationViaCode(ByVal dataConnection As IDbConnection, ByVal tableName As String) As CompuMaster.Data.DataManipulationResult
-            Return LoadTableDataForManipulationViaCode(dataConnection, tableName, 0)
+            Return LoadTableDataForManipulationViaCode(dataConnection, tableName, 0, False)
         End Function
 
         ''' <summary>
@@ -440,6 +440,19 @@ Namespace CompuMaster.Data
         ''' <returns>An DataManipulationResults object with the returned data</returns>
         ''' <remarks></remarks>
         Public Shared Function LoadTableDataForManipulationViaCode(ByVal dataConnection As IDbConnection, ByVal tableName As String, ByVal commandTimeout As Integer) As CompuMaster.Data.DataManipulationResult
+            Return LoadTableDataForManipulationViaCode(dataConnection, tableName, commandTimeout, False)
+        End Function
+
+        ''' <summary>
+        ''' Load table data from the data connection in a mode for submitting changes in a later step
+        ''' </summary>
+        ''' <param name="dataConnection">An opened connection to the data source</param>
+        ''' <param name="tableName">The name of a table on the database</param>
+        ''' <param name="commandTimeout">A timeout for the command in seconds</param>
+        ''' <param name="isSafeTableName">Table name is already in a well-formed syntax for the underlying provider, e.g. dbo.[Test - 123] or public."Test - 123"</param>
+        ''' <returns>An DataManipulationResults object with the returned data</returns>
+        ''' <remarks></remarks>
+        Public Shared Function LoadTableDataForManipulationViaCode(ByVal dataConnection As IDbConnection, ByVal tableName As String, ByVal commandTimeout As Integer, isSafeTableName As Boolean) As CompuMaster.Data.DataManipulationResult
             Dim OpenBrackets, CloseBrackets As String
             If tableName.IndexOf("[") >= 0 AndAlso tableName.IndexOf("]") >= 0 Then
                 'table name already in a well-formed syntax, e.g. "dbo.[Test - 123]"
@@ -453,6 +466,11 @@ Namespace CompuMaster.Data
             If (CType(dataConnection, Object).GetType.ToString) = "Npgsql.NpgsqlConnection" Then
                 OpenBrackets = """"
                 CloseBrackets = """"
+            End If
+            If isSafeTableName Then
+                'table name already in a well-formed syntax, e.g. "dbo.[Test - 123]"
+                OpenBrackets = Nothing
+                CloseBrackets = Nothing
             End If
 
             'Prepare the command 
