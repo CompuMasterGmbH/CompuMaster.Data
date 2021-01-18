@@ -2004,6 +2004,32 @@ Namespace CompuMaster.Test.Data
 
         End Sub
 
+        <Test()> Public Sub ValidateRequiredColumnNames()
+            Dim dt As New DataTable
+            dt.Columns.Add("hEllo")
+
+            Assert.AreEqual(1, CompuMaster.Data.DataTables.ValidateRequiredColumnNames(dt, New String() {"_suf"}).Length)
+            Assert.AreEqual(1, CompuMaster.Data.DataTables.ValidateRequiredColumnNames(dt, New String() {"_suf", "hEllo"}).Length)
+            Assert.AreEqual(2, CompuMaster.Data.DataTables.ValidateRequiredColumnNames(dt, New String() {"_suf", "Hello"}).Length)
+            Assert.AreEqual(1, CompuMaster.Data.DataTables.ValidateRequiredColumnNames(dt, New String() {"Hello"}).Length)
+            Assert.AreEqual(0, CompuMaster.Data.DataTables.ValidateRequiredColumnNames(dt, New String() {"hEllo"}).Length)
+            Assert.AreEqual("_suf", CompuMaster.Data.DataTables.ValidateRequiredColumnNames(dt, New String() {"_suf"})(0))
+
+            Assert.AreEqual(1, CompuMaster.Data.DataTables.ValidateRequiredColumnNames(dt, New String() {"_suf"}, False).Length)
+            Assert.AreEqual(1, CompuMaster.Data.DataTables.ValidateRequiredColumnNames(dt, New String() {"_suf", "hEllo"}, False).Length)
+            Assert.AreEqual(2, CompuMaster.Data.DataTables.ValidateRequiredColumnNames(dt, New String() {"_suf", "Hello"}, False).Length)
+            Assert.AreEqual(1, CompuMaster.Data.DataTables.ValidateRequiredColumnNames(dt, New String() {"Hello"}, False).Length)
+            Assert.AreEqual(0, CompuMaster.Data.DataTables.ValidateRequiredColumnNames(dt, New String() {"hEllo"}, False).Length)
+            Assert.AreEqual("_suf", CompuMaster.Data.DataTables.ValidateRequiredColumnNames(dt, New String() {"_suf"}, False)(0))
+
+            Assert.AreEqual(1, CompuMaster.Data.DataTables.ValidateRequiredColumnNames(dt, New String() {"_suf"}, True).Length)
+            Assert.AreEqual(1, CompuMaster.Data.DataTables.ValidateRequiredColumnNames(dt, New String() {"_suf", "hEllo"}, True).Length)
+            Assert.AreEqual(1, CompuMaster.Data.DataTables.ValidateRequiredColumnNames(dt, New String() {"_suf", "Hello"}, True).Length)
+            Assert.AreEqual(0, CompuMaster.Data.DataTables.ValidateRequiredColumnNames(dt, New String() {"Hello"}, True).Length)
+            Assert.AreEqual(0, CompuMaster.Data.DataTables.ValidateRequiredColumnNames(dt, New String() {"hEllo"}, True).Length)
+            Assert.AreEqual("_suf", CompuMaster.Data.DataTables.ValidateRequiredColumnNames(dt, New String() {"_suf"}, True)(0))
+        End Sub
+
     End Class
 
 End Namespace

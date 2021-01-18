@@ -4170,6 +4170,47 @@ Namespace CompuMaster.Data
 
         End Function
 
+        ''' <summary>
+        ''' Check that all required columns are available in specified table
+        ''' </summary>
+        ''' <param name="table">A table which must contain the columns</param>
+        ''' <param name="requiredColumnNames">Column names that must exist in table</param>
+        ''' <returns></returns>
+        Public Shared Function ValidateRequiredColumnNames(table As DataTable, requiredColumnNames As String()) As String()
+            Return ValidateRequiredColumnNames(table, requiredColumnNames, False)
+        End Function
+
+        ''' <summary>
+        ''' Check that all required columns are available in specified table
+        ''' </summary>
+        ''' <param name="table">A table which must contain the columns</param>
+        ''' <param name="requiredColumnNames">Column names that must exist in table</param>
+        ''' <param name="ignoreCase">Ignore upper/lower case (invariant) of column names</param>
+        ''' <returns></returns>
+        Public Shared Function ValidateRequiredColumnNames(table As DataTable, requiredColumnNames As String(), ignoreCase As Boolean) As String()
+            If requiredColumnNames Is Nothing OrElse requiredColumnNames.Length = 0 Then Return New String() {} 'Shortcut result
+
+            Dim AvailableColumns As New System.Collections.Generic.List(Of String)
+            For MyCounter As Integer = 0 To table.Columns.Count - 1
+                If ignoreCase Then
+                    AvailableColumns.Add(table.Columns(MyCounter).ColumnName.ToLowerInvariant)
+                Else
+                    AvailableColumns.Add(table.Columns(MyCounter).ColumnName)
+                End If
+            Next
+
+            Dim MissingColumns As New System.Collections.Generic.List(Of String)
+            For MyCounter As Integer = 0 To requiredColumnNames.Length - 1
+                If ignoreCase AndAlso AvailableColumns.Contains(requiredColumnNames(MyCounter).ToLowerInvariant) = False Then
+                    MissingColumns.Add(requiredColumnNames(MyCounter))
+                ElseIf Not ignoreCase AndAlso AvailableColumns.Contains(requiredColumnNames(MyCounter)) = False Then
+                    MissingColumns.Add(requiredColumnNames(MyCounter))
+                End If
+            Next
+
+            Return MissingColumns.ToArray
+        End Function
+
     End Class
 
 End Namespace
