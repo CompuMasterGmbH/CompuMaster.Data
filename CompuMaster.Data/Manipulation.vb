@@ -718,9 +718,9 @@ Namespace CompuMaster.Data
             ''' <returns></returns>
             Public Function SqlDataAdapterCommands() As String
                 Dim Result As String = ""
-                Result &= "Command for SELECT: " & Me.SqlDataAdapter.SelectCommand.CommandText
-                Result &= "Command for INSERT: " & Me.SqlDataAdapter.InsertCommand.CommandText
-                Result &= "Command for UPDATE: " & Me.SqlDataAdapter.UpdateCommand.CommandText
+                Result &= "Command for SELECT: " & Me.SqlDataAdapter.SelectCommand.CommandText & System.Environment.NewLine
+                Result &= "Command for INSERT: " & Me.SqlDataAdapter.InsertCommand.CommandText & System.Environment.NewLine
+                Result &= "Command for UPDATE: " & Me.SqlDataAdapter.UpdateCommand.CommandText & System.Environment.NewLine
                 Result &= "Command for DELETE: " & Me.SqlDataAdapter.DeleteCommand.CommandText
                 Return Result
             End Function
