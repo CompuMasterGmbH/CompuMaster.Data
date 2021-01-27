@@ -139,6 +139,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="DataManipulationResult.vb" />
+    <Compile Include="GlobalSuppressions.vb" />
     <Compile Include="ManipulationTools.vb" />
     <Compile Include="DataQuery.DataProvider.vb" />
     <Compile Include="DataQuery.TestFile.vb" />

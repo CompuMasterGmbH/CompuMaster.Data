@@ -8,7 +8,7 @@ Namespace CompuMaster.Data
     ''' </summary>
     ''' <remarks>
     ''' </remarks>
-     Public Class DataTables
+    Public NotInheritable Class DataTables
 
         ''' <summary>
         ''' Remove rows from a table which don't match with a given range of values in a defined column
@@ -135,6 +135,15 @@ Namespace CompuMaster.Data
                     column.Table.Rows.RemoveAt(RowCounter)
                 End If
             Next
+        End Sub
+
+        ''' <summary>
+        ''' Remove rows from a table without any value in specified column
+        ''' </summary>
+        ''' <param name="column">The column whose values shall be verified</param>
+        ''' <remarks></remarks>
+        Public Shared Sub RemoveRowsWithDbNullValues(ByVal column As System.Data.DataColumn)
+            RemoveRowsWithColumnValues(column, New Object() {DBNull.Value})
         End Sub
 
         ''' <summary>
@@ -435,9 +444,10 @@ Namespace CompuMaster.Data
             If Source.Length > 0 Then
                 ReDim Result(Source.Length - 1)
                 For MyCounter As Integer = 0 To Source.Length - 1
-                    Dim NewValue As New WinFormsListControlItem
-                    NewValue.Key = Source(MyCounter).Key
-                    NewValue.Value = Source(MyCounter).Value
+                    Dim NewValue As New WinFormsListControlItem With {
+                        .Key = Source(MyCounter).Key,
+                        .Value = Source(MyCounter).Value
+                    }
                     Result(MyCounter) = NewValue
                 Next
             End If
@@ -456,9 +466,10 @@ Namespace CompuMaster.Data
             If Source.Length > 0 Then
                 ReDim Result(Source.Length - 1)
                 For MyCounter As Integer = 0 To Source.Length - 1
-                    Dim NewValue As New System.Web.UI.WebControls.ListItem
-                    NewValue.Value = CType(Source(MyCounter).Key, String)
-                    NewValue.Text = CType(Source(MyCounter).Value, String)
+                    Dim NewValue As New System.Web.UI.WebControls.ListItem With {
+                        .Value = CType(Source(MyCounter).Key, String),
+                        .Text = CType(Source(MyCounter).Value, String)
+                    }
                     Result(MyCounter) = NewValue
                 Next
             End If
@@ -592,10 +603,10 @@ Namespace CompuMaster.Data
 
             'parameters validation
             If sourceColumn Is Nothing Then
-                Throw New ArgumentNullException("sourceColumn", "Required column: sourceColumn")
+                Throw New ArgumentNullException(NameOf(sourceColumn), "Required column: sourceColumn")
             ElseIf valuesMustExistInThisColumnToKeepTheSourceRow Is Nothing Then
-                Throw New ArgumentNullException("valuesMustExistInThisColumnToKeepTheSourceRow", "Required column: valuesMustExistInThisColumnToKeepTheSourceRow")
-            ElseIf Not sourceColumn.DataType Is valuesMustExistInThisColumnToKeepTheSourceRow.DataType Then
+                Throw New ArgumentNullException(NameOf(valuesMustExistInThisColumnToKeepTheSourceRow), "Required column: valuesMustExistInThisColumnToKeepTheSourceRow")
+            ElseIf sourceColumn.DataType IsNot valuesMustExistInThisColumnToKeepTheSourceRow.DataType Then
                 Throw New InvalidCastException("Data type mismatch: both tables must use the same data types for the comparison columns")
             End If
 
@@ -738,10 +749,10 @@ Namespace CompuMaster.Data
 
             'parameters validation
             If sourceColumn Is Nothing Then
-                Throw New ArgumentNullException("sourceColumn", "Required column: sourceColumn")
+                Throw New ArgumentNullException(NameOf(sourceColumn), "Required column: sourceColumn")
             ElseIf valuesMustExistInThisColumnToKeepTheSourceRow Is Nothing Then
-                Throw New ArgumentNullException("valuesMustExistInThisColumnToKeepTheSourceRow", "Required column: valuesMustExistInThisColumnToKeepTheSourceRow")
-            ElseIf Not sourceColumn.DataType Is valuesMustExistInThisColumnToKeepTheSourceRow.DataType Then
+                Throw New ArgumentNullException(NameOf(valuesMustExistInThisColumnToKeepTheSourceRow), "Required column: valuesMustExistInThisColumnToKeepTheSourceRow")
+            ElseIf sourceColumn.DataType IsNot valuesMustExistInThisColumnToKeepTheSourceRow.DataType Then
                 Throw New InvalidCastException("Data type mismatch: both tables must use the same data types for the comparison columns")
             End If
 
@@ -1199,7 +1210,7 @@ Namespace CompuMaster.Data
 
             'Copy rows
             If Not RequestedRowChanges.KeepExistingRowsInDestinationTableAndAddRemoveUpdateChangedRows = rowChanges Then
-                If Not MySrcTableRows Is Nothing Then
+                If MySrcTableRows IsNot Nothing Then
 
                     Dim srcTableColumnsList(sourceTable.Columns.Count - 1) As String
                     For i As Integer = 0 To sourceTable.Columns.Count - 1
@@ -1546,7 +1557,7 @@ Namespace CompuMaster.Data
         ''' <returns>The suggested column name as it is or modified column name to be unique</returns>
         ''' <remarks>
         ''' </remarks>
-        <Obsolete("Use the correct method name without typing error"), ComponentModel.EditorBrowsable(ComponentModel.EditorBrowsableState.Never)> _
+        <Obsolete("Use the correct method name without typing error"), ComponentModel.EditorBrowsable(ComponentModel.EditorBrowsableState.Never)>
         Public Shared Function LookupUnqiueColumnName(ByVal dataTable As DataTable, ByVal suggestedColumnName As String) As String
             Return CompuMaster.Data.DataTablesTools.LookupUniqueColumnName(dataTable, suggestedColumnName)
         End Function
@@ -1593,7 +1604,7 @@ Namespace CompuMaster.Data
             Return CompuMaster.Data.DataTablesTools.ConvertToHtmlTable(dataTable, titleTagOpener, titleTagEnd, additionalTableAttributes)
         End Function
 
-        <Obsolete("Subject of removal in a future version", True), System.ComponentModel.EditorBrowsable(ComponentModel.EditorBrowsableState.Never)> _
+        <Obsolete("Subject of removal in a future version", True), System.ComponentModel.EditorBrowsable(ComponentModel.EditorBrowsableState.Never)>
         Public Shared Function ConvertToHtmlTable(ByVal dataTable As DataTable, ByVal titleTag As String, ByVal additionalTableAttributes As String) As String
             Return CompuMaster.Data.DataTablesTools.ConvertToHtmlTable(dataTable, "<" & titleTag & ">", "</" & titleTag & ">", additionalTableAttributes)
         End Function
@@ -1626,7 +1637,7 @@ Namespace CompuMaster.Data
             Return CompuMaster.Data.DataTablesTools.ConvertToHtmlTable(rows, label, titleTagOpener, titleTagEnd, additionalTableAttributes)
         End Function
 
-        <Obsolete("Subject of removal in a future version", True), System.ComponentModel.EditorBrowsable(ComponentModel.EditorBrowsableState.Never)> _
+        <Obsolete("Subject of removal in a future version", True), System.ComponentModel.EditorBrowsable(ComponentModel.EditorBrowsableState.Never)>
         Public Shared Function ConvertToHtmlTable(ByVal rows As DataRowCollection, ByVal label As String, ByVal titleTag As String, ByVal additionalTableAttributes As String) As String
             Return CompuMaster.Data.DataTablesTools.ConvertToHtmlTable(rows, label, "<" & titleTag & ">", "</" & titleTag & ">", additionalTableAttributes)
         End Function
@@ -1645,7 +1656,7 @@ Namespace CompuMaster.Data
             Return CompuMaster.Data.DataTablesTools.ConvertToHtmlTable(rows, label, titleTagOpener, titleTagEnd, additionalTableAttributes)
         End Function
 
-        <Obsolete("Subject of removal in a future version", True), System.ComponentModel.EditorBrowsable(ComponentModel.EditorBrowsableState.Never)> _
+        <Obsolete("Subject of removal in a future version", True), System.ComponentModel.EditorBrowsable(ComponentModel.EditorBrowsableState.Never)>
         Public Shared Function ConvertToHtmlTable(ByVal rows() As DataRow, ByVal label As String, ByVal titleTag As String, ByVal additionalTableAttributes As String) As String
             Return CompuMaster.Data.DataTablesTools.ConvertToHtmlTable(rows, label, "<" & titleTag & ">", "</" & titleTag & ">", additionalTableAttributes)
         End Function
@@ -1777,7 +1788,7 @@ Namespace CompuMaster.Data
         ''' <param name="dataTable">The datatable to retrieve the content from</param>
         ''' <returns>All rows are separated by fixed width. If no rows have been processed, the user will get notified about this fact</returns>
         ''' <remarks></remarks>
-        Public Shared Function ConvertToPlainTextTableFixedColumnWidths(ByVal dataTable As DataTable, ByVal minimumColumnWidth As Integer, _
+        Public Shared Function ConvertToPlainTextTableFixedColumnWidths(ByVal dataTable As DataTable, ByVal minimumColumnWidth As Integer,
                                                                         maximumColumnWidth As Integer) As String
             Return ConvertToPlainTextTableFixedColumnWidths(dataTable, minimumColumnWidth, maximumColumnWidth, Nothing)
         End Function
@@ -1813,8 +1824,8 @@ Namespace CompuMaster.Data
         ''' <param name="dataTable">The datatable to retrieve the content from</param>
         ''' <returns>All rows are separated by fixed width. If no rows have been processed, the user will get notified about this fact</returns>
         ''' <remarks></remarks>
-        Public Shared Function ConvertToPlainTextTableFixedColumnWidths(ByVal dataTable As DataTable, verticalSeparatorHeader As String, _
-                                                                        verticalSeparatorCells As String, crossSeparator As String, _
+        Public Shared Function ConvertToPlainTextTableFixedColumnWidths(ByVal dataTable As DataTable, verticalSeparatorHeader As String,
+                                                                        verticalSeparatorCells As String, crossSeparator As String,
                                                                         horizontalSeparatorHeadline As Char, horizontalSeparatorCells As Char) As String
             Return _ConvertToPlainTextTableWithFixedColumnWidths(dataTable.Rows, dataTable.TableName, SuggestColumnWidthsForFixedPlainTables(dataTable.Rows), verticalSeparatorHeader, verticalSeparatorCells,
                                                                  crossSeparator, horizontalSeparatorHeadline, horizontalSeparatorCells, Nothing)
@@ -1826,9 +1837,9 @@ Namespace CompuMaster.Data
         ''' <param name="dataTable">The datatable to retrieve the content from</param>
         ''' <returns>All rows are separated by fixed width. If no rows have been processed, the user will get notified about this fact</returns>
         ''' <remarks></remarks>
-        Public Shared Function ConvertToPlainTextTableFixedColumnWidths(ByVal dataTable As DataTable, ByVal fixedColumnWidths As Integer(), _
-                                                                        verticalSeparatorHeader As String, verticalSeparatorCells As String, _
-                                                                        crossSeparator As String, horizontalSeparatorHeadline As Char, _
+        Public Shared Function ConvertToPlainTextTableFixedColumnWidths(ByVal dataTable As DataTable, ByVal fixedColumnWidths As Integer(),
+                                                                        verticalSeparatorHeader As String, verticalSeparatorCells As String,
+                                                                        crossSeparator As String, horizontalSeparatorHeadline As Char,
                                                                         horizontalSeparatorCells As Char) As String
             Return _ConvertToPlainTextTableWithFixedColumnWidths(dataTable.Rows, dataTable.TableName, fixedColumnWidths, verticalSeparatorHeader, verticalSeparatorCells, crossSeparator, horizontalSeparatorHeadline,
                                                                  horizontalSeparatorCells, Nothing)
@@ -1840,9 +1851,9 @@ Namespace CompuMaster.Data
         ''' <param name="dataTable">The datatable to retrieve the content from</param>
         ''' <returns>All rows are separated by fixed width. If no rows have been processed, the user will get notified about this fact</returns>
         ''' <remarks></remarks>
-        Public Shared Function ConvertToPlainTextTableFixedColumnWidths(ByVal dataTable As DataTable, ByVal standardColumnWidth As Integer, _
-                                                                        verticalSeparatorHeader As String, verticalSeparatorCells As String, _
-                                                                        crossSeparator As String, horizontalSeparatorHeadline As Char, _
+        Public Shared Function ConvertToPlainTextTableFixedColumnWidths(ByVal dataTable As DataTable, ByVal standardColumnWidth As Integer,
+                                                                        verticalSeparatorHeader As String, verticalSeparatorCells As String,
+                                                                        crossSeparator As String, horizontalSeparatorHeadline As Char,
                                                                         horizontalSeparatorCells As Char) As String
             Dim columnWidths(dataTable.Columns.Count - 1) As Integer
             For MyCounter As Integer = 0 To dataTable.Columns.Count - 1
@@ -2405,7 +2416,9 @@ Namespace CompuMaster.Data
         ''' <returns></returns>
         ''' <remarks></remarks>
         Private Shared Function MaxValueOfFirstXPercent(values As Integer(), optimalWidthWhenPercentageNumberOfRowsFitIntoCell As Double) As Integer
-            If optimalWidthWhenPercentageNumberOfRowsFitIntoCell < 0 Or optimalWidthWhenPercentageNumberOfRowsFitIntoCell > 100 Then Throw New ArgumentOutOfRangeException("optimalWidthWhenPercentageNumberOfRowsFitIntoCell")
+            If optimalWidthWhenPercentageNumberOfRowsFitIntoCell < 0 Or optimalWidthWhenPercentageNumberOfRowsFitIntoCell > 100 Then
+                Throw New ArgumentOutOfRangeException(NameOf(optimalWidthWhenPercentageNumberOfRowsFitIntoCell))
+            End If
             'Dim sl As New System.Collections.Generic.SortedList(Of Integer, Integer)
             Dim sl As New System.Collections.SortedList
             For MyCounter As Integer = 0 To values.Length - 1
@@ -2716,13 +2729,13 @@ Namespace CompuMaster.Data
         Public Shared Function FullJoinTables(ByVal leftTable As DataTable, ByVal leftKeyColumnIndexes As Integer(), ByVal rightTable As DataTable,
                                               ByVal rightKeyColumnIndexes As Integer(), ByVal compareStringsCaseInsensitive As Boolean) As DataTable
             'Parameter validation
-            If leftTable Is Nothing Then Throw New ArgumentException("Missing argument", "leftTable")
-            If leftKeyColumnIndexes Is Nothing OrElse leftKeyColumnIndexes.Length = 0 Then Throw New ArgumentException("Missing argument", "leftKeyColumnIndexes")
-            If rightTable Is Nothing Then Throw New ArgumentException("Missing argument", "rightTable")
-            If rightKeyColumnIndexes Is Nothing OrElse rightKeyColumnIndexes.Length = 0 Then Throw New ArgumentException("Missing argument", "rightKeyColumnIndexes")
+            If leftTable Is Nothing Then Throw New ArgumentException("Missing argument", NameOf(leftTable))
+            If leftKeyColumnIndexes Is Nothing OrElse leftKeyColumnIndexes.Length = 0 Then Throw New ArgumentException("Missing argument", NameOf(leftKeyColumnIndexes))
+            If rightTable Is Nothing Then Throw New ArgumentException("Missing argument", NameOf(rightTable))
+            If rightKeyColumnIndexes Is Nothing OrElse rightKeyColumnIndexes.Length = 0 Then Throw New ArgumentException("Missing argument", NameOf(rightKeyColumnIndexes))
             If leftKeyColumnIndexes.Length <> rightKeyColumnIndexes.Length Then Throw New Exception("Count of leftKeyColumnIndexes must be equal to count of rightKeyColumnIndexes")
             For MyCounter As Integer = 0 To leftKeyColumnIndexes.Length - 1
-                If Not leftTable.Columns(leftKeyColumnIndexes(MyCounter)).DataType Is rightTable.Columns(rightKeyColumnIndexes(MyCounter)).DataType Then
+                If leftTable.Columns(leftKeyColumnIndexes(MyCounter)).DataType IsNot rightTable.Columns(rightKeyColumnIndexes(MyCounter)).DataType Then
                     Throw New Exception("Data types of key columns must be equal")
                 End If
             Next
@@ -2852,13 +2865,13 @@ Namespace CompuMaster.Data
             Result.Caption = templateColumn.Caption
             Result.ColumnName = templateColumn.ColumnName
             Result.DataType = templateColumn.DataType
-#If NET_1_1 = False Then
-            Result.DateTimeMode = templateColumn.DateTimeMode
-#End If
             Result.DefaultValue = templateColumn.DefaultValue
             Result.MaxLength = templateColumn.MaxLength
             Result.ReadOnly = templateColumn.ReadOnly
             Result.Unique = False
+#If NET_1_1 = False Then
+            Result.DateTimeMode = templateColumn.DateTimeMode
+#End If
             Return Result
         End Function
 
@@ -2940,7 +2953,7 @@ Namespace CompuMaster.Data
                 End If
             Else
                 'Other data types
-                If Not value1 Is value2 Then
+                If value1 IsNot value2 Then
                     'Other data types which do not require textual handling
                     Return False
                 End If
@@ -3110,7 +3123,7 @@ Namespace CompuMaster.Data
         Public Class ReArrangeDataColumnsException
             Inherits Exception
 
-            Private MyCMToolsReArrangeDataColumnsException As CompuMaster.Data.ReArrangeDataColumnsException
+            Private ReadOnly MyCMToolsReArrangeDataColumnsException As CompuMaster.Data.ReArrangeDataColumnsException
 
             Public Sub New(ByVal rowIndex As Integer, ByVal columnIndex As Integer, ByVal sourceColumnType As Type, ByVal targetColumnType As Type,
                            ByVal problematicValue As Object, ByVal innerException As Exception)
@@ -3353,10 +3366,10 @@ Namespace CompuMaster.Data
                                           ByVal joinType As SqlJoinTypes, compareStringsCaseInsensitive As Boolean) As DataTable
             'Check required arguments
             If leftTable Is Nothing Then
-                Throw New ArgumentNullException("leftTable", "Left table is a required parameter")
+                Throw New ArgumentNullException(NameOf(leftTable), "Left table is a required parameter")
             End If
             If rightTable Is Nothing Then
-                Throw New ArgumentNullException("rightTable", "Right table is a required parameter")
+                Throw New ArgumentNullException(NameOf(rightTable), "Right table is a required parameter")
             End If
 
             'Auto-complete required arguments
@@ -3671,7 +3684,7 @@ Namespace CompuMaster.Data
             If MyKeyColumns Is Nothing OrElse MyKeyColumns.Length = 0 Then
                 Throw New ArgumentException("Key columns haven't been specified and table doesn't contain a primary key defintion")
             ElseIf searchedValueSet Is Nothing Then
-                Throw New ArgumentNullException("searchedValueSet", "Required argument: searchedValueSet")
+                Throw New ArgumentNullException(NameOf(searchedValueSet), "Required argument: searchedValueSet")
             ElseIf searchedValueSet.Length <> MyKeyColumns.Length Then
                 Throw New ArgumentException("Array lengths must be equal: searchedValueSet and keyColumns")
             End If
@@ -4017,10 +4030,10 @@ Namespace CompuMaster.Data
                                           ByVal joinType As SqlJoinTypes) As DataTable
 
             If leftTable Is Nothing Then
-                Throw New ArgumentNullException("leftTable", "Left table is a required parameter")
+                Throw New ArgumentNullException(NameOf(leftTable), "Left table is a required parameter")
             End If
             If rightTable Is Nothing Then
-                Throw New ArgumentNullException("rightTable", "Right table is a required parameter")
+                Throw New ArgumentNullException(NameOf(rightTable), "Right table is a required parameter")
             End If
 
             Dim leftKeys As New ArrayList, rightKeys As New ArrayList, leftColumns As New ArrayList, rightColumns As New ArrayList
@@ -4087,8 +4100,8 @@ Namespace CompuMaster.Data
         Public Shared Function SqlJoinTables(ByVal leftTable As DataTable, leftTableKey As String,
                                           ByVal rightTable As DataTable, rightTableKey As String,
                                           ByVal joinType As SqlJoinTypes) As DataTable
-            If leftTableKey = Nothing Then Throw New ArgumentNullException("leftTableKey")
-            If rightTableKey = Nothing Then Throw New ArgumentNullException("rightTableKey")
+            If leftTableKey = Nothing Then Throw New ArgumentNullException(NameOf(leftTableKey))
+            If rightTableKey = Nothing Then Throw New ArgumentNullException(NameOf(rightTableKey))
             Return SqlJoinTables(leftTable, New String() {leftTableKey}, Nothing, rightTable, New String() {rightTableKey}, Nothing, joinType)
         End Function
 
@@ -4108,8 +4121,8 @@ Namespace CompuMaster.Data
         Public Shared Function SqlJoinTables(ByVal leftTable As DataTable, leftTableKey As String, ByVal leftTableColumnsToCopy As String(),
                                           ByVal rightTable As DataTable, rightTableKey As String, ByVal rightTableColumnsToCopy As String(),
                                           ByVal joinType As SqlJoinTypes) As DataTable
-            If leftTableKey = Nothing Then Throw New ArgumentNullException("leftTableKey")
-            If rightTableKey = Nothing Then Throw New ArgumentNullException("rightTableKey")
+            If leftTableKey = Nothing Then Throw New ArgumentNullException(NameOf(leftTableKey))
+            If rightTableKey = Nothing Then Throw New ArgumentNullException(NameOf(rightTableKey))
             Return SqlJoinTables(leftTable, New String() {leftTableKey}, leftTableColumnsToCopy, rightTable, New String() {rightTableKey}, rightTableColumnsToCopy, joinType)
         End Function
 
@@ -4131,10 +4144,10 @@ Namespace CompuMaster.Data
                                           ByVal joinType As SqlJoinTypes) As DataTable
 
             If leftTable Is Nothing Then
-                Throw New ArgumentNullException("leftTable", "Left table is a required parameter")
+                Throw New ArgumentNullException(NameOf(leftTable), "Left table is a required parameter")
             End If
             If rightTable Is Nothing Then
-                Throw New ArgumentNullException("rightTable", "Right table is a required parameter")
+                Throw New ArgumentNullException(NameOf(rightTable), "Right table is a required parameter")
             End If
 
             Dim leftKeys As New ArrayList, rightKeys As New ArrayList, leftColumns As New ArrayList, rightColumns As New ArrayList
