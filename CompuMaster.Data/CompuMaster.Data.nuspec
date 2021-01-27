@@ -12,7 +12,7 @@
     <requireLicenseAcceptance>true</requireLicenseAcceptance>
     <description>.NET library with common methods for simplified data access, data table arrangements and data IO</description>
     <releaseNotes></releaseNotes>
-    <copyright>2005-2018 CompuMaster GmbH</copyright>
+    <copyright>2005-2021 CompuMaster GmbH</copyright>
     <tags>CompuMaster Data Common Utils DataTable LDAP CSV Text File SqlServer SqlClient MySql PostgreSQL Npgsql AnyIDataProvider DatabaseManagement DataManipulation</tags>
 		<frameworkAssemblies>
 			<frameworkAssembly assemblyName="System.Data" />	

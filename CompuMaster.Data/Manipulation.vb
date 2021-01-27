@@ -149,11 +149,11 @@ Namespace CompuMaster.Data
                 End If
                 Dim ColumnCreationCommandText As String = CreateTableCommandText(remoteTableName, PrimaryKeyColumn, ddlLanguage)
                 CompuMaster.Data.DataQuery.ExecuteNonQuery(dataConnection, ColumnCreationCommandText, CommandType.Text, Nothing, CompuMaster.Data.DataQuery.Automations.None, 0)
-                    RemoteTable = LoadTableStructureWith1RowFromConnection(remoteTableName, dataConnection, False)
-                End If
+                RemoteTable = LoadTableStructureWith1RowFromConnection(remoteTableName, dataConnection, False)
+            End If
 
-                'Extend schema if required
-                Dim extendSchemaCommandText As String = AddMissingColumnsCommandText(sourceTable, RemoteTable, ddlLanguage)
+            'Extend schema if required
+            Dim extendSchemaCommandText As String = AddMissingColumnsCommandText(sourceTable, RemoteTable, ddlLanguage)
             If extendSchemaCommandText <> Nothing Then
                 CompuMaster.Data.DataQuery.ExecuteNonQuery(dataConnection, extendSchemaCommandText, CommandType.Text, Nothing, CompuMaster.Data.DataQuery.Automations.None, 0)
             End If
@@ -259,17 +259,17 @@ Namespace CompuMaster.Data
                 CloseBrackets = "]"
             End If
 
-            If ddlLanguage = ddlLanguage.PostgreSQL Then
+            If ddlLanguage = DdlLanguage.PostgreSQL Then
                 OpenBrackets = """"
                 CloseBrackets = """"
             End If
 
             Select Case ddlLanguage
-                Case ddlLanguage.MSJetEngine
+                Case DdlLanguage.MSJetEngine
                     Return "CREATE TABLE " & OpenBrackets & tableName & CloseBrackets & " ([" & primaryColumnName & "] AUTOINCREMENT, Primary Key ([" & primaryColumnName & "]))"
-                Case ddlLanguage.MSSqlServer
+                Case DdlLanguage.MSSqlServer
                     Return "CREATE TABLE " & OpenBrackets & tableName & CloseBrackets & " ([" & primaryColumnName & "] int NOT NULL IDENTITY (1, 1) PRIMARY KEY)"
-                Case ddlLanguage.PostgreSQL
+                Case DdlLanguage.PostgreSQL
                     Return "CREATE TABLE " & OpenBrackets & tableName & CloseBrackets & " ( " & primaryColumnName & " SERIAL NOT NULL PRIMARY KEY)"
                 Case Else
                     Throw New NotSupportedException("CreateTableCommandText not supported for " & ddlLanguage.ToString)
@@ -496,7 +496,7 @@ Namespace CompuMaster.Data
                     CloseBrackets = Nothing
                 End If
             End If
-                If isSafeTableName Then
+            If isSafeTableName Then
                 'table name already in a well-formed syntax, e.g. "dbo.[Test - 123]"
                 OpenBrackets = Nothing
                 CloseBrackets = Nothing
@@ -683,6 +683,51 @@ Namespace CompuMaster.Data
         End Sub
 
         ''' <summary>
+        ''' An exception on data update
+        ''' </summary>
+        Public Class SqlDataAdapterException
+            Inherits Exception
+
+            ''' <summary>
+            ''' Re-encapsulate exception
+            ''' </summary>
+            ''' <param name="message"></param>
+            ''' <param name="innerException"></param>
+            Protected Friend Sub New(message As String, innerException As SqlDataAdapterException)
+                Me.New(message, innerException.SqlDataAdapter, innerException.InnerException)
+            End Sub
+
+            Public Sub New(sqlDataAdapter As System.Data.IDbDataAdapter, innerException As System.Exception)
+                Me.New("Data update failed", sqlDataAdapter, innerException)
+            End Sub
+
+            Public Sub New(message As String, sqlDataAdapter As System.Data.IDbDataAdapter, innerException As System.Exception)
+                MyBase.New(message, innerException)
+                Me.SqlDataAdapter = sqlDataAdapter
+            End Sub
+
+            ''' <summary>
+            ''' The instance of SqlDataAdapter that should execute the update actions
+            ''' </summary>
+            ''' <returns></returns>
+            Public Property SqlDataAdapter As System.Data.IDbDataAdapter
+
+            ''' <summary>
+            ''' Summary of command texts used by SqlDataAdapter
+            ''' </summary>
+            ''' <returns></returns>
+            Public Function SqlDataAdapterCommands() As String
+                Dim Result As String = ""
+                Result &= "Command for SELECT: " & Me.SqlDataAdapter.SelectCommand.CommandText
+                Result &= "Command for INSERT: " & Me.SqlDataAdapter.InsertCommand.CommandText
+                Result &= "Command for UPDATE: " & Me.SqlDataAdapter.UpdateCommand.CommandText
+                Result &= "Command for DELETE: " & Me.SqlDataAdapter.DeleteCommand.CommandText
+                Return Result
+            End Function
+
+        End Class
+
+        ''' <summary>
         '''     Write back changes to the data connection
         ''' </summary>
         ''' <param name="container"></param>
@@ -726,7 +771,11 @@ Namespace CompuMaster.Data
                         CType(container.DataAdapter, SqlClient.SqlDataAdapter).InsertCommand = Nothing
                     End If
                     'Update data
-                    CType(container.DataAdapter, SqlClient.SqlDataAdapter).Update(container.Table)
+                    Try
+                        CType(container.DataAdapter, SqlClient.SqlDataAdapter).Update(container.Table)
+                    Catch ex As Exception
+                        Throw New SqlDataAdapterException(container.DataAdapter, ex)
+                    End Try
                     If Not trans Is Nothing Then
                         trans.Commit()
                         trans.Dispose()
@@ -736,7 +785,12 @@ Namespace CompuMaster.Data
                         trans.Rollback()
                         trans.Dispose()
                     End If
-                    Throw New Exception("Error found - transaction has been rolled back", ex)
+                    If ex.GetType Is GetType(SqlDataAdapterException) Then
+                        Dim InnerEx As SqlDataAdapterException = CType(ex, SqlDataAdapterException)
+                        Throw New SqlDataAdapterException("Error found - transaction has been rolled back", InnerEx)
+                    Else
+                        Throw New Exception("Error found - transaction has been rolled back", ex)
+                    End If
                 End Try
             Else
                 Dim providers As System.Collections.Generic.List(Of Data.DataQuery.DataProvider)
@@ -748,7 +802,11 @@ Namespace CompuMaster.Data
                     End If
                 Next
                 If CurrentProvider IsNot Nothing Then
-                    CType(container.DataAdapter, System.Data.Common.DbDataAdapter).Update(container.Table)
+                    Try
+                        CType(container.DataAdapter, System.Data.Common.DbDataAdapter).Update(container.Table)
+                    Catch ex As Exception
+                        Throw New SqlDataAdapterException(container.DataAdapter, ex)
+                    End Try
                 Else
                     Throw New NotSupportedException("Data provider not supported yet")
                 End If
