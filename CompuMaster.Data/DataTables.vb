@@ -873,6 +873,18 @@ Namespace CompuMaster.Data
         End Function
 
         ''' <summary>
+        ''' Create a table union from 2 tables
+        ''' </summary>
+        ''' <param name="firstTable"></param>
+        ''' <param name="secondTable"></param>
+        ''' <returns></returns>
+        Public Shared Function UnionDataTables(ByVal firstTable As DataTable, secondTable As DataTable) As DataTable
+            Dim Result As DataTable = CompuMaster.Data.DataTablesTools.GetDataTableClone(firstTable)
+            CreateDataTableClone(secondTable, Result, String.Empty)
+            Return Result
+        End Function
+
+        ''' <summary>
         '''     Creates a complete clone of a DataTable with structure as well as data
         ''' </summary>
         ''' <param name="SourceTable">The source table to be copied</param>
