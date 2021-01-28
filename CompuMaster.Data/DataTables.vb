@@ -4262,10 +4262,25 @@ Namespace CompuMaster.Data
         ''' <param name="column"></param>
         ''' <param name="value"></param>
         Public Shared Sub FillColumnWithStaticValue(column As DataColumn, value As Object)
+            FillColumnWithStaticValue(column, value, False)
+        End Sub
+
+        ''' <summary>
+        ''' Fill all cells of a column with a static value
+        ''' </summary>
+        ''' <param name="column"></param>
+        ''' <param name="value"></param>
+        Public Shared Sub FillColumnWithStaticValue(column As DataColumn, value As Object, onlyIfValueIsDbNull As Boolean)
             Dim Table As DataTable = column.Table
             Dim ColOrdinal As Integer = column.Ordinal
             For MyCounter As Integer = 0 To Table.Rows.Count - 1
-                Table.Rows(MyCounter)(ColOrdinal) = value
+                If onlyIfValueIsDbNull Then
+                    If IsDBNull(Table.Rows(MyCounter)(ColOrdinal)) Then
+                        Table.Rows(MyCounter)(ColOrdinal) = value
+                    End If
+                Else
+                    Table.Rows(MyCounter)(ColOrdinal) = value
+                End If
             Next
         End Sub
 
