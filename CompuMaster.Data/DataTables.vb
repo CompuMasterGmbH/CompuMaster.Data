@@ -908,7 +908,7 @@ Namespace CompuMaster.Data
         ''' <param name="SourceTable">The source table to be copied</param>
         ''' <param name="sourceRowFilter">An additional row filter for the source table, for all rows set it to null (Nothing in VisualBasic)</param>
         ''' <param name="sourceSortExpression">An additional sort command for the source table</param>
-        ''' <param name="topRows">How many rows from top shall be returned as maximum?</param>
+        ''' <param name="topRows">After row filtering, how many rows from top shall be returned as maximum? (0 = all rows)</param>
         ''' <returns>The new clone of the datatable</returns>
         Public Shared Function CreateDataTableClone(ByVal SourceTable As DataTable, ByVal sourceRowFilter As String, ByVal sourceSortExpression As String,
                                                     ByVal topRows As Integer) As DataTable
@@ -916,13 +916,13 @@ Namespace CompuMaster.Data
         End Function
 
         ''' <summary>
-        '''     Creates a complete clone of a DataTable with structure as well as data
+        ''' Clear destination table rows, remove columns not existing in source table and copy rows/columns from source table into destination table
         ''' </summary>
         ''' <param name="sourceTable">The source table to be copied</param>
         ''' <param name="destinationTable">The destination of all operations; the destination table will be a clone of the source table at the end</param>
         ''' <param name="sourceRowFilter">An additional row filter for the source table. For all rows set it to null (Nothing in VisualBasic)</param>
         ''' <param name="sourceSortExpression">An additional sort command for the source table</param>
-        ''' <param name="topRows">How many rows from top shall be returned as maximum?</param>
+        ''' <param name="topRows">After row filtering, how many rows from top shall be returned as maximum? (0 = all rows)</param>
         ''' <param name="overwritePropertiesOfExistingColumns">Shall the data type or any other settings of an existing table be modified to match the source column's definition?</param>
         ''' <remarks>
         '''     All rows of the destination table will be removed, first.
@@ -933,13 +933,25 @@ Namespace CompuMaster.Data
         End Sub
 
         ''' <summary>
+        ''' Copy a source table into destination table while preserving existing column data types, preserving content and adding rows/columns as required
+        ''' </summary>
+        ''' <param name="sourceTable">The source table to be copied</param>
+        ''' <param name="destinationTable">The destination of all operations; the destination table will be a clone of the source table at the end</param>
+        ''' <param name="sourceRowFilter">An additional row filter for the source table. For all rows set it to null (Nothing in VisualBasic)</param>
+        ''' <remarks>
+        ''' </remarks>
+        Public Shared Sub CreateDataTableClone(ByVal sourceTable As DataTable, ByVal destinationTable As DataTable, ByVal sourceRowFilter As String)
+            CreateDataTableClone(sourceTable, destinationTable, sourceRowFilter, Nothing, 0, False, False, False)
+        End Sub
+
+        ''' <summary>
         '''     Creates a complete clone of a DataTable with structure as well as data
         ''' </summary>
         ''' <param name="sourceTable">The source table to be copied</param>
         ''' <param name="destinationTable">The destination of all operations; the destination table will be a clone of the source table at the end</param>
         ''' <param name="sourceRowFilter">An additional row filter for the source table. For all rows set it to null (Nothing in VisualBasic)</param>
         ''' <param name="sourceSortExpression">An additional sort command for the source table</param>
-        ''' <param name="topRows">How many rows from top shall be returned as maximum?</param>
+        ''' <param name="topRows">After row filtering, how many rows from top shall be returned as maximum? (0 = all rows)</param>
         ''' <param name="overwritePropertiesOfExistingColumns">Shall the data type or any other settings of an existing table be modified to match the source column's definition?</param>
         ''' <param name="dropExistingRowsInDestinationTable">Remove the existing rows of the destination table, first</param>
         ''' <param name="removeUnusedColumnsFromDestinationTable">Remove the existing columns of the destination table which are not present in the source table</param>
@@ -957,7 +969,7 @@ Namespace CompuMaster.Data
         ''' <param name="destinationTable">The destination of all operations; the destination table will be a clone of the source table at the end</param>
         ''' <param name="sourceRowFilter">An additional row filter for the source table. For all rows set it to null (Nothing in VisualBasic)</param>
         ''' <param name="sourceSortExpression">An additional sort command for the source table</param>
-        ''' <param name="topRows">How many rows from top shall be returned as maximum?</param>
+        ''' <param name="topRows">After row filtering, how many rows from top shall be returned as maximum? (0 = all rows)</param>
         ''' <param name="overwritePropertiesOfExistingColumns">Shall the data type or any other settings of an existing table be modified to match the source column's definition?</param>
         ''' <param name="dropExistingRowsInDestinationTable">Remove the existing rows of the destination table, first</param>
         ''' <param name="removeUnusedColumnsFromDestinationTable">Remove the existing columns of the destination table which are not present in the source table</param>
@@ -977,7 +989,7 @@ Namespace CompuMaster.Data
         ''' <param name="destinationTable">The destination of all operations; the destination table will be a clone of the source table at the end</param>
         ''' <param name="sourceRowFilter">An additional row filter for the source table. For all rows set it to null (Nothing in VisualBasic)</param>
         ''' <param name="sourceSortExpression">An additional sort command for the source table</param>
-        ''' <param name="topRows">How many rows from top shall be returned as maximum?</param>
+        ''' <param name="topRows">After row filtering, how many rows from top shall be returned as maximum? (0 = all rows)</param>
         ''' <param name="overwritePropertiesOfExistingColumns">Shall the data type or any other settings of an existing table be modified to match the source column's definition?</param>
         ''' <param name="dropExistingRowsInDestinationTable">Remove the existing rows of the destination table, first</param>
         ''' <param name="removeUnusedColumnsFromDestinationTable">Remove the existing columns of the destination table which are not present in the source table</param>
@@ -1070,7 +1082,7 @@ Namespace CompuMaster.Data
         ''' <param name="destinationTable">The destination of all operations; the destination table will be a clone of the source table at the end</param>
         ''' <param name="sourceRowFilter">An additional row filter for the source table. For all rows set it to null (Nothing in VisualBasic)</param>
         ''' <param name="sourceSortExpression">An additional sort command for the source table</param>
-        ''' <param name="topRows">How many rows from top shall be returned as maximum?</param>
+        ''' <param name="topRows">After row filtering, how many rows from top shall be returned as maximum? (0 = all rows)</param>
         ''' <param name="rowChanges">Enum specifing the changes to be performed on the destination row </param>
         ''' <param name="caseInsensitiveColumnNames">Specifies whether case insensitivity should matter for column names</param>
         ''' <param name="destinationSchemaChangesForUnusedColumns">Remove the existing columns of the destination table which are not present in the source table</param>
@@ -4223,6 +4235,47 @@ Namespace CompuMaster.Data
 
             Return MissingColumns.ToArray
         End Function
+
+        ''' <summary>
+        ''' Reset all cells of a column to DbNull.Value
+        ''' </summary>
+        ''' <param name="column"></param>
+        Public Shared Sub ClearColumnValues(column As DataColumn)
+            FillColumnWithStaticValue(column, DBNull.Value)
+        End Sub
+
+        ''' <summary>
+        ''' Fill all cells of a column with a static value
+        ''' </summary>
+        ''' <param name="column"></param>
+        ''' <param name="value"></param>
+        Public Shared Sub FillColumnWithStaticValue(column As DataColumn, value As Object)
+            Dim Table As DataTable = column.Table
+            Dim ColOrdinal As Integer = column.Ordinal
+            For MyCounter As Integer = 0 To Table.Rows.Count - 1
+                Table.Rows(MyCounter)(ColOrdinal) = value
+            Next
+        End Sub
+
+        ''' <summary>
+        ''' Calculate a new value based on a row's content
+        ''' </summary>
+        ''' <param name="row"></param>
+        ''' <returns></returns>
+        Public Delegate Function CalculateColumnValue(row As DataRow) As Object
+
+        ''' <summary>
+        ''' Fill all cells of a column with a calculated value based on current row data
+        ''' </summary>
+        ''' <param name="column"></param>
+        ''' <param name="valueSetter"></param>
+        Public Shared Sub FillColumnWithCalculatedValue(column As DataColumn, valueSetter As CalculateColumnValue)
+            Dim Table As DataTable = column.Table
+            Dim ColOrdinal As Integer = column.Ordinal
+            For MyCounter As Integer = 0 To Table.Rows.Count - 1
+                Table.Rows(MyCounter)(ColOrdinal) = valueSetter(Table.Rows(MyCounter))
+            Next
+        End Sub
 
     End Class
 
