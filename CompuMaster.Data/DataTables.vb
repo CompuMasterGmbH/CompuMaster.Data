@@ -4304,6 +4304,18 @@ Namespace CompuMaster.Data
             Next
         End Sub
 
+        ''' <summary>
+        ''' Remove all rows matching the filter expression
+        ''' </summary>
+        ''' <param name="table"></param>
+        ''' <param name="filterExpression"></param>
+        Public Shared Sub RemoveRowsByFilter(table As DataTable, filterExpression As String)
+            Dim FoundRows As DataRow() = table.Select(filterExpression)
+            For MyCounter As Integer = 0 To FoundRows.Length - 1
+                table.Rows.Remove(FoundRows(MyCounter))
+            Next
+        End Sub
+
     End Class
 
 End Namespace
