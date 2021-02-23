@@ -457,7 +457,7 @@ Namespace CompuMaster.Test.Data
             dt2 = CompuMaster.Data.DataTables.CreateDataTableClone(dt, "hi = 'TestL2'")
             Assert.AreEqual(1, dt2.Rows.Count())
 
-            dt2 = CompuMaster.Data.DataTables.CreateDataTableClone(dt, Nothing, "id DESC")
+            dt2 = CompuMaster.Data.DataTables.CreateDataTableClone(dt, CType(Nothing, String), "id DESC")
             Assert.AreEqual(8, dt2.Rows.Item(0).Item(0))
 
 

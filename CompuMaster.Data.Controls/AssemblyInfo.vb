@@ -7,7 +7,7 @@ Imports System.Runtime.CompilerServices
 <Assembly: AssemblyDescription("")> 
 <Assembly: AssemblyCompany("CompuMaster GmbH")>
 <Assembly: AssemblyProduct("CompuMaster Tools")>
-<Assembly: AssemblyCopyright("2005-2020 CompuMaster GmbH")>
+<Assembly: AssemblyCopyright("2005-2021 CompuMaster GmbH")>
 <Assembly: AssemblyTrademark("CompuMaster")> 
 <Assembly: CLSCompliant(True)> 
 <Assembly: ComVisibleAttribute(False)> 
@@ -16,7 +16,7 @@ Imports System.Runtime.CompilerServices
 <Assembly: Guid("FDE425FC-D944-4747-A1D8-082356335D53")>
 
 'HINT: ALWAYS UPDATE AT PROJECTS CM.DATA + CM.DATA.CONTROLS TO THE VERY SAME VERSION NO.
-<Assembly: AssemblyVersion("2.8.2021.0132")>
+<Assembly: AssemblyVersion("2.8.2021.0223")>
 '<Assembly: AssemblyInformationalVersion("2.8.2019.0312a-beta1")>
 <Assembly: AssemblyDelaySign(False)>
 
