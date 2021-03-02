@@ -20,12 +20,12 @@ dist: trusty
 #sudo: required
 #mono: none
 before_install:
-  - nuget install NUnit.Runners -Version 3.4.1 -OutputDirectory testrunner
+  - nuget install NUnit.Runners -Version 3.12.0 -OutputDirectory testrunner
 #  - sudo apt-get install nunit-console
 install:
   - nuget restore CompuMaster.Data.VS2012.sln
 script:
   - msbuild /p:Configuration=TravisCI /p:Platform="Any CPU" /p:PostBuildEvent="" CompuMaster.Data.VS2012.sln
 after_script:
-#  - ./testrunner/NUnit.ConsoleRunner.3.4.1/tools/nunit3-console.exe ./CompuMaster.Test.Tools.Data/bin/CompuMaster.Test.Tools.Data.dll
+#  - ./testrunner/NUnit.ConsoleRunner.3.12.0/tools/nunit3-console.exe ./CompuMaster.Test.Tools.Data/bin/CompuMaster.Test.Tools.Data.dll
 #  - nunit-console ./CompuMaster.Test.Tools.Data/bin/CompuMaster.Test.Tools.Data.dll
