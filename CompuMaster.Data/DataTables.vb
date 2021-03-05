@@ -2914,17 +2914,18 @@ Namespace CompuMaster.Data
         ''' <returns></returns>
         ''' <remarks></remarks>
         Private Shared Function CloneDataColumn(ByVal templateColumn As DataColumn) As DataColumn
-            Dim Result As New DataColumn
-            Result.AllowDBNull = templateColumn.AllowDBNull
-            Result.AutoIncrement = False
-            Result.Caption = templateColumn.Caption
-            Result.ColumnName = templateColumn.ColumnName
-            Result.DataType = templateColumn.DataType
-            Result.DefaultValue = templateColumn.DefaultValue
-            Result.MaxLength = templateColumn.MaxLength
-            Result.ReadOnly = templateColumn.ReadOnly
-            Result.Unique = False
-            Result.DateTimeMode = templateColumn.DateTimeMode
+            Dim Result As New DataColumn With {
+                .AllowDBNull = templateColumn.AllowDBNull,
+                .AutoIncrement = False,
+                .Caption = templateColumn.Caption,
+                .ColumnName = templateColumn.ColumnName,
+                .DataType = templateColumn.DataType,
+                .DefaultValue = templateColumn.DefaultValue,
+                .MaxLength = templateColumn.MaxLength,
+                .ReadOnly = templateColumn.ReadOnly,
+                .Unique = False,
+                .DateTimeMode = templateColumn.DateTimeMode
+            }
             Return Result
         End Function
 
@@ -3173,6 +3174,8 @@ Namespace CompuMaster.Data
         ''' <summary>
         '''     An exception which gets thrown when converting data in the ReArrangeDataColumns methods
         ''' </summary>
+        <CodeAnalysis.SuppressMessage("Design", "CA1032:Implement standard exception constructors", Justification:="<Ausstehend>")>
+        <CodeAnalysis.SuppressMessage("Usage", "CA2237:Mark ISerializable types with serializable", Justification:="<Ausstehend>")>
         Public Class ReArrangeDataColumnsException
             Inherits Exception
 

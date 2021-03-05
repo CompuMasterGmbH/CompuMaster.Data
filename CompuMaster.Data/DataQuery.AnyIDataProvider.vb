@@ -61,15 +61,15 @@ Namespace CompuMaster.Data.DataQuery
                     Exit For
                 End If
             Next
-            If Not connectionType Is Nothing Then
+            If connectionType IsNot Nothing Then
                 Return CType(Activator.CreateInstance(connectionType), IDbConnection)
             Else
                 Dim referencedAssembly As System.Reflection.Assembly
                 referencedAssembly = System.Reflection.Assembly.LoadFile(assemblyName)
                 Dim t As Type = referencedAssembly.GetType(connectionTypeName)
-                If (Not (t) Is Nothing) Then
+                If (t IsNot Nothing) Then
                     Dim m As System.Runtime.Remoting.ObjectHandle = Activator.CreateInstanceFrom(assemblyName, connectionTypeName)
-                    If (Not (m) Is Nothing) Then
+                    If ((m) IsNot Nothing) Then
                         Return CType(m.Unwrap, IDbConnection)
                     End If
                 End If
@@ -120,7 +120,7 @@ Namespace CompuMaster.Data.DataQuery
             If Not commandTimeout < 0 Then
                 MyCmd.CommandTimeout = commandTimeout
             End If
-            If Not sqlParameters Is Nothing Then
+            If sqlParameters IsNot Nothing Then
                 For Each MySqlParam As IDataParameter In sqlParameters
                     MyCmd.Parameters.Add(MySqlParam)
                 Next
@@ -128,19 +128,19 @@ Namespace CompuMaster.Data.DataQuery
             Dim Result As Object
             Try
                 If automations = Automations.AutoOpenAndCloseAndDisposeConnection OrElse automations = Automations.AutoOpenConnection Then
-                    If  MyConn IsNot Nothing AndAlso MyConn.State <> ConnectionState.Open Then
+                    If MyConn IsNot Nothing AndAlso MyConn.State <> ConnectionState.Open Then
                         MyConn.Open()
                     End If
                 End If
                 Result = MyCmd.ExecuteNonQuery
-                If  MyCmd IsNot Nothing Then
+                If MyCmd IsNot Nothing Then
                     MyCmd.Dispose()
                 End If
             Catch ex As Exception
                 Throw New CompuMaster.Data.DataQuery.DataException(MyCmd, ex)
             Finally
                 If automations = Automations.AutoOpenAndCloseAndDisposeConnection OrElse automations = Automations.AutoCloseAndDisposeConnection Then
-                    If  MyConn IsNot Nothing Then
+                    If MyConn IsNot Nothing Then
                         If MyConn.State <> ConnectionState.Closed Then
                             MyConn.Close()
                         End If
@@ -161,7 +161,7 @@ Namespace CompuMaster.Data.DataQuery
             Dim Result As Integer
             Try
                 If automations = Automations.AutoOpenAndCloseAndDisposeConnection OrElse automations = Automations.AutoOpenConnection Then
-                    If  MyConn IsNot Nothing AndAlso MyConn.State <> ConnectionState.Open Then
+                    If MyConn IsNot Nothing AndAlso MyConn.State <> ConnectionState.Open Then
                         MyConn.Open()
                     End If
                 End If
@@ -170,7 +170,7 @@ Namespace CompuMaster.Data.DataQuery
                 Throw New CompuMaster.Data.DataQuery.DataException(MyCmd, ex)
             Finally
                 If automations = Automations.AutoOpenAndCloseAndDisposeConnection OrElse automations = Automations.AutoCloseAndDisposeConnection Then
-                    If  MyConn IsNot Nothing Then
+                    If MyConn IsNot Nothing Then
                         If MyConn.State <> ConnectionState.Closed Then
                             MyConn.Close()
                         End If
@@ -217,7 +217,7 @@ Namespace CompuMaster.Data.DataQuery
             Dim MyCmd As IDbCommand = MyConn.CreateCommand
             MyCmd.CommandText = commandText
             MyCmd.CommandType = commandType
-            If Not sqlParameters Is Nothing Then
+            If sqlParameters IsNot Nothing Then
                 For Each MySqlParam As IDataParameter In sqlParameters
                     MyCmd.Parameters.Add(MySqlParam)
                 Next
@@ -225,19 +225,19 @@ Namespace CompuMaster.Data.DataQuery
             Dim Result As Object
             Try
                 If automations = Automations.AutoOpenAndCloseAndDisposeConnection OrElse automations = Automations.AutoOpenConnection Then
-                    If  MyConn IsNot Nothing AndAlso MyConn.State <> ConnectionState.Open Then
+                    If MyConn IsNot Nothing AndAlso MyConn.State <> ConnectionState.Open Then
                         MyConn.Open()
                     End If
                 End If
                 Result = MyCmd.ExecuteScalar
-                If  MyCmd IsNot Nothing Then
+                If MyCmd IsNot Nothing Then
                     MyCmd.Dispose()
                 End If
             Catch ex As Exception
                 Throw New CompuMaster.Data.DataQuery.DataException(MyCmd, ex)
             Finally
                 If automations = Automations.AutoOpenAndCloseAndDisposeConnection OrElse automations = Automations.AutoCloseAndDisposeConnection Then
-                    If  MyConn IsNot Nothing Then
+                    If MyConn IsNot Nothing Then
                         If MyConn.State <> ConnectionState.Closed Then
                             MyConn.Close()
                         End If
@@ -268,7 +268,7 @@ Namespace CompuMaster.Data.DataQuery
                 Throw New CompuMaster.Data.DataQuery.DataException(MyCmd, ex)
             Finally
                 If automations = Automations.AutoOpenAndCloseAndDisposeConnection OrElse automations = Automations.AutoCloseAndDisposeConnection Then
-                    If  MyConn IsNot Nothing Then
+                    If MyConn IsNot Nothing Then
                         If MyConn.State <> ConnectionState.Closed Then
                             MyConn.Close()
                         End If
@@ -278,30 +278,6 @@ Namespace CompuMaster.Data.DataQuery
             End Try
             Return Result
         End Function
-
-        ''' <summary>
-        '''     Data execution exceptions with details on the executed IDbCommand
-        ''' </summary>
-        <Obsolete("Use CompuMaster.Data.DataQuery.DataException instead", False), System.ComponentModel.EditorBrowsable(ComponentModel.EditorBrowsableState.Never)>
-        Class DataException
-
-            Private MyCMToolsDataException As CompuMaster.Data.DataQuery.DataException
-
-            <Obsolete("Use CompuMaster.Data.DataQuery.DataException instead", False), System.ComponentModel.EditorBrowsable(ComponentModel.EditorBrowsableState.Never)>
-            Public Sub New(ByVal command As IDbCommand, ByVal innerException As Exception)
-                MyCMToolsDataException = New CompuMaster.Data.DataQuery.DataException(command, innerException)
-            End Sub
-
-            ''' <summary>
-            '''     The complete and detailed exception information inclusive the command text
-            ''' </summary>
-            ''' <returns></returns>
-            <Obsolete("Use CompuMaster.Data.DataQuery.DataException instead", False), System.ComponentModel.EditorBrowsable(ComponentModel.EditorBrowsableState.Never)>
-            Public Overrides Function ToString() As String
-                Return MyCMToolsDataException.ToString()
-            End Function
-
-        End Class
 
         ''' <summary>
         '''     Executes a command scalar and returns the value
@@ -329,7 +305,7 @@ Namespace CompuMaster.Data.DataQuery
             Dim MyCmd As IDbCommand = MyConn.CreateCommand
             MyCmd.CommandText = commandText
             MyCmd.CommandType = commandType
-            If Not sqlParameters Is Nothing Then
+            If sqlParameters IsNot Nothing Then
                 For Each MySqlParam As IDataParameter In sqlParameters
                     MyCmd.Parameters.Add(MySqlParam)
                 Next
@@ -350,7 +326,7 @@ Namespace CompuMaster.Data.DataQuery
             Dim Result As New ArrayList
             Try
                 If automations = Automations.AutoOpenAndCloseAndDisposeConnection OrElse automations = Automations.AutoOpenConnection Then
-                    If  MyConn IsNot Nothing AndAlso MyConn.State <> ConnectionState.Open Then
+                    If MyConn IsNot Nothing AndAlso MyConn.State <> ConnectionState.Open Then
                         MyConn.Open()
                     End If
                 End If
@@ -361,11 +337,11 @@ Namespace CompuMaster.Data.DataQuery
             Catch ex As Exception
                 Throw New CompuMaster.Data.DataQuery.DataException(MyCmd, ex)
             Finally
-                If Not MyReader Is Nothing AndAlso Not MyReader.IsClosed Then
+                If MyReader IsNot Nothing AndAlso Not MyReader.IsClosed Then
                     MyReader.Close()
                 End If
                 If automations = Automations.AutoOpenAndCloseAndDisposeConnection OrElse automations = Automations.AutoCloseAndDisposeConnection Then
-                    If  MyConn IsNot Nothing Then
+                    If MyConn IsNot Nothing Then
                         If MyConn.State <> ConnectionState.Closed Then
                             MyConn.Close()
                         End If
@@ -383,7 +359,7 @@ Namespace CompuMaster.Data.DataQuery
             Dim Result As New System.Collections.Generic.List(Of TValue)
             Try
                 If automations = Automations.AutoOpenAndCloseAndDisposeConnection OrElse automations = Automations.AutoOpenConnection Then
-                    If  MyConn IsNot Nothing AndAlso MyConn.State <> ConnectionState.Open Then
+                    If MyConn IsNot Nothing AndAlso MyConn.State <> ConnectionState.Open Then
                         MyConn.Open()
                     End If
                 End If
@@ -398,11 +374,11 @@ Namespace CompuMaster.Data.DataQuery
             Catch ex As Exception
                 Throw New CompuMaster.Data.DataQuery.DataException(MyCmd, ex)
             Finally
-                If Not MyReader Is Nothing AndAlso Not MyReader.IsClosed Then
+                If MyReader IsNot Nothing AndAlso Not MyReader.IsClosed Then
                     MyReader.Close()
                 End If
                 If automations = Automations.AutoOpenAndCloseAndDisposeConnection OrElse automations = Automations.AutoCloseAndDisposeConnection Then
-                    If  MyConn IsNot Nothing Then
+                    If MyConn IsNot Nothing Then
                         If MyConn.State <> ConnectionState.Closed Then
                             MyConn.Close()
                         End If
@@ -420,7 +396,7 @@ Namespace CompuMaster.Data.DataQuery
             Dim Result As New System.Collections.Generic.List(Of TValue?)
             Try
                 If automations = Automations.AutoOpenAndCloseAndDisposeConnection OrElse automations = Automations.AutoOpenConnection Then
-                    If  MyConn IsNot Nothing AndAlso MyConn.State <> ConnectionState.Open Then
+                    If MyConn IsNot Nothing AndAlso MyConn.State <> ConnectionState.Open Then
                         MyConn.Open()
                     End If
                 End If
@@ -435,11 +411,11 @@ Namespace CompuMaster.Data.DataQuery
             Catch ex As Exception
                 Throw New CompuMaster.Data.DataQuery.DataException(MyCmd, ex)
             Finally
-                If Not MyReader Is Nothing AndAlso Not MyReader.IsClosed Then
+                If MyReader IsNot Nothing AndAlso Not MyReader.IsClosed Then
                     MyReader.Close()
                 End If
                 If automations = Automations.AutoOpenAndCloseAndDisposeConnection OrElse automations = Automations.AutoCloseAndDisposeConnection Then
-                    If  MyConn IsNot Nothing Then
+                    If MyConn IsNot Nothing Then
                         If MyConn.State <> ConnectionState.Closed Then
                             MyConn.Close()
                         End If
@@ -485,11 +461,11 @@ Namespace CompuMaster.Data.DataQuery
             Catch ex As Exception
                 Throw New CompuMaster.Data.DataQuery.DataException(MyCmd, ex)
             Finally
-                If Not MyReader Is Nothing AndAlso Not MyReader.IsClosed Then
+                If MyReader IsNot Nothing AndAlso Not MyReader.IsClosed Then
                     MyReader.Close()
                 End If
                 If automations = Automations.AutoOpenAndCloseAndDisposeConnection OrElse automations = Automations.AutoCloseAndDisposeConnection Then
-                    If Not MyCmd.Connection Is Nothing Then
+                    If MyCmd.Connection IsNot Nothing Then
                         If MyCmd.Connection.State <> ConnectionState.Closed Then
                             MyCmd.Connection.Close()
                         End If
@@ -515,7 +491,7 @@ Namespace CompuMaster.Data.DataQuery
             Dim MyCmd As IDbCommand = MyConn.CreateCommand
             MyCmd.CommandText = commandText
             MyCmd.CommandType = commandType
-            If Not sqlParameters Is Nothing Then
+            If sqlParameters IsNot Nothing Then
                 For Each MySqlParam As IDataParameter In sqlParameters
                     MyCmd.Parameters.Add(MySqlParam)
                 Next
@@ -523,7 +499,7 @@ Namespace CompuMaster.Data.DataQuery
             Dim MyReader As IDataReader = Nothing
             Try
                 If automations = Automations.AutoOpenAndCloseAndDisposeConnection OrElse automations = Automations.AutoOpenConnection Then
-                    If  MyConn IsNot Nothing AndAlso MyConn.State <> ConnectionState.Open Then
+                    If MyConn IsNot Nothing AndAlso MyConn.State <> ConnectionState.Open Then
                         MyConn.Open()
                     End If
                 End If
@@ -534,11 +510,11 @@ Namespace CompuMaster.Data.DataQuery
             Catch ex As Exception
                 Throw New CompuMaster.Data.DataQuery.DataException(MyCmd, ex)
             Finally
-                If Not MyReader Is Nothing AndAlso Not MyReader.IsClosed Then
+                If MyReader IsNot Nothing AndAlso Not MyReader.IsClosed Then
                     MyReader.Close()
                 End If
                 If automations = Automations.AutoOpenAndCloseAndDisposeConnection OrElse automations = Automations.AutoCloseAndDisposeConnection Then
-                    If  MyConn IsNot Nothing Then
+                    If MyConn IsNot Nothing Then
                         If MyConn.State <> ConnectionState.Closed Then
                             MyConn.Close()
                         End If
@@ -575,11 +551,11 @@ Namespace CompuMaster.Data.DataQuery
             Catch ex As Exception
                 Throw New CompuMaster.Data.DataQuery.DataException(MyCmd, ex)
             Finally
-                If Not MyReader Is Nothing AndAlso Not MyReader.IsClosed Then
+                If MyReader IsNot Nothing AndAlso Not MyReader.IsClosed Then
                     MyReader.Close()
                 End If
                 If automations = Automations.AutoOpenAndCloseAndDisposeConnection OrElse automations = Automations.AutoCloseAndDisposeConnection Then
-                    If Not MyCmd.Connection Is Nothing Then
+                    If MyCmd.Connection IsNot Nothing Then
                         If MyCmd.Connection.State <> ConnectionState.Closed Then
                             MyCmd.Connection.Close()
                         End If
@@ -607,7 +583,7 @@ Namespace CompuMaster.Data.DataQuery
             Dim MyCmd As IDbCommand = MyConn.CreateCommand
             MyCmd.CommandText = commandText
             MyCmd.CommandType = commandType
-            If Not sqlParameters Is Nothing Then
+            If sqlParameters IsNot Nothing Then
                 For Each MySqlParam As IDataParameter In sqlParameters
                     MyCmd.Parameters.Add(MySqlParam)
                 Next
@@ -616,7 +592,7 @@ Namespace CompuMaster.Data.DataQuery
             Dim Result As New Hashtable
             Try
                 If automations = Automations.AutoOpenAndCloseAndDisposeConnection OrElse automations = Automations.AutoOpenConnection Then
-                    If  MyConn IsNot Nothing AndAlso MyConn.State <> ConnectionState.Open Then
+                    If MyConn IsNot Nothing AndAlso MyConn.State <> ConnectionState.Open Then
                         MyConn.Open()
                     End If
                 End If
@@ -627,11 +603,11 @@ Namespace CompuMaster.Data.DataQuery
             Catch ex As Exception
                 Throw New CompuMaster.Data.DataQuery.DataException(MyCmd, ex)
             Finally
-                If Not MyReader Is Nothing AndAlso Not MyReader.IsClosed Then
+                If MyReader IsNot Nothing AndAlso Not MyReader.IsClosed Then
                     MyReader.Close()
                 End If
                 If automations = Automations.AutoOpenAndCloseAndDisposeConnection OrElse automations = Automations.AutoCloseAndDisposeConnection Then
-                    If  MyConn IsNot Nothing Then
+                    If MyConn IsNot Nothing Then
                         If MyConn.State <> ConnectionState.Closed Then
                             MyConn.Close()
                         End If
@@ -676,11 +652,11 @@ Namespace CompuMaster.Data.DataQuery
             Catch ex As Exception
                 Throw New CompuMaster.Data.DataQuery.DataException(MyCmd, ex)
             Finally
-                If Not MyReader Is Nothing AndAlso Not MyReader.IsClosed Then
+                If MyReader IsNot Nothing AndAlso Not MyReader.IsClosed Then
                     MyReader.Close()
                 End If
                 If automations = Automations.AutoOpenAndCloseAndDisposeConnection OrElse automations = Automations.AutoCloseAndDisposeConnection Then
-                    If Not MyCmd.Connection Is Nothing Then
+                    If MyCmd.Connection IsNot Nothing Then
                         If MyCmd.Connection.State <> ConnectionState.Closed Then
                             MyCmd.Connection.Close()
                         End If
@@ -725,11 +701,11 @@ Namespace CompuMaster.Data.DataQuery
             Catch ex As Exception
                 Throw New CompuMaster.Data.DataQuery.DataException(MyCmd, ex)
             Finally
-                If Not MyReader Is Nothing AndAlso Not MyReader.IsClosed Then
+                If MyReader IsNot Nothing AndAlso Not MyReader.IsClosed Then
                     MyReader.Close()
                 End If
                 If automations = Automations.AutoOpenAndCloseAndDisposeConnection OrElse automations = Automations.AutoCloseAndDisposeConnection Then
-                    If Not MyCmd.Connection Is Nothing Then
+                    If MyCmd.Connection IsNot Nothing Then
                         If MyCmd.Connection.State <> ConnectionState.Closed Then
                             MyCmd.Connection.Close()
                         End If
@@ -781,11 +757,11 @@ Namespace CompuMaster.Data.DataQuery
             Catch ex As Exception
                 Throw New CompuMaster.Data.DataQuery.DataException(MyCmd, ex)
             Finally
-                If Not MyReader Is Nothing AndAlso Not MyReader.IsClosed Then
+                If MyReader IsNot Nothing AndAlso Not MyReader.IsClosed Then
                     MyReader.Close()
                 End If
                 If automations = Automations.AutoOpenAndCloseAndDisposeConnection OrElse automations = Automations.AutoCloseAndDisposeConnection Then
-                    If Not MyCmd.Connection Is Nothing Then
+                    If MyCmd.Connection IsNot Nothing Then
                         If MyCmd.Connection.State <> ConnectionState.Closed Then
                             MyCmd.Connection.Close()
                         End If
@@ -837,11 +813,11 @@ Namespace CompuMaster.Data.DataQuery
             Catch ex As Exception
                 Throw New CompuMaster.Data.DataQuery.DataException(MyCmd, ex)
             Finally
-                If Not MyReader Is Nothing AndAlso Not MyReader.IsClosed Then
+                If MyReader IsNot Nothing AndAlso Not MyReader.IsClosed Then
                     MyReader.Close()
                 End If
                 If automations = Automations.AutoOpenAndCloseAndDisposeConnection OrElse automations = Automations.AutoCloseAndDisposeConnection Then
-                    If Not MyCmd.Connection Is Nothing Then
+                    If MyCmd.Connection IsNot Nothing Then
                         If MyCmd.Connection.State <> ConnectionState.Closed Then
                             MyCmd.Connection.Close()
                         End If
@@ -892,7 +868,7 @@ Namespace CompuMaster.Data.DataQuery
             If Not commandTimeout < 0 Then
                 MyCmd.CommandTimeout = commandTimeout
             End If
-            If Not sqlParameters Is Nothing Then
+            If sqlParameters IsNot Nothing Then
                 For Each MySqlParam As IDataParameter In sqlParameters
                     MyCmd.Parameters.Add(MySqlParam)
                 Next
@@ -900,7 +876,7 @@ Namespace CompuMaster.Data.DataQuery
             Dim Result As IDataReader
             Try
                 If automations = Automations.AutoOpenAndCloseAndDisposeConnection OrElse automations = Automations.AutoOpenConnection Then
-                    If  MyConn IsNot Nothing AndAlso MyConn.State <> ConnectionState.Open Then
+                    If MyConn IsNot Nothing AndAlso MyConn.State <> ConnectionState.Open Then
                         MyConn.Open()
                     End If
                 End If
@@ -930,7 +906,7 @@ Namespace CompuMaster.Data.DataQuery
             Dim MyCmd As IDbCommand = MyConn.CreateCommand
             MyCmd.CommandText = commandText
             MyCmd.CommandType = commandType
-            If Not sqlParameters Is Nothing Then
+            If sqlParameters IsNot Nothing Then
                 For Each MySqlParam As IDataParameter In sqlParameters
                     MyCmd.Parameters.Add(MySqlParam)
                 Next
@@ -938,7 +914,7 @@ Namespace CompuMaster.Data.DataQuery
             Dim Result As IDataReader
             Try
                 If automations = Automations.AutoOpenAndCloseAndDisposeConnection OrElse automations = Automations.AutoOpenConnection Then
-                    If  MyConn IsNot Nothing AndAlso MyConn.State <> ConnectionState.Open Then
+                    If MyConn IsNot Nothing AndAlso MyConn.State <> ConnectionState.Open Then
                         MyConn.Open()
                     End If
                 End If
@@ -1014,7 +990,7 @@ Namespace CompuMaster.Data.DataQuery
             Catch ex As Exception
                 Throw New CompuMaster.Data.DataQuery.DataException(dbCommand, ex)
             Finally
-                If Not MyReader Is Nothing AndAlso MyReader.IsClosed = False Then
+                If MyReader IsNot Nothing AndAlso MyReader.IsClosed = False Then
                     MyReader.Close()
                 End If
                 If automations = Automations.AutoOpenAndCloseAndDisposeConnection OrElse automations = Automations.AutoCloseAndDisposeConnection Then
@@ -1042,7 +1018,7 @@ Namespace CompuMaster.Data.DataQuery
                 MyCmd.CommandTimeout = commandTimeout
             End If
             MyCmd.CommandText = commandText
-            If Not sqlParameters Is Nothing Then
+            If sqlParameters IsNot Nothing Then
                 For Each MySqlParam As IDataParameter In sqlParameters
                     MyCmd.Parameters.Add(MySqlParam)
                 Next
@@ -1110,7 +1086,7 @@ Namespace CompuMaster.Data.DataQuery
             Catch ex As Exception
                 Throw New CompuMaster.Data.DataQuery.DataException(dbCommand, ex)
             Finally
-                If Not MyReader Is Nothing AndAlso MyReader.IsClosed = False Then
+                If MyReader IsNot Nothing AndAlso MyReader.IsClosed = False Then
                     MyReader.Close()
                 End If
                 If automations = Automations.AutoOpenAndCloseAndDisposeConnection OrElse automations = Automations.AutoCloseAndDisposeConnection Then
@@ -1125,7 +1101,7 @@ Namespace CompuMaster.Data.DataQuery
         ''' </summary>
         ''' <param name="connection">The connection to close and dispose</param>
         Public Sub CloseAndDisposeConnection(ByVal connection As IDbConnection)
-            If Not connection Is Nothing Then
+            If connection IsNot Nothing Then
                 If CType(connection, Object).GetType Is GetType(SqlClient.SqlConnection) Then
                     If connection.State <> ConnectionState.Closed Then
                         connection.Close()
@@ -1149,7 +1125,7 @@ Namespace CompuMaster.Data.DataQuery
         ''' </summary>
         ''' <param name="connection">The connection to close</param>
         Public Sub CloseConnection(ByVal connection As IDbConnection)
-            If Not connection Is Nothing Then
+            If connection IsNot Nothing Then
                 If CType(connection, Object) Is GetType(SqlClient.SqlConnection) Then
                     If connection.State <> ConnectionState.Closed Then
                         connection.Close()
@@ -1172,7 +1148,7 @@ Namespace CompuMaster.Data.DataQuery
         ''' <param name="connection">The connection to open</param>
         Public Sub OpenConnection(ByVal connection As IDbConnection)
             If connection Is Nothing Then
-                Throw New ArgumentNullException("connection")
+                Throw New ArgumentNullException(NameOf(connection))
             End If
             If connection.State <> ConnectionState.Open Then
                 connection.Open()

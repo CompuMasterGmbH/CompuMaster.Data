@@ -6,7 +6,7 @@ Namespace CompuMaster.Data
     ''' <summary>
     '''     Provides simplified read access to XLS(X/M/B) files via MS OLE-DB/ODBC Jet Providers
     ''' </summary>
-    Public Class XlsReader
+    Public NotInheritable Class XlsReader
 
         ''' <summary>
         '''     Read from an excel file

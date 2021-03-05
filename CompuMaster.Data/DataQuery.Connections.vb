@@ -752,10 +752,13 @@ Namespace CompuMaster.Data.DataQuery
             End If
             Return CType(Result.ToArray(GetType(OdbcTableDescriptor)), OdbcTableDescriptor())
         End Function
+
         ''' <summary>
         ''' In case that no usable data drivers are available on a x64 platform, this exception will be fired
         ''' </summary>
         ''' <remarks></remarks>
+        <CodeAnalysis.SuppressMessage("Design", "CA1032:Implement standard exception constructors", Justification:="<Ausstehend>")>
+        <CodeAnalysis.SuppressMessage("Usage", "CA2237:Mark ISerializable types with serializable", Justification:="<Ausstehend>")>
         Public Class Office2010x64OleDbOdbcEngineRequiredException
             Inherits System.Exception
 

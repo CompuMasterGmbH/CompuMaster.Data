@@ -2,12 +2,8 @@ Imports NUnit.Framework
 
 Namespace CompuMaster.Test.Data.DataQuery
 
+    <CodeAnalysis.SuppressMessage("Design", "CA1031:Do not catch general exception types", Justification:="<Ausstehend>")>
     <TestFixture(Category:="DB Connections")> Public Class Connections
-
-        <Test(), Obsolete> Public Sub DataException()
-            Dim ex As New CompuMaster.Data.DataQuery.AnyIDataProvider.DataException(Nothing, Nothing)
-            Assert.Pass("No exception thrown - all is perfect :-)")
-        End Sub
 
         <Test()> Public Sub CloseAndDisposeConnectionNpgSql()
             Dim conn As System.Data.IDbConnection

@@ -7,8 +7,9 @@ Namespace CompuMaster.Data.DataQuery
     ''' Identify the runtime platform
     ''' </summary>
     ''' <remarks></remarks>
-    Public Class PlatformTools
+    Public NotInheritable Class PlatformTools
 
+#Disable Warning CA1027 ' Mark enums with FlagsAttribute
         Public Enum ClrRuntimePlatform As Short
             x32 = 32
             x64 = 64
@@ -19,6 +20,7 @@ Namespace CompuMaster.Data.DataQuery
             x64 = 64
             x32 = 32
         End Enum
+#Enable Warning CA1027 ' Mark enums with FlagsAttribute
 
         ''' <summary>
         ''' Indicates wether the current application runs in 32bit mode or in 64bit mode (relevant e.g. for the ODBC drivers to load)
@@ -43,7 +45,7 @@ Namespace CompuMaster.Data.DataQuery
         ''' <returns></returns>
         ''' <remarks></remarks>
         Public Shared Function CreateDataConnection(ByVal provider As String, ByVal connectionString As String) As IDbConnection
-            Dim MyConn As System.Data.IDbConnection = Nothing
+            Dim MyConn As System.Data.IDbConnection
             If provider = "SqlClient" Then
                 MyConn = New System.Data.SqlClient.SqlConnection(connectionString)
             ElseIf provider = "ODBC" Then

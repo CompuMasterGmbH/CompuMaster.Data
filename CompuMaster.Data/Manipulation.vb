@@ -685,6 +685,8 @@ Namespace CompuMaster.Data
         ''' <summary>
         ''' An exception on data update
         ''' </summary>
+        <CodeAnalysis.SuppressMessage("Design", "CA1032:Implement standard exception constructors", Justification:="<Ausstehend>")>
+        <CodeAnalysis.SuppressMessage("Usage", "CA2237:Mark ISerializable types with serializable", Justification:="SqlDataAdapter possibly not Seriaizable (as is)")>
         Public Class SqlDataAdapterException
             Inherits Exception
 
