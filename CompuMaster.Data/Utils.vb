@@ -6,7 +6,7 @@ Namespace CompuMaster.Data
     ''' <summary>
     ''' Utils for converting and handling database data
     ''' </summary>
-    Public Class Utils
+    Public NotInheritable Class Utils
 
 #Region "NoDBNull"
         ''' <summary>
@@ -990,7 +990,7 @@ Namespace CompuMaster.Data
         End Function
 
         Public Shared Function ReadStringDataFromUri(ByVal uri As String, ByVal encodingName As String, ByVal ignoreSslValidationExceptions As Boolean) As String
-            Return ReadStringDataFromUri(CType(Nothing, System.Net.WebClient), uri, encodingName, False)
+            Return ReadStringDataFromUri(CType(Nothing, System.Net.WebClient), uri, encodingName, ignoreSslValidationExceptions)
         End Function
 
         Public Shared Function ReadStringDataFromUri(ByVal client As System.Net.WebClient, ByVal uri As String, ByVal encodingName As String) As String
@@ -998,7 +998,7 @@ Namespace CompuMaster.Data
         End Function
 
         Public Shared Function ReadStringDataFromUri(ByVal client As System.Net.WebClient, ByVal uri As String, ByVal encodingName As String, ByVal ignoreSslValidationExceptions As Boolean) As String
-            Return ReadStringDataFromUri(client, uri, encodingName, False, CType(Nothing, String))
+            Return ReadStringDataFromUri(client, uri, encodingName, ignoreSslValidationExceptions, CType(Nothing, String))
         End Function
 
         Public Shared Function ReadStringDataFromUri(ByVal client As System.Net.WebClient, ByVal uri As String, ByVal encodingName As String, ByVal ignoreSslValidationExceptions As Boolean, ByVal postData As String) As String
@@ -1063,7 +1063,7 @@ Namespace CompuMaster.Data
                 End If
 #If Not NET_1_1 Then
             Finally
-            System.Net.ServicePointManager.ServerCertificateValidationCallback = CurrentValidationCallback
+                System.Net.ServicePointManager.ServerCertificateValidationCallback = CurrentValidationCallback
             End Try
 #End If
         End Function
