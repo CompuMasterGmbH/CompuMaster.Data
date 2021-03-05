@@ -76,82 +76,93 @@ Namespace CompuMaster.Data.DataQuery
         End Function
 
         ''' <summary>
-        ''' Enumerates the OLE DB providers currently installed on the running machine
+        ''' Write some additional details on installed OleDb providers to console output
+        ''' </summary>
+        Friend Shared Sub ConsolOutputListOfInstalledOleDbProviders()
+            Dim InstalledProviders As Generic.List(Of String) = InstalledOleDbProvidersList()
+            Console.WriteLine("Installed OleDB providers: " & InstalledProviders.Count)
+            If InstalledProviders.Count > 0 Then
+                Console.WriteLine("- " & String.Join(System.Environment.NewLine & "- ", InstalledProviders.ToArray))
+            End If
+        End Sub
+
+        ''' <summary>
+        ''' List of names of all installed OleDbProviders
+        ''' </summary>
+        ''' <returns></returns>
+        Public Shared Function InstalledOleDbProvidersList() As Generic.List(Of String)
+            Dim ProviderReader As System.Data.OleDb.OleDbDataReader = System.Data.OleDb.OleDbEnumerator.GetRootEnumerator
+            Dim ProviderTable As DataTable = CompuMaster.Data.DataTables.ConvertDataReaderToDataTable(ProviderReader)
+            Return CompuMaster.Data.DataTables.ConvertColumnValuesIntoList(Of String)(ProviderTable.Columns("SOURCES_NAME"))
+        End Function
+
+        ''' <summary>
+        ''' List of names and descriptions of all installed OleDbProviders
+        ''' </summary>
+        ''' <returns></returns>
+        Public Shared Function InstalledOleDbProvidersWithDescription() As Generic.List(Of Generic.KeyValuePair(Of String, String))
+            Dim ProviderReader As System.Data.OleDb.OleDbDataReader = System.Data.OleDb.OleDbEnumerator.GetRootEnumerator
+            Dim ProviderTable As DataTable = CompuMaster.Data.DataTables.ConvertDataReaderToDataTable(ProviderReader)
+            Return CompuMaster.Data.DataTables.ConvertColumnValuesIntoList(Of String, String)(ProviderTable.Columns("SOURCES_NAME"), ProviderTable.Columns("SOURCES_DESCRIPTION"))
+        End Function
+
+        ''' <summary>
+        ''' Test for the existance of a provider with the specified beginning of name
+        ''' </summary>
+        ''' <param name="nameMustStartWith"></param>
+        ''' <returns></returns>
+        Public Shared Function ProbeOleDbProvider(nameMustStartWith As String) As Boolean
+            Dim Providers As Generic.List(Of String) = InstalledOleDbProvidersList()
+            For MyCounter As Integer = 0 To Providers.Count - 1
+                If Providers(MyCounter).StartsWith(nameMustStartWith) Then Return True
+            Next
+            Return False
+        End Function
+
+        ''' <summary>
+        ''' Enumerates the OLE DB providers currently installed on the running machine for the current process (64bit vs. 32bit)
         ''' </summary>
         ''' <returns>The DictionaryEntry contains the name of the OLE DB provider in the key field, the value field contains the provider description</returns>
-        ''' <remarks>
-        ''' <para>DELAY WARNING: the enumeration by registry keys will take approx. 1,000 ms (!)</para>
-        ''' <para>CONTENT WARNING: the enumeration will return ALL registered providers, but you may not be able to use them because of 32bit vs. 64bit loading problems</para>
-        ''' </remarks>
-        ''' <exception cref="NotImplementedException">Non-Windows(Win32NT)-Platforms are not yet supported</exception>
         Public Shared Function InstalledOleDbProviders() As DictionaryEntry()
-            If System.Environment.OSVersion.Platform = PlatformID.Win32NT Then
-                Dim Providers As New ArrayList
+            Dim ProviderReader As System.Data.OleDb.OleDbDataReader = System.Data.OleDb.OleDbEnumerator.GetRootEnumerator
+            Dim ProviderTable As DataTable = CompuMaster.Data.DataTables.ConvertDataReaderToDataTable(ProviderReader)
+            Return CompuMaster.Data.DataTables.ConvertDataTableToDictionaryEntryArray(ProviderTable.Columns("SOURCES_NAME"), ProviderTable.Columns("SOURCES_DESCRIPTION"))
+        End Function
 
-                ' I am only interested in the CLSID subtree
-                'Dim keyCLSID As Microsoft.Win32.RegistryKey = Microsoft.Win32.Registry.ClassesRoot.OpenSubKey("CLSID", False)
-                Dim keyCLSID As Microsoft.Win32.RegistryKey = Microsoft.Win32.Registry.ClassesRoot.OpenSubKey("CLSID", Microsoft.Win32.RegistryKeyPermissionCheck.ReadSubTree, Security.AccessControl.RegistryRights.ReadKey)
-                Dim keys() As String = keyCLSID.GetSubKeyNames()
-                Dim de As DictionaryEntry
-                Dim i As Int32
-
-                Dim AccessErrors As New Generic.List(Of Exception)
-                ' Search through the tree just one level
-                For i = 0 To keys.Length - 1
-                    Dim key As Microsoft.Win32.RegistryKey = Nothing
-                    Try
-                        'Dim key As Microsoft.Win32.RegistryKey = keyCLSID.OpenSubKey(keys(i), False)
-                        key = keyCLSID.OpenSubKey(keys(i), Microsoft.Win32.RegistryKeyPermissionCheck.ReadSubTree, Security.AccessControl.RegistryRights.ReadKey)
-
-                        ' Search for OLE DB Providers
-                        de = InstalledOleDbProviders_SearchKeys(key)
-                        If Not (de.Key Is Nothing) Then
-                            ' Found one, add it to the Dictionary
-                            Providers.Add(de)
-                        End If
-                    Catch ex As Exception
-                        AccessErrors.Add(New Exception("ERROR at " & keyCLSID.ToString & "\" & keys(i)))
-                    Finally
-                        If Not key Is Nothing Then key.Close()
-                    End Try
-                Next
-                'If AccessErrors.Count > keys.Length / 40 Then '1 access error is usual at Win10 - error situation is with more than 40% errors on all existing sub-keys
-                '    Throw New Exception("AccessErrors=" & AccessErrors.Count)
-                'End If
-                Return CType(Providers.ToArray(GetType(DictionaryEntry)), DictionaryEntry())
+        ''' <summary>
+        ''' Find the newest available provider name starting with "Microsoft.ACE.OLEDB."
+        ''' </summary>
+        ''' <returns></returns>
+        Public Shared Function FindLatestMsOfficeAceOleDbProviderName() As String
+            Dim MatchingProviders As Generic.List(Of String)
+            MatchingProviders = DataQuery.PlatformTools.InstalledOleDbProvidersList.FindAll(
+                Function(value As String) As Boolean
+                    Return value.StartsWith("Microsoft.ACE.OLEDB.")
+                End Function)
+            If MatchingProviders.Count = 0 Then
+                Return Nothing
             Else
-                Throw New NotImplementedException("Support for this method at the current platform not yet implemented")
+                MatchingProviders.Sort()
+                Return MatchingProviders(MatchingProviders.Count - 1)
             End If
         End Function
 
         ''' <summary>
-        ''' Search OLE DB provider registry keys
+        ''' Find the newest available provider name starting with "Microsoft.Jet.OLEDB."
         ''' </summary>
-        ''' <param name="key"></param>
         ''' <returns></returns>
-        ''' <remarks></remarks>
-        ''' <exception cref="NotImplementedException">Non-Windows(Win32NT)-Platforms are not yet supported</exception>
-        Private Shared Function InstalledOleDbProviders_SearchKeys(ByVal key As Microsoft.Win32.RegistryKey) As DictionaryEntry
-            Dim de As DictionaryEntry
-
-            Try
-                'Tries to find the "OLE DB Provider" key
-                'Dim key2 As Microsoft.Win32.RegistryKey = key.OpenSubKey("OLE DB Provider", False)
-                Dim key2 As Microsoft.Win32.RegistryKey = key.OpenSubKey("OLE DB Provider", Microsoft.Win32.RegistryKeyPermissionCheck.ReadSubTree, Security.AccessControl.RegistryRights.ReadKey)
-
-                If Not (key2 Is Nothing) Then
-                    ' Found it, fills the DictionaryEntry
-                    de = New DictionaryEntry()
-                    Dim sValues() As String = key2.GetValueNames()
-                    de.Key = key.OpenSubKey("ProgID", False).GetValue(sValues(0))
-                    Dim sValues2() As String = key2.GetValueNames()
-                    de.Value = key2.GetValue(sValues2(0))
-                    key2.Close()
-                End If
-            Catch ex As Exception
-                Throw New Exception("ERROR at " & key.ToString & "\OLE DB Provider")
-            End Try
-            Return de
+        Public Shared Function FindLatestMsOfficeJetOleDbProviderName() As String
+            Dim MatchingProviders As Generic.List(Of String)
+            MatchingProviders = DataQuery.PlatformTools.InstalledOleDbProvidersList.FindAll(
+                Function(value As String) As Boolean
+                    Return value.StartsWith("Microsoft.Jet.OLEDB.")
+                End Function)
+            If MatchingProviders.Count = 0 Then
+                Return Nothing
+            Else
+                MatchingProviders.Sort()
+                Return MatchingProviders(MatchingProviders.Count - 1)
+            End If
         End Function
 
     End Class

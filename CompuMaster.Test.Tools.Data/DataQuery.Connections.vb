@@ -50,18 +50,34 @@ Namespace CompuMaster.Test.Data.DataQuery
         End Sub
 
         <Test()> Public Sub ReadMsAccessDatabaseMdb()
+            If CompuMaster.Data.DataQuery.PlatformTools.ProbeOleDbProvider("Microsoft.ACE.OLEDB.") = False AndAlso CompuMaster.Data.DataQuery.PlatformTools.ProbeOleDbProvider("Microsoft.Jet.OLEDB.") = False Then
+                Assert.Ignore("No MS Office driver installed")
+            End If
+
             ReadMsAccessDatabaseMdb_Execute("testfiles\test_for_msaccess.mdb")
         End Sub
 
         <Test()> Public Sub ReadMsAccessDatabaseMdb2000()
+            If CompuMaster.Data.DataQuery.PlatformTools.ProbeOleDbProvider("Microsoft.ACE.OLEDB.") = False AndAlso CompuMaster.Data.DataQuery.PlatformTools.ProbeOleDbProvider("Microsoft.Jet.OLEDB.") = False Then
+                Assert.Ignore("No MS Office driver installed")
+            End If
+
             ReadMsAccessDatabaseMdb_Execute("testfiles\test_for_msaccess_2000.mdb")
         End Sub
 
         <Test()> Public Sub ReadMsAccessDatabaseMdb2002UpTo2003()
+            If CompuMaster.Data.DataQuery.PlatformTools.ProbeOleDbProvider("Microsoft.ACE.OLEDB.") = False AndAlso CompuMaster.Data.DataQuery.PlatformTools.ProbeOleDbProvider("Microsoft.Jet.OLEDB.") = False Then
+                Assert.Ignore("No MS Office driver installed")
+            End If
+
             ReadMsAccessDatabaseMdb_Execute("testfiles\test_for_msaccess_2002-2003.mdb")
         End Sub
 
         <Test()> Public Sub ReadMsAccessDatabaseAccdb()
+            If CompuMaster.Data.DataQuery.PlatformTools.ProbeOleDbProvider("Microsoft.ACE.OLEDB.") = False Then
+                Assert.Ignore("No MS Office driver installed")
+            End If
+
             ReadMsAccessDatabaseMdb_Execute("testfiles\test_for_msaccess.accdb")
         End Sub
 
@@ -157,6 +173,10 @@ Namespace CompuMaster.Test.Data.DataQuery
 
 #If Not CI_Build Then
         <Test()> Public Sub MicrosoftExcelOdbcConnection()
+            If CompuMaster.Data.DataQuery.PlatformTools.ProbeOleDbProvider("Microsoft.ACE.OLEDB.") = False AndAlso CompuMaster.Data.DataQuery.PlatformTools.ProbeOleDbProvider("Microsoft.Jet.OLEDB.") = False Then
+                Assert.Ignore("No MS Office driver installed")
+            End If
+
             Console.WriteLine("Trying to find appropriate data provider for platform " & PlatformDependentProcessBitNumber())
             Dim TestFile As String = AssemblyTestEnvironment.TestFileAbsolutePath("testfiles\test_for_lastcell_e70aka97-2003.xls")
             Dim conn As IDbConnection = CompuMaster.Data.DataQuery.Connections.MicrosoftExcelOdbcConnection(TestFile, False, True)
@@ -177,7 +197,7 @@ Namespace CompuMaster.Test.Data.DataQuery
         <Test()> <CodeAnalysis.SuppressMessage("Style", "IDE0028:Initialisierung der Sammlung vereinfachen", Justification:="<Ausstehend>")>
         Public Sub MicrosoftExcelConnectionMatrixByProviderAndExcelFileFormatVersion()
             Dim TestFails As Boolean = False
-            Console.WriteLine("Trying to find appropriate data provider for platform " & PlatformDependentProcessBitNumber())
+            Console.WriteLine("Trying to find appropriate data provider for platform " & PlatformDependentProcessBitNumber() & " and OS " & System.Environment.OSVersion.ToString)
             Console.WriteLine()
             Dim TestFiles As New Generic.Dictionary(Of String, String)
             TestFiles.Add("XLS95", "testfiles\test_for_lastcell_e50aka95.xls")
@@ -191,17 +211,35 @@ Namespace CompuMaster.Test.Data.DataQuery
                 Dim CurrentTestFile As String = AssemblyTestEnvironment.TestFileAbsolutePath(TestFile.Value)
                 Console.Write("Checking " & TestFile.Key & ": ")
                 Dim FoundProviderLookupException As Exception = Nothing
+                Dim IsProviderCurrentlyInstalled As Boolean
+                Select Case System.IO.Path.GetExtension(TestFile.Value).ToLowerInvariant
+                    Case ".xls", ".mdb"
+                        IsProviderCurrentlyInstalled = IsMsOfficeAnyProviderInstalled()
+                    Case Else
+                        IsProviderCurrentlyInstalled = IsMsOfficeAceProviderInstalled()
+                End Select
                 Dim conn As IDbConnection = Nothing
                 Try
                     conn = CompuMaster.Data.DataQuery.Connections.MicrosoftExcelOleDbConnection(CurrentTestFile, False, True)
+                    If conn IsNot Nothing Then
+                        Assert.AreEqual("string", CType(CompuMaster.Data.DataQuery.ExecuteScalar(conn, "SELECT * FROM [test$]", CommandType.Text, Nothing, CompuMaster.Data.DataQuery.AnyIDataProvider.Automations.AutoOpenConnection), String))
+                    End If
                 Catch ex As Exception
                     FoundProviderLookupException = ex
-                    TestFails = True
+                    If IsProviderCurrentlyInstalled = False Then
+                        TestFails = False
+                    Else
+                        TestFails = True
+                    End If
                 End Try
                 If FoundProviderLookupException IsNot Nothing Then
                     Console.WriteLine("FAILED ON PROVIDER LOOKUP: " & FoundProviderLookupException.Message)
+                ElseIf IsProviderCurrentlyInstalled = False Then
+                    Console.WriteLine("DETECTION FOR INSTALLED PROVIDER FAILED, BUT SUCCESS ON PROVIDER LOOKUP: " & conn.GetType.Name & "::" & conn.ConnectionString)
+                    TestFails = True
                 Else
-                    Console.WriteLine(MicrosoftAccessOrExcelConnectionMatrixByProviderAndAccessOrExcelFileFormatVersion_TryOpenConnectionTest(conn, TestFails))
+                    Dim TestResult As String = MicrosoftAccessOrExcelConnectionMatrixByProviderAndAccessOrExcelFileFormatVersion_TryOpenConnectionTest(conn, TestFails)
+                    Console.WriteLine(TestResult)
                 End If
             Next
             'ODBC checks
@@ -211,17 +249,35 @@ Namespace CompuMaster.Test.Data.DataQuery
                 Dim CurrentTestFile As String = AssemblyTestEnvironment.TestFileAbsolutePath(TestFile.Value)
                 Console.Write("Checking " & TestFile.Key & ": ")
                 Dim FoundProviderLookupException As Exception = Nothing
+                Dim IsProviderCurrentlyInstalled As Boolean
+                Select Case System.IO.Path.GetExtension(TestFile.Value).ToLowerInvariant
+                    Case ".xls", ".mdb"
+                        IsProviderCurrentlyInstalled = IsMsOfficeAnyProviderInstalled()
+                    Case Else
+                        IsProviderCurrentlyInstalled = IsMsOfficeAceProviderInstalled()
+                End Select
                 Dim conn As IDbConnection = Nothing
                 Try
                     conn = CompuMaster.Data.DataQuery.Connections.MicrosoftExcelOdbcConnection(CurrentTestFile, False, True)
+                    If conn IsNot Nothing Then
+                        Assert.AreEqual("string", CType(CompuMaster.Data.DataQuery.ExecuteScalar(conn, "SELECT * FROM [test$]", CommandType.Text, Nothing, CompuMaster.Data.DataQuery.AnyIDataProvider.Automations.AutoOpenConnection), String))
+                    End If
                 Catch ex As Exception
                     FoundProviderLookupException = ex
-                    TestFails = True
+                    If IsProviderCurrentlyInstalled = False Then
+                        TestFails = False
+                    Else
+                        TestFails = True
+                    End If
                 End Try
                 If FoundProviderLookupException IsNot Nothing Then
                     Console.WriteLine("FAILED ON PROVIDER LOOKUP: " & FoundProviderLookupException.Message)
+                ElseIf IsProviderCurrentlyInstalled = False Then
+                    Console.WriteLine("DETECTION FOR INSTALLED PROVIDER FAILED, BUT SUCCESS ON PROVIDER LOOKUP: " & conn.GetType.Name & "::" & conn.ConnectionString)
+                    TestFails = True
                 Else
-                    Console.WriteLine(MicrosoftAccessOrExcelConnectionMatrixByProviderAndAccessOrExcelFileFormatVersion_TryOpenConnectionTest(conn, TestFails))
+                    Dim TestResult As String = MicrosoftAccessOrExcelConnectionMatrixByProviderAndAccessOrExcelFileFormatVersion_TryOpenConnectionTest(conn, TestFails)
+                    Console.WriteLine(TestResult)
                 End If
             Next
             'Auto-Lookup checks
@@ -231,17 +287,35 @@ Namespace CompuMaster.Test.Data.DataQuery
                 Dim CurrentTestFile As String = AssemblyTestEnvironment.TestFileAbsolutePath(TestFile.Value)
                 Console.Write("Checking " & TestFile.Key & ": ")
                 Dim FoundProviderLookupException As Exception = Nothing
+                Dim IsProviderCurrentlyInstalled As Boolean
+                Select Case System.IO.Path.GetExtension(TestFile.Value).ToLowerInvariant
+                    Case ".xls", ".mdb"
+                        IsProviderCurrentlyInstalled = IsMsOfficeAnyProviderInstalled()
+                    Case Else
+                        IsProviderCurrentlyInstalled = IsMsOfficeAceProviderInstalled()
+                End Select
                 Dim conn As IDbConnection = Nothing
                 Try
                     conn = CompuMaster.Data.DataQuery.Connections.MicrosoftExcelConnection(CurrentTestFile, False, True)
+                    If conn IsNot Nothing Then
+                        Assert.AreEqual("string", CType(CompuMaster.Data.DataQuery.ExecuteScalar(conn, "SELECT * FROM [test$]", CommandType.Text, Nothing, CompuMaster.Data.DataQuery.AnyIDataProvider.Automations.AutoOpenConnection), String))
+                    End If
                 Catch ex As Exception
                     FoundProviderLookupException = ex
-                    TestFails = True
+                    If IsProviderCurrentlyInstalled = False Then
+                        TestFails = False
+                    Else
+                        TestFails = True
+                    End If
                 End Try
                 If FoundProviderLookupException IsNot Nothing Then
                     Console.WriteLine("FAILED ON PROVIDER LOOKUP: " & FoundProviderLookupException.Message)
+                ElseIf IsProviderCurrentlyInstalled = False Then
+                    Console.WriteLine("DETECTION FOR INSTALLED PROVIDER FAILED, BUT SUCCESS ON PROVIDER LOOKUP: " & conn.GetType.Name & "::" & conn.ConnectionString)
+                    TestFails = True
                 Else
-                    Console.WriteLine(MicrosoftAccessOrExcelConnectionMatrixByProviderAndAccessOrExcelFileFormatVersion_TryOpenConnectionTest(conn, TestFails))
+                    Dim TestResult As String = MicrosoftAccessOrExcelConnectionMatrixByProviderAndAccessOrExcelFileFormatVersion_TryOpenConnectionTest(conn, TestFails)
+                    Console.WriteLine(TestResult)
                 End If
             Next
             If TestFails = True Then
@@ -251,6 +325,19 @@ Namespace CompuMaster.Test.Data.DataQuery
             End If
 
         End Sub
+
+        Private Shared Function IsMsOfficeAnyProviderInstalled() As Boolean
+            Return CompuMaster.Data.DataQuery.PlatformTools.ProbeOleDbProvider("Microsoft.ACE.OLEDB.") OrElse CompuMaster.Data.DataQuery.PlatformTools.ProbeOleDbProvider("Microsoft.Jet.OLEDB.")
+        End Function
+
+        Private Shared Function IsMsOfficeAceProviderInstalled() As Boolean
+            Return CompuMaster.Data.DataQuery.PlatformTools.ProbeOleDbProvider("Microsoft.ACE.OLEDB.")
+        End Function
+
+        Private Shared Function IsMsOfficeJetProviderInstalled() As Boolean
+            Return CompuMaster.Data.DataQuery.PlatformTools.ProbeOleDbProvider("Microsoft.Jet.OLEDB.")
+        End Function
+
 
         <Test()> <CodeAnalysis.SuppressMessage("Style", "IDE0028:Initialisierung der Sammlung vereinfachen", Justification:="<Ausstehend>")>
         Public Sub MicrosoftAccessConnectionMatrixByProviderAndAccessFileFormatVersion()
@@ -268,17 +355,35 @@ Namespace CompuMaster.Test.Data.DataQuery
                 Dim CurrentTestFile As String = AssemblyTestEnvironment.TestFileAbsolutePath(TestFile.Value)
                 Console.Write("Checking " & TestFile.Key & ": ")
                 Dim FoundProviderLookupException As Exception = Nothing
+                Dim IsProviderCurrentlyInstalled As Boolean
+                Select Case System.IO.Path.GetExtension(TestFile.Value).ToLowerInvariant
+                    Case ".xls", ".mdb"
+                        IsProviderCurrentlyInstalled = IsMsOfficeAnyProviderInstalled()
+                    Case Else
+                        IsProviderCurrentlyInstalled = IsMsOfficeAceProviderInstalled()
+                End Select
                 Dim conn As IDbConnection = Nothing
                 Try
                     conn = CompuMaster.Data.DataQuery.Connections.MicrosoftAccessOleDbConnection(CurrentTestFile)
+                    If conn IsNot Nothing Then
+                        Assert.AreEqual("string", CType(CompuMaster.Data.DataQuery.ExecuteScalar(conn, "SELECT * FROM test", CommandType.Text, Nothing, CompuMaster.Data.DataQuery.AnyIDataProvider.Automations.AutoOpenConnection), String))
+                    End If
                 Catch ex As Exception
                     FoundProviderLookupException = ex
-                    TestFails = True
+                    If IsProviderCurrentlyInstalled = False Then
+                        TestFails = False
+                    Else
+                        TestFails = True
+                    End If
                 End Try
                 If FoundProviderLookupException IsNot Nothing Then
                     Console.WriteLine("FAILED ON PROVIDER LOOKUP: " & FoundProviderLookupException.Message)
+                ElseIf IsProviderCurrentlyInstalled = False Then
+                    Console.WriteLine("DETECTION FOR INSTALLED PROVIDER FAILED, BUT SUCCESS ON PROVIDER LOOKUP: " & conn.GetType.Name & "::" & conn.ConnectionString)
+                    TestFails = True
                 Else
-                    Console.WriteLine(MicrosoftAccessOrExcelConnectionMatrixByProviderAndAccessOrExcelFileFormatVersion_TryOpenConnectionTest(conn, TestFails))
+                    Dim TestResult As String = MicrosoftAccessOrExcelConnectionMatrixByProviderAndAccessOrExcelFileFormatVersion_TryOpenConnectionTest(conn, TestFails)
+                    Console.WriteLine(TestResult)
                 End If
             Next
             'ODBC checks
@@ -288,17 +393,35 @@ Namespace CompuMaster.Test.Data.DataQuery
                 Dim CurrentTestFile As String = AssemblyTestEnvironment.TestFileAbsolutePath(TestFile.Value)
                 Console.Write("Checking " & TestFile.Key & ": ")
                 Dim FoundProviderLookupException As Exception = Nothing
+                Dim IsProviderCurrentlyInstalled As Boolean
+                Select Case System.IO.Path.GetExtension(TestFile.Value).ToLowerInvariant
+                    Case ".xls", ".mdb"
+                        IsProviderCurrentlyInstalled = IsMsOfficeAnyProviderInstalled()
+                    Case Else
+                        IsProviderCurrentlyInstalled = IsMsOfficeAceProviderInstalled()
+                End Select
                 Dim conn As IDbConnection = Nothing
                 Try
                     conn = CompuMaster.Data.DataQuery.Connections.MicrosoftAccessOdbcConnection(CurrentTestFile)
+                    If conn IsNot Nothing Then
+                        Assert.AreEqual("string", CType(CompuMaster.Data.DataQuery.ExecuteScalar(conn, "SELECT * FROM test", CommandType.Text, Nothing, CompuMaster.Data.DataQuery.AnyIDataProvider.Automations.AutoOpenConnection), String))
+                    End If
                 Catch ex As Exception
                     FoundProviderLookupException = ex
-                    TestFails = True
+                    If IsProviderCurrentlyInstalled = False Then
+                        TestFails = False
+                    Else
+                        TestFails = True
+                    End If
                 End Try
                 If FoundProviderLookupException IsNot Nothing Then
                     Console.WriteLine("FAILED ON PROVIDER LOOKUP: " & FoundProviderLookupException.Message)
+                ElseIf IsProviderCurrentlyInstalled = False Then
+                    Console.WriteLine("DETECTION FOR INSTALLED PROVIDER FAILED, BUT SUCCESS ON PROVIDER LOOKUP: " & conn.GetType.Name & "::" & conn.ConnectionString)
+                    TestFails = True
                 Else
-                    Console.WriteLine(MicrosoftAccessOrExcelConnectionMatrixByProviderAndAccessOrExcelFileFormatVersion_TryOpenConnectionTest(conn, TestFails))
+                    Dim TestResult As String = MicrosoftAccessOrExcelConnectionMatrixByProviderAndAccessOrExcelFileFormatVersion_TryOpenConnectionTest(conn, TestFails)
+                    Console.WriteLine(TestResult)
                 End If
             Next
             'Auto-Lookup checks
@@ -308,17 +431,35 @@ Namespace CompuMaster.Test.Data.DataQuery
                 Dim CurrentTestFile As String = AssemblyTestEnvironment.TestFileAbsolutePath(TestFile.Value)
                 Console.Write("Checking " & TestFile.Key & ": ")
                 Dim FoundProviderLookupException As Exception = Nothing
+                Dim IsProviderCurrentlyInstalled As Boolean
+                Select Case System.IO.Path.GetExtension(TestFile.Value).ToLowerInvariant
+                    Case ".xls", ".mdb"
+                        IsProviderCurrentlyInstalled = IsMsOfficeAnyProviderInstalled()
+                    Case Else
+                        IsProviderCurrentlyInstalled = IsMsOfficeAceProviderInstalled()
+                End Select
                 Dim conn As IDbConnection = Nothing
                 Try
                     conn = CompuMaster.Data.DataQuery.Connections.MicrosoftAccessConnection(CurrentTestFile)
+                    If conn IsNot Nothing Then
+                        Assert.AreEqual("string", CType(CompuMaster.Data.DataQuery.ExecuteScalar(conn, "SELECT * FROM test", CommandType.Text, Nothing, CompuMaster.Data.DataQuery.AnyIDataProvider.Automations.AutoOpenConnection), String))
+                    End If
                 Catch ex As Exception
                     FoundProviderLookupException = ex
-                    TestFails = True
+                    If IsProviderCurrentlyInstalled = False Then
+                        TestFails = False
+                    Else
+                        TestFails = True
+                    End If
                 End Try
                 If FoundProviderLookupException IsNot Nothing Then
                     Console.WriteLine("FAILED ON PROVIDER LOOKUP: " & FoundProviderLookupException.Message)
+                ElseIf IsProviderCurrentlyInstalled = False Then
+                    Console.WriteLine("DETECTION FOR INSTALLED PROVIDER FAILED, BUT SUCCESS ON PROVIDER LOOKUP: " & conn.GetType.Name & "::" & conn.ConnectionString)
+                    TestFails = True
                 Else
-                    Console.WriteLine(MicrosoftAccessOrExcelConnectionMatrixByProviderAndAccessOrExcelFileFormatVersion_TryOpenConnectionTest(conn, TestFails))
+                    Dim TestResult As String = MicrosoftAccessOrExcelConnectionMatrixByProviderAndAccessOrExcelFileFormatVersion_TryOpenConnectionTest(conn, TestFails)
+                    Console.WriteLine(TestResult)
                 End If
             Next
             If TestFails = True Then
@@ -339,8 +480,13 @@ Namespace CompuMaster.Test.Data.DataQuery
             End If
 
             Try
-                CompuMaster.Data.DataQuery.OpenConnection(conn)
-                Result &= " WORKING"
+                If conn.ConnectionString = Nothing Then
+                    Result &= " FAILED ON OPENING: MISSING CONNECTION-STRING"
+                    TestFails = True
+                Else
+                    CompuMaster.Data.DataQuery.OpenConnection(conn)
+                    Result &= " WORKING"
+                End If
             Catch ex As Exception
                 Result &= " FAILED ON OPENING: " & ex.Message
                 TestFails = True
@@ -351,6 +497,10 @@ Namespace CompuMaster.Test.Data.DataQuery
         End Function
 
         <Test()> Public Sub MicrosoftExcelOledbConnection()
+            If CompuMaster.Data.DataQuery.PlatformTools.ProbeOleDbProvider("Microsoft.ACE.OLEDB.") = False AndAlso CompuMaster.Data.DataQuery.PlatformTools.ProbeOleDbProvider("Microsoft.Jet.OLEDB.") = False Then
+                Assert.Ignore("No MS Office driver installed")
+            End If
+
             Console.WriteLine("Trying to find appropriate data provider for platform " & PlatformDependentProcessBitNumber())
             Dim TestFile As String = AssemblyTestEnvironment.TestFileAbsolutePath("testfiles\test_for_lastcell_e70aka97-2003.xls")
             Dim conn As IDbConnection = CompuMaster.Data.DataQuery.Connections.MicrosoftExcelOleDbConnection(TestFile, False, True)
@@ -369,6 +519,10 @@ Namespace CompuMaster.Test.Data.DataQuery
         End Sub
 
         <Test()> Public Sub MicrosoftExcelConnection()
+            If CompuMaster.Data.DataQuery.PlatformTools.ProbeOleDbProvider("Microsoft.ACE.OLEDB.") = False AndAlso CompuMaster.Data.DataQuery.PlatformTools.ProbeOleDbProvider("Microsoft.Jet.OLEDB.") = False Then
+                Assert.Ignore("No MS Office driver installed")
+            End If
+
             Console.WriteLine("Trying to find appropriate data provider for platform " & PlatformDependentProcessBitNumber())
             Dim TestFile As String = AssemblyTestEnvironment.TestFileAbsolutePath("testfiles\test_for_lastcell_e70aka97-2003.xls")
             Dim conn As IDbConnection = CompuMaster.Data.DataQuery.Connections.MicrosoftExcelConnection(TestFile, False, True)
@@ -388,6 +542,10 @@ Namespace CompuMaster.Test.Data.DataQuery
         End Sub
 
         <Test()> Public Sub MicrosoftAccessOdbcConnection()
+            If CompuMaster.Data.DataQuery.PlatformTools.ProbeOleDbProvider("Microsoft.ACE.OLEDB.") = False AndAlso CompuMaster.Data.DataQuery.PlatformTools.ProbeOleDbProvider("Microsoft.Jet.OLEDB.") = False Then
+                Assert.Ignore("No MS Office driver installed")
+            End If
+
             Console.WriteLine("Trying to find appropriate data provider for platform " & PlatformDependentProcessBitNumber())
             Dim TestFile As String = AssemblyTestEnvironment.TestFileAbsolutePath("testfiles\test_for_msaccess.mdb")
             Dim conn As IDbConnection = CompuMaster.Data.DataQuery.Connections.MicrosoftAccessOdbcConnection(TestFile)
@@ -406,6 +564,10 @@ Namespace CompuMaster.Test.Data.DataQuery
         End Sub
 
         <Test()> Public Sub MicrosoftAccessOledbConnection()
+            If CompuMaster.Data.DataQuery.PlatformTools.ProbeOleDbProvider("Microsoft.ACE.OLEDB.") = False AndAlso CompuMaster.Data.DataQuery.PlatformTools.ProbeOleDbProvider("Microsoft.Jet.OLEDB.") = False Then
+                Assert.Ignore("No MS Office driver installed")
+            End If
+
             Console.WriteLine("Trying to find appropriate data provider for platform " & PlatformDependentProcessBitNumber())
             Dim TestFile As String = AssemblyTestEnvironment.TestFileAbsolutePath("testfiles\test_for_msaccess.mdb")
             Dim conn As IDbConnection = CompuMaster.Data.DataQuery.Connections.MicrosoftAccessOleDbConnection(TestFile)
@@ -464,6 +626,10 @@ Namespace CompuMaster.Test.Data.DataQuery
         End Function
 
         <Test()> Public Sub MicrosoftAccessConnection()
+            If CompuMaster.Data.DataQuery.PlatformTools.ProbeOleDbProvider("Microsoft.ACE.OLEDB.") = False AndAlso CompuMaster.Data.DataQuery.PlatformTools.ProbeOleDbProvider("Microsoft.Jet.OLEDB.") = False Then
+                Assert.Ignore("No MS Office driver installed")
+            End If
+
             Console.WriteLine("Trying to find appropriate data provider for platform " & PlatformDependentProcessBitNumber())
             Dim TestFile As String = AssemblyTestEnvironment.TestFileAbsolutePath("testfiles\test_for_msaccess.mdb")
             Dim conn As IDbConnection = CompuMaster.Data.DataQuery.Connections.MicrosoftAccessConnection(TestFile)
@@ -492,6 +658,10 @@ Namespace CompuMaster.Test.Data.DataQuery
 
 #If Not CI_Build Then
         <Test()> Public Sub ReadMsAccessDatabaseEnumeratedTable()
+            If CompuMaster.Data.DataQuery.PlatformTools.ProbeOleDbProvider("Microsoft.ACE.OLEDB.") = False AndAlso CompuMaster.Data.DataQuery.PlatformTools.ProbeOleDbProvider("Microsoft.Jet.OLEDB.") = False Then
+                Assert.Ignore("No MS Office driver installed")
+            End If
+
             Dim TestFile As String = AssemblyTestEnvironment.TestFileAbsolutePath("testfiles\test_for_msaccess.mdb")
             Dim MyConn As IDbConnection = CompuMaster.Data.DataQuery.Connections.MicrosoftAccessConnection(TestFile)
             Dim table As DataTable

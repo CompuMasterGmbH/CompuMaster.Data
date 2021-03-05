@@ -1290,7 +1290,7 @@ Namespace CompuMaster.Data
         End Function
 
         ''' <summary>
-        ''' Copy the values of a data column into an arraylist
+        ''' Copy the values of a data column into an arraylist (except DBNull values)
         ''' </summary>
         ''' <param name="column">The column which contains the data</param>
         ''' <returns>An array containing data with type of the column's datatype OR with type of DBNull</returns>
@@ -1302,7 +1302,7 @@ Namespace CompuMaster.Data
         ''' <summary>
         '''     Convert a data table column to a generic list (except DBNull values)
         ''' </summary>
-        ''' <param name="column">The column which shall be used to fill the arraylist</param>
+        ''' <param name="column">The column which shall be used</param>
         ''' <returns>An array containing data with type of the column's datatype OR with type of DBNull</returns>
         ''' <remarks>
         ''' </remarks>
@@ -1325,7 +1325,7 @@ Namespace CompuMaster.Data
         '''     Convert a data table column to a generic list (except DBNull values)
         ''' </summary>
         ''' <param name="data">The data table with the content</param>
-        ''' <param name="selectedColumnIndex">The column which shall be used to fill the arraylist</param>
+        ''' <param name="selectedColumnIndex">The column which shall be usedt</param>
         ''' <returns>An array containing data with type of the column's datatype OR with type of DBNull</returns>
         ''' <remarks>
         ''' </remarks>
@@ -1334,6 +1334,61 @@ Namespace CompuMaster.Data
             For MyCounter As Integer = 0 To data.Rows.Count - 1
                 If Not IsDBNull(data.Rows(MyCounter)(selectedColumnIndex)) Then
                     Result.Add(CType(data.Rows(MyCounter)(selectedColumnIndex), T))
+                End If
+            Next
+            Return Result
+        End Function
+
+        ''' <summary>
+        ''' Copy the values of a data column into an arraylist (except rows with DBNull values in both columns)
+        ''' </summary>
+        ''' <param name="column1">The column which contains the data</param>
+        ''' <param name="column2">The column which contains the data</param>
+        ''' <returns>An array containing data with type of the column's datatype OR with type of DBNull</returns>
+        ''' <remarks></remarks>
+        Public Shared Function ConvertColumnValuesIntoList(Of T1, T2)(ByVal column1 As DataColumn, ByVal column2 As DataColumn) As Generic.List(Of Generic.KeyValuePair(Of T1, T2))
+            If column1.Table IsNot column2.Table Then Throw New ArgumentException("Tables of both columns must be the same")
+            Return ConvertDataTableToList(Of T1, T2)(column1.Table, column1.Ordinal, column2.Ordinal)
+        End Function
+
+        ''' <summary>
+        '''     Convert a data table column to a generic list (except rows with DBNull values in both columns)
+        ''' </summary>
+        ''' <param name="column1">The column which contains the data</param>
+        ''' <param name="column2">The column which contains the data</param>
+        ''' <returns>An array containing data with type of the column's datatype OR with type of DBNull</returns>
+        ''' <remarks>
+        ''' </remarks>
+        Public Shared Function ConvertDataTableToList(Of T1, T2)(ByVal column1 As DataColumn, ByVal column2 As DataColumn) As Generic.List(Of Generic.KeyValuePair(Of T1, T2))
+            If column1.Table IsNot column2.Table Then Throw New ArgumentException("Tables of both columns must be the same")
+            Return ConvertDataTableToList(Of T1, T2)(column1.Table, column1.Ordinal, column2.Ordinal)
+        End Function
+
+        ''' <summary>
+        '''     Convert a data table column to a generic list (except rows with DBNull values in both columns)
+        ''' </summary>
+        ''' <param name="data">The first column of this data table will be used</param>
+        ''' <returns>An array containing data with type of the column's datatype OR with type of DBNull</returns>
+        ''' <remarks>
+        ''' </remarks>
+        Public Shared Function ConvertDataTableToList(Of T1, T2)(ByVal data As DataTable) As Generic.List(Of Generic.KeyValuePair(Of T1, T2))
+            Return ConvertDataTableToList(Of T1, T2)(data, 0, 1)
+        End Function
+
+        ''' <summary>
+        '''     Convert a data table column to a generic list (except rows with DBNull values in both columns)
+        ''' </summary>
+        ''' <param name="data">The data table with the content</param>
+        ''' <param name="column1Index">The column which shall be used</param>
+        ''' <param name="column2Index">The column which shall be used</param>
+        ''' <returns>An array containing data with type of the column's datatype OR with type of DBNull</returns>
+        ''' <remarks>
+        ''' </remarks>
+        Public Shared Function ConvertDataTableToList(Of T1, T2)(ByVal data As DataTable, ByVal column1Index As Integer, ByVal column2Index As Integer) As Generic.List(Of Generic.KeyValuePair(Of T1, T2))
+            Dim Result As New System.Collections.Generic.List(Of Generic.KeyValuePair(Of T1, T2))
+            For MyCounter As Integer = 0 To data.Rows.Count - 1
+                If Not IsDBNull(data.Rows(MyCounter)(column1Index)) OrElse Not IsDBNull(data.Rows(MyCounter)(column2Index)) Then
+                    Result.Add(New Generic.KeyValuePair(Of T1, T2)(Utils.NoDBNull(Of T1)(data.Rows(MyCounter)(column1Index)), Utils.NoDBNull(Of T2)(CType(data.Rows(MyCounter)(column2Index), T2))))
                 End If
             Next
             Return Result
@@ -1660,7 +1715,7 @@ Namespace CompuMaster.Data
             If dataRows.Length > 0 Then
                 TableName = dataRows(0).Table.TableName
             End If
-            Return ConvertToPlainTextTableWithFixedColumnWidthsInternal(dataRows, TableName, SuggestColumnWidthsForFixedPlainTables(dataRows), Nothing)
+            Return ConvertToPlainTextTableWithFixedColumnWidthsInternal(dataRows, TableName, SuggestColumnWidthsForFixedPlainTables(dataRows, 100.0), Nothing)
         End Function
 
         ''' <summary>
@@ -1674,7 +1729,7 @@ Namespace CompuMaster.Data
             If dataRows.Length > 0 Then
                 TableName = dataRows(0).Table.TableName
             End If
-            Return ConvertToPlainTextTableWithFixedColumnWidthsInternal(dataRows, TableName, SuggestColumnWidthsForFixedPlainTables(dataRows, columnFormatting), columnFormatting)
+            Return ConvertToPlainTextTableWithFixedColumnWidthsInternal(dataRows, TableName, SuggestColumnWidthsForFixedPlainTables(dataRows, Nothing, 100.0, columnFormatting), columnFormatting)
         End Function
 
         ''' <summary>
@@ -1684,7 +1739,7 @@ Namespace CompuMaster.Data
         ''' <returns>All rows are separated by fixed width. If no rows have been processed, the user will get notified about this fact</returns>
         ''' <remarks></remarks>
         Public Shared Function ConvertToPlainTextTableFixedColumnWidths(ByVal dataRow As DataRow) As String
-            Return ConvertToPlainTextTableWithFixedColumnWidthsInternal(New System.Data.DataRow() {dataRow}, dataRow.Table.TableName, SuggestColumnWidthsForFixedPlainTables(New System.Data.DataRow() {dataRow}), Nothing)
+            Return ConvertToPlainTextTableWithFixedColumnWidthsInternal(New System.Data.DataRow() {dataRow}, dataRow.Table.TableName, SuggestColumnWidthsForFixedPlainTables(New System.Data.DataRow() {dataRow}, 100.0), Nothing)
         End Function
 
         ''' <summary>
@@ -1694,7 +1749,7 @@ Namespace CompuMaster.Data
         ''' <returns>All rows are separated by fixed width. If no rows have been processed, the user will get notified about this fact</returns>
         ''' <remarks></remarks>
         Public Shared Function ConvertToPlainTextTableFixedColumnWidths(ByVal dataRow As DataRow, columnFormatting As DataColumnToString) As String
-            Return ConvertToPlainTextTableWithFixedColumnWidthsInternal(New System.Data.DataRow() {dataRow}, dataRow.Table.TableName, SuggestColumnWidthsForFixedPlainTables(New System.Data.DataRow() {dataRow}, columnFormatting), columnFormatting)
+            Return ConvertToPlainTextTableWithFixedColumnWidthsInternal(New System.Data.DataRow() {dataRow}, dataRow.Table.TableName, SuggestColumnWidthsForFixedPlainTables(New System.Data.DataRow() {dataRow}, Nothing, 100.0, columnFormatting), columnFormatting)
         End Function
 
         ''' <summary>
@@ -1704,7 +1759,7 @@ Namespace CompuMaster.Data
         ''' <returns>All rows are separated by fixed width. If no rows have been processed, the user will get notified about this fact</returns>
         ''' <remarks></remarks>
         Public Shared Function ConvertToPlainTextTableFixedColumnWidths(ByVal dataTable As DataTable) As String
-            Return ConvertToPlainTextTableWithFixedColumnWidthsInternal(dataTable.Rows, dataTable.TableName, SuggestColumnWidthsForFixedPlainTables(dataTable.Rows), Nothing)
+            Return ConvertToPlainTextTableWithFixedColumnWidthsInternal(dataTable.Rows, dataTable.TableName, SuggestColumnWidthsForFixedPlainTables(dataTable.Rows, 100.0), Nothing)
         End Function
 
         ''' <summary>
@@ -1714,7 +1769,7 @@ Namespace CompuMaster.Data
         ''' <returns>All rows are separated by fixed width. If no rows have been processed, the user will get notified about this fact</returns>
         ''' <remarks></remarks>
         Public Shared Function ConvertToPlainTextTableFixedColumnWidths(ByVal dataTable As DataTable, columnFormatting As DataColumnToString) As String
-            Return ConvertToPlainTextTableWithFixedColumnWidthsInternal(dataTable.Rows, dataTable.TableName, SuggestColumnWidthsForFixedPlainTables(dataTable.Rows, columnFormatting), columnFormatting)
+            Return ConvertToPlainTextTableWithFixedColumnWidthsInternal(dataTable.Rows, dataTable.TableName, SuggestColumnWidthsForFixedPlainTables(dataTable.Rows, Nothing, 100.0, columnFormatting), columnFormatting)
         End Function
 
         ''' <summary>
@@ -1761,7 +1816,7 @@ Namespace CompuMaster.Data
         Public Shared Function ConvertToPlainTextTableFixedColumnWidths(ByVal dataTable As DataTable, ByVal minimumColumnWidth As Integer,
                                                                         maximumColumnWidth As Integer,
                                                                         columnFormatting As DataColumnToString) As String
-            Dim columnWidths As Integer() = SuggestColumnWidthsForFixedPlainTables(dataTable.Rows, dataTable, 100, columnFormatting)
+            Dim columnWidths As Integer() = SuggestColumnWidthsForFixedPlainTables(dataTable.Rows, dataTable, 100.0, columnFormatting)
             If columnWidths Is Nothing Then
                 Dim newWidths(dataTable.Columns.Count - 1) As Integer
                 For MyCounter As Integer = 0 To dataTable.Columns.Count - 1
@@ -1832,7 +1887,7 @@ Namespace CompuMaster.Data
                                                                         maximumColumnWidth As Integer, verticalSeparatorHeader As String,
                                                                         verticalSeparatorCells As String, crossSeparator As String,
                                                                         horizontalSeparatorHeadline As Char, horizontalSeparatorCells As Char) As String
-            Dim columnWidths As Integer() = SuggestColumnWidthsForFixedPlainTables(dataTable.Rows, dataTable, 100, Nothing)
+            Dim columnWidths As Integer() = SuggestColumnWidthsForFixedPlainTables(dataTable.Rows, dataTable, 100.0, Nothing)
             If columnWidths Is Nothing Then
                 Dim newWidths(dataTable.Columns.Count - 1) As Integer
                 For MyCounter As Integer = 0 To dataTable.Columns.Count - 1
@@ -1861,7 +1916,7 @@ Namespace CompuMaster.Data
                                                                         verticalSeparatorCells As String, crossSeparator As String,
                                                                         horizontalSeparatorHeadline As Char, horizontalSeparatorCells As Char,
                                                                         columnFormatting As DataColumnToString) As String
-            Dim columnWidths As Integer() = SuggestColumnWidthsForFixedPlainTables(dataTable.Rows, dataTable, 100, columnFormatting)
+            Dim columnWidths As Integer() = SuggestColumnWidthsForFixedPlainTables(dataTable.Rows, dataTable, 100.0, columnFormatting)
             If columnWidths Is Nothing Then
                 Dim newWidths(dataTable.Columns.Count - 1) As Integer
                 For MyCounter As Integer = 0 To dataTable.Columns.Count - 1
@@ -1927,7 +1982,7 @@ Namespace CompuMaster.Data
             'For DokuWiki, use
             Const verticalSeparatorHeader As String = " ^ "
             Const verticalSeparatorCells As String = " | "
-            Dim fixedColumnWidths As Integer() = SuggestColumnWidthsForFixedPlainTables(table.Rows, table, 100, columnFormatting)
+            Dim fixedColumnWidths As Integer() = SuggestColumnWidthsForFixedPlainTables(table.Rows, table, 100.0, columnFormatting)
             Dim Result As New System.Text.StringBuilder
             Dim rows As DataRowCollection = table.Rows
             'Add table name
@@ -2001,6 +2056,16 @@ Namespace CompuMaster.Data
         End Function
 
         ''' <summary>
+        ''' Suggests column widths for a table using as minimum 2 chars, but minimum header string length, but also either full cell length for number/date/time columns or for all other types a given % value of all values should be visible completely
+        ''' </summary>
+        ''' <param name="table"></param>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        Public Shared Function SuggestColumnWidthsForFixedPlainTables(table As System.Data.DataTable, optimalWidthWhenPercentageNumberOfRowsFitIntoCell As Double) As Integer()
+            Return SuggestColumnWidthsForFixedPlainTables(table.Rows, table, optimalWidthWhenPercentageNumberOfRowsFitIntoCell, Nothing)
+        End Function
+
+        ''' <summary>
         ''' Suggests column widths for a table using as minimum 2 chars, but minimum header string length, but also either full cell length for number/date/time columns or for all other types 80 % of all values should be visible completely
         ''' </summary>
         ''' <param name="rows"></param>
@@ -2015,6 +2080,20 @@ Namespace CompuMaster.Data
         End Function
 
         ''' <summary>
+        ''' Suggests column widths for a table using as minimum 2 chars, but minimum header string length, but also either full cell length for number/date/time columns or for all other types a given % value of all values should be visible completely
+        ''' </summary>
+        ''' <param name="rows"></param>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        Public Shared Function SuggestColumnWidthsForFixedPlainTables(rows As System.Data.DataRowCollection, optimalWidthWhenPercentageNumberOfRowsFitIntoCell As Double) As Integer()
+            If rows.Count = 0 Then
+                Return Nothing
+            Else
+                Return SuggestColumnWidthsForFixedPlainTables(rows, rows(0).Table, optimalWidthWhenPercentageNumberOfRowsFitIntoCell, Nothing)
+            End If
+        End Function
+
+        ''' <summary>
         ''' Suggests column widths for a table using as minimum 2 chars, but minimum header string length, but also either full cell length for number/date/time columns or for all other types 80 % of all values should be visible completely
         ''' </summary>
         ''' <param name="rows"></param>
@@ -2025,6 +2104,20 @@ Namespace CompuMaster.Data
                 Return Nothing
             Else
                 Return SuggestColumnWidthsForFixedPlainTables(rows, rows(0).Table, 80, Nothing)
+            End If
+        End Function
+
+        ''' <summary>
+        ''' Suggests column widths for a table using as minimum 2 chars, but minimum header string length, but also either full cell length for number/date/time columns or for all other types a given % value of all values should be visible completely
+        ''' </summary>
+        ''' <param name="rows"></param>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        Public Shared Function SuggestColumnWidthsForFixedPlainTables(rows As System.Data.DataRow(), optimalWidthWhenPercentageNumberOfRowsFitIntoCell As Double) As Integer()
+            If rows.Length = 0 Then
+                Return Nothing
+            Else
+                Return SuggestColumnWidthsForFixedPlainTables(rows, rows(0).Table, optimalWidthWhenPercentageNumberOfRowsFitIntoCell, Nothing)
             End If
         End Function
 
@@ -2066,15 +2159,18 @@ Namespace CompuMaster.Data
             End If
         End Function
         ''' <summary>
-        ''' Suggests column widths for a table using as minimum 2 chars, but minimum header string length, but also either full cell length for number/date/time columns or for all other types 80 % of all values should be visible completely
+        ''' Suggests column widths for a table using as minimum 2 chars, but minimum header string length, but also either full cell length for number/date/time columns or for all other types a given % value of all values should be visible completely
         ''' </summary>
         ''' <param name="rows"></param>
         ''' <param name="table"></param>
         ''' <returns></returns>
         ''' <remarks></remarks>
-        Private Shared Function SuggestColumnWidthsForFixedPlainTables(rows As System.Data.DataRow(), table As DataTable,
+        Private Shared Function SuggestColumnWidthsForFixedPlainTables(rows As System.Data.DataRow(), ByVal table As DataTable,
                                                                        optimalWidthWhenPercentageNumberOfRowsFitIntoCell As Double,
                                                                        columnFormatting As DataColumnToString) As Integer()
+            If table Is Nothing AndAlso rows IsNot Nothing AndAlso rows.Length > 0 Then
+                table = rows(0).Table
+            End If
             Dim colWidths As New ArrayList
             For ColCounter As Integer = 0 To table.Columns.Count - 1
                 Dim MinWidthForHeader As Integer
@@ -2111,7 +2207,7 @@ Namespace CompuMaster.Data
         End Function
 
         ''' <summary>
-        ''' Suggests column widths for a table using as minimum 2 chars, but minimum header string length, but also either full cell length for number/date/time columns or for all other types 80 % of all values should be visible completely
+        ''' Suggests column widths for a table using as minimum 2 chars, but minimum header string length, but also either full cell length for number/date/time columns or for all other types a given % value of all values should be visible completely
         ''' </summary>
         ''' <param name="rows"></param>
         ''' <param name="table"></param>
@@ -2369,7 +2465,7 @@ Namespace CompuMaster.Data
         End Function
 
         ''' <summary>
-        ''' Lookup a value which is at 80 % position
+        ''' Lookup a value which is at a given % value position
         ''' </summary>
         ''' <param name="values"></param>
         ''' <returns></returns>
@@ -2818,18 +2914,17 @@ Namespace CompuMaster.Data
         ''' <returns></returns>
         ''' <remarks></remarks>
         Private Shared Function CloneDataColumn(ByVal templateColumn As DataColumn) As DataColumn
-            Dim Result As New DataColumn With {
-                .AllowDBNull = templateColumn.AllowDBNull,
-                .AutoIncrement = False,
-                .Caption = templateColumn.Caption,
-                .ColumnName = templateColumn.ColumnName,
-                .DataType = templateColumn.DataType,
-                .DefaultValue = templateColumn.DefaultValue,
-                .MaxLength = templateColumn.MaxLength,
-                .ReadOnly = templateColumn.ReadOnly,
-                .Unique = False,
-                .DateTimeMode = templateColumn.DateTimeMode
-            }
+            Dim Result As New DataColumn
+            Result.AllowDBNull = templateColumn.AllowDBNull
+            Result.AutoIncrement = False
+            Result.Caption = templateColumn.Caption
+            Result.ColumnName = templateColumn.ColumnName
+            Result.DataType = templateColumn.DataType
+            Result.DefaultValue = templateColumn.DefaultValue
+            Result.MaxLength = templateColumn.MaxLength
+            Result.ReadOnly = templateColumn.ReadOnly
+            Result.Unique = False
+            Result.DateTimeMode = templateColumn.DateTimeMode
             Return Result
         End Function
 
