@@ -1,10 +1,15 @@
 Imports NUnit.Framework
 
-Namespace CompuMaster.Test.Data
+Namespace CompuMaster.Test.Data.WinPlatformsOnly
 
     <TestFixture(Category:="XLS Reader")> Public Class XlsReader
 
-#If Not CI_Build Then
+        Public Sub New()
+#If CI_Build Then
+            Assert.Ignore("XsReader expected to be not working on non-windows platforms")
+#End If
+        End Sub
+
         <Test()> Public Sub ReadLastCell()
             Dim TestFile As String = AssemblyTestEnvironment.TestFileAbsolutePath("testfiles\test_for_lastcell_e70aka97-2003.xls")
 
@@ -66,7 +71,6 @@ Namespace CompuMaster.Test.Data
             CompuMaster.Data.DatabaseManagement.CreateMsExcelFile(TestFile, CompuMaster.Data.DatabaseManagement.MsExcelFileType.MsExcel2007Xlsm)
             CompuMaster.Data.XlsReader.ReadDataTableFromXlsFile(TestFile, "Table1")
         End Sub
-#End If
 
     End Class
 

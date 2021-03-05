@@ -6,7 +6,7 @@ Namespace CompuMaster.Test.Data
         Public Sub New()
         End Sub
 
-        Private _OriginCulture As System.Globalization.CultureInfo = System.Threading.Thread.CurrentThread.CurrentCulture
+        Private ReadOnly _OriginCulture As System.Globalization.CultureInfo = System.Threading.Thread.CurrentThread.CurrentCulture
         <TearDown> Public Sub ResetCulture()
             System.Threading.Thread.CurrentThread.CurrentCulture = _OriginCulture
         End Sub
@@ -88,7 +88,8 @@ Namespace CompuMaster.Test.Data
             NUnit.Framework.Assert.AreEqual(2, testoutputdata.Rows.Count, "JW #101")
         End Sub
 
-        <Test> Public Sub ReadDataTableFromCsvFileViaHttpRequestWithCorrectCharsetEncoding(<Values(1, 2, 3)> testType As Byte)
+        <Test> <CodeAnalysis.SuppressMessage("Performance", "CA1825:Avoid zero-length array allocations.", Justification:="<Ausstehend>")>
+        Public Sub ReadDataTableFromCsvFileViaHttpRequestWithCorrectCharsetEncoding(<Values(1, 2, 3)> testType As Byte)
             Const GithubCountryCodesTestUrl As String = "https://raw.githubusercontent.com/datasets/country-codes/master/data/country-codes.csv"
             Dim CheckEntries As String() = New String() {"CHN", "RUS", "FRA", "ZWE"} 'ISO3166-1-Alpha-3
 
@@ -506,7 +507,7 @@ Namespace CompuMaster.Test.Data
             WriteFactoryXxlDataTableToCsvTextStringAndReRead(XxlFactorySampleTableMightCausingOutOfMemoryExceptionWhenInStringInComplete(500)) '500 mio. lines
         End Sub
 
-        Sub WriteFactoryXxlDataTableToCsvTextStringAndReRead(t As DataTable)
+        Private Shared Sub WriteFactoryXxlDataTableToCsvTextStringAndReRead(t As DataTable)
             Dim TempFile As New CompuMaster.Test.Data.TemporaryFile(".csv")
             Console.WriteLine("Using temporary file: " & TempFile.Path)
 
@@ -619,7 +620,7 @@ Namespace CompuMaster.Test.Data
             For MyCounter As Integer = 0 To Result.Columns.Count - 1
                 If Result.Columns(MyCounter).DataType Is GetType(String) Then
                     For MyRowCounter As Integer = 0 To Result.Rows.Count - 1
-                        If IsDBNull(Result.Rows(MyRowCounter)(MyCounter)) = False AndAlso Not Result.Rows(MyRowCounter)(MyCounter) Is Nothing Then
+                        If IsDBNull(Result.Rows(MyRowCounter)(MyCounter)) = False AndAlso Result.Rows(MyRowCounter)(MyCounter) IsNot Nothing Then
                             Result.Rows(MyRowCounter)(MyCounter) = CType(Result.Rows(MyRowCounter)(MyCounter), String).Replace(searchValue, replaceValue)
                         End If
                     Next

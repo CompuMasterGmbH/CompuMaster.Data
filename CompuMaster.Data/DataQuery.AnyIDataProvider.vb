@@ -128,19 +128,19 @@ Namespace CompuMaster.Data.DataQuery
             Dim Result As Object
             Try
                 If automations = Automations.AutoOpenAndCloseAndDisposeConnection OrElse automations = Automations.AutoOpenConnection Then
-                    If Not MyConn Is Nothing AndAlso MyConn.State <> ConnectionState.Open Then
+                    If  MyConn IsNot Nothing AndAlso MyConn.State <> ConnectionState.Open Then
                         MyConn.Open()
                     End If
                 End If
                 Result = MyCmd.ExecuteNonQuery
-                If Not MyCmd Is Nothing Then
+                If  MyCmd IsNot Nothing Then
                     MyCmd.Dispose()
                 End If
             Catch ex As Exception
                 Throw New CompuMaster.Data.DataQuery.DataException(MyCmd, ex)
             Finally
                 If automations = Automations.AutoOpenAndCloseAndDisposeConnection OrElse automations = Automations.AutoCloseAndDisposeConnection Then
-                    If Not MyConn Is Nothing Then
+                    If  MyConn IsNot Nothing Then
                         If MyConn.State <> ConnectionState.Closed Then
                             MyConn.Close()
                         End If
@@ -161,7 +161,7 @@ Namespace CompuMaster.Data.DataQuery
             Dim Result As Integer
             Try
                 If automations = Automations.AutoOpenAndCloseAndDisposeConnection OrElse automations = Automations.AutoOpenConnection Then
-                    If Not MyConn Is Nothing AndAlso MyConn.State <> ConnectionState.Open Then
+                    If  MyConn IsNot Nothing AndAlso MyConn.State <> ConnectionState.Open Then
                         MyConn.Open()
                     End If
                 End If
@@ -170,7 +170,7 @@ Namespace CompuMaster.Data.DataQuery
                 Throw New CompuMaster.Data.DataQuery.DataException(MyCmd, ex)
             Finally
                 If automations = Automations.AutoOpenAndCloseAndDisposeConnection OrElse automations = Automations.AutoCloseAndDisposeConnection Then
-                    If Not MyConn Is Nothing Then
+                    If  MyConn IsNot Nothing Then
                         If MyConn.State <> ConnectionState.Closed Then
                             MyConn.Close()
                         End If
@@ -225,19 +225,19 @@ Namespace CompuMaster.Data.DataQuery
             Dim Result As Object
             Try
                 If automations = Automations.AutoOpenAndCloseAndDisposeConnection OrElse automations = Automations.AutoOpenConnection Then
-                    If Not MyConn Is Nothing AndAlso MyConn.State <> ConnectionState.Open Then
+                    If  MyConn IsNot Nothing AndAlso MyConn.State <> ConnectionState.Open Then
                         MyConn.Open()
                     End If
                 End If
                 Result = MyCmd.ExecuteScalar
-                If Not MyCmd Is Nothing Then
+                If  MyCmd IsNot Nothing Then
                     MyCmd.Dispose()
                 End If
             Catch ex As Exception
                 Throw New CompuMaster.Data.DataQuery.DataException(MyCmd, ex)
             Finally
                 If automations = Automations.AutoOpenAndCloseAndDisposeConnection OrElse automations = Automations.AutoCloseAndDisposeConnection Then
-                    If Not MyConn Is Nothing Then
+                    If  MyConn IsNot Nothing Then
                         If MyConn.State <> ConnectionState.Closed Then
                             MyConn.Close()
                         End If
@@ -268,7 +268,7 @@ Namespace CompuMaster.Data.DataQuery
                 Throw New CompuMaster.Data.DataQuery.DataException(MyCmd, ex)
             Finally
                 If automations = Automations.AutoOpenAndCloseAndDisposeConnection OrElse automations = Automations.AutoCloseAndDisposeConnection Then
-                    If Not MyConn Is Nothing Then
+                    If  MyConn IsNot Nothing Then
                         If MyConn.State <> ConnectionState.Closed Then
                             MyConn.Close()
                         End If
@@ -350,7 +350,7 @@ Namespace CompuMaster.Data.DataQuery
             Dim Result As New ArrayList
             Try
                 If automations = Automations.AutoOpenAndCloseAndDisposeConnection OrElse automations = Automations.AutoOpenConnection Then
-                    If Not MyConn Is Nothing AndAlso MyConn.State <> ConnectionState.Open Then
+                    If  MyConn IsNot Nothing AndAlso MyConn.State <> ConnectionState.Open Then
                         MyConn.Open()
                     End If
                 End If
@@ -365,7 +365,7 @@ Namespace CompuMaster.Data.DataQuery
                     MyReader.Close()
                 End If
                 If automations = Automations.AutoOpenAndCloseAndDisposeConnection OrElse automations = Automations.AutoCloseAndDisposeConnection Then
-                    If Not MyConn Is Nothing Then
+                    If  MyConn IsNot Nothing Then
                         If MyConn.State <> ConnectionState.Closed Then
                             MyConn.Close()
                         End If
@@ -383,7 +383,7 @@ Namespace CompuMaster.Data.DataQuery
             Dim Result As New System.Collections.Generic.List(Of TValue)
             Try
                 If automations = Automations.AutoOpenAndCloseAndDisposeConnection OrElse automations = Automations.AutoOpenConnection Then
-                    If Not MyConn Is Nothing AndAlso MyConn.State <> ConnectionState.Open Then
+                    If  MyConn IsNot Nothing AndAlso MyConn.State <> ConnectionState.Open Then
                         MyConn.Open()
                     End If
                 End If
@@ -402,7 +402,7 @@ Namespace CompuMaster.Data.DataQuery
                     MyReader.Close()
                 End If
                 If automations = Automations.AutoOpenAndCloseAndDisposeConnection OrElse automations = Automations.AutoCloseAndDisposeConnection Then
-                    If Not MyConn Is Nothing Then
+                    If  MyConn IsNot Nothing Then
                         If MyConn.State <> ConnectionState.Closed Then
                             MyConn.Close()
                         End If
@@ -420,7 +420,7 @@ Namespace CompuMaster.Data.DataQuery
             Dim Result As New System.Collections.Generic.List(Of TValue?)
             Try
                 If automations = Automations.AutoOpenAndCloseAndDisposeConnection OrElse automations = Automations.AutoOpenConnection Then
-                    If Not MyConn Is Nothing AndAlso MyConn.State <> ConnectionState.Open Then
+                    If  MyConn IsNot Nothing AndAlso MyConn.State <> ConnectionState.Open Then
                         MyConn.Open()
                     End If
                 End If
@@ -439,7 +439,7 @@ Namespace CompuMaster.Data.DataQuery
                     MyReader.Close()
                 End If
                 If automations = Automations.AutoOpenAndCloseAndDisposeConnection OrElse automations = Automations.AutoCloseAndDisposeConnection Then
-                    If Not MyConn Is Nothing Then
+                    If  MyConn IsNot Nothing Then
                         If MyConn.State <> ConnectionState.Closed Then
                             MyConn.Close()
                         End If
@@ -523,7 +523,7 @@ Namespace CompuMaster.Data.DataQuery
             Dim MyReader As IDataReader = Nothing
             Try
                 If automations = Automations.AutoOpenAndCloseAndDisposeConnection OrElse automations = Automations.AutoOpenConnection Then
-                    If Not MyConn Is Nothing AndAlso MyConn.State <> ConnectionState.Open Then
+                    If  MyConn IsNot Nothing AndAlso MyConn.State <> ConnectionState.Open Then
                         MyConn.Open()
                     End If
                 End If
@@ -538,7 +538,7 @@ Namespace CompuMaster.Data.DataQuery
                     MyReader.Close()
                 End If
                 If automations = Automations.AutoOpenAndCloseAndDisposeConnection OrElse automations = Automations.AutoCloseAndDisposeConnection Then
-                    If Not MyConn Is Nothing Then
+                    If  MyConn IsNot Nothing Then
                         If MyConn.State <> ConnectionState.Closed Then
                             MyConn.Close()
                         End If
@@ -616,7 +616,7 @@ Namespace CompuMaster.Data.DataQuery
             Dim Result As New Hashtable
             Try
                 If automations = Automations.AutoOpenAndCloseAndDisposeConnection OrElse automations = Automations.AutoOpenConnection Then
-                    If Not MyConn Is Nothing AndAlso MyConn.State <> ConnectionState.Open Then
+                    If  MyConn IsNot Nothing AndAlso MyConn.State <> ConnectionState.Open Then
                         MyConn.Open()
                     End If
                 End If
@@ -631,7 +631,7 @@ Namespace CompuMaster.Data.DataQuery
                     MyReader.Close()
                 End If
                 If automations = Automations.AutoOpenAndCloseAndDisposeConnection OrElse automations = Automations.AutoCloseAndDisposeConnection Then
-                    If Not MyConn Is Nothing Then
+                    If  MyConn IsNot Nothing Then
                         If MyConn.State <> ConnectionState.Closed Then
                             MyConn.Close()
                         End If
@@ -900,7 +900,7 @@ Namespace CompuMaster.Data.DataQuery
             Dim Result As IDataReader
             Try
                 If automations = Automations.AutoOpenAndCloseAndDisposeConnection OrElse automations = Automations.AutoOpenConnection Then
-                    If Not MyConn Is Nothing AndAlso MyConn.State <> ConnectionState.Open Then
+                    If  MyConn IsNot Nothing AndAlso MyConn.State <> ConnectionState.Open Then
                         MyConn.Open()
                     End If
                 End If
@@ -938,7 +938,7 @@ Namespace CompuMaster.Data.DataQuery
             Dim Result As IDataReader
             Try
                 If automations = Automations.AutoOpenAndCloseAndDisposeConnection OrElse automations = Automations.AutoOpenConnection Then
-                    If Not MyConn Is Nothing AndAlso MyConn.State <> ConnectionState.Open Then
+                    If  MyConn IsNot Nothing AndAlso MyConn.State <> ConnectionState.Open Then
                         MyConn.Open()
                     End If
                 End If

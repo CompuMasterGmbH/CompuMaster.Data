@@ -29,7 +29,9 @@ Namespace CompuMaster.Data
         Private Shared Function ReadDataTableFromCsvReader(ByVal reader As StreamReader, ByVal includesColumnHeaders As Boolean, ByVal cultureFormatProvider As System.Globalization.CultureInfo, ByVal columnWidths As Integer(), ByVal convertEmptyStringsToDBNull As Boolean, lineEncodings As CompuMaster.Data.Csv.ReadLineEncodings, lineEncodingAutoConversions As CompuMaster.Data.Csv.ReadLineEncodingAutoConversion) As DataTable
 
             If cultureFormatProvider Is Nothing Then
+#Disable Warning IDE0059 ' Unnötige Zuweisung eines Werts.
                 cultureFormatProvider = System.Globalization.CultureInfo.InvariantCulture
+#Enable Warning IDE0059 ' Unnötige Zuweisung eines Werts.
             End If
             If columnWidths Is Nothing Then
                 columnWidths = New Integer() {Integer.MaxValue}
@@ -130,7 +132,7 @@ Namespace CompuMaster.Data
                 Result = ReadDataTableFromCsvReader(reader, includesColumnHeaders, System.Globalization.CultureInfo.CurrentCulture, columnWidths, convertEmptyStringsToDBNull, lineEncodings, lineEncodingAutoConversions)
                 Result.TableName = System.IO.Path.GetFileNameWithoutExtension(path)
             Finally
-                If Not reader Is Nothing Then
+                If reader IsNot Nothing Then
                     reader.Close()
                 End If
             End Try
@@ -182,7 +184,7 @@ Namespace CompuMaster.Data
                 Result = ReadDataTableFromCsvReader(reader, includesColumnHeaders, cultureFormatProvider, columnWidths, convertEmptyStringsToDBNull, lineEncodings, lineEncodingAutoConversions)
                 Result.TableName = System.IO.Path.GetFileNameWithoutExtension(path)
             Finally
-                If Not reader Is Nothing Then
+                If reader IsNot Nothing Then
                     reader.Close()
                 End If
             End Try
@@ -210,7 +212,7 @@ Namespace CompuMaster.Data
                 reader = New StreamReader(New MemoryStream(System.Text.Encoding.Unicode.GetBytes(data)), System.Text.Encoding.Unicode, False)
                 Result = ReadDataTableFromCsvReader(reader, includesColumnHeaders, System.Globalization.CultureInfo.CurrentCulture, columnWidths, convertEmptyStringsToDBNull, lineEncodings, lineEncodingAutoConversions)
             Finally
-                If Not reader Is Nothing Then
+                If reader IsNot Nothing Then
                     reader.Close()
                 End If
             End Try
@@ -239,7 +241,7 @@ Namespace CompuMaster.Data
                 reader = New StreamReader(New MemoryStream(System.Text.Encoding.Unicode.GetBytes(data)), System.Text.Encoding.Unicode, False)
                 Result = ReadDataTableFromCsvReader(reader, includesColumnHeaders, cultureFormatProvider, columnWidths, convertEmptyStringsToDBNull, lineEncodings, lineEncodingAutoConversions)
             Finally
-                If Not reader Is Nothing Then
+                If reader IsNot Nothing Then
                     reader.Close()
                 End If
             End Try
@@ -260,7 +262,7 @@ Namespace CompuMaster.Data
         Private Shared Sub SplitFixedCsvLineIntoCellValues(ByRef lineContent As String, ByVal outputList As ArrayList, ByRef startposition As Integer, ByVal columnWidths As Integer())
 
             Dim CurrentColumnValue As System.Text.StringBuilder = Nothing
-            Dim CharPositionCounter As Integer = 0
+            Dim CharPositionCounter As Integer
 
             For CharPositionCounter = startposition To lineContent.Length - 1
                 If CharPositionCounter = startposition Then
@@ -291,7 +293,7 @@ Namespace CompuMaster.Data
             Next
 
             'Add the last column value to the collection
-            If Not CurrentColumnValue Is Nothing AndAlso CurrentColumnValue.Length <> 0 Then
+            If CurrentColumnValue IsNot Nothing AndAlso CurrentColumnValue.Length <> 0 Then
                 outputList.Add(CurrentColumnValue.ToString)
             End If
 
@@ -319,13 +321,13 @@ Namespace CompuMaster.Data
             Return False
         End Function
 
-        Private Shared Function SumOfIntegerValues(ByVal array As Integer(), ByVal sumUpToElementIndex As Integer) As Integer
-            Dim Result As Integer
-            For MyCounter As Integer = 0 To sumUpToElementIndex
-                Result += array(MyCounter)
-            Next
-            Return Result
-        End Function
+        'Private Shared Function SumOfIntegerValues(ByVal array As Integer(), ByVal sumUpToElementIndex As Integer) As Integer
+        '    Dim Result As Integer
+        '    For MyCounter As Integer = 0 To sumUpToElementIndex
+        '        Result += array(MyCounter)
+        '    Next
+        '    Return Result
+        'End Function
 #End Region
 
 #Region "Separator separation"
@@ -368,7 +370,7 @@ Namespace CompuMaster.Data
                 Result = ReadDataTableFromCsvReader(reader, includesColumnHeaders, System.Globalization.CultureInfo.CurrentCulture, columnSeparator, recognizeTextBy, recognizeMultipleColumnSeparatorCharsAsOne, convertEmptyStringsToDBNull, lineEncodings, lineEncodingAutoConversions)
                 Result.TableName = System.IO.Path.GetFileNameWithoutExtension(path)
             Finally
-                If Not reader Is Nothing Then
+                If reader IsNot Nothing Then
                     reader.Close()
                 End If
             End Try
@@ -421,7 +423,7 @@ Namespace CompuMaster.Data
                 Result = ReadDataTableFromCsvReader(reader, includesColumnHeaders, cultureFormatProvider, Nothing, recognizeTextBy, recognizeMultipleColumnSeparatorCharsAsOne, convertEmptyStringsToDBNull, lineEncodings, lineEncodingAutoConversions)
                 Result.TableName = System.IO.Path.GetFileNameWithoutExtension(path)
             Finally
-                If Not reader Is Nothing Then
+                If reader IsNot Nothing Then
                     reader.Close()
                 End If
             End Try
@@ -714,7 +716,7 @@ Namespace CompuMaster.Data
                 reader = New StreamReader(New MemoryStream(System.Text.Encoding.Unicode.GetBytes(data)), System.Text.Encoding.Unicode, False)
                 Result = ReadDataTableFromCsvReader(reader, includesColumnHeaders, System.Globalization.CultureInfo.CurrentCulture, columnSeparator, recognizeTextBy, recognizeMultipleColumnSeparatorCharsAsOne, convertEmptyStringsToDBNull, lineEncodings, lineEncodingAutoConversions)
             Finally
-                If Not reader Is Nothing Then
+                If reader IsNot Nothing Then
                     reader.Close()
                 End If
             End Try
@@ -744,7 +746,7 @@ Namespace CompuMaster.Data
                 reader = New StreamReader(New MemoryStream(System.Text.Encoding.Unicode.GetBytes(data)), System.Text.Encoding.Unicode, False)
                 Result = ReadDataTableFromCsvReader(reader, includesColumnHeaders, cultureFormatProvider, Nothing, recognizeTextBy, recognizeMultipleColumnSeparatorCharsAsOne, convertEmptyStringsToDBNull, lineEncodings, lineEncodingAutoConversions)
             Finally
-                If Not reader Is Nothing Then
+                If reader IsNot Nothing Then
                     reader.Close()
                 End If
             End Try
@@ -761,12 +763,12 @@ Namespace CompuMaster.Data
 
             'Parameter validation
             If data Is Nothing Then
-                Throw New ArgumentNullException("data")
+                Throw New ArgumentNullException(NameOf(data))
             End If
 
             'Ensure that only string columns are here
             For ColCounter As Integer = 0 To data.Columns.Count - 1
-                If Not data.Columns(ColCounter).DataType Is GetType(String) Then
+                If data.Columns(ColCounter).DataType IsNot GetType(String) Then
                     Throw New Exception("All columns must be of data type System.String")
                 End If
             Next
@@ -791,12 +793,12 @@ Namespace CompuMaster.Data
 
             'Parameter validation
             If data Is Nothing Then
-                Throw New ArgumentNullException("data")
+                Throw New ArgumentNullException(NameOf(data))
             End If
 
             'Ensure that only string columns are here
             For ColCounter As Integer = 0 To data.Columns.Count - 1
-                If Not data.Columns(ColCounter).DataType Is GetType(String) Then
+                If data.Columns(ColCounter).DataType IsNot GetType(String) Then
                     Throw New Exception("All columns must be of data type System.String")
                 End If
             Next
@@ -846,7 +848,7 @@ Namespace CompuMaster.Data
                 Dim textStringBuilder As System.Text.StringBuilder = ConvertDataTableToCsv(dataTable, includesColumnHeaders, cultureFormatProvider, columnWidths, lineEncodings)
                 WriteTextStringBuilderToStreamWriter(writer, textStringBuilder)
             Finally
-                If Not writer Is Nothing Then
+                If writer IsNot Nothing Then
                     writer.Close()
                 End If
             End Try
@@ -862,7 +864,7 @@ Namespace CompuMaster.Data
                 Dim textStringBuilder As System.Text.StringBuilder = ConvertDataTableToCsv(dataTable, includesColumnHeaders, cultureFormatProvider, columnSeparator, recognizeTextBy, lineEncodings)
                 WriteTextStringBuilderToStreamWriter(writer, textStringBuilder)
             Finally
-                If Not writer Is Nothing Then
+                If writer IsNot Nothing Then
                     writer.Close()
                 End If
             End Try
@@ -919,42 +921,42 @@ Namespace CompuMaster.Data
                         writer.Append(FixedLengthText(String.Empty, columnWidths(ColCounter), False))
                     ElseIf dataTable.Columns(ColCounter).DataType Is GetType(String) Then
                         'Strings
-                        If Not dataTable.Rows(RowCounter)(ColCounter) Is DBNull.Value Then
+                        If dataTable.Rows(RowCounter)(ColCounter) IsNot DBNull.Value Then
                             writer.Append(FixedLengthText(CsvEncode(CType(dataTable.Rows(RowCounter)(ColCounter), String), Nothing, lineEncodings), columnWidths(ColCounter), False))
                         End If
                     ElseIf dataTable.Columns(ColCounter).DataType Is GetType(System.Double) Then
                         'Doubles
-                        If Not dataTable.Rows(RowCounter)(ColCounter) Is DBNull.Value Then
+                        If dataTable.Rows(RowCounter)(ColCounter) IsNot DBNull.Value Then
                             'Other data types which do not require textual handling
                             writer.Append(FixedLengthText(CType(dataTable.Rows(RowCounter)(ColCounter), Double).ToString(cultureFormatProvider), columnWidths(ColCounter), True))
                         End If
                     ElseIf dataTable.Columns(ColCounter).DataType Is GetType(System.Decimal) Then
                         'Decimals
-                        If Not dataTable.Rows(RowCounter)(ColCounter) Is DBNull.Value Then
+                        If dataTable.Rows(RowCounter)(ColCounter) IsNot DBNull.Value Then
                             'Other data types which do not require textual handling
                             writer.Append(FixedLengthText(CType(dataTable.Rows(RowCounter)(ColCounter), Decimal).ToString(cultureFormatProvider), columnWidths(ColCounter), True))
                         End If
                     ElseIf dataTable.Columns(ColCounter).DataType Is GetType(System.DateTime) Then
                         'Datetime
-                        If Not dataTable.Rows(RowCounter)(ColCounter) Is DBNull.Value Then
+                        If dataTable.Rows(RowCounter)(ColCounter) IsNot DBNull.Value Then
                             'Other data types which do not require textual handling
                             writer.Append(FixedLengthText(CType(dataTable.Rows(RowCounter)(ColCounter), DateTime).ToString(cultureFormatProvider), columnWidths(ColCounter), False))
                         End If
                     ElseIf dataTable.Columns(ColCounter).DataType Is GetType(System.Int16) OrElse dataTable.Columns(ColCounter).DataType Is GetType(System.Int32) OrElse dataTable.Columns(ColCounter).DataType Is GetType(System.Int64) Then
                         'Intxx
-                        If Not dataTable.Rows(RowCounter)(ColCounter) Is DBNull.Value Then
+                        If dataTable.Rows(RowCounter)(ColCounter) IsNot DBNull.Value Then
                             'Other data types which do not require textual handling
                             writer.Append(FixedLengthText(CType(dataTable.Rows(RowCounter)(ColCounter), System.Int64).ToString(cultureFormatProvider), columnWidths(ColCounter), True))
                         End If
                     ElseIf dataTable.Columns(ColCounter).DataType Is GetType(System.UInt16) OrElse dataTable.Columns(ColCounter).DataType Is GetType(System.UInt32) OrElse dataTable.Columns(ColCounter).DataType Is GetType(System.UInt64) Then
                         'UIntxx
-                        If Not dataTable.Rows(RowCounter)(ColCounter) Is DBNull.Value Then
+                        If dataTable.Rows(RowCounter)(ColCounter) IsNot DBNull.Value Then
                             'Other data types which do not require textual handling
                             writer.Append(FixedLengthText(CType(dataTable.Rows(RowCounter)(ColCounter), System.UInt64).ToString(cultureFormatProvider), columnWidths(ColCounter), True))
                         End If
                     Else
                         'Other data types
-                        If Not dataTable.Rows(RowCounter)(ColCounter) Is DBNull.Value Then
+                        If dataTable.Rows(RowCounter)(ColCounter) IsNot DBNull.Value Then
                             'Other data types which do not require textual handling
                             writer.Append(FixedLengthText(CType(dataTable.Rows(RowCounter)(ColCounter), String), columnWidths(ColCounter), False))
                         End If
@@ -1061,7 +1063,7 @@ Namespace CompuMaster.Data
                 Next
 
             Finally
-                If Not writer Is Nothing Then
+                If writer IsNot Nothing Then
                     writer.Close()
                 End If
             End Try
@@ -1183,7 +1185,7 @@ Namespace CompuMaster.Data
                 Next
 
             Finally
-                If Not writer Is Nothing Then
+                If writer IsNot Nothing Then
                     writer.Close()
                 End If
             End Try
@@ -1272,7 +1274,7 @@ Namespace CompuMaster.Data
                 Next
 
             Finally
-                If Not writer Is Nothing Then
+                If writer IsNot Nothing Then
                     writer.Close()
                 End If
             End Try
@@ -1327,7 +1329,7 @@ Namespace CompuMaster.Data
                 Next
 
             Finally
-                If Not writer Is Nothing Then
+                If writer IsNot Nothing Then
                     writer.Close()
                 End If
             End Try
@@ -1363,14 +1365,14 @@ Namespace CompuMaster.Data
                                           writerStream As System.IO.StreamWriter, writerStringBuilder As System.Text.StringBuilder)
             If cellColumnDataType Is GetType(String) Then
                 'Strings
-                If Not cellValue Is DBNull.Value Then
+                If cellValue IsNot DBNull.Value Then
                     If recognizeTextBy <> Nothing Then WriteCellValueToWriter(recognizeTextBy, writerStream, writerStringBuilder)
                     WriteCellValueToWriter(CsvEncode(CType(cellValue, String), recognizeTextBy, lineEncodings), writerStream, writerStringBuilder)
                     If recognizeTextBy <> Nothing Then WriteCellValueToWriter(recognizeTextBy, writerStream, writerStringBuilder)
                 End If
             ElseIf cellColumnDataType Is GetType(System.Double) Then
                 'Doubles
-                If Not cellValue Is DBNull.Value Then
+                If cellValue IsNot DBNull.Value Then
                     'Other data types which do not require textual handling
                     Dim Value As String = CType(cellValue, Double).ToString(cultureFormatProvider)
                     If Value <> "" AndAlso Value.Contains(columnSeparator) Then WriteCellValueToWriter(recognizeTextBy, writerStream, writerStringBuilder)
@@ -1379,7 +1381,7 @@ Namespace CompuMaster.Data
                 End If
             ElseIf cellColumnDataType Is GetType(System.Decimal) Then
                 'Decimals
-                If Not cellValue Is DBNull.Value Then
+                If cellValue IsNot DBNull.Value Then
                     'Other data types which do not require textual handling
                     Dim Value As String = CType(cellValue, Decimal).ToString(cultureFormatProvider)
                     If Value <> "" AndAlso Value.Contains(columnSeparator) Then WriteCellValueToWriter(recognizeTextBy, writerStream, writerStringBuilder)
@@ -1388,7 +1390,7 @@ Namespace CompuMaster.Data
                 End If
             ElseIf cellColumnDataType Is GetType(System.DateTime) Then
                 'Datetime
-                If Not cellValue Is DBNull.Value Then
+                If cellValue IsNot DBNull.Value Then
                     'Other data types which do not require textual handling
                     Dim Value As String
                     If cultureFormatProvider Is Globalization.CultureInfo.InvariantCulture Then
@@ -1402,7 +1404,7 @@ Namespace CompuMaster.Data
                 End If
             Else
                 'Other data types
-                If Not cellValue Is DBNull.Value Then
+                If cellValue IsNot DBNull.Value Then
                     'Other data types which do not require textual handling
                     Dim Value As String = CType(cellValue, String)
                     If Value <> "" AndAlso Value.Contains(columnSeparator) Then WriteCellValueToWriter(recognizeTextBy, writerStream, writerStringBuilder)

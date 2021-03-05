@@ -7,7 +7,7 @@ Namespace CompuMaster.Data
     ''' Provide methods for transferring data from and back to a remote database on a data connection
     ''' </summary>
     ''' <remarks></remarks>
-    Public Class Manipulation
+    Public NotInheritable Class Manipulation
 
         ''' <summary>
         ''' DDL languages
@@ -79,7 +79,7 @@ Namespace CompuMaster.Data
         ''' <param name="connectionBehaviour">Automations regarding the connection state</param>
         ''' <remarks>Missing columns will be added automatically. In case that a column already exist on the remote database and its datatype doesn't match the datatype in the source table, there might be thrown an exception while data transfer.</remarks>
         Public Shared Sub WriteDataSetToDataConnection(ByVal dataSet As DataSet, ByVal dataConnection As IDbConnection, ByVal ddlLanguage As DdlLanguage, ByVal dropExistingRowsInDestinationTable As Boolean, ByVal connectionBehaviour As CompuMaster.Data.DataQuery.Automations)
-            If dataConnection Is Nothing Then Throw New ArgumentNullException("dataConnection")
+            If dataConnection Is Nothing Then Throw New ArgumentNullException(NameOf(dataConnection))
             Try
                 'Auto-Open
                 Select Case connectionBehaviour
@@ -129,13 +129,13 @@ Namespace CompuMaster.Data
         ''' <param name="dropExistingRowsInDestinationTable">If True, all existing rows will be removed first before new rows from the source table will be imported</param>
         ''' <remarks>If the table doesn't exist on the data connection, it will be created automatically if supported by the DDL language. Missing columns will be added automatically. In case that a column already exist on the remote database and its datatype doesn't match the datatype in the source table, there might be thrown an exception while data transfer.</remarks>
         Public Shared Sub WriteDataTableToDataConnection(ByVal sourceTable As DataTable, ByVal remoteTableName As String, ByVal dataConnection As IDbConnection, ByVal ddlLanguage As DdlLanguage, ByVal dropExistingRowsInDestinationTable As Boolean)
-            If dataConnection Is Nothing Then Throw New ArgumentNullException("dataConnection")
+            If dataConnection Is Nothing Then Throw New ArgumentNullException(NameOf(dataConnection))
             If dataConnection.State <> ConnectionState.Open Then Throw New ArgumentException("dataConnection.ConnectionState is not open")
             If remoteTableName = Nothing Then
                 remoteTableName = sourceTable.TableName
             End If
             If remoteTableName = Nothing Then
-                Throw New ArgumentNullException("remoteTableName")
+                Throw New ArgumentNullException(NameOf(remoteTableName))
             End If
             Dim RemoteTable As DataTable = LoadTableStructureWith1RowFromConnection(remoteTableName, dataConnection, True)
 
@@ -180,7 +180,7 @@ Namespace CompuMaster.Data
         ''' <param name="connectionBehaviour">Automations regarding the connection state</param>
         ''' <remarks>If the table doesn't exist on the data connection, it will be created automatically if supported by the DDL language. Missing columns will be added automatically. In case that a column already exist on the remote database and its datatype doesn't match the datatype in the source table, there might be thrown an exception while data transfer.</remarks>
         Public Shared Sub WriteDataTableToDataConnection(ByVal sourceTable As DataTable, ByVal dataConnection As IDbConnection, ByVal ddlLanguage As DdlLanguage, ByVal dropExistingRowsInDestinationTable As Boolean, ByVal connectionBehaviour As CompuMaster.Data.DataQuery.Automations)
-            If dataConnection Is Nothing Then Throw New ArgumentNullException("dataConnection")
+            If dataConnection Is Nothing Then Throw New ArgumentNullException(NameOf(dataConnection))
             Try
                 'Auto-Open
                 Select Case connectionBehaviour
@@ -215,7 +215,7 @@ Namespace CompuMaster.Data
         ''' <param name="connectionBehaviour">Automations regarding the connection state</param>
         ''' <remarks>If the table doesn't exist on the data connection, it will be created automatically if supported by the DDL language. Missing columns will be added automatically. In case that a column already exist on the remote database and its datatype doesn't match the datatype in the source table, there might be thrown an exception while data transfer.</remarks>
         Public Shared Sub WriteDataTableToDataConnection(ByVal sourceTable As DataTable, ByVal remoteTableName As String, ByVal dataConnection As IDbConnection, ByVal ddlLanguage As DdlLanguage, ByVal dropExistingRowsInDestinationTable As Boolean, ByVal connectionBehaviour As CompuMaster.Data.DataQuery.Automations)
-            If dataConnection Is Nothing Then Throw New ArgumentNullException("dataConnection")
+            If dataConnection Is Nothing Then Throw New ArgumentNullException(NameOf(dataConnection))
             Try
                 'Auto-Open
                 Select Case connectionBehaviour
@@ -324,8 +324,8 @@ Namespace CompuMaster.Data
                     Dim ColumnCreationArguments As String = Nothing
                     OpenBrackets = """"
                     CloseBrackets = """"
-                    Dim TableOpenBrackets As String = Nothing
-                    Dim TableCloseBrackets As String = Nothing
+                    Dim TableOpenBrackets As String
+                    Dim TableCloseBrackets As String
                     If remoteTableName.Contains(".""") = False Then
                         TableOpenBrackets = """"
                         TableCloseBrackets = """"
@@ -742,7 +742,7 @@ Namespace CompuMaster.Data
                     CType(container.DataAdapter, SqlClient.SqlDataAdapter).SelectCommand.Transaction = trans
                     'Create missing update command statements
                     Dim sqlBuilder As New SqlClient.SqlCommandBuilder(CType(container.DataAdapter, SqlClient.SqlDataAdapter))
-                    If Not trans Is Nothing Then
+                    If trans IsNot Nothing Then
                         'ATTENTION: using manually created commands leads to not supported situation of columns with NOT NULL but with DEFAULT values
                         'result will be to trials of insertions of NULLs when there would be a default value 
                         'and which will lead to an exception when inserting
@@ -776,12 +776,12 @@ Namespace CompuMaster.Data
                     Catch ex As Exception
                         Throw New SqlDataAdapterException(container.DataAdapter, ex)
                     End Try
-                    If Not trans Is Nothing Then
+                    If trans IsNot Nothing Then
                         trans.Commit()
                         trans.Dispose()
                     End If
                 Catch ex As Exception
-                    If Not trans Is Nothing Then
+                    If trans IsNot Nothing Then
                         trans.Rollback()
                         trans.Dispose()
                     End If

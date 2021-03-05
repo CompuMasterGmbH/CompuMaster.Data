@@ -173,6 +173,7 @@
     <Compile Include="DataTables.vb">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="GlobalSuppressions.vb" />
     <Compile Include="Ldap.vb">
       <SubType>Code</SubType>
     </Compile>

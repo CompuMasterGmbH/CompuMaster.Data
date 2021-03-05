@@ -210,9 +210,10 @@ Namespace CompuMaster.Data
                 Dim Result As ListControlItem()
                 ReDim Result(datatable.Rows.Count - 1)
                 For MyCounter As Integer = 0 To datatable.Rows.Count - 1
-                    Result(MyCounter) = New ListControlItem
-                    Result(MyCounter).Key = datatable.Rows(MyCounter)(0)
-                    Result(MyCounter).Value = datatable.Rows(MyCounter)(1)
+                    Result(MyCounter) = New ListControlItem With {
+                        .Key = datatable.Rows(MyCounter)(0),
+                        .Value = datatable.Rows(MyCounter)(1)
+                    }
                 Next
                 Return Result
             End If
@@ -312,7 +313,7 @@ Namespace CompuMaster.Data
                 End If
             End If
 
-            If Not MyRows Is Nothing AndAlso MyRows.Count > 0 Then
+            If MyRows IsNot Nothing AndAlso MyRows.Count > 0 Then
                 For MyRowCounter As Integer = StartAtRow To LastRowIndex
                     Dim MyNewRow As DataRow = Result.NewRow
                     MyNewRow.ItemArray = MyRows(MyRowCounter).ItemArray
@@ -333,7 +334,7 @@ Namespace CompuMaster.Data
         '''     The resulting DataRow has got the schema from the sourceRow's DataTable, but it hasn't been added to the table yet.
         ''' </remarks>
         Public Shared Function CreateDataRowClone(ByVal sourceRow As DataRow) As DataRow
-            If sourceRow Is Nothing Then Throw New ArgumentNullException("sourceRow")
+            If sourceRow Is Nothing Then Throw New ArgumentNullException(NameOf(sourceRow))
             Dim Result As DataRow = sourceRow.Table.NewRow
             Result.ItemArray = sourceRow.ItemArray
             Return Result
@@ -386,7 +387,7 @@ Namespace CompuMaster.Data
                 topRows = Integer.MaxValue
             End If
 
-            If Not MyRows Is Nothing Then
+            If MyRows IsNot Nothing Then
                 For MyCounter As Integer = 1 To MyRows.Length
                     If MyCounter > topRows Then
                         Exit For
@@ -442,7 +443,7 @@ Namespace CompuMaster.Data
         ''' ATTENTION: the very first column is used as key column and must be unique therefore
         ''' </remarks>
         Friend Shared Function ConvertDataTableToHashtable(ByVal keyColumn As DataColumn, ByVal valueColumn As DataColumn) As Hashtable
-            If Not keyColumn.Table Is valueColumn.Table Then
+            If keyColumn.Table IsNot valueColumn.Table Then
                 Throw New Exception("Key column and value column must be from the same table")
             End If
             Return ConvertDataTableToHashtable(keyColumn.Table, keyColumn.Ordinal, valueColumn.Ordinal)
@@ -500,7 +501,7 @@ Namespace CompuMaster.Data
         ''' <param name="valueColumn">A column which contains the values</param>
         ''' <returns></returns>
         Friend Shared Function ConvertDataTableToDictionaryEntryArray(ByVal keyColumn As DataColumn, ByVal valueColumn As DataColumn) As DictionaryEntry()
-            If Not keyColumn.Table Is valueColumn.Table Then
+            If keyColumn.Table IsNot valueColumn.Table Then
                 Throw New Exception("Key column and value column must be from the same table")
             End If
             Return ConvertDataTableToDictionaryEntryArray(keyColumn.Table, keyColumn.Ordinal, valueColumn.Ordinal)
@@ -653,13 +654,13 @@ Namespace CompuMaster.Data
                 MyConn.Open()
                 MyDA.Fill(MyDataTable)
             Finally
-                If Not MyDA Is Nothing Then
+                If MyDA IsNot Nothing Then
                     MyDA.Dispose()
                 End If
-                If Not MyCmd Is Nothing Then
+                If MyCmd IsNot Nothing Then
                     MyCmd.Dispose()
                 End If
-                If Not MyConn Is Nothing Then
+                If MyConn IsNot Nothing Then
                     If MyConn.State <> ConnectionState.Closed Then
                         MyConn.Close()
                     End If
@@ -689,13 +690,13 @@ Namespace CompuMaster.Data
                 MyConn.Open()
                 MyDA.Fill(MyDataTable)
             Finally
-                If Not MyDA Is Nothing Then
+                If MyDA IsNot Nothing Then
                     MyDA.Dispose()
                 End If
-                If Not MyCmd Is Nothing Then
+                If MyCmd IsNot Nothing Then
                     MyCmd.Dispose()
                 End If
-                If Not MyConn Is Nothing Then
+                If MyConn IsNot Nothing Then
                     If MyConn.State <> ConnectionState.Closed Then
                         MyConn.Close()
                     End If
@@ -889,7 +890,7 @@ Namespace CompuMaster.Data
         ''' <param name="dataTable">The datatable to retrieve the content from</param>
         ''' <returns>All rows are tab separated. If no rows have been processed, the user will get notified about this fact</returns>
         Friend Shared Function ConvertToPlainTextTable(ByVal dataTable As DataTable) As String
-            Return _ConvertToPlainTextTable(dataTable.Rows, dataTable.TableName)
+            Return ConvertToPlainTextTableInternal(dataTable.Rows, dataTable.TableName)
         End Function
 
         ''' <summary>
@@ -933,7 +934,7 @@ Namespace CompuMaster.Data
         ''' <param name="rows">The rows to be processed</param>
         ''' <param name="label">An optional title of the rows</param>
         ''' <returns>All rows are tab separated. If no rows have been processed, the user will get notified about this fact</returns>
-        Private Shared Function _ConvertToPlainTextTable(ByVal rows As DataRowCollection, ByVal label As String) As String
+        Private Shared Function ConvertToPlainTextTableInternal(ByVal rows As DataRowCollection, ByVal label As String) As String
             Const separator As Char = ControlChars.Tab
             Dim Result As New System.Text.StringBuilder
             If label <> "" Then
@@ -973,7 +974,7 @@ Namespace CompuMaster.Data
         '''     The columns will only be removed if they exist. If a column name doesn't exist, it will be ignored.
         ''' </remarks>
         Public Shared Sub RemoveColumns(ByVal datatable As System.Data.DataTable, ByVal columnNames As String())
-            If Not columnNames Is Nothing Then
+            If columnNames IsNot Nothing Then
                 For MyRemoveCounter As Integer = 0 To columnNames.Length - 1
                     For MyColumnsCounter As Integer = datatable.Columns.Count - 1 To 0 Step -1
                         If datatable.Columns(MyColumnsCounter).ColumnName = columnNames(MyRemoveCounter) Then
@@ -991,7 +992,7 @@ Namespace CompuMaster.Data
         ''' <param name="label">An optional title of the rows</param>
         ''' <returns>All rows are tab separated. If no rows have been processed, the user will get notified about this fact</returns>
         Friend Shared Function ConvertToPlainTextTable(ByVal rows As DataRowCollection, ByVal label As String) As String
-            Return _ConvertToPlainTextTable(rows, label)
+            Return ConvertToPlainTextTableInternal(rows, label)
         End Function
 
         ''' <summary>
@@ -1136,7 +1137,7 @@ Namespace CompuMaster.Data
             If leftParentTable Is Nothing OrElse rightChildTable Is Nothing Then
                 Throw New Exception("One or both table references are null")
             End If
-            If leftParentTable.DataSet Is Nothing OrElse Not leftParentTable.DataSet Is rightChildTable.DataSet Then
+            If leftParentTable.DataSet Is Nothing OrElse leftParentTable.DataSet IsNot rightChildTable.DataSet Then
                 Throw New Exception("Both tables must be member of the same dataset")
             End If
             If relation Is Nothing Then
@@ -1197,14 +1198,14 @@ Namespace CompuMaster.Data
             'Find required column indexes
             Dim LeftColumns As Integer() = Nothing
             Dim RightColumns As Integer() = Nothing
-            If Not leftTableColumnsToCopy Is Nothing Then
+            If leftTableColumnsToCopy IsNot Nothing Then
                 Dim indexesOfLeftTableColumnsToCopy As New ArrayList
                 For MyCounter As Integer = 0 To leftTableColumnsToCopy.Length - 1
                     indexesOfLeftTableColumnsToCopy.Add(leftTableColumnsToCopy(MyCounter).Ordinal)
                 Next
                 LeftColumns = CType(indexesOfLeftTableColumnsToCopy.ToArray(GetType(Integer)), Integer())
             End If
-            If Not leftTableColumnsToCopy Is Nothing Then
+            If leftTableColumnsToCopy IsNot Nothing Then
                 Dim indexesOfRightTableColumnsToCopy As New ArrayList
                 For MyCounter As Integer = 0 To leftTableColumnsToCopy.Length - 1
                     indexesOfRightTableColumnsToCopy.Add(leftTableColumnsToCopy(MyCounter).Ordinal)
@@ -1261,7 +1262,7 @@ Namespace CompuMaster.Data
             If leftParentTable Is Nothing OrElse rightChildTable Is Nothing Then
                 Throw New Exception("One or both table references are null")
             End If
-            If leftParentTable.DataSet Is Nothing OrElse Not leftParentTable.DataSet Is rightChildTable.DataSet Then
+            If leftParentTable.DataSet Is Nothing OrElse leftParentTable.DataSet IsNot rightChildTable.DataSet Then
                 Throw New Exception("Both tables must be member of the same dataset")
             End If
             If relation Is Nothing Then
@@ -1557,11 +1558,11 @@ Namespace CompuMaster.Data
                         End If
                     Next
                     'Read out the value of the counter
-                    Dim NumberCounterValue As Integer = 0
+                    Dim NumberCounterValue As Integer
                     If NumberPositionIndex = -1 OrElse NumberPositionIndex + 1 > suggestedColumnName.Length Then
                         'Attach a new counter value
                         NumberCounterValue = 1
-                        suggestedColumnName = suggestedColumnName & NumberCounterValue.ToString
+                        suggestedColumnName &= NumberCounterValue.ToString
                     Else
                         'Update the counter value
                         NumberCounterValue = CType(suggestedColumnName.Substring(NumberPositionIndex), Integer) + 1
@@ -1631,12 +1632,12 @@ Namespace CompuMaster.Data
 
             'Parameter validation
             If source Is Nothing Then
-                Throw New ArgumentNullException("source")
+                Throw New ArgumentNullException(NameOf(source))
             End If
             If destinationColumnSet Is Nothing Then
-                Throw New ArgumentNullException("destinationColumnSet")
+                Throw New ArgumentNullException(NameOf(destinationColumnSet))
             ElseIf destinationColumnSet.Length = 0 Then
-                Throw New ArgumentException("empty array not allowed", "destinationColumnSet")
+                Throw New ArgumentException("empty array not allowed", NameOf(destinationColumnSet))
             End If
 
             'Prepare new datatable

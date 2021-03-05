@@ -1262,11 +1262,9 @@ Namespace CompuMaster.Data
         Public Shared Function ReadStringDataFromUri(ByVal client As System.Net.WebClient, ByVal uri As String, ByVal encodingName As String, ByVal ignoreSslValidationExceptions As Boolean, ByVal postData As String) As String
             If client Is Nothing Then client = New System.Net.WebClient
             'https://compumaster.dyndns.biz/.....asmx without trusted certificate
-#If Not NET_1_1 Then
             Dim CurrentValidationCallback As System.Net.Security.RemoteCertificateValidationCallback = System.Net.ServicePointManager.ServerCertificateValidationCallback
             Try
                 If ignoreSslValidationExceptions Then System.Net.ServicePointManager.ServerCertificateValidationCallback = New System.Net.Security.RemoteCertificateValidationCallback(AddressOf OnValidationCallback)
-#End If
                 If encodingName <> Nothing Then
                     Dim bytes As Byte()
                     If postData Is Nothing Then
@@ -1276,27 +1274,6 @@ Namespace CompuMaster.Data
                     End If
                     Return System.Text.Encoding.GetEncoding(encodingName).GetString(bytes)
                 Else
-#If NET_1_1 Then
-                Dim encoding As System.Text.Encoding
-                Try
-                    Dim encName As String = client.ResponseHeaders("Content-Type")
-                    If encName <> "" And encName.IndexOf("charset=") > -1 Then
-                        encName = encName.Substring(encName.IndexOf("charset=") + "charset=".Length)
-                        encoding = System.Text.Encoding.GetEncoding(encName)
-                    Else
-                        encoding = System.Text.Encoding.Default
-                    End If
-                Catch
-                    encoding = System.Text.Encoding.Default
-                End Try
-                Dim bytes As Byte()
-                If postData Is Nothing Then
-                    bytes = client.DownloadData(uri)
-                Else
-                    bytes = client.UploadData(uri, encoding.GetBytes(postData))
-                End If
-                Return encoding.GetString(bytes)
-#Else
                     Dim Result As String
                     If postData Is Nothing Then
                         Result = client.DownloadString(uri)
@@ -1317,16 +1294,12 @@ Namespace CompuMaster.Data
                     Else
                         Return Result 'no content encoding information available, return downloaded string as is
                     End If
-#End If
                 End If
-#If Not NET_1_1 Then
             Finally
                 System.Net.ServicePointManager.ServerCertificateValidationCallback = CurrentValidationCallback
             End Try
-#End If
         End Function
 
-#If Not NET_1_1 Then
         ''' <summary>
         ''' Suppress all SSL certification requirements - just use the webservice SSL URL
         ''' </summary>
@@ -1339,7 +1312,6 @@ Namespace CompuMaster.Data
         Public Shared Function OnValidationCallback(ByVal sender As Object, ByVal cert As System.Security.Cryptography.X509Certificates.X509Certificate, ByVal chain As System.Security.Cryptography.X509Certificates.X509Chain, ByVal errors As System.Net.Security.SslPolicyErrors) As Boolean
             Return True
         End Function
-#End If
 
 #End Region
 

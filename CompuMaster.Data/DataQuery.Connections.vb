@@ -7,7 +7,7 @@ Namespace CompuMaster.Data.DataQuery
     ''' A factory for common data connection types, usable on most platforms
     ''' </summary>
     ''' <remarks></remarks>
-    Public Class Connections
+    Public NotInheritable Class Connections
 
         ''' <summary>
         ''' A most probably working Microsoft Access connection which uses the most appropriate, installed OleDB provider of the current machine
@@ -17,7 +17,7 @@ Namespace CompuMaster.Data.DataQuery
         ''' <remarks></remarks>
         ''' <exception cref="Office2010x64OleDbOdbcEngineRequiredException" />
         Public Shared Function MicrosoftAccessOleDbConnection(ByVal path As String) As IDbConnection
-            If path = Nothing Then Throw New ArgumentNullException("path")
+            If path = Nothing Then Throw New ArgumentNullException(NameOf(path))
             Return MicrosoftAccessOleDbConnection(path, "")
         End Function
 
@@ -30,8 +30,8 @@ Namespace CompuMaster.Data.DataQuery
         ''' <remarks></remarks>
         ''' <exception cref="Office2010x64OleDbOdbcEngineRequiredException" />
         Public Shared Function MicrosoftAccessOleDbConnection(ByVal path As String, ByVal databasePassword As String) As IDbConnection
-            If path = Nothing Then Throw New ArgumentNullException("path")
-            Dim TestFile As TestFile = Nothing
+            If path = Nothing Then Throw New ArgumentNullException(NameOf(path))
+            Dim TestFile As TestFile
             Try
                 'Try to create a temporary file - might fail in environments which are not fully trusted
                 If path.ToLowerInvariant.EndsWith(".mdb") OrElse path.ToLowerInvariant.EndsWith(".mde") Then
@@ -79,7 +79,7 @@ Namespace CompuMaster.Data.DataQuery
                     End If
                 End If
             Finally
-                If Not TestFile Is Nothing Then
+                If TestFile IsNot Nothing Then
                     TestFile.Dispose()
                 End If
             End Try
@@ -93,7 +93,7 @@ Namespace CompuMaster.Data.DataQuery
         ''' <remarks></remarks>
         ''' <exception cref="Office2010x64OleDbOdbcEngineRequiredException" />
         Public Shared Function MicrosoftAccessOdbcConnection(ByVal path As String) As IDbConnection
-            If path = Nothing Then Throw New ArgumentNullException("path")
+            If path = Nothing Then Throw New ArgumentNullException(NameOf(path))
             Return MicrosoftAccessOdbcConnection(path, "")
         End Function
 
@@ -106,8 +106,8 @@ Namespace CompuMaster.Data.DataQuery
         ''' <remarks></remarks>
         ''' <exception cref="Office2010x64OleDbOdbcEngineRequiredException" />
         Public Shared Function MicrosoftAccessOdbcConnection(ByVal path As String, ByVal databasePassword As String) As IDbConnection
-            If path = Nothing Then Throw New ArgumentNullException("path")
-            Dim TestFile As TestFile = Nothing
+            If path = Nothing Then Throw New ArgumentNullException(NameOf(path))
+            Dim TestFile As TestFile
             Try
                 'Try to create a temporary file - might fail in environments which are not fully trusted
                 If path.ToLowerInvariant.EndsWith(".mdb") OrElse path.ToLowerInvariant.EndsWith(".mde") Then
@@ -148,7 +148,7 @@ Namespace CompuMaster.Data.DataQuery
                     End If
                 End If
             Finally
-                If Not TestFile Is Nothing Then
+                If TestFile IsNot Nothing Then
                     TestFile.Dispose()
                 End If
             End Try
@@ -162,9 +162,9 @@ Namespace CompuMaster.Data.DataQuery
         ''' <remarks></remarks>
         ''' <exception cref="Office2010x64OleDbOdbcEngineRequiredException" />
         Public Shared Function TextCsvConnection(ByVal path As String) As IDbConnection
-            If path = Nothing Then Throw New ArgumentNullException("path")
-            If System.IO.Directory.Exists(path) = False Then Throw New ArgumentException("Path must be a an existing directory", "path")
-            Dim TestFile As TestFile = Nothing
+            If path = Nothing Then Throw New ArgumentNullException(NameOf(path))
+            If System.IO.Directory.Exists(path) = False Then Throw New ArgumentException("Path must be a an existing directory", NameOf(path))
+            Dim TestFile As TestFile
             Try
                 'Try to create a temporary file - might fail in environments which are not fully trusted
                 TestFile = New TestFile(DataQuery.TestFile.TestFileType.TextCsv)
@@ -189,7 +189,7 @@ Namespace CompuMaster.Data.DataQuery
                     Return CompuMaster.Data.DataQuery.PlatformTools.CreateDataConnection("ODBC", "Driver={Microsoft Text Driver (*.txt; *.csv)};Dbq=" & path & ";Extensions=asc,csv,tab,txt;")
                 End If
             Finally
-                If Not TestFile Is Nothing Then
+                If TestFile IsNot Nothing Then
                     TestFile.Dispose()
                 End If
             End Try
@@ -203,7 +203,7 @@ Namespace CompuMaster.Data.DataQuery
         ''' <remarks></remarks>
         ''' <exception cref="Office2010x64OleDbOdbcEngineRequiredException" />
         Public Shared Function MicrosoftAccessConnection(ByVal path As String) As IDbConnection
-            If path = Nothing Then Throw New ArgumentNullException("path")
+            If path = Nothing Then Throw New ArgumentNullException(NameOf(path))
             Return MicrosoftAccessConnection(path, "")
         End Function
 
@@ -216,8 +216,8 @@ Namespace CompuMaster.Data.DataQuery
         ''' <remarks></remarks>
         ''' <exception cref="Office2010x64OleDbOdbcEngineRequiredException" />
         Public Shared Function MicrosoftAccessConnection(ByVal path As String, ByVal databasePassword As String) As IDbConnection
-            If path = Nothing Then Throw New ArgumentNullException("path")
-            Dim TestFile As TestFile = Nothing
+            If path = Nothing Then Throw New ArgumentNullException(NameOf(path))
+            Dim TestFile As TestFile
             Try
                 'Try to create a temporary file - might fail in environments which are not fully trusted
                 If path.ToLowerInvariant.EndsWith(".mdb") OrElse path.ToLowerInvariant.EndsWith(".mde") Then
@@ -269,7 +269,7 @@ Namespace CompuMaster.Data.DataQuery
                     End If
                 End If
             Finally
-                If Not TestFile Is Nothing Then
+                If TestFile IsNot Nothing Then
                     TestFile.Dispose()
                 End If
             End Try
@@ -285,7 +285,7 @@ Namespace CompuMaster.Data.DataQuery
         ''' <remarks></remarks>
         ''' <exception cref="Office2010x64OleDbOdbcEngineRequiredException" />
         Public Shared Function MicrosoftExcelConnection(ByVal path As String, ByVal firstRowContainsHeaders As Boolean, ByVal readAllColumnsAsTextOnly As Boolean) As IDbConnection
-            If path = Nothing Then Throw New ArgumentNullException("path")
+            If path = Nothing Then Throw New ArgumentNullException(NameOf(path))
             Dim TestFile As TestFile = Nothing
             Try
                 If path.ToLowerInvariant.EndsWith(".xls") Then
@@ -329,7 +329,7 @@ Namespace CompuMaster.Data.DataQuery
                     End If
                 End If
             Finally
-                If Not TestFile Is Nothing Then
+                If TestFile IsNot Nothing Then
                     TestFile.Dispose()
                 End If
             End Try
@@ -346,7 +346,7 @@ Namespace CompuMaster.Data.DataQuery
         ''' <remarks></remarks>
         ''' <exception cref="Office2010x64OleDbOdbcEngineRequiredException" />
         Public Shared Function MicrosoftExcelOdbcConnection(ByVal path As String, ByVal firstRowContainsHeaders As Boolean, ByVal readAllColumnsAsTextOnly As Boolean) As IDbConnection
-            If path = Nothing Then Throw New ArgumentNullException("path")
+            If path = Nothing Then Throw New ArgumentNullException(NameOf(path))
             Dim TestFile As TestFile = Nothing
             Try
                 If path.ToLowerInvariant.EndsWith(".xls") Then
@@ -372,7 +372,7 @@ Namespace CompuMaster.Data.DataQuery
                     End If
                 End If
             Finally
-                If Not TestFile Is Nothing Then
+                If TestFile IsNot Nothing Then
                     TestFile.Dispose()
                 End If
             End Try
@@ -388,7 +388,7 @@ Namespace CompuMaster.Data.DataQuery
         ''' <remarks></remarks>
         ''' <exception cref="Office2010x64OleDbOdbcEngineRequiredException" />
         Public Shared Function MicrosoftExcelOleDbConnection(ByVal path As String, ByVal firstRowContainsHeaders As Boolean, ByVal readAllColumnsAsTextOnly As Boolean) As IDbConnection
-            If path = Nothing Then Throw New ArgumentNullException("path")
+            If path = Nothing Then Throw New ArgumentNullException(NameOf(path))
             Dim TestFile As TestFile = Nothing
             Try
                 If path.ToLowerInvariant.EndsWith(".xls") Then
@@ -427,13 +427,13 @@ Namespace CompuMaster.Data.DataQuery
                     End If
                 End If
             Finally
-                If Not TestFile Is Nothing Then
+                If TestFile IsNot Nothing Then
                     TestFile.Dispose()
                 End If
             End Try
         End Function
 
-        Private Shared _MicrosoftAccessConnectionProviderWorkingStatusForACEDynList As New Generic.Dictionary(Of Integer, TriState)
+        Private Shared ReadOnly _MicrosoftAccessConnectionProviderWorkingStatusForACEDynList As New Generic.Dictionary(Of Integer, TriState)
         Private Shared ReadOnly Property MicrosoftAccessConnectionProviderWorkingStatusForACEDynList(officeMainVersion As Integer) As TriState
             Get
                 If _MicrosoftAccessConnectionProviderWorkingStatusForACEDynList.ContainsKey(officeMainVersion) = False Then
@@ -443,7 +443,7 @@ Namespace CompuMaster.Data.DataQuery
             End Get
         End Property
 
-        Private Shared _MicrosoftExcelConnectionProviderWorkingStatusForACEDynList As New Generic.Dictionary(Of Integer, TriState)
+        Private Shared ReadOnly _MicrosoftExcelConnectionProviderWorkingStatusForACEDynList As New Generic.Dictionary(Of Integer, TriState)
         Private Shared ReadOnly Property MicrosoftExcelConnectionProviderWorkingStatusForACEDynList(officeMainVersion As Integer) As TriState
             Get
                 If _MicrosoftExcelConnectionProviderWorkingStatusForACEDynList.ContainsKey(officeMainVersion) = False Then
@@ -539,7 +539,7 @@ Namespace CompuMaster.Data.DataQuery
         Public Class OleDbTableDescriptor
 
             Friend Sub New(ByVal schemaName As String, ByVal tableName As String)
-                If tableName = Nothing Then Throw New ArgumentNullException("tableName")
+                If tableName = Nothing Then Throw New ArgumentNullException(NameOf(tableName))
                 _SchemaName = schemaName
                 _TableName = tableName
             End Sub
@@ -598,7 +598,7 @@ Namespace CompuMaster.Data.DataQuery
         Public Class OdbcTableDescriptor
 
             Friend Sub New(ByVal schemaName As String, ByVal tableName As String)
-                If tableName = Nothing Then Throw New ArgumentNullException("tableName")
+                If tableName = Nothing Then Throw New ArgumentNullException(NameOf(tableName))
                 _SchemaName = schemaName
                 _TableName = tableName
             End Sub
@@ -657,16 +657,6 @@ Namespace CompuMaster.Data.DataQuery
         ''' <returns>The DictionaryEntry contains the table/view name in the key field, the schema name in the value field</returns>
         ''' <remarks></remarks>
         Public Shared Function EnumerateTablesAndViewsInOleDbDataSource(ByVal openedConnection As System.Data.OleDb.OleDbConnection) As OleDbTableDescriptor()
-#If NET_1_1 Then
-            '.NET 1.x
-            Dim Result As New ArrayList
-            Dim tables As DataTable = openedConnection.GetOleDbSchemaTable(System.Data.OleDb.OleDbSchemaGuid.Tables, New Object() {Nothing, Nothing, Nothing, "TABLE"})
-            For MyCounter As Integer = 0 To tables.Rows.Count - 1
-                Result.Add(New OleDbTableDescriptor(Utils.NoDBNull(tables.Rows(MyCounter)("TABLE_SCHEMA"), CType(Nothing, String)), Utils.NoDBNull(tables.Rows(MyCounter)("TABLE_NAME"), CType(Nothing, String))))
-            Next
-            Return CType(Result.ToArray(GetType(OleDbTableDescriptor)), OleDbTableDescriptor())
-#Else
-            '.NET 2.x or higher
             Dim DbSchema As DataTable = openedConnection.GetSchema()
             Dim DbSchemaCollections As String() = CType(CompuMaster.Data.DataTables.ConvertDataTableToArrayList(DbSchema).ToArray(GetType(String)), String())
             Dim Result As New ArrayList
@@ -677,7 +667,6 @@ Namespace CompuMaster.Data.DataQuery
                 Next
             End If
             Return CType(Result.ToArray(GetType(OleDbTableDescriptor)), OleDbTableDescriptor())
-#End If
         End Function
 
         ''' <summary>

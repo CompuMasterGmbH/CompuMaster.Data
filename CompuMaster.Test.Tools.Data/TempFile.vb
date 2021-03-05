@@ -24,6 +24,7 @@ Namespace CompuMaster.Test.Data
         Private disposedValue As Boolean ' Dient zur Erkennung redundanter Aufrufe.
 
         ' IDisposable
+        <CodeAnalysis.SuppressMessage("Design", "CA1031:Do not catch general exception types", Justification:="<Ausstehend>")>
         Protected Overridable Sub Dispose(disposing As Boolean)
             If Not disposedValue Then
                 If disposing Then

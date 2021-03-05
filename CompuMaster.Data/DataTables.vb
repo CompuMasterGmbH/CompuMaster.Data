@@ -56,28 +56,6 @@ Namespace CompuMaster.Data
                                 RowsOkay.Add(RowCounter)
                                 Exit For
                             End If
-#If NET_1_1 Then
-                    ElseIf column.DataType Is GetType(UInt16) Then
-                        If CType(values(ValueCounter), System.UInt16).ToString = CType(rowValue, System.UInt16).ToString Then
-                            RowsOkay.Add(RowCounter)
-                            Exit For
-                        End If
-                    ElseIf column.DataType Is GetType(UInt32) Then
-                        If CType(values(ValueCounter), UInt32).ToString = CType(rowValue, UInt32).ToString Then
-                            RowsOkay.Add(RowCounter)
-                            Exit For
-                        End If
-                    ElseIf column.DataType Is GetType(UInt64) Then
-                        If CType(values(ValueCounter), UInt64).ToString = CType(rowValue, UInt64).ToString Then
-                            RowsOkay.Add(RowCounter)
-                            Exit For
-                        End If
-                    ElseIf column.DataType Is GetType(TimeSpan) Then
-                        If CType(values(ValueCounter), TimeSpan).Subtract(CType(rowValue, TimeSpan)).Ticks = 0 AndAlso CType(values(ValueCounter), TimeSpan).Subtract(CType(rowValue, TimeSpan)).TotalMilliseconds = 0 Then
-                            RowsOkay.Add(RowCounter)
-                            Exit For
-                        End If
-#Else
                         ElseIf column.DataType Is GetType(UInt16) Then
                             If CType(values(ValueCounter), System.UInt16) = CType(rowValue, System.UInt16) Then
                                 RowsOkay.Add(RowCounter)
@@ -98,7 +76,6 @@ Namespace CompuMaster.Data
                                 RowsOkay.Add(RowCounter)
                                 Exit For
                             End If
-#End If
                         ElseIf column.DataType Is GetType(Date) Then
                             If CType(values(ValueCounter), Date) = CType(rowValue, Date) Then
                                 RowsOkay.Add(RowCounter)
@@ -191,28 +168,6 @@ Namespace CompuMaster.Data
                                 column.Table.Rows.RemoveAt(RowCounter)
                                 Exit For
                             End If
-#If NET_1_1 Then
-                    ElseIf column.DataType Is GetType(UInt16) Then
-                        If CType(values(ValueCounter), System.UInt16).ToString = CType(rowValue, System.UInt16).ToString Then
-                            column.Table.Rows.RemoveAt(RowCounter)
-                            Exit For
-                        End If
-                    ElseIf column.DataType Is GetType(UInt32) Then
-                        If CType(values(ValueCounter), UInt32).ToString = CType(rowValue, UInt32).ToString Then
-                            column.Table.Rows.RemoveAt(RowCounter)
-                            Exit For
-                        End If
-                    ElseIf column.DataType Is GetType(UInt64) Then
-                        If CType(values(ValueCounter), UInt64).ToString = CType(rowValue, UInt64).ToString Then
-                            column.Table.Rows.RemoveAt(RowCounter)
-                            Exit For
-                        End If
-                    ElseIf column.DataType Is GetType(TimeSpan) Then
-                        If CType(values(ValueCounter), TimeSpan).Subtract(CType(rowValue, TimeSpan)).Ticks = 0 AndAlso CType(values(ValueCounter), TimeSpan).Subtract(CType(rowValue, TimeSpan)).TotalMilliseconds = 0 Then
-                            column.Table.Rows.RemoveAt(RowCounter)
-                            Exit For
-                        End If
-#Else
                         ElseIf column.DataType Is GetType(UInt16) Then
                             If CType(values(ValueCounter), System.UInt16) = CType(rowValue, System.UInt16) Then
                                 column.Table.Rows.RemoveAt(RowCounter)
@@ -233,7 +188,6 @@ Namespace CompuMaster.Data
                                 column.Table.Rows.RemoveAt(RowCounter)
                                 Exit For
                             End If
-#End If
                         ElseIf column.DataType Is GetType(Date) Then
                             If CType(values(ValueCounter), Date) = CType(rowValue, Date) Then
                                 column.Table.Rows.RemoveAt(RowCounter)
@@ -282,9 +236,7 @@ Namespace CompuMaster.Data
             newCol.ReadOnly = column.ReadOnly
             newCol.Unique = column.Unique
             newCol.MaxLength = column.MaxLength
-#If Not NET_1_1 Then
             newCol.DateTimeMode = column.DateTimeMode
-#End If
             newCol.ColumnMapping = column.ColumnMapping
             newCol.Prefix = column.Prefix
             newCol.Caption = column.Caption
@@ -1107,11 +1059,6 @@ Namespace CompuMaster.Data
                                                destinationSchemaChangesForExistingColumns As RequestedSchemaChangesForExistingColumns,
                                                destinationSchemaChangesForAdditionalColumns As RequestedSchemaChangesForAdditionalColumns)
 
-#If NET_1_1 Then
-            If RequestedRowChanges.KeepExistingRowsInDestinationTableAndAddRemoveUpdateChangedRows = rowChanges Then
-                Throw New NotSupportedException("Merging isn't supported in .NET 1.1 and lower")
-            End If
-#End If
             If RequestedRowChanges.DropExistingRowsInDestinationTableAndInsertNewRows = rowChanges Then
                 'Drop existing rows
                 For MyRowCounter As Integer = destinationTable.Rows.Count - 1 To 0 Step -1
@@ -1262,7 +1209,6 @@ Namespace CompuMaster.Data
                         End If
                     Next
                 End If
-#If Not NET_1_1 Then
             Else 'Merging'
                 Dim sourceView As DataView = sourceTable.DefaultView
                 sourceView.RowFilter = sourceRowFilter
@@ -1277,7 +1223,6 @@ Namespace CompuMaster.Data
                     Next
                     destinationTable = destTopRows
                 End If
-#End If
             End If
         End Sub
 
@@ -1344,7 +1289,6 @@ Namespace CompuMaster.Data
             Return Result
         End Function
 
-#If Not NET_1_1 Then
         ''' <summary>
         ''' Copy the values of a data column into an arraylist
         ''' </summary>
@@ -1394,7 +1338,7 @@ Namespace CompuMaster.Data
             Next
             Return Result
         End Function
-#End If
+
         ''' <summary>
         '''     Convert a data table to a hash table
         ''' </summary>
@@ -1716,7 +1660,7 @@ Namespace CompuMaster.Data
             If dataRows.Length > 0 Then
                 TableName = dataRows(0).Table.TableName
             End If
-            Return _ConvertToPlainTextTableWithFixedColumnWidths(dataRows, TableName, SuggestColumnWidthsForFixedPlainTables(dataRows), Nothing)
+            Return ConvertToPlainTextTableWithFixedColumnWidthsInternal(dataRows, TableName, SuggestColumnWidthsForFixedPlainTables(dataRows), Nothing)
         End Function
 
         ''' <summary>
@@ -1730,7 +1674,7 @@ Namespace CompuMaster.Data
             If dataRows.Length > 0 Then
                 TableName = dataRows(0).Table.TableName
             End If
-            Return _ConvertToPlainTextTableWithFixedColumnWidths(dataRows, TableName, SuggestColumnWidthsForFixedPlainTables(dataRows, columnFormatting), columnFormatting)
+            Return ConvertToPlainTextTableWithFixedColumnWidthsInternal(dataRows, TableName, SuggestColumnWidthsForFixedPlainTables(dataRows, columnFormatting), columnFormatting)
         End Function
 
         ''' <summary>
@@ -1740,7 +1684,7 @@ Namespace CompuMaster.Data
         ''' <returns>All rows are separated by fixed width. If no rows have been processed, the user will get notified about this fact</returns>
         ''' <remarks></remarks>
         Public Shared Function ConvertToPlainTextTableFixedColumnWidths(ByVal dataRow As DataRow) As String
-            Return _ConvertToPlainTextTableWithFixedColumnWidths(New System.Data.DataRow() {dataRow}, dataRow.Table.TableName, SuggestColumnWidthsForFixedPlainTables(New System.Data.DataRow() {dataRow}), Nothing)
+            Return ConvertToPlainTextTableWithFixedColumnWidthsInternal(New System.Data.DataRow() {dataRow}, dataRow.Table.TableName, SuggestColumnWidthsForFixedPlainTables(New System.Data.DataRow() {dataRow}), Nothing)
         End Function
 
         ''' <summary>
@@ -1750,7 +1694,7 @@ Namespace CompuMaster.Data
         ''' <returns>All rows are separated by fixed width. If no rows have been processed, the user will get notified about this fact</returns>
         ''' <remarks></remarks>
         Public Shared Function ConvertToPlainTextTableFixedColumnWidths(ByVal dataRow As DataRow, columnFormatting As DataColumnToString) As String
-            Return _ConvertToPlainTextTableWithFixedColumnWidths(New System.Data.DataRow() {dataRow}, dataRow.Table.TableName, SuggestColumnWidthsForFixedPlainTables(New System.Data.DataRow() {dataRow}, columnFormatting), columnFormatting)
+            Return ConvertToPlainTextTableWithFixedColumnWidthsInternal(New System.Data.DataRow() {dataRow}, dataRow.Table.TableName, SuggestColumnWidthsForFixedPlainTables(New System.Data.DataRow() {dataRow}, columnFormatting), columnFormatting)
         End Function
 
         ''' <summary>
@@ -1760,7 +1704,7 @@ Namespace CompuMaster.Data
         ''' <returns>All rows are separated by fixed width. If no rows have been processed, the user will get notified about this fact</returns>
         ''' <remarks></remarks>
         Public Shared Function ConvertToPlainTextTableFixedColumnWidths(ByVal dataTable As DataTable) As String
-            Return _ConvertToPlainTextTableWithFixedColumnWidths(dataTable.Rows, dataTable.TableName, SuggestColumnWidthsForFixedPlainTables(dataTable.Rows), Nothing)
+            Return ConvertToPlainTextTableWithFixedColumnWidthsInternal(dataTable.Rows, dataTable.TableName, SuggestColumnWidthsForFixedPlainTables(dataTable.Rows), Nothing)
         End Function
 
         ''' <summary>
@@ -1770,7 +1714,7 @@ Namespace CompuMaster.Data
         ''' <returns>All rows are separated by fixed width. If no rows have been processed, the user will get notified about this fact</returns>
         ''' <remarks></remarks>
         Public Shared Function ConvertToPlainTextTableFixedColumnWidths(ByVal dataTable As DataTable, columnFormatting As DataColumnToString) As String
-            Return _ConvertToPlainTextTableWithFixedColumnWidths(dataTable.Rows, dataTable.TableName, SuggestColumnWidthsForFixedPlainTables(dataTable.Rows, columnFormatting), columnFormatting)
+            Return ConvertToPlainTextTableWithFixedColumnWidthsInternal(dataTable.Rows, dataTable.TableName, SuggestColumnWidthsForFixedPlainTables(dataTable.Rows, columnFormatting), columnFormatting)
         End Function
 
         ''' <summary>
@@ -1780,7 +1724,7 @@ Namespace CompuMaster.Data
         ''' <returns>All rows are separated by fixed width. If no rows have been processed, the user will get notified about this fact</returns>
         ''' <remarks></remarks>
         Public Shared Function ConvertToPlainTextTableFixedColumnWidths(ByVal dataTable As DataTable, ByVal fixedColumnWidths As Integer()) As String
-            Return _ConvertToPlainTextTableWithFixedColumnWidths(dataTable.Rows, dataTable.TableName, fixedColumnWidths, Nothing)
+            Return ConvertToPlainTextTableWithFixedColumnWidthsInternal(dataTable.Rows, dataTable.TableName, fixedColumnWidths, Nothing)
         End Function
 
         ''' <summary>
@@ -1790,20 +1734,11 @@ Namespace CompuMaster.Data
         ''' <returns>All rows are separated by fixed width. If no rows have been processed, the user will get notified about this fact</returns>
         ''' <remarks></remarks>
         Public Shared Function ConvertToPlainTextTableFixedColumnWidths(ByVal dataTable As DataTable, ByVal standardColumnWidth As Integer) As String
-
-#If NET_1_1 Then
-            Dim columnWidths(dataTable.Columns.Count - 1) As Integer
-            For MyCounter As Integer = 0 To dataTable.Columns.Count - 1
-                columnWidths(MyCounter) = standardColumnWidth
-            Next
-            Return _ConvertToPlainTextTableWithFixedColumnWidths(dataTable.Rows, dataTable.TableName, columnWidths, Nothing)
-#Else
             Dim columnWidths As New System.Collections.Generic.List(Of Integer)
             For MyCounter As Integer = 0 To dataTable.Columns.Count - 1
                 columnWidths.Add(standardColumnWidth)
             Next
-            Return _ConvertToPlainTextTableWithFixedColumnWidths(dataTable.Rows, dataTable.TableName, columnWidths.ToArray, Nothing)
-#End If
+            Return ConvertToPlainTextTableWithFixedColumnWidthsInternal(dataTable.Rows, dataTable.TableName, columnWidths.ToArray, Nothing)
         End Function
 
         ''' <summary>
@@ -1839,7 +1774,7 @@ Namespace CompuMaster.Data
                     If columnWidths(MyCounter) > maximumColumnWidth Then columnWidths(MyCounter) = maximumColumnWidth
                 Next
             End If
-            Return _ConvertToPlainTextTableWithFixedColumnWidths(dataTable.Rows, dataTable.TableName, columnWidths, columnFormatting)
+            Return ConvertToPlainTextTableWithFixedColumnWidthsInternal(dataTable.Rows, dataTable.TableName, columnWidths, columnFormatting)
         End Function
 
         ''' <summary>
@@ -1851,7 +1786,7 @@ Namespace CompuMaster.Data
         Public Shared Function ConvertToPlainTextTableFixedColumnWidths(ByVal dataTable As DataTable, verticalSeparatorHeader As String,
                                                                         verticalSeparatorCells As String, crossSeparator As String,
                                                                         horizontalSeparatorHeadline As Char, horizontalSeparatorCells As Char) As String
-            Return _ConvertToPlainTextTableWithFixedColumnWidths(dataTable.Rows, dataTable.TableName, SuggestColumnWidthsForFixedPlainTables(dataTable.Rows), verticalSeparatorHeader, verticalSeparatorCells,
+            Return ConvertToPlainTextTableWithFixedColumnWidthsInternal(dataTable.Rows, dataTable.TableName, SuggestColumnWidthsForFixedPlainTables(dataTable.Rows), verticalSeparatorHeader, verticalSeparatorCells,
                                                                  crossSeparator, horizontalSeparatorHeadline, horizontalSeparatorCells, Nothing)
         End Function
 
@@ -1865,7 +1800,7 @@ Namespace CompuMaster.Data
                                                                         verticalSeparatorHeader As String, verticalSeparatorCells As String,
                                                                         crossSeparator As String, horizontalSeparatorHeadline As Char,
                                                                         horizontalSeparatorCells As Char) As String
-            Return _ConvertToPlainTextTableWithFixedColumnWidths(dataTable.Rows, dataTable.TableName, fixedColumnWidths, verticalSeparatorHeader, verticalSeparatorCells, crossSeparator, horizontalSeparatorHeadline,
+            Return ConvertToPlainTextTableWithFixedColumnWidthsInternal(dataTable.Rows, dataTable.TableName, fixedColumnWidths, verticalSeparatorHeader, verticalSeparatorCells, crossSeparator, horizontalSeparatorHeadline,
                                                                  horizontalSeparatorCells, Nothing)
         End Function
 
@@ -1883,7 +1818,7 @@ Namespace CompuMaster.Data
             For MyCounter As Integer = 0 To dataTable.Columns.Count - 1
                 columnWidths(MyCounter) = standardColumnWidth
             Next
-            Return _ConvertToPlainTextTableWithFixedColumnWidths(dataTable.Rows, dataTable.TableName, columnWidths, verticalSeparatorHeader, verticalSeparatorCells,
+            Return ConvertToPlainTextTableWithFixedColumnWidthsInternal(dataTable.Rows, dataTable.TableName, columnWidths, verticalSeparatorHeader, verticalSeparatorCells,
                                                                  crossSeparator, horizontalSeparatorHeadline, horizontalSeparatorCells, Nothing)
         End Function
 
@@ -1910,7 +1845,7 @@ Namespace CompuMaster.Data
                     If columnWidths(MyCounter) > maximumColumnWidth Then columnWidths(MyCounter) = maximumColumnWidth
                 Next
             End If
-            Return _ConvertToPlainTextTableWithFixedColumnWidths(dataTable.Rows, dataTable.TableName, columnWidths, verticalSeparatorHeader,
+            Return ConvertToPlainTextTableWithFixedColumnWidthsInternal(dataTable.Rows, dataTable.TableName, columnWidths, verticalSeparatorHeader,
                                                                  verticalSeparatorCells, crossSeparator, horizontalSeparatorHeadline,
                                                                  horizontalSeparatorCells, Nothing)
         End Function
@@ -1939,7 +1874,7 @@ Namespace CompuMaster.Data
                     If columnWidths(MyCounter) > maximumColumnWidth Then columnWidths(MyCounter) = maximumColumnWidth
                 Next
             End If
-            Return _ConvertToPlainTextTableWithFixedColumnWidths(dataTable.Rows, dataTable.TableName, columnWidths, verticalSeparatorHeader,
+            Return ConvertToPlainTextTableWithFixedColumnWidthsInternal(dataTable.Rows, dataTable.TableName, columnWidths, verticalSeparatorHeader,
                                                                  verticalSeparatorCells, crossSeparator, horizontalSeparatorHeadline,
                                                                  horizontalSeparatorCells, columnFormatting)
         End Function
@@ -2229,7 +2164,7 @@ Namespace CompuMaster.Data
         ''' <param name="fixedColumnWidths">The column sizes in chars</param>
         ''' <returns>All rows are with fixed column withs. If no rows have been processed, the user will get notified about this fact</returns>
         ''' <remarks></remarks>
-        Private Shared Function _ConvertToPlainTextTableWithFixedColumnWidths(ByVal rows As DataRow(), ByVal label As String,
+        Private Shared Function ConvertToPlainTextTableWithFixedColumnWidthsInternal(ByVal rows As DataRow(), ByVal label As String,
                                                                               ByVal fixedColumnWidths As Integer(),
                                                                               columnFormatting As DataColumnToString) As String
             Const vSeparatorHeader As String = "|"
@@ -2237,7 +2172,7 @@ Namespace CompuMaster.Data
             Const hSeparatorCells As Char = Nothing
             Const vSeparatorCells As String = "|"
             Const crossSeparator As String = "+"
-            Return _ConvertToPlainTextTableWithFixedColumnWidths(rows, label, fixedColumnWidths, vSeparatorHeader, vSeparatorCells, crossSeparator, hSeparatorHeader, hSeparatorCells, columnFormatting)
+            Return ConvertToPlainTextTableWithFixedColumnWidthsInternal(rows, label, fixedColumnWidths, vSeparatorHeader, vSeparatorCells, crossSeparator, hSeparatorHeader, hSeparatorCells, columnFormatting)
         End Function
 
         ''' <summary>
@@ -2248,7 +2183,7 @@ Namespace CompuMaster.Data
         ''' <param name="fixedColumnWidths">The column sizes in chars</param>
         ''' <returns>All rows are with fixed column withs. If no rows have been processed, the user will get notified about this fact</returns>
         ''' <remarks></remarks>
-        Private Shared Function _ConvertToPlainTextTableWithFixedColumnWidths(ByVal rows As DataRowCollection, ByVal label As String,
+        Private Shared Function ConvertToPlainTextTableWithFixedColumnWidthsInternal(ByVal rows As DataRowCollection, ByVal label As String,
                                                                               ByVal fixedColumnWidths As Integer(),
                                                                               columnFormatting As DataColumnToString) As String
             Const vSeparatorHeader As String = "|"
@@ -2256,7 +2191,7 @@ Namespace CompuMaster.Data
             Const hSeparatorCells As Char = Nothing
             Const vSeparatorCells As String = "|"
             Const crossSeparator As String = "+"
-            Return _ConvertToPlainTextTableWithFixedColumnWidths(rows, label, fixedColumnWidths, vSeparatorHeader, vSeparatorCells, crossSeparator, hSeparatorHeader, hSeparatorCells, columnFormatting)
+            Return ConvertToPlainTextTableWithFixedColumnWidthsInternal(rows, label, fixedColumnWidths, vSeparatorHeader, vSeparatorCells, crossSeparator, hSeparatorHeader, hSeparatorCells, columnFormatting)
         End Function
 
         ''' <summary>
@@ -2272,7 +2207,7 @@ Namespace CompuMaster.Data
         ''' <param name="horizontalSeparatorCells"></param>
         ''' <returns>All rows are with fixed column withs. If no rows have been processed, the user will get notified about this fact</returns>
         ''' <remarks></remarks>
-        Private Shared Function _ConvertToPlainTextTableWithFixedColumnWidths(ByVal rows As DataRow(), ByVal label As String,
+        Private Shared Function ConvertToPlainTextTableWithFixedColumnWidthsInternal(ByVal rows As DataRow(), ByVal label As String,
                                                                               ByVal fixedColumnWidths As Integer(), verticalSeparatorHeader As String,
                                                                               verticalSeparatorCells As String, crossSeparator As String,
                                                                               horizontalSeparatorHeadline As Char, horizontalSeparatorCells As Char,
@@ -2352,7 +2287,7 @@ Namespace CompuMaster.Data
         ''' <param name="horizontalSeparatorCells"></param>
         ''' <returns>All rows are with fixed column withs. If no rows have been processed, the user will get notified about this fact</returns>
         ''' <remarks></remarks>
-        Private Shared Function _ConvertToPlainTextTableWithFixedColumnWidths(ByVal rows As DataRowCollection, ByVal label As String,
+        Private Shared Function ConvertToPlainTextTableWithFixedColumnWidthsInternal(ByVal rows As DataRowCollection, ByVal label As String,
                                                                               ByVal fixedColumnWidths As Integer(), verticalSeparatorHeader As String,
                                                                               verticalSeparatorCells As String, crossSeparator As String,
                                                                               horizontalSeparatorHeadline As Char, horizontalSeparatorCells As Char,
@@ -2490,7 +2425,7 @@ Namespace CompuMaster.Data
         ''' <returns>All rows are tab separated. If no rows have been processed, the user will get notified about this fact</returns>
         <Obsolete("Use ConvertToPlainTextTableFixedColumnWidths instead", False), ComponentModel.EditorBrowsable(ComponentModel.EditorBrowsableState.Never)>
         Public Shared Function ConvertToPlainTextTable(ByVal rows As DataRowCollection, ByVal label As String, ByVal fixedColumnWidths As Integer()) As String
-            Return _ConvertToPlainTextTableWithFixedColumnWidths(rows, label, fixedColumnWidths, Nothing)
+            Return ConvertToPlainTextTableWithFixedColumnWidthsInternal(rows, label, fixedColumnWidths, Nothing)
         End Function
 
         ''' <summary>
@@ -2883,19 +2818,18 @@ Namespace CompuMaster.Data
         ''' <returns></returns>
         ''' <remarks></remarks>
         Private Shared Function CloneDataColumn(ByVal templateColumn As DataColumn) As DataColumn
-            Dim Result As New DataColumn
-            Result.AllowDBNull = templateColumn.AllowDBNull
-            Result.AutoIncrement = False
-            Result.Caption = templateColumn.Caption
-            Result.ColumnName = templateColumn.ColumnName
-            Result.DataType = templateColumn.DataType
-            Result.DefaultValue = templateColumn.DefaultValue
-            Result.MaxLength = templateColumn.MaxLength
-            Result.ReadOnly = templateColumn.ReadOnly
-            Result.Unique = False
-#If NET_1_1 = False Then
-            Result.DateTimeMode = templateColumn.DateTimeMode
-#End If
+            Dim Result As New DataColumn With {
+                .AllowDBNull = templateColumn.AllowDBNull,
+                .AutoIncrement = False,
+                .Caption = templateColumn.Caption,
+                .ColumnName = templateColumn.ColumnName,
+                .DataType = templateColumn.DataType,
+                .DefaultValue = templateColumn.DefaultValue,
+                .MaxLength = templateColumn.MaxLength,
+                .ReadOnly = templateColumn.ReadOnly,
+                .Unique = False,
+                .DateTimeMode = templateColumn.DateTimeMode
+            }
             Return Result
         End Function
 

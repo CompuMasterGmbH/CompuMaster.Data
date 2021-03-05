@@ -7,3 +7,4 @@ Imports System.Diagnostics.CodeAnalysis
 
 <Assembly: SuppressMessage("Performance", "CA1820:Test for empty strings using string length", Justification:="<Ausstehend>")>
 <Assembly: SuppressMessage("Design", "CA1034:Nested types should not be visible", Justification:="<Ausstehend>")>
+<Assembly: SuppressMessage("Design", "CA1031:Do not catch general exception types", Justification:="<Ausstehend>")>

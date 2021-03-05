@@ -4,7 +4,6 @@ Namespace CompuMaster.Test.Data.DataQuery
 
     <TestFixture(Category:="DB Connections")> Public Class Connections
 
-#If Not NET_1_1 Then
         <Test(), Obsolete> Public Sub DataException()
             Dim ex As New CompuMaster.Data.DataQuery.AnyIDataProvider.DataException(Nothing, Nothing)
             Assert.Pass("No exception thrown - all is perfect :-)")
@@ -28,7 +27,6 @@ Namespace CompuMaster.Test.Data.DataQuery
             Assert.AreEqual(System.Data.ConnectionState.Closed, conn.State)
             Assert.Pass("No exception thrown - all is perfect :-)")
         End Sub
-#End If
 
         <Test()> Public Sub LoadAndUseConnectionFromExternalAssembly()
             'TODO: Unabhängigkeit von spezifischer Workstation mit Lw. G:
@@ -176,7 +174,8 @@ Namespace CompuMaster.Test.Data.DataQuery
             End If
         End Sub
 
-        <Test()> Public Sub MicrosoftExcelConnectionMatrixByProviderAndExcelFileFormatVersion()
+        <Test()> <CodeAnalysis.SuppressMessage("Style", "IDE0028:Initialisierung der Sammlung vereinfachen", Justification:="<Ausstehend>")>
+        Public Sub MicrosoftExcelConnectionMatrixByProviderAndExcelFileFormatVersion()
             Dim TestFails As Boolean = False
             Console.WriteLine("Trying to find appropriate data provider for platform " & PlatformDependentProcessBitNumber())
             Console.WriteLine()
@@ -253,7 +252,8 @@ Namespace CompuMaster.Test.Data.DataQuery
 
         End Sub
 
-        <Test()> Public Sub MicrosoftAccessConnectionMatrixByProviderAndAccessFileFormatVersion()
+        <Test()> <CodeAnalysis.SuppressMessage("Style", "IDE0028:Initialisierung der Sammlung vereinfachen", Justification:="<Ausstehend>")>
+        Public Sub MicrosoftAccessConnectionMatrixByProviderAndAccessFileFormatVersion()
             Dim TestFails As Boolean = False
             Console.WriteLine("Trying to find appropriate data provider for platform " & PlatformDependentProcessBitNumber())
             Console.WriteLine()

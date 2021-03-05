@@ -25,6 +25,7 @@ namespace CompuMaster.Test.Tools.TinyWebServerAdvanced
         private readonly Func<HttpListenerRequest, string> _handler;
         private readonly System.Collections.Specialized.NameValueCollection _responseHeaders;
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0016:throw-Ausdruck verwenden", Justification = "<Ausstehend>")]
         public WebServer(Func<HttpListenerRequest, string> handler, params string[] urls)
         {
             if (urls == null || urls.Length == 0)
@@ -39,6 +40,7 @@ namespace CompuMaster.Test.Tools.TinyWebServerAdvanced
             _listener.Start();
         }
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0016:throw-Ausdruck verwenden", Justification = "<Ausstehend>")]
         public WebServer(Func<HttpListenerRequest, string> handler, System.Collections.Specialized.NameValueCollection responseHeaders, params string[] urls)
         {
             if (urls == null || urls.Length == 0)
@@ -54,6 +56,7 @@ namespace CompuMaster.Test.Tools.TinyWebServerAdvanced
             _listener.Start();
         }
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0019:Musterabgleich verwenden", Justification = "<Ausstehend>")]
         public void Run()
         {
             ThreadPool.QueueUserWorkItem(o =>
@@ -62,7 +65,7 @@ namespace CompuMaster.Test.Tools.TinyWebServerAdvanced
                 {
                     ThreadPool.QueueUserWorkItem(c =>
                     {
-                        var ctx = c as HttpListenerContext;
+                        HttpListenerContext ctx = c as HttpListenerContext;
                         if (ctx != null)
                         {
                             try

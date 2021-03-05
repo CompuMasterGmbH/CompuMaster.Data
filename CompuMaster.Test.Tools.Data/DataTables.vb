@@ -20,7 +20,7 @@ Namespace CompuMaster.Test.Data
 #End Region
 
 #Region "Test data"
-        Private Function _TestTable1() As DataTable
+        Private Function TestTable1() As DataTable
             Dim Result As New DataTable("test1")
             Result.Columns.Add("ID", GetType(Integer))
             Result.Columns.Add("Value", GetType(String))
@@ -56,7 +56,7 @@ Namespace CompuMaster.Test.Data
             Return Result
         End Function
 
-        Private Function _TestTable2() As DataTable
+        Private Function TestTable2() As DataTable
             Dim file As String = AssemblyTestEnvironment.TestFileAbsolutePath("testfiles\Q&A.xls")
             Dim dt As DataTable = CompuMaster.Data.XlsReader.ReadDataTableFromXlsFile(file, "Rund um das NT")
             Return dt
@@ -237,8 +237,8 @@ Namespace CompuMaster.Test.Data
             Throw New NotImplementedException
         End Sub
 
-#If NET_1_1 = False Then
-        <Test()> Public Sub ConvertIDictionaryToDataTable()
+        <Test()> <CodeAnalysis.SuppressMessage("Style", "IDE0028:Initialisierung der Sammlung vereinfachen", Justification:="<Ausstehend>")>
+        Public Sub ConvertIDictionaryToDataTable()
             Dim dict As IDictionary = New System.Collections.Generic.Dictionary(Of String, String)()
             dict.Add("Berlin", "Germany")
 
@@ -247,9 +247,9 @@ Namespace CompuMaster.Test.Data
             Assert.AreEqual(2, dt.Columns.Count())
 
         End Sub
-#End If
 
-        <Test()> Public Sub ConvertNameValueCollectionToDataTable()
+        <Test()> <CodeAnalysis.SuppressMessage("Style", "IDE0028:Initialisierung der Sammlung vereinfachen", Justification:="<Ausstehend>")>
+        Public Sub ConvertNameValueCollectionToDataTable()
             Dim nvc As New System.Collections.Specialized.NameValueCollection
             nvc.Add("Berlin", "Germany")
             nvc.Add("Paris", "France")
@@ -291,7 +291,7 @@ Namespace CompuMaster.Test.Data
             dt2.Columns.Add("Hi", GetType(String))
 
             Dim row2 As DataRow = dt2.NewRow
-            row.item(0) = 23
+            row.Item(0) = 23
             row.Item(1) = "Hello"
 
             Dim row3 As DataRow = dt2.NewRow
@@ -321,13 +321,14 @@ Namespace CompuMaster.Test.Data
             Console.WriteLine(CompuMaster.Data.DataTables.ConvertToWikiTable(dt))
 
 #If Not CI_Build Then
-            dt = _TestTable2()
+            dt = TestTable2()
             Console.WriteLine(CompuMaster.Data.DataTables.ConvertToWikiTable(dt))
 #End If
 
         End Sub
 
-        <Test()> Public Sub ConvertToPlainTextTableFixedColumnWidths()
+        <Test()> <CodeAnalysis.SuppressMessage("Style", "IDE0028:Initialisierung der Sammlung vereinfachen", Justification:="<Ausstehend>")>
+        Public Sub ConvertToPlainTextTableFixedColumnWidths()
             Dim dt As New DataTable
             dt.Columns.Add("id", GetType(Integer))
             dt.Columns.Add("Hi", GetType(String))
@@ -361,7 +362,7 @@ Namespace CompuMaster.Test.Data
 
 #If Not CI_Build Then
             'Real data table: quiz questions
-            dt = _TestTable2()
+            dt = TestTable2()
             Console.WriteLine(CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(dt))
             Console.WriteLine(CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(dt, " :: ", " :: ", "=##=", "=", "="))
             Console.WriteLine(CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(dt, 10))
@@ -619,7 +620,6 @@ Namespace CompuMaster.Test.Data
             StringAssert.IsMatch("Text2", merge_dest3.Rows.Item(3).Item(1))
             StringAssert.IsMatch("Text3", merge_dest3.Rows.Item(4).Item(1))
 
-#If Not NET_1_1 Then
             Dim big As New DataTable
             Dim bigCopy As New DataTable
             Dim bigCopy2 As New DataTable
@@ -647,7 +647,6 @@ Namespace CompuMaster.Test.Data
             Assert.AreEqual(bigCopy.Columns.Count, bigCopy2.Columns.Count)
             Assert.AreEqual(20, bigCopy2.Rows.Item(1020).Item(1))
             Assert.AreEqual(55, bigCopy2.Rows.Item(900).Item(1))
-#End If
 
             'TODO: all variations'
         End Sub
@@ -816,7 +815,7 @@ Namespace CompuMaster.Test.Data
 
         <Test()> Public Sub AddColumns()
             Dim dt As DataTable
-            dt = Me._TestTable1()
+            dt = Me.TestTable1()
             Assert.AreEqual(2, dt.Columns.Count)
 
             CompuMaster.Data.DataTables.AddColumns(dt, "SomeStringColumn")
@@ -1060,12 +1059,13 @@ Namespace CompuMaster.Test.Data
             dt2.Rows.Add(New String() {"D", "W2"})
 
             Dim dt As DataTable
-            Dim MethodResult As Object
+            Dim MethodResult As ArrayList
 
             Console.WriteLine()
             Console.WriteLine("Test 1 with DBNull at source but with removing source rows with DBNull")
             dt = CompuMaster.Data.DataTables.CreateDataTableClone(dtTemplate)
-            MethodResult = CompuMaster.Data.DataTables.RemoveRowsWithCorrespondingValueInComparisonTable(dt.Columns(0), dt2.Columns(0)).ToArray
+            MethodResult = CompuMaster.Data.DataTables.RemoveRowsWithCorrespondingValueInComparisonTable(dt.Columns(0), dt2.Columns(0))
+            Assert.AreEqual(3, MethodResult.Count)
             Console.WriteLine(CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(dt))
             Assert.AreEqual(New Object() {"A", "B", DBNull.Value}, MethodResult)
             Assert.AreEqual(1, dt.Rows.Count())
@@ -1076,6 +1076,7 @@ Namespace CompuMaster.Test.Data
             Console.WriteLine("Test 2 with DBNull at source but not at comparison table")
             dt = CompuMaster.Data.DataTables.CreateDataTableClone(dtTemplate)
             MethodResult = CompuMaster.Data.DataTables.RemoveRowsWithCorrespondingValueInComparisonTable(dt.Columns(0), dt2.Columns(0), True, False)
+            Assert.AreEqual(2, MethodResult.Count)
             Console.WriteLine(CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(dt))
             Assert.AreEqual(2, dt.Rows.Count())
             StringAssert.IsMatch("C", dt.Rows.Item(0).Item(0))
@@ -1088,6 +1089,7 @@ Namespace CompuMaster.Test.Data
             dt = CompuMaster.Data.DataTables.CreateDataTableClone(dtTemplate)
             dt2.Rows.Add(New Object() {DBNull.Value, "N2"})
             MethodResult = CompuMaster.Data.DataTables.RemoveRowsWithCorrespondingValueInComparisonTable(dt.Columns(0), dt2.Columns(0), True, False)
+            Assert.AreEqual(3, MethodResult.Count)
             Console.WriteLine(CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(dt))
             Assert.AreEqual(1, dt.Rows.Count())
             StringAssert.IsMatch("C", dt.Rows.Item(0).Item(0))
@@ -1174,6 +1176,8 @@ Namespace CompuMaster.Test.Data
             SqlJoinTables_CrossJoin_Test1()
             SqlJoinTables_CrossJoin_Test2()
         End Sub
+
+        <CodeAnalysis.SuppressMessage("Performance", "CA1825:Avoid zero-length array allocations.", Justification:="<Ausstehend>")>
         Private Sub SqlJoinTables_CrossJoin_Test1()
 
             Dim TestTableSet As JoinTableSet = Me.CreateCrossJoinTablesTableSet1
@@ -1194,6 +1198,7 @@ Namespace CompuMaster.Test.Data
 
         End Sub
 
+        <CodeAnalysis.SuppressMessage("Performance", "CA1825:Avoid zero-length array allocations.", Justification:="<Ausstehend>")>
         Private Sub SqlJoinTables_CrossJoin_Test2()
 
             Dim TestTableSet As JoinTableSet = Me.CreateCrossJoinTablesTableSet2
@@ -1598,7 +1603,7 @@ Namespace CompuMaster.Test.Data
                     Assert.AreEqual(3, CInt(FullOuterJoined.Rows(i)(4)))
                 ElseIf i = 2 Then
                     Assert.AreEqual(DBNull.Value, FullOuterJoined.Rows(i)(4))
-                ElseIf i = 4
+                ElseIf i = 4 Then
                     Assert.AreEqual(1 + i, CInt(FullOuterJoined.Rows(i)(4)))
                 End If
             Next i
@@ -1931,7 +1936,7 @@ Namespace CompuMaster.Test.Data
         End Sub
 
         <Test()> Public Sub FindDuplicates()
-            Dim testTable As DataTable = _TestTable1()
+            Dim testTable As DataTable = TestTable1()
             Dim Result As Hashtable
             Result = CompuMaster.Data.DataTables.FindDuplicates(testTable.Columns("value"))
 

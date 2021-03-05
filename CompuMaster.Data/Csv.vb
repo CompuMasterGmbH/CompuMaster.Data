@@ -6,7 +6,7 @@ Namespace CompuMaster.Data
     ''' <summary>
     '''     Provides simplified access to CSV files
     ''' </summary>
-    Public Class Csv
+    Public NotInheritable Class Csv
 
         Public Enum WriteLineEncodings As Byte
             None = 0
@@ -29,6 +29,7 @@ Namespace CompuMaster.Data
         ''' <summary>
         ''' Line encoding of CSV files 
         ''' </summary>
+        <CodeAnalysis.SuppressMessage("Design", "CA1027:Mark enums with FlagsAttribute", Justification:="<Ausstehend>")>
         Public Enum ReadLineEncodings As Byte
             ''' <summary>
             ''' Force reading line break in cell value as row break

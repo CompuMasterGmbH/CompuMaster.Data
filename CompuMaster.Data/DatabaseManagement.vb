@@ -3,7 +3,7 @@ Option Strict On
 
 Namespace CompuMaster.Data
 
-    Public Class DatabaseManagement
+    Public NotInheritable Class DatabaseManagement
 
         ''' <summary>
         ''' Create a database file on the specified location, supported file types are .mdb, .accdb, .xls, .xlsx, .xlsm, .xlsb
@@ -57,7 +57,7 @@ Namespace CompuMaster.Data
         ''' <param name="path">The path of the new database file</param>
         ''' <remarks>The folder for the file should already exist and be writable. </remarks>
         Public Shared Sub CreateMsExcelFile(ByVal path As String, ByVal excelVersion As MsExcelFileType)
-                     Select Case excelVersion
+            Select Case excelVersion
                 Case MsExcelFileType.MsExcel95Xls
                     WriteAllBytes(path, LoadBinaryResource("template_e95.xls"))
                 Case MsExcelFileType.MsExcel97Xls
@@ -97,7 +97,7 @@ Namespace CompuMaster.Data
         ''' <remarks>An existing file will be overwritten</remarks>
         Private Shared Sub WriteAllBytes(ByVal path As String, ByVal bytes As Byte())
             If (bytes Is Nothing) Then
-                Throw New ArgumentNullException("bytes")
+                Throw New ArgumentNullException(NameOf(bytes))
             End If
             Dim stream As System.IO.FileStream = New System.IO.FileStream(path, System.IO.FileMode.Create, System.IO.FileAccess.Write, System.IO.FileShare.Read)
             stream.Write(bytes, 0, bytes.Length)
@@ -121,7 +121,7 @@ Namespace CompuMaster.Data
             Catch ex As Exception
                 Throw New Exception("Failure while loading resource name """ & embeddedFileName & """" & vbNewLine & "Available resource names are: " & String.Join(",", System.Reflection.Assembly.GetExecutingAssembly().GetManifestResourceNames), ex)
             Finally
-                If Not stream Is Nothing Then stream.Close()
+                If stream IsNot Nothing Then stream.Close()
             End Try
             Return buffer
         End Function
