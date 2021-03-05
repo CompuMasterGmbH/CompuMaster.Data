@@ -76,7 +76,8 @@ Namespace CompuMaster.Test.Data
 
         End Sub
 
-        <Test> Public Sub NoDBNullArrayOrListFromString()
+        <Test> <CodeAnalysis.SuppressMessage("Performance", "CA1825:Avoid zero-length array allocations.", Justification:="<Ausstehend>")>
+        Public Sub NoDBNullArrayOrListFromString_Generics()
             'DBNull.Value
             Assert.AreEqual(Nothing, CompuMaster.Data.Utils.NoDBNullArrayFromString(Of String)(DBNull.Value, ","))
             Assert.AreEqual(Nothing, CompuMaster.Data.Utils.NoDBNullArrayFromString(Of Object)(DBNull.Value, ","))
@@ -99,6 +100,30 @@ Namespace CompuMaster.Test.Data
             Assert.AreEqual(New Integer?() {1, 2, 3}, CompuMaster.Data.Utils.NoDBNullArrayFromString(Of Integer?)("1,2,3", ","))
         End Sub
 
+        <Test> <CodeAnalysis.SuppressMessage("Performance", "CA1825:Avoid zero-length array allocations.", Justification:="<Ausstehend>")>
+        Public Sub NoDBNullArrayOrListFromString_NoGenerics()
+            'DBNull.Value
+            Assert.AreEqual(Nothing, CompuMaster.Data.Utils.NoDBNullArrayFromString(DBNull.Value, ",", CType(Nothing, String())))
+            Assert.AreEqual(Nothing, CompuMaster.Data.Utils.NoDBNullArrayFromString(DBNull.Value, ",", CType(Nothing, Object())))
+            Assert.AreEqual(Nothing, CompuMaster.Data.Utils.NoDBNullArrayFromString(DBNull.Value, ",", CType(Nothing, Integer())))
+            'Assert.AreEqual(Nothing, CompuMaster.Data.Utils.NoDBNullArrayFromString(DBNull.Value, ",", CType(Nothing, Integer?())))
+            'Empty String
+            Assert.AreEqual(New String() {}, CompuMaster.Data.Utils.NoDBNullArrayFromString("", ",", CType(Nothing, String())))
+            Assert.AreEqual(New Object() {}, CompuMaster.Data.Utils.NoDBNullArrayFromString("", ",", CType(Nothing, Object())))
+            Assert.AreEqual(New Integer() {}, CompuMaster.Data.Utils.NoDBNullArrayFromString("", ",", CType(Nothing, Integer())))
+            'Assert.AreEqual(New Integer?() {}, CompuMaster.Data.Utils.NoDBNullArrayFromString("", ",", CType(Nothing, Integer?())))
+            'Single String
+            Assert.AreEqual(New String() {"Test"}, CompuMaster.Data.Utils.NoDBNullArrayFromString("Test", ",", CType(Nothing, String())))
+            'Assert.AreEqual(New Object() {New Object}, CompuMaster.Data.Utils.NoDBNullArrayFromString(New Object.ToString, ",", CType(Nothing, Object())))
+            Assert.AreEqual(New Integer() {1}, CompuMaster.Data.Utils.NoDBNullArrayFromString("1", ",", CType(Nothing, Integer())))
+            'Assert.AreEqual(New Integer?() {1}, CompuMaster.Data.Utils.NoDBNullArrayFromString("1", ",", CType(Nothing, Integer?())))
+            'Separatable String
+            Assert.AreEqual(New String() {"Test1", "Test2", "Test3"}, CompuMaster.Data.Utils.NoDBNullArrayFromString("Test1,Test2,Test3", ",", CType(Nothing, String())))
+            'Assert.AreEqual(New Object() {}, CompuMaster.Data.Utils.NoDBNullArrayFromString("", ",", CType(Nothing, Object())))
+            Assert.AreEqual(New Integer() {1, 2, 3}, CompuMaster.Data.Utils.NoDBNullArrayFromString("1,2,3", ",", CType(Nothing, Integer())))
+            'Assert.AreEqual(New Integer?() {1, 2, 3}, CompuMaster.Data.Utils.NoDBNullArrayFromString("1,2,3", ",", CType(Nothing, Integer?())))
+        End Sub
+
         <Test> Public Sub NullableTypeWithItsValueOrDBNull()
             Assert.AreNotEqual(GetType(Integer?), CompuMaster.Data.Utils.NullableTypeWithItsValueOrDBNull(Of Integer)(New Integer?(1)).GetType)
             Assert.AreEqual(GetType(Integer), CompuMaster.Data.Utils.NullableTypeWithItsValueOrDBNull(Of Integer)(New Integer?(1)).GetType)
@@ -108,7 +133,8 @@ Namespace CompuMaster.Test.Data
             Assert.AreEqual(DBNull.Value, CompuMaster.Data.Utils.NullableTypeWithItsValueOrDBNull(Of Integer)(Nothing))
         End Sub
 
-        <Test> Sub ArrayNotNothingOrDBNull()
+        <Test> <CodeAnalysis.SuppressMessage("Performance", "CA1825:Avoid zero-length array allocations.", Justification:="<Ausstehend>")>
+        Sub ArrayNotNothingOrDBNull()
             Assert.AreEqual(DBNull.Value, CompuMaster.Data.Utils.ArrayNotNothingOrDBNull(Nothing))
             Dim arr As Byte() = Nothing
             Assert.AreEqual(DBNull.Value, CompuMaster.Data.Utils.ArrayNotNothingOrDBNull(arr))
@@ -116,7 +142,8 @@ Namespace CompuMaster.Test.Data
             Assert.AreEqual(New Byte() {1}, CompuMaster.Data.Utils.ArrayNotNothingOrDBNull(New Byte() {1}))
         End Sub
 
-        <Test> Sub ArrayNotEmptyOrDBNull()
+        <Test> <CodeAnalysis.SuppressMessage("Performance", "CA1825:Avoid zero-length array allocations.", Justification:="<Ausstehend>")>
+        Sub ArrayNotEmptyOrDBNull()
             Assert.AreEqual(DBNull.Value, CompuMaster.Data.Utils.ArrayNotEmptyOrDBNull(Nothing))
             Dim arr As Byte() = Nothing
             Assert.AreEqual(DBNull.Value, CompuMaster.Data.Utils.ArrayNotEmptyOrDBNull(arr))
