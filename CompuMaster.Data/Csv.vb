@@ -86,7 +86,7 @@ Namespace CompuMaster.Data
         ''' <param name="path">The path of the file</param>
         ''' <param name="csvContainsColumnHeaders">Indicates wether column headers are present</param>
         ''' <param name="fileEncoding">The text encoding of the file</param>
-        ''' <param name="cultureFormatProvider"></param>
+        ''' <param name="cultureFormatProvider">A culture for all conversions</param>
         ''' <param name="recognizeTextBy">A character indicating the start and end of text strings</param>
         ''' <param name="recognizeDoubledColumnSeparatorCharAsOne">Currently without purpose</param>
         ''' <param name="convertEmptyStringsToDBNull">Convert values with empty strings automatically to DbNull</param>
@@ -103,7 +103,7 @@ Namespace CompuMaster.Data
         ''' </summary>
         ''' <param name="data">The content of a CSV file</param>
         ''' <param name="csvContainsColumnHeaders">Indicates wether column headers are present</param>
-        ''' <param name="cultureFormatProvider"></param>
+        ''' <param name="cultureFormatProvider">A culture for all conversions</param>
         ''' <param name="recognizeTextBy">A character indicating the start and end of text strings</param>
         ''' <param name="recognizeDoubledColumnSeparatorCharAsOne">Currently without purpose</param>
         ''' <param name="convertEmptyStringsToDBNull">Convert values with empty strings automatically to DbNull</param>
@@ -155,7 +155,7 @@ Namespace CompuMaster.Data
         ''' <param name="csvContainsColumnHeaders">Indicates wether column headers are present</param>
         ''' <param name="columnWidths">An array of integers specifying the fixed column widths</param>
         ''' <param name="fileEncoding">The text encoding of the file</param>
-        ''' <param name="cultureFormatProvider"></param>
+        ''' <param name="cultureFormatProvider">A culture for all conversions</param>
         ''' <param name="convertEmptyStringsToDBNull">Convert values with empty strings automatically to DbNull</param>
         ''' <returns></returns>
         ''' <remarks>
@@ -170,7 +170,7 @@ Namespace CompuMaster.Data
         ''' </summary>
         ''' <param name="data">The content of a CSV file</param>
         ''' <param name="csvContainsColumnHeaders">Indicates wether column headers are present</param>
-        ''' <param name="cultureFormatProvider"></param>
+        ''' <param name="cultureFormatProvider">A culture for all conversions</param>
         ''' <param name="columnWidths">An array of integers specifying the fixed column widths</param>
         ''' <param name="convertEmptyStringsToDBNull">Convert values with empty strings automatically to DbNull</param>
         ''' <returns></returns>
@@ -206,6 +206,8 @@ Namespace CompuMaster.Data
         ''' <param name="recognizeTextBy">A character indicating the start and end of text strings</param>
         ''' <param name="recognizeMultipleColumnSeparatorCharsAsOne">Specifies whether multiple seperator characters should be recognized as one</param>
         ''' <param name="convertEmptyStringsToDBNull">Convert values with empty strings automatically to DbNull</param>
+        ''' <param name="lineEncodings">Encoding style for linebreaks</param>
+        ''' <param name="lineEncodingAutoConversions">Change linebreak encodings on reading</param>
         ''' <returns></returns>
         ''' <remarks>
         ''' In case of duplicate column names, all additional occurances of the same column name will be modified to use a unique column name
@@ -220,10 +222,12 @@ Namespace CompuMaster.Data
         ''' <param name="path">The path of the file</param>
         ''' <param name="csvContainsColumnHeaders">Indicates wether column headers are present</param>
         ''' <param name="fileEncoding">The text encoding of the file</param>
-        ''' <param name="cultureFormatProvider"></param>
+        ''' <param name="cultureFormatProvider">A culture for all conversions</param>
         ''' <param name="recognizeTextBy">A character indicating the start and end of text strings</param>
         ''' <param name="recognizeDoubledColumnSeparatorCharAsOne">Currently without purpose</param>
         ''' <param name="convertEmptyStringsToDBNull">Convert values with empty strings automatically to DbNull</param>
+        ''' <param name="lineEncodings">Encoding style for linebreaks</param>
+        ''' <param name="lineEncodingAutoConversions">Change linebreak encodings on reading</param>
         ''' <returns></returns>
         ''' <remarks>
         ''' In case of duplicate column names, all additional occurances of the same column name will be modified to use a unique column name
@@ -237,10 +241,12 @@ Namespace CompuMaster.Data
         ''' </summary>
         ''' <param name="data">The content of a CSV file</param>
         ''' <param name="csvContainsColumnHeaders">Indicates wether column headers are present</param>
-        ''' <param name="cultureFormatProvider"></param>
+        ''' <param name="cultureFormatProvider">A culture for all conversions</param>
         ''' <param name="recognizeTextBy">A character indicating the start and end of text strings</param>
         ''' <param name="recognizeDoubledColumnSeparatorCharAsOne">Currently without purpose</param>
         ''' <param name="convertEmptyStringsToDBNull">Convert values with empty strings automatically to DbNull</param>
+        ''' <param name="lineEncodings">Encoding style for linebreaks</param>
+        ''' <param name="lineEncodingAutoConversions">Change linebreak encodings on reading</param>
         ''' <returns></returns>
         ''' <remarks>
         ''' In case of duplicate column names, all additional occurances of the same column name will be modified to use a unique column name
@@ -258,6 +264,8 @@ Namespace CompuMaster.Data
         ''' <param name="RecognizeTextBy">A character indicating the start and end of text strings</param>
         ''' <param name="recognizeDoubledColumnSeparatorCharAsOne">Currently without purpose</param>
         ''' <param name="convertEmptyStringsToDBNull">Convert values with empty strings automatically to DbNull</param>
+        ''' <param name="lineEncodings">Encoding style for linebreaks</param>
+        ''' <param name="lineEncodingAutoConversions">Change linebreak encodings on reading</param>
         ''' <returns></returns>
         ''' <remarks>
         ''' In case of duplicate column names, all additional occurances of the same column name will be modified to use a unique column name
@@ -274,6 +282,8 @@ Namespace CompuMaster.Data
         ''' <param name="fileEncoding">The text encoding of the file</param>
         ''' <param name="columnWidths">An array of integers specifying the fixed column widths</param>
         ''' <param name="convertEmptyStringsToDBNull">Convert values with empty strings automatically to DbNull</param>
+        ''' <param name="lineEncodings">Encoding style for linebreaks</param>
+        ''' <param name="lineEncodingAutoConversions">Change linebreak encodings on reading</param>
         ''' <returns></returns>
         ''' <remarks>
         ''' In case of duplicate column names, all additional occurances of the same column name will be modified to use a unique column name
@@ -289,8 +299,10 @@ Namespace CompuMaster.Data
         ''' <param name="csvContainsColumnHeaders">Indicates wether column headers are present</param>
         ''' <param name="columnWidths">An array of integers specifying the fixed column widths</param>
         ''' <param name="fileEncoding">The text encoding of the file</param>
-        ''' <param name="cultureFormatProvider"></param>
+        ''' <param name="cultureFormatProvider">A culture for all conversions</param>
         ''' <param name="convertEmptyStringsToDBNull">Convert values with empty strings automatically to DbNull</param>
+        ''' <param name="lineEncodings">Encoding style for linebreaks</param>
+        ''' <param name="lineEncodingAutoConversions">Change linebreak encodings on reading</param>
         ''' <returns></returns>
         ''' <remarks>
         ''' In case of duplicate column names, all additional occurances of the same column name will be modified to use a unique column name
@@ -304,9 +316,11 @@ Namespace CompuMaster.Data
         ''' </summary>
         ''' <param name="data">The content of a CSV file</param>
         ''' <param name="csvContainsColumnHeaders">Indicates wether column headers are present</param>
-        ''' <param name="cultureFormatProvider"></param>
+        ''' <param name="cultureFormatProvider">A culture for all conversions</param>
         ''' <param name="columnWidths">An array of integers specifying the fixed column widths</param>
         ''' <param name="convertEmptyStringsToDBNull">Convert values with empty strings automatically to DbNull</param>
+        ''' <param name="lineEncodings">Encoding style for linebreaks</param>
+        ''' <param name="lineEncodingAutoConversions">Change linebreak encodings on reading</param>
         ''' <returns></returns>
         ''' <remarks>
         ''' In case of duplicate column names, all additional occurances of the same column name will be modified to use a unique column name
@@ -322,6 +336,8 @@ Namespace CompuMaster.Data
         ''' <param name="csvContainsColumnHeaders">Indicates wether column headers are present</param>
         ''' <param name="columnWidths">An array of integers specifying the fixed column widths</param>
         ''' <param name="convertEmptyStringsToDBNull">Convert values with empty strings automatically to DbNull</param>
+        ''' <param name="lineEncodings">Encoding style for linebreaks</param>
+        ''' <param name="lineEncodingAutoConversions">Change linebreak encodings on reading</param>
         ''' <returns></returns>
         ''' <remarks>
         ''' In case of duplicate column names, all additional occurances of the same column name will be modified to use a unique column name
@@ -333,8 +349,8 @@ Namespace CompuMaster.Data
         ''' <summary>
         '''     Write to a CSV file
         ''' </summary>
-        ''' <param name="path"></param>
-        ''' <param name="dataTable"></param>
+        ''' <param name="path">The path of the file</param>
+        ''' <param name="dataTable">A datatable which shall be exported</param>
         Public Shared Sub WriteDataTableToCsvFile(ByVal path As String, ByVal dataTable As System.Data.DataTable)
             CompuMaster.Data.CsvTools.WriteDataTableToCsvFile(path, dataTable, WriteLineEncodings.Default)
         End Sub
@@ -342,8 +358,9 @@ Namespace CompuMaster.Data
         ''' <summary>
         '''     Write to a CSV file
         ''' </summary>
-        ''' <param name="path"></param>
-        ''' <param name="dataTable"></param>
+        ''' <param name="path">The path of the file</param>
+        ''' <param name="dataTable">A datatable which shall be exported</param>
+        ''' <param name="lineEncodings">Encoding style for linebreaks</param>
         Public Shared Sub WriteDataTableToCsvFile(ByVal path As String, ByVal dataTable As System.Data.DataTable, lineEncodings As CompuMaster.Data.Csv.WriteLineEncodings)
             CompuMaster.Data.CsvTools.WriteDataTableToCsvFile(path, dataTable, lineEncodings)
         End Sub
@@ -370,6 +387,7 @@ Namespace CompuMaster.Data
         ''' <param name="columnWidths">An array of integers specifying the fixed column widths</param>
         ''' <param name="cultureFormatProvider">A culture format provider which declares list and decimal separators, etc.</param>
         ''' <param name="fileEncoding">A file encoding (default UTF-8)</param>
+        ''' <param name="lineEncodings">Encoding style for linebreaks</param>
         Public Shared Sub WriteDataTableToCsvFile(ByVal path As String, ByVal dataTable As System.Data.DataTable, ByVal writeCsvColumnHeaders As Boolean, lineEncodings As CompuMaster.Data.Csv.WriteLineEncodings, ByVal columnWidths As Integer(), ByVal cultureFormatProvider As System.Globalization.CultureInfo, Optional ByVal fileEncoding As String = "UTF-8")
             CompuMaster.Data.CsvTools.WriteDataTableToCsvFile(path, dataTable, writeCsvColumnHeaders, columnWidths, cultureFormatProvider, fileEncoding, lineEncodings)
         End Sub
@@ -394,6 +412,7 @@ Namespace CompuMaster.Data
         ''' <param name="writeCsvColumnHeaders">Add a row with column headers on the top</param>
         ''' <param name="cultureFormatProvider">A culture format provider which declares list and decimal separators, etc.</param>
         ''' <param name="fileEncoding">A file encoding (default UTF-8)</param>
+        ''' <param name="lineEncodings">Encoding style for linebreaks</param>
         Public Shared Sub WriteDataTableToCsvFile(ByVal path As String, ByVal dataTable As System.Data.DataTable, ByVal writeCsvColumnHeaders As Boolean, lineEncodings As CompuMaster.Data.Csv.WriteLineEncodings, ByVal cultureFormatProvider As System.Globalization.CultureInfo, Optional ByVal fileEncoding As String = "UTF-8")
             WriteDataTableToCsvFile(path, dataTable, writeCsvColumnHeaders, lineEncodings, cultureFormatProvider, fileEncoding, Nothing)
         End Sub
@@ -428,6 +447,7 @@ Namespace CompuMaster.Data
         ''' <param name="fileEncoding">A file encoding (default UTF-8)</param>
         ''' <param name="columnSeparator">A column separator (culture default if empty value)</param>
         ''' <param name="recognizeTextBy">Recognize text by this character (default: quotation marks)</param>
+        ''' <param name="lineEncodings">Encoding style for linebreaks</param>
         Public Shared Sub WriteDataTableToCsvFile(ByVal path As String, ByVal dataTable As System.Data.DataTable, ByVal writeCsvColumnHeaders As Boolean, lineEncodings As CompuMaster.Data.Csv.WriteLineEncodings, ByVal cultureFormatProvider As System.Globalization.CultureInfo, ByVal fileEncoding As String, ByVal columnSeparator As String, Optional ByVal recognizeTextBy As Char = """"c)
             If fileEncoding = Nothing Then
                 fileEncoding = "UTF-8"
@@ -462,6 +482,7 @@ Namespace CompuMaster.Data
         ''' <param name="cultureFormatProvider">A culture format provider which declares list and decimal separators, etc.</param>
         ''' <param name="columnSeparator">A column separator (culture default if empty value)</param>
         ''' <param name="recognizeTextBy">Recognize text by this character (default: quotation marks)</param>
+        ''' <param name="lineEncodings">Encoding style for linebreaks</param>
         ''' <returns>A formatted text output</returns>
         Public Shared Function ConvertDataTableToTextAsStringBuilder(ByVal dataTable As System.Data.DataTable, ByVal writeCsvColumnHeaders As Boolean, lineEncodings As CompuMaster.Data.Csv.WriteLineEncodings, ByVal cultureFormatProvider As System.Globalization.CultureInfo, Optional ByVal columnSeparator As String = Nothing, Optional ByVal recognizeTextBy As Char = """"c) As System.Text.StringBuilder
             If columnSeparator = Nothing Then
@@ -489,6 +510,7 @@ Namespace CompuMaster.Data
         ''' <param name="writeCsvColumnHeaders">Add a row with column headers on the top</param>
         ''' <param name="cultureFormatProvider">A culture format provider which declares list and decimal separators, etc.</param>
         ''' <param name="columnWidths">An array of integers specifying the fixed column widths</param>
+        ''' <param name="lineEncodings">Encoding style for linebreaks</param>
         ''' <returns>The table as text with comma-separated structure</returns>
         Public Shared Function ConvertDataTableToTextAsStringBuilder(ByVal dataTable As System.Data.DataTable, ByVal writeCsvColumnHeaders As Boolean, lineEncodings As CompuMaster.Data.Csv.WriteLineEncodings, ByVal cultureFormatProvider As System.Globalization.CultureInfo, ByVal columnWidths As Integer()) As System.Text.StringBuilder
             Return CompuMaster.Data.CsvTools.ConvertDataTableToCsv(dataTable, writeCsvColumnHeaders, cultureFormatProvider, columnWidths, lineEncodings)
@@ -544,6 +566,7 @@ Namespace CompuMaster.Data
         ''' <param name="fileEncoding">The text encoding of the file</param>
         ''' <param name="columnSeparator">Choose the required character for splitting the columns. Set to null (Nothing in VisualBasic) to enable fixed column widths mode</param>
         ''' <param name="recognizeTextBy">A character indicating the start and end of text strings</param>
+        ''' <param name="lineEncodings">Encoding style for linebreaks</param>
         Public Shared Sub WriteDataTableToCsvFile(ByVal path As String, ByVal dataTable As System.Data.DataTable, ByVal writeCsvColumnHeaders As Boolean, lineEncodings As CompuMaster.Data.Csv.WriteLineEncodings, Optional ByVal fileEncoding As String = "UTF-8", Optional ByVal columnSeparator As String = ","c, Optional ByVal recognizeTextBy As Char = """"c, Optional ByVal decimalSeparator As Char = "."c)
             CompuMaster.Data.CsvTools.WriteDataTableToCsvFile(path, dataTable, writeCsvColumnHeaders, fileEncoding, columnSeparator, recognizeTextBy, decimalSeparator, lineEncodings)
         End Sub
@@ -551,12 +574,12 @@ Namespace CompuMaster.Data
         ''' <summary>
         '''     Create a CSV table (contains BOF signature for unicode encodings)
         ''' </summary>
-        ''' <param name="dataTable"></param>
+        ''' <param name="dataTable">A datatable which shall be exported</param>
         ''' <param name="writeCsvColumnHeaders">Indicates wether column headers are present</param>
         ''' <param name="fileEncoding">The text encoding of the file</param>
         ''' <param name="columnSeparator">Choose the required character for splitting the columns. Set to null (Nothing in VisualBasic) to enable fixed column widths mode</param>
         ''' <param name="recognizeTextBy">A character indicating the start and end of text strings</param>
-        ''' <param name="decimalSeparator"></param>
+        ''' <param name="decimalSeparator">A character indicating the decimal separator in the text string</param>
         ''' <returns>A string containing the CSV table with integrated file encoding for writing with e.g. System.IO.File.WriteAllText()</returns>
         <Obsolete("Better use WriteDataTableToCsvFileStringWithTextEncoding() instead"), ComponentModel.EditorBrowsable(ComponentModel.EditorBrowsableState.Never)>
         Public Shared Function WriteDataTableToCsvString(ByVal dataTable As System.Data.DataTable, ByVal writeCsvColumnHeaders As Boolean, Optional ByVal fileEncoding As String = "UTF-8", Optional ByVal columnSeparator As Char = ","c, Optional ByVal recognizeTextBy As Char = """"c, Optional ByVal decimalSeparator As Char = "."c) As String
@@ -566,15 +589,15 @@ Namespace CompuMaster.Data
         ''' <summary>
         '''     Create a CSV table (contains BOF signature for unicode encodings)
         ''' </summary>
-        ''' <param name="dataTable"></param>
+        ''' <param name="dataTable">A datatable which shall be exported</param>
         ''' <param name="writeCsvColumnHeaders">Indicates wether column headers are present</param>
         ''' <param name="fileEncoding">The text encoding of the file</param>
         ''' <param name="columnSeparator">Choose the required character for splitting the columns. Set to null (Nothing in VisualBasic) to enable fixed column widths mode</param>
         ''' <param name="recognizeTextBy">A character indicating the start and end of text strings</param>
-        ''' <param name="decimalSeparator"></param>
+        ''' <param name="decimalSeparator">A character indicating the decimal separator in the text string</param>
         ''' <returns>A string containing the CSV table with integrated file encoding for writing with e.g. System.IO.File.WriteAllText()</returns>
+        <Obsolete("Better use WriteDataTableToCsvTextString() instead since Strings don't support fileEncoding"), ComponentModel.EditorBrowsable(ComponentModel.EditorBrowsableState.Never)>
         Public Shared Function WriteDataTableToCsvFileStringWithTextEncoding(ByVal dataTable As System.Data.DataTable, ByVal writeCsvColumnHeaders As Boolean, Optional ByVal fileEncoding As String = "UTF-8", Optional ByVal columnSeparator As String = ",", Optional ByVal recognizeTextBy As Char = """"c, Optional ByVal decimalSeparator As Char = "."c) As String
-            'BUG: fileEncoding argument not used - obsolete argument or wrong implementation?!?
             Dim MyStream As System.IO.MemoryStream = WriteDataTableToCsvMemoryStream(dataTable, writeCsvColumnHeaders, WriteLineEncodings.Default, System.Text.Encoding.Unicode.EncodingName, columnSeparator, recognizeTextBy, decimalSeparator)
             Return System.Text.Encoding.Unicode.GetString(MyStream.ToArray)
         End Function
@@ -582,15 +605,16 @@ Namespace CompuMaster.Data
         ''' <summary>
         '''     Create a CSV table (contains BOF signature for unicode encodings)
         ''' </summary>
-        ''' <param name="dataTable"></param>
+        ''' <param name="dataTable">A datatable which shall be exported</param>
         ''' <param name="writeCsvColumnHeaders">Indicates wether column headers are present</param>
         ''' <param name="fileEncoding">The text encoding of the file</param>
         ''' <param name="columnSeparator">Choose the required character for splitting the columns. Set to null (Nothing in VisualBasic) to enable fixed column widths mode</param>
         ''' <param name="recognizeTextBy">A character indicating the start and end of text strings</param>
-        ''' <param name="decimalSeparator"></param>
+        ''' <param name="decimalSeparator">A character indicating the decimal separator in the text string</param>
+        ''' <param name="lineEncodings">Encoding style for linebreaks</param>
         ''' <returns>A string containing the CSV table with integrated file encoding for writing with e.g. System.IO.File.WriteAllText()</returns>
+        <Obsolete("Better use WriteDataTableToCsvTextString() instead since Strings don't support fileEncoding"), ComponentModel.EditorBrowsable(ComponentModel.EditorBrowsableState.Never)>
         Public Shared Function WriteDataTableToCsvFileStringWithTextEncoding(ByVal dataTable As System.Data.DataTable, ByVal writeCsvColumnHeaders As Boolean, lineEncodings As CompuMaster.Data.Csv.WriteLineEncodings, Optional ByVal fileEncoding As String = "UTF-8", Optional ByVal columnSeparator As String = ",", Optional ByVal recognizeTextBy As Char = """"c, Optional ByVal decimalSeparator As Char = "."c) As String
-            'BUG: fileEncoding argument not used - obsolete argument or wrong implementation?!?
             Dim MyStream As System.IO.MemoryStream = WriteDataTableToCsvMemoryStream(dataTable, writeCsvColumnHeaders, lineEncodings, System.Text.Encoding.Unicode.EncodingName, columnSeparator, recognizeTextBy, decimalSeparator)
             Return System.Text.Encoding.Unicode.GetString(MyStream.ToArray)
         End Function
@@ -598,11 +622,11 @@ Namespace CompuMaster.Data
         ''' <summary>
         '''     Create a CSV table
         ''' </summary>
-        ''' <param name="dataTable"></param>
+        ''' <param name="dataTable">A datatable which shall be exported</param>
         ''' <param name="writeCsvColumnHeaders">Indicates wether column headers are present</param>
         ''' <param name="columnSeparator">Choose the required character for splitting the columns. Set to null (Nothing in VisualBasic) to enable fixed column widths mode</param>
         ''' <param name="recognizeTextBy">A character indicating the start and end of text strings</param>
-        ''' <param name="decimalSeparator"></param>
+        ''' <param name="decimalSeparator">A character indicating the decimal separator in the text string</param>
         ''' <returns>A string containing the CSV table</returns>
         Public Shared Function WriteDataTableToCsvTextString(ByVal dataTable As System.Data.DataTable, ByVal writeCsvColumnHeaders As Boolean, Optional ByVal columnSeparator As String = ",", Optional ByVal recognizeTextBy As Char = """"c, Optional ByVal decimalSeparator As Char = "."c) As String
             Dim WrittenStream As System.IO.MemoryStream = WriteDataTableToCsvMemoryStream(dataTable, writeCsvColumnHeaders, WriteLineEncodings.Default, System.Text.Encoding.Unicode.EncodingName, columnSeparator, recognizeTextBy, decimalSeparator)
@@ -620,11 +644,12 @@ Namespace CompuMaster.Data
         ''' <summary>
         '''     Create a CSV table
         ''' </summary>
-        ''' <param name="dataTable"></param>
+        ''' <param name="dataTable">A datatable which shall be exported</param>
         ''' <param name="writeCsvColumnHeaders">Indicates wether column headers are present</param>
         ''' <param name="columnSeparator">Choose the required character for splitting the columns. Set to null (Nothing in VisualBasic) to enable fixed column widths mode</param>
         ''' <param name="recognizeTextBy">A character indicating the start and end of text strings</param>
-        ''' <param name="decimalSeparator"></param>
+        ''' <param name="decimalSeparator">A character indicating the decimal separator in the text string</param>
+        ''' <param name="lineEncodings">Encoding style for linebreaks</param>
         ''' <returns>A string containing the CSV table</returns>
         Public Shared Function WriteDataTableToCsvTextString(ByVal dataTable As System.Data.DataTable, ByVal writeCsvColumnHeaders As Boolean, lineEncodings As CompuMaster.Data.Csv.WriteLineEncodings, Optional ByVal columnSeparator As String = ",", Optional ByVal recognizeTextBy As Char = """"c, Optional ByVal decimalSeparator As Char = "."c) As String
             Dim WrittenStream As System.IO.MemoryStream = WriteDataTableToCsvMemoryStream(dataTable, writeCsvColumnHeaders, lineEncodings, System.Text.Encoding.Unicode.EncodingName, columnSeparator, recognizeTextBy, decimalSeparator)
@@ -642,12 +667,12 @@ Namespace CompuMaster.Data
         ''' <summary>
         '''     Create a CSV table
         ''' </summary>
-        ''' <param name="dataTable"></param>
+        ''' <param name="dataTable">A datatable which shall be exported</param>
         ''' <param name="writeCsvColumnHeaders">Indicates wether column headers are present</param>
         ''' <param name="fileEncoding">The text encoding of the file</param>
         ''' <param name="columnSeparator">Choose the required character for splitting the columns. Set to null (Nothing in VisualBasic) to enable fixed column widths mode</param>
         ''' <param name="recognizeTextBy">A character indicating the start and end of text strings</param>
-        ''' <param name="decimalSeparator"></param>
+        ''' <param name="decimalSeparator">A character indicating the decimal separator in the text string</param>
         ''' <returns>A string containing the CSV table</returns>
         Public Shared Function WriteDataTableToCsvBytes(ByVal dataTable As System.Data.DataTable, ByVal writeCsvColumnHeaders As Boolean, Optional ByVal fileEncoding As String = "UTF-8", Optional ByVal columnSeparator As Char = ","c, Optional ByVal recognizeTextBy As Char = """"c, Optional ByVal decimalSeparator As Char = "."c) As Byte()
             Return CompuMaster.Data.CsvTools.WriteDataTableToCsvBytes(dataTable, writeCsvColumnHeaders, fileEncoding, columnSeparator, recognizeTextBy, decimalSeparator, WriteLineEncodings.Default)
@@ -656,12 +681,13 @@ Namespace CompuMaster.Data
         ''' <summary>
         '''     Create a CSV table
         ''' </summary>
-        ''' <param name="dataTable"></param>
+        ''' <param name="dataTable">A datatable which shall be exported</param>
         ''' <param name="writeCsvColumnHeaders">Indicates wether column headers are present</param>
         ''' <param name="fileEncoding">The text encoding of the file</param>
         ''' <param name="columnSeparator">Choose the required character for splitting the columns. Set to null (Nothing in VisualBasic) to enable fixed column widths mode</param>
         ''' <param name="recognizeTextBy">A character indicating the start and end of text strings</param>
-        ''' <param name="decimalSeparator"></param>
+        ''' <param name="decimalSeparator">A character indicating the decimal separator in the text string</param>
+        ''' <param name="lineEncodings">Encoding style for linebreaks</param>
         ''' <returns>A string containing the CSV table</returns>
         Public Shared Function WriteDataTableToCsvBytes(ByVal dataTable As System.Data.DataTable, ByVal writeCsvColumnHeaders As Boolean, lineEncodings As CompuMaster.Data.Csv.WriteLineEncodings, Optional ByVal fileEncoding As String = "UTF-8", Optional ByVal columnSeparator As Char = ","c, Optional ByVal recognizeTextBy As Char = """"c, Optional ByVal decimalSeparator As Char = "."c) As Byte()
             Return CompuMaster.Data.CsvTools.WriteDataTableToCsvBytes(dataTable, writeCsvColumnHeaders, fileEncoding, columnSeparator, recognizeTextBy, decimalSeparator, lineEncodings)
@@ -670,7 +696,7 @@ Namespace CompuMaster.Data
         ''' <summary>
         '''     Create a CSV table
         ''' </summary>
-        ''' <param name="dataTable"></param>
+        ''' <param name="dataTable">A datatable which shall be exported</param>
         ''' <param name="writeCsvColumnHeaders">Indicates wether column headers are present</param>
         ''' <param name="fileEncoding">The text encoding of the file</param>
         ''' <param name="cultureFormatProvider">A globalization information object for the conversion of all data to strings</param>
@@ -690,12 +716,13 @@ Namespace CompuMaster.Data
         ''' <summary>
         '''     Create a CSV table
         ''' </summary>
-        ''' <param name="dataTable"></param>
+        ''' <param name="dataTable">A datatable which shall be exported</param>
         ''' <param name="writeCsvColumnHeaders">Indicates wether column headers are present</param>
         ''' <param name="fileEncoding">The text encoding of the file</param>
         ''' <param name="cultureFormatProvider">A globalization information object for the conversion of all data to strings</param>
         ''' <param name="columnSeparator">Choose the required character for splitting the columns. Set to null (Nothing in VisualBasic) to enable fixed column widths mode</param>
         ''' <param name="recognizeTextBy">A character indicating the start and end of text strings</param>
+        ''' <param name="lineEncodings">Encoding style for linebreaks</param>
         ''' <returns>A string containing the CSV table</returns>
         Public Shared Function WriteDataTableToCsvBytes(ByVal dataTable As System.Data.DataTable, ByVal writeCsvColumnHeaders As Boolean, lineEncodings As CompuMaster.Data.Csv.WriteLineEncodings, ByVal fileEncoding As System.Text.Encoding, ByVal cultureFormatProvider As System.Globalization.CultureInfo, Optional ByVal columnSeparator As Char = Nothing, Optional ByVal recognizeTextBy As Char = """"c) As Byte()
             Dim charColumnSeparator As Char
@@ -710,12 +737,12 @@ Namespace CompuMaster.Data
         ''' <summary>
         '''     Create a CSV table
         ''' </summary>
-        ''' <param name="dataTable"></param>
+        ''' <param name="dataTable">A datatable which shall be exported</param>
         ''' <param name="writeCsvColumnHeaders">Indicates wether column headers are present</param>
         ''' <param name="fileEncoding">The text encoding of the file</param>
         ''' <param name="columnSeparator">Choose the required character for splitting the columns. Set to null (Nothing in VisualBasic) to enable fixed column widths mode</param>
         ''' <param name="recognizeTextBy">A character indicating the start and end of text strings</param>
-        ''' <param name="decimalSeparator"></param>
+        ''' <param name="decimalSeparator">A character indicating the decimal separator in the text string</param>
         ''' <returns>A memory stream containing all texts as bytes in Unicode format</returns>
         Public Shared Function WriteDataTableToCsvMemoryStream(ByVal dataTable As System.Data.DataTable, ByVal writeCsvColumnHeaders As Boolean, Optional ByVal fileEncoding As String = "UTF-8", Optional ByVal columnSeparator As String = ","c, Optional ByVal recognizeTextBy As Char = """"c, Optional ByVal decimalSeparator As Char = "."c) As System.IO.MemoryStream
             Return CompuMaster.Data.CsvTools.WriteDataTableToCsvMemoryStream(dataTable, writeCsvColumnHeaders, fileEncoding, columnSeparator, recognizeTextBy, decimalSeparator, WriteLineEncodings.Default)
@@ -724,12 +751,13 @@ Namespace CompuMaster.Data
         ''' <summary>
         '''     Create a CSV table
         ''' </summary>
-        ''' <param name="dataTable"></param>
+        ''' <param name="dataTable">A datatable which shall be exported</param>
         ''' <param name="writeCsvColumnHeaders">Indicates wether column headers are present</param>
         ''' <param name="fileEncoding">The text encoding of the file</param>
         ''' <param name="columnSeparator">Choose the required character for splitting the columns. Set to null (Nothing in VisualBasic) to enable fixed column widths mode</param>
         ''' <param name="recognizeTextBy">A character indicating the start and end of text strings</param>
-        ''' <param name="decimalSeparator"></param>
+        ''' <param name="decimalSeparator">A character indicating the decimal separator in the text string</param>
+        ''' <param name="lineEncodings">Encoding style for linebreaks</param>
         ''' <returns>A memory stream containing all texts as bytes in Unicode format</returns>
         Public Shared Function WriteDataTableToCsvMemoryStream(ByVal dataTable As System.Data.DataTable, ByVal writeCsvColumnHeaders As Boolean, lineEncodings As CompuMaster.Data.Csv.WriteLineEncodings, Optional ByVal fileEncoding As String = "UTF-8", Optional ByVal columnSeparator As String = ","c, Optional ByVal recognizeTextBy As Char = """"c, Optional ByVal decimalSeparator As Char = "."c) As System.IO.MemoryStream
             Return CompuMaster.Data.CsvTools.WriteDataTableToCsvMemoryStream(dataTable, writeCsvColumnHeaders, fileEncoding, columnSeparator, recognizeTextBy, decimalSeparator, lineEncodings)
@@ -738,8 +766,8 @@ Namespace CompuMaster.Data
         ''' <summary>
         '''     Write to a CSV file
         ''' </summary>
-        ''' <param name="path"></param>
-        ''' <param name="dataview"></param>
+        ''' <param name="path">The path of the file</param>
+        ''' <param name="dataView">A dataview object with the desired rows</param>
         Public Shared Sub WriteDataViewToCsvFile(ByVal path As String, ByVal dataview As System.Data.DataView)
             CompuMaster.Data.CsvTools.WriteDataViewToCsvFile(path, dataview, WriteLineEncodings.Default)
         End Sub
@@ -747,8 +775,9 @@ Namespace CompuMaster.Data
         ''' <summary>
         '''     Write to a CSV file
         ''' </summary>
-        ''' <param name="path"></param>
-        ''' <param name="dataview"></param>
+        ''' <param name="path">The path of the file</param>
+        ''' <param name="dataView">A dataview object with the desired rows</param>
+        ''' <param name="lineEncodings">Encoding style for linebreaks</param>
         Public Shared Sub WriteDataViewToCsvFile(ByVal path As String, ByVal dataview As System.Data.DataView, lineEncodings As CompuMaster.Data.Csv.WriteLineEncodings)
             CompuMaster.Data.CsvTools.WriteDataViewToCsvFile(path, dataview, lineEncodings)
         End Sub
@@ -756,11 +785,11 @@ Namespace CompuMaster.Data
         ''' <summary>
         '''     Write to a CSV file
         ''' </summary>
-        ''' <param name="path"></param>
-        ''' <param name="dataView"></param>
-        ''' <param name="writeCsvColumnHeaders"></param>
-        ''' <param name="cultureFormatProvider"></param>
-        ''' <param name="fileEncoding"></param>
+        ''' <param name="path">The path of the file</param>
+        ''' <param name="dataView">A dataview object with the desired rows</param>
+        ''' <param name="writeCsvColumnHeaders">Add a row with column headers on the top</param>
+        ''' <param name="cultureFormatProvider">A culture for all conversions</param>
+        ''' <param name="fileEncoding">The text encoding of the file</param>
         Public Shared Sub WriteDataViewToCsvFile(ByVal path As String, ByVal dataView As System.Data.DataView, ByVal writeCsvColumnHeaders As Boolean, ByVal cultureFormatProvider As System.Globalization.CultureInfo, Optional ByVal fileEncoding As String = "UTF-8", Optional ByVal columnSeparator As String = Nothing, Optional ByVal recognizeTextBy As Char = """"c)
             If columnSeparator = Nothing Then
                 columnSeparator = cultureFormatProvider.TextInfo.ListSeparator
@@ -771,11 +800,12 @@ Namespace CompuMaster.Data
         ''' <summary>
         '''     Write to a CSV file
         ''' </summary>
-        ''' <param name="path"></param>
-        ''' <param name="dataView"></param>
-        ''' <param name="writeCsvColumnHeaders"></param>
-        ''' <param name="cultureFormatProvider"></param>
-        ''' <param name="fileEncoding"></param>
+        ''' <param name="path">The path of the file</param>
+        ''' <param name="dataView">A dataview object with the desired rows</param>
+        ''' <param name="writeCsvColumnHeaders">Add a row with column headers on the top</param>
+        ''' <param name="cultureFormatProvider">A culture for all conversions</param>
+        ''' <param name="fileEncoding">The text encoding of the file</param>
+        ''' <param name="lineEncodings">Encoding style for linebreaks</param>
         Public Shared Sub WriteDataViewToCsvFile(ByVal path As String, ByVal dataView As System.Data.DataView, ByVal writeCsvColumnHeaders As Boolean, lineEncodings As CompuMaster.Data.Csv.WriteLineEncodings, ByVal cultureFormatProvider As System.Globalization.CultureInfo, Optional ByVal fileEncoding As String = "UTF-8", Optional ByVal columnSeparator As String = Nothing, Optional ByVal recognizeTextBy As Char = """"c)
             If columnSeparator = Nothing Then
                 columnSeparator = cultureFormatProvider.TextInfo.ListSeparator
@@ -786,13 +816,13 @@ Namespace CompuMaster.Data
         ''' <summary>
         '''     Write to a CSV file
         ''' </summary>
-        ''' <param name="path"></param>
-        ''' <param name="dataView"></param>
-        ''' <param name="writeCsvColumnHeaders"></param>
-        ''' <param name="fileEncoding"></param>
-        ''' <param name="columnSeparator"></param>
-        ''' <param name="recognizeTextBy"></param>
-        ''' <param name="decimalSeparator"></param>
+        ''' <param name="path">The path of the file</param>
+        ''' <param name="dataView">A dataview object with the desired rows</param>
+        ''' <param name="writeCsvColumnHeaders">Add a row with column headers on the top</param>
+        ''' <param name="fileEncoding">The text encoding of the file</param>
+        ''' <param name="columnSeparator">Choose the required character for splitting the columns. Set to null (Nothing in VisualBasic) to enable fixed column widths mode</param>
+        ''' <param name="recognizeTextBy">A character indicating the start and end of text strings</param>
+        ''' <param name="decimalSeparator">A character indicating the decimal separator in the text string</param>
         Public Shared Sub WriteDataViewToCsvFile(ByVal path As String, ByVal dataView As System.Data.DataView, ByVal writeCsvColumnHeaders As Boolean, Optional ByVal fileEncoding As String = "UTF-8", Optional ByVal columnSeparator As String = ",", Optional ByVal recognizeTextBy As Char = """"c, Optional ByVal decimalSeparator As Char = "."c)
             CompuMaster.Data.CsvTools.WriteDataViewToCsvFile(path, dataView, writeCsvColumnHeaders, fileEncoding, columnSeparator, recognizeTextBy, decimalSeparator, WriteLineEncodings.Default)
         End Sub
@@ -800,13 +830,14 @@ Namespace CompuMaster.Data
         ''' <summary>
         '''     Write to a CSV file
         ''' </summary>
-        ''' <param name="path"></param>
-        ''' <param name="dataView"></param>
-        ''' <param name="writeCsvColumnHeaders"></param>
-        ''' <param name="fileEncoding"></param>
-        ''' <param name="columnSeparator"></param>
-        ''' <param name="recognizeTextBy"></param>
-        ''' <param name="decimalSeparator"></param>
+        ''' <param name="path">The path of the file</param>
+        ''' <param name="dataView">A dataview object with the desired rows</param>
+        ''' <param name="writeCsvColumnHeaders">Add a row with column headers on the top</param>
+        ''' <param name="fileEncoding">The text encoding of the file</param>
+        ''' <param name="columnSeparator">Choose the required character for splitting the columns. Set to null (Nothing in VisualBasic) to enable fixed column widths mode</param>
+        ''' <param name="recognizeTextBy">A character indicating the start and end of text strings</param>
+        ''' <param name="decimalSeparator">A character indicating the decimal separator in the text string</param>
+        ''' <param name="lineEncodings">Encoding style for linebreaks</param>
         Public Shared Sub WriteDataViewToCsvFile(ByVal path As String, ByVal dataView As System.Data.DataView, ByVal writeCsvColumnHeaders As Boolean, lineEncodings As CompuMaster.Data.Csv.WriteLineEncodings, Optional ByVal fileEncoding As String = "UTF-8", Optional ByVal columnSeparator As String = ",", Optional ByVal recognizeTextBy As Char = """"c, Optional ByVal decimalSeparator As Char = "."c)
             CompuMaster.Data.CsvTools.WriteDataViewToCsvFile(path, dataView, writeCsvColumnHeaders, fileEncoding, columnSeparator, recognizeTextBy, decimalSeparator, lineEncodings)
         End Sub

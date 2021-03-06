@@ -569,7 +569,7 @@ Namespace CompuMaster.Data
         Friend Shared Function ConvertIDictionaryToDataTable(ByVal dictionary As IDictionary, ByVal keyIsUnique As Boolean) As DataTable
             Dim Result As New DataTable
             Result.Columns.Add(New DataColumn("key"))
-            Result.Columns("key").Unique = True
+            Result.Columns("key").Unique = keyIsUnique
             Result.Columns.Add(New DataColumn("value"))
 
             For Each MyKey As Object In dictionary.Keys
@@ -593,7 +593,7 @@ Namespace CompuMaster.Data
         Friend Shared Function ConvertDictionaryEntryArrayToDataTable(ByVal dictionaryEntries As DictionaryEntry(), ByVal keyIsUnique As Boolean) As DataTable
             Dim Result As New DataTable
             Result.Columns.Add(New DataColumn("key"))
-            Result.Columns("key").Unique = True
+            Result.Columns("key").Unique = keyIsUnique
             Result.Columns.Add(New DataColumn("value"))
 
             For Each entry As DictionaryEntry In dictionaryEntries
@@ -624,7 +624,7 @@ Namespace CompuMaster.Data
         Friend Shared Function ConvertNameValueCollectionToDataTable(ByVal nameValueCollection As Specialized.NameValueCollection, ByVal keyIsUnique As Boolean) As DataTable
             Dim Result As New DataTable
             Result.Columns.Add(New DataColumn("key"))
-            Result.Columns("key").Unique = True
+            Result.Columns("key").Unique = keyIsUnique
             Result.Columns.Add(New DataColumn("value"))
 
             For Each MyKey As String In nameValueCollection.Keys
@@ -1205,10 +1205,10 @@ Namespace CompuMaster.Data
                 Next
                 LeftColumns = CType(indexesOfLeftTableColumnsToCopy.ToArray(GetType(Integer)), Integer())
             End If
-            If leftTableColumnsToCopy IsNot Nothing Then
+            If rightTableColumnsToCopy IsNot Nothing Then
                 Dim indexesOfRightTableColumnsToCopy As New ArrayList
-                For MyCounter As Integer = 0 To leftTableColumnsToCopy.Length - 1
-                    indexesOfRightTableColumnsToCopy.Add(leftTableColumnsToCopy(MyCounter).Ordinal)
+                For MyCounter As Integer = 0 To rightTableColumnsToCopy.Length - 1
+                    indexesOfRightTableColumnsToCopy.Add(rightTableColumnsToCopy(MyCounter).Ordinal)
                 Next
                 RightColumns = CType(indexesOfRightTableColumnsToCopy.ToArray(GetType(Integer)), Integer())
             End If
@@ -1487,8 +1487,8 @@ Namespace CompuMaster.Data
         ''' <summary>
         '''     Add a prefix to the names of the columns
         ''' </summary>
-        ''' <param name="dataTable"></param>
-        ''' <param name="columnIndexes"></param>
+        ''' <param name="dataTable">A datatable which shall be exported</param>
+        ''' <param name="columnIndexes">An array of column indexes</param>
         ''' <param name="prefix">e. g. "orders."</param>
         Friend Shared Sub AddPrefixesToColumnNames(ByVal dataTable As DataTable, ByVal columnIndexes As Integer(), ByVal prefix As String)
 
@@ -1509,8 +1509,8 @@ Namespace CompuMaster.Data
         ''' <summary>
         '''     Add a suffix to the names of the columns
         ''' </summary>
-        ''' <param name="dataTable"></param>
-        ''' <param name="columnIndexes"></param>
+        ''' <param name="dataTable">A datatable which shall be exported</param>
+        ''' <param name="columnIndexes">An array of column indexes</param>
         ''' <param name="suffix">e. g. "-orders"</param>
         Friend Shared Sub AddSuffixesToColumnNames(ByVal dataTable As DataTable, ByVal columnIndexes As Integer(), ByVal suffix As String)
 

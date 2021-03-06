@@ -55,7 +55,7 @@ Namespace CompuMaster.Data
         ''' <summary>
         ''' Lookup the last content row index (the last content cell might differ from Excel's special cell xlLastCell)
         ''' </summary>
-        ''' <param name="table"></param>
+        ''' <param name="table">A table</param>
         ''' <returns></returns>
         ''' <remarks></remarks>
         Private Shared Function LookupLastContentRowIndex(ByVal table As DataTable) As Integer
@@ -74,9 +74,9 @@ Namespace CompuMaster.Data
         ''' <summary>
         ''' Determine if a cell contains empty content
         ''' </summary>
-        ''' <param name="table"></param>
-        ''' <param name="rowIndex"></param>
-        ''' <param name="columnIndex"></param>
+        ''' <param name="table">A table</param>
+        ''' <param name="rowIndex">The row index</param>
+        ''' <param name="columnIndex">The column index</param>
         ''' <returns></returns>
         ''' <remarks></remarks>
         Private Shared Function IsEmptyCell(ByVal table As DataTable, ByVal rowIndex As Integer, ByVal columnIndex As Integer) As Boolean

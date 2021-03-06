@@ -215,7 +215,7 @@ Namespace CompuMaster.Data.Windows
             If Me.DesignMode Then
                 CopySelectedCellsToClipboardWithHeadersToolStripMenuItem.Visible = True
                 CopySelectedCellsToClipboardWithoutHeadersToolStripMenuItem.Visible = True
-            ElseIf Not Grid Is Nothing Then
+            ElseIf Grid IsNot Nothing Then
                 If Grid.AreAllCellsSelected(False) Then
                     CopySelectedCellsToClipboardWithHeadersToolStripMenuItem.Visible = False
                     CopySelectedCellsToClipboardWithoutHeadersToolStripMenuItem.Visible = False
@@ -329,6 +329,7 @@ Namespace CompuMaster.Data.Windows
             MyBase.Dispose(disposing)
         End Sub
 
+        <Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1031:Do not catch general exception types", Justification:="<Ausstehend>")>
         Private Sub InsertRowsFromClipboardToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles InsertRowsFromClipboardToolStripMenuItem.Click
             Try
                 'Dim ClipboardTableText As String = Clipboard.GetText(TextDataFormat.CommaSeparatedValue)
@@ -354,6 +355,7 @@ Namespace CompuMaster.Data.Windows
             End Try
         End Sub
 
+        <Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1031:Do not catch general exception types", Justification:="<Ausstehend>")>
         Private Sub PasteFromClipboardToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles PasteFromClipboardToolStripMenuItem.Click
             Try
                 If Clipboard.ContainsImage Then

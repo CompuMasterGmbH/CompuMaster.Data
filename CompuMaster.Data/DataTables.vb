@@ -1937,7 +1937,7 @@ Namespace CompuMaster.Data
         ''' <summary>
         ''' Create a well-formed table for Wiki
         ''' </summary>
-        ''' <param name="rows"></param>
+        ''' <param name="rows">A set of DataRows</param>
         ''' <returns></returns>
         ''' <remarks></remarks>
         Public Shared Function ConvertToWikiTable(ByVal rows As DataRowCollection) As String
@@ -1951,21 +1951,21 @@ Namespace CompuMaster.Data
         ''' <summary>
         ''' Create a well-formed table for Wiki
         ''' </summary>
-        ''' <param name="rows"></param>
+        ''' <param name="rows">A set of DataRows</param>
         ''' <returns></returns>
         ''' <remarks></remarks>
         Public Shared Function ConvertToWikiTable(ByVal rows As DataRowCollection, columnFormatting As DataColumnToString) As String
             If rows.Count = 0 Then
                 Return Nothing
             Else
-                Return ConvertToWikiTable(rows(0).Table)
+                Return ConvertToWikiTable(rows(0).Table, columnFormatting)
             End If
         End Function
 
         ''' <summary>
         ''' Create a well-formed table for Wiki
         ''' </summary>
-        ''' <param name="table"></param>
+        ''' <param name="table">A table</param>
         ''' <returns></returns>
         ''' <remarks></remarks>
         Public Shared Function ConvertToWikiTable(ByVal table As DataTable) As String
@@ -1975,7 +1975,7 @@ Namespace CompuMaster.Data
         ''' <summary>
         ''' Create a well-formed table for Wiki
         ''' </summary>
-        ''' <param name="table"></param>
+        ''' <param name="table">A table</param>
         ''' <returns></returns>
         ''' <remarks></remarks>
         Public Shared Function ConvertToWikiTable(ByVal table As DataTable, columnFormatting As DataColumnToString) As String
@@ -2048,7 +2048,7 @@ Namespace CompuMaster.Data
         ''' <summary>
         ''' Suggests column widths for a table using as minimum 2 chars, but minimum header string length, but also either full cell length for number/date/time columns or for all other types 80 % of all values should be visible completely
         ''' </summary>
-        ''' <param name="table"></param>
+        ''' <param name="table">A table</param>
         ''' <returns></returns>
         ''' <remarks></remarks>
         Public Shared Function SuggestColumnWidthsForFixedPlainTables(table As System.Data.DataTable) As Integer()
@@ -2058,7 +2058,7 @@ Namespace CompuMaster.Data
         ''' <summary>
         ''' Suggests column widths for a table using as minimum 2 chars, but minimum header string length, but also either full cell length for number/date/time columns or for all other types a given % value of all values should be visible completely
         ''' </summary>
-        ''' <param name="table"></param>
+        ''' <param name="table">A table</param>
         ''' <returns></returns>
         ''' <remarks></remarks>
         Public Shared Function SuggestColumnWidthsForFixedPlainTables(table As System.Data.DataTable, optimalWidthWhenPercentageNumberOfRowsFitIntoCell As Double) As Integer()
@@ -2068,7 +2068,7 @@ Namespace CompuMaster.Data
         ''' <summary>
         ''' Suggests column widths for a table using as minimum 2 chars, but minimum header string length, but also either full cell length for number/date/time columns or for all other types 80 % of all values should be visible completely
         ''' </summary>
-        ''' <param name="rows"></param>
+        ''' <param name="rows">A set of DataRows</param>
         ''' <returns></returns>
         ''' <remarks></remarks>
         Public Shared Function SuggestColumnWidthsForFixedPlainTables(rows As System.Data.DataRowCollection) As Integer()
@@ -2082,7 +2082,7 @@ Namespace CompuMaster.Data
         ''' <summary>
         ''' Suggests column widths for a table using as minimum 2 chars, but minimum header string length, but also either full cell length for number/date/time columns or for all other types a given % value of all values should be visible completely
         ''' </summary>
-        ''' <param name="rows"></param>
+        ''' <param name="rows">A set of DataRows</param>
         ''' <returns></returns>
         ''' <remarks></remarks>
         Public Shared Function SuggestColumnWidthsForFixedPlainTables(rows As System.Data.DataRowCollection, optimalWidthWhenPercentageNumberOfRowsFitIntoCell As Double) As Integer()
@@ -2096,7 +2096,7 @@ Namespace CompuMaster.Data
         ''' <summary>
         ''' Suggests column widths for a table using as minimum 2 chars, but minimum header string length, but also either full cell length for number/date/time columns or for all other types 80 % of all values should be visible completely
         ''' </summary>
-        ''' <param name="rows"></param>
+        ''' <param name="rows">A set of DataRows</param>
         ''' <returns></returns>
         ''' <remarks></remarks>
         Public Shared Function SuggestColumnWidthsForFixedPlainTables(rows As System.Data.DataRow()) As Integer()
@@ -2110,7 +2110,7 @@ Namespace CompuMaster.Data
         ''' <summary>
         ''' Suggests column widths for a table using as minimum 2 chars, but minimum header string length, but also either full cell length for number/date/time columns or for all other types a given % value of all values should be visible completely
         ''' </summary>
-        ''' <param name="rows"></param>
+        ''' <param name="rows">A set of DataRows</param>
         ''' <returns></returns>
         ''' <remarks></remarks>
         Public Shared Function SuggestColumnWidthsForFixedPlainTables(rows As System.Data.DataRow(), optimalWidthWhenPercentageNumberOfRowsFitIntoCell As Double) As Integer()
@@ -2124,7 +2124,7 @@ Namespace CompuMaster.Data
         ''' <summary>
         ''' Suggests column widths for a table using as minimum 2 chars, but minimum header string length, but also either full cell length for number/date/time columns or for all other types 80 % of all values should be visible completely
         ''' </summary>
-        ''' <param name="table"></param>
+        ''' <param name="table">A table</param>
         ''' <returns></returns>
         ''' <remarks></remarks>
         Public Shared Function SuggestColumnWidthsForFixedPlainTables(table As System.Data.DataTable, columnFormatting As DataColumnToString) As Integer()
@@ -2134,7 +2134,7 @@ Namespace CompuMaster.Data
         ''' <summary>
         ''' Suggests column widths for a table using as minimum 2 chars, but minimum header string length, but also either full cell length for number/date/time columns or for all other types 80 % of all values should be visible completely
         ''' </summary>
-        ''' <param name="rows"></param>
+        ''' <param name="rows">A set of DataRows</param>
         ''' <returns></returns>
         ''' <remarks></remarks>
         Public Shared Function SuggestColumnWidthsForFixedPlainTables(rows As System.Data.DataRowCollection, columnFormatting As DataColumnToString) As Integer()
@@ -2148,7 +2148,7 @@ Namespace CompuMaster.Data
         ''' <summary>
         ''' Suggests column widths for a table using as minimum 2 chars, but minimum header string length, but also either full cell length for number/date/time columns or for all other types 80 % of all values should be visible completely
         ''' </summary>
-        ''' <param name="rows"></param>
+        ''' <param name="rows">A set of DataRows</param>
         ''' <returns></returns>
         ''' <remarks></remarks>
         Public Shared Function SuggestColumnWidthsForFixedPlainTables(rows As System.Data.DataRow(), columnFormatting As DataColumnToString) As Integer()
@@ -2161,8 +2161,8 @@ Namespace CompuMaster.Data
         ''' <summary>
         ''' Suggests column widths for a table using as minimum 2 chars, but minimum header string length, but also either full cell length for number/date/time columns or for all other types a given % value of all values should be visible completely
         ''' </summary>
-        ''' <param name="rows"></param>
-        ''' <param name="table"></param>
+        ''' <param name="rows">A set of DataRows</param>
+        ''' <param name="table">A table</param>
         ''' <returns></returns>
         ''' <remarks></remarks>
         Private Shared Function SuggestColumnWidthsForFixedPlainTables(rows As System.Data.DataRow(), ByVal table As DataTable,
@@ -2209,8 +2209,8 @@ Namespace CompuMaster.Data
         ''' <summary>
         ''' Suggests column widths for a table using as minimum 2 chars, but minimum header string length, but also either full cell length for number/date/time columns or for all other types a given % value of all values should be visible completely
         ''' </summary>
-        ''' <param name="rows"></param>
-        ''' <param name="table"></param>
+        ''' <param name="rows">A set of DataRows</param>
+        ''' <param name="table">A table</param>
         ''' <returns></returns>
         ''' <remarks></remarks>
         Private Shared Function SuggestColumnWidthsForFixedPlainTables(rows As System.Data.DataRowCollection, table As DataTable,
@@ -3154,8 +3154,8 @@ Namespace CompuMaster.Data
         ''' <summary>
         '''     Add a prefix to the names of the columns
         ''' </summary>
-        ''' <param name="dataTable"></param>
-        ''' <param name="columnIndexes"></param>
+        ''' <param name="dataTable">A datatable which shall be exported</param>
+        ''' <param name="columnIndexes">An array of column indexes</param>
         ''' <param name="prefix">e. g. "orders."</param>
         Public Shared Sub AddPrefixesToColumnNames(ByVal dataTable As DataTable, ByVal columnIndexes As Integer(), ByVal prefix As String)
             CompuMaster.Data.DataTablesTools.AddPrefixesToColumnNames(dataTable, columnIndexes, prefix)
@@ -3164,8 +3164,8 @@ Namespace CompuMaster.Data
         ''' <summary>
         '''     Add a suffix to the names of the columns
         ''' </summary>
-        ''' <param name="dataTable"></param>
-        ''' <param name="columnIndexes"></param>
+        ''' <param name="dataTable">A datatable which shall be exported</param>
+        ''' <param name="columnIndexes">An array of column indexes</param>
         ''' <param name="suffix">e. g. "-orders"</param>
         Public Shared Sub AddSuffixesToColumnNames(ByVal dataTable As DataTable, ByVal columnIndexes As Integer(), ByVal suffix As String)
             CompuMaster.Data.DataTablesTools.AddSuffixesToColumnNames(dataTable, columnIndexes, suffix)
@@ -3270,7 +3270,7 @@ Namespace CompuMaster.Data
         ''' <summary>
         ''' All columns of the table
         ''' </summary>
-        ''' <param name="table"></param>
+        ''' <param name="table">A table</param>
         ''' <returns></returns>
         Public Shared Function AllColumns(table As System.Data.DataTable) As System.Data.DataColumn()
             Dim Result As New System.Collections.Generic.List(Of System.Data.DataColumn)
@@ -3283,7 +3283,7 @@ Namespace CompuMaster.Data
         ''' <summary>
         ''' All column names of the table
         ''' </summary>
-        ''' <param name="table"></param>
+        ''' <param name="table">A table</param>
         ''' <returns></returns>
         Public Shared Function AllColumnNames(table As System.Data.DataTable) As String()
             Dim Result As New System.Collections.Generic.List(Of String)
@@ -4339,7 +4339,7 @@ Namespace CompuMaster.Data
         ''' <summary>
         ''' Remove all rows matching the filter expression
         ''' </summary>
-        ''' <param name="table"></param>
+        ''' <param name="table">A table</param>
         ''' <param name="filterExpression"></param>
         Public Shared Sub RemoveRowsByFilter(table As DataTable, filterExpression As String)
             Dim FoundRows As DataRow() = table.Select(filterExpression)

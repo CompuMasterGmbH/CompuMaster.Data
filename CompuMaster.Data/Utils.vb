@@ -521,7 +521,7 @@ Namespace CompuMaster.Data
         ''' <returns></returns>
         Public Shared Function NoDBNullListFromString(ByVal arrayData As Object, splitChar As Char, alternativeValue As Generic.List(Of DateTime)) As Generic.List(Of DateTime)
             If IsDBNull(arrayData) OrElse arrayData Is Nothing Then
-                Return Nothing
+                Return alternativeValue
             ElseIf CType(arrayData, String) = "" Then
                 Return New Generic.List(Of DateTime)
             Else
@@ -549,7 +549,7 @@ Namespace CompuMaster.Data
         ''' <returns></returns>
         Public Shared Function NoDBNullListFromString(ByVal arrayData As Object, splitChar As Char, alternativeValue As Generic.List(Of Boolean)) As Generic.List(Of Boolean)
             If IsDBNull(arrayData) OrElse arrayData Is Nothing Then
-                Return Nothing
+                Return alternativeValue
             ElseIf CType(arrayData, String) = "" Then
                 Return New Generic.List(Of Boolean)
             Else
@@ -577,7 +577,7 @@ Namespace CompuMaster.Data
         ''' <returns></returns>
         Public Shared Function NoDBNullListFromString(ByVal arrayData As Object, splitChar As Char, alternativeValue As Generic.List(Of Double)) As Generic.List(Of Double)
             If IsDBNull(arrayData) OrElse arrayData Is Nothing Then
-                Return Nothing
+                Return alternativeValue
             ElseIf CType(arrayData, String) = "" Then
                 Return New Generic.List(Of Double)
             Else
@@ -605,7 +605,7 @@ Namespace CompuMaster.Data
         ''' <returns></returns>
         Public Shared Function NoDBNullListFromString(ByVal arrayData As Object, splitChar As Char, alternativeValue As Generic.List(Of Integer)) As Generic.List(Of Integer)
             If IsDBNull(arrayData) OrElse arrayData Is Nothing Then
-                Return Nothing
+                Return alternativeValue
             ElseIf CType(arrayData, String) = "" Then
                 Return New Generic.List(Of Integer)
             Else

@@ -12,7 +12,7 @@ Namespace CompuMaster.Data.DataQuery
         ''' <summary>
         ''' A most probably working Microsoft Access connection which uses the most appropriate, installed OleDB provider of the current machine
         ''' </summary>
-        ''' <param name="path"></param>
+        ''' <param name="path">The path of the file</param>
         ''' <returns>An OleDB data connection to the requested file</returns>
         ''' <remarks></remarks>
         ''' <exception cref="Office2010x64OleDbOdbcEngineRequiredException" />
@@ -24,7 +24,7 @@ Namespace CompuMaster.Data.DataQuery
         ''' <summary>
         ''' A most probably working Microsoft Access connection which uses the most appropriate, installed OleDB provider of the current machine
         ''' </summary>
-        ''' <param name="path"></param>
+        ''' <param name="path">The path of the file</param>
         ''' <param name="databasePassword"></param>
         ''' <returns>An OleDB data connection to the requested file</returns>
         ''' <remarks></remarks>
@@ -105,7 +105,7 @@ Namespace CompuMaster.Data.DataQuery
         ''' <summary>
         ''' A most probably working Microsoft Access connection which uses the most appropriate, installed ODBC driver of the current machine
         ''' </summary>
-        ''' <param name="path"></param>
+        ''' <param name="path">The path of the file</param>
         ''' <returns>An ODBC data connection to the requested file</returns>
         ''' <remarks></remarks>
         ''' <exception cref="Office2010x64OleDbOdbcEngineRequiredException" />
@@ -117,7 +117,7 @@ Namespace CompuMaster.Data.DataQuery
         ''' <summary>
         ''' A most probably working Microsoft Access connection which uses the most appropriate, installed ODBC driver of the current machine
         ''' </summary>
-        ''' <param name="path"></param>
+        ''' <param name="path">The path of the file</param>
         ''' <param name="databasePassword"></param>
         ''' <returns>An ODBC data connection to the requested file</returns>
         ''' <remarks></remarks>
@@ -177,7 +177,7 @@ Namespace CompuMaster.Data.DataQuery
         ''' <summary>
         ''' A most probably working Microsoft Access connection which uses the most appropriate, installed ODBC driver of the current machine
         ''' </summary>
-        ''' <param name="path"></param>
+        ''' <param name="path">The path of the directory with multiple text files</param>
         ''' <returns>An ODBC data connection to the requested file</returns>
         ''' <remarks></remarks>
         ''' <exception cref="Office2010x64OleDbOdbcEngineRequiredException" />
@@ -218,7 +218,7 @@ Namespace CompuMaster.Data.DataQuery
         ''' <summary>
         ''' A most probably working Microsoft Access connection which uses the most appropriate, installed OleDB provider or ODBC driver of the current machine
         ''' </summary>
-        ''' <param name="path"></param>
+        ''' <param name="path">The path of the file</param>
         ''' <returns>An OleDB or ODBC data connection to the requested file</returns>
         ''' <remarks></remarks>
         ''' <exception cref="Office2010x64OleDbOdbcEngineRequiredException" />
@@ -230,7 +230,7 @@ Namespace CompuMaster.Data.DataQuery
         ''' <summary>
         ''' A most probably working Microsoft Access connection which uses the most appropriate, installed OleDB provider or ODBC driver of the current machine
         ''' </summary>
-        ''' <param name="path"></param>
+        ''' <param name="path">The path of the file</param>
         ''' <param name="databasePassword"></param>
         ''' <returns>An OleDB or ODBC data connection to the requested file</returns>
         ''' <remarks></remarks>
@@ -315,7 +315,7 @@ Namespace CompuMaster.Data.DataQuery
         ''' <summary>
         ''' A most probably working Microsoft Excel connection which uses the most appropriate, installed OleDB provider or ODBC driver of the current machine
         ''' </summary>
-        ''' <param name="path"></param>
+        ''' <param name="path">The path of the file</param>
         ''' <param name="firstRowContainsHeaders"></param>
         ''' <param name="readAllColumnsAsTextOnly"></param>
         ''' <returns>An OleDB or ODBC data connection to the requested file</returns>
@@ -387,7 +387,7 @@ Namespace CompuMaster.Data.DataQuery
         ''' <summary>
         ''' A most probably working Microsoft Excel connection which uses the most appropriate, installed ODBC driver of the current machine
         ''' </summary>
-        ''' <param name="path"></param>
+        ''' <param name="path">The path of the file</param>
         ''' <param name="firstRowContainsHeaders"></param>
         ''' <param name="readAllColumnsAsTextOnly"></param>
         ''' <returns>An ODBC data connection to the requested file</returns>
@@ -432,7 +432,7 @@ Namespace CompuMaster.Data.DataQuery
         ''' <summary>
         ''' A most probably working Microsoft Excel connection which uses the most appropriate, installed OleDB provider of the current machine
         ''' </summary>
-        ''' <param name="path"></param>
+        ''' <param name="path">The path of the file</param>
         ''' <param name="firstRowContainsHeaders"></param>
         ''' <param name="readAllColumnsAsTextOnly"></param>
         ''' <returns>An OleDB data connection to the requested file</returns>

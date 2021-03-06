@@ -346,14 +346,16 @@ Namespace CompuMaster.Test.Data
 
         End Sub
 
-        <Test> Sub WriteDataTableToCsvFileStringWithTextEncoding()
+        <Test, Obsolete> Sub WriteDataTableToCsvFileStringWithTextEncoding()
             Dim t As DataTable = SimpleSampleTable()
             Dim bom As String = System.Text.Encoding.UTF8.GetString(System.Text.Encoding.UTF8.GetPreamble())
+            Assert.AreEqual(New Byte() {239, 187, 191}, System.Text.Encoding.UTF8.GetPreamble())
+            Assert.Greater(bom.Length, 0, "Utf8Preamble must contain at least 1 Char")
             Dim csv As String
             csv = CompuMaster.Data.Csv.WriteDataTableToCsvFileStringWithTextEncoding(t, True)
-            Assert.True(csv.Substring(0, bom.Length) = bom, "CSV starts correctly with BOM signature for UTF-8")
+            Assert.AreEqual(bom, csv.Substring(0, bom.Length), "CSV starts correctly with BOM signature for UTF-8")
             csv = CompuMaster.Data.Csv.WriteDataTableToCsvFileStringWithTextEncoding(t, True, "UTF-8")
-            Assert.True(csv.Substring(0, bom.Length) = bom, "CSV starts correctly with BOM signature for UTF-8")
+            Assert.AreEqual(bom, csv.Substring(0, bom.Length), "CSV starts correctly with BOM signature for UTF-8")
         End Sub
 
         <Test> Sub WriteDataTableToCsvTextString()
@@ -361,7 +363,7 @@ Namespace CompuMaster.Test.Data
             Dim bom As String = System.Text.Encoding.UTF8.GetString(System.Text.Encoding.UTF8.GetPreamble())
             Dim csv As String
             csv = CompuMaster.Data.Csv.WriteDataTableToCsvTextString(t, True)
-            Assert.False(csv.Substring(0, bom.Length) = bom, "CSV starts invalidly with BOM signature for UTF-8")
+            Assert.AreNotEqual(bom, csv.Substring(0, bom.Length), "CSV starts invalidly with BOM signature for UTF-8")
         End Sub
 
         <Test> Sub ReadWriteCompareDatableWithStringEncoding()
