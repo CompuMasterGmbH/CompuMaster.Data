@@ -428,6 +428,27 @@ Namespace CompuMaster.Data
         ''' <param name="splitChar"></param>
         ''' <param name="alternativeValue"></param>
         ''' <returns></returns>
+        Public Shared Function NoDBNullArrayFromString(ByVal arrayData As Object, splitChar As Char, alternativeValue As Byte()) As Byte()
+            Dim ListResult As Generic.List(Of Byte)
+            If alternativeValue Is Nothing Then
+                ListResult = NoDBNullListFromString(arrayData, splitChar, CType(Nothing, Generic.List(Of Byte)))
+            Else
+                ListResult = NoDBNullListFromString(arrayData, splitChar, New Generic.List(Of Byte)(alternativeValue))
+            End If
+            If ListResult Is Nothing Then
+                Return alternativeValue
+            Else
+                Return ListResult.ToArray
+            End If
+        End Function
+
+        ''' <summary>
+        ''' Check for DBNull and return null (Nothing in VisualBasic) alternatively, second check for empty string and return empty array, third split the string and fill the array with all elements
+        ''' </summary>
+        ''' <param name="arrayData"></param>
+        ''' <param name="splitChar"></param>
+        ''' <param name="alternativeValue"></param>
+        ''' <returns></returns>
         Public Shared Function NoDBNullArrayFromString(ByVal arrayData As Object, splitChar As Char, alternativeValue As DateTime()) As DateTime()
             Dim ListResult As Generic.List(Of DateTime)
             If alternativeValue Is Nothing Then
@@ -562,6 +583,34 @@ Namespace CompuMaster.Data
                         Result.Add(CType(Activator.CreateInstance(GetType(Boolean), SplitValueAsT), Boolean))
                     Else
                         Result.Add(CType(CType(SplitValue, Object), Boolean))
+                    End If
+                Next
+                Return Result
+            End If
+        End Function
+
+        ''' <summary>
+        ''' Check for DBNull and return null (Nothing in VisualBasic) alternatively, second check for empty string and return empty list, third split the string and fill the list with all elements
+        ''' </summary>
+        ''' <param name="arrayData"></param>
+        ''' <param name="splitChar"></param>
+        ''' <param name="alternativeValue"></param>
+        ''' <returns></returns>
+        Public Shared Function NoDBNullListFromString(ByVal arrayData As Object, splitChar As Char, alternativeValue As Generic.List(Of Byte)) As Generic.List(Of Byte)
+            If IsDBNull(arrayData) OrElse arrayData Is Nothing Then
+                Return alternativeValue
+            ElseIf CType(arrayData, String) = "" Then
+                Return New Generic.List(Of Byte)
+            Else
+                Dim Result As New Generic.List(Of Byte)
+                For Each SplitValue As String In CType(arrayData, String).Split(splitChar)
+                    If Nullable.GetUnderlyingType(GetType(Byte)) IsNot Nothing AndAlso GetType(Byte).IsValueType AndAlso Nullable.GetUnderlyingType(GetType(Byte)) IsNot GetType(Byte) Then
+                        Dim UnderlyingType As Type = Nullable.GetUnderlyingType(GetType(Byte)) 'e.g.: T = Nullable(Of Integer) -> UnderlyingType = Integer
+                        Dim SplitValueOrNothing As String = StringNotEmptyOrNothing(SplitValue)
+                        Dim SplitValueAsT As Byte = CType(Convert.ChangeType(SplitValueOrNothing, UnderlyingType), Byte)
+                        Result.Add(CType(Activator.CreateInstance(GetType(Byte), SplitValueAsT), Byte))
+                    Else
+                        Result.Add(CType(CType(SplitValue, Object), Byte))
                     End If
                 Next
                 Return Result

@@ -601,7 +601,7 @@ Namespace CompuMaster.Test.Data
             Assert.AreEqual(3, merge_dest3.Columns.Count)
 
 
-            'Checking sort after merge (only source 
+            'Checking sort after merge (only source)
             Assert.AreEqual(1, merge_dest3.Rows.Item(0).Item(0))
             Assert.AreEqual(9, merge_dest3.Rows.Item(1).Item(0))
             Assert.AreEqual(10, merge_dest3.Rows.Item(2).Item(0))
