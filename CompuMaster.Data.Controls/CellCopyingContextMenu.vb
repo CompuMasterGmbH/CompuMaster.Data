@@ -271,9 +271,9 @@ Namespace CompuMaster.Data.Windows
         ''' <returns></returns>
         ''' <remarks></remarks>
         Private Function PreferredCulture() As Globalization.CultureInfo
-            If InvariantCultureToolStripMenuItem.Checked = True Then
+            If InvariantCultureToolStripMenuItem.Checked Then
                 Return Globalization.CultureInfo.InvariantCulture
-            ElseIf CultureOfOperatingSystemToolStripMenuItem.Checked = True Then
+            ElseIf CultureOfOperatingSystemToolStripMenuItem.Checked Then
                 Return Globalization.CultureInfo.InstalledUICulture
             ElseIf EnglishCultureenUSToolStripMenuItem.Checked Then
                 Return Globalization.CultureInfo.GetCultureInfo("en-US")

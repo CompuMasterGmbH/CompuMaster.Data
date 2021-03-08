@@ -8,6 +8,7 @@ Namespace CompuMaster.Data
     ''' </summary>
     ''' <remarks>
     ''' </remarks>
+    <CodeAnalysis.SuppressMessage("Major Code Smell", "S3385:""Exit"" statements should not be used", Justification:="<Ausstehend>")>
     Friend Class DataTablesTools
 
         ''' <summary>
@@ -954,7 +955,7 @@ Namespace CompuMaster.Data
             Next
             Result.Append(System.Environment.NewLine)
             For Each row As DataRow In rows
-                If Not row.RowState = DataRowState.Deleted Then
+                If row.RowState <> DataRowState.Deleted Then
                     For Each column As DataColumn In row.Table.Columns
                         If column.Ordinal <> 0 Then Result.Append(separator)
                         Result.Append(String.Format("{0}", row(column)))
@@ -1063,9 +1064,11 @@ Namespace CompuMaster.Data
             End Function
 
             Protected Overrides Sub OnRowUpdated(ByVal value As System.Data.Common.RowUpdatedEventArgs)
+                'don't execute base code
             End Sub
 
             Protected Overrides Sub OnRowUpdating(ByVal value As System.Data.Common.RowUpdatingEventArgs)
+                'don't execute base code
             End Sub
 
         End Class
@@ -1155,10 +1158,8 @@ Namespace CompuMaster.Data
                     'Verify that we don't add relation columns which would lead to duplicate data since those columns must also be in the parent table
                     For MyRelColCounter As Integer = 0 To RelationColumns.Length - 1
                         Dim rightColumn As DataColumn = rightChildTable.Columns(MyColCounter)
-                        If rightColumn Is RelationColumns(MyRelColCounter) Then
-                            If LeftRelationColumns(MyRelColCounter).ColumnName = RelationColumns(MyRelColCounter).ColumnName Then 'if the name is equal then we don't need to add this column again, otherwise we do
-                                IsRelationColumn = True
-                            End If
+                        If rightColumn Is RelationColumns(MyRelColCounter) AndAlso LeftRelationColumns(MyRelColCounter).ColumnName = RelationColumns(MyRelColCounter).ColumnName Then 'if the name is equal then we don't need to add this column again, otherwise we do
+                            IsRelationColumn = True
                         End If
                     Next
                     If IsRelationColumn = False Then
@@ -1523,7 +1524,9 @@ Namespace CompuMaster.Data
             End If
 
             For MyCounter As Integer = 0 To columnIndexes.Length - 1
+#Disable Warning S1643 ' Strings should not be concatenated using "+" or "&" in a loop
                 dataTable.Columns(columnIndexes(MyCounter)).ColumnName = dataTable.Columns(columnIndexes(MyCounter)).ColumnName & suffix
+#Enable Warning S1643 ' Strings should not be concatenated using "+" or "&" in a loop
             Next
 
         End Sub

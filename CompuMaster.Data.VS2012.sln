@@ -87,6 +87,11 @@ Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "CompuMaster.Test.Web.DataUp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CompuMaster.Test.TinyWebServerAdvanced", "CompuMaster.Test.TinyWebServerAdvanced\CompuMaster.Test.TinyWebServerAdvanced.csproj", "{8E5448F8-484E-43D5-8638-1C35F44EB9B7}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{266A3BE1-C77B-4330-BE4F-156C2DCB0BFE}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		AppVeyorCI|Any CPU = AppVeyorCI|Any CPU

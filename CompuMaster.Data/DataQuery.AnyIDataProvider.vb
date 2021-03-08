@@ -16,6 +16,7 @@ Namespace CompuMaster.Data.DataQuery
     ''' <summary>
     '''     Common routines to query data from any data provider
     ''' </summary>
+    <CodeAnalysis.SuppressMessage("Major Code Smell", "S1066:Collapsible ""if"" statements should be merged", Justification:="<Ausstehend>")>
     Public Module AnyIDataProvider
 
         ''' <summary>
@@ -48,6 +49,7 @@ Namespace CompuMaster.Data.DataQuery
         ''' <remarks>
         '''     Errors will be thrown in case of unresolvable parameter values or if the created type can't be casted into an IDbConnection.
         ''' </remarks>
+        <CodeAnalysis.SuppressMessage("Major Code Smell", "S3385:""Exit"" statements should not be used", Justification:="<Ausstehend>")>
         Public Function CreateConnection(ByVal assemblyName As String, ByVal connectionTypeName As String) As IDbConnection
             Dim connectionType As Type = Nothing
             Dim runningAssembly As System.Reflection.Assembly = System.Reflection.Assembly.GetExecutingAssembly
@@ -117,7 +119,7 @@ Namespace CompuMaster.Data.DataQuery
             Dim MyCmd As IDbCommand = MyConn.CreateCommand
             MyCmd.CommandText = commandText
             MyCmd.CommandType = commandType
-            If Not commandTimeout < 0 Then
+            If commandTimeout >= 0 Then
                 MyCmd.CommandTimeout = commandTimeout
             End If
             If sqlParameters IsNot Nothing Then
@@ -865,7 +867,7 @@ Namespace CompuMaster.Data.DataQuery
             Dim MyCmd As IDbCommand = MyConn.CreateCommand
             MyCmd.CommandText = commandText
             MyCmd.CommandType = commandType
-            If Not commandTimeout < 0 Then
+            If commandTimeout >= 0 Then
                 MyCmd.CommandTimeout = commandTimeout
             End If
             If sqlParameters IsNot Nothing Then

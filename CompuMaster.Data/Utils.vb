@@ -355,7 +355,7 @@ Namespace CompuMaster.Data
             ElseIf checkValueIfDBNull Is Nothing Then
                 Return CType(Nothing, T)
             ElseIf Nullable.GetUnderlyingType(GetType(T)) IsNot Nothing AndAlso checkValueIfDBNull.GetType.IsValueType AndAlso Nullable.GetUnderlyingType(GetType(T)) IsNot checkValueIfDBNull.GetType Then
-                Dim UnderlyingType As Type = Nullable.GetUnderlyingType(GetType(T))
+                'Dim UnderlyingType As Type = Nullable.GetUnderlyingType(GetType(T))
                 Dim Result As T = CType(Activator.CreateInstance(GetType(T), checkValueIfDBNull), T)
                 Return Result
             Else
@@ -1272,14 +1272,10 @@ Namespace CompuMaster.Data
             PWDPos = InStr(UCase(fullConnectionString), "PWD=")
             If PWDPos > 0 Then
                 fullConnectionString = Mid(fullConnectionString, 1, PWDPos + 3) & "..."
-            Else
-                fullConnectionString = fullConnectionString
             End If
             PWDPos = InStr(UCase(fullConnectionString), "PASSWORD=")
             If PWDPos > 0 Then
                 fullConnectionString = Mid(fullConnectionString, 1, PWDPos + 8) & "..."
-            Else
-                fullConnectionString = fullConnectionString
             End If
             Return fullConnectionString
         End Function

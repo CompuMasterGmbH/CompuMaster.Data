@@ -8,6 +8,7 @@ Namespace CompuMaster.Data
     ''' </summary>
     ''' <remarks>
     ''' </remarks>
+    <CodeAnalysis.SuppressMessage("Major Code Smell", "S3385:""Exit"" statements should not be used", Justification:="<Ausstehend>")>
     Public NotInheritable Class DataTables
 
         ''' <summary>
@@ -1180,7 +1181,7 @@ Namespace CompuMaster.Data
             End If
 
             'Copy rows
-            If Not RequestedRowChanges.KeepExistingRowsInDestinationTableAndAddRemoveUpdateChangedRows = rowChanges Then
+            If RequestedRowChanges.KeepExistingRowsInDestinationTableAndAddRemoveUpdateChangedRows <> rowChanges Then
                 If MySrcTableRows IsNot Nothing Then
 
                     Dim srcTableColumnsList(sourceTable.Columns.Count - 1) As String
@@ -1360,8 +1361,7 @@ Namespace CompuMaster.Data
         ''' <remarks>
         ''' </remarks>
         Public Shared Function ConvertDataTableToList(Of T1, T2)(ByVal column1 As DataColumn, ByVal column2 As DataColumn) As Generic.List(Of Generic.KeyValuePair(Of T1, T2))
-            If column1.Table IsNot column2.Table Then Throw New ArgumentException("Tables of both columns must be the same")
-            Return ConvertDataTableToList(Of T1, T2)(column1.Table, column1.Ordinal, column2.Ordinal)
+            Return ConvertColumnValuesIntoList(Of T1, T2)(column1, column2)
         End Function
 
         ''' <summary>
@@ -2334,8 +2334,10 @@ Namespace CompuMaster.Data
                 'Add header separator
                 Dim LineSeparatorHeader As String = ""
                 For ColCounter As Integer = 0 To System.Math.Min(rows(0).Table.Columns.Count, fixedColumnWidths.Length) - 1
+#Disable Warning S1643 ' Strings should not be concatenated using "+" or "&" in a loop
                     If ColCounter <> 0 Then LineSeparatorHeader &= crossSeparator
                     LineSeparatorHeader &= Strings.StrDup(fixedColumnWidths(ColCounter), horizontalSeparatorHeadline)
+#Enable Warning S1643 ' Strings should not be concatenated using "+" or "&" in a loop
                 Next
                 Result.Append(LineSeparatorHeader)
                 Result.Append(System.Environment.NewLine)
@@ -2358,8 +2360,10 @@ Namespace CompuMaster.Data
                     'Add lines in between of the cells area
                     Dim LineSeparatorCells As String = ""
                     For ColCounter As Integer = 0 To System.Math.Min(rows(0).Table.Columns.Count, fixedColumnWidths.Length) - 1
+#Disable Warning S1643 ' Strings should not be concatenated using "+" or "&" in a loop
                         If ColCounter <> 0 Then LineSeparatorCells &= crossSeparator
                         LineSeparatorCells &= Strings.StrDup(fixedColumnWidths(ColCounter), horizontalSeparatorCells)
+#Enable Warning S1643 ' Strings should not be concatenated using "+" or "&" in a loop
                     Next
                     Result.Append(LineSeparatorCells)
                     Result.Append(System.Environment.NewLine)
@@ -2414,8 +2418,10 @@ Namespace CompuMaster.Data
                 'Add header separator
                 Dim LineSeparatorHeader As String = ""
                 For ColCounter As Integer = 0 To System.Math.Min(rows(0).Table.Columns.Count, fixedColumnWidths.Length) - 1
+#Disable Warning S1643 ' Strings should not be concatenated using "+" or "&" in a loop
                     If ColCounter <> 0 Then LineSeparatorHeader &= crossSeparator
                     LineSeparatorHeader &= Strings.StrDup(fixedColumnWidths(ColCounter), horizontalSeparatorHeadline)
+#Enable Warning S1643 ' Strings should not be concatenated using "+" or "&" in a loop
                 Next
                 Result.Append(LineSeparatorHeader)
                 Result.Append(System.Environment.NewLine)
@@ -2438,8 +2444,10 @@ Namespace CompuMaster.Data
                     'Add lines in between of the cells area
                     Dim LineSeparatorCells As String = ""
                     For ColCounter As Integer = 0 To System.Math.Min(rows(0).Table.Columns.Count, fixedColumnWidths.Length) - 1
+#Disable Warning S1643 ' Strings should not be concatenated using "+" or "&" in a loop
                         If ColCounter <> 0 Then LineSeparatorCells &= crossSeparator
                         LineSeparatorCells &= Strings.StrDup(fixedColumnWidths(ColCounter), horizontalSeparatorCells)
+#Enable Warning S1643 ' Strings should not be concatenated using "+" or "&" in a loop
                     Next
                     Result.Append(LineSeparatorCells)
                     Result.Append(System.Environment.NewLine)
@@ -2471,7 +2479,7 @@ Namespace CompuMaster.Data
         ''' <returns></returns>
         ''' <remarks></remarks>
         Private Shared Function MaxValueOfFirstXPercent(values As Integer(), optimalWidthWhenPercentageNumberOfRowsFitIntoCell As Double) As Integer
-            If optimalWidthWhenPercentageNumberOfRowsFitIntoCell < 0 Or optimalWidthWhenPercentageNumberOfRowsFitIntoCell > 100 Then
+            If optimalWidthWhenPercentageNumberOfRowsFitIntoCell < 0 OrElse optimalWidthWhenPercentageNumberOfRowsFitIntoCell > 100 Then
                 Throw New ArgumentOutOfRangeException(NameOf(optimalWidthWhenPercentageNumberOfRowsFitIntoCell))
             End If
             'Dim sl As New System.Collections.Generic.SortedList(Of Integer, Integer)
@@ -2960,19 +2968,19 @@ Namespace CompuMaster.Data
             End If
             If value1 Is DBNull.Value OrElse value2 Is DBNull.Value Then
                 'At least 1 DBNull is present
-                If value1 Is DBNull.Value And value2 Is DBNull.Value Then
+                If value1 Is DBNull.Value AndAlso value2 Is DBNull.Value Then
                     'DBNull at both sides lead to True result
                     Return True
                 Else
                     'DBNull only at one 1 side leads to False result
                     Return False
                 End If
-            ElseIf value1 Is Nothing And value2 Is Nothing Then
+            ElseIf value1 Is Nothing AndAlso value2 Is Nothing Then
                 Return True
             ElseIf TypeCheckValue.GetType Is GetType(String) Then
                 'Strings
                 If compareStringsCaseInsensitive = False Then
-                    If Not CType(value1, String) = CType(value2, String) Then
+                    If CType(value1, String) <> CType(value2, String) Then
                         Return False
                     End If
                 Else
@@ -2982,27 +2990,27 @@ Namespace CompuMaster.Data
                 End If
             ElseIf TypeCheckValue.GetType Is GetType(System.Double) Then
                 'Doubles
-                If Not CType(value1, System.Double) = CType(value2, System.Double) Then
+                If CType(value1, System.Double) <> CType(value2, System.Double) Then
                     Return False
                 End If
             ElseIf TypeCheckValue.GetType Is GetType(System.Decimal) Then
                 'Decimals
-                If Not CType(value1, System.Decimal) = CType(value2, System.Decimal) Then
+                If CType(value1, System.Decimal) <> CType(value2, System.Decimal) Then
                     Return False
                 End If
             ElseIf TypeCheckValue.GetType Is GetType(System.DateTime) Then
                 'Datetime
-                If Not CType(value1, System.DateTime) = CType(value2, System.DateTime) Then
+                If CType(value1, System.DateTime) <> CType(value2, System.DateTime) Then
                     Return False
                 End If
             ElseIf TypeCheckValue.GetType Is GetType(System.Int16) OrElse value1 Is GetType(System.Int32) OrElse value1 Is GetType(System.Int64) Then
                 'Intxx
-                If Not CType(value1, System.Int64) = CType(value2, System.Int64) Then
+                If CType(value1, System.Int64) <> CType(value2, System.Int64) Then
                     Return False
                 End If
             ElseIf TypeCheckValue.GetType Is GetType(System.UInt16) OrElse value1 Is GetType(System.UInt32) OrElse value1 Is GetType(System.UInt64) Then
                 'UIntxx
-                If Not CType(value1, System.UInt64).CompareTo(CType(value2, System.UInt64)) = 0 Then
+                If CType(value1, System.UInt64).CompareTo(CType(value2, System.UInt64)) <> 0 Then
                     Return False
                 End If
             Else
@@ -3475,7 +3483,9 @@ Namespace CompuMaster.Data
                 Next
 
                 'Inverse RightJoin to LeftJoin
+#Disable Warning S2234 ' Parameters should be passed in the correct order
                 Return SqlJoinTables(rightTable, rightTableKeys, rightTableColumnsToCopy, leftTable, leftTableKeys, leftTableColumnsToCopy, SqlJoinTypes.Left, compareStringsCaseInsensitive)
+#Enable Warning S2234 ' Parameters should be passed in the correct order
             Else
                 'Execute Inner, Left or FullOuter Join
 
@@ -3982,7 +3992,7 @@ Namespace CompuMaster.Data
         Private Shared Function SqlJoin_IsEqual(value1 As Object, value2 As Object, compareStringsCaseInsensitive As Boolean) As Boolean
             If IsDBNull(value1) Xor IsDBNull(value2) Then
                 Return False
-            ElseIf IsDBNull(value1) And IsDBNull(value2) Then
+            ElseIf IsDBNull(value1) AndAlso IsDBNull(value2) Then
                 Return True
             ElseIf value1.GetType Is GetType(String) AndAlso value2.GetType Is GetType(String) AndAlso compareStringsCaseInsensitive Then
                 Return LCase(CType(value1, String)) = LCase(CType(value2, String))
@@ -3992,9 +4002,9 @@ Namespace CompuMaster.Data
                 Return CType(value1, System.Decimal) = CType(value2, System.Decimal)
             ElseIf value1.GetType Is GetType(System.Double) OrElse value2.GetType Is GetType(System.Double) OrElse value1.GetType Is GetType(System.Single) OrElse value2.GetType Is GetType(System.Single) Then
                 Return CType(value1, System.Double) = CType(value2, System.Double)
-            ElseIf IsNumeric(value1) And IsNumeric(value2) Then
+            ElseIf IsNumeric(value1) AndAlso IsNumeric(value2) Then
                 Return CType(value1, System.Int64) = CType(value2, System.Int64)
-            ElseIf IsDate(value1) And IsDate(value2) Then
+            ElseIf IsDate(value1) AndAlso IsDate(value2) Then
                 Return CType(value1, DateTime) = CType(value2, DateTime)
             Else
                 Return Object.Equals(value1, value2)

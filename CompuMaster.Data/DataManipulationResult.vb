@@ -26,11 +26,12 @@ Namespace CompuMaster.Data
         ''' </summary>
         ''' <param name="command">The SELECT command for retrieving the data</param>
         ''' <remarks></remarks>
-        Public Sub New(ByVal command As System.Data.IDbCommand)
+        Public Sub New(ByVal command As System.Data.IDbCommand, commandBuilder As System.Data.Common.DbCommandBuilder)
             Dim Result As CompuMaster.Data.DataManipulationResult = CompuMaster.Data.Manipulation.LoadQueryDataForManipulationViaCode(command)
             Me.UpdateDataAdapter = Result.DataAdapter
             Me.SelectCommand = Result.Command
             Me.DataTable = Result.Table
+            Me.CommandBuilder = commandBuilder
         End Sub
 
         ''' <summary>
@@ -39,8 +40,8 @@ Namespace CompuMaster.Data
         ''' <param name="command">The SELECT command for retrieving the data</param>
         ''' <param name="dataAdapter">An instance of data adapter using the SELECT command</param>
         ''' <remarks></remarks>
-        Friend Sub New(ByVal command As System.Data.IDbCommand, ByVal dataAdapter As System.Data.IDbDataAdapter)
-            Me.New(Nothing, command, dataAdapter)
+        Friend Sub New(ByVal command As System.Data.IDbCommand, ByVal dataAdapter As System.Data.IDbDataAdapter, commandBuilder As System.Data.Common.DbCommandBuilder)
+            Me.New(Nothing, command, dataAdapter, commandBuilder)
         End Sub
 
         ''' <summary>
@@ -50,13 +51,14 @@ Namespace CompuMaster.Data
         ''' <param name="command">The SELECT command for retrieving the data</param>
         ''' <param name="dataAdapter">An instance of data adapter using the SELECT command</param>
         ''' <remarks></remarks>
-        Friend Sub New(ByVal table As System.Data.DataTable, ByVal command As System.Data.IDbCommand, ByVal dataAdapter As System.Data.IDbDataAdapter)
+        Friend Sub New(ByVal table As System.Data.DataTable, ByVal command As System.Data.IDbCommand, ByVal dataAdapter As System.Data.IDbDataAdapter, commandBuilder As System.Data.Common.DbCommandBuilder)
             If table Is Nothing Then table = New System.Data.DataTable("livedataclone")
-            If command Is Nothing Then Throw New ArgumentNullException("command")
-            If dataAdapter Is Nothing Then Throw New ArgumentNullException("dataAdapter")
+            If command Is Nothing Then Throw New ArgumentNullException(NameOf(command))
+            If dataAdapter Is Nothing Then Throw New ArgumentNullException(NameOf(dataAdapter))
             Me.DataTable = table
             Me.SelectCommand = command
             Me.UpdateDataAdapter = dataAdapter
+            Me.CommandBuilder = commandBuilder
         End Sub
 
         ''' <summary>
@@ -66,6 +68,12 @@ Namespace CompuMaster.Data
         Public Sub UpdateChanges()
             CompuMaster.Data.Manipulation.UpdateCodeManipulatedData(Me, False)
         End Sub
+
+        ''' <summary>
+        ''' The command builder used for the DataAdapter
+        ''' </summary>
+        ''' <returns></returns>
+        Public ReadOnly Property CommandBuilder As System.Data.Common.DbCommandBuilder
 
         ''' <summary>
         ''' The table which holds the queried data
@@ -108,9 +116,10 @@ Namespace CompuMaster.Data
         ''' </summary>
         ''' <param name="disposing"></param>
         ''' <remarks></remarks>
+        <CodeAnalysis.SuppressMessage("Major Code Smell", "S1066:Collapsible ""if"" statements should be merged", Justification:="<Ausstehend>")>
         Protected Overridable Sub Dispose(ByVal disposing As Boolean)
             If disposing Then
-                If Not SelectCommand Is Nothing Then
+                If SelectCommand IsNot Nothing Then
                     CompuMaster.Data.DataQuery.CloseAndDisposeConnection(SelectCommand.Connection)
                     SelectCommand.Dispose()
                     DataTable = Nothing
@@ -127,13 +136,13 @@ Namespace CompuMaster.Data
 #End Region
 
         Private Sub DataTable_RowChanged(ByVal sender As Object, ByVal e As System.Data.DataRowChangeEventArgs) Handles DataTable.RowChanged
-            If Not Me.Table.GetChanges() Is Nothing Then
+            If Me.Table.GetChanges() IsNot Nothing Then
                 RaiseEvent DataChanged()
             End If
         End Sub
 
         Private Sub DataTable_RowDeleted(ByVal sender As Object, ByVal e As System.Data.DataRowChangeEventArgs) Handles DataTable.RowDeleted
-            If Not Me.Table.GetChanges() Is Nothing Then
+            If Me.Table.GetChanges() IsNot Nothing Then
                 RaiseEvent DataChanged()
             End If
         End Sub

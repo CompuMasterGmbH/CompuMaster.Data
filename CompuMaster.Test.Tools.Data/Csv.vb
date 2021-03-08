@@ -529,7 +529,7 @@ Namespace CompuMaster.Test.Data
 
         <Test> Sub WriteDataTableToCsvTextStringAndReReadAndReWriteWithoutChanges()
             Dim t As DataTable = SimpleSampleTable()
-            Dim bom As String = System.Text.Encoding.UTF8.GetString(System.Text.Encoding.UTF8.GetPreamble())
+            'Dim bom As String = System.Text.Encoding.UTF8.GetString(System.Text.Encoding.UTF8.GetPreamble())
             Dim csv As String
             csv = CompuMaster.Data.Csv.WriteDataTableToCsvTextString(t, True)
             Dim t2 As DataTable = CompuMaster.Data.Csv.ReadDataTableFromCsvString(csv, True)
@@ -552,7 +552,7 @@ Namespace CompuMaster.Test.Data
             Dim t As DataTable = SeveralTypesSampleTable()
             Dim initialColumnDataTypes As String() = DataTypesOfColumns(t.Columns)
             Console.WriteLine("Initial column data types: " & String.Join(", ", initialColumnDataTypes) & vbNewLine & vbNewLine)
-            Dim bom As String = System.Text.Encoding.UTF8.GetString(System.Text.Encoding.UTF8.GetPreamble())
+            'Dim bom As String = System.Text.Encoding.UTF8.GetString(System.Text.Encoding.UTF8.GetPreamble())
             Dim csv As String
             csv = CompuMaster.Data.Csv.WriteDataTableToCsvTextString(t, True)
             Console.WriteLine("Initial table" & vbNewLine & vbNewLine)
@@ -573,7 +573,7 @@ Namespace CompuMaster.Test.Data
             Dim t As DataTable = SeveralTypesSampleTable()
             Dim initialColumnDataTypes As String() = DataTypesOfColumns(t.Columns)
             Console.WriteLine("Column data types: " & String.Join(", ", initialColumnDataTypes) & vbNewLine & vbNewLine)
-            Dim bom As String = System.Text.Encoding.UTF8.GetString(System.Text.Encoding.UTF8.GetPreamble())
+            'Dim bom As String = System.Text.Encoding.UTF8.GetString(System.Text.Encoding.UTF8.GetPreamble())
             Dim csv As String
             csv = CompuMaster.Data.Csv.WriteDataTableToCsvTextString(t, True)
             Console.WriteLine("Current culture formatted table" & vbNewLine & vbNewLine)
@@ -592,7 +592,7 @@ Namespace CompuMaster.Test.Data
 
         <Test> Sub WriteDataTableToCsvTextStringAndReReadAndReWriteWithoutChangesWithLineBreaksExcelCompatible()
             Dim t As DataTable = CellWithLineBreaksAndSpecialCharsSampleTable()
-            Dim bom As String = System.Text.Encoding.UTF8.GetString(System.Text.Encoding.UTF8.GetPreamble())
+            'Dim bom As String = System.Text.Encoding.UTF8.GetString(System.Text.Encoding.UTF8.GetPreamble())
             Dim csv As String
             csv = CompuMaster.Data.Csv.WriteDataTableToCsvTextString(t, True)
             Console.WriteLine(csv)

@@ -267,8 +267,7 @@ Namespace CompuMaster.Test.Data
             row.Item(1) = "Hello World"
 
             Dim html As String = CompuMaster.Data.DataTables.ConvertToHtmlTable(dt)
-
-            'TODO: ...'
+            Assert.IsNotEmpty(html)
 
         End Sub
 
@@ -285,6 +284,7 @@ Namespace CompuMaster.Test.Data
 
 
             Dim html As String = CompuMaster.Data.DataTables.ConvertToPlainTextTable(dt)
+            Assert.IsNotEmpty(html)
 
             Dim dt2 As New DataTable
             dt2.Columns.Add("id", GetType(Integer))
@@ -303,6 +303,7 @@ Namespace CompuMaster.Test.Data
             dt2.AcceptChanges()
             dt2.Rows(1).Delete()
             Dim html2 As String = CompuMaster.Data.DataTables.ConvertToPlainTextTable(dt2)
+            Assert.IsNotEmpty(html2)
 
         End Sub
 
@@ -1188,7 +1189,7 @@ Namespace CompuMaster.Test.Data
             Console.WriteLine("CROS-JOINED TABLE CONTENTS")
             Console.WriteLine(CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(CrossJoined))
 
-            'TODO: ResultComparisonValue to be evaluated
+            'ResultComparisonValue to be evaluated
             Dim ShallBeResult As String = "JoinedTable" & vbNewLine &
                     "FirstCol|SecondCol|ThirdCol|FourthCol" & vbNewLine &
                     "--------+---------+--------+---------" & vbNewLine &
@@ -1209,7 +1210,7 @@ Namespace CompuMaster.Test.Data
             Console.WriteLine("CROS-JOINED TABLE CONTENTS")
             Console.WriteLine(CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(CrossJoined))
 
-            'TODO: ResultComparisonValue to be evaluated
+            'ResultComparisonValue to be evaluated
             Dim ShallBeResult As String = "JoinedTable" & vbNewLine &
                     "FirstCol|SecondCol|ThirdCol|FourthCol " & vbNewLine &
                     "--------+---------+--------+----------" & vbNewLine &
@@ -1252,7 +1253,6 @@ Namespace CompuMaster.Test.Data
 #Region "FullOuterJoinTestTables"""
         Private Function CreateFullOuterJoinTableSet1() As JoinTableSet
             'Full outer join test'
-            Dim fullOuterJoined As New DataTable
             Dim right As New DataTable
             Dim left As New DataTable
 
@@ -1304,7 +1304,6 @@ Namespace CompuMaster.Test.Data
 
         Private Function CreateFullOuterJoinTableSet2() As JoinTableSet
             'Full outer join test'
-            Dim fullOuterJoined As New DataTable
             Dim right As New DataTable
             Dim left As New DataTable
 

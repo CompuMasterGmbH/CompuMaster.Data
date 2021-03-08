@@ -44,10 +44,10 @@ Namespace CompuMaster.Data
         <Obsolete("Use CompuMaster.Data.Manipulation instead", False), ComponentModel.EditorBrowsable(ComponentModel.EditorBrowsableState.Never)> Public Class DataManipulationResults
             Inherits CompuMaster.Data.DataManipulationResult
             <Obsolete("Use CompuMaster.Data.Manipulation instead", True)> Public Sub New()
-                MyBase.New(Nothing, Nothing, Nothing)
+                MyBase.New(Nothing, Nothing, Nothing, Nothing)
             End Sub
-            Friend Sub New(ByVal command As System.Data.IDbCommand, ByVal dataAdapter As System.Data.IDbDataAdapter)
-                MyBase.New(Nothing, command, dataAdapter)
+            Friend Sub New(ByVal command As System.Data.IDbCommand, ByVal dataAdapter As System.Data.IDbDataAdapter, commandBuilder As System.Data.Common.DbCommandBuilder)
+                MyBase.New(Nothing, command, dataAdapter, commandBuilder)
             End Sub
             Protected Overloads Overrides Sub Dispose(ByVal disposing As Boolean)
                 'Do not dispose connections and commands due to internal behaviour as well as compatibility
@@ -307,6 +307,7 @@ Namespace CompuMaster.Data
         ''' <remarks>
         ''' This function doesn't create any column update commands to change existing columns; it just creates commands for adding additional columns.
         ''' </remarks>
+        <CodeAnalysis.SuppressMessage("Minor Code Smell", "S1643:Strings should not be concatenated using ""+"" or ""&"" in a loop", Justification:="<Ausstehend>")>
         Public Shared Function AddMissingColumnsCommandText(ByVal sourceTable As DataTable, ByVal destinationTable As DataTable, remoteTableName As String, ByVal ddlLanguage As DdlLanguage) As String
             Dim OpenBrackets, CloseBrackets As String
             If remoteTableName.IndexOf("[") >= 0 AndAlso remoteTableName.IndexOf("]") >= 0 Then
@@ -532,7 +533,7 @@ Namespace CompuMaster.Data
 
                 'Load the data
                 Dim MyCmdBuilder As System.Data.Common.DbCommandBuilder = CurrentProvider.CreateCommandBuilder(MyDA)
-                Result = New CompuMaster.Data.DataManipulationResult(command, MyDA)
+                Result = New CompuMaster.Data.DataManipulationResult(command, MyDA, MyCmdBuilder)
                 CType(MyDA, System.Data.Common.DbDataAdapter).Fill(Result.Table)
 
                 'Create required data manipulation commands

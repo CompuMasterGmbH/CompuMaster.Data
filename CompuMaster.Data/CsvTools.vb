@@ -10,6 +10,7 @@ Namespace CompuMaster.Data
     ''' </summary>
     ''' <remarks>
     ''' </remarks>
+    <CodeAnalysis.SuppressMessage("Major Code Smell", "S3385:""Exit"" statements should not be used", Justification:="<Ausstehend>")>
     Friend Class CsvTools
 
 #Region "Read data"
@@ -117,6 +118,7 @@ Namespace CompuMaster.Data
             Dim Result As New DataTable
 
             If File.Exists(path) Then
+                'do nothing for now
             ElseIf path.ToLower.StartsWith("http://") OrElse path.ToLower.StartsWith("https://") Then
                 Dim LocalCopyOfFileContentFromRemoteUri As String = Utils.ReadStringDataFromUri(path, encoding)
                 Result = ReadDataTableFromCsvString(LocalCopyOfFileContentFromRemoteUri, includesColumnHeaders, columnWidths, convertEmptyStringsToDBNull, lineEncodings, lineEncodingAutoConversions)
@@ -165,6 +167,7 @@ Namespace CompuMaster.Data
             Dim Result As New DataTable
 
             If File.Exists(path) Then
+                'do nothing for now
             ElseIf path.ToLower.StartsWith("http://") OrElse path.ToLower.StartsWith("https://") Then
                 Dim EncodingWebName As String
                 If encoding Is Nothing Then
@@ -363,6 +366,7 @@ Namespace CompuMaster.Data
             Dim Result As New DataTable
 
             If File.Exists(path) Then
+                'do nothing for now
             ElseIf path.ToLower.StartsWith("http://") OrElse path.ToLower.StartsWith("https://") Then
                 Dim LocalCopyOfFileContentFromRemoteUri As String = Utils.ReadStringDataFromUri(path, encoding)
                 Result = ReadDataTableFromCsvString(LocalCopyOfFileContentFromRemoteUri, includesColumnHeaders, columnSeparator, recognizeTextBy, recognizeMultipleColumnSeparatorCharsAsOne, convertEmptyStringsToDBNull, lineEncodings, lineEncodingAutoConversions)
@@ -412,6 +416,7 @@ Namespace CompuMaster.Data
             Dim Result As New DataTable
 
             If File.Exists(path) Then
+                'do nothing for now
             ElseIf path.ToLower.StartsWith("http://") OrElse path.ToLower.StartsWith("https://") Then
                 Dim EncodingWebName As String
                 If encoding Is Nothing Then
@@ -495,11 +500,13 @@ Namespace CompuMaster.Data
             Dim CharPosition As Integer = 0
             While CharPosition < rdStr.Length
 
+#Disable Warning S1066 ' Collapsible "if" statements should be merged
                 If lineEncodings = Csv.ReadLineEncodings.RowBreakCrLfOrCrOrLf_CellLineBreakCrLfOrCrOrLf AndAlso detectCompletedRowLineBasedOnRequiredColumnCount = 0 Then
-                    If Not (RowCounter = 0) Then 'already includesColumnHeaders required since lineEncodings check on method head
+                    If RowCounter <> 0 Then 'already includesColumnHeaders required since lineEncodings check on method head
                         Throw New ArgumentNullException("detectCompletedRowLineBasedOnRequiredColumnCount", "Argument detectCompletedRowLineBasedOnRequiredColumnCount required for reading with line endings RowBreakCrLfOrCrOrLf_CellLineBreakCrLfOrCrOrLf")
                     End If
                 End If
+#Enable Warning S1066 ' Collapsible "if" statements should be merged
 
                 'Read the next csv row
                 Dim ColValues As New ArrayList
