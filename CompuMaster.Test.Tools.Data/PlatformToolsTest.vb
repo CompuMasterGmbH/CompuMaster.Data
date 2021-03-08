@@ -2,7 +2,7 @@
 
 Namespace CompuMaster.Test.Data
 
-    <TestFixture(Category:="PlatformTools")> Public Class TestPlatformTools
+    <TestFixture(Category:="PlatformTools")> Public Class PlatformToolsTest
 
         <Test> Public Sub InstalledOleDbProviders()
             Dim result As DictionaryEntry() = CompuMaster.Data.DataQuery.PlatformTools.InstalledOleDbProviders

@@ -2,7 +2,7 @@ Imports NUnit.Framework
 
 Namespace CompuMaster.Test.Data
 
-    <TestFixture(Category:="LDAP with security")> Public Class Ldap
+    <TestFixture(Category:="LDAP with security")> Public Class LdapTest
 
 #If Not CI_Build Then
         <Test()> Public Sub CurrentRootDomain()

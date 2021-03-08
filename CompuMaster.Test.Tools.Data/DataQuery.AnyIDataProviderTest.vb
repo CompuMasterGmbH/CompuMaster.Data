@@ -2,7 +2,7 @@
 
 Namespace CompuMaster.Test.Data.DataQuery
 
-    <TestFixture(Category:="DataQueryAnyIDataProvider")> Public Class DataQueryAnyIDataProvider
+    <TestFixture(Category:="DataQueryAnyIDataProvider")> Public Class DataQueryAnyIDataProviderTest
 
 #If Not CI_Build Then
         <Test()> Public Sub ExecuteReaderAndPutFirstColumnIntoGenericList()

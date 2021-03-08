@@ -2,7 +2,7 @@
 
 Namespace CompuMaster.Test.Data
 
-    <TestFixture(Category:="Common Utils")> Public Class Utils
+    <TestFixture(Category:="Common Utils")> Public Class UtilsTest
 
         <Test> Public Sub NoDbNull()
             'Object type

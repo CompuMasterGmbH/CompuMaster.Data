@@ -2,7 +2,7 @@
 
 Namespace CompuMaster.Test.Data
 
-    Friend Class TemporaryFile
+    Friend Class TemporaryTestFile
         Implements IDisposable
 
         ''' <summary>

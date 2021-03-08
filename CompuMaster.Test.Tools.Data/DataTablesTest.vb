@@ -2,7 +2,7 @@ Imports NUnit.Framework
 
 Namespace CompuMaster.Test.Data
 
-    <TestFixture(Category:="DataTables")> Public Class DataTables
+    <TestFixture(Category:="DataTables")> Public Class DataTablesTest
 
 #Region "TestComparisons"
         Public Shared Sub AssertTables(table1 As DataTable, table2 As DataTable, assertionTitle As String)

@@ -166,21 +166,21 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="AssemblyTestEnvironment.vb" />
-    <Compile Include="DataQuery.DataProvider.vb" />
-    <Compile Include="DataQuery.AnyIDataProvider.vb" />
-    <Compile Include="DataQuery.Connections.vb" />
-    <Compile Include="Csv.vb" />
-    <Compile Include="DataTables.vb">
+    <Compile Include="DataQuery.DataProviderTest.vb" />
+    <Compile Include="DataQuery.AnyIDataProviderTest.vb" />
+    <Compile Include="DataQuery.ConnectionsTest.vb" />
+    <Compile Include="CsvTest.vb" />
+    <Compile Include="DataTablesTest.vb">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="GlobalSuppressions.vb" />
-    <Compile Include="Ldap.vb">
+    <Compile Include="LdapTest.vb">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="TempFile.vb" />
-    <Compile Include="Utils.vb" />
-    <Compile Include="XlsReader.vb" />
-    <Compile Include="TestPlatformTools.vb" />
+    <Compile Include="TempTestFile.vb" />
+    <Compile Include="UtilsTest.vb" />
+    <Compile Include="XlsReaderTest.vb" />
+    <Compile Include="PlatformToolsTest.vb" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="testfiles\3000RowsTable.xml">
