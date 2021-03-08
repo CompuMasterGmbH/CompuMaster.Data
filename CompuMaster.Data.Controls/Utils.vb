@@ -12,7 +12,7 @@ Namespace CompuMaster.Data.Windows
             Dim Result As CompuMaster.Data.DataManipulationResult
             Try
                 CompuMaster.Data.DataQuery.OpenConnection(selectCommand.Connection)
-                Result = New CompuMaster.Data.DataManipulationResult(selectCommand)
+                Result = New CompuMaster.Data.DataManipulationResult(selectCommand, Nothing)
             Finally
                 CompuMaster.Data.DataQuery.CloseConnection(selectCommand.Connection)
             End Try
