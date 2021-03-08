@@ -590,12 +590,8 @@ Namespace CompuMaster.Data
                             End If
                         ElseIf IsDBNull(comparisonTable.Rows(MyCompCounter)(valuesMustExistInThisColumnToKeepTheSourceRow)) Then
                             'Not identical, continue search
-                        ElseIf ignoreCaseInStrings = True AndAlso String.Compare(CType(sourceTable.Rows(MyCounter)(sourceColumn), String), CType(comparisonTable.Rows(MyCompCounter)(valuesMustExistInThisColumnToKeepTheSourceRow), String), True, System.Globalization.CultureInfo.InvariantCulture) = 0 Then
+                        ElseIf String.Compare(CType(sourceTable.Rows(MyCounter)(sourceColumn), String), CType(comparisonTable.Rows(MyCompCounter)(valuesMustExistInThisColumnToKeepTheSourceRow), String), ignoreCaseInStrings, System.Globalization.CultureInfo.InvariantCulture) = 0 Then
                             'Case insensitive comparison resulted to successful match
-                            MatchFound = True
-                            Exit For
-                        ElseIf ignoreCaseInStrings = False AndAlso String.Compare(CType(sourceTable.Rows(MyCounter)(sourceColumn), String), CType(comparisonTable.Rows(MyCompCounter)(valuesMustExistInThisColumnToKeepTheSourceRow), String), False, System.Globalization.CultureInfo.InvariantCulture) = 0 Then
-                            'Case sensitive comparison resulted to successful match
                             MatchFound = True
                             Exit For
                         Else
@@ -736,12 +732,8 @@ Namespace CompuMaster.Data
                             End If
                         ElseIf IsDBNull(comparisonTable.Rows(MyCompCounter)(valuesMustExistInThisColumnToKeepTheSourceRow)) Then
                             'Not identical, continue search
-                        ElseIf ignoreCaseInStrings = True AndAlso String.Compare(CType(sourceTable.Rows(MyCounter)(sourceColumn), String), CType(comparisonTable.Rows(MyCompCounter)(valuesMustExistInThisColumnToKeepTheSourceRow), String), True, System.Globalization.CultureInfo.InvariantCulture) = 0 Then
+                        ElseIf String.Compare(CType(sourceTable.Rows(MyCounter)(sourceColumn), String), CType(comparisonTable.Rows(MyCompCounter)(valuesMustExistInThisColumnToKeepTheSourceRow), String), ignoreCaseInStrings, System.Globalization.CultureInfo.InvariantCulture) = 0 Then
                             'Case insensitive comparison resulted to successful match
-                            MatchFound = True
-                            Exit For
-                        ElseIf ignoreCaseInStrings = False AndAlso String.Compare(CType(sourceTable.Rows(MyCounter)(sourceColumn), String), CType(comparisonTable.Rows(MyCompCounter)(valuesMustExistInThisColumnToKeepTheSourceRow), String), False, System.Globalization.CultureInfo.InvariantCulture) = 0 Then
-                            'Case sensitive comparison resulted to successful match
                             MatchFound = True
                             Exit For
                         Else
