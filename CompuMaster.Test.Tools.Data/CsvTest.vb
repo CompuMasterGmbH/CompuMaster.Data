@@ -137,7 +137,7 @@ Namespace CompuMaster.Test.Data
         End Sub
 
         <Test> Public Sub ReadDataTableFromCsvFileWithColumnSeparatorCharInTextStrings()
-            Dim TestFile As String = AssemblyTestEnvironment.TestFileAbsolutePath("testfiles\country-codes.csv")
+            Dim TestFile As String = AssemblyTestEnvironment.TestFileAbsolutePath(System.IO.Path.Combine("testfiles", "country-codes.csv"))
             System.Console.WriteLine("TestFile=" & TestFile)
             'TestFile = "https://raw.githubusercontent.com/datasets/country-codes/master/data/country-codes.csv"
 
@@ -377,16 +377,47 @@ Namespace CompuMaster.Test.Data
             Console.WriteLine("Cell 3: " & CType(Level1CsvDataTable.Rows(0)(2), String))
             Console.WriteLine("Cell 4: " & CType(Level1CsvDataTable.Rows(0)(3), String))
         End Sub
+
         <Test> Sub WriteDataTableToCsvTextStringRecognizeTextChar()
             Dim t As DataTable = SimpleSampleTable()
             Dim ExpectedValue As String
             Dim csv As String
 
-            csv = CompuMaster.Data.Csv.WriteDataTableToCsvTextString(t, True, CompuMaster.Data.Csv.WriteLineEncodings.RowBreakCrLf_CellLineBreakCr, "||", """"c, ".")
+            'Line break checks for rows
+            ExpectedValue = """col1""||""col2""" & System.Environment.NewLine &
+                """R1C1""||""R1C2""" & System.Environment.NewLine &
+                """R2C1""||""R2C2""" & System.Environment.NewLine
+            csv = CompuMaster.Data.Csv.WriteDataTableToCsvTextString(t, True, CompuMaster.Data.Csv.WriteLineEncodings.Auto, "||", """"c, ".")
             Console.WriteLine(csv)
+            Assert.AreEqual(ExpectedValue, csv, "Not expected: CSV EmptyStringAsRecognizeTextChar")
+
+            csv = CompuMaster.Data.Csv.WriteDataTableToCsvTextString(t, True, CompuMaster.Data.Csv.WriteLineEncodings.None, "||", """"c, ".")
+            Console.WriteLine(csv)
+            Assert.AreEqual(ExpectedValue, csv, "Not expected: CSV EmptyStringAsRecognizeTextChar")
+
             ExpectedValue = """col1""||""col2""" & vbNewLine &
                 """R1C1""||""R1C2""" & vbNewLine &
                 """R2C1""||""R2C2""" & vbNewLine
+            csv = CompuMaster.Data.Csv.WriteDataTableToCsvTextString(t, True, CompuMaster.Data.Csv.WriteLineEncodings.Default, "||", """"c, ".")
+            Console.WriteLine(csv)
+            Assert.AreEqual(ExpectedValue, csv, "Not expected: CSV EmptyStringAsRecognizeTextChar")
+
+            csv = CompuMaster.Data.Csv.WriteDataTableToCsvTextString(t, True, CompuMaster.Data.Csv.WriteLineEncodings.RowBreakCrLf_CellLineBreakCr, "||", """"c, ".")
+            Console.WriteLine(csv)
+            Assert.AreEqual(ExpectedValue, csv, "Not expected: CSV EmptyStringAsRecognizeTextChar")
+
+            ExpectedValue = """col1""||""col2""" & ControlChars.Cr &
+                """R1C1""||""R1C2""" & ControlChars.Cr &
+                """R2C1""||""R2C2""" & ControlChars.Cr
+            csv = CompuMaster.Data.Csv.WriteDataTableToCsvTextString(t, True, CompuMaster.Data.Csv.WriteLineEncodings.RowBreakCr_CellLineBreakLf, "||", """"c, ".")
+            Console.WriteLine(csv)
+            Assert.AreEqual(ExpectedValue, csv, "Not expected: CSV EmptyStringAsRecognizeTextChar")
+
+            ExpectedValue = """col1""||""col2""" & ControlChars.Lf &
+                """R1C1""||""R1C2""" & ControlChars.Lf &
+                """R2C1""||""R2C2""" & ControlChars.Lf
+            csv = CompuMaster.Data.Csv.WriteDataTableToCsvTextString(t, True, CompuMaster.Data.Csv.WriteLineEncodings.RowBreakLf_CellLineBreakCr, "||", """"c, ".")
+            Console.WriteLine(csv)
             Assert.AreEqual(ExpectedValue, csv, "Not expected: CSV EmptyStringAsRecognizeTextChar")
 
             'Special: ChrW(0) is handled as NO text recognition character!
@@ -404,12 +435,88 @@ Namespace CompuMaster.Test.Data
             Console.WriteLine(csv)
             Assert.AreEqual(ExpectedValue, csv, "Not expected: CSV Chrw(0)AsRecognizeTextChar")
 
-            csv = CompuMaster.Data.Csv.WriteDataTableToCsvTextString(t, True, CompuMaster.Data.Csv.WriteLineEncodings.RowBreakCrLf_CellLineBreakCr, "||", ChrW(1), ".")
             ExpectedValue = ChrW(1) & "col1" & ChrW(1) & "||" & ChrW(1) & "col2" & ChrW(1) & vbNewLine &
                 ChrW(1) & "R1C1" & ChrW(1) & "||" & ChrW(1) & "R1C2" & ChrW(1) & vbNewLine &
                 ChrW(1) & "R2C1" & ChrW(1) & "||" & ChrW(1) & "R2C2" & ChrW(1) & vbNewLine
+            csv = CompuMaster.Data.Csv.WriteDataTableToCsvTextString(t, True, CompuMaster.Data.Csv.WriteLineEncodings.RowBreakCrLf_CellLineBreakCr, "||", ChrW(1), ".")
             Console.WriteLine(csv)
             Assert.AreEqual(ExpectedValue, csv, "Not expected: CSV Chrw(1)AsRecognizeTextChar")
+
+            csv = CompuMaster.Data.Csv.WriteDataTableToCsvTextString(t, True, CompuMaster.Data.Csv.WriteLineEncodings.RowBreakCrLf_CellLineBreakCr, "||", ChrW(1), ".")
+            Console.WriteLine(csv)
+            Assert.AreEqual(ExpectedValue, csv, "Not expected: CSV Chrw(1)AsRecognizeTextChar")
+        End Sub
+
+        <Test> Sub WriteDataTableToCsvTextStringLineEncodings()
+            Dim t As DataTable = SimpleSampleTableWithLineBreaksInCells(System.Environment.NewLine)
+            Dim ExpectedValue As String, ExpectedRowLineBreak As String, ExpectedCellLineBreak As String
+            Dim csv As String
+
+            'Line break checks for multiline cells
+            ExpectedRowLineBreak = System.Environment.NewLine
+            ExpectedCellLineBreak = System.Environment.NewLine
+            ExpectedValue = """col1" & ExpectedCellLineBreak & "Line 2""||""col2" & ExpectedCellLineBreak & "Line 2""" & ExpectedRowLineBreak &
+                """R1C1" & ExpectedCellLineBreak & "Line 2""||""R1C2" & ExpectedCellLineBreak & "Line 2""" & ExpectedRowLineBreak &
+                """R2C1" & ExpectedCellLineBreak & "Line 2""||""R2C2" & ExpectedCellLineBreak & "Line 2""" & ExpectedRowLineBreak
+            csv = CompuMaster.Data.Csv.WriteDataTableToCsvTextString(t, True, CompuMaster.Data.Csv.WriteLineEncodings.None, "||", """"c, ".")
+            Console.WriteLine(csv)
+            Assert.AreEqual(ExpectedValue, csv, "Linebreaks=PlatformNewLine/UnChanged(PlatformNewLine)")
+
+            ExpectedRowLineBreak = ControlChars.CrLf
+            ExpectedCellLineBreak = ControlChars.Lf
+            ExpectedValue = """col1" & ExpectedCellLineBreak & "Line 2""||""col2" & ExpectedCellLineBreak & "Line 2""" & ExpectedRowLineBreak &
+                """R1C1" & ExpectedCellLineBreak & "Line 2""||""R1C2" & ExpectedCellLineBreak & "Line 2""" & ExpectedRowLineBreak &
+                """R2C1" & ExpectedCellLineBreak & "Line 2""||""R2C2" & ExpectedCellLineBreak & "Line 2""" & ExpectedRowLineBreak
+            csv = CompuMaster.Data.Csv.WriteDataTableToCsvTextString(t, True, CompuMaster.Data.Csv.WriteLineEncodings.RowBreakCrLf_CellLineBreakLf, "||", """"c, ".")
+            Console.WriteLine(csv)
+            Assert.AreEqual(ExpectedValue, csv, "Linebreaks=CrLf/Lf")
+
+            csv = CompuMaster.Data.Csv.WriteDataTableToCsvTextString(t, True, CompuMaster.Data.Csv.WriteLineEncodings.Default, "||", """"c, ".")
+            Console.WriteLine(csv)
+            Assert.AreEqual(ExpectedValue, csv, "Linebreaks=Default")
+
+            ExpectedRowLineBreak = ControlChars.CrLf
+            ExpectedCellLineBreak = ControlChars.Cr
+            ExpectedValue = """col1" & ExpectedCellLineBreak & "Line 2""||""col2" & ExpectedCellLineBreak & "Line 2""" & ExpectedRowLineBreak &
+                """R1C1" & ExpectedCellLineBreak & "Line 2""||""R1C2" & ExpectedCellLineBreak & "Line 2""" & ExpectedRowLineBreak &
+                """R2C1" & ExpectedCellLineBreak & "Line 2""||""R2C2" & ExpectedCellLineBreak & "Line 2""" & ExpectedRowLineBreak
+            csv = CompuMaster.Data.Csv.WriteDataTableToCsvTextString(t, True, CompuMaster.Data.Csv.WriteLineEncodings.RowBreakCrLf_CellLineBreakCr, "||", """"c, ".")
+            Console.WriteLine(csv)
+            Assert.AreEqual(ExpectedValue, csv, "Linebreaks=CrLf/Cr")
+
+            ExpectedRowLineBreak = ControlChars.Cr
+            ExpectedCellLineBreak = ControlChars.Lf
+            ExpectedValue = """col1" & ExpectedCellLineBreak & "Line 2""||""col2" & ExpectedCellLineBreak & "Line 2""" & ExpectedRowLineBreak &
+                """R1C1" & ExpectedCellLineBreak & "Line 2""||""R1C2" & ExpectedCellLineBreak & "Line 2""" & ExpectedRowLineBreak &
+                """R2C1" & ExpectedCellLineBreak & "Line 2""||""R2C2" & ExpectedCellLineBreak & "Line 2""" & ExpectedRowLineBreak
+            csv = CompuMaster.Data.Csv.WriteDataTableToCsvTextString(t, True, CompuMaster.Data.Csv.WriteLineEncodings.RowBreakCr_CellLineBreakLf, "||", """"c, ".")
+            Console.WriteLine(csv)
+            Assert.AreEqual(ExpectedValue, csv, "Linebreaks=Cr/Lf")
+
+            ExpectedRowLineBreak = ControlChars.Lf
+            ExpectedCellLineBreak = ControlChars.Cr
+            ExpectedValue = """col1" & ExpectedCellLineBreak & "Line 2""||""col2" & ExpectedCellLineBreak & "Line 2""" & ExpectedRowLineBreak &
+                """R1C1" & ExpectedCellLineBreak & "Line 2""||""R1C2" & ExpectedCellLineBreak & "Line 2""" & ExpectedRowLineBreak &
+                """R2C1" & ExpectedCellLineBreak & "Line 2""||""R2C2" & ExpectedCellLineBreak & "Line 2""" & ExpectedRowLineBreak
+            csv = CompuMaster.Data.Csv.WriteDataTableToCsvTextString(t, True, CompuMaster.Data.Csv.WriteLineEncodings.RowBreakLf_CellLineBreakCr, "||", """"c, ".")
+            Console.WriteLine(csv)
+            Assert.AreEqual(ExpectedValue, csv, "Linebreaks=Lf/Cr")
+
+            ExpectedRowLineBreak = System.Environment.NewLine
+            Select Case ExpectedRowLineBreak
+                Case ControlChars.Cr, ControlChars.CrLf
+                    ExpectedCellLineBreak = ControlChars.Lf
+                Case ControlChars.Lf
+                    ExpectedCellLineBreak = ControlChars.Cr
+                Case Else
+                    Throw New NotImplementedException
+            End Select
+            ExpectedValue = """col1" & ExpectedCellLineBreak & "Line 2""||""col2" & ExpectedCellLineBreak & "Line 2""" & ExpectedRowLineBreak &
+                """R1C1" & ExpectedCellLineBreak & "Line 2""||""R1C2" & ExpectedCellLineBreak & "Line 2""" & ExpectedRowLineBreak &
+                """R2C1" & ExpectedCellLineBreak & "Line 2""||""R2C2" & ExpectedCellLineBreak & "Line 2""" & ExpectedRowLineBreak
+            csv = CompuMaster.Data.Csv.WriteDataTableToCsvTextString(t, True, CompuMaster.Data.Csv.WriteLineEncodings.Auto, "||", """"c, ".")
+            Console.WriteLine(csv)
+            Assert.AreEqual(ExpectedValue, csv, "Linebreaks=Auto")
         End Sub
 
         Private Function SimpleSampleTable() As DataTable
@@ -423,6 +530,21 @@ Namespace CompuMaster.Test.Data
             r = t.NewRow
             r(0) = "R2C1"
             r(1) = "R2C2"
+            t.Rows.Add(r)
+            Return t
+        End Function
+
+        Private Function SimpleSampleTableWithLineBreaksInCells(lineBreak As String) As DataTable
+            Dim t As New DataTable("root" & lineBreak & "Line 2")
+            t.Columns.Add("col1" & lineBreak & "Line 2")
+            t.Columns.Add("col2" & lineBreak & "Line 2")
+            Dim r As DataRow = t.NewRow
+            r(0) = "R1C1" & lineBreak & "Line 2"
+            r(1) = "R1C2" & lineBreak & "Line 2"
+            t.Rows.Add(r)
+            r = t.NewRow
+            r(0) = "R2C1" & lineBreak & "Line 2"
+            r(1) = "R2C2" & lineBreak & "Line 2"
             t.Rows.Add(r)
             Return t
         End Function

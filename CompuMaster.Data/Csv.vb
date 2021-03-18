@@ -9,6 +9,9 @@ Namespace CompuMaster.Data
     Public NotInheritable Class Csv
 
         Public Enum WriteLineEncodings As Byte
+            ''' <summary>
+            ''' Platform dependent NewLine encoding for row separation, but keep line breaks in cells unchanged (danger: cell line breaks might conflict with line break of current platform)
+            ''' </summary>
             None = 0
             RowBreakCrLf_CellLineBreakLf = 1
             RowBreakCrLf_CellLineBreakCr = 2
@@ -20,10 +23,17 @@ Namespace CompuMaster.Data
             RowBreakCrLf_CellLineBreakRemoved = 13 'remove all line breaks
             RowBreakCr_CellLineBreakRemoved = 14 'remove all line breaks
             RowBreakLf_CellLineBreakRemoved = 15 'remove all line breaks
+            ''' <summary>
+            ''' Rule as RowBreakCrLf_CellLineBreakLf
+            ''' </summary>
             [Default] = 1
             'Windows = 1
             'Mac = 2
             'Linux = 3
+            ''' <summary>
+            ''' Platform dependent NewLine encoding for row separation, line breaks in cells LF (Windows+Mac) or CR (Linux+Unix)
+            ''' </summary>
+            Auto = 255
         End Enum
 
         ''' <summary>
@@ -48,7 +58,14 @@ Namespace CompuMaster.Data
             ''' CURRENT DESIGN ISSUE WITH TROUBLE: LineBreaks in first and last column can't be identified if its for the previous row or for the next row since this data is missing in CSV file
             ''' </remarks>
             RowBreakCrLfOrCrOrLf_CellLineBreakCrLfOrCrOrLf = 7
+            ''' <summary>
+            ''' Rule as RowBreakCrLfOrCr_CellLineBreakLf
+            ''' </summary>
             [Default] = 5
+            ''' <summary>
+            ''' Platform dependent NewLine encoding for row separation, line breaks in cells LF (Windows+Mac) or CR (Linux+Unix)
+            ''' </summary>
+            Auto = 255
         End Enum
 
         ''' <summary>

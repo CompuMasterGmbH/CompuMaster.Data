@@ -1061,6 +1061,8 @@ Namespace CompuMaster.Data
         ''' <param name="lineEncodings">Encoding style for linebreaks</param>
         Friend Shared Sub WriteDataTableToCsvFile(ByVal path As String, ByVal dataTable As System.Data.DataTable, ByVal includesColumnHeaders As Boolean, ByVal encoding As String, ByVal columnSeparator As String, ByVal recognizeTextBy As Char, ByVal decimalSeparator As Char, lineEncodings As CompuMaster.Data.Csv.WriteLineEncodings)
 
+            Dim RequestedRowLineBreak As String = RowLineBreak(lineEncodings)
+
             Dim cultureFormatProvider As New System.Globalization.CultureInfo("")
             cultureFormatProvider.NumberFormat.CurrencyDecimalSeparator = decimalSeparator
             cultureFormatProvider.NumberFormat.NumberDecimalSeparator = decimalSeparator
@@ -1081,7 +1083,7 @@ Namespace CompuMaster.Data
                         writer.Write(CsvEncode(dataTable.Columns(ColCounter).ColumnName, recognizeTextBy, lineEncodings))
                         If recognizeTextBy <> Nothing Then writer.Write(recognizeTextBy)
                     Next
-                    writer.WriteLine()
+                    writer.Write(RequestedRowLineBreak)
                 End If
 
                 'Data values
@@ -1092,7 +1094,7 @@ Namespace CompuMaster.Data
                         End If
                         WriteCellValue(dataTable.Columns(ColCounter).DataType, dataTable.Rows(RowCounter)(ColCounter), recognizeTextBy, columnSeparator, cultureFormatProvider, lineEncodings, writer, Nothing)
                     Next
-                    writer.WriteLine()
+                    writer.Write(RequestedRowLineBreak)
                 Next
 
             Finally
@@ -1183,6 +1185,8 @@ Namespace CompuMaster.Data
         ''' <returns>A memory stream containing all texts as bytes in Unicode format</returns>
         Friend Shared Function WriteDataTableToCsvMemoryStream(ByVal dataTable As System.Data.DataTable, ByVal includesColumnHeaders As Boolean, ByVal encoding As System.Text.Encoding, ByVal cultureFormatProvider As System.Globalization.CultureInfo, ByVal columnSeparator As String, ByVal recognizeTextBy As Char, lineEncodings As CompuMaster.Data.Csv.WriteLineEncodings) As System.IO.MemoryStream
 
+            Dim RequestedRowLineBreak As String = RowLineBreak(lineEncodings)
+
             If cultureFormatProvider Is Nothing Then
                 cultureFormatProvider = System.Globalization.CultureInfo.InvariantCulture
             End If
@@ -1207,7 +1211,7 @@ Namespace CompuMaster.Data
                         writer.Write(CsvEncode(dataTable.Columns(ColCounter).ColumnName, recognizeTextBy, lineEncodings))
                         If recognizeTextBy <> Nothing Then writer.Write(recognizeTextBy)
                     Next
-                    writer.WriteLine()
+                    writer.Write(RequestedRowLineBreak)
                 End If
 
                 'Data values
@@ -1218,7 +1222,7 @@ Namespace CompuMaster.Data
                         End If
                         WriteCellValue(dataTable.Columns(ColCounter).DataType, dataTable.Rows(RowCounter)(ColCounter), recognizeTextBy, columnSeparator, cultureFormatProvider, lineEncodings, writer, Nothing)
                     Next
-                    writer.WriteLine()
+                    writer.Write(RequestedRowLineBreak)
                 Next
 
             Finally
@@ -1229,6 +1233,26 @@ Namespace CompuMaster.Data
 
             Return Result
 
+        End Function
+
+        ''' <summary>
+        ''' The line break for rows
+        ''' </summary>
+        ''' <param name="lineEncoding"></param>
+        ''' <returns></returns>
+        Friend Shared Function RowLineBreak(lineEncoding As CompuMaster.Data.Csv.WriteLineEncodings) As String
+            Select Case lineEncoding
+                Case Csv.WriteLineEncodings.None, Csv.WriteLineEncodings.Auto
+                    Return System.Environment.NewLine
+                Case Csv.WriteLineEncodings.Default, Csv.WriteLineEncodings.RowBreakCrLf_CellLineBreakCr, Csv.WriteLineEncodings.RowBreakCrLf_CellLineBreakLf, Csv.WriteLineEncodings.RowBreakCrLf_CellLineBreakRemoved, Csv.WriteLineEncodings.RowBreakCrLf_CellLineBreakSpaceChar
+                    Return ControlChars.CrLf
+                Case Csv.WriteLineEncodings.RowBreakCr_CellLineBreakLf, Csv.WriteLineEncodings.RowBreakCr_CellLineBreakRemoved, Csv.WriteLineEncodings.RowBreakCr_CellLineBreakSpaceChar
+                    Return ControlChars.Cr
+                Case Csv.WriteLineEncodings.RowBreakLf_CellLineBreakCr, Csv.WriteLineEncodings.RowBreakLf_CellLineBreakRemoved, Csv.WriteLineEncodings.RowBreakLf_CellLineBreakSpaceChar
+                    Return ControlChars.Lf
+                Case Else
+                    Throw New NotImplementedException("Invalid lineEncoding")
+            End Select
         End Function
 
         ''' <summary>
@@ -1244,9 +1268,24 @@ Namespace CompuMaster.Data
             Else
                 Result = value
             End If
+            If lineEncoding = Csv.WriteLineEncodings.Auto Then
+                Select Case System.Environment.NewLine
+                    Case ControlChars.CrLf
+                        'Windows platforms
+                        lineEncoding = Csv.WriteLineEncodings.RowBreakCrLf_CellLineBreakLf
+                    Case ControlChars.Lf
+                        'Linux platforms
+                        lineEncoding = Csv.WriteLineEncodings.RowBreakLf_CellLineBreakCr
+                    Case ControlChars.Cr
+                        'Mac platforms
+                        lineEncoding = Csv.WriteLineEncodings.RowBreakCr_CellLineBreakLf
+                    Case Else
+                        Throw New NotImplementedException
+                End Select
+            End If
             Select Case lineEncoding
                 Case Csv.WriteLineEncodings.None
-                Case Csv.WriteLineEncodings.RowBreakCrLf_CellLineBreakLf, Csv.WriteLineEncodings.RowBreakCr_CellLineBreakLf
+                Case Csv.WriteLineEncodings.Default, Csv.WriteLineEncodings.RowBreakCrLf_CellLineBreakLf, Csv.WriteLineEncodings.RowBreakCr_CellLineBreakLf
                     Result = Replace(Result, ControlChars.CrLf, ControlChars.Lf)
                     Result = Replace(Result, ControlChars.Cr, ControlChars.Lf)
                 Case Csv.WriteLineEncodings.RowBreakCrLf_CellLineBreakCr, Csv.WriteLineEncodings.RowBreakLf_CellLineBreakCr
@@ -1273,6 +1312,7 @@ Namespace CompuMaster.Data
         Friend Shared Sub WriteDataViewToCsvFile(ByVal path As String, ByVal dataView As System.Data.DataView, ByVal includesColumnHeaders As Boolean, ByVal cultureFormatProvider As System.Globalization.CultureInfo, ByVal encoding As String, ByVal columnSeparator As String, ByVal recognizeTextBy As Char, lineEncodings As CompuMaster.Data.Csv.WriteLineEncodings)
 
             Dim DataTable As System.Data.DataTable = dataView.Table
+            Dim RequestedRowLineBreak As String = RowLineBreak(lineEncodings)
 
             If cultureFormatProvider Is Nothing Then
                 cultureFormatProvider = System.Globalization.CultureInfo.InvariantCulture
@@ -1297,7 +1337,7 @@ Namespace CompuMaster.Data
                         writer.Write(CsvEncode(DataTable.Columns(ColCounter).ColumnName, recognizeTextBy, lineEncodings))
                         If recognizeTextBy <> Nothing Then writer.Write(recognizeTextBy)
                     Next
-                    writer.WriteLine()
+                    writer.Write(RequestedRowLineBreak)
                 End If
 
                 'Data values
@@ -1331,6 +1371,7 @@ Namespace CompuMaster.Data
         Friend Shared Sub WriteDataViewToCsvFile(ByVal path As String, ByVal dataView As System.Data.DataView, ByVal includesColumnHeaders As Boolean, ByVal encoding As String, ByVal columnSeparator As String, ByVal recognizeTextBy As Char, ByVal decimalSeparator As Char, lineEncodings As CompuMaster.Data.Csv.WriteLineEncodings)
 
             Dim DataTable As System.Data.DataTable = dataView.Table
+            Dim RequestedRowLineBreak As String = RowLineBreak(lineEncodings)
 
             Dim cultureFormatProvider As New System.Globalization.CultureInfo("")
             cultureFormatProvider.NumberFormat.CurrencyDecimalSeparator = decimalSeparator
@@ -1352,7 +1393,7 @@ Namespace CompuMaster.Data
                         writer.Write(CsvEncode(DataTable.Columns(ColCounter).ColumnName, recognizeTextBy, lineEncodings))
                         If recognizeTextBy <> Nothing Then writer.Write(recognizeTextBy)
                     Next
-                    writer.WriteLine()
+                    writer.Write(RequestedRowLineBreak)
                 End If
 
                 'Data values
@@ -1363,7 +1404,7 @@ Namespace CompuMaster.Data
                         End If
                         WriteCellValue(DataTable.Columns(ColCounter).DataType, dataView.Item(RowCounter).Row(ColCounter), recognizeTextBy, columnSeparator, cultureFormatProvider, lineEncodings, writer, Nothing)
                     Next
-                    writer.WriteLine()
+                    writer.Write(RequestedRowLineBreak)
                 Next
 
             Finally
