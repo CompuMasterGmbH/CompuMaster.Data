@@ -57,7 +57,7 @@ Namespace CompuMaster.Test.Data
         End Function
 
         Private Function TestTable2() As DataTable
-            Dim file As String = AssemblyTestEnvironment.TestFileAbsolutePath("testfiles\Q&A.xlsx")
+            Dim file As String = AssemblyTestEnvironment.TestFileAbsolutePath(System.IO.Path.Combine("testfiles", "Q&A.xlsx"))
             Dim dt As DataTable = CompuMaster.Data.XlsEpplus.ReadDataTableFromXlsFile(file, "Rund um das NT")
             Return dt
         End Function
@@ -139,7 +139,7 @@ Namespace CompuMaster.Test.Data
 
 #If Not CI_Build Then
         <Test()> Public Sub ConvertDataReaderToDataTable()
-            Dim TestFile As String = AssemblyTestEnvironment.TestFileAbsolutePath("testfiles\test_for_msaccess.mdb")
+            Dim TestFile As String = AssemblyTestEnvironment.TestFileAbsolutePath(System.IO.Path.Combine("testfiles", "test_for_msaccess.mdb"))
             Dim MyConn As IDbConnection = CompuMaster.Data.DataQuery.Connections.MicrosoftAccessConnection(TestFile)
             Dim MyCmd As IDbCommand = MyConn.CreateCommand()
             MyCmd.CommandType = CommandType.Text
@@ -622,7 +622,7 @@ Namespace CompuMaster.Test.Data
             Dim bigCopy As New DataTable
             Dim bigCopy2 As New DataTable
 
-            big.ReadXml(AssemblyTestEnvironment.TestFileAbsolutePath("testfiles\3000RowsTable.xml"))
+            big.ReadXml(AssemblyTestEnvironment.TestFileAbsolutePath(System.IO.Path.Combine("testfiles", "3000RowsTable.xml")))
 
             CompuMaster.Data.DataTables.CreateDataTableClone(big, bigCopy, "", "", Nothing, CompuMaster.Data.DataTables.RequestedRowChanges.DropExistingRowsInDestinationTableAndInsertNewRows, False,
                                                              CompuMaster.Data.DataTables.RequestedSchemaChangesForUnusedColumns.Remove, CompuMaster.Data.DataTables.RequestedSchemaChangesForExistingColumns.None,
