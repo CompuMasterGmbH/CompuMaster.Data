@@ -485,6 +485,21 @@ Namespace CompuMaster.Data
             Dim rdStr As String
             Dim RowCounter As Integer
             Dim detectCompletedRowLineBasedOnRequiredColumnCount As Integer = 0
+            If lineEncodings = Csv.ReadLineEncodings.Auto Then
+                Select Case System.Environment.NewLine
+                    Case ControlChars.CrLf
+                        'Windows platforms
+                        lineEncodings = Csv.ReadLineEncodings.RowBreakCrLf_CellLineBreakLf
+                    Case ControlChars.Cr
+                        'Mac platforms
+                        lineEncodings = Csv.ReadLineEncodings.RowBreakCr_CellLineBreakLf
+                    Case ControlChars.Lf
+                        'Linux platforms
+                        lineEncodings = Csv.ReadLineEncodings.RowBreakLf_CellLineBreakCr
+                    Case Else
+                        Throw New NotImplementedException
+                End Select
+            End If
             If lineEncodings = Csv.ReadLineEncodings.RowBreakCrLfOrCrOrLf_CellLineBreakCrLfOrCrOrLf AndAlso includesColumnHeaders = False Then
                 Throw New Exception("Line endings setting RowBreakCrLfOrCrOrLf_CellLineBreakCrLfOrCrOrLf requires the CSV data to provide column headers")
             End If
@@ -534,7 +549,7 @@ Namespace CompuMaster.Data
                         Dim colValue As String = Trim(CType(ColValues(ColCounter), String))
                         If Result.Columns.Count <= ColCounter Then
                             If lineEncodings = Csv.ReadLineEncodings.RowBreakCrLfOrCrOrLf_CellLineBreakCrLfOrCrOrLf Then
-                                Throw New Exception("Line endings setting RowBreakCrLfOrCrOrLf_CellLineBreakCrLfOrCrOrLf requires the CSV data to provide the same column count in each row: error reading record row " & Result.Rows.Count + 1 & " and cell """ & colValue & """ - full raw row data:" & vbNewLine & rdStr.Substring(CurrentRowStartPosition, CharPosition - CurrentRowStartPosition))
+                                Throw New Exception("Line endings setting RowBreakCrLfOrCrOrLf_CellLineBreakCrLfOrCrOrLf requires the CSV data to provide the same column count in each row: error reading record row " & Result.Rows.Count + 1 & " and cell """ & colValue & """ - full raw row data:" & System.Environment.NewLine & rdStr.Substring(CurrentRowStartPosition, CharPosition - CurrentRowStartPosition))
                             Else
                                 Result.Columns.Add(New DataColumn(Nothing, GetType(String)))
                             End If
@@ -572,6 +587,21 @@ Namespace CompuMaster.Data
             Dim CurrentColumnValue As New System.Text.StringBuilder
             Dim InQuotationMarks As Boolean
             Dim CharPositionCounter As Integer
+            If lineEncodings = Csv.ReadLineEncodings.Auto Then
+                Select Case System.Environment.NewLine
+                    Case ControlChars.CrLf
+                        'Windows platforms
+                        lineEncodings = Csv.ReadLineEncodings.RowBreakCrLf_CellLineBreakLf
+                    Case ControlChars.Cr
+                        'Mac platforms
+                        lineEncodings = Csv.ReadLineEncodings.RowBreakCr_CellLineBreakLf
+                    Case ControlChars.Lf
+                        'Linux platforms
+                        lineEncodings = Csv.ReadLineEncodings.RowBreakLf_CellLineBreakCr
+                    Case Else
+                        Throw New NotImplementedException
+                End Select
+            End If
 
             For CharPositionCounter = startposition To lineContent.Length - 1
                 Select Case lineContent.Chars(CharPositionCounter)
@@ -935,6 +965,23 @@ Namespace CompuMaster.Data
                 cultureFormatProvider = System.Globalization.CultureInfo.InvariantCulture
             End If
 
+            If lineEncodings = Csv.WriteLineEncodings.Auto Then
+                Select Case System.Environment.NewLine
+                    Case ControlChars.CrLf
+                        'Windows platforms
+                        lineEncodings = Csv.WriteLineEncodings.RowBreakCrLf_CellLineBreakLf
+                    Case ControlChars.Cr
+                        'Mac platforms
+                        lineEncodings = Csv.WriteLineEncodings.RowBreakCr_CellLineBreakLf
+                    Case ControlChars.Lf
+                        'Linux platforms
+                        lineEncodings = Csv.WriteLineEncodings.RowBreakLf_CellLineBreakCr
+                    Case Else
+                        Throw New NotImplementedException
+                End Select
+            End If
+            Dim RequestedRowLineBreak As String = RowLineBreak(lineEncodings)
+
             Dim writer As New System.Text.StringBuilder
 
             'Column headers
@@ -942,7 +989,7 @@ Namespace CompuMaster.Data
                 For ColCounter As Integer = 0 To System.Math.Min(columnWidths.Length, dataTable.Columns.Count) - 1
                     writer.Append(FixedLengthText(dataTable.Columns(ColCounter).ColumnName, columnWidths(ColCounter), False))
                 Next
-                writer.Append(vbNewLine)
+                writer.Append(RequestedRowLineBreak)
             End If
 
             'Data values
@@ -993,7 +1040,7 @@ Namespace CompuMaster.Data
                         End If
                     End If
                 Next
-                writer.Append(vbNewLine)
+                writer.Append(RequestedRowLineBreak)
             Next
             Return writer
 
@@ -1019,6 +1066,23 @@ Namespace CompuMaster.Data
                 columnSeparator = cultureFormatProvider.TextInfo.ListSeparator
             End If
 
+            If lineEncodings = Csv.WriteLineEncodings.Auto Then
+                Select Case System.Environment.NewLine
+                    Case ControlChars.CrLf
+                        'Windows platforms
+                        lineEncodings = Csv.WriteLineEncodings.RowBreakCrLf_CellLineBreakLf
+                    Case ControlChars.Cr
+                        'Mac platforms
+                        lineEncodings = Csv.WriteLineEncodings.RowBreakCr_CellLineBreakLf
+                    Case ControlChars.Lf
+                        'Linux platforms
+                        lineEncodings = Csv.WriteLineEncodings.RowBreakLf_CellLineBreakCr
+                    Case Else
+                        Throw New NotImplementedException
+                End Select
+            End If
+            Dim RequestedRowLineBreak As String = RowLineBreak(lineEncodings)
+
             Dim writer As New System.Text.StringBuilder
 
             'Column headers
@@ -1031,7 +1095,7 @@ Namespace CompuMaster.Data
                     writer.Append(CsvEncode(dataTable.Columns(ColCounter).ColumnName, recognizeTextBy, lineEncodings))
                     If recognizeTextBy <> Nothing Then writer.Append(recognizeTextBy)
                 Next
-                writer.Append(vbNewLine)
+                writer.Append(RequestedRowLineBreak)
             End If
 
             'Data values
@@ -1042,7 +1106,7 @@ Namespace CompuMaster.Data
                     End If
                     WriteCellValue(dataTable.Columns(ColCounter).DataType, dataTable.Rows(RowCounter)(ColCounter), recognizeTextBy, columnSeparator, cultureFormatProvider, lineEncodings, Nothing, writer)
                 Next
-                writer.Append(vbNewLine)
+                writer.Append(RequestedRowLineBreak)
             Next
             Return writer
 
