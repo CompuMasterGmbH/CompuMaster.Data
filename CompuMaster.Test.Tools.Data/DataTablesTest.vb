@@ -1191,10 +1191,10 @@ Namespace CompuMaster.Test.Data
             Console.WriteLine(CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(CrossJoined))
 
             'ResultComparisonValue to be evaluated
-            Dim ShallBeResult As String = "JoinedTable" & vbNewLine &
-                    "FirstCol|SecondCol|ThirdCol|FourthCol" & vbNewLine &
-                    "--------+---------+--------+---------" & vbNewLine &
-                    "Test    |Test2    |        |RightTest" & vbNewLine &
+            Dim ShallBeResult As String = "JoinedTable" & System.Environment.NewLine &
+                    "FirstCol|SecondCol|ThirdCol|FourthCol" & System.Environment.NewLine &
+                    "--------+---------+--------+---------" & System.Environment.NewLine &
+                    "Test    |Test2    |        |RightTest" & System.Environment.NewLine &
                     ""
             Assert.AreEqual(ShallBeResult, CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(CrossJoined))
 
@@ -1212,15 +1212,15 @@ Namespace CompuMaster.Test.Data
             Console.WriteLine(CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(CrossJoined))
 
             'ResultComparisonValue to be evaluated
-            Dim ShallBeResult As String = "JoinedTable" & vbNewLine &
-                    "FirstCol|SecondCol|ThirdCol|FourthCol " & vbNewLine &
-                    "--------+---------+--------+----------" & vbNewLine &
-                    "Test1   |Test1Col2|        |RightTest1" & vbNewLine &
-                    "Test1   |Test1Col2|        |RightTest2" & vbNewLine &
-                    "Test1   |Test1Col2|        |RightTest3" & vbNewLine &
-                    "Test2   |Test2Col2|        |RightTest1" & vbNewLine &
-                    "Test2   |Test2Col2|        |RightTest2" & vbNewLine &
-                    "Test2   |Test2Col2|        |RightTest3" & vbNewLine &
+            Dim ShallBeResult As String = "JoinedTable" & System.Environment.NewLine &
+                    "FirstCol|SecondCol|ThirdCol|FourthCol " & System.Environment.NewLine &
+                    "--------+---------+--------+----------" & System.Environment.NewLine &
+                    "Test1   |Test1Col2|        |RightTest1" & System.Environment.NewLine &
+                    "Test1   |Test1Col2|        |RightTest2" & System.Environment.NewLine &
+                    "Test1   |Test1Col2|        |RightTest3" & System.Environment.NewLine &
+                    "Test2   |Test2Col2|        |RightTest1" & System.Environment.NewLine &
+                    "Test2   |Test2Col2|        |RightTest2" & System.Environment.NewLine &
+                    "Test2   |Test2Col2|        |RightTest3" & System.Environment.NewLine &
                     ""
             Assert.AreEqual(ShallBeResult, CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(CrossJoined))
 
@@ -1608,21 +1608,21 @@ Namespace CompuMaster.Test.Data
                 End If
             Next i
 
-            Dim ShallBeResult As String = "JoinedTable" & vbNewLine &
-                    "left1|left2|left3|right1|right2" & vbNewLine &
-                    "-----+-----+-----+------+------" & vbNewLine &
-                    "0    |1    |2    |0     |1     " & vbNewLine &
-                    "     |2    |3    |      |3     " & vbNewLine &
-                    "2    |3    |4    |      |      " & vbNewLine &
-                    "3    |4    |5    |3     |4     " & vbNewLine &
-                    "3    |4    |5    |3     |40    " & vbNewLine &
-                    "4    |5    |6    |4     |104   " & vbNewLine &
-                    "5    |6    |7    |5     |      " & vbNewLine &
-                    "567  |65527|     |      |      " & vbNewLine &
-                    "5    |60   |70   |5     |      " & vbNewLine &
-                    "     |     |     |1     |2     " & vbNewLine &
-                    "     |     |     |789   |65728 " & vbNewLine &
-                    "     |     |     |890   |      " & vbNewLine &
+            Dim ShallBeResult As String = "JoinedTable" & System.Environment.NewLine &
+                    "left1|left2|left3|right1|right2" & System.Environment.NewLine &
+                    "-----+-----+-----+------+------" & System.Environment.NewLine &
+                    "0    |1    |2    |0     |1     " & System.Environment.NewLine &
+                    "     |2    |3    |      |3     " & System.Environment.NewLine &
+                    "2    |3    |4    |      |      " & System.Environment.NewLine &
+                    "3    |4    |5    |3     |4     " & System.Environment.NewLine &
+                    "3    |4    |5    |3     |40    " & System.Environment.NewLine &
+                    "4    |5    |6    |4     |104   " & System.Environment.NewLine &
+                    "5    |6    |7    |5     |      " & System.Environment.NewLine &
+                    "567  |65527|     |      |      " & System.Environment.NewLine &
+                    "5    |60   |70   |5     |      " & System.Environment.NewLine &
+                    "     |     |     |1     |2     " & System.Environment.NewLine &
+                    "     |     |     |789   |65728 " & System.Environment.NewLine &
+                    "     |     |     |890   |      " & System.Environment.NewLine &
                     ""
             Assert.AreEqual(ShallBeResult, CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(FullOuterJoined))
 
@@ -1918,18 +1918,18 @@ Namespace CompuMaster.Test.Data
             Console.WriteLine("LEFT-JOINED TABLE CONTENTS: " & TestTables.TableSetName)
             Console.WriteLine(CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(LeftJoined))
 
-            Dim ShallBeResult As String = "JoinedTable" & vbNewLine &
-                    "left1|left2|left3|right1|right2" & vbNewLine &
-                    "-----+-----+-----+------+------" & vbNewLine &
-                    "0    |1    |2    |0     |1     " & vbNewLine &
-                    "     |2    |3    |      |3     " & vbNewLine &
-                    "2    |3    |4    |      |      " & vbNewLine &
-                    "3    |4    |5    |3     |4     " & vbNewLine &
-                    "3    |4    |5    |3     |40    " & vbNewLine &
-                    "4    |5    |6    |4     |104   " & vbNewLine &
-                    "5    |6    |7    |5     |      " & vbNewLine &
-                    "567  |65527|     |      |      " & vbNewLine &
-                    "5    |60   |70   |5     |      " & vbNewLine &
+            Dim ShallBeResult As String = "JoinedTable" & System.Environment.NewLine &
+                    "left1|left2|left3|right1|right2" & System.Environment.NewLine &
+                    "-----+-----+-----+------+------" & System.Environment.NewLine &
+                    "0    |1    |2    |0     |1     " & System.Environment.NewLine &
+                    "     |2    |3    |      |3     " & System.Environment.NewLine &
+                    "2    |3    |4    |      |      " & System.Environment.NewLine &
+                    "3    |4    |5    |3     |4     " & System.Environment.NewLine &
+                    "3    |4    |5    |3     |40    " & System.Environment.NewLine &
+                    "4    |5    |6    |4     |104   " & System.Environment.NewLine &
+                    "5    |6    |7    |5     |      " & System.Environment.NewLine &
+                    "567  |65527|     |      |      " & System.Environment.NewLine &
+                    "5    |60   |70   |5     |      " & System.Environment.NewLine &
                     ""
             Assert.AreEqual(ShallBeResult, CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(LeftJoined))
 
