@@ -69,6 +69,7 @@ Namespace CompuMaster.Test.Data
         ''' </summary>
         ''' <param name="handler"></param>
         ''' <returns></returns>
+        <CodeAnalysis.SuppressMessage("Major Code Smell", "S1172:Unused procedure parameters should be removed", Justification:="<Ausstehend>")>
         Private Shared Function ReadDataTableLocalhostTestWebserver(handler As System.Net.HttpListenerRequest) As String
             Return "Test,Column" & vbNewLine & "1,äöüßÄÖÜ2"
         End Function

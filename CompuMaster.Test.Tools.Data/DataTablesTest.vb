@@ -372,6 +372,7 @@ Namespace CompuMaster.Test.Data
 
         End Sub
 
+        <CodeAnalysis.SuppressMessage("Major Code Smell", "S1172:Unused procedure parameters should be removed", Justification:="Required parameter to fit AddressOf method compatibility")>
         Private Function ConvertColumnToString(column As DataColumn, value As Object) As String
             If IsDBNull(value) Then
                 Return Nothing

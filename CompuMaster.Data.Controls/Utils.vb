@@ -36,9 +36,9 @@ Namespace CompuMaster.Data.Windows
         ''' </summary>
         ''' <remarks></remarks>
         Public Shared Sub CloseAndDisposeQuickEditDataContainer(ByVal _DataContainer As CompuMaster.Data.DataManipulationResult)
-            If Not _DataContainer Is Nothing AndAlso Not _DataContainer.Command Is Nothing Then
+            If _DataContainer IsNot Nothing AndAlso _DataContainer.Command IsNot Nothing Then
                 CompuMaster.Data.DataQuery.CloseAndDisposeConnection(_DataContainer.Command.Connection)
-                If Not _DataContainer.Command Is Nothing Then
+                If _DataContainer.Command IsNot Nothing Then
                     _DataContainer.Command.Dispose()
                 End If
             End If

@@ -335,7 +335,7 @@ Namespace CompuMaster.Data.Windows
                 'Dim ClipboardTableText As String = Clipboard.GetText(TextDataFormat.CommaSeparatedValue)
                 Dim ClipboardTableText As String = Clipboard.GetText() 'TextDataFormat.UnicodeText)
                 Dim ClipboardTable As DataTable = CompuMaster.Data.Csv.ReadDataTableFromCsvString(ClipboardTableText, False, Csv.ReadLineEncodings.Default, Csv.ReadLineEncodingAutoConversion.AutoConvertLineBreakToCrLf, ControlChars.Tab, """"c, False, True)
-                Dim check As String = CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(ClipboardTable)
+                'Dim check As String = CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(ClipboardTable)
                 For MyCounter As Integer = 0 To ClipboardTable.Rows.Count - 1
                     Dim ClipboardRow As DataRow = ClipboardTable.Rows(MyCounter)
                     Dim GridNewRowIndex As Integer = Me.Grid.NewRowIndex
