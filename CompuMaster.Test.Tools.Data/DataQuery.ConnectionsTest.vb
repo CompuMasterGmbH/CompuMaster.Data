@@ -642,7 +642,6 @@ Namespace CompuMaster.Test.Data.DataQuery
                 Assert.Fail("Failed to open Access MDB at " & PlatformDependentProcessBitNumber() & " platform")
             End If
         End Sub
-#End If
 
         Private Function PlatformDependentProcessBitNumber() As String
             If Environment.Is64BitProcess Then
@@ -651,6 +650,7 @@ Namespace CompuMaster.Test.Data.DataQuery
                 Return "x32"
             End If
         End Function
+#End If
 
 #If Not CI_Build Then
         <Test()> Public Sub ReadMsAccessDatabaseEnumeratedTable()

@@ -57,8 +57,8 @@ Namespace CompuMaster.Test.Data
         End Function
 
         Private Function TestTable2() As DataTable
-            Dim file As String = AssemblyTestEnvironment.TestFileAbsolutePath("testfiles\Q&A.xls")
-            Dim dt As DataTable = CompuMaster.Data.XlsReader.ReadDataTableFromXlsFile(file, "Rund um das NT")
+            Dim file As String = AssemblyTestEnvironment.TestFileAbsolutePath("testfiles\Q&A.xlsx")
+            Dim dt As DataTable = CompuMaster.Data.XlsEpplus.ReadDataTableFromXlsFile(file, "Rund um das NT")
             Return dt
         End Function
 #End Region
@@ -321,10 +321,8 @@ Namespace CompuMaster.Test.Data
 
             Console.WriteLine(CompuMaster.Data.DataTables.ConvertToWikiTable(dt))
 
-#If Not CI_Build Then
             dt = TestTable2()
             Console.WriteLine(CompuMaster.Data.DataTables.ConvertToWikiTable(dt))
-#End If
 
         End Sub
 
@@ -361,14 +359,12 @@ Namespace CompuMaster.Test.Data
             dt.Rows.Add(dt.NewRow)
             Console.WriteLine(CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(dt, 5, 20, "|", "|", "+", "=", "-", AddressOf ConvertColumnToString))
 
-#If Not CI_Build Then
             'Real data table: quiz questions
             dt = TestTable2()
             Console.WriteLine(CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(dt))
             Console.WriteLine(CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(dt, " :: ", " :: ", "=##=", "=", "="))
             Console.WriteLine(CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(dt, 10))
             Console.WriteLine(CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(dt, 5, 20))
-#End If
 
         End Sub
 
