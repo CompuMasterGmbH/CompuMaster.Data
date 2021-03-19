@@ -364,6 +364,20 @@ Namespace CompuMaster.Data
         End Function
 
         ''' <summary>
+        '''     Checks for DBNull and returns the second value alternatively
+        ''' </summary>
+        ''' <param name="checkValueIfDBNull">The value to be checked</param>
+        ''' <param name="replaceWithThis">The alternative value, null (Nothing in VisualBasic) if not defined</param>
+        ''' <returns>A value which is not DBNull</returns>
+        <DebuggerHidden()> Public Shared Function NoDBNull(Of T)(ByVal checkValueIfDBNull As Object, ByVal replaceWithThis As T) As T
+            If IsDBNull(checkValueIfDBNull) Then
+                Return (replaceWithThis)
+            Else
+                Return CType(checkValueIfDBNull, T)
+            End If
+        End Function
+
+        ''' <summary>
         ''' Check for DBNull and return null (Nothing in VisualBasic) alternatively, second check for empty string and return empty array, third split the string and fill the array with all elements
         ''' </summary>
         ''' <typeparam name="T"></typeparam>
@@ -698,20 +712,6 @@ Namespace CompuMaster.Data
                     End If
                 Next
                 Return Result
-            End If
-        End Function
-
-        ''' <summary>
-        '''     Checks for DBNull and returns the second value alternatively
-        ''' </summary>
-        ''' <param name="checkValueIfDBNull">The value to be checked</param>
-        ''' <param name="replaceWithThis">The alternative value, null (Nothing in VisualBasic) if not defined</param>
-        ''' <returns>A value which is not DBNull</returns>
-        <DebuggerHidden()> Public Shared Function NoDBNull(Of T)(ByVal checkValueIfDBNull As Object, ByVal replaceWithThis As T) As T
-            If IsDBNull(checkValueIfDBNull) Then
-                Return (replaceWithThis)
-            Else
-                Return CType(checkValueIfDBNull, T)
             End If
         End Function
 
