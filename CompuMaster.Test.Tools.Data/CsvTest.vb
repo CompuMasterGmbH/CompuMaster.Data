@@ -394,7 +394,7 @@ Namespace CompuMaster.Test.Data
         <Test> Sub ReadWriteCompareDatableFixedColWidthsWithStringEncodingDefault()
             Dim Level0CsvData As String = "ID   GROSS klein " & vbNewLine & "12345ABCDEFabcdef" & vbNewLine & "äöüß AEIOU aeiou " & vbNewLine
             Dim Level1CsvDataTable As DataTable = CompuMaster.Data.Csv.ReadDataTableFromCsvString(Level0CsvData, False, New Integer() {5, 6, 6}, False)
-            Dim Level2CsvData As String = CompuMaster.Data.Csv.ConvertDataTableToTextAsStringBuilder(Level1CsvDataTable, False, CompuMaster.Data.Csv.WriteLineEncodings.Auto, System.Globalization.CultureInfo.CurrentCulture, New Integer() {5, 6, 6}).ToString
+            Dim Level2CsvData As String = CompuMaster.Data.Csv.ConvertDataTableToTextAsStringBuilder(Level1CsvDataTable, False, CompuMaster.Data.Csv.WriteLineEncodings.RowBreakCrLf_CellLineBreakLf, System.Globalization.CultureInfo.CurrentCulture, New Integer() {5, 6, 6}).ToString
             Assert.AreEqual("ID", CType(Level1CsvDataTable.Rows(0)(0), String))
             Assert.AreEqual("GROSS", CType(Level1CsvDataTable.Rows(0)(1), String))
             Assert.AreEqual("klein", CType(Level1CsvDataTable.Rows(0)(2), String))
