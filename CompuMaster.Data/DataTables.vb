@@ -1039,7 +1039,7 @@ Namespace CompuMaster.Data
         ''' <param name="destinationTable">The destination of all operations; the destination table will be a clone of the source table at the end</param>
         ''' <param name="sourceRowFilter">An additional row filter for the source table. For all rows set it to null (Nothing in VisualBasic)</param>
         ''' <param name="sourceSortExpression">An additional sort command for the source table</param>
-        ''' <param name="topRows">After row filtering, how many rows from top shall be returned as maximum? (0 = all rows)</param>
+        ''' <param name="topRows">After row filtering/merging, how many rows from top shall be returned as maximum? (0 = all rows)</param>
         ''' <param name="rowChanges">Enum specifing the changes to be performed on the destination row </param>
         ''' <param name="caseInsensitiveColumnNames">Specifies whether case insensitivity should matter for column names</param>
         ''' <param name="destinationSchemaChangesForUnusedColumns">Remove the existing columns of the destination table which are not present in the source table</param>
@@ -1173,7 +1173,7 @@ Namespace CompuMaster.Data
             End If
 
             'Copy rows
-            If RequestedRowChanges.KeepExistingRowsInDestinationTableAndAddRemoveUpdateChangedRows <> rowChanges Then
+            If rowChanges <> RequestedRowChanges.KeepExistingRowsInDestinationTableAndAddRemoveUpdateChangedRows Then
                 If MySrcTableRows IsNot Nothing Then
 
                     Dim srcTableColumnsList(sourceTable.Columns.Count - 1) As String
@@ -1210,11 +1210,9 @@ Namespace CompuMaster.Data
                 destinationTable.Merge(sourceView.ToTable(), False, MissingSchemaAction.Ignore)
 
                 If topRows < destinationTable.Rows.Count Then
-                    Dim destTopRows As DataTable = destinationTable.Clone()
-                    For i As Integer = 0 To topRows - 1
-                        destTopRows.ImportRow(destinationTable.Rows(i))
+                    For MyCounter As Integer = destinationTable.Rows.Count - 1 To topRows Step -1
+                        destinationTable.Rows.RemoveAt(MyCounter)
                     Next
-                    destinationTable = destTopRows
                 End If
             End If
         End Sub
@@ -1714,6 +1712,17 @@ Namespace CompuMaster.Data
         '''     Return a string with all columns and rows, helpfull for debugging purposes
         ''' </summary>
         ''' <param name="dataRows">The datatable to retrieve the content from</param>
+        ''' <param name="tableTitle">The headline for the table</param>
+        ''' <returns>All rows are separated by fixed width. If no rows have been processed, the user will get notified about this fact</returns>
+        ''' <remarks></remarks>
+        Public Shared Function ConvertToPlainTextTableFixedColumnWidths(ByVal dataRows As DataRow(), tableTitle As String) As String
+            Return ConvertToPlainTextTableWithFixedColumnWidthsInternal(dataRows, tableTitle, SuggestColumnWidthsForFixedPlainTables(dataRows, 100.0), Nothing)
+        End Function
+
+        ''' <summary>
+        '''     Return a string with all columns and rows, helpfull for debugging purposes
+        ''' </summary>
+        ''' <param name="dataRows">The datatable to retrieve the content from</param>
         ''' <returns>All rows are separated by fixed width. If no rows have been processed, the user will get notified about this fact</returns>
         ''' <remarks></remarks>
         Public Shared Function ConvertToPlainTextTableFixedColumnWidths(ByVal dataRows As DataRow(), columnFormatting As DataColumnToString) As String
@@ -1738,6 +1747,17 @@ Namespace CompuMaster.Data
         '''     Return a string with all columns and rows, helpfull for debugging purposes
         ''' </summary>
         ''' <param name="dataRow">The data row to retrieve the content from</param>
+        ''' <param name="tableTitle">The headline for the table</param>
+        ''' <returns>All rows are separated by fixed width. If no rows have been processed, the user will get notified about this fact</returns>
+        ''' <remarks></remarks>
+        Public Shared Function ConvertToPlainTextTableFixedColumnWidths(ByVal dataRow As DataRow, tableTitle As String) As String
+            Return ConvertToPlainTextTableWithFixedColumnWidthsInternal(New System.Data.DataRow() {dataRow}, tableTitle, SuggestColumnWidthsForFixedPlainTables(New System.Data.DataRow() {dataRow}, 100.0), Nothing)
+        End Function
+
+        ''' <summary>
+        '''     Return a string with all columns and rows, helpfull for debugging purposes
+        ''' </summary>
+        ''' <param name="dataRow">The data row to retrieve the content from</param>
         ''' <returns>All rows are separated by fixed width. If no rows have been processed, the user will get notified about this fact</returns>
         ''' <remarks></remarks>
         Public Shared Function ConvertToPlainTextTableFixedColumnWidths(ByVal dataRow As DataRow, columnFormatting As DataColumnToString) As String
@@ -1752,6 +1772,17 @@ Namespace CompuMaster.Data
         ''' <remarks></remarks>
         Public Shared Function ConvertToPlainTextTableFixedColumnWidths(ByVal dataTable As DataTable) As String
             Return ConvertToPlainTextTableWithFixedColumnWidthsInternal(dataTable.Rows, dataTable.TableName, SuggestColumnWidthsForFixedPlainTables(dataTable.Rows, 100.0), Nothing)
+        End Function
+
+        ''' <summary>
+        '''     Return a string with all columns and rows, helpfull for debugging purposes
+        ''' </summary>
+        ''' <param name="dataTable">The datatable to retrieve the content from</param>
+        ''' <param name="tableTitle">The headline for the table</param>
+        ''' <returns>All rows are separated by fixed width. If no rows have been processed, the user will get notified about this fact</returns>
+        ''' <remarks></remarks>
+        Public Shared Function ConvertToPlainTextTableFixedColumnWidths(ByVal dataTable As DataTable, ByVal tableTitle As String) As String
+            Return ConvertToPlainTextTableWithFixedColumnWidthsInternal(dataTable.Rows, tableTitle, SuggestColumnWidthsForFixedPlainTables(dataTable.Rows, 100.0), Nothing)
         End Function
 
         ''' <summary>

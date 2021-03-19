@@ -574,13 +574,13 @@ Namespace CompuMaster.Test.Data
             merge_source3.PrimaryKey = New DataColumn() {merge_source3.Columns(0)}
             merge_dest3.PrimaryKey = New DataColumn() {merge_dest3.Columns(0)}
 
-            merge_source3.Rows.Add(New Object() {1, "Text1", "A"})
-            merge_source3.Rows.Add(New Object() {2, "Text2", "A"})
-            merge_source3.Rows.Add(New Object() {3, "Text3", "A"})
-            merge_source3.Rows.Add(New Object() {4, "Text4", "B"})
-            merge_source3.Rows.Add(New Object() {5, "Text5", "B"})
+            merge_source3.Rows.Add(New Object() {1, "Text1", "KEEP-THIS-RECORD"})
+            merge_source3.Rows.Add(New Object() {2, "Text2", "KEEP-THIS-RECORD"})
+            merge_source3.Rows.Add(New Object() {3, "Text3", "KEEP-THIS-RECORD"})
+            merge_source3.Rows.Add(New Object() {4, "Text4", "DEL-ME"})
+            merge_source3.Rows.Add(New Object() {5, "Text5", "DEL-ME"})
 
-            merge_dest3.Rows.Add(New Object() {1, "TextGone!", "A"})
+            merge_dest3.Rows.Add(New Object() {1, "TextGone!", "K"})
             merge_dest3.Rows.Add(New Object() {9, "Not touched", "B"})
             merge_dest3.Rows.Add(New Object() {10, "...", "B"})
             merge_dest3.Rows.Add(New Object() {2, "TextX", "A"})
@@ -589,15 +589,47 @@ Namespace CompuMaster.Test.Data
             merge_source3.AcceptChanges()
             merge_dest3.AcceptChanges()
 
-            CompuMaster.Data.DataTables.CreateDataTableClone(merge_source3, merge_dest3, "C = 'A'", "A ASC", Nothing, CompuMaster.Data.DataTables.RequestedRowChanges.KeepExistingRowsInDestinationTableAndAddRemoveUpdateChangedRows,
+            Dim Cloned_merge_dest3 As DataTable = CompuMaster.Data.DataTables.CreateDataTableClone(merge_dest3)
+            Assert.AreEqual(TableStatistics(merge_dest3), TableStatistics(Cloned_merge_dest3))
+
+            'Show table statistics
+            System.Console.WriteLine("TABLE: merge_source3")
+            System.Console.WriteLine(TableStatistics(merge_source3))
+            System.Console.WriteLine(System.Environment.NewLine)
+            System.Console.WriteLine(System.Environment.NewLine)
+            System.Console.WriteLine("TABLE: merge_dest3")
+            System.Console.WriteLine(TableStatistics(merge_dest3))
+            System.Console.WriteLine(System.Environment.NewLine)
+            System.Console.WriteLine(System.Environment.NewLine)
+            System.Console.WriteLine("TABLE: Cloned_merge_dest3")
+            System.Console.WriteLine(TableStatistics(Cloned_merge_dest3))
+            System.Console.WriteLine(System.Environment.NewLine)
+            System.Console.WriteLine(System.Environment.NewLine)
+
+            'Show table content
+            System.Console.WriteLine(CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(merge_source3, "TABLE: merge_source3"))
+            System.Console.WriteLine(System.Environment.NewLine)
+            System.Console.WriteLine(System.Environment.NewLine)
+            System.Console.WriteLine(CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(merge_dest3, "TABLE: merge_dest3"))
+            System.Console.WriteLine(System.Environment.NewLine)
+            System.Console.WriteLine(System.Environment.NewLine)
+            System.Console.WriteLine(CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(Cloned_merge_dest3, "TABLE: Cloned_merge_dest3"))
+            System.Console.WriteLine(System.Environment.NewLine)
+            System.Console.WriteLine(System.Environment.NewLine)
+
+
+            CompuMaster.Data.DataTables.CreateDataTableClone(merge_source3, merge_dest3, "C = 'KEEP-THIS-RECORD'", "A ASC", Nothing, CompuMaster.Data.DataTables.RequestedRowChanges.KeepExistingRowsInDestinationTableAndAddRemoveUpdateChangedRows,
                                                              True, CompuMaster.Data.DataTables.RequestedSchemaChangesForUnusedColumns.None,
                                                              CompuMaster.Data.DataTables.RequestedSchemaChangesForExistingColumns.None,
                                                              CompuMaster.Data.DataTables.RequestedSchemaChangesForAdditionalColumns.None)
 
+            System.Console.WriteLine(CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(Cloned_merge_dest3, "TABLE: Cloned_merge_dest3 #20"))
+            System.Console.WriteLine(System.Environment.NewLine)
+            System.Console.WriteLine(System.Environment.NewLine)
+
 
             Assert.AreEqual(5, merge_dest3.Rows.Count)
             Assert.AreEqual(3, merge_dest3.Columns.Count)
-
 
             'Checking sort after merge (only source)
             Assert.AreEqual(1, merge_dest3.Rows.Item(0).Item(0))
@@ -608,15 +640,25 @@ Namespace CompuMaster.Test.Data
             Assert.AreEqual(2, merge_dest3.Rows.Item(3).Item(0))
             Assert.AreEqual(3, merge_dest3.Rows.Item(4).Item(0))
 
+            'Ensure in general correct merge
+            Assert.AreEqual("Text1", merge_dest3.Rows.Item(0).Item(1))
+            Assert.AreEqual("Not touched", merge_dest3.Rows.Item(1).Item(1))
+            Assert.AreEqual("...", merge_dest3.Rows.Item(2).Item(1))
+            'Assert.AreEqual("Text4", merge_dest3.Rows.Item(3).Item(1))
+            'Assert.AreEqual("Text5", merge_dest3.Rows.Item(4).Item(1))
+            Assert.AreEqual("Text2", merge_dest3.Rows.Item(3).Item(1))
+            Assert.AreEqual("Text3", merge_dest3.Rows.Item(4).Item(1))
 
-            'Ensure in general correct merge'
-            StringAssert.IsMatch("Text1", merge_dest3.Rows.Item(0).Item(1))
-            StringAssert.IsMatch("Not touched", merge_dest3.Rows.Item(1).Item(1))
-            StringAssert.IsMatch("...", merge_dest3.Rows.Item(2).Item(1))
-            'StringAssert.IsMatch("Text4", merge_dest3.Rows.Item(3).Item(1))
-            'StringAssert.IsMatch("Text5", merge_dest3.Rows.Item(4).Item(1))
-            StringAssert.IsMatch("Text2", merge_dest3.Rows.Item(3).Item(1))
-            StringAssert.IsMatch("Text3", merge_dest3.Rows.Item(4).Item(1))
+            CompuMaster.Data.DataTables.CreateDataTableClone(merge_source3, merge_dest3, "C = 'KEEP-THIS-RECORD'", "A ASC", 3, CompuMaster.Data.DataTables.RequestedRowChanges.KeepExistingRowsInDestinationTableAndAddRemoveUpdateChangedRows,
+                                                             True, CompuMaster.Data.DataTables.RequestedSchemaChangesForUnusedColumns.None,
+                                                             CompuMaster.Data.DataTables.RequestedSchemaChangesForExistingColumns.None,
+                                                             CompuMaster.Data.DataTables.RequestedSchemaChangesForAdditionalColumns.None)
+
+            System.Console.WriteLine(CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(Cloned_merge_dest3, "TABLE: Cloned_merge_dest3 #30"))
+            System.Console.WriteLine(System.Environment.NewLine)
+            System.Console.WriteLine(System.Environment.NewLine)
+
+            Assert.AreEqual(3, merge_dest3.Rows.Count(), "RowCount check")
 
             Dim big As New DataTable
             Dim bigCopy As New DataTable
@@ -629,6 +671,7 @@ Namespace CompuMaster.Test.Data
                                                              CompuMaster.Data.DataTables.RequestedSchemaChangesForAdditionalColumns.Add)
             Assert.AreEqual(big.Columns.Count, bigCopy.Columns.Count)
             Assert.AreEqual(big.Rows.Count, bigCopy.Rows.Count)
+            Assert.AreEqual(CompuMaster.Data.DataTables.ConvertToPlainTextTable(big.Rows, "Table"), CompuMaster.Data.DataTables.ConvertToPlainTextTable(bigCopy.Rows, "Table"))
 
             bigCopy.Rows.Item(0).Item(1) = 29
             bigCopy.Rows.Item(1020).Item(1) = 20
@@ -636,6 +679,31 @@ Namespace CompuMaster.Test.Data
             bigCopy.Rows.Item(1000).Item(1) = 22
             bigCopy.Rows.Item(900).Item(1) = 55
             bigCopy.Rows.Item(bigCopy.Rows.Count - 5).Item(1) = 78
+
+            'Show table statistics
+            System.Console.WriteLine("TABLE: big")
+            System.Console.WriteLine(TableStatistics(big))
+            System.Console.WriteLine(System.Environment.NewLine)
+            System.Console.WriteLine(System.Environment.NewLine)
+            System.Console.WriteLine("TABLE: bigCopy")
+            System.Console.WriteLine(TableStatistics(bigCopy))
+            System.Console.WriteLine(System.Environment.NewLine)
+            System.Console.WriteLine(System.Environment.NewLine)
+            System.Console.WriteLine("TABLE: bigCopy2")
+            System.Console.WriteLine(TableStatistics(bigCopy2))
+            System.Console.WriteLine(System.Environment.NewLine)
+            System.Console.WriteLine(System.Environment.NewLine)
+
+            ''Show table content
+            'System.Console.WriteLine(CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(big, "TABLE: big"))
+            'System.Console.WriteLine(System.Environment.NewLine)
+            'System.Console.WriteLine(System.Environment.NewLine)
+            'System.Console.WriteLine(CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(big, "TABLE: bigCopy"))
+            'System.Console.WriteLine(System.Environment.NewLine)
+            'System.Console.WriteLine(System.Environment.NewLine)
+            'System.Console.WriteLine(CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(big, "TABLE: bigCopy2"))
+            'System.Console.WriteLine(System.Environment.NewLine)
+            'System.Console.WriteLine(System.Environment.NewLine)
 
             CompuMaster.Data.DataTables.CreateDataTableClone(bigCopy, bigCopy2, "", "", Nothing, CompuMaster.Data.DataTables.RequestedRowChanges.DropExistingRowsInDestinationTableAndInsertNewRows,
                                                              False, CompuMaster.Data.DataTables.RequestedSchemaChangesForUnusedColumns.None, CompuMaster.Data.DataTables.RequestedSchemaChangesForExistingColumns.None,
@@ -645,9 +713,44 @@ Namespace CompuMaster.Test.Data
             Assert.AreEqual(bigCopy.Columns.Count, bigCopy2.Columns.Count)
             Assert.AreEqual(20, bigCopy2.Rows.Item(1020).Item(1))
             Assert.AreEqual(55, bigCopy2.Rows.Item(900).Item(1))
+            Assert.AreEqual(CompuMaster.Data.DataTables.ConvertToPlainTextTable(bigCopy.Rows, "Table"), CompuMaster.Data.DataTables.ConvertToPlainTextTable(bigCopy2.Rows, "Table"))
+
+            System.Console.WriteLine("TABLE: bigCopy2")
+            System.Console.WriteLine(TableStatistics(bigCopy2))
+            System.Console.WriteLine(System.Environment.NewLine)
+            System.Console.WriteLine(System.Environment.NewLine)
 
             'TODO: all variations'
+
         End Sub
+
+        Private Shared Function TableStatistics(table As DataTable) As String
+            Dim Result As New System.Text.StringBuilder
+            Result.AppendLine("TableName: " & table.TableName)
+            Result.AppendLine("Rows")
+            Result.AppendLine("* Count: " & table.Rows.Count)
+            Result.AppendLine("PrimaryKey Columns")
+            Result.AppendLine("* Count: " & table.PrimaryKey.Length)
+            For MyCounter As Integer = 0 To table.PrimaryKey.Length - 1
+                Dim Col As DataColumn = table.PrimaryKey(MyCounter)
+                Result.AppendLine("* PK Column [" & MyCounter + 1 & "]: " & Col.ColumnName)
+            Next
+            Result.AppendLine("Columns")
+            Result.AppendLine("* Count: " & table.Columns.Count)
+            For MyCounter As Integer = 0 To table.Columns.Count - 1
+                Dim Col As DataColumn = table.Columns(MyCounter)
+                Result.AppendLine("* Column [" & MyCounter + 1 & "]: " & Col.DataType.FullName)
+                Result.AppendLine("  * ColumnName: " & Col.ColumnName)
+                Result.AppendLine("  * AllowDBNull: " & Col.AllowDBNull)
+                Result.AppendLine("  * AutoIncreemnt: " & Col.AutoIncrement)
+                Result.AppendLine("  * Caption: " & Col.Caption)
+                Result.AppendLine("  * DefaultValue: " & CompuMaster.Data.Utils.ObjectNotNothingOrEmptyString(CompuMaster.Data.Utils.NoDBNull(Col.DefaultValue, "<NULL>")).ToString)
+                Result.AppendLine("  * Expression: " & Col.Expression)
+                Result.AppendLine("  * ReadOnly: " & Col.ReadOnly)
+                Result.AppendLine("  * Unique: " & Col.Unique)
+            Next
+            Return Result.ToString
+        End Function
 
         <Test()> Public Sub FindUniqueValues()
             Dim dt As New DataTable
