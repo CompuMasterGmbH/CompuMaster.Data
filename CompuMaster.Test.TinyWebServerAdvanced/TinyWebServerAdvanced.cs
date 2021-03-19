@@ -21,7 +21,7 @@ namespace CompuMaster.Test.Tools.TinyWebServerAdvanced
     /// </summary>
     public class WebServer
     {
-        private readonly HttpListener _listener = new HttpListener();
+        private HttpListener _listener = new HttpListener();
         private readonly Func<HttpListenerRequest, string> _handler;
         private readonly System.Collections.Specialized.NameValueCollection _responseHeaders;
 
@@ -59,9 +59,10 @@ namespace CompuMaster.Test.Tools.TinyWebServerAdvanced
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0019:Musterabgleich verwenden", Justification = "<Ausstehend>")]
         public void Run()
         {
+            if (_listener == null) throw new InvalidOperationException("Server already closed");
             ThreadPool.QueueUserWorkItem(o =>
             {
-                while (_listener.IsListening)
+                while (_listener != null && _listener.IsListening)
                 {
                     ThreadPool.QueueUserWorkItem(c =>
                     {
@@ -91,6 +92,7 @@ namespace CompuMaster.Test.Tools.TinyWebServerAdvanced
         {
             _listener.Stop();
             _listener.Close();
+            _listener = null;
         }
 
         ~WebServer()
