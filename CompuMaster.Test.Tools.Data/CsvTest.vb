@@ -302,13 +302,13 @@ Namespace CompuMaster.Test.Data
 
         End Sub
 
-        <Test()> Public Sub ReadDataTableFromCsvReaderFixedColumnWidths()
+        <Test()> Public Sub ReadDataTableFromCsvReaderFixedColumnWidths(<NUnit.Framework.Values(ControlChars.CrLf, ControlChars.Cr & "", ControlChars.Lf & "")> newLineStyle As String)
             Dim testinputdata As String
             Dim testoutputdata As DataTable
             Dim columnWidths As Integer()
 
-            testinputdata = "ID     Description   DateValue       " & vbNewLine &
-                            "12345678901234567890123456789012" & vbNewLine &
+            testinputdata = "ID     Description   DateValue       " & newLineStyle &
+                            "12345678901234567890123456789012" & newLineStyle &
                             "1234567890123456789012345678901234567890"
             columnWidths = New Integer() {7, 12, 15}
             testoutputdata = CompuMaster.Data.Csv.ReadDataTableFromCsvString(testinputdata, True, columnWidths)
@@ -387,6 +387,39 @@ Namespace CompuMaster.Test.Data
             Console.WriteLine(Level2CsvData)
             Console.WriteLine("Cell 3: " & CType(Level1CsvDataTable.Rows(0)(2), String))
             Console.WriteLine("Cell 4: " & CType(Level1CsvDataTable.Rows(0)(3), String))
+        End Sub
+
+        <Test> Sub ReadWriteCompareDatableFixedColWidthsWithStringEncodingDefault()
+            Dim Level0CsvData As String = "ID   GROSS klein " & vbNewLine & "12345ABCDEFabcdef" & vbNewLine & "äöüß AEIOU aeiou " & vbNewLine
+            Dim Level1CsvDataTable As DataTable = CompuMaster.Data.Csv.ReadDataTableFromCsvString(Level0CsvData, False, New Integer() {5, 6, 6}, False)
+            Dim Level2CsvData As String = CompuMaster.Data.Csv.ConvertDataTableToTextAsStringBuilder(Level1CsvDataTable, False, CompuMaster.Data.Csv.WriteLineEncodings.Auto, System.Globalization.CultureInfo.CurrentCulture, New Integer() {5, 6, 6}).ToString
+            Assert.AreEqual("ID", CType(Level1CsvDataTable.Rows(0)(0), String))
+            Assert.AreEqual("GROSS", CType(Level1CsvDataTable.Rows(0)(1), String))
+            Assert.AreEqual("klein", CType(Level1CsvDataTable.Rows(0)(2), String))
+            Assert.AreEqual(Level0CsvData, Level2CsvData)
+            Console.WriteLine(Level2CsvData)
+        End Sub
+
+        <Test> Sub ReadWriteCompareDatableFixedColWidthsWithStringEncodingOsPlatformDependent()
+            Dim Level0CsvData As String = "ID   GROSS klein " & System.Environment.NewLine & "12345ABCDEFabcdef" & System.Environment.NewLine & "äöüß AEIOU aeiou " & System.Environment.NewLine
+            Dim Level1CsvDataTable As DataTable = CompuMaster.Data.Csv.ReadDataTableFromCsvString(Level0CsvData, False, New Integer() {5, 6, 6}, False)
+            Dim Level2CsvData As String = CompuMaster.Data.Csv.ConvertDataTableToTextAsStringBuilder(Level1CsvDataTable, False, CompuMaster.Data.Csv.WriteLineEncodings.Auto, System.Globalization.CultureInfo.CurrentCulture, New Integer() {5, 6, 6}).ToString
+            Assert.AreEqual("ID", CType(Level1CsvDataTable.Rows(0)(0), String))
+            Assert.AreEqual("GROSS", CType(Level1CsvDataTable.Rows(0)(1), String))
+            Assert.AreEqual("klein", CType(Level1CsvDataTable.Rows(0)(2), String))
+            Assert.AreEqual(Level0CsvData, Level2CsvData)
+            Console.WriteLine(Level2CsvData)
+        End Sub
+
+        <Test> Sub ReadWriteCompareDatableFixedColWidthsWithStringEncodingLinux()
+            Dim Level0CsvData As String = "ID   GROSS klein " & ControlChars.Lf & "12345ABCDEFabcdef" & ControlChars.Lf & "äöüß AEIOU aeiou " & ControlChars.Lf
+            Dim Level1CsvDataTable As DataTable = CompuMaster.Data.Csv.ReadDataTableFromCsvString(Level0CsvData, False, New Integer() {5, 6, 6}, False)
+            Dim Level2CsvData As String = CompuMaster.Data.Csv.ConvertDataTableToTextAsStringBuilder(Level1CsvDataTable, False, CompuMaster.Data.Csv.WriteLineEncodings.RowBreakLf_CellLineBreakCr, System.Globalization.CultureInfo.CurrentCulture, New Integer() {5, 6, 6}).ToString
+            Assert.AreEqual("ID", CType(Level1CsvDataTable.Rows(0)(0), String))
+            Assert.AreEqual("GROSS", CType(Level1CsvDataTable.Rows(0)(1), String))
+            Assert.AreEqual("klein", CType(Level1CsvDataTable.Rows(0)(2), String))
+            Assert.AreEqual(Level0CsvData, Level2CsvData)
+            Console.WriteLine(Level2CsvData)
         End Sub
 
         <Test> Sub WriteDataTableToCsvTextStringRecognizeTextChar()

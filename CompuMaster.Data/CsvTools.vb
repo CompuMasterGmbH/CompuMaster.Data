@@ -31,6 +31,7 @@ Namespace CompuMaster.Data
         ''' In case of duplicate column names, all additional occurances of the same column name will be modified to use a unique column name
         ''' </remarks>
         Private Shared Function ReadDataTableFromCsvReader(ByVal reader As StreamReader, ByVal includesColumnHeaders As Boolean, ByVal cultureFormatProvider As System.Globalization.CultureInfo, ByVal columnWidths As Integer(), ByVal convertEmptyStringsToDBNull As Boolean, lineEncodings As CompuMaster.Data.Csv.ReadLineEncodings, lineEncodingAutoConversions As CompuMaster.Data.Csv.ReadLineEncodingAutoConversion) As DataTable
+            'Throw New NotSupportedException
             If cultureFormatProvider Is Nothing Then
 #Disable Warning IDE0059 ' Unnötige Zuweisung eines Werts.
                 cultureFormatProvider = System.Globalization.CultureInfo.InvariantCulture
@@ -56,8 +57,8 @@ Namespace CompuMaster.Data
             While CharPosition < rdStr.Length
 
                 'Read the next csv row
-                Dim ColValues As New ArrayList
-                SplitFixedCsvLineIntoCellValues(rdStr, ColValues, CharPosition, columnWidths)
+                Dim ColValues As New System.Collections.Generic.List(Of String)
+                SplitFixedCsvLineIntoCellValues(rdStr, ColValues, CharPosition, columnWidths, lineEncodings, lineEncodingAutoConversions)
 
                 'Add it as a new data row (respectively add the columns definition)
                 RowCounter += 1
@@ -270,9 +271,11 @@ Namespace CompuMaster.Data
         ''' <param name="outputList">An array list which shall hold the separated column values</param>
         ''' <param name="startPosition">The start position to which the columnWidhts are related to</param>
         ''' <param name="columnWidths">An array of column widths in their order</param>
+        ''' <param name="lineEncodings">Encoding style for linebreaks</param>
+        ''' <param name="lineEncodingAutoConversions">Change linebreak encodings on reading</param>
         ''' <remarks>
         ''' </remarks>
-        Private Shared Sub SplitFixedCsvLineIntoCellValues(ByRef lineContent As String, ByVal outputList As ArrayList, ByRef startposition As Integer, ByVal columnWidths As Integer())
+        Private Shared Sub SplitFixedCsvLineIntoCellValues(ByRef lineContent As String, ByVal outputList As System.Collections.Generic.List(Of String), ByRef startposition As Integer, ByVal columnWidths As Integer(), lineEncodings As CompuMaster.Data.Csv.ReadLineEncodings, lineEncodingAutoConversions As CompuMaster.Data.Csv.ReadLineEncodingAutoConversion)
 
             Dim CurrentColumnValue As System.Text.StringBuilder = Nothing
             Dim CharPositionCounter As Integer
@@ -288,6 +291,7 @@ Namespace CompuMaster.Data
                     'Prepare the new value for  the next column
                     CurrentColumnValue = New System.Text.StringBuilder
                 End If
+                'TODO: consider line encoding arguments and support cell line breaks by considering the cell line break encoding
                 Select Case lineContent.Chars(CharPositionCounter)
                     Case ControlChars.Lf
                         'now it's a line separator
