@@ -64,6 +64,16 @@ namespace CompuMaster.Test.Tools.TinyWebServerAdvanced
             {
                 while (_listener != null && _listener.IsListening)
                 {
+                    HttpListenerContext httpContext;
+                    try
+                    {
+                        httpContext = _listener.GetContext();
+                    }
+                    catch (HttpListenerException)
+                    {
+                        //Listener closed, but Linux/Mono doesn't stop to continue exection of this code block
+                        return;
+                    }
                     ThreadPool.QueueUserWorkItem(c =>
                     {
                         HttpListenerContext ctx = c as HttpListenerContext;
@@ -83,7 +93,7 @@ namespace CompuMaster.Test.Tools.TinyWebServerAdvanced
                                 ctx.Response.OutputStream.Close();
                             }
                         }
-                    }, _listener.GetContext());
+                    }, httpContext);
                 }
             });
         }
