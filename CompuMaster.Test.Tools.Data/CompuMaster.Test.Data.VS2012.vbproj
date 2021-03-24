@@ -170,6 +170,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="TempTestFile.vb" />
+    <Compile Include="TextCellTest.vb" />
+    <Compile Include="TextRowTest.vb" />
+    <Compile Include="TextTableTest.vb" />
     <Compile Include="UtilsTest.vb" />
     <Compile Include="XlsReaderTest.vb" />
     <Compile Include="PlatformToolsTest.vb" />

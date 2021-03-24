@@ -1861,11 +1861,13 @@ Namespace CompuMaster.Data
         ''' <param name="dataTable">The datatable to retrieve the content from</param>
         ''' <returns>All rows are separated by fixed width. If no rows have been processed, the user will get notified about this fact</returns>
         ''' <remarks></remarks>
-        Public Shared Function ConvertToPlainTextTableFixedColumnWidths(ByVal dataTable As DataTable, verticalSeparatorHeader As String,
-                                                                        verticalSeparatorCells As String, crossSeparator As String,
-                                                                        horizontalSeparatorHeadline As Char, horizontalSeparatorCells As Char) As String
-            Return ConvertToPlainTextTableWithFixedColumnWidthsInternal(dataTable.Rows, dataTable.TableName, SuggestColumnWidthsForFixedPlainTables(dataTable.Rows), verticalSeparatorHeader, verticalSeparatorCells,
-                                                                 crossSeparator, horizontalSeparatorHeadline, horizontalSeparatorCells, Nothing)
+        Public Shared Function ConvertToPlainTextTableFixedColumnWidths(ByVal dataTable As DataTable,
+                                                                        horizontalSeparatorAfterHeader As String,
+                                                                        horizontalSeparatorCells As String, crossSeparator As String,
+                                                                        verticalSeparatorAfterHeader As Char, verticalSeparatorForCells As Char) As String
+            Return ConvertToPlainTextTableWithFixedColumnWidthsInternal(dataTable.Rows, dataTable.TableName, SuggestColumnWidthsForFixedPlainTables(dataTable.Rows),
+                                                                        horizontalSeparatorAfterHeader, horizontalSeparatorCells,
+                                                                 crossSeparator, crossSeparator, verticalSeparatorAfterHeader, verticalSeparatorForCells, Nothing)
         End Function
 
         ''' <summary>
@@ -1875,11 +1877,14 @@ Namespace CompuMaster.Data
         ''' <returns>All rows are separated by fixed width. If no rows have been processed, the user will get notified about this fact</returns>
         ''' <remarks></remarks>
         Public Shared Function ConvertToPlainTextTableFixedColumnWidths(ByVal dataTable As DataTable, ByVal fixedColumnWidths As Integer(),
-                                                                        verticalSeparatorHeader As String, verticalSeparatorCells As String,
-                                                                        crossSeparator As String, horizontalSeparatorHeadline As Char,
-                                                                        horizontalSeparatorCells As Char) As String
-            Return ConvertToPlainTextTableWithFixedColumnWidthsInternal(dataTable.Rows, dataTable.TableName, fixedColumnWidths, verticalSeparatorHeader, verticalSeparatorCells, crossSeparator, horizontalSeparatorHeadline,
-                                                                 horizontalSeparatorCells, Nothing)
+                                                                        horizontalSeparatorAfterHeader As String, horizontalSeparatorCells As String,
+                                                                        crossSeparator As String, verticalSeparatorAfterHeader As Char,
+                                                                        verticalSeparatorForCells As Char) As String
+            Return ConvertToPlainTextTableWithFixedColumnWidthsInternal(dataTable.Rows, dataTable.TableName, fixedColumnWidths,
+                                                                        horizontalSeparatorAfterHeader, horizontalSeparatorCells,
+                                                                        crossSeparator, crossSeparator,
+                                                                        verticalSeparatorAfterHeader,
+                                                                        verticalSeparatorForCells, Nothing)
         End Function
 
         ''' <summary>
@@ -1889,15 +1894,15 @@ Namespace CompuMaster.Data
         ''' <returns>All rows are separated by fixed width. If no rows have been processed, the user will get notified about this fact</returns>
         ''' <remarks></remarks>
         Public Shared Function ConvertToPlainTextTableFixedColumnWidths(ByVal dataTable As DataTable, ByVal standardColumnWidth As Integer,
-                                                                        verticalSeparatorHeader As String, verticalSeparatorCells As String,
-                                                                        crossSeparator As String, horizontalSeparatorHeadline As Char,
-                                                                        horizontalSeparatorCells As Char) As String
+                                                                        horizontalSeparatorAfterHeader As String, horizontalSeparatorForCells As String,
+                                                                        crossSeparator As String, verticalSeparatorAfterHeader As Char,
+                                                                        verticalSeparatorForCells As Char) As String
             Dim columnWidths(dataTable.Columns.Count - 1) As Integer
             For MyCounter As Integer = 0 To dataTable.Columns.Count - 1
                 columnWidths(MyCounter) = standardColumnWidth
             Next
-            Return ConvertToPlainTextTableWithFixedColumnWidthsInternal(dataTable.Rows, dataTable.TableName, columnWidths, verticalSeparatorHeader, verticalSeparatorCells,
-                                                                 crossSeparator, horizontalSeparatorHeadline, horizontalSeparatorCells, Nothing)
+            Return ConvertToPlainTextTableWithFixedColumnWidthsInternal(dataTable.Rows, dataTable.TableName, columnWidths, horizontalSeparatorAfterHeader, horizontalSeparatorForCells,
+                                                                 crossSeparator, crossSeparator, verticalSeparatorAfterHeader, verticalSeparatorForCells, Nothing)
         End Function
 
         ''' <summary>
@@ -1907,9 +1912,10 @@ Namespace CompuMaster.Data
         ''' <returns>All rows are separated by fixed width. If no rows have been processed, the user will get notified about this fact</returns>
         ''' <remarks></remarks>
         Public Shared Function ConvertToPlainTextTableFixedColumnWidths(ByVal dataTable As DataTable, ByVal minimumColumnWidth As Integer,
-                                                                        maximumColumnWidth As Integer, verticalSeparatorHeader As String,
-                                                                        verticalSeparatorCells As String, crossSeparator As String,
-                                                                        horizontalSeparatorHeadline As Char, horizontalSeparatorCells As Char) As String
+                                                                        maximumColumnWidth As Integer,
+                                                                        horizontalSeparatorAfterHeader As String,
+                                                                        horizontalSeparatorForCells As String, crossSeparator As String,
+                                                                        verticalSeparatorAfterHeader As Char, verticalSeparatorForCells As Char) As String
             Dim columnWidths As Integer() = SuggestColumnWidthsForFixedPlainTables(dataTable.Rows, dataTable, 100.0, Nothing)
             If columnWidths Is Nothing Then
                 Dim newWidths(dataTable.Columns.Count - 1) As Integer
@@ -1923,9 +1929,9 @@ Namespace CompuMaster.Data
                     If columnWidths(MyCounter) > maximumColumnWidth Then columnWidths(MyCounter) = maximumColumnWidth
                 Next
             End If
-            Return ConvertToPlainTextTableWithFixedColumnWidthsInternal(dataTable.Rows, dataTable.TableName, columnWidths, verticalSeparatorHeader,
-                                                                 verticalSeparatorCells, crossSeparator, horizontalSeparatorHeadline,
-                                                                 horizontalSeparatorCells, Nothing)
+            Return ConvertToPlainTextTableWithFixedColumnWidthsInternal(dataTable.Rows, dataTable.TableName, columnWidths, horizontalSeparatorAfterHeader,
+                                                                 horizontalSeparatorForCells, crossSeparator, crossSeparator, verticalSeparatorAfterHeader,
+                                                                 verticalSeparatorForCells, Nothing)
         End Function
 
         ''' <summary>
@@ -1935,9 +1941,10 @@ Namespace CompuMaster.Data
         ''' <returns>All rows are separated by fixed width. If no rows have been processed, the user will get notified about this fact</returns>
         ''' <remarks></remarks>
         Public Shared Function ConvertToPlainTextTableFixedColumnWidths(ByVal dataTable As DataTable, ByVal minimumColumnWidth As Integer,
-                                                                        maximumColumnWidth As Integer, verticalSeparatorHeader As String,
-                                                                        verticalSeparatorCells As String, crossSeparator As String,
-                                                                        horizontalSeparatorHeadline As Char, horizontalSeparatorCells As Char,
+                                                                        maximumColumnWidth As Integer,
+                                                                        horizontalSeparatorAfterHeader As String,
+                                                                        horizontalSeparatorForCells As String, crossSeparator As String,
+                                                                        verticalSeparatorAfterHeader As Char, verticalSeparatorForCells As Char,
                                                                         columnFormatting As DataColumnToString) As String
             Dim columnWidths As Integer() = SuggestColumnWidthsForFixedPlainTables(dataTable.Rows, dataTable, 100.0, columnFormatting)
             If columnWidths Is Nothing Then
@@ -1952,9 +1959,9 @@ Namespace CompuMaster.Data
                     If columnWidths(MyCounter) > maximumColumnWidth Then columnWidths(MyCounter) = maximumColumnWidth
                 Next
             End If
-            Return ConvertToPlainTextTableWithFixedColumnWidthsInternal(dataTable.Rows, dataTable.TableName, columnWidths, verticalSeparatorHeader,
-                                                                 verticalSeparatorCells, crossSeparator, horizontalSeparatorHeadline,
-                                                                 horizontalSeparatorCells, columnFormatting)
+            Return ConvertToPlainTextTableWithFixedColumnWidthsInternal(dataTable.Rows, dataTable.TableName, columnWidths, horizontalSeparatorAfterHeader,
+                                                                 horizontalSeparatorForCells, crossSeparator, crossSeparator, verticalSeparatorAfterHeader,
+                                                                 verticalSeparatorForCells, columnFormatting)
         End Function
 
         ''' <summary>
@@ -2030,9 +2037,9 @@ Namespace CompuMaster.Data
                 End If
                 If textAlignmentRight = True Then Result.Append(" ")
                 If column.Caption <> Nothing Then
-                    Result.Append(TrimStringToFixedWidth(String.Format("{0}", column.Caption), fixedColumnWidths(ColCounter)))
+                    Result.Append(TrimStringToFixedWidth(String.Format("{0}", column.Caption), fixedColumnWidths(ColCounter), ""))
                 Else
-                    Result.Append(TrimStringToFixedWidth(String.Format("{0}", column.ColumnName), fixedColumnWidths(ColCounter)))
+                    Result.Append(TrimStringToFixedWidth(String.Format("{0}", column.ColumnName), fixedColumnWidths(ColCounter), ""))
                 End If
                 If ColCounter = table.Columns.Count - 1 Then Result.Append(verticalSeparatorCells.TrimEnd)
             Next
@@ -2060,7 +2067,7 @@ Namespace CompuMaster.Data
                     Else
                         RenderValue = columnFormatting(column, row(column))
                     End If
-                    Result.Append(TrimStringToFixedWidth(String.Format("{0}", RenderValue), fixedColumnWidths(ColCounter)))
+                    Result.Append(TrimStringToFixedWidth(String.Format("{0}", RenderValue), fixedColumnWidths(ColCounter), ""))
                     If ColCounter = table.Columns.Count - 1 Then Result.Append(verticalSeparatorCells.TrimEnd)
                 Next
                 Result.Append(System.Environment.NewLine)
@@ -2286,12 +2293,13 @@ Namespace CompuMaster.Data
         Private Shared Function ConvertToPlainTextTableWithFixedColumnWidthsInternal(ByVal rows As DataRow(), ByVal label As String,
                                                                               ByVal fixedColumnWidths As Integer(),
                                                                               columnFormatting As DataColumnToString) As String
-            Const vSeparatorHeader As String = "|"
-            Const hSeparatorHeader As Char = "-"c
-            Const hSeparatorCells As Char = Nothing
-            Const vSeparatorCells As String = "|"
-            Const crossSeparator As String = "+"
-            Return ConvertToPlainTextTableWithFixedColumnWidthsInternal(rows, label, fixedColumnWidths, vSeparatorHeader, vSeparatorCells, crossSeparator, hSeparatorHeader, hSeparatorCells, columnFormatting)
+            Const hSeparatorHeader As String = "|"
+            Const vSeparatorHeader As Char = "-"c
+            Const crossSeparatorHeader As String = "+"
+            Const vSeparatorCells As Char = Nothing
+            Const hSeparatorCells As String = "|"
+            Const crossSeparatorCells As String = "+"
+            Return ConvertToPlainTextTableWithFixedColumnWidthsInternal(rows, label, fixedColumnWidths, hSeparatorHeader, hSeparatorCells, crossSeparatorHeader, crossSeparatorCells, vSeparatorHeader, vSeparatorCells, columnFormatting)
         End Function
 
         ''' <summary>
@@ -2305,12 +2313,13 @@ Namespace CompuMaster.Data
         Private Shared Function ConvertToPlainTextTableWithFixedColumnWidthsInternal(ByVal rows As DataRowCollection, ByVal label As String,
                                                                               ByVal fixedColumnWidths As Integer(),
                                                                               columnFormatting As DataColumnToString) As String
-            Const vSeparatorHeader As String = "|"
-            Const hSeparatorHeader As Char = "-"c
-            Const hSeparatorCells As Char = Nothing
-            Const vSeparatorCells As String = "|"
-            Const crossSeparator As String = "+"
-            Return ConvertToPlainTextTableWithFixedColumnWidthsInternal(rows, label, fixedColumnWidths, vSeparatorHeader, vSeparatorCells, crossSeparator, hSeparatorHeader, hSeparatorCells, columnFormatting)
+            Const hSeparatorHeader As String = "|"
+            Const vSeparatorHeader As Char = "-"c
+            Const crossSeparatorHeader As String = "+"
+            Const vSeparatorCells As Char = Nothing
+            Const hSeparatorCells As String = "|"
+            Const crossSeparatorCells As String = "+"
+            Return ConvertToPlainTextTableWithFixedColumnWidthsInternal(rows, label, fixedColumnWidths, hSeparatorHeader, hSeparatorCells, crossSeparatorHeader, crossSeparatorCells, vSeparatorHeader, vSeparatorCells, columnFormatting)
         End Function
 
         ''' <summary>
@@ -2319,21 +2328,25 @@ Namespace CompuMaster.Data
         ''' <param name="rows">The rows to be processed</param>
         ''' <param name="label">An optional title of the rows</param>
         ''' <param name="fixedColumnWidths">The column sizes in chars</param>
-        ''' <param name="verticalSeparatorHeader"></param>
-        ''' <param name="verticalSeparatorCells"></param>
-        ''' <param name="crossSeparator"></param>
-        ''' <param name="horizontalSeparatorHeadline"></param>
-        ''' <param name="horizontalSeparatorCells"></param>
+        ''' <param name="verticalSeparatorAfterHeader"></param>
+        ''' <param name="verticalSeparatorForCells"></param>
+        ''' <param name="crossSeparatorHeader"></param>
+        ''' <param name="crossSeparatorCells"></param>
+        ''' <param name="horizontalSeparatorAfterHeader"></param>
+        ''' <param name="horizontalSeparatorForCells"></param>
         ''' <returns>All rows are with fixed column withs. If no rows have been processed, the user will get notified about this fact</returns>
         ''' <remarks></remarks>
         Private Shared Function ConvertToPlainTextTableWithFixedColumnWidthsInternal(ByVal rows As DataRow(), ByVal label As String,
-                                                                              ByVal fixedColumnWidths As Integer(), verticalSeparatorHeader As String,
-                                                                              verticalSeparatorCells As String, crossSeparator As String,
-                                                                              horizontalSeparatorHeadline As Char, horizontalSeparatorCells As Char,
+                                                                              ByVal fixedColumnWidths As Integer(),
+                                                                              horizontalSeparatorAfterHeader As String, horizontalSeparatorForCells As String,
+                                                                              crossSeparatorHeader As String, crossSeparatorCells As String,
+                                                                              verticalSeparatorAfterHeader As Char, verticalSeparatorForCells As Char,
                                                                               columnFormatting As DataColumnToString) As String
-            If Len(verticalSeparatorCells) <> Len(verticalSeparatorHeader) Then Throw New ArgumentException("Length of verticalSeparatorHeader and verticalSeparatorCells must be equal")
-            If (Char.GetNumericValue(horizontalSeparatorHeadline) > 0 OrElse Char.GetNumericValue(horizontalSeparatorCells) > 0) AndAlso Len(crossSeparator) <> Len(verticalSeparatorHeader) Then Throw New ArgumentException("Length of verticalSeparatorHeader and crossSeparator must be equal since horizontal lines are requested")
+            If Len(horizontalSeparatorForCells) <> Len(horizontalSeparatorAfterHeader) Then Throw New ArgumentException("Length of horizontalSeparatorAfterHeader and horizontalSeparatorForCells must be equal")
+            If (Char.GetNumericValue(verticalSeparatorAfterHeader) > 0 OrElse Char.GetNumericValue(verticalSeparatorForCells) > 0) AndAlso Len(crossSeparatorHeader) <> Len(horizontalSeparatorAfterHeader) Then Throw New ArgumentException("Length of horizontalSeparatorAfterHeader and crossSeparatorHeader must be equal since horizontal lines are requested")
             Dim Result As New System.Text.StringBuilder
+            Const SuffixIfValueMustBeShortened As String = "..."
+
             'Add table name
             If label <> "" Then
                 Result.Append(String.Format("{0}", label) & System.Environment.NewLine)
@@ -2345,21 +2358,21 @@ Namespace CompuMaster.Data
             'Add column headers
             For ColCounter As Integer = 0 To System.Math.Min(rows(0).Table.Columns.Count, fixedColumnWidths.Length) - 1
                 Dim column As DataColumn = rows(0).Table.Columns(ColCounter)
-                If ColCounter <> 0 Then Result.Append(verticalSeparatorHeader)
+                If ColCounter <> 0 Then Result.Append(horizontalSeparatorAfterHeader)
                 If column.Caption <> Nothing Then
-                    Result.Append(TrimStringToFixedWidth(String.Format("{0}", column.Caption), fixedColumnWidths(ColCounter)))
+                    Result.Append(TrimStringToFixedWidth(String.Format("{0}", column.Caption), fixedColumnWidths(ColCounter), SuffixIfValueMustBeShortened))
                 Else
-                    Result.Append(TrimStringToFixedWidth(String.Format("{0}", column.ColumnName), fixedColumnWidths(ColCounter)))
+                    Result.Append(TrimStringToFixedWidth(String.Format("{0}", column.ColumnName), fixedColumnWidths(ColCounter), SuffixIfValueMustBeShortened))
                 End If
             Next
             Result.Append(System.Environment.NewLine)
-            If horizontalSeparatorHeadline <> Nothing Then
+            If verticalSeparatorAfterHeader <> Nothing Then
                 'Add header separator
                 Dim LineSeparatorHeader As String = ""
                 For ColCounter As Integer = 0 To System.Math.Min(rows(0).Table.Columns.Count, fixedColumnWidths.Length) - 1
 #Disable Warning S1643 ' Strings should not be concatenated using "+" or "&" in a loop
-                    If ColCounter <> 0 Then LineSeparatorHeader &= crossSeparator
-                    LineSeparatorHeader &= Strings.StrDup(fixedColumnWidths(ColCounter), horizontalSeparatorHeadline)
+                    If ColCounter <> 0 Then LineSeparatorHeader &= crossSeparatorHeader
+                    LineSeparatorHeader &= Strings.StrDup(fixedColumnWidths(ColCounter), verticalSeparatorAfterHeader)
 #Enable Warning S1643 ' Strings should not be concatenated using "+" or "&" in a loop
                 Next
                 Result.Append(LineSeparatorHeader)
@@ -2369,23 +2382,23 @@ Namespace CompuMaster.Data
             For Each row As DataRow In rows
                 For ColCounter As Integer = 0 To System.Math.Min(row.Table.Columns.Count, fixedColumnWidths.Length) - 1
                     Dim column As DataColumn = row.Table.Columns(ColCounter)
-                    If ColCounter <> 0 Then Result.Append(verticalSeparatorCells)
+                    If ColCounter <> 0 Then Result.Append(horizontalSeparatorForCells)
                     Dim RenderValue As Object
                     If columnFormatting Is Nothing Then
                         RenderValue = row(column)
                     Else
                         RenderValue = columnFormatting(column, row(column))
                     End If
-                    Result.Append(TrimStringToFixedWidth(String.Format("{0}", RenderValue), fixedColumnWidths(ColCounter)))
+                    Result.Append(TrimStringToFixedWidth(String.Format("{0}", RenderValue), fixedColumnWidths(ColCounter), SuffixIfValueMustBeShortened))
                 Next
                 Result.Append(System.Environment.NewLine)
-                If horizontalSeparatorCells <> Nothing Then
+                If verticalSeparatorForCells <> Nothing Then
                     'Add lines in between of the cells area
                     Dim LineSeparatorCells As String = ""
                     For ColCounter As Integer = 0 To System.Math.Min(rows(0).Table.Columns.Count, fixedColumnWidths.Length) - 1
 #Disable Warning S1643 ' Strings should not be concatenated using "+" or "&" in a loop
-                        If ColCounter <> 0 Then LineSeparatorCells &= crossSeparator
-                        LineSeparatorCells &= Strings.StrDup(fixedColumnWidths(ColCounter), horizontalSeparatorCells)
+                        If ColCounter <> 0 Then LineSeparatorCells &= crossSeparatorCells
+                        LineSeparatorCells &= Strings.StrDup(fixedColumnWidths(ColCounter), verticalSeparatorForCells)
 #Enable Warning S1643 ' Strings should not be concatenated using "+" or "&" in a loop
                     Next
                     Result.Append(LineSeparatorCells)
@@ -2403,20 +2416,22 @@ Namespace CompuMaster.Data
         ''' <param name="rows">The rows to be processed</param>
         ''' <param name="label">An optional title of the rows</param>
         ''' <param name="fixedColumnWidths">The column sizes in chars</param>
-        ''' <param name="verticalSeparatorHeader"></param>
-        ''' <param name="verticalSeparatorCells"></param>
-        ''' <param name="crossSeparator"></param>
-        ''' <param name="horizontalSeparatorHeadline"></param>
-        ''' <param name="horizontalSeparatorCells"></param>
+        ''' <param name="horizontalSeparatorAfterHeader"></param>
+        ''' <param name="horizontalSeparatorForCells"></param>
+        ''' <param name="crossSeparatorHeader"></param>
+        ''' <param name="crossSeparatorCells"></param>
+        ''' <param name="verticalSeparatorAfterHeader"></param>
+        ''' <param name="verticalSeparatorForCells"></param>
         ''' <returns>All rows are with fixed column withs. If no rows have been processed, the user will get notified about this fact</returns>
         ''' <remarks></remarks>
         Private Shared Function ConvertToPlainTextTableWithFixedColumnWidthsInternal(ByVal rows As DataRowCollection, ByVal label As String,
-                                                                              ByVal fixedColumnWidths As Integer(), verticalSeparatorHeader As String,
-                                                                              verticalSeparatorCells As String, crossSeparator As String,
-                                                                              horizontalSeparatorHeadline As Char, horizontalSeparatorCells As Char,
+                                                                              ByVal fixedColumnWidths As Integer(),
+                                                                              horizontalSeparatorAfterHeader As String, horizontalSeparatorForCells As String,
+                                                                              crossSeparatorHeader As String, crossSeparatorCells As String,
+                                                                              verticalSeparatorAfterHeader As Char, verticalSeparatorForCells As Char,
                                                                               columnFormatting As DataColumnToString) As String
-            If Len(verticalSeparatorCells) <> Len(verticalSeparatorHeader) Then Throw New ArgumentException("Length of verticalSeparatorHeader and verticalSeparatorCells must be equal")
-            If (Char.GetNumericValue(horizontalSeparatorHeadline) > 0 OrElse Char.GetNumericValue(horizontalSeparatorCells) > 0) AndAlso Len(crossSeparator) <> Len(verticalSeparatorHeader) Then Throw New ArgumentException("Length of verticalSeparatorHeader and crossSeparator must be equal since horizontal lines are requested")
+            If Len(horizontalSeparatorForCells) <> Len(horizontalSeparatorAfterHeader) Then Throw New ArgumentException("Length of verticalSeparatorHeader and verticalSeparatorCells must be equal")
+            If (Char.GetNumericValue(verticalSeparatorAfterHeader) > 0 OrElse Char.GetNumericValue(verticalSeparatorForCells) > 0) AndAlso Len(crossSeparatorHeader) <> Len(horizontalSeparatorAfterHeader) Then Throw New ArgumentException("Length of verticalSeparatorHeader and crossSeparator must be equal since horizontal lines are requested")
             Dim Result As New System.Text.StringBuilder
             'Add table name
             If label <> "" Then
@@ -2426,56 +2441,22 @@ Namespace CompuMaster.Data
                 Result.Append("no rows found" & System.Environment.NewLine)
                 Return Result.ToString
             End If
-            'Add column headers
-            For ColCounter As Integer = 0 To System.Math.Min(rows(0).Table.Columns.Count, fixedColumnWidths.Length) - 1
-                Dim column As DataColumn = rows(0).Table.Columns(ColCounter)
-                If ColCounter <> 0 Then Result.Append(verticalSeparatorHeader)
-                If column.Caption <> Nothing Then
-                    Result.Append(TrimStringToFixedWidth(String.Format("{0}", column.Caption), fixedColumnWidths(ColCounter)))
-                Else
-                    Result.Append(TrimStringToFixedWidth(String.Format("{0}", column.ColumnName), fixedColumnWidths(ColCounter)))
-                End If
-            Next
-            Result.Append(System.Environment.NewLine)
-            If horizontalSeparatorHeadline <> Nothing Then
-                'Add header separator
-                Dim LineSeparatorHeader As String = ""
-                For ColCounter As Integer = 0 To System.Math.Min(rows(0).Table.Columns.Count, fixedColumnWidths.Length) - 1
-#Disable Warning S1643 ' Strings should not be concatenated using "+" or "&" in a loop
-                    If ColCounter <> 0 Then LineSeparatorHeader &= crossSeparator
-                    LineSeparatorHeader &= Strings.StrDup(fixedColumnWidths(ColCounter), horizontalSeparatorHeadline)
-#Enable Warning S1643 ' Strings should not be concatenated using "+" or "&" in a loop
-                Next
-                Result.Append(LineSeparatorHeader)
-                Result.Append(System.Environment.NewLine)
+            'Add converted table
+            Dim TextTable As New TextTable(rows(0).Table, columnFormatting)
+            Dim SuffixIfValueMustBeShortened As String = "..."
+            Dim VSeparatorAfterHeader As Char?
+            Dim VSeparatorForCells As Char?
+            If verticalSeparatorAfterHeader <> Nothing Then
+                VSeparatorAfterHeader = verticalSeparatorAfterHeader
             End If
-            'Add table rows
-            For Each row As DataRow In rows
-                For ColCounter As Integer = 0 To System.Math.Min(row.Table.Columns.Count, fixedColumnWidths.Length) - 1
-                    Dim column As DataColumn = row.Table.Columns(ColCounter)
-                    If ColCounter <> 0 Then Result.Append(verticalSeparatorCells)
-                    Dim RenderValue As Object
-                    If columnFormatting Is Nothing Then
-                        RenderValue = row(column)
-                    Else
-                        RenderValue = columnFormatting(column, row(column))
-                    End If
-                    Result.Append(TrimStringToFixedWidth(String.Format("{0}", RenderValue), fixedColumnWidths(ColCounter)))
-                Next
-                Result.Append(System.Environment.NewLine)
-                If horizontalSeparatorCells <> Nothing Then
-                    'Add lines in between of the cells area
-                    Dim LineSeparatorCells As String = ""
-                    For ColCounter As Integer = 0 To System.Math.Min(rows(0).Table.Columns.Count, fixedColumnWidths.Length) - 1
-#Disable Warning S1643 ' Strings should not be concatenated using "+" or "&" in a loop
-                        If ColCounter <> 0 Then LineSeparatorCells &= crossSeparator
-                        LineSeparatorCells &= Strings.StrDup(fixedColumnWidths(ColCounter), horizontalSeparatorCells)
-#Enable Warning S1643 ' Strings should not be concatenated using "+" or "&" in a loop
-                    Next
-                    Result.Append(LineSeparatorCells)
-                    Result.Append(System.Environment.NewLine)
-                End If
-            Next
+            If verticalSeparatorForCells <> Nothing Then
+                VSeparatorForCells = verticalSeparatorForCells
+            End If
+            Result.Append(TextTable.ToString(fixedColumnWidths, System.Environment.NewLine, System.Environment.NewLine, "", "", SuffixIfValueMustBeShortened,
+                                             VSeparatorAfterHeader, VSeparatorForCells,
+                                             crossSeparatorHeader, crossSeparatorCells,
+                                             horizontalSeparatorAfterHeader, horizontalSeparatorForCells))
+            Result.Append(System.Environment.NewLine)
             Return Result.ToString
         End Function
 
@@ -2484,12 +2465,13 @@ Namespace CompuMaster.Data
         ''' </summary>
         ''' <param name="value"></param>
         ''' <param name="width"></param>
+        ''' <param name="suffixIfValueMustBeShortened">A suffix like "..." which appears at end of cell line if the output width is shorter than the value width (suffix will be present only if width is greater suffix length)</param>
         ''' <returns></returns>
         ''' <remarks></remarks>
-        Private Shared Function TrimStringToFixedWidth(ByVal value As String, ByVal width As Integer) As String
+        Friend Shared Function TrimStringToFixedWidth(ByVal value As String, ByVal width As Integer, suffixIfValueMustBeShortened As String) As String
             If value Is Nothing Then value = String.Empty
-            If value.Length > width AndAlso width > 3 Then
-                Return value.Substring(0, width - 3) & "..."
+            If suffixIfValueMustBeShortened IsNot Nothing AndAlso value.Length > width AndAlso width > suffixIfValueMustBeShortened.Length Then
+                Return value.Substring(0, width - suffixIfValueMustBeShortened.Length) & suffixIfValueMustBeShortened
             Else
                 Return Strings.LSet(value, width)
             End If

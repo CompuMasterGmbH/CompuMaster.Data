@@ -172,6 +172,9 @@
     <Compile Include="CompuMaster.Data.vb">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="TextCell.vb" />
+    <Compile Include="TextRow.vb" />
+    <Compile Include="TextTable.vb" />
     <Compile Include="XlsReader.vb">
       <SubType>Code</SubType>
     </Compile>
