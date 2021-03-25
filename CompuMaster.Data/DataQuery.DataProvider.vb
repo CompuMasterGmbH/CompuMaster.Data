@@ -218,7 +218,7 @@ Namespace CompuMaster.Data.DataQuery
             For Each t As Type In GetAssemblyTypesSafely(assembly)
                 If IsMonoRuntime AndAlso t IsNot Nothing AndAlso t Is GetType(System.Data.OleDb.OleDbConnection) Then
                     'Mono runtime throws NotImplementedExceptions for OleDb stubs, but more important their Dispose method also throw NotImplementedExceptions causing garbage collector to crash causing AppDomain to crash
-                    'Workaround for now: don't use at Mono
+                    'Workaround for now because of https://github.com/mono/mono/issues/20975: don't use OleDbConnection at Mono at all
                 ElseIf t IsNot Nothing Then
                     For Each iface As Type In GetTypeInterfacesSafely(t)
                         If iface Is GetType(System.Data.IDbConnection) AndAlso t IsNot GetType(System.Data.Common.DbConnection) Then
