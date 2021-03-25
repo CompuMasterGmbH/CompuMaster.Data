@@ -213,9 +213,13 @@ Namespace CompuMaster.Data.DataQuery
 
 
         Public Shared Function AvailableDataProviders(assembly As System.Reflection.Assembly) As List(Of DataProvider)
+            Dim IsMonoRuntime As Boolean = Type.GetType("Mono.Runtime") IsNot Nothing
             Dim Result As New List(Of DataProvider)
             For Each t As Type In GetAssemblyTypesSafely(assembly)
-                If t IsNot Nothing Then
+                If IsMonoRuntime AndAlso t IsNot Nothing AndAlso t Is GetType(System.Data.OleDb.OleDbConnection) Then
+                    'Mono runtime throws NotImplementedExceptions for OleDb stubs, but more important their Dispose method also throw NotImplementedExceptions causing garbage collector to crash causing AppDomain to crash
+                    'Workaround for now: don't use at Mono
+                ElseIf t IsNot Nothing Then
                     For Each iface As Type In GetTypeInterfacesSafely(t)
                         If iface Is GetType(System.Data.IDbConnection) AndAlso t IsNot GetType(System.Data.Common.DbConnection) Then
                             Try

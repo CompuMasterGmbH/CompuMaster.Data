@@ -8,7 +8,7 @@ Namespace CompuMaster.Test.Data.DataQuery
         <OneTimeSetUp> Public Sub LoadSystemDataAssembly()
             CompuMaster.Data.DataQuery.AnyIDataProvider.CreateConnection("System.Data", "System.Data.SqlClient.SqlConnection")
         End Sub
-        
+
         Private Sub LoadedAssembliesInCurrentAppDomain()
             Console.WriteLine("Assemblies:")
             Console.WriteLine(ListOfAssemblies(AppDomain.CurrentDomain.GetAssemblies))
