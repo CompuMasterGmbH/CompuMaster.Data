@@ -143,10 +143,10 @@ Namespace CompuMaster.Data.DataQuery
         End Function
 
         Public Shared Function AvailableDataProviders(appDomain As AppDomain) As List(Of DataProvider)
-            Dim AlreadyLoadedAssemblies As System.Reflection.Assembly() = appDomain.CurrentDomain.GetAssemblies
+            Dim AlreadyLoadedAssemblies As System.Reflection.Assembly() = AppDomain.CurrentDomain.GetAssemblies
             Dim Result As New List(Of DataProvider)
             For Each asm As System.Reflection.Assembly In AlreadyLoadedAssemblies
-                Dim asmName As String = asm.FullName.Substring(0, asm.fullname.IndexOf(","c)) 'asm.GetName.Name.ToLowerInvariant
+                Dim asmName As String = asm.FullName.Substring(0, asm.FullName.IndexOf(","c)) 'asm.GetName.Name.ToLowerInvariant
                 Dim TryToFindDataConnectorsInAssembly As Boolean
                 If asmName = "system.data" OrElse asmName = "system.data.oracleclient" Then
                     TryToFindDataConnectorsInAssembly = True
@@ -157,7 +157,11 @@ Namespace CompuMaster.Data.DataQuery
                 End If
                 If TryToFindDataConnectorsInAssembly Then
                     'Analyse all loaded assemblies for available data connectors
-                    Result.AddRange(AvailableDataProviders(asm))
+                    Try
+                        Result.AddRange(AvailableDataProviders(asm))
+                    Catch ex As NotImplementedException
+                        'Ignore OleDbProviders on Mono .NET throwing NotImplementedExceptions
+                    End Try
                 End If
             Next
             Return Result
