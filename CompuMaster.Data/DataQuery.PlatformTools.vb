@@ -93,9 +93,13 @@ Namespace CompuMaster.Data.DataQuery
         ''' </summary>
         ''' <returns></returns>
         Public Shared Function InstalledOleDbProvidersList() As Generic.List(Of String)
-            Dim ProviderReader As System.Data.OleDb.OleDbDataReader = System.Data.OleDb.OleDbEnumerator.GetRootEnumerator
-            Dim ProviderTable As DataTable = CompuMaster.Data.DataTables.ConvertDataReaderToDataTable(ProviderReader)
-            Return CompuMaster.Data.DataTables.ConvertColumnValuesIntoList(Of String)(ProviderTable.Columns("SOURCES_NAME"))
+            Try
+                Dim ProviderReader As System.Data.OleDb.OleDbDataReader = System.Data.OleDb.OleDbEnumerator.GetRootEnumerator
+                Dim ProviderTable As DataTable = CompuMaster.Data.DataTables.ConvertDataReaderToDataTable(ProviderReader)
+                Return CompuMaster.Data.DataTables.ConvertColumnValuesIntoList(Of String)(ProviderTable.Columns("SOURCES_NAME"))
+            Catch ex As NotImplementedException
+                Return New Generic.List(Of String)
+            End Try
         End Function
 
         ''' <summary>
@@ -103,9 +107,13 @@ Namespace CompuMaster.Data.DataQuery
         ''' </summary>
         ''' <returns></returns>
         Public Shared Function InstalledOleDbProvidersWithDescription() As Generic.List(Of Generic.KeyValuePair(Of String, String))
-            Dim ProviderReader As System.Data.OleDb.OleDbDataReader = System.Data.OleDb.OleDbEnumerator.GetRootEnumerator
-            Dim ProviderTable As DataTable = CompuMaster.Data.DataTables.ConvertDataReaderToDataTable(ProviderReader)
-            Return CompuMaster.Data.DataTables.ConvertColumnValuesIntoList(Of String, String)(ProviderTable.Columns("SOURCES_NAME"), ProviderTable.Columns("SOURCES_DESCRIPTION"))
+            Try
+                Dim ProviderReader As System.Data.OleDb.OleDbDataReader = System.Data.OleDb.OleDbEnumerator.GetRootEnumerator
+                Dim ProviderTable As DataTable = CompuMaster.Data.DataTables.ConvertDataReaderToDataTable(ProviderReader)
+                Return CompuMaster.Data.DataTables.ConvertColumnValuesIntoList(Of String, String)(ProviderTable.Columns("SOURCES_NAME"), ProviderTable.Columns("SOURCES_DESCRIPTION"))
+            Catch ex As NotImplementedException
+                Return New Generic.List(Of Generic.KeyValuePair(Of String, String))
+            End Try
         End Function
 
         ''' <summary>
@@ -126,9 +134,13 @@ Namespace CompuMaster.Data.DataQuery
         ''' </summary>
         ''' <returns>The DictionaryEntry contains the name of the OLE DB provider in the key field, the value field contains the provider description</returns>
         Public Shared Function InstalledOleDbProviders() As DictionaryEntry()
-            Dim ProviderReader As System.Data.OleDb.OleDbDataReader = System.Data.OleDb.OleDbEnumerator.GetRootEnumerator
-            Dim ProviderTable As DataTable = CompuMaster.Data.DataTables.ConvertDataReaderToDataTable(ProviderReader)
-            Return CompuMaster.Data.DataTables.ConvertDataTableToDictionaryEntryArray(ProviderTable.Columns("SOURCES_NAME"), ProviderTable.Columns("SOURCES_DESCRIPTION"))
+            Try
+                Dim ProviderReader As System.Data.OleDb.OleDbDataReader = System.Data.OleDb.OleDbEnumerator.GetRootEnumerator
+                Dim ProviderTable As DataTable = CompuMaster.Data.DataTables.ConvertDataReaderToDataTable(ProviderReader)
+                Return CompuMaster.Data.DataTables.ConvertDataTableToDictionaryEntryArray(ProviderTable.Columns("SOURCES_NAME"), ProviderTable.Columns("SOURCES_DESCRIPTION"))
+            Catch ex As NotImplementedException
+                Return New DictionaryEntry() {}
+            End Try
         End Function
 
         ''' <summary>
