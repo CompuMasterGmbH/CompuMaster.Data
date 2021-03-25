@@ -6,7 +6,7 @@ Namespace CompuMaster.Test.Data
 
         <Test> Public Sub InstalledOleDbProviders()
             Dim Result As DictionaryEntry() = CompuMaster.Data.DataQuery.PlatformTools.InstalledOleDbProviders
-            If Result Is Nothing Then
+            If Result Is Nothing OrElse Result.Length = 0 Then
                 'Mono .NET Framework and/or Non-Windows platforms (e.g. Linux) don't support this feature currently
                 Assert.Ignore("Platform doesn't provide OleDbProvider list")
             Else
@@ -24,7 +24,7 @@ Namespace CompuMaster.Test.Data
                 Result = CompuMaster.Data.DataQuery.PlatformTools.InstalledOdbcDrivers(CompuMaster.Data.DataQuery.PlatformTools.TargetPlatform.Current)
             Catch ex As NotImplementedException
                 'Mono .NET Framework and/or Non-Windows platforms (e.g. Linux) don't support this feature currently
-                Assert.Ignore("Platform doesn't provide OleDbProvider list")
+                Assert.Ignore("Platform doesn't provide OdbcDriver list")
             End Try
             'There should be at least 1 entry being found
             For Each item As String In Result
