@@ -100,9 +100,12 @@ namespace CompuMaster.Test.Tools.TinyWebServerAdvanced
 
         public void Stop()
         {
-            _listener.Stop();
-            _listener.Close();
-            _listener = null;
+            if (_listener != null)
+            {
+                _listener.Stop();
+                _listener.Close();
+                _listener = null;
+            }
         }
 
         ~WebServer()
