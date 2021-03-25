@@ -52,13 +52,18 @@ Namespace CompuMaster.Test.Data.DataQuery
             Assert.AreEqual(GetType(System.Data.Odbc.OdbcDataAdapter), provider.CreateDataAdapter.GetType)
 
             provider = CompuMaster.Data.DataQuery.DataProvider.LookupDataProvider("OleDb")
-            Assert.IsNotNull(provider)
-            Assert.AreEqual(GetType(System.Data.OleDb.OleDbConnection), provider.CreateConnection.GetType)
-            Assert.AreEqual(GetType(System.Data.OleDb.OleDbCommand), provider.CreateCommand.GetType)
-            Assert.IsNotNull(provider.CreateCommandBuilder)
-            Assert.AreEqual(GetType(System.Data.OleDb.OleDbCommandBuilder), provider.CreateCommandBuilder.GetType)
-            Assert.IsNotNull(provider.CreateDataAdapter)
-            Assert.AreEqual(GetType(System.Data.OleDb.OleDbDataAdapter), provider.CreateDataAdapter.GetType)
+            Dim IsMonoRuntime As Boolean = Type.GetType("Mono.Runtime") IsNot Nothing
+            If IsMonoRuntime Then
+                Assert.IsNull(provider)
+            Else
+                Assert.IsNotNull(provider)
+                Assert.AreEqual(GetType(System.Data.OleDb.OleDbConnection), provider.CreateConnection.GetType)
+                Assert.AreEqual(GetType(System.Data.OleDb.OleDbCommand), provider.CreateCommand.GetType)
+                Assert.IsNotNull(provider.CreateCommandBuilder)
+                Assert.AreEqual(GetType(System.Data.OleDb.OleDbCommandBuilder), provider.CreateCommandBuilder.GetType)
+                Assert.IsNotNull(provider.CreateDataAdapter)
+                Assert.AreEqual(GetType(System.Data.OleDb.OleDbDataAdapter), provider.CreateDataAdapter.GetType)
+            End If
 
             provider = CompuMaster.Data.DataQuery.DataProvider.LookupDataProvider("SqlClient")
             Assert.IsNotNull(provider)
