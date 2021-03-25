@@ -157,11 +157,7 @@ Namespace CompuMaster.Data.DataQuery
                 End If
                 If TryToFindDataConnectorsInAssembly Then
                     'Analyse all loaded assemblies for available data connectors
-                    Try
-                        Result.AddRange(AvailableDataProviders(asm))
-                    Catch ex As NotImplementedException
-                        'Ignore OleDbProviders on Mono .NET throwing NotImplementedExceptions
-                    End Try
+                    Result.AddRange(AvailableDataProviders(asm))
                 End If
             Next
             Return Result
@@ -222,16 +218,20 @@ Namespace CompuMaster.Data.DataQuery
                 If t IsNot Nothing Then
                     For Each iface As Type In GetTypeInterfacesSafely(t)
                         If iface Is GetType(System.Data.IDbConnection) AndAlso t IsNot GetType(System.Data.Common.DbConnection) Then
-                            Dim IDbCommandType As System.Type
                             Try
-                                IDbCommandType = CType(Activator.CreateInstance(t), IDbConnection).CreateCommand.GetType
-                            Catch ex As System.Reflection.TargetInvocationException
-                                IDbCommandType = FindIDbCommandType(assembly, t)
+                                Dim IDbCommandType As System.Type
+                                Try
+                                    IDbCommandType = CType(Activator.CreateInstance(t), IDbConnection).CreateCommand.GetType
+                                Catch ex As System.Reflection.TargetInvocationException
+                                    IDbCommandType = FindIDbCommandType(assembly, t)
+                                End Try
+                                Dim IDbDataAdapterType As System.Type = FindIDbDataApaterType(assembly, IDbCommandType)
+                                Dim DbCommandBuilderType As System.Type = FindDbCommandBuilder(assembly, IDbDataAdapterType)
+                                Dim Provider As New DataProvider(assembly, t, IDbCommandType, DbCommandBuilderType, IDbDataAdapterType)
+                                Result.Add(Provider)
+                            Catch ex As NotImplementedException
+                                'Ignore OleDbProviders on Mono .NET throwing NotImplementedExceptions
                             End Try
-                            Dim IDbDataAdapterType As System.Type = FindIDbDataApaterType(assembly, IDbCommandType)
-                            Dim DbCommandBuilderType As System.Type = FindDbCommandBuilder(assembly, IDbDataAdapterType)
-                            Dim Provider As New DataProvider(assembly, t, IDbCommandType, DbCommandBuilderType, IDbDataAdapterType)
-                            Result.Add(Provider)
                         End If
                     Next
                 End If
