@@ -8,6 +8,7 @@ Namespace CompuMaster.Test.Data.DataQuery
         <OneTimeSetUp> Public Sub LoadSystemDataAssembly()
             CompuMaster.Data.DataQuery.AnyIDataProvider.CreateConnection("System.Data", "System.Data.SqlClient.SqlConnection")
         End Sub
+        
         Private Sub LoadedAssembliesInCurrentAppDomain()
             Console.WriteLine("Assemblies:")
             Console.WriteLine(ListOfAssemblies(AppDomain.CurrentDomain.GetAssemblies))
@@ -37,6 +38,7 @@ Namespace CompuMaster.Test.Data.DataQuery
 
         <Test> Public Sub LookupDataProviderTest()
             Dim provider As CompuMaster.Data.DataQuery.DataProvider
+
             provider = CompuMaster.Data.DataQuery.DataProvider.LookupDataProvider("gibt es nicht")
             Assert.IsNull(provider)
 
