@@ -21,7 +21,7 @@
     <DelaySign>false</DelaySign>
     <OutputType>Library</OutputType>
     <OptionCompare>Binary</OptionCompare>
-    <OptionExplicit>On</OptionExplicit>
+    <OptionExplicit>Off</OptionExplicit>
     <OptionStrict>Off</OptionStrict>
     <RootNamespace>
     </RootNamespace>
@@ -53,7 +53,7 @@
     <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <OutputPath>bin\net_2_0\</OutputPath>
+    <OutputPath>bin\debug\</OutputPath>
     <DocumentationFile>CompuMaster.Data.Controls.xml</DocumentationFile>
     <BaseAddress>285212672</BaseAddress>
     <ConfigurationOverrideFile>
@@ -80,25 +80,6 @@
     </ConfigurationOverrideFile>
     <DefineConstants>
     </DefineConstants>
-    <DefineDebug>false</DefineDebug>
-    <DefineTrace>true</DefineTrace>
-    <DebugSymbols>false</DebugSymbols>
-    <Optimize>true</Optimize>
-    <RegisterForComInterop>false</RegisterForComInterop>
-    <RemoveIntegerChecks>false</RemoveIntegerChecks>
-    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
-    <WarningLevel>1</WarningLevel>
-    <NoWarn>42016,42017,42018,42019,42032,42353,42354,42355</NoWarn>
-    <DebugType>none</DebugType>
-    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'NAnt|AnyCPU' ">
-    <OutputPath>bin\NAnt\</OutputPath>
-    <DocumentationFile>CompuMaster.Data.Controls.xml</DocumentationFile>
-    <BaseAddress>285212672</BaseAddress>
-    <ConfigurationOverrideFile>
-    </ConfigurationOverrideFile>
-    <DefineConstants>SignAssembly=True</DefineConstants>
     <DefineDebug>false</DefineDebug>
     <DefineTrace>true</DefineTrace>
     <DebugSymbols>false</DebugSymbols>
@@ -207,11 +188,7 @@
   <PropertyGroup>
     <PreBuildEvent>
     </PreBuildEvent>
-    <PostBuildEvent>rem Create a NuGet package for this project and place the .nupkg file in the project,s output directory.
-rem If you see this in Visual Studio's Error List window, check the Output window's Build tab for the actual error.
-echo Creating NuGet package in Post-Build event...
-if not "!$(ConfigurationName)"=="!Release" echo NUGET PACKAGING ONLY IN RELEASE CONFIGURATION, not in $(ConfigurationName) configuration
-if "!$(ConfigurationName)"=="!Release" echo NUGET PACKAGING . . .
-if "!$(ConfigurationName)"=="!Release" powershell -NoProfile -ExecutionPolicy Bypass -Command "&amp; '$(ProjectDir)_CreateNewNuGetPackage\DoNotModify\CreateNuGetPackage.ps1' -ProjectFilePath '$(ProjectPath)' -OutputDirectory '$(TargetDir)' -BuildConfiguration '$(ConfigurationName)' -BuildPlatform '$(PlatformName)'"</PostBuildEvent>
+    <PostBuildEvent>
+    </PostBuildEvent>
   </PropertyGroup>
 </Project>
