@@ -143,7 +143,12 @@ Namespace CompuMaster.Data.DataQuery
         End Function
 
         Public Shared Function AvailableDataProviders(appDomain As AppDomain) As List(Of DataProvider)
-            Dim AlreadyLoadedAssemblies As System.Reflection.Assembly() = AppDomain.CurrentDomain.GetAssemblies
+            Dim AlreadyLoadedAssemblies As System.Reflection.Assembly()
+            If appDomain IsNot Nothing Then
+                AlreadyLoadedAssemblies = appDomain.GetAssemblies
+            Else
+                AlreadyLoadedAssemblies = System.AppDomain.CurrentDomain.GetAssemblies
+            End If
             Dim Result As New List(Of DataProvider)
             For Each asm As System.Reflection.Assembly In AlreadyLoadedAssemblies
                 Dim asmName As String = asm.FullName.Substring(0, asm.FullName.IndexOf(","c)) 'asm.GetName.Name.ToLowerInvariant
@@ -172,7 +177,7 @@ Namespace CompuMaster.Data.DataQuery
             Return assembly.GetTypes()
         End Function
         Private Shared Function GetAssemblyTypesSafely(assembly As System.Reflection.Assembly) As System.Type()
-            Dim AssemblyTypes As System.Type() = Nothing
+            Dim AssemblyTypes As System.Type()
             Try
                 AssemblyTypes = GetAssemblyTypes(assembly)
             Catch ex As System.Reflection.ReflectionTypeLoadException
@@ -189,7 +194,7 @@ Namespace CompuMaster.Data.DataQuery
             Return type.GetInterfaces()
         End Function
         Private Shared Function GetTypeInterfacesSafely(type As System.Type) As System.Type()
-            Dim TypeInterfaces As System.Type() = Nothing
+            Dim TypeInterfaces As System.Type()
             Try
                 TypeInterfaces = GetTypeInterfaces(type)
             Catch ex As System.Reflection.ReflectionTypeLoadException
@@ -201,7 +206,7 @@ Namespace CompuMaster.Data.DataQuery
             Return type.GetProperties(Reflection.BindingFlags.Public)
         End Function
         Private Shared Function GetTypePublicPropertiesSafely(type As System.Type) As System.Reflection.PropertyInfo()
-            Dim TypeProperties As System.Reflection.PropertyInfo() = Nothing
+            Dim TypeProperties As System.Reflection.PropertyInfo()
             Try
                 TypeProperties = GetTypePublicProperties(type)
             Catch ex As System.Reflection.ReflectionTypeLoadException
@@ -255,7 +260,11 @@ Namespace CompuMaster.Data.DataQuery
             End Get
         End Property
 
+#Disable Warning CA1032 ' Implement standard exception constructors
+#Disable Warning CA2237 ' Mark ISerializable types with serializable
         Public Class DataProviderDetectionException
+#Enable Warning CA2237 ' Mark ISerializable types with serializable
+#Enable Warning CA1032 ' Implement standard exception constructors
             Inherits Exception
 
             Friend Sub New(assembly As System.Reflection.Assembly, innerException As Exception)
