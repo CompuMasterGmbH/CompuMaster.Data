@@ -15,7 +15,11 @@
     <copyright>2005-2021 CompuMaster GmbH</copyright>
     <tags>CompuMaster Data Common Utils DataTable LDAP CSV Text File SqlServer SqlClient MySql PostgreSQL Npgsql AnyIDataProvider DatabaseManagement DataManipulation</tags>
 		<frameworkAssemblies>
+			<frameworkAssembly assemblyName="System" />	
 			<frameworkAssembly assemblyName="System.Data" />	
+			<frameworkAssembly assemblyName="System.DirectoryServices.dll" />	
+			<frameworkAssembly assemblyName="System.Web" />	
+			<frameworkAssembly assemblyName="System.Xml" />	
 		</frameworkAssemblies>
   </metadata>
   <files>
