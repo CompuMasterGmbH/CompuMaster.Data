@@ -99,7 +99,7 @@ Namespace CompuMaster.Data
             If (bytes Is Nothing) Then
                 Throw New ArgumentNullException(NameOf(bytes))
             End If
-            Dim stream As System.IO.FileStream = New System.IO.FileStream(path, System.IO.FileMode.Create, System.IO.FileAccess.Write, System.IO.FileShare.Read)
+            Dim stream As New System.IO.FileStream(path, System.IO.FileMode.Create, System.IO.FileAccess.Write, System.IO.FileShare.Read)
             stream.Write(bytes, 0, bytes.Length)
             stream.Close()
         End Sub

@@ -1,6 +1,8 @@
 Option Explicit On 
 Option Strict On
 
+Imports System.Collections.Generic
+
 Namespace CompuMaster.Data
 
     ''' <summary>
@@ -261,7 +263,7 @@ Namespace CompuMaster.Data
         ''' <returns></returns>
         Friend Shared Function ConvertDatasetToXml(ByVal dataset As DataSet) As String
             Dim sbuilder As New System.Text.StringBuilder
-            Dim xmlSW As System.IO.StringWriter = New System.IO.StringWriter(sbuilder)
+            Dim xmlSW As New System.IO.StringWriter(sbuilder)
             dataset.WriteXml(xmlSW, XmlWriteMode.WriteSchema)
             xmlSW.Close()
             Return sbuilder.ToString
@@ -273,7 +275,7 @@ Namespace CompuMaster.Data
         ''' <param name="xml"></param>
         ''' <returns></returns>
         Friend Shared Function ConvertXmlToDataset(ByVal xml As String) As DataSet
-            Dim reader As System.IO.StringReader = New System.IO.StringReader(xml)
+            Dim reader As New System.IO.StringReader(xml)
             Dim DataSet As New DataSet
             DataSet.ReadXml(reader, XmlReadMode.Auto)
             reader.Close()
@@ -712,57 +714,22 @@ Namespace CompuMaster.Data
         ''' <summary>
         '''     Return a string with all columns and rows as an html table
         ''' </summary>
-        ''' <param name="dataTable">The datatable to retrieve the content from</param>
-        ''' <returns>If no rows have been processed, the return string is nothing</returns>
-        Public Shared Function ConvertToHtmlTable(ByVal dataTable As DataTable) As String
-            Return CompuMaster.Data.DataTablesTools.ConvertToHtmlTable(dataTable, "<H1>", "</H1>", Nothing)
-        End Function
-
-        ''' <summary>
-        '''     Return a string with all columns and rows as an html table
-        ''' </summary>
-        ''' <param name="rows">The rows to be processed</param>
-        ''' <param name="label">An optional title of the rows</param>
-        ''' <returns>If no rows have been processed, the return string is nothing</returns>
-        Public Shared Function ConvertToHtmlTable(ByVal rows As DataRowCollection, ByVal label As String) As String
-            Return CompuMaster.Data.DataTablesTools.ConvertToHtmlTable(rows, label, "<H1>", "</H1>", Nothing)
-        End Function
-
-        ''' <summary>
-        '''     Return a string with all columns and rows as an html table
-        ''' </summary>
-        ''' <param name="rows">The rows to be processed</param>
-        ''' <param name="label">An optional title of the rows</param>
-        ''' <returns>If no rows have been processed, the return string is nothing</returns>
-        Public Shared Function ConvertToHtmlTable(ByVal rows() As DataRow, ByVal label As String) As String
-            Return CompuMaster.Data.DataTablesTools.ConvertToHtmlTable(rows, label, "<H1>", "</H1>", Nothing)
-        End Function
-
-        ''' <summary>
-        '''     Return a string with all columns and rows as an html table
-        ''' </summary>
-        ''' <param name="dataTable">The datatable to retrieve the content from</param>
-        ''' <param name="titleTagOpener">The opening tag in front of the table's title</param>
-        ''' <param name="titleTagEnd">The closing tag after the table title</param>
-        ''' <param name="additionalTableAttributes">Additional attributes for the rendered table</param>
-        ''' <returns>If no rows have been processed, the return string is nothing</returns>
-        Friend Shared Function ConvertToHtmlTable(ByVal dataTable As DataTable, ByVal titleTagOpener As String, ByVal titleTagEnd As String,
-                                                  ByVal additionalTableAttributes As String) As String
-            Return ConvertToHtmlTable(dataTable.Rows, dataTable.TableName, titleTagOpener, titleTagEnd, additionalTableAttributes)
-        End Function
-
-        ''' <summary>
-        '''     Return a string with all columns and rows as an html table
-        ''' </summary>
         ''' <param name="rows">The rows to be processed</param>
         ''' <param name="label">An optional title of the rows</param>
         ''' <param name="titleTagOpener">The opening tag in front of the table's title</param>
         ''' <param name="titleTagEnd">The closing tag after the table title</param>
         ''' <param name="additionalTableAttributes">Additional attributes for the rendered table</param>
+        ''' <param name="htmlEncodeCellContentAndLineBreaks">Encode all output to valid HTML</param>
         ''' <returns>If no rows have been processed, the return string is nothing</returns>
-        Friend Shared Function ConvertToHtmlTable(ByVal rows As DataRowCollection, ByVal label As String, ByVal titleTagOpener As String, ByVal titleTagEnd As String,
-                                                  ByVal additionalTableAttributes As String) As String
-            Return ConvertToHtmlTable(rows, label, titleTagOpener, titleTagEnd, additionalTableAttributes, False)
+        Friend Shared Function ConvertToHtmlTable(ByVal rows As DataRowCollection, ByVal label As String, ByVal titleTagOpener As String,
+                                                  ByVal titleTagEnd As String, ByVal additionalTableAttributes As String,
+                                                  ByVal htmlEncodeCellContentAndLineBreaks As Boolean,
+                                                  disableHtmlEncodingForColumns As String()) As String
+            Dim RowList As New List(Of DataRow)
+            For MyCounter As Integer = 0 To rows.Count - 1
+                RowList.Add(rows.Item(MyCounter))
+            Next
+            Return ConvertToHtmlTable(RowList, label, titleTagOpener, titleTagEnd, additionalTableAttributes, htmlEncodeCellContentAndLineBreaks, disableHtmlEncodingForColumns)
         End Function
 
         ''' <summary>
@@ -775,11 +742,38 @@ Namespace CompuMaster.Data
         ''' <param name="additionalTableAttributes">Additional attributes for the rendered table</param>
         ''' <param name="htmlEncodeCellContentAndLineBreaks">Encode all output to valid HTML</param>
         ''' <returns>If no rows have been processed, the return string is nothing</returns>
-        Friend Shared Function ConvertToHtmlTable(ByVal rows As DataRowCollection, ByVal label As String, ByVal titleTagOpener As String,
+        Friend Shared Function ConvertToHtmlTable(ByVal rows As DataRow(), ByVal label As String, ByVal titleTagOpener As String,
                                                   ByVal titleTagEnd As String, ByVal additionalTableAttributes As String,
-                                                  ByVal htmlEncodeCellContentAndLineBreaks As Boolean) As String
+                                                  ByVal htmlEncodeCellContentAndLineBreaks As Boolean,
+                                                  disableHtmlEncodingForColumns As String()) As String
+            Dim RowList As New List(Of DataRow)(rows)
+            Return ConvertToHtmlTable(RowList, label, titleTagOpener, titleTagEnd, additionalTableAttributes, htmlEncodeCellContentAndLineBreaks, disableHtmlEncodingForColumns)
+        End Function
+
+        ''' <summary>
+        '''     Return a string with all columns and rows as an html table
+        ''' </summary>
+        ''' <param name="rows">The rows to be processed</param>
+        ''' <param name="label">An optional title of the rows</param>
+        ''' <param name="titleTagOpener">The opening tag in front of the table's title</param>
+        ''' <param name="titleTagEnd">The closing tag after the table title</param>
+        ''' <param name="additionalTableAttributes">Additional attributes for the rendered table</param>
+        ''' <param name="htmlEncodeCellContentAndLineBreaks">Encode all output to valid HTML</param>
+        ''' <returns>If no rows have been processed, the return string is nothing</returns>
+        Friend Shared Function ConvertToHtmlTable(ByVal rows As List(Of DataRow), ByVal label As String, ByVal titleTagOpener As String,
+                                                  ByVal titleTagEnd As String, ByVal additionalTableAttributes As String,
+                                                  ByVal htmlEncodeCellContentAndLineBreaks As Boolean,
+                                                  disableHtmlEncodingForColumns As String()) As String
+            If disableHtmlEncodingForColumns Is Nothing Then
+                disableHtmlEncodingForColumns = New String() {}
+            End If
+            If titleTagOpener Is Nothing AndAlso titleTagEnd Is Nothing Then
+                titleTagOpener = "<H1>"
+                titleTagEnd = "</H1>"
+            End If
+
             Dim Result As New System.Text.StringBuilder
-            If label <> "" Then
+            If label IsNot Nothing Then
                 Result.Append(titleTagOpener)
                 If htmlEncodeCellContentAndLineBreaks Then
                     Result.Append(HtmlEncodeLineBreaks(System.Web.HttpUtility.HtmlEncode(String.Format("{0}", label))))
@@ -795,15 +789,19 @@ Namespace CompuMaster.Data
             Result.Append(additionalTableAttributes)
             Result.Append("><TR>")
             For Each column As DataColumn In rows(0).Table.Columns
+                Dim HtmlEncodeCellContentDisabledForCurrentColumn As Boolean = (
+                    htmlEncodeCellContentAndLineBreaks = False OrElse
+                    Not (Array.IndexOf(Of String)(disableHtmlEncodingForColumns, column.ColumnName) = -1)
+                    )
                 Result.Append("<TH>")
                 If column.Caption <> Nothing Then
-                    If htmlEncodeCellContentAndLineBreaks Then
+                    If htmlEncodeCellContentAndLineBreaks AndAlso HtmlEncodeCellContentDisabledForCurrentColumn = False Then
                         Result.Append(HtmlEncodeLineBreaks(System.Web.HttpUtility.HtmlEncode(String.Format("{0}", column.Caption))))
                     Else
                         Result.Append(String.Format("{0}", column.Caption))
                     End If
                 Else
-                    If htmlEncodeCellContentAndLineBreaks Then
+                    If htmlEncodeCellContentAndLineBreaks AndAlso HtmlEncodeCellContentDisabledForCurrentColumn = False Then
                         Result.Append(HtmlEncodeLineBreaks(System.Web.HttpUtility.HtmlEncode(String.Format("{0}", column.ColumnName))))
                     Else
                         Result.Append(String.Format("{0}", column.ColumnName))
@@ -816,8 +814,12 @@ Namespace CompuMaster.Data
             For Each row As DataRow In rows
                 Result.Append("<TR>")
                 For Each column As DataColumn In row.Table.Columns
+                    Dim HtmlEncodeCellContentDisabledForCurrentColumn As Boolean = (
+                        htmlEncodeCellContentAndLineBreaks = False OrElse
+                        Not (Array.IndexOf(Of String)(disableHtmlEncodingForColumns, column.ColumnName) = -1)
+                        )
                     Result.Append("<TD>")
-                    If htmlEncodeCellContentAndLineBreaks Then
+                    If htmlEncodeCellContentAndLineBreaks AndAlso HtmlEncodeCellContentDisabledForCurrentColumn = False Then
                         Result.Append(HtmlEncodeLineBreaks(System.Web.HttpUtility.HtmlEncode(String.Format("{0}", row(column)))))
                     Else
                         Result.Append(String.Format("{0}", row(column)))
@@ -841,48 +843,6 @@ Namespace CompuMaster.Data
         ''' </remarks>
         Private Shared Function HtmlEncodeLineBreaks(ByVal Text As String) As String
             Return Text.Replace(ControlChars.CrLf, "<br>").Replace(ControlChars.Cr, "<br>").Replace(ControlChars.Lf, "<br>")
-        End Function
-
-        ''' <summary>
-        '''     Return a string with all columns and rows as an html table
-        ''' </summary>
-        ''' <param name="rows">The rows to be processed</param>
-        ''' <param name="label">An optional title of the rows</param>
-        ''' <param name="titleTagOpener">The opening tag in front of the table's title</param>
-        ''' <param name="titleTagEnd">The closing tag after the table title</param>
-        ''' <param name="additionalTableAttributes">Additional attributes for the rendered table</param>
-        ''' <returns>If no rows have been processed, the return string is nothing</returns>
-        Friend Shared Function ConvertToHtmlTable(ByVal rows() As DataRow, ByVal label As String, ByVal titleTagOpener As String,
-                                                  ByVal titleTagEnd As String, ByVal additionalTableAttributes As String) As String
-            Dim Result As New System.Text.StringBuilder
-            If label <> "" Then
-                Result.Append(titleTagOpener)
-                Result.Append(String.Format("{0}", label) & System.Environment.NewLine)
-                Result.Append(titleTagEnd)
-            End If
-            If rows.Length <= 0 Then
-                Return Nothing
-            End If
-            Result.Append("<TABLE ")
-            Result.Append(additionalTableAttributes)
-            Result.Append("><TR>")
-            For Each c As DataColumn In rows(0).Table.Columns
-                Result.Append(String.Format("{0}", c.ColumnName))
-            Next
-            Result.Append("</TR>")
-            Result.Append(System.Environment.NewLine)
-            For Each row As DataRow In rows
-                Result.Append("<TR>")
-                For Each column As DataColumn In row.Table.Columns
-                    Result.Append("<TD>")
-                    Result.Append(String.Format("{0}", row(column)))
-                    Result.Append("</TD>")
-                Next
-                Result.Append("</TR>")
-                Result.Append(System.Environment.NewLine)
-            Next
-            Result.Append("</TABLE>")
-            Return Result.ToString
         End Function
 
         ''' <summary>

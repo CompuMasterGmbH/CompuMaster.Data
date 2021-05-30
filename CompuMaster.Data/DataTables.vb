@@ -1581,7 +1581,7 @@ Namespace CompuMaster.Data
         ''' <param name="dataTable">The datatable to retrieve the content from</param>
         ''' <returns>If no rows have been processed, the return string is nothing</returns>
         Public Shared Function ConvertToHtmlTable(ByVal dataTable As DataTable) As String
-            Return CompuMaster.Data.DataTablesTools.ConvertToHtmlTable(dataTable)
+            Return CompuMaster.Data.DataTablesTools.ConvertToHtmlTable(dataTable.Rows, dataTable.TableName, CType(Nothing, String), CType(Nothing, String), CType(Nothing, String), False, New String() {})
         End Function
 
         ''' <summary>
@@ -1591,7 +1591,7 @@ Namespace CompuMaster.Data
         ''' <param name="label">An optional title of the rows</param>
         ''' <returns>If no rows have been processed, the return string is nothing</returns>
         Public Shared Function ConvertToHtmlTable(ByVal rows As DataRowCollection, ByVal label As String) As String
-            Return CompuMaster.Data.DataTablesTools.ConvertToHtmlTable(rows, label)
+            Return CompuMaster.Data.DataTablesTools.ConvertToHtmlTable(rows, label, CType(Nothing, String), CType(Nothing, String), CType(Nothing, String), False, New String() {})
         End Function
 
         ''' <summary>
@@ -1601,7 +1601,7 @@ Namespace CompuMaster.Data
         ''' <param name="label">An optional title of the rows</param>
         ''' <returns>If no rows have been processed, the return string is nothing</returns>
         Public Shared Function ConvertToHtmlTable(ByVal rows() As DataRow, ByVal label As String) As String
-            Return CompuMaster.Data.DataTablesTools.ConvertToHtmlTable(rows, label)
+            Return CompuMaster.Data.DataTablesTools.ConvertToHtmlTable(rows, label, CType(Nothing, String), CType(Nothing, String), CType(Nothing, String), False, New String() {})
         End Function
 
         ''' <summary>
@@ -1614,12 +1614,7 @@ Namespace CompuMaster.Data
         ''' <returns>If no rows have been processed, the return string is nothing</returns>
         Public Shared Function ConvertToHtmlTable(ByVal dataTable As DataTable, ByVal titleTagOpener As String, ByVal titleTagEnd As String,
                                                   ByVal additionalTableAttributes As String) As String
-            Return CompuMaster.Data.DataTablesTools.ConvertToHtmlTable(dataTable, titleTagOpener, titleTagEnd, additionalTableAttributes)
-        End Function
-
-        <Obsolete("Subject of removal in a future version", True), System.ComponentModel.EditorBrowsable(ComponentModel.EditorBrowsableState.Never)>
-        Public Shared Function ConvertToHtmlTable(ByVal dataTable As DataTable, ByVal titleTag As String, ByVal additionalTableAttributes As String) As String
-            Return CompuMaster.Data.DataTablesTools.ConvertToHtmlTable(dataTable, "<" & titleTag & ">", "</" & titleTag & ">", additionalTableAttributes)
+            Return CompuMaster.Data.DataTablesTools.ConvertToHtmlTable(dataTable.Rows, dataTable.TableName, titleTagOpener, titleTagEnd, additionalTableAttributes, False, New String() {})
         End Function
 
         ''' <summary>
@@ -1633,7 +1628,22 @@ Namespace CompuMaster.Data
         ''' <returns>If no rows have been processed, the return string is nothing</returns>
         Public Shared Function ConvertToHtmlTable(ByVal dataTable As DataTable, ByVal titleTagOpener As String, ByVal titleTagEnd As String,
                                                   ByVal additionalTableAttributes As String, ByVal htmlEncodeCellContentAndLineBreaks As Boolean) As String
-            Return CompuMaster.Data.DataTablesTools.ConvertToHtmlTable(dataTable.Rows, dataTable.TableName, titleTagOpener, titleTagEnd, additionalTableAttributes, htmlEncodeCellContentAndLineBreaks)
+            Return CompuMaster.Data.DataTablesTools.ConvertToHtmlTable(dataTable.Rows, dataTable.TableName, titleTagOpener, titleTagEnd, additionalTableAttributes, htmlEncodeCellContentAndLineBreaks, CType(Nothing, String()))
+        End Function
+
+        ''' <summary>
+        '''     Return a string with all columns and rows as an html table
+        ''' </summary>
+        ''' <param name="dataTable">The datatable to retrieve the content from</param>
+        ''' <param name="titleTagOpener">The opening tag in front of the table's title</param>
+        ''' <param name="titleTagEnd">The closing tag after the table title</param>
+        ''' <param name="additionalTableAttributes">Additional attributes for the rendered table</param>
+        ''' <param name="htmlEncodeCellContentAndLineBreaks">Encode all output to valid HTML</param>
+        ''' <param name="disableHtmlEncodingForColumns">If <paramref name="htmlEncodeCellContentAndLineBreaks"/> is enabled, disable HTML encodings for these columns</param>
+        ''' <returns>If no rows have been processed, the return string is nothing</returns>
+        Public Shared Function ConvertToHtmlTable(ByVal dataTable As DataTable, ByVal titleTagOpener As String, ByVal titleTagEnd As String,
+                                                  ByVal additionalTableAttributes As String, ByVal htmlEncodeCellContentAndLineBreaks As Boolean, disableHtmlEncodingForColumns As String()) As String
+            Return CompuMaster.Data.DataTablesTools.ConvertToHtmlTable(dataTable.Rows, dataTable.TableName, titleTagOpener, titleTagEnd, additionalTableAttributes, htmlEncodeCellContentAndLineBreaks, disableHtmlEncodingForColumns)
         End Function
 
         ''' <summary>
@@ -1647,12 +1657,38 @@ Namespace CompuMaster.Data
         ''' <returns>If no rows have been processed, the return string is nothing</returns>
         Public Shared Function ConvertToHtmlTable(ByVal rows As DataRowCollection, ByVal label As String, ByVal titleTagOpener As String, ByVal titleTagEnd As String,
                                                   ByVal additionalTableAttributes As String) As String
-            Return CompuMaster.Data.DataTablesTools.ConvertToHtmlTable(rows, label, titleTagOpener, titleTagEnd, additionalTableAttributes)
+            Return CompuMaster.Data.DataTablesTools.ConvertToHtmlTable(rows, label, titleTagOpener, titleTagEnd, additionalTableAttributes, False, New String() {})
         End Function
 
-        <Obsolete("Subject of removal in a future version", True), System.ComponentModel.EditorBrowsable(ComponentModel.EditorBrowsableState.Never)>
-        Public Shared Function ConvertToHtmlTable(ByVal rows As DataRowCollection, ByVal label As String, ByVal titleTag As String, ByVal additionalTableAttributes As String) As String
-            Return CompuMaster.Data.DataTablesTools.ConvertToHtmlTable(rows, label, "<" & titleTag & ">", "</" & titleTag & ">", additionalTableAttributes)
+        ''' <summary>
+        '''     Return a string with all columns and rows as an html table
+        ''' </summary>
+        ''' <param name="rows">The rows to be processed</param>
+        ''' <param name="label">An optional title of the rows</param>
+        ''' <param name="titleTagOpener">The opening tag in front of the table's title</param>
+        ''' <param name="titleTagEnd">The closing tag after the table title</param>
+        ''' <param name="additionalTableAttributes">Additional attributes for the rendered table</param>
+        ''' <param name="htmlEncodeCellContentAndLineBreaks">Encode all output to valid HTML</param>
+        ''' <returns>If no rows have been processed, the return string is nothing</returns>
+        Public Shared Function ConvertToHtmlTable(ByVal rows As DataRowCollection, ByVal label As String, ByVal titleTagOpener As String, ByVal titleTagEnd As String,
+                                                  ByVal additionalTableAttributes As String, htmlEncodeCellContentAndLineBreaks As Boolean) As String
+            Return CompuMaster.Data.DataTablesTools.ConvertToHtmlTable(rows, label, titleTagOpener, titleTagEnd, additionalTableAttributes, htmlEncodeCellContentAndLineBreaks, CType(Nothing, String()))
+        End Function
+
+        ''' <summary>
+        '''     Return a string with all columns and rows as an html table
+        ''' </summary>
+        ''' <param name="rows">The rows to be processed</param>
+        ''' <param name="label">An optional title of the rows</param>
+        ''' <param name="titleTagOpener">The opening tag in front of the table's title</param>
+        ''' <param name="titleTagEnd">The closing tag after the table title</param>
+        ''' <param name="additionalTableAttributes">Additional attributes for the rendered table</param>
+        ''' <param name="htmlEncodeCellContentAndLineBreaks">Encode all output to valid HTML</param>
+        ''' <param name="disableHtmlEncodingForColumns">If <paramref name="htmlEncodeCellContentAndLineBreaks"/> is enabled, disable HTML encodings for these columns</param>
+        ''' <returns>If no rows have been processed, the return string is nothing</returns>
+        Public Shared Function ConvertToHtmlTable(ByVal rows As DataRowCollection, ByVal label As String, ByVal titleTagOpener As String, ByVal titleTagEnd As String,
+                                                  ByVal additionalTableAttributes As String, htmlEncodeCellContentAndLineBreaks As Boolean, disableHtmlEncodingForColumns As String()) As String
+            Return CompuMaster.Data.DataTablesTools.ConvertToHtmlTable(rows, label, titleTagOpener, titleTagEnd, additionalTableAttributes, htmlEncodeCellContentAndLineBreaks, disableHtmlEncodingForColumns)
         End Function
 
         ''' <summary>
@@ -1666,12 +1702,43 @@ Namespace CompuMaster.Data
         ''' <returns>If no rows have been processed, the return string is nothing</returns>
         Public Shared Function ConvertToHtmlTable(ByVal rows() As DataRow, ByVal label As String, ByVal titleTagOpener As String, ByVal titleTagEnd As String,
                                                   ByVal additionalTableAttributes As String) As String
-            Return CompuMaster.Data.DataTablesTools.ConvertToHtmlTable(rows, label, titleTagOpener, titleTagEnd, additionalTableAttributes)
+            Return CompuMaster.Data.DataTablesTools.ConvertToHtmlTable(rows, label, titleTagOpener, titleTagEnd, additionalTableAttributes, False, CType(Nothing, String()))
+        End Function
+
+        ''' <summary>
+        '''     Return a string with all columns and rows as an html table
+        ''' </summary>
+        ''' <param name="rows">The rows to be processed</param>
+        ''' <param name="label">An optional title of the rows</param>
+        ''' <param name="titleTagOpener">The opening tag in front of the table's title</param>
+        ''' <param name="titleTagEnd">The closing tag after the table title</param>
+        ''' <param name="additionalTableAttributes">Additional attributes for the rendered table</param>
+        ''' <param name="htmlEncodeCellContentAndLineBreaks">Encode all output to valid HTML</param>
+        ''' <returns>If no rows have been processed, the return string is nothing</returns>
+        Public Shared Function ConvertToHtmlTable(ByVal rows() As DataRow, ByVal label As String, ByVal titleTagOpener As String, ByVal titleTagEnd As String,
+                                                  ByVal additionalTableAttributes As String, htmlEncodeCellContentAndLineBreaks As Boolean) As String
+            Return CompuMaster.Data.DataTablesTools.ConvertToHtmlTable(rows, label, titleTagOpener, titleTagEnd, additionalTableAttributes, htmlEncodeCellContentAndLineBreaks, CType(Nothing, String()))
+        End Function
+
+        ''' <summary>
+        '''     Return a string with all columns and rows as an html table
+        ''' </summary>
+        ''' <param name="rows">The rows to be processed</param>
+        ''' <param name="label">An optional title of the rows</param>
+        ''' <param name="titleTagOpener">The opening tag in front of the table's title</param>
+        ''' <param name="titleTagEnd">The closing tag after the table title</param>
+        ''' <param name="additionalTableAttributes">Additional attributes for the rendered table</param>
+        ''' <param name="htmlEncodeCellContentAndLineBreaks">Encode all output to valid HTML</param>
+        ''' <param name="disableHtmlEncodingForColumns">If <paramref name="htmlEncodeCellContentAndLineBreaks"/> is enabled, disable HTML encodings for these columns</param>
+        ''' <returns>If no rows have been processed, the return string is nothing</returns>
+        Public Shared Function ConvertToHtmlTable(ByVal rows() As DataRow, ByVal label As String, ByVal titleTagOpener As String, ByVal titleTagEnd As String,
+                                                  ByVal additionalTableAttributes As String, htmlEncodeCellContentAndLineBreaks As Boolean, disableHtmlEncodingForColumns As String()) As String
+            Return CompuMaster.Data.DataTablesTools.ConvertToHtmlTable(rows, label, titleTagOpener, titleTagEnd, additionalTableAttributes, htmlEncodeCellContentAndLineBreaks, disableHtmlEncodingForColumns)
         End Function
 
         <Obsolete("Subject of removal in a future version", True), System.ComponentModel.EditorBrowsable(ComponentModel.EditorBrowsableState.Never)>
         Public Shared Function ConvertToHtmlTable(ByVal rows() As DataRow, ByVal label As String, ByVal titleTag As String, ByVal additionalTableAttributes As String) As String
-            Return CompuMaster.Data.DataTablesTools.ConvertToHtmlTable(rows, label, "<" & titleTag & ">", "</" & titleTag & ">", additionalTableAttributes)
+            Return CompuMaster.Data.DataTablesTools.ConvertToHtmlTable(rows, label, "<" & titleTag & ">", "</" & titleTag & ">", additionalTableAttributes, False, CType(Nothing, String()))
         End Function
 
         ''' <summary>

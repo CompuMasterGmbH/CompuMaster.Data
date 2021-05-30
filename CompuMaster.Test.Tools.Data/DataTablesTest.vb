@@ -259,15 +259,87 @@ Namespace CompuMaster.Test.Data
         End Sub
 
         <Test()> Public Sub ConvertToHtmlTable()
+            Dim NullString As String = Nothing
+
             Dim dt As New DataTable
             dt.Columns.Add("id", GetType(Integer))
             dt.Columns.Add("Hi", GetType(String))
+            dt.Columns.Add("action", GetType(String))
+            dt.Columns("action").Caption = "<strong>Action</strong>"
             Dim row As DataRow = dt.NewRow
             row.Item(0) = 23
-            row.Item(1) = "Hello World"
+            row.Item(1) = "Hello <strong>World</strong>"
+            row.Item(2) = "<a hef=""/test/"">Test</a>"
+            dt.Rows.Add(row)
+            Dim RowArray As DataRow() = New DataRow() {row}
+            Dim HtmlColumns As String() = New String() {"action"}
 
-            Dim html As String = CompuMaster.Data.DataTables.ConvertToHtmlTable(dt)
-            Assert.IsNotEmpty(html)
+            '## Basic HTML output
+            Dim ExpectedHtml As String, Html As String
+            ExpectedHtml = CompuMaster.Data.DataTables.ConvertToHtmlTable(dt)
+            Assert.IsNotNull(ExpectedHtml)
+            Assert.IsNotEmpty(ExpectedHtml)
+            Html = CompuMaster.Data.DataTables.ConvertToHtmlTable(dt.Rows, dt.TableName)
+            Assert.AreEqual(ExpectedHtml, Html)
+            Html = CompuMaster.Data.DataTables.ConvertToHtmlTable(RowArray, dt.TableName)
+            Assert.AreEqual(ExpectedHtml, Html)
+
+            '## Arguments list for DataTable
+            Html = CompuMaster.Data.DataTables.ConvertToHtmlTable(dt, NullString, NullString, NullString)
+            Assert.AreEqual(ExpectedHtml, Html)
+            Assert.IsTrue(Html.Contains("Hello <strong>World</strong>"))
+            Assert.IsTrue(Html.Contains("<strong>Action</strong>"))
+            Assert.IsTrue(Html.Contains("<a hef=""/test/"">Test</a>"))
+
+            '- test with HTML encoding
+            Html = CompuMaster.Data.DataTables.ConvertToHtmlTable(dt, NullString, NullString, NullString, True)
+            Assert.IsTrue(Html.Contains("Hello &lt;strong&gt;World&lt;/strong&gt;"))
+            Assert.IsTrue(Html.Contains("&lt;strong&gt;Action&lt;/strong&gt;"))
+            Assert.IsTrue(Html.Contains("&lt;a hef=&quot;/test/&quot;&gt;Test&lt;/a&gt;"))
+
+            '- test with HTML encoding except defined columns
+            Html = CompuMaster.Data.DataTables.ConvertToHtmlTable(dt, NullString, NullString, NullString, True, HtmlColumns)
+            Assert.IsTrue(Html.Contains("Hello &lt;strong&gt;World&lt;/strong&gt;"))
+            Assert.IsTrue(Html.Contains("<strong>Action</strong>"))
+            Assert.IsTrue(Html.Contains("<a hef=""/test/"">Test</a>"))
+
+            '## Arguments list for DataRowCollection
+            Html = CompuMaster.Data.DataTables.ConvertToHtmlTable(dt.Rows, dt.TableName, NullString, NullString, NullString)
+            Assert.AreEqual(ExpectedHtml, Html)
+            Assert.IsTrue(Html.Contains("Hello <strong>World</strong>"))
+            Assert.IsTrue(Html.Contains("<strong>Action</strong>"))
+            Assert.IsTrue(Html.Contains("<a hef=""/test/"">Test</a>"))
+
+            '- test with HTML encoding
+            Html = CompuMaster.Data.DataTables.ConvertToHtmlTable(dt.Rows, dt.TableName, NullString, NullString, NullString, True)
+            Assert.IsTrue(Html.Contains("Hello &lt;strong&gt;World&lt;/strong&gt;"))
+            Assert.IsTrue(Html.Contains("&lt;strong&gt;Action&lt;/strong&gt;"))
+            Assert.IsTrue(Html.Contains("&lt;a hef=&quot;/test/&quot;&gt;Test&lt;/a&gt;"))
+
+            '- test with HTML encoding except defined columns
+            Html = CompuMaster.Data.DataTables.ConvertToHtmlTable(dt, NullString, NullString, NullString, True, HtmlColumns)
+            Assert.IsTrue(Html.Contains("Hello &lt;strong&gt;World&lt;/strong&gt;"))
+            Assert.IsTrue(Html.Contains("<strong>Action</strong>"))
+            Assert.IsTrue(Html.Contains("<a hef=""/test/"">Test</a>"))
+
+            '## Arguments list for DataRow array
+            Html = CompuMaster.Data.DataTables.ConvertToHtmlTable(RowArray, dt.TableName, NullString, NullString, NullString)
+            Assert.AreEqual(ExpectedHtml, Html)
+            Assert.IsTrue(Html.Contains("Hello <strong>World</strong>"))
+            Assert.IsTrue(Html.Contains("<strong>Action</strong>"))
+            Assert.IsTrue(Html.Contains("<a hef=""/test/"">Test</a>"))
+
+            '- test with HTML encoding
+            Html = CompuMaster.Data.DataTables.ConvertToHtmlTable(RowArray, dt.TableName, NullString, NullString, NullString, True)
+            Assert.IsTrue(Html.Contains("Hello &lt;strong&gt;World&lt;/strong&gt;"))
+            Assert.IsTrue(Html.Contains("&lt;strong&gt;Action&lt;/strong&gt;"))
+            Assert.IsTrue(Html.Contains("&lt;a hef=&quot;/test/&quot;&gt;Test&lt;/a&gt;"))
+
+            '- test with HTML encoding except defined columns
+            Html = CompuMaster.Data.DataTables.ConvertToHtmlTable(dt, NullString, NullString, NullString, True, HtmlColumns)
+            Assert.IsTrue(Html.Contains("Hello &lt;strong&gt;World&lt;/strong&gt;"))
+            Assert.IsTrue(Html.Contains("<strong>Action</strong>"))
+            Assert.IsTrue(Html.Contains("<a hef=""/test/"">Test</a>"))
 
         End Sub
 
