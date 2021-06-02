@@ -380,18 +380,25 @@ Namespace CompuMaster.Data
                 Throw New System.IO.FileNotFoundException("File not found", path)
             End If
 
+            Dim fs As FileStream = Nothing
             Dim reader As StreamReader = Nothing
             Try
+                fs = New FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite)
                 If encoding = "" Then
-                    reader = New StreamReader(path, System.Text.Encoding.Default)
+                    reader = New StreamReader(fs, System.Text.Encoding.Default)
                 Else
-                    reader = New StreamReader(path, System.Text.Encoding.GetEncoding(encoding))
+                    reader = New StreamReader(fs, System.Text.Encoding.GetEncoding(encoding))
                 End If
                 Result = ReadDataTableFromCsvReader(reader, includesColumnHeaders, System.Globalization.CultureInfo.CurrentCulture, columnSeparator, recognizeTextBy, recognizeMultipleColumnSeparatorCharsAsOne, convertEmptyStringsToDBNull, lineEncodings, lineEncodingAutoConversions)
                 Result.TableName = System.IO.Path.GetFileNameWithoutExtension(path)
             Finally
                 If reader IsNot Nothing Then
                     reader.Close()
+                    reader.Dispose()
+                End If
+                If fs IsNot Nothing Then
+                    fs.Close()
+                    fs.Dispose()
                 End If
             End Try
 
