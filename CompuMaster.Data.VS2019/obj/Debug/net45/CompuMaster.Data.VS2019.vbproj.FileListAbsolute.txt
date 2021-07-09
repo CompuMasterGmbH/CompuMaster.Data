@@ -1,0 +1,8 @@
+D:\git_local_repository\software-projects\CompuMaster.Data\CompuMaster.Data.VS2019\bin\Debug\net45\CompuMaster.Data.VS2019.dll
+D:\git_local_repository\software-projects\CompuMaster.Data\CompuMaster.Data.VS2019\bin\Debug\net45\CompuMaster.Data.VS2019.pdb
+D:\git_local_repository\software-projects\CompuMaster.Data\CompuMaster.Data.VS2019\obj\Debug\net45\CompuMaster.Data.VS2019.vbproj.AssemblyReference.cache
+D:\git_local_repository\software-projects\CompuMaster.Data\CompuMaster.Data.VS2019\obj\Debug\net45\CompuMaster.Data.VS2019.AssemblyInfoInputs.cache
+D:\git_local_repository\software-projects\CompuMaster.Data\CompuMaster.Data.VS2019\obj\Debug\net45\CompuMaster.Data.VS2019.AssemblyInfo.vb
+D:\git_local_repository\software-projects\CompuMaster.Data\CompuMaster.Data.VS2019\obj\Debug\net45\CompuMaster.Data.VS2019.vbproj.CoreCompileInputs.cache
+D:\git_local_repository\software-projects\CompuMaster.Data\CompuMaster.Data.VS2019\obj\Debug\net45\CompuMaster.Data.VS2019.dll
+D:\git_local_repository\software-projects\CompuMaster.Data\CompuMaster.Data.VS2019\obj\Debug\net45\CompuMaster.Data.VS2019.pdb
