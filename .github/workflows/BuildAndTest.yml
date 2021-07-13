@@ -38,10 +38,22 @@ jobs:
         strategy:
           fail-fast: false
           matrix:
+            #arch: [x86, x86_64, arm]
             os: [windows-latest, ubuntu-latest, macos-latest]
             include: 
               - os: macos-latest
                 runNetExe: mono
+              #  arch: x86_64
+              #- os: ubuntu-latest
+              #  arch: x86
+              #- os: ubuntu-latest
+              #  arch: x86_64
+              #- os: ubuntu-latest
+              #  arch: arm
+              #- os: windows-latest
+              #  arch: x86
+              #- os: windows-latest
+              #  arch: x86_64
 
         # the build-and-test job might be skipped, we don't need to run this job then
         #if: success() || failure()
