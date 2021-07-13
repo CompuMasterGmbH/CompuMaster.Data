@@ -785,6 +785,7 @@ Namespace CompuMaster.Data.DataQuery
                 End Get
             End Property
 
+#Disable Warning CA1822 ' Member als statisch markieren
             ''' <summary>
             ''' Recommended link for the user to download and install missing components on x64 systems
             ''' </summary>
@@ -792,6 +793,7 @@ Namespace CompuMaster.Data.DataQuery
             ''' <returns></returns>
             ''' <remarks></remarks>
             Public ReadOnly Property RecommendedDownloadLink() As String
+#Enable Warning CA1822 ' Member als statisch markieren
                 Get
                     Return "http://www.microsoft.com/downloads/en/details.aspx?familyid=C06B8369-60DD-4B64-A44B-84B371EDE16D&displaylang=en"
                 End Get

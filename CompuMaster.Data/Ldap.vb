@@ -9,10 +9,10 @@ Namespace CompuMaster.Data
     ''' <summary>
     '''     LDAP access to retrieve data
     ''' </summary>
-    Public Class Ldap
+    Public NotInheritable Class Ldap
 
         Friend Shared Function GetRootDomain() As String
-            If Not System.DirectoryServices.ActiveDirectory.Forest.GetCurrentForest Is Nothing Then
+            If System.DirectoryServices.ActiveDirectory.Forest.GetCurrentForest IsNot Nothing Then
                 Return System.DirectoryServices.ActiveDirectory.Forest.GetCurrentForest.Name
             Else
                 Return Nothing
@@ -20,7 +20,7 @@ Namespace CompuMaster.Data
         End Function
 
         Public Shared Function GetDomains() As String()
-            If Not System.DirectoryServices.ActiveDirectory.Forest.GetCurrentForest Is Nothing Then
+            If System.DirectoryServices.ActiveDirectory.Forest.GetCurrentForest IsNot Nothing Then
                 Dim Result As New System.Collections.Generic.List(Of String)
                 For Each d As System.DirectoryServices.ActiveDirectory.Domain In System.DirectoryServices.ActiveDirectory.Forest.GetCurrentForest.Domains
                     Result.Add(d.Name)

@@ -36,6 +36,8 @@ Namespace CompuMaster.Data.DataQuery
             ElseIf IntPtr.Size = 8 Then
                 '64bit CLR
                 Return ClrRuntimePlatform.x64
+            Else
+                Throw New NotImplementedException("Platform lookup with IntPtr.Size " & IntPtr.Size.ToString & " not yet implemented")
             End If
         End Function
 
@@ -141,7 +143,9 @@ Namespace CompuMaster.Data.DataQuery
                 Dim ProviderTable As DataTable = CompuMaster.Data.DataTables.ConvertDataReaderToDataTable(ProviderReader)
                 Return CompuMaster.Data.DataTables.ConvertDataTableToDictionaryEntryArray(ProviderTable.Columns("SOURCES_NAME"), ProviderTable.Columns("SOURCES_DESCRIPTION"))
             Catch ex As NotImplementedException
+#Disable Warning CA1825 ' Arrayzuordnungen mit einer Länge von null vermeiden
                 Return New DictionaryEntry() {}
+#Enable Warning CA1825 ' Arrayzuordnungen mit einer Länge von null vermeiden
             End Try
         End Function
 
