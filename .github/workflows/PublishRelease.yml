@@ -60,9 +60,14 @@ jobs:
             - name: Publish binaries CompuMaster.Data
               uses: softprops/action-gh-release@v1
               with:
-                files: 
-                  "bin.zip"
-                  "bin-controls.zip"
+                files: "bin.zip"
+              env:
+                GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+            - name: Publish binaries CompuMaster.Data.Controls
+              uses: softprops/action-gh-release@v1
+              with:
+                files: "bin-controls.zip"
               env:
                 GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
