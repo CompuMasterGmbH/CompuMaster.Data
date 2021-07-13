@@ -7,8 +7,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{00C434
 		.nuget\packages.config = .nuget\packages.config
 	EndProjectSection
 EndProject
-Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "CompuMaster.Data.Controls.VS2012", "CompuMaster.Data.Controls\CompuMaster.Data.Controls.VS2012.vbproj", "{A67ADD6A-A78B-4B95-B9A4-B40A118C1813}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{266A3BE1-C77B-4330-BE4F-156C2DCB0BFE}"
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
@@ -30,20 +28,6 @@ Global
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{A67ADD6A-A78B-4B95-B9A4-B40A118C1813}.CI_CD|Any CPU.ActiveCfg = Debug|Any CPU
-		{A67ADD6A-A78B-4B95-B9A4-B40A118C1813}.CI_CD|Any CPU.Build.0 = Debug|Any CPU
-		{A67ADD6A-A78B-4B95-B9A4-B40A118C1813}.CI_CD|Any CPU.Deploy.0 = Debug|Any CPU
-		{A67ADD6A-A78B-4B95-B9A4-B40A118C1813}.CI_CD|x86.ActiveCfg = Debug|Any CPU
-		{A67ADD6A-A78B-4B95-B9A4-B40A118C1813}.CI_CD|x86.Build.0 = Debug|Any CPU
-		{A67ADD6A-A78B-4B95-B9A4-B40A118C1813}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A67ADD6A-A78B-4B95-B9A4-B40A118C1813}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A67ADD6A-A78B-4B95-B9A4-B40A118C1813}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
-		{A67ADD6A-A78B-4B95-B9A4-B40A118C1813}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{A67ADD6A-A78B-4B95-B9A4-B40A118C1813}.Debug|x86.Build.0 = Debug|Any CPU
-		{A67ADD6A-A78B-4B95-B9A4-B40A118C1813}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A67ADD6A-A78B-4B95-B9A4-B40A118C1813}.Release|Any CPU.Build.0 = Release|Any CPU
-		{A67ADD6A-A78B-4B95-B9A4-B40A118C1813}.Release|x86.ActiveCfg = Release|Any CPU
-		{A67ADD6A-A78B-4B95-B9A4-B40A118C1813}.Release|x86.Build.0 = Release|Any CPU
 		{23D43CB0-A621-416A-966A-5A0C0EEB34DB}.CI_CD|Any CPU.ActiveCfg = Debug|Any CPU
 		{23D43CB0-A621-416A-966A-5A0C0EEB34DB}.CI_CD|Any CPU.Build.0 = Debug|Any CPU
 		{23D43CB0-A621-416A-966A-5A0C0EEB34DB}.CI_CD|x86.ActiveCfg = Debug|Any CPU
