@@ -56,6 +56,7 @@ Namespace CompuMaster.Data.Windows
         ''' <remarks></remarks>
         Public Property SaveDataChangesAfterEveryRowChange As Boolean = True
 
+#Disable Warning IDE1006 ' Benennungsstile
         Private WithEvents _DataContainer As CompuMaster.Data.DataManipulationResult = Nothing
         ''' <summary>
         ''' The data container holds all necessary data for edit and upload
@@ -68,6 +69,7 @@ Namespace CompuMaster.Data.Windows
                 Return _DataContainer
             End Get
         End Property
+#Enable Warning IDE1006 ' Benennungsstile
 
         ''' <summary>
         ''' DataSource of base datagrid should not be used any more, use DataContainer or DataSourceObject property instead
@@ -106,7 +108,7 @@ Namespace CompuMaster.Data.Windows
         ''' <param name="e"></param>
         ''' <remarks></remarks>
         Private Sub DataGridView_CellEnter(ByVal sender As Object, ByVal e As System.Windows.Forms.DataGridViewCellEventArgs) Handles Me.CellEnter
-            If IsLoading = False AndAlso Not Me.DataContainer Is Nothing AndAlso Me._DataContainer.Table.Rows.Count > 0 AndAlso Not Me.SelectedCells Is Nothing AndAlso Me.SelectedCells.Count <= 1 Then
+            If IsLoading = False AndAlso Me.DataContainer IsNot Nothing AndAlso Me._DataContainer.Table.Rows.Count > 0 AndAlso Me.SelectedCells IsNot Nothing AndAlso Me.SelectedCells.Count <= 1 Then
                 Me.BeginEdit(True)
             End If
         End Sub
@@ -119,12 +121,14 @@ Namespace CompuMaster.Data.Windows
             If Me.SaveDataChangesAfterEveryRowChange Then
                 Try
                     Me.SaveDataChanges()
+#Disable Warning CA1031 ' Do not catch general exception types
                 Catch ex As Exception
-                    If Not ex.InnerException Is Nothing Then
+                    If ex.InnerException IsNot Nothing Then
                         MsgBox(ex.InnerException.Message, MsgBoxStyle.Critical)
                     Else
                         MsgBox(ex.Message, MsgBoxStyle.Critical)
                     End If
+#Enable Warning CA1031 ' Do not catch general exception types
                 End Try
             End If
         End Sub
@@ -389,11 +393,13 @@ Namespace CompuMaster.Data.Windows
             End If
         End Sub
 
+#Disable Warning IDE1006 ' Benennungsstile
         ''' <summary>
         ''' Forward DataChanged event
         ''' </summary>
         ''' <remarks></remarks>
         Private Sub _DataContainer_DataChanged() Handles _DataContainer.DataChanged
+#Enable Warning IDE1006 ' Benennungsstile
             RaiseEvent DataChanged()
         End Sub
 
@@ -413,7 +419,7 @@ Namespace CompuMaster.Data.Windows
         Protected Overrides Sub OnPaint(ByVal e As System.Windows.Forms.PaintEventArgs)
             Try
                 MyBase.OnPaint(e)
-            Catch ex As Exception
+            Catch
                 Me.Invalidate()
             End Try
         End Sub

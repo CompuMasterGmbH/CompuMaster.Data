@@ -68,13 +68,16 @@
   </ItemGroup>
 
   <ItemGroup>
+	<PackageReference Include="CompuMaster.Data.XlsEpplus" Version="3.0.2021.713" />
 	<PackageReference Include="JUnitTestLogger4GitHub" Version="1.1.1" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.9.4" />
+    <PackageReference Include="Npgsql" Version="3.1.8" />
     <PackageReference Include="NUnit" Version="3.13.1" />
     <PackageReference Include="NUnit3TestAdapter" Version="3.17.0" />
     <PackageReference Include="coverlet.collector" Version="3.0.2" />
     <PackageReference Include="System.Data.Odbc" Version="5.0.0" />
     <PackageReference Include="System.Data.OleDb" Version="5.0.0" />
+    <PackageReference Include="System.Data.SqlClient" Version="4.8.2" />
   </ItemGroup>
 
   <ItemGroup>

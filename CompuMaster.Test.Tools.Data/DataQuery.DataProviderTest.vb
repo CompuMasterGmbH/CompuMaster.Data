@@ -3,6 +3,7 @@ Imports System.Collections.Generic
 
 Namespace CompuMaster.Test.Data.DataQuery
 
+#Disable Warning CA1822 ' Member als statisch markieren
     <TestFixture(Category:="DataQueryDataProvider")> Public Class DataQueryDataProviderTest
 
         <OneTimeSetUp> Public Sub LoadSystemDataAssembly()
@@ -76,5 +77,6 @@ Namespace CompuMaster.Test.Data.DataQuery
         End Sub
 
     End Class
+#Enable Warning CA1822 ' Member als statisch markieren
 
 End Namespace

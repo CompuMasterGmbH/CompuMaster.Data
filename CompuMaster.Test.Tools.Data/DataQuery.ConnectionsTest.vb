@@ -3,6 +3,7 @@ Imports System.Data
 
 Namespace CompuMaster.Test.Data.DataQuery
 
+#Disable Warning CA1822 ' Member als statisch markieren
     <CodeAnalysis.SuppressMessage("Design", "CA1031:Do not catch general exception types", Justification:="<Ausstehend>")>
     <TestFixture(Category:="DB Connections")> Public Class ConnectionsTest
 
@@ -466,7 +467,7 @@ Namespace CompuMaster.Test.Data.DataQuery
             End If
         End Sub
 
-        Private Function MicrosoftAccessOrExcelConnectionMatrixByProviderAndAccessOrExcelFileFormatVersion_TryOpenConnectionTest(conn As IDbConnection, ByRef TestFails As Boolean) As String
+        Private Shared Function MicrosoftAccessOrExcelConnectionMatrixByProviderAndAccessOrExcelFileFormatVersion_TryOpenConnectionTest(conn As IDbConnection, ByRef TestFails As Boolean) As String
             Dim Result As String = Nothing
             If CType(conn, Object).GetType Is GetType(System.Data.OleDb.OleDbConnection) Then
                 Result = "OLEDB"
@@ -678,5 +679,6 @@ Namespace CompuMaster.Test.Data.DataQuery
 #End If
 
     End Class
+#Enable Warning CA1822 ' Member als statisch markieren
 
 End Namespace
