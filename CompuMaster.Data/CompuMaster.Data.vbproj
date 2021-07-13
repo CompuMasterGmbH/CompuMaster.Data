@@ -13,7 +13,7 @@
 	  <RepositoryUrl>https://github.com/CompuMasterGmbH/CompuMaster.Data.git</RepositoryUrl>
 	  <RepositoryType>git</RepositoryType>
 	  <PackageTags> CompuMaster Data Common Utils DataTable LDAP CSV Text File SqlServer SqlClient MySql PostgreSQL Npgsql AnyIDataProvider DatabaseManagement DataManipulation </PackageTags>
-	  <Configurations>Debug;Release</Configurations>
+	  <Configurations>Debug;Release;CI_CD</Configurations>
   </PropertyGroup>
 <PropertyGroup>
 	<Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -29,6 +29,14 @@
 	<DefineTrace>true</DefineTrace>
 	<OutputPath>bin\Debug\</OutputPath>
 	<NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='CI_CD|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <DefineDebug>true</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <OutputPath>bin\CI_CD\</OutputPath>
+    <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
 	<DebugType>pdbonly</DebugType>
