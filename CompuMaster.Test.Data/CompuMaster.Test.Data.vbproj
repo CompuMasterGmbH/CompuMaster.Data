@@ -1,0 +1,82 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+	<TargetFrameworks>netcoreapp3.1;net5.0</TargetFrameworks>
+
+    <IsPackable>false</IsPackable>
+
+    <RootNamespace />
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Content Include="testfiles\3000RowsTable.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="testfiles\country-codes.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="testfiles\dataset-multitable.xml" />
+    <Content Include="testfiles\Q&amp;A.xls">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="testfiles\Q&amp;A.xlsx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="testfiles\sql-server-export.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="testfiles\test_for_lastcell_e12aka2007.xlsb">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="testfiles\test_for_lastcell_e12aka2007.xlsm">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="testfiles\test_for_lastcell_e12aka2007.xlsx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="testfiles\test_for_lastcell_e50aka95.xls">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="testfiles\test_for_lastcell_e70aka97-2003.xls">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="testfiles\test_for_msaccess.accdb">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="testfiles\test_for_msaccess.mdb">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="testfiles\test_for_msaccess_2000.mdb">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="testfiles\test_for_msaccess_2002-2003.mdb">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="testfiles\test_linebreak_crlf_cellbreak_crlf.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+	<PackageReference Include="JUnitTestLogger4GitHub" Version="1.1.1" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.9.4" />
+    <PackageReference Include="NUnit" Version="3.13.1" />
+    <PackageReference Include="NUnit3TestAdapter" Version="3.17.0" />
+    <PackageReference Include="coverlet.collector" Version="3.0.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\CompuMaster.Data\CompuMaster.Data.vbproj" />
+    <ProjectReference Include="..\CompuMaster.Test.TinyWebServerAdvanced\CompuMaster.Test.TinyWebServerAdvanced.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="DataTablesTest.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="LdapTest.vb">
+      <SubType>Code</SubType>
+    </Compile>
+  </ItemGroup>
+
+</Project>

@@ -6,7 +6,7 @@
   <PropertyGroup>
 	<Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
 	<Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-	<ProjectGuid>{23D43CB0-A621-416A-966A-5A0C0EEB34DB}</ProjectGuid>
+	<ProjectGuid>{FF4D55AE-133C-4C65-B612-2CE21285F949}</ProjectGuid>
 	<FileAlignment>512</FileAlignment>
 	<MyType>Empty</MyType>
   </PropertyGroup>
@@ -40,7 +40,7 @@
 	<NoWarn>CA1416</NoWarn>
   </PropertyGroup>
   <ItemGroup>
-	<Compile Update="AssemblyInfo.cs" >
+	<Compile Update="AssemblyInfo.cs">
 		<SubType>Code</SubType>
 	</Compile>
   </ItemGroup>
