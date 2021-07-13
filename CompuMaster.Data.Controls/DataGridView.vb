@@ -66,7 +66,7 @@ Namespace CompuMaster.Data.Windows
         ''' <remarks></remarks>
         Public ReadOnly Property DataContainer As CompuMaster.Data.DataManipulationResult
             Get
-                Return _DataContainer
+                Return Me._DataContainer
             End Get
         End Property
 #Enable Warning IDE1006 ' Benennungsstile
@@ -140,8 +140,10 @@ Namespace CompuMaster.Data.Windows
         Public Sub LoadData()
             Try
                 Me.LoadData(True)
+#Disable Warning CA1031 ' Do not catch general exception types
             Catch ex As Exception
                 System.Windows.Forms.MessageBox.Show(ex.Message, "Error loading data", System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Error)
+#Enable Warning CA1031 ' Do not catch general exception types
             End Try
         End Sub
 
@@ -419,8 +421,10 @@ Namespace CompuMaster.Data.Windows
         Protected Overrides Sub OnPaint(ByVal e As System.Windows.Forms.PaintEventArgs)
             Try
                 MyBase.OnPaint(e)
+#Disable Warning CA1031 ' Do not catch general exception types
             Catch
                 Me.Invalidate()
+#Enable Warning CA1031 ' Do not catch general exception types
             End Try
         End Sub
 
