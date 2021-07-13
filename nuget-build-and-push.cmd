@@ -1,4 +1,0 @@
-::REM -UpdateNuGetExecutable not required since it's updated by VS.NET mechanisms
-PowerShell -NoProfile -ExecutionPolicy Bypass -Command "& 'CompuMaster.Data\_CreateNewNuGetPackage\DoNotModify\New-NuGetPackage.ps1' -ProjectFilePath '.\CompuMaster.Data\CompuMaster.Data.VS2012.vbproj' -verbose -NoPrompt -PushPackageToNuGetGallery"
-PowerShell -NoProfile -ExecutionPolicy Bypass -Command "& 'CompuMaster.Data.Controls\_CreateNewNuGetPackage\DoNotModify\New-NuGetPackage.ps1' -ProjectFilePath '.\CompuMaster.Data.Controls\CompuMaster.Data.Controls.VS2012.vbproj' -verbose -NoPrompt -PushPackageToNuGetGallery"
-pause

@@ -1,8 +1,12 @@
-Option Explicit On 
+Option Explicit On
 Option Strict On
 
-Namespace CompuMaster.Data
+Imports System.Data
+Imports CompuMaster.Data.Utils
+Imports CompuMaster.Data.Information
+Imports CompuMaster.Data.Strings
 
+Namespace CompuMaster.Data
     ''' <summary>
     '''     Common DataTable operations
     ''' </summary>
@@ -10,6 +14,29 @@ Namespace CompuMaster.Data
     ''' </remarks>
     <CodeAnalysis.SuppressMessage("Major Code Smell", "S3385:""Exit"" statements should not be used", Justification:="<Ausstehend>")>
     Public NotInheritable Class DataTables
+
+        'Not supported @ .NET Standard 2.0
+        '''' <summary>
+        ''''     Convert the first two columns into objects which can be consumed by the ListControl objects in the System.Web.WebControls namespaces
+        '''' </summary>
+        '''' <param name="datatable">The datatable which contains a key column and a value column for the list control</param>
+        '''' <returns>An array of System.Web.UI.WebControls.ListItem for consumption in many list controls of the System.Web namespace</returns>
+        'Public Shared Function ConvertDataTableToWebFormsListItem(ByVal datatable As DataTable) As System.Web.UI.WebControls.ListItem()
+        '    Dim Result As System.Web.UI.WebControls.ListItem() = Nothing
+        '    Dim Source As CompuMaster.Data.DataTablesTools.ListControlItem()
+        '    Source = CompuMaster.Data.DataTablesTools.ConvertDataTableToListControlItem(datatable)
+        '    If Source.Length > 0 Then
+        '        ReDim Result(Source.Length - 1)
+        '        For MyCounter As Integer = 0 To Source.Length - 1
+        '            Dim NewValue As New System.Web.UI.WebControls.ListItem With {
+        '                .Value = CType(Source(MyCounter).Key, String),
+        '                .Text = CType(Source(MyCounter).Value, String)
+        '            }
+        '            Result(MyCounter) = NewValue
+        '        Next
+        '    End If
+        '    Return Result
+        'End Function
 
         ''' <summary>
         ''' Remove rows from a table which don't match with a given range of values in a defined column
@@ -400,28 +427,6 @@ Namespace CompuMaster.Data
                     Dim NewValue As New WinFormsListControlItem With {
                         .Key = Source(MyCounter).Key,
                         .Value = Source(MyCounter).Value
-                    }
-                    Result(MyCounter) = NewValue
-                Next
-            End If
-            Return Result
-        End Function
-
-        ''' <summary>
-        '''     Convert the first two columns into objects which can be consumed by the ListControl objects in the System.Web.WebControls namespaces
-        ''' </summary>
-        ''' <param name="datatable">The datatable which contains a key column and a value column for the list control</param>
-        ''' <returns>An array of System.Web.UI.WebControls.ListItem for consumption in many list controls of the System.Web namespace</returns>
-        Public Shared Function ConvertDataTableToWebFormsListItem(ByVal datatable As DataTable) As System.Web.UI.WebControls.ListItem()
-            Dim Result As System.Web.UI.WebControls.ListItem() = Nothing
-            Dim Source As CompuMaster.Data.DataTablesTools.ListControlItem()
-            Source = CompuMaster.Data.DataTablesTools.ConvertDataTableToListControlItem(datatable)
-            If Source.Length > 0 Then
-                ReDim Result(Source.Length - 1)
-                For MyCounter As Integer = 0 To Source.Length - 1
-                    Dim NewValue As New System.Web.UI.WebControls.ListItem With {
-                        .Value = CType(Source(MyCounter).Key, String),
-                        .Text = CType(Source(MyCounter).Value, String)
                     }
                     Result(MyCounter) = NewValue
                 Next

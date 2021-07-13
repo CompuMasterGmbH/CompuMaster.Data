@@ -1,5 +1,8 @@
-Option Explicit On 
+﻿Option Explicit On 
 Option Strict On
+
+Imports System.Data
+Imports CompuMaster.Data.Strings
 
 Namespace CompuMaster.Data
 
@@ -249,7 +252,9 @@ Namespace CompuMaster.Data
         ''' <remarks></remarks>
         Private Shared Function CreateTableCommandText(ByVal tableName As String, ByVal primaryColumnName As String, ByVal ddlLanguage As DdlLanguage) As String
             Dim OpenBrackets, CloseBrackets As String
+#Disable Warning CA2249 ' Erwägen Sie die Verwendung von "string.Contains" anstelle von "string.IndexOf"
             If tableName.IndexOf("[") >= 0 AndAlso tableName.IndexOf("]") >= 0 Then
+#Enable Warning CA2249 ' Erwägen Sie die Verwendung von "string.Contains" anstelle von "string.IndexOf"
                 'table name already in a well-formed syntax, e.g. "dbo.[Test - 123]"
                 OpenBrackets = Nothing
                 CloseBrackets = Nothing
@@ -310,7 +315,9 @@ Namespace CompuMaster.Data
         <CodeAnalysis.SuppressMessage("Minor Code Smell", "S1643:Strings should not be concatenated using ""+"" or ""&"" in a loop", Justification:="<Ausstehend>")>
         Public Shared Function AddMissingColumnsCommandText(ByVal sourceTable As DataTable, ByVal destinationTable As DataTable, remoteTableName As String, ByVal ddlLanguage As DdlLanguage) As String
             Dim OpenBrackets, CloseBrackets As String
+#Disable Warning CA2249 ' Erwägen Sie die Verwendung von "string.Contains" anstelle von "string.IndexOf"
             If remoteTableName.IndexOf("[") >= 0 AndAlso remoteTableName.IndexOf("]") >= 0 Then
+#Enable Warning CA2249 ' Erwägen Sie die Verwendung von "string.Contains" anstelle von "string.IndexOf"
                 'table name already in a well-formed syntax, e.g. "dbo.[Test - 123]"
                 OpenBrackets = Nothing
                 CloseBrackets = Nothing
@@ -366,7 +373,7 @@ Namespace CompuMaster.Data
                                 Case Else
                                     Throw New NotSupportedException("Data type """ & MyColumn.DataType.Name & """ for column """ & MyColumn.ColumnName & """ not supported for auto-adding in database")
                             End Select
-                            ColumnCreationArguments &= " NULL" & vbNewLine
+                            ColumnCreationArguments &= " NULL" & ControlChars.CrLf
                         End If
                     Next
                     If ColumnCreationArguments <> Nothing Then ColumnCreationArguments = "ALTER TABLE " & TableOpenBrackets & remoteTableName & TableCloseBrackets & " ADD COLUMN " & ColumnCreationArguments
@@ -402,7 +409,7 @@ Namespace CompuMaster.Data
                                 Case Else
                                     Throw New NotSupportedException("Data type """ & MyColumn.DataType.Name & """ for column """ & MyColumn.ColumnName & """ not supported for auto-adding in database")
                             End Select
-                            ColumnCreationArguments &= " NULL" & vbNewLine
+                            ColumnCreationArguments &= " NULL" & ControlChars.CrLf
                         End If
                     Next
                     If ColumnCreationArguments <> Nothing Then ColumnCreationArguments = "ALTER TABLE " & OpenBrackets & remoteTableName & CloseBrackets & " ADD " & ColumnCreationArguments
@@ -435,7 +442,7 @@ Namespace CompuMaster.Data
                                 Case Else
                                     Throw New NotSupportedException("Data type """ & MyColumn.DataType.Name & """ for column """ & MyColumn.ColumnName & """ not supported for auto-adding in database")
                             End Select
-                            ColumnCreationArguments &= " NULL" & vbNewLine
+                            ColumnCreationArguments &= " NULL" & ControlChars.CrLf
                         End If
                     Next
                     If ColumnCreationArguments <> Nothing Then ColumnCreationArguments = "ALTER TABLE " & OpenBrackets & remoteTableName & CloseBrackets & " ADD " & ColumnCreationArguments
@@ -479,7 +486,9 @@ Namespace CompuMaster.Data
         ''' <remarks></remarks>
         Public Shared Function LoadTableDataForManipulationViaCode(ByVal dataConnection As IDbConnection, ByVal tableName As String, ByVal commandTimeout As Integer, isSafeTableName As Boolean) As CompuMaster.Data.DataManipulationResult
             Dim OpenBrackets, CloseBrackets As String
+#Disable Warning CA2249 ' Erwägen Sie die Verwendung von "string.Contains" anstelle von "string.IndexOf"
             If tableName.IndexOf("[") >= 0 AndAlso tableName.IndexOf("]") >= 0 Then
+#Enable Warning CA2249 ' Erwägen Sie die Verwendung von "string.Contains" anstelle von "string.IndexOf"
                 'table name already in a well-formed syntax, e.g. "dbo.[Test - 123]"
                 OpenBrackets = Nothing
                 CloseBrackets = Nothing
@@ -825,7 +834,9 @@ Namespace CompuMaster.Data
         ''' <remarks></remarks>
         Private Shared Function LoadTableStructureWith1RowFromConnection(ByVal tableName As String, ByVal dataConnection As IDbConnection, ByVal ignoreExceptions As Boolean) As DataTable
             Dim OpenBrackets, CloseBrackets As String
+#Disable Warning CA2249 ' Erwägen Sie die Verwendung von "string.Contains" anstelle von "string.IndexOf"
             If tableName.IndexOf("[") >= 0 AndAlso tableName.IndexOf("]") >= 0 Then
+#Enable Warning CA2249 ' Erwägen Sie die Verwendung von "string.Contains" anstelle von "string.IndexOf"
                 'table name already in a well-formed syntax, e.g. "dbo.[Test - 123]"
                 OpenBrackets = Nothing
                 CloseBrackets = Nothing

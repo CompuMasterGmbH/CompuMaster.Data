@@ -1,6 +1,9 @@
 Option Explicit On 
 Option Strict On
 
+Imports System.Data
+Imports CompuMaster.Data.Information
+
 Namespace CompuMaster.Data
 
     ''' <summary>

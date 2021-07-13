@@ -1,4 +1,5 @@
 Imports NUnit.Framework
+Imports System.Data
 
 Namespace CompuMaster.Test.Data
 
@@ -10,7 +11,7 @@ Namespace CompuMaster.Test.Data
         End Sub
 
         <Test()> Public Sub CurrentDomains()
-            Console.WriteLine("Domains in current forest:" & vbNewLine & Strings.Join(CompuMaster.Data.Ldap.GetDomains, vbNewLine))
+            Console.WriteLine("Domains in current forest:" & ControlChars.CrLf & Strings.Join(CompuMaster.Data.Ldap.GetDomains, ControlChars.CrLf))
         End Sub
 
         <Test()> Public Sub Query()
@@ -48,7 +49,7 @@ Namespace CompuMaster.Test.Data
             Assert.AreEqual(False, IsStringWithA2ZOnly("akbküDED"))
         End Sub
 
-        Private Function IsStringWithA2ZOnly(value As String) As Boolean
+        Private Shared Function IsStringWithA2ZOnly(value As String) As Boolean
             Dim pattern As String = "^[a-zA-Z]+$"
             Dim reg As New System.Text.RegularExpressions.Regex(pattern)
             Return reg.IsMatch(value)

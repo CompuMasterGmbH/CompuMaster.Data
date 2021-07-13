@@ -1,6 +1,8 @@
 ﻿Option Explicit On
 Option Strict On
 
+Imports CompuMaster.Data.Information
+
 Namespace CompuMaster.Data
 
     Public Class TextCell

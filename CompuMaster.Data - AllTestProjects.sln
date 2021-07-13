@@ -2,7 +2,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30717.126
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "CompuMaster.Data.VS2012", "CompuMaster.Data\CompuMaster.Data.VS2012.vbproj", "{3BDA1292-0D02-452E-9518-18496AB59231}"
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "CompuMaster.Data", "CompuMaster.Data\CompuMaster.Data.vbproj", "{3BDA1292-0D02-452E-9518-18496AB59231}"
 EndProject
 Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "CompuMaster.Test.Data.VS2012", "CompuMaster.Test.Tools.Data\CompuMaster.Test.Data.VS2012.vbproj", "{C050535C-CAE0-40E3-8C35-73C6C5702F4A}"
 EndProject

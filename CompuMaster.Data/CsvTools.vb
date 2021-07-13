@@ -2,6 +2,8 @@ Option Explicit On
 Option Strict On
 
 Imports System.IO
+Imports System.Data
+Imports CompuMaster.Data.Strings
 
 Namespace CompuMaster.Data
 

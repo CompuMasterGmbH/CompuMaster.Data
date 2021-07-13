@@ -1,7 +1,9 @@
 Imports NUnit.Framework
+Imports System.Data
 
 Namespace CompuMaster.Test.Data.DataQuery
 
+#Disable Warning CA1822 ' Member als statisch markieren
     <CodeAnalysis.SuppressMessage("Design", "CA1031:Do not catch general exception types", Justification:="<Ausstehend>")>
     <TestFixture(Category:="DB Connections")> Public Class ConnectionsTest
 
@@ -465,7 +467,7 @@ Namespace CompuMaster.Test.Data.DataQuery
             End If
         End Sub
 
-        Private Function MicrosoftAccessOrExcelConnectionMatrixByProviderAndAccessOrExcelFileFormatVersion_TryOpenConnectionTest(conn As IDbConnection, ByRef TestFails As Boolean) As String
+        Private Shared Function MicrosoftAccessOrExcelConnectionMatrixByProviderAndAccessOrExcelFileFormatVersion_TryOpenConnectionTest(conn As IDbConnection, ByRef TestFails As Boolean) As String
             Dim Result As String = Nothing
             If CType(conn, Object).GetType Is GetType(System.Data.OleDb.OleDbConnection) Then
                 Result = "OLEDB"
@@ -581,45 +583,45 @@ Namespace CompuMaster.Test.Data.DataQuery
             End If
         End Sub
 
-        <Test()> Public Sub MicrosoftAccessConnection_MediumTrust()
-            'Permission required to read the providers application name And access config
-            Dim permissions As New System.Security.PermissionSet(System.Security.Permissions.PermissionState.None)
-            permissions.AddPermission(New System.Web.AspNetHostingPermission(System.Web.AspNetHostingPermissionLevel.Minimal))
-            permissions.AddPermission(New System.Security.Permissions.FileIOPermission(System.Security.Permissions.PermissionState.Unrestricted))
-            permissions.Assert()
+        '<Test()> Public Sub MicrosoftAccessConnection_MediumTrust()
+        '    'Permission required to read the providers application name And access config
+        '    Dim permissions As New System.Security.PermissionSet(System.Security.Permissions.PermissionState.None)
+        '    permissions.AddPermission(New System.Web.AspNetHostingPermission(System.Web.AspNetHostingPermissionLevel.Minimal))
+        '    permissions.AddPermission(New System.Security.Permissions.FileIOPermission(System.Security.Permissions.PermissionState.Unrestricted))
+        '    permissions.Assert()
 
-            Console.WriteLine("Current trust level for code security: " & GetCurrentTrustLevel.ToString)
-            Console.WriteLine("Current trust level for app domain security: IsUnrestricted=" & AppDomain.CurrentDomain.ApplicationTrust.DefaultGrantSet.PermissionSet.IsUnrestricted())
-            If (System.Web.AspNetHostingPermissionLevel.Medium <> GetCurrentTrustLevel()) Then
-                Assert.Ignore("Code access security trust level must be set to medium trust for this test")
-            End If
-            MicrosoftAccessConnection()
+        '    Console.WriteLine("Current trust level for code security: " & GetCurrentTrustLevel.ToString)
+        '    Console.WriteLine("Current trust level for app domain security: IsUnrestricted=" & AppDomain.CurrentDomain.ApplicationTrust.DefaultGrantSet.PermissionSet.IsUnrestricted())
+        '    If (System.Web.AspNetHostingPermissionLevel.Medium <> GetCurrentTrustLevel()) Then
+        '        Assert.Ignore("Code access security trust level must be set to medium trust for this test")
+        '    End If
+        '    MicrosoftAccessConnection()
 
-            System.Security.PermissionSet.RevertAssert()
+        '    System.Security.PermissionSet.RevertAssert()
 
-        End Sub
+        'End Sub
 
-        Private Function GetCurrentTrustLevel() As System.Web.AspNetHostingPermissionLevel
-            Dim CheckTrustLevels As System.Web.AspNetHostingPermissionLevel()
-            CheckTrustLevels = New System.Web.AspNetHostingPermissionLevel() {
-                    System.Web.AspNetHostingPermissionLevel.Unrestricted,
-                    System.Web.AspNetHostingPermissionLevel.High,
-                    System.Web.AspNetHostingPermissionLevel.Medium,
-                    System.Web.AspNetHostingPermissionLevel.Low,
-                    System.Web.AspNetHostingPermissionLevel.Minimal
-                }
-            For Each trustLevel As System.Web.AspNetHostingPermissionLevel In CheckTrustLevels
-                Try
-                    Dim TestPermissionLevel As System.Web.AspNetHostingPermission = New System.Web.AspNetHostingPermission(trustLevel)
-                    TestPermissionLevel.Demand()
-                Catch ex As System.Security.SecurityException
-                    Continue For
-                End Try
-                Return trustLevel
-            Next
+        'Private Function GetCurrentTrustLevel() As System.Web.AspNetHostingPermissionLevel
+        '    Dim CheckTrustLevels As System.Web.AspNetHostingPermissionLevel()
+        '    CheckTrustLevels = New System.Web.AspNetHostingPermissionLevel() {
+        '            System.Web.AspNetHostingPermissionLevel.Unrestricted,
+        '            System.Web.AspNetHostingPermissionLevel.High,
+        '            System.Web.AspNetHostingPermissionLevel.Medium,
+        '            System.Web.AspNetHostingPermissionLevel.Low,
+        '            System.Web.AspNetHostingPermissionLevel.Minimal
+        '        }
+        '    For Each trustLevel As System.Web.AspNetHostingPermissionLevel In CheckTrustLevels
+        '        Try
+        '            Dim TestPermissionLevel As System.Web.AspNetHostingPermission = New System.Web.AspNetHostingPermission(trustLevel)
+        '            TestPermissionLevel.Demand()
+        '        Catch ex As System.Security.SecurityException
+        '            Continue For
+        '        End Try
+        '        Return trustLevel
+        '    Next
 
-            Return System.Web.AspNetHostingPermissionLevel.None
-        End Function
+        '    Return System.Web.AspNetHostingPermissionLevel.None
+        'End Function
 
         <Test()> Public Sub MicrosoftAccessConnection()
             If CompuMaster.Data.DataQuery.PlatformTools.ProbeOleDbProvider("Microsoft.ACE.OLEDB.") = False AndAlso CompuMaster.Data.DataQuery.PlatformTools.ProbeOleDbProvider("Microsoft.Jet.OLEDB.") = False Then
@@ -677,5 +679,6 @@ Namespace CompuMaster.Test.Data.DataQuery
 #End If
 
     End Class
+#Enable Warning CA1822 ' Member als statisch markieren
 
 End Namespace

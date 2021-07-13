@@ -1,7 +1,9 @@
 Imports NUnit.Framework
+Imports System.Data
 
 Namespace CompuMaster.Test.Data
 
+#Disable Warning CA1822 ' Member als statisch markieren
     <TestFixture(Category:="DataTables")> Public Class DataTablesTest
 
 #Region "TestComparisons"
@@ -450,7 +452,7 @@ Namespace CompuMaster.Test.Data
                 For Each keyName As String In dict.Keys
                     If Result.Length <> 0 Then Result.AppendLine()
                     Result.Append(keyName)
-                    Result.Append(":")
+                    Result.Append(":"c)
                     Result.Append(dict(keyName))
                 Next
                 Return Result.ToString
@@ -2207,5 +2209,6 @@ Namespace CompuMaster.Test.Data
         End Sub
 
     End Class
+#Enable Warning CA1822 ' Member als statisch markieren
 
 End Namespace

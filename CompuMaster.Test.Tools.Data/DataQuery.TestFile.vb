@@ -5,7 +5,7 @@ Namespace CompuMaster.Test.Data.DataQuery
 
     <TestFixture(Category:="DataQueryTestFile")> Public Class DataQueryTestFile
 
-        Private Sub CreateAndDispose(ByVal testFileType As CompuMaster.Data.DataQuery.TestFile.TestFileType)
+        Private Shared Sub CreateAndDispose(ByVal testFileType As CompuMaster.Data.DataQuery.TestFile.TestFileType)
             Dim testFile As New CompuMaster.Data.DataQuery.TestFile(testFileType)
             Assert.IsTrue(System.IO.File.Exists(testFile.FilePath), "File exists")
             Dim filepath As String = testFile.FilePath
@@ -19,8 +19,19 @@ Namespace CompuMaster.Test.Data.DataQuery
             End Using
             Assert.IsFalse(System.IO.File.Exists(cachedPath), "File was deleted")
         End Sub
+
         <Test> Public Sub CreateAndDisposeMsAccess()
+#Disable Warning BC40000 ' Typ oder Element ist veraltet
             CreateAndDispose(CompuMaster.Data.DataQuery.TestFile.TestFileType.MsAccess)
+#Enable Warning BC40000 ' Typ oder Element ist veraltet
+        End Sub
+
+        <Test> Public Sub CreateAndDisposeMsAccessAccdb()
+            CreateAndDispose(CompuMaster.Data.DataQuery.TestFile.TestFileType.MsAccessAccdb)
+        End Sub
+
+        <Test> Public Sub CreateAndDisposeMsAccessMdb()
+            CreateAndDispose(CompuMaster.Data.DataQuery.TestFile.TestFileType.MsAccessMdb)
         End Sub
 
         <Test> Public Sub CreateAndDisposeMsExcel95Xls()

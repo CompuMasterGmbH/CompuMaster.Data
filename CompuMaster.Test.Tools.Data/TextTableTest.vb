@@ -2,9 +2,11 @@
 Option Strict On
 
 Imports NUnit.Framework
+Imports System.Data
 
 Namespace CompuMaster.Test.Data
 
+#Disable Warning CA1822 ' Member als statisch markieren
     <TestFixture(Category:="TextTables")> Public Class TextTableTest
 
         <Test> Public Sub CreateFromDataTable()
@@ -268,5 +270,6 @@ Namespace CompuMaster.Test.Data
 #End Region
 
     End Class
+#Enable Warning CA1822 ' Member als statisch markieren
 
 End Namespace

@@ -4,6 +4,10 @@ Namespace CompuMaster.Test.Data
 
     <TestFixture(Category:="Common Utils")> Public Class UtilsTest
 
+        <Test> Public Sub TripleState()
+            Assert.AreEqual(CompuMaster.Data.Utils.TripleState.Undefined, CType(Nothing, CompuMaster.Data.Utils.TripleState))
+        End Sub
+
         <Test> Public Sub NoDbNull()
             'Object type
             Assert.AreEqual(Me, CompuMaster.Data.Utils.NoDBNull(Me))

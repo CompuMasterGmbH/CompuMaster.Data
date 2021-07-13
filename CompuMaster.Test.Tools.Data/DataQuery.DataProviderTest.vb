@@ -3,6 +3,7 @@ Imports System.Collections.Generic
 
 Namespace CompuMaster.Test.Data.DataQuery
 
+#Disable Warning CA1822 ' Member als statisch markieren
     <TestFixture(Category:="DataQueryDataProvider")> Public Class DataQueryDataProviderTest
 
         <OneTimeSetUp> Public Sub LoadSystemDataAssembly()
@@ -20,7 +21,7 @@ Namespace CompuMaster.Test.Data.DataQuery
         Private Function ListOfAssemblies(asms As Reflection.Assembly()) As String
             Dim Result As String = ""
             For MyCounter As Integer = 0 To asms.Length - 1
-                Result &= asms(MyCounter).FullName & vbNewLine
+                Result &= asms(MyCounter).FullName & ControlChars.CrLf
             Next
             Return Result
         End Function
@@ -76,5 +77,6 @@ Namespace CompuMaster.Test.Data.DataQuery
         End Sub
 
     End Class
+#Enable Warning CA1822 ' Member als statisch markieren
 
 End Namespace

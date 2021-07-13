@@ -1,29 +1,36 @@
 Option Explicit On
 Option Strict On
 
+Imports System.Data
+Imports CompuMaster.Data.Information
+
 Namespace CompuMaster.Data.DataQuery
 
+#Disable Warning CA2237 ' Mark ISerializable types with serializable
+#Disable Warning CA1032 ' Implement standard exception constructors
     ''' <summary>
     '''     Data execution exceptions with details on the executed IDbCommand
     ''' </summary>
     Public Class DataException
+#Enable Warning CA1032 ' Implement standard exception constructors
+#Enable Warning CA2237 ' Mark ISerializable types with serializable
         Inherits System.Exception
 
-        Private _commandText As String
-        Private _command As IDbCommand
+        Private ReadOnly _commandText As String
+        Private ReadOnly _command As IDbCommand
 
         Friend Sub New(ByVal command As IDbCommand, ByVal innerException As Exception)
             MyBase.New("Data layer exception", innerException)
             _command = command
-            If Not _command Is Nothing Then
-                _commandText = "ConnectionString (without sensitive data): " & Utils.ConnectionStringWithoutPasswords(command.Connection.ConnectionString) & vbNewLine
-                _commandText = "CommandType: " & command.CommandType.ToString & vbNewLine
-                _commandText &= "CommandText:" & vbNewLine & command.CommandText
-                _commandText &= vbNewLine & vbNewLine
+            If _command IsNot Nothing Then
+                _commandText = "ConnectionString (without sensitive data): " & Utils.ConnectionStringWithoutPasswords(command.Connection.ConnectionString) & ControlChars.CrLf
+                _commandText = "CommandType: " & command.CommandType.ToString & ControlChars.CrLf
+                _commandText &= "CommandText:" & ControlChars.CrLf & command.CommandText
+                _commandText &= ControlChars.CrLf & ControlChars.CrLf
                 If command.Parameters.Count > 0 Then
-                    _commandText &= "Parameters:" & vbNewLine & ConvertParameterCollectionToString(command.Parameters) & vbNewLine
+                    _commandText &= "Parameters:" & ControlChars.CrLf & ConvertParameterCollectionToString(command.Parameters) & ControlChars.CrLf
                 Else
-                    _commandText &= "Parameters:" & vbNewLine & "The parameters collection is empty" & vbNewLine
+                    _commandText &= "Parameters:" & ControlChars.CrLf & "The parameters collection is empty" & ControlChars.CrLf
                 End If
             End If
         End Sub
@@ -33,7 +40,7 @@ Namespace CompuMaster.Data.DataQuery
         ''' </summary>
         ''' <param name="parameters">An IDataParameterCollection of a IDbCommand</param>
         ''' <returns></returns>
-        Private Function ConvertParameterCollectionToString(ByVal parameters As System.Data.IDataParameterCollection) As String
+        Private Shared Function ConvertParameterCollectionToString(ByVal parameters As System.Data.IDataParameterCollection) As String
             Dim Result As String = Nothing
             For MyCounter As Integer = 0 To parameters.Count - 1
                 Result &= "Parameter " & MyCounter & ": "
@@ -53,7 +60,7 @@ Namespace CompuMaster.Data.DataQuery
                 Catch
                     Result &= "{" & parameters(MyCounter).GetType.ToString & "}"
                 End Try
-                Result &= vbNewLine
+                Result &= ControlChars.CrLf
             Next
             Return Result
         End Function
@@ -71,7 +78,7 @@ Namespace CompuMaster.Data.DataQuery
         ''' <remarks>
         ''' </remarks>
         Public Overrides Function ToString() As String
-            Return MyBase.ToString & vbNewLine & vbNewLine & _commandText
+            Return MyBase.ToString & ControlChars.CrLf & ControlChars.CrLf & _commandText
         End Function
 
         ''' <summary>
