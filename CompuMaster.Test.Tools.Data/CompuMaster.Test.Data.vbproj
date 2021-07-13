@@ -8,6 +8,14 @@
     <RootNamespace />
 
     <AssemblyName>CompuMaster.Test.Tools.Data</AssemblyName>
+
+    <Version>3.0.2021.0713</Version>
+
+    <Authors>Jochen Wezel</Authors>
+
+    <Company>CompuMaster GmbH</Company>
+
+    <Product>CompuMaster.Data</Product>
   </PropertyGroup>
 
   <ItemGroup>
