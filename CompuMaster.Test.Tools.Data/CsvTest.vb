@@ -3,6 +3,7 @@ Imports System.Data
 
 Namespace CompuMaster.Test.Data
 
+#Disable Warning CA1822 ' Member als statisch markieren
     <TestFixture(Category:="CSV")> Public Class CsvTest
         Public Sub New()
         End Sub
@@ -74,7 +75,7 @@ Namespace CompuMaster.Test.Data
         ''' <returns></returns>
         <CodeAnalysis.SuppressMessage("Major Code Smell", "S1172:Unused procedure parameters should be removed", Justification:="<Ausstehend>")>
         Private Shared Function ReadDataTableLocalhostTestWebserver(handler As System.Net.HttpListenerRequest) As String
-            Return "Test,Column" & vbNewLine & "1,äöüßÄÖÜ2"
+            Return "Test,Column" & ControlChars.CrLf & "1,äöüßÄÖÜ2"
         End Function
 
         <Test()> Public Sub ReadDataTableFromCsvStringSeparatorSeparatedMustFailsBecauseOfWrongCulture(<Values("en-US", "en-GB", "ja-JP")> cultureContext As String)
@@ -83,8 +84,8 @@ Namespace CompuMaster.Test.Data
             Dim testinputdata As String
             Dim testoutputdata As DataTable
 
-            testinputdata = "ID;""Description"";DateValue" & vbNewLine &
-                "5;""line1 ü content"";2005-08-29" & vbNewLine &
+            testinputdata = "ID;""Description"";DateValue" & ControlChars.CrLf &
+                "5;""line1 ü content"";2005-08-29" & ControlChars.CrLf &
                 ";""line 2 """" content"";""2005-08-27"""
             testoutputdata = CompuMaster.Data.Csv.ReadDataTableFromCsvString(testinputdata, True, System.Threading.Thread.CurrentThread.CurrentCulture)
             'Throw New Exception(CompuMaster.Data.DataTables.ConvertToPlainTextTable(testoutputdata))
@@ -161,8 +162,8 @@ Namespace CompuMaster.Test.Data
             Dim testinputdata As String
             Dim testoutputdata As DataTable
 
-            testinputdata = "ID;""Description"";DateValue" & vbNewLine &
-                "5;""line1 ü content"";2005-08-29" & vbNewLine &
+            testinputdata = "ID;""Description"";DateValue" & ControlChars.CrLf &
+                "5;""line1 ü content"";2005-08-29" & ControlChars.CrLf &
                 ";""line 2 """" content"";""2005-08-27"""
             testoutputdata = CompuMaster.Data.Csv.ReadDataTableFromCsvString(testinputdata, True, System.Globalization.CultureInfo.CreateSpecificCulture("de-DE"))
             'Throw New Exception(CompuMaster.Data.DataTables.ConvertToPlainTextTable(testoutputdata))
@@ -178,9 +179,9 @@ Namespace CompuMaster.Test.Data
             NUnit.Framework.Assert.AreEqual("line 2 "" content", testoutputdata.Rows(1)(1), "JW #109")
             NUnit.Framework.Assert.AreEqual("2005-08-27", testoutputdata.Rows(1)(2), "JW #110")
 
-            testinputdata = "ID;""Description"";DateValue" & vbNewLine &
+            testinputdata = "ID;""Description"";DateValue" & ControlChars.CrLf &
                 "5;""line1 ü content"";2005-08-29" & ControlChars.Lf &
-                ";""line 2 " & ControlChars.Lf & "newline content"";""2005-08-27"";" & vbNewLine
+                ";""line 2 " & ControlChars.Lf & "newline content"";""2005-08-27"";" & ControlChars.CrLf
             testoutputdata = CompuMaster.Data.Csv.ReadDataTableFromCsvString(testinputdata, True, System.Globalization.CultureInfo.CreateSpecificCulture("de-DE"))
             NUnit.Framework.Assert.AreEqual(4, testoutputdata.Columns.Count, "JW #200")
             NUnit.Framework.Assert.AreEqual(2, testoutputdata.Rows.Count, "JW #201")
@@ -196,8 +197,8 @@ Namespace CompuMaster.Test.Data
             NUnit.Framework.Assert.AreEqual("2005-08-27", testoutputdata.Rows(1)(2), "JW #210")
             NUnit.Framework.Assert.AreEqual("", testoutputdata.Rows(1)(3), "JW #211")
 
-            testinputdata = "ID,""Description"",DateValue" & vbNewLine &
-                "5,""line1 ü content"",2005-08-29" & vbNewLine &
+            testinputdata = "ID,""Description"",DateValue" & ControlChars.CrLf &
+                "5,""line1 ü content"",2005-08-29" & ControlChars.CrLf &
                 ",""line 2 """" content"",""2005-08-27"""
             testoutputdata = CompuMaster.Data.Csv.ReadDataTableFromCsvString(testinputdata, True, System.Globalization.CultureInfo.CreateSpecificCulture("en-GB"))
             'Throw New Exception(CompuMaster.Data.DataTables.ConvertToPlainTextTable(testoutputdata))
@@ -213,9 +214,9 @@ Namespace CompuMaster.Test.Data
             NUnit.Framework.Assert.AreEqual("line 2 "" content", testoutputdata.Rows(1)(1), "JW #709")
             NUnit.Framework.Assert.AreEqual("2005-08-27", testoutputdata.Rows(1)(2), "JW #710")
 
-            testinputdata = "ID,""Description"",DateValue" & vbNewLine &
+            testinputdata = "ID,""Description"",DateValue" & ControlChars.CrLf &
                 "5,""line1 ü content"",2005-08-29" & ControlChars.Lf &
-                ",""line 2 " & ControlChars.Lf & "newline content"",""2005-08-27""," & vbNewLine
+                ",""line 2 " & ControlChars.Lf & "newline content"",""2005-08-27""," & ControlChars.CrLf
             testoutputdata = CompuMaster.Data.Csv.ReadDataTableFromCsvString(testinputdata, True, System.Globalization.CultureInfo.CreateSpecificCulture("en-GB"))
             NUnit.Framework.Assert.AreEqual(4, testoutputdata.Columns.Count, "JW #800")
             NUnit.Framework.Assert.AreEqual(2, testoutputdata.Rows.Count, "JW #801")
@@ -233,8 +234,8 @@ Namespace CompuMaster.Test.Data
 
             'Again the same tests from above - but this time without culture parameter but some manual info on separator etc.
 
-            testinputdata = "ID;""Description"";DateValue" & vbNewLine &
-                "5;""line1 ü content"";2005-08-29" & vbNewLine &
+            testinputdata = "ID;""Description"";DateValue" & ControlChars.CrLf &
+                "5;""line1 ü content"";2005-08-29" & ControlChars.CrLf &
                 ";""line 2 """" content"";""2005-08-27"""
             testoutputdata = CompuMaster.Data.Csv.ReadDataTableFromCsvString(testinputdata, True, ";"c, """"c, False, False)
             'Throw New Exception(CompuMaster.Data.DataTables.ConvertToPlainTextTable(testoutputdata))
@@ -250,9 +251,9 @@ Namespace CompuMaster.Test.Data
             NUnit.Framework.Assert.AreEqual("line 2 "" content", testoutputdata.Rows(1)(1), "JW #109")
             NUnit.Framework.Assert.AreEqual("2005-08-27", testoutputdata.Rows(1)(2), "JW #110")
 
-            testinputdata = "ID;""Description"";DateValue" & vbNewLine &
+            testinputdata = "ID;""Description"";DateValue" & ControlChars.CrLf &
                 "5;""line1 ü content"";2005-08-29" & ControlChars.Lf &
-                ";""line 2 " & ControlChars.Lf & "newline content"";""2005-08-27"";" & vbNewLine
+                ";""line 2 " & ControlChars.Lf & "newline content"";""2005-08-27"";" & ControlChars.CrLf
             testoutputdata = CompuMaster.Data.Csv.ReadDataTableFromCsvString(testinputdata, True, ";"c, """"c, False, False)
             NUnit.Framework.Assert.AreEqual(4, testoutputdata.Columns.Count, "JW #200")
             NUnit.Framework.Assert.AreEqual(2, testoutputdata.Rows.Count, "JW #201")
@@ -268,8 +269,8 @@ Namespace CompuMaster.Test.Data
             NUnit.Framework.Assert.AreEqual("2005-08-27", testoutputdata.Rows(1)(2), "JW #210")
             NUnit.Framework.Assert.AreEqual("", testoutputdata.Rows(1)(3), "JW #211")
 
-            testinputdata = "ID,""Description"",DateValue" & vbNewLine &
-                "5,""line1 ü content"",2005-08-29" & vbNewLine &
+            testinputdata = "ID,""Description"",DateValue" & ControlChars.CrLf &
+                "5,""line1 ü content"",2005-08-29" & ControlChars.CrLf &
                 ",""line 2 """" content"",""2005-08-27"""
             testoutputdata = CompuMaster.Data.Csv.ReadDataTableFromCsvString(testinputdata, True)
             'Throw New Exception(CompuMaster.Data.DataTables.ConvertToPlainTextTable(testoutputdata))
@@ -285,9 +286,9 @@ Namespace CompuMaster.Test.Data
             NUnit.Framework.Assert.AreEqual("line 2 "" content", testoutputdata.Rows(1)(1), "JW #709")
             NUnit.Framework.Assert.AreEqual("2005-08-27", testoutputdata.Rows(1)(2), "JW #710")
 
-            testinputdata = "ID,""Description"",DateValue" & vbNewLine &
+            testinputdata = "ID,""Description"",DateValue" & ControlChars.CrLf &
                 "5,""line1 ü content"",2005-08-29" & ControlChars.Lf &
-                ",""line 2 " & ControlChars.Lf & "newline content"",""2005-08-27""," & vbNewLine
+                ",""line 2 " & ControlChars.Lf & "newline content"",""2005-08-27""," & ControlChars.CrLf
             testoutputdata = CompuMaster.Data.Csv.ReadDataTableFromCsvString(testinputdata, True)
             NUnit.Framework.Assert.AreEqual(4, testoutputdata.Columns.Count, "JW #800")
             NUnit.Framework.Assert.AreEqual(2, testoutputdata.Rows.Count, "JW #801")
@@ -330,9 +331,9 @@ Namespace CompuMaster.Test.Data
             NUnit.Framework.Assert.AreEqual("012345678901234", testoutputdata.Rows(1)(2), "JW #310")
             NUnit.Framework.Assert.AreEqual("567890", testoutputdata.Rows(1)(3), "JW #311")
 
-            'testinputdata = "ID;""Description"";DateValue" & vbNewLine & _
-            '    "5;""line1 ü content"";2005-08-29" & vbNewLine & _
-            '    ";""line 2 " & ControlChars.Lf & "newline content"";""2005-08-27"";" & vbNewLine
+            'testinputdata = "ID;""Description"";DateValue" & ControlChars.CrLf & _
+            '    "5;""line1 ü content"";2005-08-29" & ControlChars.CrLf & _
+            '    ";""line 2 " & ControlChars.Lf & "newline content"";""2005-08-27"";" & ControlChars.CrLf
             'testoutputdata = CompuMaster.Data.Csv.ReadDataTableFromCsvString(testinputdata, True)
             'NUnit.Framework.Assert.AreEqual(4, testoutputdata.Columns.Count, "JW #400")
             'NUnit.Framework.Assert.AreEqual(2, testoutputdata.Rows.Count, "JW #401")
@@ -350,16 +351,18 @@ Namespace CompuMaster.Test.Data
 
         End Sub
 
-        <Test, Obsolete> Sub WriteDataTableToCsvFileStringWithTextEncoding()
+        <Test> Sub WriteDataTableToCsvFileStringWithTextEncoding()
             Dim t As DataTable = SimpleSampleTable()
             Dim bom As String = System.Text.Encoding.UTF8.GetString(System.Text.Encoding.UTF8.GetPreamble())
             Assert.AreEqual(New Byte() {239, 187, 191}, System.Text.Encoding.UTF8.GetPreamble())
             Assert.Greater(bom.Length, 0, "Utf8Preamble must contain at least 1 Char")
             Dim csv As String
+#Disable Warning BC40000 ' Typ oder Element ist veraltet
             csv = CompuMaster.Data.Csv.WriteDataTableToCsvFileStringWithTextEncoding(t, True)
             Assert.AreEqual(bom, csv.Substring(0, bom.Length), "CSV starts correctly with BOM signature for UTF-8")
             csv = CompuMaster.Data.Csv.WriteDataTableToCsvFileStringWithTextEncoding(t, True, "UTF-8")
             Assert.AreEqual(bom, csv.Substring(0, bom.Length), "CSV starts correctly with BOM signature for UTF-8")
+#Enable Warning BC40000 ' Typ oder Element ist veraltet
         End Sub
 
         <Test> Sub WriteDataTableToCsvTextString()
@@ -371,7 +374,7 @@ Namespace CompuMaster.Test.Data
         End Sub
 
         <Test> Sub ReadWriteCompareDatableWithStringEncodingDefault()
-            Dim Level0CsvData As String = """69100"";"""";"""""""";""Text with quotation mark("""")"";""Space""" & vbNewLine
+            Dim Level0CsvData As String = """69100"";"""";"""""""";""Text with quotation mark("""")"";""Space""" & ControlChars.CrLf
             Dim Level1CsvDataTable As DataTable = CompuMaster.Data.Csv.ReadDataTableFromCsvString(Level0CsvData, False, ";"c, """"c, False, False)
             Dim Level2CsvData As String = CompuMaster.Data.Csv.WriteDataTableToCsvTextString(Level1CsvDataTable, False, ";"c, """"c, "."c)
             Assert.AreEqual("Text with quotation mark("")", CType(Level1CsvDataTable.Rows(0)(3), String))
@@ -393,7 +396,7 @@ Namespace CompuMaster.Test.Data
         End Sub
 
         <Test> Sub ReadWriteCompareDatableFixedColWidthsWithStringEncodingDefault()
-            Dim Level0CsvData As String = "ID   GROSS klein " & vbNewLine & "12345ABCDEFabcdef" & vbNewLine & "äöüß AEIOU aeiou " & vbNewLine
+            Dim Level0CsvData As String = "ID   GROSS klein " & ControlChars.CrLf & "12345ABCDEFabcdef" & ControlChars.CrLf & "äöüß AEIOU aeiou " & ControlChars.CrLf
             Dim Level1CsvDataTable As DataTable = CompuMaster.Data.Csv.ReadDataTableFromCsvString(Level0CsvData, False, New Integer() {5, 6, 6}, False)
             Dim Level2CsvData As String = CompuMaster.Data.Csv.ConvertDataTableToTextAsStringBuilder(Level1CsvDataTable, False, CompuMaster.Data.Csv.WriteLineEncodings.RowBreakCrLf_CellLineBreakLf, System.Globalization.CultureInfo.CurrentCulture, New Integer() {5, 6, 6}).ToString
             Assert.AreEqual("ID", CType(Level1CsvDataTable.Rows(0)(0), String))
@@ -442,9 +445,9 @@ Namespace CompuMaster.Test.Data
             Console.WriteLine(csv)
             Assert.AreEqual(ExpectedValue, csv, "Not expected: CSV EmptyStringAsRecognizeTextChar")
 
-            ExpectedValue = """col1""||""col2""" & vbNewLine &
-                """R1C1""||""R1C2""" & vbNewLine &
-                """R2C1""||""R2C2""" & vbNewLine
+            ExpectedValue = """col1""||""col2""" & ControlChars.CrLf &
+                """R1C1""||""R1C2""" & ControlChars.CrLf &
+                """R2C1""||""R2C2""" & ControlChars.CrLf
             csv = CompuMaster.Data.Csv.WriteDataTableToCsvTextString(t, True, CompuMaster.Data.Csv.WriteLineEncodings.Default, "||", """"c, ".")
             Console.WriteLine(csv)
             Assert.AreEqual(ExpectedValue, csv, "Not expected: CSV EmptyStringAsRecognizeTextChar")
@@ -468,12 +471,12 @@ Namespace CompuMaster.Test.Data
             Assert.AreEqual(ExpectedValue, csv, "Not expected: CSV EmptyStringAsRecognizeTextChar")
 
             'Special: ChrW(0) is handled as NO text recognition character!
-            'ExpectedValue = ChrW(0) & "col1" & ChrW(0) & "||" & ChrW(0) & "col2" & ChrW(0) & vbNewLine &
-            '    ChrW(0) & "R1C1" & ChrW(0) & "||" & ChrW(0) & "R1C2" & ChrW(0) & vbNewLine &
-            '    ChrW(0) & "R2C1" & ChrW(0) & "||" & ChrW(0) & "R2C2" & ChrW(0) & vbNewLine
-            ExpectedValue = "col1||col2" & vbNewLine &
-                "R1C1||R1C2" & vbNewLine &
-                "R2C1||R2C2" & vbNewLine
+            'ExpectedValue = ChrW(0) & "col1" & ChrW(0) & "||" & ChrW(0) & "col2" & ChrW(0) & ControlChars.CrLf &
+            '    ChrW(0) & "R1C1" & ChrW(0) & "||" & ChrW(0) & "R1C2" & ChrW(0) & ControlChars.CrLf &
+            '    ChrW(0) & "R2C1" & ChrW(0) & "||" & ChrW(0) & "R2C2" & ChrW(0) & ControlChars.CrLf
+            ExpectedValue = "col1||col2" & ControlChars.CrLf &
+                "R1C1||R1C2" & ControlChars.CrLf &
+                "R2C1||R2C2" & ControlChars.CrLf
             csv = CompuMaster.Data.Csv.WriteDataTableToCsvTextString(t, True, CompuMaster.Data.Csv.WriteLineEncodings.RowBreakCrLf_CellLineBreakCr, "||", "", ".")
             Console.WriteLine(csv)
             Assert.AreEqual(ExpectedValue, csv, "Not expected: CSV EmptyStringAsRecognizeTextChar")
@@ -482,9 +485,9 @@ Namespace CompuMaster.Test.Data
             Console.WriteLine(csv)
             Assert.AreEqual(ExpectedValue, csv, "Not expected: CSV Chrw(0)AsRecognizeTextChar")
 
-            ExpectedValue = ChrW(1) & "col1" & ChrW(1) & "||" & ChrW(1) & "col2" & ChrW(1) & vbNewLine &
-                ChrW(1) & "R1C1" & ChrW(1) & "||" & ChrW(1) & "R1C2" & ChrW(1) & vbNewLine &
-                ChrW(1) & "R2C1" & ChrW(1) & "||" & ChrW(1) & "R2C2" & ChrW(1) & vbNewLine
+            ExpectedValue = ChrW(1) & "col1" & ChrW(1) & "||" & ChrW(1) & "col2" & ChrW(1) & ControlChars.CrLf &
+                ChrW(1) & "R1C1" & ChrW(1) & "||" & ChrW(1) & "R1C2" & ChrW(1) & ControlChars.CrLf &
+                ChrW(1) & "R2C1" & ChrW(1) & "||" & ChrW(1) & "R2C2" & ChrW(1) & ControlChars.CrLf
             csv = CompuMaster.Data.Csv.WriteDataTableToCsvTextString(t, True, CompuMaster.Data.Csv.WriteLineEncodings.RowBreakCrLf_CellLineBreakCr, "||", ChrW(1), ".")
             Console.WriteLine(csv)
             Assert.AreEqual(ExpectedValue, csv, "Not expected: CSV Chrw(1)AsRecognizeTextChar")
@@ -721,19 +724,19 @@ Namespace CompuMaster.Test.Data
         <Test, Ignore("Column data type auto-detection not yet implemented in CSV read")> Sub WriteDataTableToCsvTextStringAndReReadAndReWriteWithoutChanges_DataTypesReDetection()
             Dim t As DataTable = SeveralTypesSampleTable()
             Dim initialColumnDataTypes As String() = DataTypesOfColumns(t.Columns)
-            Console.WriteLine("Initial column data types: " & String.Join(", ", initialColumnDataTypes) & vbNewLine & vbNewLine)
+            Console.WriteLine("Initial column data types: " & String.Join(", ", initialColumnDataTypes) & ControlChars.CrLf & ControlChars.CrLf)
             'Dim bom As String = System.Text.Encoding.UTF8.GetString(System.Text.Encoding.UTF8.GetPreamble())
             Dim csv As String
             csv = CompuMaster.Data.Csv.WriteDataTableToCsvTextString(t, True)
-            Console.WriteLine("Initial table" & vbNewLine & vbNewLine)
+            Console.WriteLine("Initial table" & ControlChars.CrLf & ControlChars.CrLf)
             Console.WriteLine(csv)
             Dim t2 As DataTable = CompuMaster.Data.Csv.ReadDataTableFromCsvString(csv, True)
             Dim csv2 As String
             Assert.AreEqual(t.Columns.Count, t2.Columns.Count) 'should be the very same
             Assert.AreEqual(t.Rows.Count, t2.Rows.Count) 'should be the very same
             csv2 = CompuMaster.Data.Csv.WriteDataTableToCsvTextString(t2, True)
-            Console.WriteLine("Reread column data types: " & String.Join(", ", DataTypesOfColumns(t2.Columns)) & vbNewLine & vbNewLine)
-            Console.WriteLine("Rewritten table" & vbNewLine & vbNewLine)
+            Console.WriteLine("Reread column data types: " & String.Join(", ", DataTypesOfColumns(t2.Columns)) & ControlChars.CrLf & ControlChars.CrLf)
+            Console.WriteLine("Rewritten table" & ControlChars.CrLf & ControlChars.CrLf)
             Console.WriteLine(csv2)
             Assert.AreEqual(csv, csv2) 'should be the very same
             Assert.AreEqual(initialColumnDataTypes, DataTypesOfColumns(t2.Columns))
@@ -742,11 +745,11 @@ Namespace CompuMaster.Test.Data
         <Test> Sub WriteDataTableToCsvTextStringAndReReadAndReWriteWithoutChanges_ComlumnSeparatorInjectionTrials()
             Dim t As DataTable = SeveralTypesSampleTable()
             Dim initialColumnDataTypes As String() = DataTypesOfColumns(t.Columns)
-            Console.WriteLine("Column data types: " & String.Join(", ", initialColumnDataTypes) & vbNewLine & vbNewLine)
+            Console.WriteLine("Column data types: " & String.Join(", ", initialColumnDataTypes) & ControlChars.CrLf & ControlChars.CrLf)
             'Dim bom As String = System.Text.Encoding.UTF8.GetString(System.Text.Encoding.UTF8.GetPreamble())
             Dim csv As String
             csv = CompuMaster.Data.Csv.WriteDataTableToCsvTextString(t, True)
-            Console.WriteLine("Current culture formatted table" & vbNewLine & vbNewLine)
+            Console.WriteLine("Current culture formatted table" & ControlChars.CrLf & ControlChars.CrLf)
             Console.WriteLine(csv)
             Assert.IsFalse(csv.Contains("""1000,0001"""))
             Dim t2 As DataTable = SeveralTypesSampleTable()
@@ -754,7 +757,7 @@ Namespace CompuMaster.Test.Data
             Assert.AreEqual(t.Columns.Count, t2.Columns.Count) 'should be the very same
             Assert.AreEqual(t.Rows.Count, t2.Rows.Count) 'should be the very same
             csv2 = CompuMaster.Data.Csv.WriteDataTableToCsvTextString(t2, True, ","c, """"c, ","c)
-            Console.WriteLine("Decimal separator equalling to column separator table" & vbNewLine & vbNewLine)
+            Console.WriteLine("Decimal separator equalling to column separator table" & ControlChars.CrLf & ControlChars.CrLf)
             Console.WriteLine(csv2)
             Assert.IsTrue(csv2.Contains("""1000,0001"""))
             Assert.AreNotEqual(csv, csv2) 'should be the very same
@@ -768,9 +771,9 @@ Namespace CompuMaster.Test.Data
             Console.WriteLine(csv)
             Dim t2 As DataTable = CompuMaster.Data.Csv.ReadDataTableFromCsvString(csv, True, CompuMaster.Data.Csv.ReadLineEncodings.RowBreakCrLf_CellLineBreakLf, CompuMaster.Data.Csv.ReadLineEncodingAutoConversion.AutoConvertLineBreakToLf)
             'DataTables.AssertTables(t, t2, "Comparison t vs t2")
-            'DataTables.AssertTables(CloneTableWithSearchAndReplaceOnStrings(t, vbNewLine, vbLf), t2, "Comparison t vs t2")
-            DataTablesTest.AssertTables(CloneTableWithSearchAndReplaceOnStrings(CloneTableWithSearchAndReplaceOnStrings(t, vbNewLine, vbLf), vbCr, vbLf), t2, "Comparison t vs t2")
-            'DataTables.AssertTables(CloneTableWithSearchAndReplaceOnStrings(CloneTableWithSearchAndReplaceOnStrings(t, vbNewLine, vbLf), vbCr, vbLf), CloneTableWithSearchAndReplaceOnStrings(t2, vbNewLine, vbLf), "Comparison t vs t2")
+            'DataTables.AssertTables(CloneTableWithSearchAndReplaceOnStrings(t, ControlChars.CrLf, vbLf), t2, "Comparison t vs t2")
+            DataTablesTest.AssertTables(CloneTableWithSearchAndReplaceOnStrings(CloneTableWithSearchAndReplaceOnStrings(t, ControlChars.CrLf, vbLf), vbCr, vbLf), t2, "Comparison t vs t2")
+            'DataTables.AssertTables(CloneTableWithSearchAndReplaceOnStrings(CloneTableWithSearchAndReplaceOnStrings(t, ControlChars.CrLf, vbLf), vbCr, vbLf), CloneTableWithSearchAndReplaceOnStrings(t2, ControlChars.CrLf, vbLf), "Comparison t vs t2")
             Dim csv2 As String
             Assert.AreEqual(t.Columns.Count, t2.Columns.Count) 'should be the very same
             Assert.AreEqual(t.Rows.Count, t2.Rows.Count) 'should be the very same - except line breaks in cells haven't been converted correctly
@@ -781,10 +784,10 @@ Namespace CompuMaster.Test.Data
 
         <Test> Sub CsvEncode()
             Assert.AreEqual("R1C1""""" & vbLf, CompuMaster.Data.CsvTools.CsvEncode("R1C1""" & vbLf, """"c, CompuMaster.Data.Csv.WriteLineEncodings.RowBreakCr_CellLineBreakLf))
-            Assert.AreEqual("R1C1""""" & vbLf & vbLf, CompuMaster.Data.CsvTools.CsvEncode("R1C1""" & vbNewLine & vbCr, """"c, CompuMaster.Data.Csv.WriteLineEncodings.RowBreakCr_CellLineBreakLf))
-            Assert.AreEqual("R1C1""""""""" & vbLf & vbLf, CompuMaster.Data.CsvTools.CsvEncode("R1C1""""" & vbNewLine & vbCr, """"c, CompuMaster.Data.Csv.WriteLineEncodings.RowBreakCr_CellLineBreakLf))
-            Assert.AreEqual("R1C1""""" & vbLf & vbLf, CompuMaster.Data.CsvTools.CsvEncode("R1C1""" & vbNewLine & vbCr, """"c, CompuMaster.Data.Csv.WriteLineEncodings.RowBreakCrLf_CellLineBreakLf))
-            Assert.AreEqual("R1C1""""""""" & vbLf & vbLf, CompuMaster.Data.CsvTools.CsvEncode("R1C1""""" & vbNewLine & vbCr, """"c, CompuMaster.Data.Csv.WriteLineEncodings.RowBreakCrLf_CellLineBreakLf))
+            Assert.AreEqual("R1C1""""" & vbLf & vbLf, CompuMaster.Data.CsvTools.CsvEncode("R1C1""" & ControlChars.CrLf & vbCr, """"c, CompuMaster.Data.Csv.WriteLineEncodings.RowBreakCr_CellLineBreakLf))
+            Assert.AreEqual("R1C1""""""""" & vbLf & vbLf, CompuMaster.Data.CsvTools.CsvEncode("R1C1""""" & ControlChars.CrLf & vbCr, """"c, CompuMaster.Data.Csv.WriteLineEncodings.RowBreakCr_CellLineBreakLf))
+            Assert.AreEqual("R1C1""""" & vbLf & vbLf, CompuMaster.Data.CsvTools.CsvEncode("R1C1""" & ControlChars.CrLf & vbCr, """"c, CompuMaster.Data.Csv.WriteLineEncodings.RowBreakCrLf_CellLineBreakLf))
+            Assert.AreEqual("R1C1""""""""" & vbLf & vbLf, CompuMaster.Data.CsvTools.CsvEncode("R1C1""""" & ControlChars.CrLf & vbCr, """"c, CompuMaster.Data.Csv.WriteLineEncodings.RowBreakCrLf_CellLineBreakLf))
         End Sub
 
         Private Function CloneTableWithSearchAndReplaceOnStrings(table As DataTable, searchValue As String, replaceValue As String) As DataTable
@@ -873,5 +876,6 @@ Namespace CompuMaster.Test.Data
         End Sub
 
     End Class
+#Enable Warning CA1822 ' Member als statisch markieren
 
 End Namespace

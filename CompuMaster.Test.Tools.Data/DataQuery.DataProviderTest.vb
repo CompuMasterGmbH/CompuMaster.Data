@@ -21,7 +21,7 @@ Namespace CompuMaster.Test.Data.DataQuery
         Private Function ListOfAssemblies(asms As Reflection.Assembly()) As String
             Dim Result As String = ""
             For MyCounter As Integer = 0 To asms.Length - 1
-                Result &= asms(MyCounter).FullName & vbNewLine
+                Result &= asms(MyCounter).FullName & ControlChars.CrLf
             Next
             Return Result
         End Function

@@ -48,7 +48,7 @@ Namespace CompuMaster.Data
         Public Shared Sub CreateTextCsvDatabaseFile(ByVal path As String)
             Dim ParentPath As String = System.IO.Path.GetDirectoryName(path)
             If System.IO.Directory.Exists(ParentPath) = False Then System.IO.Directory.CreateDirectory(ParentPath)
-            System.IO.File.WriteAllText(path, "Column1" & vbNewLine & "Value1" & vbNewLine & "Value2")
+            System.IO.File.WriteAllText(path, "Column1" & ControlChars.CrLf & "Value1" & ControlChars.CrLf & "Value2")
         End Sub
 
         ''' <summary>
@@ -119,7 +119,7 @@ Namespace CompuMaster.Data
                 ReDim buffer(CInt(stream.Length) - 1)
                 stream.Read(buffer, 0, CInt(stream.Length))
             Catch ex As Exception
-                Throw New Exception("Failure while loading resource name """ & embeddedFileName & """" & vbNewLine & "Available resource names are: " & String.Join(",", System.Reflection.Assembly.GetExecutingAssembly().GetManifestResourceNames), ex)
+                Throw New Exception("Failure while loading resource name """ & embeddedFileName & """" & ControlChars.CrLf & "Available resource names are: " & String.Join(",", System.Reflection.Assembly.GetExecutingAssembly().GetManifestResourceNames), ex)
             Finally
                 If stream IsNot Nothing Then stream.Close()
             End Try
