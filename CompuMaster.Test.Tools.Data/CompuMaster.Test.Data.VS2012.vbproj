@@ -209,7 +209,7 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\CompuMaster.Data.VS2019\CompuMaster.Data.VS2019.vbproj">
+    <ProjectReference Include="..\CompuMaster.Data\CompuMaster.Data.vbproj">
       <Project>{23d43cb0-a621-416a-966a-5a0c0eeb34db}</Project>
       <Name>CompuMaster.Data.VS2019</Name>
     </ProjectReference>
