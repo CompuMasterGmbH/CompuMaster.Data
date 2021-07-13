@@ -232,6 +232,9 @@
       <Version>3.17.0</Version>
     </PackageReference>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="MsVisualBasicMethodTests.b" />
+  </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.VisualBasic.targets" />
   <PropertyGroup>
     <PreBuildEvent>
