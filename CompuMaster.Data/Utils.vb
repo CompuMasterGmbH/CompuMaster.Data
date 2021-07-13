@@ -11,6 +11,15 @@ Namespace CompuMaster.Data
     ''' </summary>
     Public NotInheritable Class Utils
 
+        ''' <summary>
+        ''' A triple state defaulting to Undefined
+        ''' </summary>
+        Friend Enum TripleState As Byte
+            Undefined = 0
+            [True] = 1
+            [False] = 2
+        End Enum
+
 #Region "NoDBNull"
         ''' <summary>
         '''     Checks for DBNull and returns null (Nothing in VisualBasic) in that case

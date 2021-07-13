@@ -233,7 +233,7 @@
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="MsVisualBasicMethodTests.b" />
+    <Compile Include="MsVisualBasicMethodTests.vb" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.VisualBasic.targets" />
   <PropertyGroup>
