@@ -1,6 +1,9 @@
 Option Explicit On 
 Option Strict On
 
+Imports System.Data
+Imports CompuMaster.Data.Information
+
 Namespace CompuMaster.Data.DataQuery
 
     ''' <summary>
@@ -70,10 +73,11 @@ Namespace CompuMaster.Data.DataQuery
                 referencedAssembly = System.Reflection.Assembly.LoadFile(assemblyName)
                 Dim t As Type = referencedAssembly.GetType(connectionTypeName)
                 If (t IsNot Nothing) Then
-                    Dim m As System.Runtime.Remoting.ObjectHandle = Activator.CreateInstanceFrom(assemblyName, connectionTypeName)
-                    If ((m) IsNot Nothing) Then
-                        Return CType(m.Unwrap, IDbConnection)
-                    End If
+                    Return CType(Activator.CreateInstance(t), IDbConnection)
+                    'Dim m As System.Runtime.Remoting.ObjectHandle = Activator.CreateInstanceFrom(assemblyName, connectionTypeName)
+                    'If ((m) IsNot Nothing) Then
+                    '    Return CType(m.Unwrap, IDbConnection)
+                    'End If
                 End If
             End If
             Throw New Exception("Class not found: " & assemblyName & "::" & connectionTypeName)

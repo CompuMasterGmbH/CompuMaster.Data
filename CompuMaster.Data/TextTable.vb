@@ -1,6 +1,8 @@
 ﻿Option Explicit On
 Option Strict On
 
+Imports System.Data
+
 Namespace CompuMaster.Data
 
     Public Class TextTable

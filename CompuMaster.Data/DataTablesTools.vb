@@ -2,6 +2,8 @@ Option Explicit On
 Option Strict On
 
 Imports System.Collections.Generic
+Imports System.Data
+Imports CompuMaster.Data.Information
 
 Namespace CompuMaster.Data
 

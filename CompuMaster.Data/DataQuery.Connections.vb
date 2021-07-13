@@ -1,5 +1,9 @@
-Option Explicit On 
+Option Explicit On
 Option Strict On
+
+Imports System.Data
+Imports CompuMaster.Data.Information
+'Imports Microsoft.VisualBasic
 
 Namespace CompuMaster.Data.DataQuery
 
