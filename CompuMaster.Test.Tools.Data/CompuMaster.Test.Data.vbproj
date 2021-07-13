@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
 	<TargetFrameworks>netcoreapp3.1;net5.0</TargetFrameworks>
@@ -6,6 +6,8 @@
     <IsPackable>false</IsPackable>
 
     <RootNamespace />
+
+    <AssemblyName>CompuMaster.Test.Tools.Data</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>
@@ -63,6 +65,8 @@
     <PackageReference Include="NUnit" Version="3.13.1" />
     <PackageReference Include="NUnit3TestAdapter" Version="3.17.0" />
     <PackageReference Include="coverlet.collector" Version="3.0.2" />
+    <PackageReference Include="System.Data.Odbc" Version="5.0.0" />
+    <PackageReference Include="System.Data.OleDb" Version="5.0.0" />
   </ItemGroup>
 
   <ItemGroup>

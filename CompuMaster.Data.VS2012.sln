@@ -20,7 +20,7 @@ Project("{778DAE3C-4631-46EA-AA77-85C1314464D9}") = "CompuMaster.Data", "CompuMa
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CompuMaster.Test.TinyWebServerAdvanced", "CompuMaster.Test.TinyWebServerAdvanced\CompuMaster.Test.TinyWebServerAdvanced.csproj", "{FF4D55AE-133C-4C65-B612-2CE21285F949}"
 EndProject
-Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "CompuMaster.Test.Data", "CompuMaster.Test.Data\CompuMaster.Test.Data.vbproj", "{1A4BEA9F-6D74-4740-8871-4F87D2F777F4}"
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "CompuMaster.Test.Tools.Data", "CompuMaster.Test.Tools.Data\CompuMaster.Test.Tools.Data.vbproj", "{1A4BEA9F-6D74-4740-8871-4F87D2F777F4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

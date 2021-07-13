@@ -1,4 +1,5 @@
 Imports NUnit.Framework
+Imports System.Data
 
 Namespace CompuMaster.Test.Data.WinPlatformsOnly
 
