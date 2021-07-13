@@ -1,0 +1,23 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v3.1",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v3.1": {
+      "CompuMaster.Data/1.0.0": {
+        "runtime": {
+          "CompuMaster.Data.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "CompuMaster.Data/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}

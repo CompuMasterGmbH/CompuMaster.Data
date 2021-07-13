@@ -1,0 +1,9 @@
+D:\git_local_repository\software-projects\CompuMaster.Data\CompuMaster.Test.TinyWebServerAdvanced_new\bin\Debug\netstandard2.0\CompuMaster.Data.deps.json
+D:\git_local_repository\software-projects\CompuMaster.Data\CompuMaster.Test.TinyWebServerAdvanced_new\bin\Debug\netstandard2.0\CompuMaster.Data.dll
+D:\git_local_repository\software-projects\CompuMaster.Data\CompuMaster.Test.TinyWebServerAdvanced_new\bin\Debug\netstandard2.0\CompuMaster.Data.pdb
+D:\git_local_repository\software-projects\CompuMaster.Data\CompuMaster.Test.TinyWebServerAdvanced_new\obj\Debug\netstandard2.0\CompuMaster.Test.TinyWebServerAdvanced.csproj.AssemblyReference.cache
+D:\git_local_repository\software-projects\CompuMaster.Data\CompuMaster.Test.TinyWebServerAdvanced_new\obj\Debug\netstandard2.0\CompuMaster.Test.TinyWebServerAdvanced.AssemblyInfoInputs.cache
+D:\git_local_repository\software-projects\CompuMaster.Data\CompuMaster.Test.TinyWebServerAdvanced_new\obj\Debug\netstandard2.0\CompuMaster.Test.TinyWebServerAdvanced.AssemblyInfo.cs
+D:\git_local_repository\software-projects\CompuMaster.Data\CompuMaster.Test.TinyWebServerAdvanced_new\obj\Debug\netstandard2.0\CompuMaster.Test.TinyWebServerAdvanced.csproj.CoreCompileInputs.cache
+D:\git_local_repository\software-projects\CompuMaster.Data\CompuMaster.Test.TinyWebServerAdvanced_new\obj\Debug\netstandard2.0\CompuMaster.Data.dll
+D:\git_local_repository\software-projects\CompuMaster.Data\CompuMaster.Test.TinyWebServerAdvanced_new\obj\Debug\netstandard2.0\CompuMaster.Data.pdb
