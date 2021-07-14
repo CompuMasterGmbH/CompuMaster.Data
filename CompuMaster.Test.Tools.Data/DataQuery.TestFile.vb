@@ -20,11 +20,11 @@ Namespace CompuMaster.Test.Data.DataQuery
             Assert.IsFalse(System.IO.File.Exists(cachedPath), "File was deleted")
         End Sub
 
-        <Test> Public Sub CreateAndDisposeMsAccess()
-#Disable Warning BC40000 ' Typ oder Element ist veraltet
-            CreateAndDispose(CompuMaster.Data.DataQuery.TestFile.TestFileType.MsAccess)
-#Enable Warning BC40000 ' Typ oder Element ist veraltet
-        End Sub
+        '        <Test> Public Sub CreateAndDisposeMsAccess()
+        '#Disable Warning BC40000 ' Typ oder Element ist veraltet
+        '            CreateAndDispose(CompuMaster.Data.DataQuery.TestFile.TestFileType.MsAccess)
+        '#Enable Warning BC40000 ' Typ oder Element ist veraltet
+        '        End Sub
 
         <Test> Public Sub CreateAndDisposeMsAccessAccdb()
             CreateAndDispose(CompuMaster.Data.DataQuery.TestFile.TestFileType.MsAccessAccdb)

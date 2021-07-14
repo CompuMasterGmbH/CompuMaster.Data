@@ -60,7 +60,7 @@ Namespace CompuMaster.Test.Data
 
         Private Function TestTable2() As DataTable
             Dim file As String = AssemblyTestEnvironment.TestFileAbsolutePath(System.IO.Path.Combine("testfiles", "Q&A.xlsx"))
-            Dim dt As DataTable = CompuMaster.Data.XlsEpplus.ReadDataTableFromXlsFile(file, "Rund um das NT")
+            Dim dt As DataTable = CompuMaster.Data.XlsEpplus.ReadDataTableFromXlsFile(file) ', "Rund um das NT")
             Return dt
         End Function
 #End Region

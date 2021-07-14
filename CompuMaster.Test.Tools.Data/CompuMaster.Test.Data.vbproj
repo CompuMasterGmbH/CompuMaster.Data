@@ -16,6 +16,21 @@
     <Company>CompuMaster GmbH</Company>
 
     <Product>CompuMaster.Data</Product>
+
+    <Configurations>Debug;Release;CI_CD</Configurations>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='CI_CD|netcoreapp3.1|AnyCPU'">
+    <DefineConstants>CI_Build=True</DefineConstants>
+    <OutputPath>bin\CI_CD\</OutputPath>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|netcoreapp3.1|AnyCPU'">
+    <OutputPath>\bin\Debug\</OutputPath>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|netcoreapp3.1|AnyCPU'">
+    <OutputPath>bin\Release\</OutputPath>
   </PropertyGroup>
 
   <ItemGroup>

@@ -89,11 +89,11 @@ Namespace CompuMaster.Data.DataQuery
             Get
                 Dim Result As String
                 Result = Strings.Replace(Me.ConnectionType.Name, "Connection", "")
-                Result = Strings.Replace(Me.ConnectionType.Name, "Connection".ToLowerInvariant, "")
-                Result = Strings.Replace(Me.ConnectionType.Name, "Connection".ToUpperInvariant, "")
-                If Result = "Sql" AndAlso Me.AssemblyName.ToLowerInvariant = "system.data" Then
+                Result = Strings.Replace(Result, "Connection".ToLowerInvariant, "")
+                Result = Strings.Replace(Result, "Connection".ToUpperInvariant, "")
+                If Result = "Sql" AndAlso (Me.AssemblyName.ToLowerInvariant = "system.data" OrElse Me.AssemblyName.ToLowerInvariant = "system.data.sqlclient") Then
                     Result = "SqlClient"
-                ElseIf Result = "Odbc" AndAlso Me.AssemblyName.ToLowerInvariant = "system.data" Then
+                ElseIf Result = "Odbc" AndAlso (Me.AssemblyName.ToLowerInvariant = "system.data" OrElse Me.AssemblyName.ToLowerInvariant = "system.data.odbc") Then
                     Result = "ODBC"
                 End If
                 Return Result
