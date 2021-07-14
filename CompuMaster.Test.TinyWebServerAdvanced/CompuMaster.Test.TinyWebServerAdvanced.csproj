@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFrameworks>netstandard2.0;netcoreapp3.1;net5.0;net48;net45</TargetFrameworks>
@@ -34,7 +34,7 @@
   </PropertyGroup>
   <PropertyGroup>
 	<OptionStrict>Off</OptionStrict>
-	<AssemblyName>CompuMaster.Data</AssemblyName>
+	<AssemblyName>CompuMaster.Test.TinyWebServerAdvanced</AssemblyName>
   </PropertyGroup>
   <PropertyGroup Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Windows)))' == 'true'">
 	<NoWarn>CA1416</NoWarn>

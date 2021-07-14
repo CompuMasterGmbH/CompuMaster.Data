@@ -7,7 +7,9 @@ Namespace CompuMaster.Test.Data.DataQuery
     <TestFixture(Category:="DataQueryDataProvider")> Public Class DataQueryDataProviderTest
 
         <OneTimeSetUp> Public Sub LoadSystemDataAssembly()
-            CompuMaster.Data.DataQuery.AnyIDataProvider.CreateConnection("System.Data", "System.Data.SqlClient.SqlConnection")
+            Dim SqlConnType As Type = GetType(System.Data.SqlClient.SqlConnection)
+            CompuMaster.Data.DataQuery.AnyIDataProvider.CreateConnection(SqlConnType.Assembly.GetName.Name, SqlConnType.FullName)
+            'CompuMaster.Data.DataQuery.AnyIDataProvider.CreateConnection("System.Data", "System.Data.SqlClient.SqlConnection")
         End Sub
 
         Private Sub LoadedAssembliesInCurrentAppDomain()
@@ -34,7 +36,7 @@ Namespace CompuMaster.Test.Data.DataQuery
             For Each MyProvider As CompuMaster.Data.DataQuery.DataProvider In providers
                 Console.WriteLine(MyProvider.Title & " - " & MyProvider.ConnectionType.FullName & " - " & MyProvider.Assembly.FullName)
             Next
-            Assert.GreaterOrEqual(providers.Count, 3)
+            Assert.GreaterOrEqual(providers.Count, 1)
         End Sub
 
         <Test> Public Sub LookupDataProviderTest()

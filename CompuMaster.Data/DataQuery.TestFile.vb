@@ -47,7 +47,7 @@ Namespace CompuMaster.Data.DataQuery
                 TempFile &= ".dir\testdata.csv"
                 CompuMaster.Data.DatabaseManagement.CreateTextCsvDatabaseFile(TempFile)
             Else
-                Throw New ArgumentException("Invalid value for parameter fileType", NameOf(fileType))
+                Throw New ArgumentException("Invalid value for parameter fileType (" & fileType.ToString & ")", NameOf(fileType))
             End If
             path = TempFile
         End Sub

@@ -66,7 +66,8 @@ Namespace CompuMaster.Data
             ElseIf startPosition > text.Length Then
                 Return ""
             Else
-                Return text.Substring(startPosition - 1, length)
+                Dim MaxReadLength As Integer = System.Math.Min(text.Length - (startPosition - 1), length)
+                Return text.Substring(startPosition - 1, MaxReadLength)
             End If
         End Function
 
