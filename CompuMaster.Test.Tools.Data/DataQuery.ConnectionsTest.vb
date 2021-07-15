@@ -129,6 +129,8 @@ Namespace CompuMaster.Test.Data.DataQuery
                 Assert.AreEqual("country-codes.csv", TestDataTable.TableName)
                 Assert.AreEqual(Nothing, TestDataTable.SchemaName)
                 Assert.AreEqual("[country-codes.csv]", TestDataTable.ToString)
+            Catch ex As System.Data.Odbc.OdbcException
+                Assert.Ignore("ODBC driver for CSV files not available on current platform " & System.Environment.OSVersion.VersionString & " (" & ex.Message & ")")
             Finally
                 CompuMaster.Data.DataQuery.CloseAndDisposeConnection(conn)
             End Try
