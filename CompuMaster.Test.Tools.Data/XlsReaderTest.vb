@@ -6,9 +6,9 @@ Namespace CompuMaster.Test.Data.WinPlatformsOnly
     <TestFixture(Category:="XLS Reader")> Public Class XlsReaderTest
 
         Public Sub New()
-#If CI_Build Then
-            Assert.Ignore("XsReader expected to be not working on non-windows platforms")
-#End If
+            '#If CI_Build Then
+            '            Assert.Ignore("XsReader expected to be not working on non-windows platforms")
+            '#End If
         End Sub
 
         <Test()> Public Sub ReadLastCell()

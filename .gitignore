@@ -11,6 +11,7 @@
 /CompuMaster.Data.Controls/obj
 /CompuMaster.Data.Controls/bin
 /TestResults
+/test-results
 /CompuMaster.Data.Controls/New-NuGetPackages
 /CompuMaster.Data/New-NuGetPackages
 /CompuMaster.Test.Tools.Data/TestResults

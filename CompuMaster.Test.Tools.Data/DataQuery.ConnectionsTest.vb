@@ -16,6 +16,7 @@ Namespace CompuMaster.Test.Data.DataQuery
             Assert.AreEqual(System.Data.ConnectionState.Closed, conn.State)
             Assert.Pass("No exception thrown - all is perfect :-)")
         End Sub
+
         <Test()> Public Sub CloseAndDisposeConnectionMsSql()
             Dim conn As System.Data.IDbConnection
             conn = New System.Data.SqlClient.SqlConnection
@@ -29,6 +30,7 @@ Namespace CompuMaster.Test.Data.DataQuery
         <Test()> Public Sub LoadAndUseConnectionFromExternalAssembly()
             'TODO: Unabhängigkeit von spezifischer Workstation mit Lw. G:
             'TODO: Sinnvolles Testing
+            Assert.Ignore("Implementation required")
         End Sub
 
 #If Not CI_Build Then
@@ -195,7 +197,7 @@ Namespace CompuMaster.Test.Data.DataQuery
         <Test()> <CodeAnalysis.SuppressMessage("Style", "IDE0028:Initialisierung der Sammlung vereinfachen", Justification:="<Ausstehend>")>
         Public Sub MicrosoftExcelConnectionMatrixByProviderAndExcelFileFormatVersion()
             Dim TestFails As Boolean = False
-            Console.WriteLine("Trying to find appropriate data provider for platform " & PlatformDependentProcessBitNumber() & " and OS " & System.Environment.OSVersion.ToString)
+            Console.WriteLine("Trying to find appropriate data provider for platform " & PlatformDependentProcessBitNumber() & " and OS " & System.Environment.OSVersion.ToString & " (" & System.Environment.OSVersion.Platform.ToString & ": " & System.Environment.OSVersion.VersionString & ")")
             Console.WriteLine()
             Dim TestFiles As New Generic.Dictionary(Of String, String)
             TestFiles.Add("XLS95", "testfiles\test_for_lastcell_e50aka95.xls")
@@ -220,6 +222,7 @@ Namespace CompuMaster.Test.Data.DataQuery
                 Try
                     conn = CompuMaster.Data.DataQuery.Connections.MicrosoftExcelOleDbConnection(CurrentTestFile, False, True)
                     If conn IsNot Nothing Then
+                        'Console.WriteLine(CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(CompuMaster.Data.DataQuery.FillDataTable(conn, "SELECT * FROM [test$]", CommandType.Text, Nothing, CompuMaster.Data.DataQuery.AnyIDataProvider.Automations.AutoOpenConnection)))
                         Assert.AreEqual("string", CType(CompuMaster.Data.DataQuery.ExecuteScalar(conn, "SELECT * FROM [test$]", CommandType.Text, Nothing, CompuMaster.Data.DataQuery.AnyIDataProvider.Automations.AutoOpenConnection), String))
                     End If
                 Catch ex As Exception
@@ -231,7 +234,15 @@ Namespace CompuMaster.Test.Data.DataQuery
                     End If
                 End Try
                 If FoundProviderLookupException IsNot Nothing Then
-                    Console.WriteLine("FAILED ON PROVIDER LOOKUP: " & FoundProviderLookupException.Message)
+                    If FoundProviderLookupException.GetType Is GetType(CompuMaster.Data.DataQuery.DataException) Then
+                        If FoundProviderLookupException.InnerException IsNot Nothing Then
+                            Console.WriteLine("FAILED ON PROVIDER LOOKUP (DataException): " & FoundProviderLookupException.InnerException.Message & " (Test file: " & CurrentTestFile & ")")
+                        Else
+                            Console.WriteLine("FAILED ON PROVIDER LOOKUP (DataException): " & FoundProviderLookupException.Message & " (Test file: " & CurrentTestFile & ")")
+                        End If
+                    Else
+                        Console.WriteLine("FAILED ON PROVIDER LOOKUP: " & FoundProviderLookupException.Message & " (Test file: " & CurrentTestFile & ")")
+                    End If
                 ElseIf IsProviderCurrentlyInstalled = False Then
                     Console.WriteLine("DETECTION FOR INSTALLED PROVIDER FAILED, BUT SUCCESS ON PROVIDER LOOKUP: " & conn.GetType.Name & "::" & conn.ConnectionString)
                     TestFails = True
@@ -258,7 +269,18 @@ Namespace CompuMaster.Test.Data.DataQuery
                 Try
                     conn = CompuMaster.Data.DataQuery.Connections.MicrosoftExcelOdbcConnection(CurrentTestFile, False, True)
                     If conn IsNot Nothing Then
-                        Assert.AreEqual("string", CType(CompuMaster.Data.DataQuery.ExecuteScalar(conn, "SELECT * FROM [test$]", CommandType.Text, Nothing, CompuMaster.Data.DataQuery.AnyIDataProvider.Automations.AutoOpenConnection), String))
+                        Dim ReadTable As DataTable = CompuMaster.Data.DataQuery.FillDataTable(conn, "SELECT * FROM [test$]", CommandType.Text, Nothing, CompuMaster.Data.DataQuery.AnyIDataProvider.Automations.AutoOpenConnection)
+                        'Console.WriteLine(CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(ReadTable))
+                        If ReadTable.Columns(0).ColumnName = "string" Then
+                            'OK: table was read
+                            'BUT ERROR IN MS EXCEL ODBC DRIVER: not all connection string attributes are working (against MS specification)
+                            'See:
+                            '* https://social.msdn.microsoft.com/Forums/sqlserver/en-US/bdff0b5b-6838-4a4b-9029-e1ba953824db/how-to-access-excel-files-using-odbc-without-skipping-first-row-with-access-2013-runtime?forum=adodotnetdataproviders
+                            '* https://docs.microsoft.com/de-de/office/client-developer/access/desktop-database-reference/initializing-the-microsoft-excel-driver?redirectedfrom=MSDN&tabs=office-2016
+                            Assert.AreEqual("string", ReadTable.Columns(0).ColumnName)
+                        Else
+                            Assert.AreEqual("string", CType(CompuMaster.Data.DataQuery.ExecuteScalar(conn, "SELECT * FROM [test$]", CommandType.Text, Nothing, CompuMaster.Data.DataQuery.AnyIDataProvider.Automations.AutoOpenConnection), String))
+                        End If
                     End If
                 Catch ex As Exception
                     FoundProviderLookupException = ex
@@ -269,7 +291,15 @@ Namespace CompuMaster.Test.Data.DataQuery
                     End If
                 End Try
                 If FoundProviderLookupException IsNot Nothing Then
-                    Console.WriteLine("FAILED ON PROVIDER LOOKUP: " & FoundProviderLookupException.Message)
+                    If FoundProviderLookupException.GetType Is GetType(CompuMaster.Data.DataQuery.DataException) Then
+                        If FoundProviderLookupException.InnerException IsNot Nothing Then
+                            Console.WriteLine("FAILED ON PROVIDER LOOKUP (DataException): " & FoundProviderLookupException.InnerException.Message & " (Test file: " & CurrentTestFile & ")")
+                        Else
+                            Console.WriteLine("FAILED ON PROVIDER LOOKUP (DataException): " & FoundProviderLookupException.Message & " (Test file: " & CurrentTestFile & ")")
+                        End If
+                    Else
+                        Console.WriteLine("FAILED ON PROVIDER LOOKUP: " & FoundProviderLookupException.Message & " (Test file: " & CurrentTestFile & ")")
+                    End If
                 ElseIf IsProviderCurrentlyInstalled = False Then
                     Console.WriteLine("DETECTION FOR INSTALLED PROVIDER FAILED, BUT SUCCESS ON PROVIDER LOOKUP: " & conn.GetType.Name & "::" & conn.ConnectionString)
                     TestFails = True
@@ -296,6 +326,7 @@ Namespace CompuMaster.Test.Data.DataQuery
                 Try
                     conn = CompuMaster.Data.DataQuery.Connections.MicrosoftExcelConnection(CurrentTestFile, False, True)
                     If conn IsNot Nothing Then
+                        'Console.WriteLine(CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(CompuMaster.Data.DataQuery.FillDataTable(conn, "SELECT * FROM [test$]", CommandType.Text, Nothing, CompuMaster.Data.DataQuery.AnyIDataProvider.Automations.AutoOpenConnection)))
                         Assert.AreEqual("string", CType(CompuMaster.Data.DataQuery.ExecuteScalar(conn, "SELECT * FROM [test$]", CommandType.Text, Nothing, CompuMaster.Data.DataQuery.AnyIDataProvider.Automations.AutoOpenConnection), String))
                     End If
                 Catch ex As Exception
@@ -307,7 +338,15 @@ Namespace CompuMaster.Test.Data.DataQuery
                     End If
                 End Try
                 If FoundProviderLookupException IsNot Nothing Then
-                    Console.WriteLine("FAILED ON PROVIDER LOOKUP: " & FoundProviderLookupException.Message)
+                    If FoundProviderLookupException.GetType Is GetType(CompuMaster.Data.DataQuery.DataException) Then
+                        If FoundProviderLookupException.InnerException IsNot Nothing Then
+                            Console.WriteLine("FAILED ON PROVIDER LOOKUP (DataException): " & FoundProviderLookupException.InnerException.Message & " (Test file: " & CurrentTestFile & ")")
+                        Else
+                            Console.WriteLine("FAILED ON PROVIDER LOOKUP (DataException): " & FoundProviderLookupException.Message & " (Test file: " & CurrentTestFile & ")")
+                        End If
+                    Else
+                        Console.WriteLine("FAILED ON PROVIDER LOOKUP: " & FoundProviderLookupException.Message & " (Test file: " & CurrentTestFile & ")")
+                    End If
                 ElseIf IsProviderCurrentlyInstalled = False Then
                     Console.WriteLine("DETECTION FOR INSTALLED PROVIDER FAILED, BUT SUCCESS ON PROVIDER LOOKUP: " & conn.GetType.Name & "::" & conn.ConnectionString)
                     TestFails = True
@@ -340,7 +379,7 @@ Namespace CompuMaster.Test.Data.DataQuery
         <Test()> <CodeAnalysis.SuppressMessage("Style", "IDE0028:Initialisierung der Sammlung vereinfachen", Justification:="<Ausstehend>")>
         Public Sub MicrosoftAccessConnectionMatrixByProviderAndAccessFileFormatVersion()
             Dim TestFails As Boolean = False
-            Console.WriteLine("Trying to find appropriate data provider for platform " & PlatformDependentProcessBitNumber())
+            Console.WriteLine("Trying to find appropriate data provider for platform " & PlatformDependentProcessBitNumber() & " and OS " & System.Environment.OSVersion.ToString & " (" & System.Environment.OSVersion.Platform.ToString & ": " & System.Environment.OSVersion.VersionString & ")")
             Console.WriteLine()
             Dim TestFiles As New Generic.Dictionary(Of String, String)
             TestFiles.Add("MDB", "testfiles\test_for_msaccess.mdb")
@@ -364,7 +403,7 @@ Namespace CompuMaster.Test.Data.DataQuery
                 Try
                     conn = CompuMaster.Data.DataQuery.Connections.MicrosoftAccessOleDbConnection(CurrentTestFile)
                     If conn IsNot Nothing Then
-                        Assert.AreEqual("string", CType(CompuMaster.Data.DataQuery.ExecuteScalar(conn, "SELECT * FROM test", CommandType.Text, Nothing, CompuMaster.Data.DataQuery.AnyIDataProvider.Automations.AutoOpenConnection), String))
+                        Assert.AreEqual("1", CType(CompuMaster.Data.DataQuery.ExecuteScalar(conn, "SELECT * FROM testdata", CommandType.Text, Nothing, CompuMaster.Data.DataQuery.AnyIDataProvider.Automations.AutoOpenConnection), String))
                     End If
                 Catch ex As Exception
                     FoundProviderLookupException = ex
@@ -375,7 +414,15 @@ Namespace CompuMaster.Test.Data.DataQuery
                     End If
                 End Try
                 If FoundProviderLookupException IsNot Nothing Then
-                    Console.WriteLine("FAILED ON PROVIDER LOOKUP: " & FoundProviderLookupException.Message)
+                    If FoundProviderLookupException.GetType Is GetType(CompuMaster.Data.DataQuery.DataException) Then
+                        If FoundProviderLookupException.InnerException IsNot Nothing Then
+                            Console.WriteLine("FAILED ON PROVIDER LOOKUP (DataException): " & FoundProviderLookupException.InnerException.Message & " (Test file: " & CurrentTestFile & ")")
+                        Else
+                            Console.WriteLine("FAILED ON PROVIDER LOOKUP (DataException): " & FoundProviderLookupException.Message & " (Test file: " & CurrentTestFile & ")")
+                        End If
+                    Else
+                        Console.WriteLine("FAILED ON PROVIDER LOOKUP: " & FoundProviderLookupException.Message & " (Test file: " & CurrentTestFile & ")")
+                    End If
                 ElseIf IsProviderCurrentlyInstalled = False Then
                     Console.WriteLine("DETECTION FOR INSTALLED PROVIDER FAILED, BUT SUCCESS ON PROVIDER LOOKUP: " & conn.GetType.Name & "::" & conn.ConnectionString)
                     TestFails = True
@@ -402,7 +449,7 @@ Namespace CompuMaster.Test.Data.DataQuery
                 Try
                     conn = CompuMaster.Data.DataQuery.Connections.MicrosoftAccessOdbcConnection(CurrentTestFile)
                     If conn IsNot Nothing Then
-                        Assert.AreEqual("string", CType(CompuMaster.Data.DataQuery.ExecuteScalar(conn, "SELECT * FROM test", CommandType.Text, Nothing, CompuMaster.Data.DataQuery.AnyIDataProvider.Automations.AutoOpenConnection), String))
+                        Assert.AreEqual("1", CType(CompuMaster.Data.DataQuery.ExecuteScalar(conn, "SELECT * FROM testdata", CommandType.Text, Nothing, CompuMaster.Data.DataQuery.AnyIDataProvider.Automations.AutoOpenConnection), String))
                     End If
                 Catch ex As Exception
                     FoundProviderLookupException = ex
@@ -413,7 +460,15 @@ Namespace CompuMaster.Test.Data.DataQuery
                     End If
                 End Try
                 If FoundProviderLookupException IsNot Nothing Then
-                    Console.WriteLine("FAILED ON PROVIDER LOOKUP: " & FoundProviderLookupException.Message)
+                    If FoundProviderLookupException.GetType Is GetType(CompuMaster.Data.DataQuery.DataException) Then
+                        If FoundProviderLookupException.InnerException IsNot Nothing Then
+                            Console.WriteLine("FAILED ON PROVIDER LOOKUP (DataException): " & FoundProviderLookupException.InnerException.Message & " (Test file: " & CurrentTestFile & ")")
+                        Else
+                            Console.WriteLine("FAILED ON PROVIDER LOOKUP (DataException): " & FoundProviderLookupException.Message & " (Test file: " & CurrentTestFile & ")")
+                        End If
+                    Else
+                        Console.WriteLine("FAILED ON PROVIDER LOOKUP: " & FoundProviderLookupException.Message & " (Test file: " & CurrentTestFile & ")")
+                    End If
                 ElseIf IsProviderCurrentlyInstalled = False Then
                     Console.WriteLine("DETECTION FOR INSTALLED PROVIDER FAILED, BUT SUCCESS ON PROVIDER LOOKUP: " & conn.GetType.Name & "::" & conn.ConnectionString)
                     TestFails = True
@@ -440,7 +495,7 @@ Namespace CompuMaster.Test.Data.DataQuery
                 Try
                     conn = CompuMaster.Data.DataQuery.Connections.MicrosoftAccessConnection(CurrentTestFile)
                     If conn IsNot Nothing Then
-                        Assert.AreEqual("string", CType(CompuMaster.Data.DataQuery.ExecuteScalar(conn, "SELECT * FROM test", CommandType.Text, Nothing, CompuMaster.Data.DataQuery.AnyIDataProvider.Automations.AutoOpenConnection), String))
+                        Assert.AreEqual("1", CType(CompuMaster.Data.DataQuery.ExecuteScalar(conn, "SELECT * FROM testdata", CommandType.Text, Nothing, CompuMaster.Data.DataQuery.AnyIDataProvider.Automations.AutoOpenConnection), String))
                     End If
                 Catch ex As Exception
                     FoundProviderLookupException = ex
@@ -451,7 +506,15 @@ Namespace CompuMaster.Test.Data.DataQuery
                     End If
                 End Try
                 If FoundProviderLookupException IsNot Nothing Then
-                    Console.WriteLine("FAILED ON PROVIDER LOOKUP: " & FoundProviderLookupException.Message)
+                    If FoundProviderLookupException.GetType Is GetType(CompuMaster.Data.DataQuery.DataException) Then
+                        If FoundProviderLookupException.InnerException IsNot Nothing Then
+                            Console.WriteLine("FAILED ON PROVIDER LOOKUP (DataException): " & FoundProviderLookupException.InnerException.Message & " (Test file: " & CurrentTestFile & ")")
+                        Else
+                            Console.WriteLine("FAILED ON PROVIDER LOOKUP (DataException): " & FoundProviderLookupException.Message & " (Test file: " & CurrentTestFile & ")")
+                        End If
+                    Else
+                        Console.WriteLine("FAILED ON PROVIDER LOOKUP: " & FoundProviderLookupException.Message & " (Test file: " & CurrentTestFile & ")")
+                    End If
                 ElseIf IsProviderCurrentlyInstalled = False Then
                     Console.WriteLine("DETECTION FOR INSTALLED PROVIDER FAILED, BUT SUCCESS ON PROVIDER LOOKUP: " & conn.GetType.Name & "::" & conn.ConnectionString)
                     TestFails = True
