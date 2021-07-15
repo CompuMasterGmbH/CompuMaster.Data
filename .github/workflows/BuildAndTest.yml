@@ -77,6 +77,11 @@ jobs:
               if: (!startsWith(matrix.os, 'windows'))
               run: ls -la
 
+            - name: unixODBC Driver Listing (Linux/Mac)
+              if: (!startsWith(matrix.os, 'windows'))
+              continue-on-error: true
+              run: odbcinst -q -d
+
             - name: Install dependencies
               run: dotnet restore CompuMaster.Data.VS2012.sln
 
