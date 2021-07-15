@@ -95,7 +95,23 @@ Namespace CompuMaster.Test.Data.DataQuery
 
         <Test()> Public Sub EnumerateTablesAndViewsInOdbcDbDataSource()
             Dim TestDir As String = AssemblyTestEnvironment.TestFileAbsolutePath("testfiles")
-            Dim conn As IDbConnection = CompuMaster.Data.DataQuery.Connections.TextCsvConnection(TestDir)
+            Dim conn As IDbConnection = Nothing
+            Select Case System.Environment.OSVersion.Platform
+                Case PlatformID.Win32NT
+                    conn = CompuMaster.Data.DataQuery.Connections.TextCsvConnection(TestDir)
+                Case Else
+                    Assert.Catch(Of System.Data.Odbc.OdbcException)(Sub()
+                                                                        CompuMaster.Data.DataQuery.Connections.TextCsvConnection(TestDir)
+                                                                    End Sub)
+                    Dim Message As String
+                    Try
+                        CompuMaster.Data.DataQuery.Connections.TextCsvConnection(TestDir)
+                        Message = "Invalid operation flow"
+                    Catch ex As System.Data.Odbc.OdbcException
+                        Message = ex.Message
+                    End Try
+                    Assert.Ignore("ODBC driver for CSV files not available on current platform " & System.Environment.OSVersion.VersionString & " (" & Message & ")")
+            End Select
             Try
                 conn.Open()
                 Dim tables As CompuMaster.Data.DataQuery.Connections.OdbcTableDescriptor() = CompuMaster.Data.DataQuery.Connections.EnumerateTablesAndViewsInOdbcDataSource(CType(conn, System.Data.Odbc.OdbcConnection))
@@ -142,8 +158,26 @@ Namespace CompuMaster.Test.Data.DataQuery
         End Sub
 
         <Test()> Public Sub EnumerateTablesAndViewsInOleDbDataSource()
+            If CompuMaster.Data.DataQuery.PlatformTools.ProbeOleDbProvider("Microsoft.ACE.OLEDB.") = False AndAlso CompuMaster.Data.DataQuery.PlatformTools.ProbeOleDbProvider("Microsoft.Jet.OLEDB.") = False Then
+                Assert.Ignore("No MS Office driver installed")
+            End If
+
             Dim TestFile As String = AssemblyTestEnvironment.TestFileAbsolutePath("testfiles\test_for_msaccess.mdb")
-            Dim conn As IDbConnection = CompuMaster.Data.DataQuery.Connections.MicrosoftAccessConnection(TestFile)
+            Dim conn As IDbConnection = Nothing
+            Select Case System.Environment.OSVersion.Platform
+                Case PlatformID.Win32NT
+                    Try
+                        conn = CompuMaster.Data.DataQuery.Connections.MicrosoftAccessConnection(TestFile)
+                    Catch ex As CompuMaster.Data.DataQuery.Connections.Office2010x64OleDbOdbcEngineRequiredException
+                        Assert.Ignore("Microsoft Access OleDB provider not available on current platform " & System.Environment.OSVersion.VersionString)
+                    End Try
+                Case Else
+                    Assert.Catch(Of CompuMaster.Data.DataQuery.Connections.Office2010x64OleDbOdbcEngineRequiredException)(Sub()
+                                                                                                                              conn = CompuMaster.Data.DataQuery.Connections.MicrosoftAccessConnection(TestFile)
+                                                                                                                          End Sub)
+                    Assert.Ignore("Microsoft Access OleDB provider not available on current platform " & System.Environment.OSVersion.VersionString)
+            End Select
+            Console.WriteLine("Evaluated data provider connection string for current platform: " & conn.ConnectionString)
             If CType(conn, Object).GetType Is GetType(System.Data.OleDb.OleDbConnection) Then
                 Try
                     conn.Open()
@@ -179,7 +213,20 @@ Namespace CompuMaster.Test.Data.DataQuery
 
             Console.WriteLine("Trying to find appropriate data provider for platform " & PlatformDependentProcessBitNumber())
             Dim TestFile As String = AssemblyTestEnvironment.TestFileAbsolutePath("testfiles\test_for_lastcell_e70aka97-2003.xls")
-            Dim conn As IDbConnection = CompuMaster.Data.DataQuery.Connections.MicrosoftExcelOdbcConnection(TestFile, False, True)
+            Dim conn As IDbConnection = Nothing
+            Select Case System.Environment.OSVersion.Platform
+                Case PlatformID.Win32NT
+                    Try
+                        conn = CompuMaster.Data.DataQuery.Connections.MicrosoftExcelOdbcConnection(TestFile, False, True)
+                    Catch ex As CompuMaster.Data.DataQuery.Connections.Office2010x64OleDbOdbcEngineRequiredException
+                        Assert.Ignore("Microsoft Excel OleDB provider not available on current platform " & System.Environment.OSVersion.VersionString)
+                    End Try
+                Case Else
+                    Assert.Catch(Of CompuMaster.Data.DataQuery.Connections.Office2010x64OleDbOdbcEngineRequiredException)(Sub()
+                                                                                                                              conn = CompuMaster.Data.DataQuery.Connections.MicrosoftExcelOdbcConnection(TestFile, False, True)
+                                                                                                                          End Sub)
+                    Assert.Ignore("Microsoft Excel OleDB provider not available on current platform " & System.Environment.OSVersion.VersionString)
+            End Select
             Console.WriteLine("Evaluated data provider connection string for current platform: " & conn.ConnectionString)
             If CType(conn, Object).GetType Is GetType(System.Data.Odbc.OdbcConnection) Then
                 Try
