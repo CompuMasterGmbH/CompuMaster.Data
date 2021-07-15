@@ -101,6 +101,8 @@ Namespace CompuMaster.Data.DataQuery
                 Dim ProviderReader As System.Data.OleDb.OleDbDataReader = System.Data.OleDb.OleDbEnumerator.GetRootEnumerator
                 Dim ProviderTable As DataTable = CompuMaster.Data.DataTables.ConvertDataReaderToDataTable(ProviderReader)
                 Return CompuMaster.Data.DataTables.ConvertColumnValuesIntoList(Of String)(ProviderTable.Columns("SOURCES_NAME"))
+            Catch ex As PlatformNotSupportedException
+                Return New Generic.List(Of String)
             Catch ex As NotImplementedException
                 Return New Generic.List(Of String)
             End Try
@@ -115,6 +117,8 @@ Namespace CompuMaster.Data.DataQuery
                 Dim ProviderReader As System.Data.OleDb.OleDbDataReader = System.Data.OleDb.OleDbEnumerator.GetRootEnumerator
                 Dim ProviderTable As DataTable = CompuMaster.Data.DataTables.ConvertDataReaderToDataTable(ProviderReader)
                 Return CompuMaster.Data.DataTables.ConvertColumnValuesIntoList(Of String, String)(ProviderTable.Columns("SOURCES_NAME"), ProviderTable.Columns("SOURCES_DESCRIPTION"))
+            Catch ex As PlatformNotSupportedException
+                Return New Generic.List(Of Generic.KeyValuePair(Of String, String))
             Catch ex As NotImplementedException
                 Return New Generic.List(Of Generic.KeyValuePair(Of String, String))
             End Try

@@ -13,16 +13,32 @@ Namespace CompuMaster.Test.Data
         <Test()> Public Sub CurrentDomains()
             Console.WriteLine("Domains in current forest:" & ControlChars.CrLf & Strings.Join(CompuMaster.Data.Ldap.GetDomains, ControlChars.CrLf))
         End Sub
+#End If
 
         <Test()> Public Sub Query()
+#If Not CI_Build Then
+            Select Case System.Environment.OSVersion.Platform
+                Case PlatformID.Win32NT
+                    'Expected exception: The server is not operational.
+                    Assert.Catch(Of System.Runtime.InteropServices.COMException)(Sub()
+                                                                                     CompuMaster.Data.Ldap.Query("compumaster", "(objectCategory=user)")
+                                                                                 End Sub)
+                Case Else
+                    'Expected exception: System.DirectoryServices is not supported on this platform.
+                    Assert.Catch(Of PlatformNotSupportedException)(Sub()
+                                                                       CompuMaster.Data.Ldap.Query("compumaster", "(objectCategory=user)")
+                                                                   End Sub)
+            End Select
+#Else
             Dim testTable As DataTable = CompuMaster.Data.Ldap.Query("compumaster", "(objectCategory=user)")
             Console.WriteLine(CompuMaster.Data.DataTables.ConvertToPlainTextTable(testTable))
             Assert.Greater(testTable.Rows.Count, 1)
             testTable = CompuMaster.Data.Ldap.Query("CN=Jochen Wezel,OU=Emmelshausen,OU=Users - CompuMaster,DC=lan,DC=compumaster,DC=de", "(objectCategory=user)")
             Console.WriteLine(CompuMaster.Data.DataTables.ConvertToPlainTextTable(testTable))
             Assert.AreEqual(testTable.Rows.Count, 1)
-        End Sub
 #End If
+        End Sub
+
 
     End Class
 
