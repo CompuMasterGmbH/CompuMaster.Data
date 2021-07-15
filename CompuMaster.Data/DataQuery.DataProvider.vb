@@ -241,6 +241,8 @@ Namespace CompuMaster.Data.DataQuery
                                 Dim DbCommandBuilderType As System.Type = FindDbCommandBuilder(assembly, IDbDataAdapterType)
                                 Dim Provider As New DataProvider(assembly, t, IDbCommandType, DbCommandBuilderType, IDbDataAdapterType)
                                 Result.Add(Provider)
+                            Catch ex As PlatformNotSupportedException
+                                'Ignore OleDbProviders on platforms throwing PlatformNotSupportedException 
                             Catch ex As NotImplementedException
                                 'Ignore OleDbProviders on Mono .NET throwing NotImplementedExceptions
                             End Try

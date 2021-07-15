@@ -22,6 +22,8 @@ Namespace CompuMaster.Test.Data
             Dim Result As String() = Nothing
             Try
                 Result = CompuMaster.Data.DataQuery.PlatformTools.InstalledOdbcDrivers(CompuMaster.Data.DataQuery.PlatformTools.TargetPlatform.Current)
+            Catch ex As PlatformNotSupportedException
+                Assert.Ignore("Platform doesn't provide OdbcDriver list")
             Catch ex As NotImplementedException
                 'Mono .NET Framework and/or Non-Windows platforms (e.g. Linux) don't support this feature currently
                 Assert.Ignore("Platform doesn't provide OdbcDriver list")
