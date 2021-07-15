@@ -26,8 +26,8 @@ env:
   # Configuration type to build
   BUILD_CONFIGURATION: CI_CD
 
-  BUILD_OUTPUT: CompuMaster.Data/bin/${{env.BUILD_CONFIGURATION}}
-  BUILD_OUTPUT_TEST: CompuMaster.Test.Tools.Data/bin/${{env.BUILD_CONFIGURATION}}
+  BUILD_OUTPUT: CompuMaster.Data/bin/CI_CD
+  BUILD_OUTPUT_TEST: CompuMaster.Test.Tools.Data/bin/CI_CD
 
 jobs:
 
