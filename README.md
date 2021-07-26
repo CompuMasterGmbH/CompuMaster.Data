@@ -9,6 +9,10 @@
 ```powershell
 Install-Package CompuMaster.Data
 ```
+respectively
+```powershell
+Install-Package CompuMaster.Data.Controls
+```
 Also see: https://www.nuget.org/packages/CompuMaster.Data/
 
 ## Some of the many features - all .Net data providers
