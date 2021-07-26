@@ -1,0 +1,11 @@
+D:\git_local_repository\software-projects\CompuMaster.Data\CompuMaster.Data.Controls_multi_Forms\bin\Debug\net48\CompuMaster.Data.Controls.exe.config
+D:\git_local_repository\software-projects\CompuMaster.Data\CompuMaster.Data.Controls_multi_Forms\bin\Debug\net48\CompuMaster.Data.Controls.exe
+D:\git_local_repository\software-projects\CompuMaster.Data\CompuMaster.Data.Controls_multi_Forms\bin\Debug\net48\CompuMaster.Data.Controls.pdb
+D:\git_local_repository\software-projects\CompuMaster.Data\CompuMaster.Data.Controls_multi_Forms\bin\Debug\net48\CompuMaster.Data.dll
+D:\git_local_repository\software-projects\CompuMaster.Data\CompuMaster.Data.Controls_multi_Forms\obj\Debug\net48\CompuMaster.Data.Controls_multi_Forms.vbproj.AssemblyReference.cache
+D:\git_local_repository\software-projects\CompuMaster.Data\CompuMaster.Data.Controls_multi_Forms\obj\Debug\net48\CompuMaster.Data.Controls_multi_Forms.AssemblyInfoInputs.cache
+D:\git_local_repository\software-projects\CompuMaster.Data\CompuMaster.Data.Controls_multi_Forms\obj\Debug\net48\CompuMaster.Data.Controls_multi_Forms.AssemblyInfo.vb
+D:\git_local_repository\software-projects\CompuMaster.Data\CompuMaster.Data.Controls_multi_Forms\obj\Debug\net48\CompuMaster.Data.Controls_multi_Forms.vbproj.CoreCompileInputs.cache
+D:\git_local_repository\software-projects\CompuMaster.Data\CompuMaster.Data.Controls_multi_Forms\obj\Debug\net48\CompuMaster.Data.Controls_multi_Forms.vbproj.CopyComplete
+D:\git_local_repository\software-projects\CompuMaster.Data\CompuMaster.Data.Controls_multi_Forms\obj\Debug\net48\CompuMaster.Data.Controls.exe
+D:\git_local_repository\software-projects\CompuMaster.Data\CompuMaster.Data.Controls_multi_Forms\obj\Debug\net48\CompuMaster.Data.Controls.pdb
