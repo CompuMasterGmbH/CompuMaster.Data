@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
@@ -12,7 +12,7 @@
     <AssemblyName>CompuMaster.Data.Web</AssemblyName>
     <FileAlignment>512</FileAlignment>
     <MyType>WebControl</MyType>
-    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <Nonshipping>true</Nonshipping>
     <OptionExplicit>On</OptionExplicit>
     <OptionCompare>Binary</OptionCompare>
@@ -38,6 +38,7 @@
     <IsWebBootstrapper>false</IsWebBootstrapper>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -47,6 +48,7 @@
     <OutputPath>bin\Debug\</OutputPath>
     <DocumentationFile>CompuMaster.Data.Web.xml</DocumentationFile>
     <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022,42353,42354,42355</NoWarn>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -56,6 +58,7 @@
     <OutputPath>bin\Release\</OutputPath>
     <DocumentationFile>CompuMaster.Data.Web.xml</DocumentationFile>
     <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022,42353,42354,42355</NoWarn>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -82,6 +85,7 @@
     <Compile Include="My Project\Application.Designer.vb">
       <AutoGen>True</AutoGen>
       <DependentUpon>Application.myapp</DependentUpon>
+      <DesignTime>True</DesignTime>
     </Compile>
     <Compile Include="GridEditQuery.vb" />
     <Compile Include="AssemblyInfo.vb" />
@@ -132,9 +136,9 @@
     <Service Include="{94E38DFF-614B-4CBD-B67C-F211BB35CE8B}" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\CompuMaster.Data\CompuMaster.Data.VS2012.vbproj">
-      <Project>{3bda1292-0d02-452e-9518-18496ab59231}</Project>
-      <Name>CompuMaster.Data.VS2012</Name>
+    <ProjectReference Include="..\CompuMaster.Data\CompuMaster.Data.vbproj">
+      <Project>{23d43cb0-a621-416a-966a-5a0c0eeb34db}</Project>
+      <Name>CompuMaster.Data</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.VisualBasic.targets" />

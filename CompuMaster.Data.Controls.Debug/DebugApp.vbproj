@@ -52,6 +52,28 @@
   <PropertyGroup>
     <OptionInfer>On</OptionInfer>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <DefineDebug>true</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DocumentationFile>CMDataWindowsDebugApp.xml</DocumentationFile>
+    <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
+    <DefineTrace>true</DefineTrace>
+    <OutputPath>bin\Release\</OutputPath>
+    <DocumentationFile>CMDataWindowsDebugApp.xml</DocumentationFile>
+    <Optimize>true</Optimize>
+    <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>favicon.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -111,6 +133,7 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="favicon.ico" />
     <None Include="App.config" />
     <Content Include="app_data\country.accdb">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -150,19 +173,19 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\CompuMaster.Data.Controls\CompuMaster.Data.Controls.VS2012.vbproj">
-      <Project>{a67add6a-a78b-4b95-b9a4-b40a118c1813}</Project>
-      <Name>CompuMaster.Data.Controls.VS2012</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\CompuMaster.Data\CompuMaster.Data.VS2012.vbproj">
-      <Project>{3bda1292-0d02-452e-9518-18496ab59231}</Project>
-      <Name>CompuMaster.Data.VS2012</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <PackageReference Include="Npgsql">
       <Version>4.1.8</Version>
     </PackageReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\CompuMaster.Data.Controls\CompuMaster.Data.Controls.vbproj">
+      <Project>{1bf97e36-3d0c-481e-a977-84cf2b6586c1}</Project>
+      <Name>CompuMaster.Data.Controls</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CompuMaster.Data\CompuMaster.Data.vbproj">
+      <Project>{23d43cb0-a621-416a-966a-5a0c0eeb34db}</Project>
+      <Name>CompuMaster.Data</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
