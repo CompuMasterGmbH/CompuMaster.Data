@@ -47,7 +47,8 @@ jobs:
               #  arch: x86_64
               #- os: ubuntu-latest
               #  arch: arm
-              #- os: windows-latest
+              - os: windows-latest
+                build_configuration_suffix: "_WIN"
               #  arch: x86
               #- os: windows-latest
               #  arch: x86_64
@@ -80,13 +81,13 @@ jobs:
               run: odbcinst -q -d
 
             - name: Install dependencies
-              run: dotnet restore /p:Configuration=CI_CD
+              run: dotnet restore /p:Configuration=CI_CD${{matrix.build_configuration_suffix}}
 
             - name: Build
-              run: dotnet build --configuration=${{env.BUILD_CONFIGURATION}} --no-restore 
+              run: dotnet build --configuration=${{env.BUILD_CONFIGURATION}}${{matrix.build_configuration_suffix}} --no-restore 
 
             - name: Run Unit Tests
-              run: dotnet test --framework net5.0 --results-directory test-results --logger junit --configuration=${{env.BUILD_CONFIGURATION}} --no-restore 
+              run: dotnet test --framework net5.0 --results-directory test-results --logger junit --configuration=${{env.BUILD_CONFIGURATION}}${{matrix.build_configuration_suffix}} --no-restore 
 
             - name: Dir Listing (Win) test-results
               if: startsWith(matrix.os, 'windows')
