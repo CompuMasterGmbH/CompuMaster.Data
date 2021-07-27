@@ -344,7 +344,7 @@ Namespace CompuMaster.Data.Windows
                     'Me.DataGridViewQuickEdit.Rows(GridNewRowIndex).Selected = True
                     'Me.DataGridViewQuickEdit.BeginEdit(False)
                     For MyColCounter As Integer = 0 To ClipboardTable.Columns.Count - 1
-                        Dim ClipboardCellValue As String = Data.Utils.NoDBNull(Of String)(ClipboardRow(MyColCounter))
+                        Dim ClipboardCellValue As String = Global.CompuMaster.Data.Utils.NoDBNull(Of String)(ClipboardRow(MyColCounter))
                         Me.Grid.Rows(GridNewRowIndex).Cells(MyColCounter).Value = ClipboardCellValue
                         Me.Grid.Update()
                     Next
