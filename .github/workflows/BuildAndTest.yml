@@ -80,13 +80,13 @@ jobs:
               run: odbcinst -q -d
 
             - name: Install dependencies
-              run: dotnet restore CompuMaster.Data.sln --configuration=${{env.BUILD_CONFIGURATION}}
+              run: dotnet restore 
 
             - name: Build
-              run: dotnet build --configuration=${{env.BUILD_CONFIGURATION}} --no-restore CompuMaster.Data.sln
+              run: dotnet build --configuration=${{env.BUILD_CONFIGURATION}} --no-restore 
 
             - name: Run Unit Tests
-              run: dotnet test --framework net5.0 --results-directory test-results --logger junit --configuration=${{env.BUILD_CONFIGURATION}} --no-restore CompuMaster.Data.sln
+              run: dotnet test --framework net5.0 --results-directory test-results --logger junit --configuration=${{env.BUILD_CONFIGURATION}} --no-restore 
 
             - name: Dir Listing (Win) test-results
               if: startsWith(matrix.os, 'windows')
