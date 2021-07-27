@@ -63,9 +63,16 @@ Namespace CompuMaster.Test.Data.DataQuery
 
             provider = CompuMaster.Data.DataQuery.DataProvider.LookupDataProvider("OleDb")
             Dim IsMonoRuntime As Boolean = Type.GetType("Mono.Runtime") IsNot Nothing
-            If IsMonoRuntime OrElse System.Environment.OSVersion.Platform <> PlatformID.Win32NT Then
+            If IsMonoRuntime AndAlso System.Environment.OSVersion.Platform <> PlatformID.Win32NT Then
                 Assert.IsNull(provider)
                 Console.WriteLine("OleDb NOT SUPPORTED at Mono/" & System.Environment.OSVersion.Platform.ToString)
+            ElseIf Not IsMonoRuntime AndAlso System.Environment.OSVersion.Platform <> PlatformID.Win32NT Then
+                Assert.IsNull(provider.Title = "OleDb")
+                Assert.Throws(Of System.PlatformNotSupportedException)(
+                    Sub()
+                        provider.CreateConnection()
+                    End Sub)
+                Console.WriteLine("OleDb NOT SUPPORTED at Non-Windows-Platform " & System.Environment.OSVersion.Platform.ToString)
             Else
                 Assert.IsNotNull(provider)
                 Assert.AreEqual(GetType(System.Data.OleDb.OleDbConnection), provider.CreateConnection.GetType)
