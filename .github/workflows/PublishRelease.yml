@@ -44,7 +44,7 @@ jobs:
                 dotnet-version: 5.0.x
 
             - name: Install dependencies
-              run: dotnet restore 
+              run: dotnet restore /p:Configuration=CI_CD
 
             - name: Build
               run: dotnet build --configuration=${{env.BUILD_CONFIGURATION}} --no-restore 
