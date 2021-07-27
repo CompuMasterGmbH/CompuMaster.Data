@@ -82,6 +82,10 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="My Project\" />
+    <None Include="..\logo_64x64.png">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CompuMaster.Data\CompuMaster.Data.vbproj" />
