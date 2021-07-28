@@ -67,7 +67,7 @@ Namespace CompuMaster.Test.Data.DataQuery
                 Assert.IsNull(provider)
                 Console.WriteLine("OleDb NOT SUPPORTED at Mono/" & System.Environment.OSVersion.Platform.ToString)
             ElseIf Not IsMonoRuntime AndAlso System.Environment.OSVersion.Platform <> PlatformID.Win32NT Then
-                Assert.IsNull(provider.Title = "OleDb")
+                Assert.IsTrue(provider.Title = "OleDb")
                 Assert.Throws(Of System.PlatformNotSupportedException)(
                     Sub()
                         provider.CreateConnection()
