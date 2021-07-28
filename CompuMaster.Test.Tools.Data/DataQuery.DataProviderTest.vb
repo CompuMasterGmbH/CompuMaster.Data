@@ -1,5 +1,7 @@
 ﻿Imports NUnit.Framework
+Imports System
 Imports System.Collections.Generic
+Imports System.Diagnostics
 
 Namespace CompuMaster.Test.Data.DataQuery
 
@@ -68,11 +70,19 @@ Namespace CompuMaster.Test.Data.DataQuery
                 Console.WriteLine("OleDb NOT SUPPORTED at Mono/" & System.Environment.OSVersion.Platform.ToString)
             ElseIf Not IsMonoRuntime AndAlso System.Environment.OSVersion.Platform <> PlatformID.Win32NT Then
                 Assert.IsTrue(provider.Title = "OleDb")
-                Assert.Throws(Of System.PlatformNotSupportedException)(
-                    Sub()
-                        provider.CreateConnection()
-                    End Sub)
-                Console.WriteLine("OleDb NOT SUPPORTED at Non-Windows-Platform " & System.Environment.OSVersion.Platform.ToString)
+                Try
+                    provider.CreateConnection()
+                    Assert.Fail("Expected exception")
+                Catch ex As Exception
+                    If ex.GetType Is GetType(PlatformNotSupportedException) OrElse (
+                                     ex.InnerException IsNot Nothing AndAlso ex.InnerException.GetType Is GetType(PlatformNotSupportedException)
+                                ) Then
+                        'test passed :-)
+                        Console.WriteLine("OleDb NOT SUPPORTED at Non-Windows-Platform " & System.Environment.OSVersion.Platform.ToString)
+                    Else
+                        Assert.Fail("Unexpected exception type " & ex.GetType.FullName)
+                    End If
+                End Try
             Else
                 Assert.IsNotNull(provider)
                 Assert.AreEqual(GetType(System.Data.OleDb.OleDbConnection), provider.CreateConnection.GetType)
