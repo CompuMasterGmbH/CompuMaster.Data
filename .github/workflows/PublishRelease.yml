@@ -30,7 +30,7 @@ env:
 
 jobs:
     publish:
-        runs-on: ubuntu-latest
+        runs-on: windows-latest
         #if: false # always skip job
 
         steps:
@@ -44,18 +44,18 @@ jobs:
                 dotnet-version: 5.0.x
 
             - name: Install dependencies
-              run: dotnet restore CompuMaster.Data.VS2012.sln
+              run: dotnet restore /p:Configuration=CI_CD
 
             - name: Build
-              run: dotnet build --configuration=${{env.BUILD_CONFIGURATION}} --no-restore CompuMaster.Data.VS2012.sln
+              run: dotnet build --configuration=${{env.BUILD_CONFIGURATION}} --no-restore 
 
             - name: Pack binaries CompuMaster.Data
               run: |
                 (cd ${{env.BUILD_OUTPUT_BASEDIR}}/${{env.BUILD_CONFIGURATION}} && zip $OLDPWD/bin.zip -r .)
 
-            #- name: Pack binaries CompuMaster.Data.Controls
-            #  run: |
-            #    (cd ${{env.BUILD_OUTPUT_BASEDIR2}}/${{env.BUILD_CONFIGURATION}} && zip $OLDPWD/bin-controls.zip -r .)
+            - name: Pack binaries CompuMaster.Data.Controls
+              run: |
+                (cd ${{env.BUILD_OUTPUT_BASEDIR2}}/${{env.BUILD_CONFIGURATION}} && zip $OLDPWD/bin-wincontrols.zip -r .)
 
             - name: Publish binaries CompuMaster.Data
               uses: softprops/action-gh-release@v1
@@ -64,20 +64,20 @@ jobs:
               env:
                 GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-            #- name: Publish binaries CompuMaster.Data.Controls
-            #  uses: softprops/action-gh-release@v1
-            #  with:
-            #    files: "bin-controls.zip"
-            #  env:
-            #    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+            - name: Publish binaries CompuMaster.Data.Controls
+              uses: softprops/action-gh-release@v1
+              with:
+                files: "bin-wincontrols.zip"
+              env:
+                GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
             - name: Pack CompuMaster.Data
               run: dotnet pack --no-build --configuration=${{env.BUILD_CONFIGURATION}} ${{env.BUILD_PROJECT}} --output .  
 
-            #- name: Pack CompuMaster.Data.Controls
-            #  run: dotnet pack --no-build --configuration=${{env.BUILD_CONFIGURATION}} ${{env.BUILD_PROJECT2}} --output .  
+            - name: Pack CompuMaster.Data.Controls
+              run: dotnet pack --no-build --configuration=${{env.BUILD_CONFIGURATION}} ${{env.BUILD_PROJECT2}} --output .  
 
-            - name: PushNuget CompuMaster.Data #+ CompuMaster.Data.Controls
+            - name: PushNuget CompuMaster.Data + CompuMaster.Data.Controls
               run: dotnet nuget push *.nupkg --source https://api.nuget.org/v3/index.json --api-key ${{ secrets.NUGET_API_KEY }} --skip-duplicate 
 
             - name: Publish Package Artifacts

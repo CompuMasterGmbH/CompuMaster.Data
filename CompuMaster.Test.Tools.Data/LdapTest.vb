@@ -5,6 +5,15 @@ Namespace CompuMaster.Test.Data
 
     <TestFixture(Category:="LDAP with security")> Public Class LdapTest
 
+        <SetUp> Public Sub IgnoreTestsAtNonWindowsPlatforms()
+            Select Case System.Environment.OSVersion.Platform
+                Case PlatformID.Win32NT
+                    'continue
+                Case Else
+                    Assert.Ignore("LDAP not available for non-Windows platforms")
+            End Select
+        End Sub
+
 #If Not CI_Build Then
         <Test()> Public Sub CurrentRootDomain()
             Console.WriteLine("First domain in forest=" & CompuMaster.Data.Ldap.GetRootDomain)

@@ -11,6 +11,7 @@
 /CompuMaster.Data.Controls/obj
 /CompuMaster.Data.Controls/bin
 /TestResults
+/testresults
 /test-results
 /CompuMaster.Data.Controls/New-NuGetPackages
 /CompuMaster.Data/New-NuGetPackages
@@ -43,3 +44,5 @@ CompuMaster.Test.Web.DataUpdate/Bin/Npgsql.pdb
 CompuMaster.Test.Web.DataUpdate/Bin/CompuMaster.Data.pdb
 /CompuMaster.Test.TinyWebServerAdvanced/bin
 /CompuMaster.Test.TinyWebServerAdvanced/obj
+bin
+obj

@@ -1,39 +1,38 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-	<TargetFrameworks>netcoreapp3.1;net5.0</TargetFrameworks>
-
+	<TargetFrameworks>netcoreapp3.1;net5.0;net48</TargetFrameworks>
     <IsPackable>false</IsPackable>
-
     <RootNamespace />
-
     <AssemblyName>CompuMaster.Test.Tools.Data</AssemblyName>
-
     <Version>3.0.2021.0713</Version>
-
     <Authors>Jochen Wezel</Authors>
-
     <Company>CompuMaster GmbH</Company>
-
     <Product>CompuMaster.Data</Product>
-
     <Configurations>Debug;Release;CI_CD</Configurations>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='CI_CD|netcoreapp3.1|AnyCPU'">
+  <PropertyGroup Condition="'$(Configuration)'=='CI_CD'">
     <DefineConstants>CI_Build=True</DefineConstants>
     <OutputPath>bin\CI_CD\</OutputPath>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|netcoreapp3.1|AnyCPU'">
+  <PropertyGroup Condition="'$(Configuration)'=='Debug'">
     <OutputPath>\bin\Debug\</OutputPath>
     <DefineConstants></DefineConstants>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|netcoreapp3.1|AnyCPU'">
+  <PropertyGroup Condition="'$(Configuration)'=='Release'">
     <OutputPath>bin\Release\</OutputPath>
   </PropertyGroup>
 
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DefineDebug>false</DefineDebug>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'CI_CD|AnyCPU' ">
+    <DefineDebug>false</DefineDebug>
+    <DefineTrace>false</DefineTrace>
+  </PropertyGroup>
   <ItemGroup>
     <Content Include="testfiles\3000RowsTable.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

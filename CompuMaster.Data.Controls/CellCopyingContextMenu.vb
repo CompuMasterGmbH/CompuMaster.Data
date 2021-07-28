@@ -3,6 +3,7 @@ Option Strict On
 
 Imports System.Windows.Forms
 Imports System.Drawing
+Imports CompuMaster.Data
 
 Namespace CompuMaster.Data.Windows
 
@@ -237,7 +238,7 @@ Namespace CompuMaster.Data.Windows
         Private Sub CopyFullTableToClipboardToolStripMenuItem_Click(sender As System.Object, e As System.EventArgs) Handles CopyFullTableToClipboardToolStripMenuItem.Click
             If Me.Grid Is Nothing Then Throw New InvalidOperationException("DataGridView hasn't been assigned, yet")
             If Grid.DataSource IsNot Nothing Then
-                Clipboard.SetDataObject(CompuMaster.Data.Csv.ConvertDataTableToTextAsStringBuilder(CType(Grid.DataSource, DataTable), True, PreferredCulture(), ControlChars.Tab).ToString)
+                Clipboard.SetDataObject(Csv.ConvertDataTableToTextAsStringBuilder(CType(Grid.DataSource, DataTable), True, PreferredCulture(), ControlChars.Tab).ToString)
             End If
         End Sub
 
@@ -250,7 +251,7 @@ Namespace CompuMaster.Data.Windows
         Private Sub CopySelectedCellsToClipboardwithHeadersToolStripMenuItem_Click(sender As System.Object, e As System.EventArgs) Handles CopySelectedCellsToClipboardWithHeadersToolStripMenuItem.Click
             If Me.Grid Is Nothing Then Throw New InvalidOperationException("DataGridView hasn't been assigned, yet")
             Dim newTable As DataTable = CreateDataTableFromMarkedCells()
-            Clipboard.SetDataObject(CompuMaster.Data.Csv.ConvertDataTableToTextAsStringBuilder(newTable, True, PreferredCulture(), ControlChars.Tab).ToString)
+            Clipboard.SetDataObject(Csv.ConvertDataTableToTextAsStringBuilder(newTable, True, PreferredCulture(), ControlChars.Tab).ToString)
         End Sub
 
         ''' <summary>
@@ -262,7 +263,7 @@ Namespace CompuMaster.Data.Windows
         Private Sub CopySelectedCellsToClipboardwithoutHeadersToolStripMenuItem_Click(sender As System.Object, e As System.EventArgs) Handles CopySelectedCellsToClipboardWithoutHeadersToolStripMenuItem.Click
             If Me.Grid Is Nothing Then Throw New InvalidOperationException("DataGridView hasn't been assigned, yet")
             Dim newTable As DataTable = CreateDataTableFromMarkedCells()
-            Clipboard.SetDataObject(CompuMaster.Data.Csv.ConvertDataTableToTextAsStringBuilder(newTable, False, PreferredCulture(), ControlChars.Tab).ToString)
+            Clipboard.SetDataObject(Csv.ConvertDataTableToTextAsStringBuilder(newTable, False, PreferredCulture(), ControlChars.Tab).ToString)
         End Sub
 
         ''' <summary>
@@ -334,7 +335,7 @@ Namespace CompuMaster.Data.Windows
             Try
                 'Dim ClipboardTableText As String = Clipboard.GetText(TextDataFormat.CommaSeparatedValue)
                 Dim ClipboardTableText As String = Clipboard.GetText() 'TextDataFormat.UnicodeText)
-                Dim ClipboardTable As DataTable = CompuMaster.Data.Csv.ReadDataTableFromCsvString(ClipboardTableText, False, Csv.ReadLineEncodings.Default, Csv.ReadLineEncodingAutoConversion.AutoConvertLineBreakToCrLf, ControlChars.Tab, """"c, False, True)
+                Dim ClipboardTable As DataTable = Csv.ReadDataTableFromCsvString(ClipboardTableText, False, Csv.ReadLineEncodings.Default, Csv.ReadLineEncodingAutoConversion.AutoConvertLineBreakToCrLf, ControlChars.Tab, """"c, False, True)
                 'Dim check As String = CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(ClipboardTable)
                 For MyCounter As Integer = 0 To ClipboardTable.Rows.Count - 1
                     Dim ClipboardRow As DataRow = ClipboardTable.Rows(MyCounter)
@@ -343,7 +344,7 @@ Namespace CompuMaster.Data.Windows
                     'Me.DataGridViewQuickEdit.Rows(GridNewRowIndex).Selected = True
                     'Me.DataGridViewQuickEdit.BeginEdit(False)
                     For MyColCounter As Integer = 0 To ClipboardTable.Columns.Count - 1
-                        Dim ClipboardCellValue As String = CompuMaster.Data.Utils.NoDBNull(Of String)(ClipboardRow(MyColCounter))
+                        Dim ClipboardCellValue As String = Global.CompuMaster.Data.Utils.NoDBNull(Of String)(ClipboardRow(MyColCounter))
                         Me.Grid.Rows(GridNewRowIndex).Cells(MyColCounter).Value = ClipboardCellValue
                         Me.Grid.Update()
                     Next

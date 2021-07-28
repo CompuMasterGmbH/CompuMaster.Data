@@ -3,6 +3,7 @@ Option Explicit On
 
 Imports System
 Imports System.Runtime.InteropServices
+Imports CompuMaster.Data
 
 Namespace CompuMaster.Data.Windows
 
@@ -57,14 +58,14 @@ Namespace CompuMaster.Data.Windows
         Public Property SaveDataChangesAfterEveryRowChange As Boolean = True
 
 #Disable Warning IDE1006 ' Benennungsstile
-        Private WithEvents _DataContainer As CompuMaster.Data.DataManipulationResult = Nothing
+        Private WithEvents _DataContainer As DataManipulationResult = Nothing
         ''' <summary>
         ''' The data container holds all necessary data for edit and upload
         ''' </summary>
         ''' <value></value>
         ''' <returns></returns>
         ''' <remarks></remarks>
-        Public ReadOnly Property DataContainer As CompuMaster.Data.DataManipulationResult
+        Public ReadOnly Property DataContainer As DataManipulationResult
             Get
                 Return Me._DataContainer
             End Get

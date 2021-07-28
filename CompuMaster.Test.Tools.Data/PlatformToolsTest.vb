@@ -5,16 +5,24 @@ Namespace CompuMaster.Test.Data
     <TestFixture(Category:="PlatformTools")> Public Class PlatformToolsTest
 
         <Test> Public Sub InstalledOleDbProviders()
-            Dim Result As DictionaryEntry() = CompuMaster.Data.DataQuery.PlatformTools.InstalledOleDbProviders
-            If Result Is Nothing OrElse Result.Length = 0 Then
-                'Mono .NET Framework and/or Non-Windows platforms (e.g. Linux) don't support this feature currently
-                Assert.Ignore("Platform doesn't provide OleDbProvider list")
+            Dim IsMonoRuntime As Boolean = Type.GetType("Mono.Runtime") IsNot Nothing
+            If Not IsMonoRuntime AndAlso System.Environment.OSVersion.Platform <> PlatformID.Win32NT Then
+                Assert.Throws(Of System.PlatformNotSupportedException)(
+                    Sub()
+                        CompuMaster.Data.DataQuery.PlatformTools.InstalledOleDbProviders()
+                    End Sub)
             Else
-                'There should be at least 1 entry being found
-                For Each item As DictionaryEntry In Result
-                    Console.WriteLine(item.Key & "=" & item.Value)
-                Next
-                Assert.NotZero(Result.Length)
+                Dim Result As DictionaryEntry() = CompuMaster.Data.DataQuery.PlatformTools.InstalledOleDbProviders
+                If Result Is Nothing OrElse Result.Length = 0 Then
+                    'Mono .NET Framework and/or Non-Windows platforms (e.g. Linux) don't support this feature currently
+                    Assert.Ignore("Platform " & System.Environment.OSVersion.Platform.ToString & " doesn't provide OleDbProvider list")
+                Else
+                    'There should be at least 1 entry being found
+                    For Each item As DictionaryEntry In Result
+                        Console.WriteLine(item.Key & "=" & item.Value)
+                    Next
+                    Assert.NotZero(Result.Length)
+                End If
             End If
         End Sub
 
