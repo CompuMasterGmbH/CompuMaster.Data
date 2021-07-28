@@ -14,8 +14,7 @@
 		<RepositoryUrl>https://github.com/CompuMasterGmbH/CompuMaster.Data.git</RepositoryUrl>
 		<RepositoryType>git</RepositoryType>
 		<PackageTags> CompuMaster Data Common Utils DataTable LDAP CSV Text File SqlServer SqlClient MySql PostgreSQL Npgsql AnyIDataProvider DatabaseManagement DataManipulation </PackageTags>
-		<StartupObject>Sub Main</StartupObject>
-		<Configurations>Debug;Release;CI_CD</Configurations>
+		<Configurations>Debug;CI_CD;Release</Configurations>
 		<UseWindowsForms>true</UseWindowsForms>
 		<MyType>WindowsForms</MyType>
 	</PropertyGroup>
@@ -36,7 +35,7 @@
 		<DebugType>full</DebugType>
 		<DefineDebug>true</DefineDebug>
 		<DefineTrace>true</DefineTrace>
-		<OutputPath>bin\Debug\</OutputPath>
+		<OutputPath>bin\Debug\net5.0-windows</OutputPath>
 		<NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
 	</PropertyGroup>
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='CI_CD|AnyCPU'">
@@ -44,7 +43,7 @@
 		<DebugType>full</DebugType>
 		<DefineDebug>true</DefineDebug>
 		<DefineTrace>true</DefineTrace>
-		<OutputPath>bin\CI_CD\</OutputPath>
+		<OutputPath>bin\CI_CD\net5.0-windows</OutputPath>
 		<NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
 	</PropertyGroup>
 	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
@@ -52,7 +51,7 @@
 		<DefineDebug>false</DefineDebug>
 		<DefineTrace>true</DefineTrace>
 		<Optimize>true</Optimize>
-		<OutputPath>bin\Release\</OutputPath>
+		<OutputPath>bin\Release\net5.0-windows</OutputPath>
 		<NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
 	</PropertyGroup>
 	<PropertyGroup>

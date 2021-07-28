@@ -26,6 +26,13 @@
     <OutputPath>bin\Release\</OutputPath>
   </PropertyGroup>
 
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DefineDebug>false</DefineDebug>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'CI_CD|AnyCPU' ">
+    <DefineDebug>false</DefineDebug>
+    <DefineTrace>false</DefineTrace>
+  </PropertyGroup>
   <ItemGroup>
     <Content Include="testfiles\3000RowsTable.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
