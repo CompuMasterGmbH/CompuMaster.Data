@@ -94,6 +94,7 @@ Also see: https://www.nuget.org/packages/CompuMaster.Data/
 * convert full DataTables, DataSets or just some DataRows into beautiful plain text or HTML tables with just 1 line of code
 ```vb.net
         CompuMaster.Data.DataTables.ConvertToPlainTextTable(SourceTable)
+        CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(SourceTable)
         CompuMaster.Data.DataTables.ConvertToHtmlTable(SourceTable)
 ```
 
