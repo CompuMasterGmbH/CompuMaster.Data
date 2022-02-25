@@ -19,7 +19,8 @@ env:
   SOLUTION_FILE_PATH: .
 
   # Name of project configuration for build as well as name of the bin output subdirectory (both must match for "dotnet pack" to find compiled files!)
-  BUILD_CONFIGURATION: CI_CD
+  BUILD_CONFIGURATION: CI_CD_WIN
+  BUILD_OUTPUT_SUBDIR: CI_CD
   # Name of build project which creates required output for packaging/deployment
   BUILD_PROJECT: CompuMaster.Data/CompuMaster.Data.vbproj
   BUILD_PROJECT2: CompuMaster.Data.Controls/CompuMaster.Data.Controls.vbproj
@@ -44,16 +45,16 @@ jobs:
                 dotnet-version: 6.0.x
 
             - name: Install dependencies
-              run: dotnet restore /p:Configuration=CI_CD
+              run: dotnet restore /p:Configuration=${{env.BUILD_CONFIGURATION}}
 
             - name: Build
               run: dotnet build --configuration=${{env.BUILD_CONFIGURATION}} --no-restore 
 
             - name: Pack binaries CompuMaster.Data
-              run: Compress-Archive -DestinationPath bin.zip ${{env.BUILD_OUTPUT_BASEDIR}}/${{env.BUILD_CONFIGURATION}}
+              run: Compress-Archive -DestinationPath bin.zip ${{env.BUILD_OUTPUT_BASEDIR}}/${{env.BUILD_OUTPUT_SUBDIR}}
 
             - name: Pack binaries CompuMaster.Data.Controls
-              run: Compress-Archive -DestinationPath bin-wincontrols.zip ${{env.BUILD_OUTPUT_BASEDIR2}}/${{env.BUILD_CONFIGURATION}}
+              run: Compress-Archive -DestinationPath bin-wincontrols.zip ${{env.BUILD_OUTPUT_BASEDIR2}}/${{env.BUILD_OUTPUT_SUBDIR}}
 
             - name: Publish binaries CompuMaster.Data
               uses: softprops/action-gh-release@v1
