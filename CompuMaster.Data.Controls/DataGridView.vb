@@ -15,17 +15,15 @@ Namespace CompuMaster.Data.Windows
     ''' A data grid view class implementing easy access for quick edit data manipulation
     ''' </summary>
     ''' <remarks></remarks>
-    <System.ComponentModel.DesignTimeVisible(True)> _
-    <System.Windows.Forms.DockingAttribute(System.Windows.Forms.DockingBehavior.Ask)> _
-    <System.ComponentModel.Designer("System.Windows.Forms.Design.DataGridViewDesigner, System.Design, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a"), _
-    ComVisible(True), _
-    ClassInterface(ClassInterfaceType.AutoDispatch), _
-    System.ComponentModel.DefaultEvent("CellContentClick"), _
-    System.Reflection.DefaultMember("Item"), _
-    System.ComponentModel.ComplexBindingProperties("DataSource", "DataMember"), _
+    <System.ComponentModel.DesignTimeVisible(True)>
+    <System.Windows.Forms.DockingAttribute(System.Windows.Forms.DockingBehavior.Ask)>
+    <System.ComponentModel.Designer("System.Windows.Forms.Design.DataGridViewDesigner, System.Design, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a"),
+    System.ComponentModel.DefaultEvent("CellContentClick"),
+    System.Reflection.DefaultMember("Item"),
+    System.ComponentModel.ComplexBindingProperties("DataSource", "DataMember"),
     System.ComponentModel.Editor("System.Windows.Forms.Design.DataGridViewComponentEditor, System.Design, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a", GetType(System.ComponentModel.ComponentEditor)),
     System.ComponentModel.Description("CompuMaster.Data.DataGridView")
-    > _
+    >
     Public Class DataGridView
         Inherits System.Windows.Forms.DataGridView
         Implements System.ComponentModel.ISupportInitialize
