@@ -32,7 +32,7 @@ Namespace CompuMaster.Test.Data
                         Dim testTable As DataTable = CompuMaster.Data.Ldap.Query("compumaster", "(objectCategory=user)")
                         Console.WriteLine(CompuMaster.Data.DataTables.ConvertToPlainTextTable(testTable))
                         Assert.Greater(testTable.Rows.Count, 1)
-                        testTable = CompuMaster.Data.Ldap.Query("CN=Jochen Wezel,OU=Emmelshausen,OU=Users - CompuMaster,DC=lan,DC=compumaster,DC=de", "(objectCategory=user)")
+                        testTable = CompuMaster.Data.Ldap.Query("CN=Jochen Wezel,OU=Boppard,OU=Users - CompuMaster,DC=lan,DC=compumaster,DC=de", "(objectCategory=user)")
                         Console.WriteLine(CompuMaster.Data.DataTables.ConvertToPlainTextTable(testTable))
                         Assert.AreEqual(testTable.Rows.Count, 1)
                     Else

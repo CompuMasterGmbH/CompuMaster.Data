@@ -29,17 +29,21 @@ Namespace CompuMaster.Test.Data
         ''' <remarks>
         ''' The CSV file is returned as UTF-8 bytes
         ''' </remarks>
-        <Test> Public Sub ReadDataTableFromCsvUrlAtLocalhostWithContentTypeButWithoutCharset(<Values(0, 1, 2)> headerContentTypeVariantToExecute As Integer)
-            Dim HeaderContentTypeVariants As String() = New String() {Nothing, "text/csv", "text/csv; charset=utf-8"}
-            Dim HeaderContentType As String = HeaderContentTypeVariants(headerContentTypeVariantToExecute)
+        <Test, NonParallelizable> Public Sub ReadDataTableFromCsvUrlAtLocalhostWithContentTypeButWithoutCharset(<Values(0, 1, 2)> headerContentTypeVariantToExecute As Integer)
             Dim Url As String = "http://localhost:" & 8035 + headerContentTypeVariantToExecute & "/"
             Dim CsvCulture As System.Globalization.CultureInfo = System.Globalization.CultureInfo.CreateSpecificCulture("en-US")
             Dim FileEncoding As System.Text.Encoding = Nothing
-            Dim Headers As New System.Collections.Specialized.NameValueCollection
-            If HeaderContentType <> Nothing Then
-                Headers("content-type") = HeaderContentType
-            End If
-            Dim ws As New CompuMaster.Test.Tools.TinyWebServerAdvanced.WebServer(AddressOf ReadDataTableLocalhostTestWebserver, Headers, Url)
+            Dim ws As New CompuMaster.Web.TinyWebServerAdvanced.WebServer(AddressOf ReadDataTableLocalhostTestWebserver,
+                                                                          Function(handler As System.Net.HttpListenerRequest) As System.Collections.Specialized.NameValueCollection
+                                                                              Dim HeaderContentTypeVariants As String() = New String() {Nothing, "text/csv", "text/csv; charset=utf-8"}
+                                                                              Dim HeaderContentType As String = HeaderContentTypeVariants(headerContentTypeVariantToExecute)
+                                                                              Dim Headers As New System.Collections.Specialized.NameValueCollection
+                                                                              If HeaderContentType <> Nothing Then
+                                                                                  Headers("content-type") = HeaderContentType
+                                                                              End If
+                                                                              Return Headers
+                                                                          End Function,
+                                                                          New String() {Url})
             Try
                 ws.Run()
                 Dim dt As DataTable
@@ -74,7 +78,7 @@ Namespace CompuMaster.Test.Data
         ''' <param name="handler"></param>
         ''' <returns></returns>
         <CodeAnalysis.SuppressMessage("Major Code Smell", "S1172:Unused procedure parameters should be removed", Justification:="<Ausstehend>")>
-        Private Shared Function ReadDataTableLocalhostTestWebserver(handler As System.Net.HttpListenerRequest) As String
+        Private Shared Function ReadDataTableLocalhostTestWebserver(handler As System.Net.HttpListenerRequest, ParamArray urls As String()) As String
             Return "Test,Column" & ControlChars.CrLf & "1,äöüßÄÖÜ2"
         End Function
 

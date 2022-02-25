@@ -1,6 +1,6 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.30717.126
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.32112.339
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{00C434A8-2EB5-4CC5-B6DB-5C5F74696FB6}"
 	ProjectSection(SolutionItems) = preProject
@@ -12,13 +12,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		.editorconfig = .editorconfig
 	EndProjectSection
 EndProject
-Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "CompuMaster.Data", "CompuMaster.Data\CompuMaster.Data.vbproj", "{23D43CB0-A621-416A-966A-5A0C0EEB34DB}"
+Project("{778DAE3C-4631-46EA-AA77-85C1314464D9}") = "CompuMaster.Data", "CompuMaster.Data\CompuMaster.Data.vbproj", "{23D43CB0-A621-416A-966A-5A0C0EEB34DB}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CompuMaster.Test.TinyWebServerAdvanced", "CompuMaster.Test.TinyWebServerAdvanced\CompuMaster.Test.TinyWebServerAdvanced.csproj", "{FF4D55AE-133C-4C65-B612-2CE21285F949}"
+Project("{778DAE3C-4631-46EA-AA77-85C1314464D9}") = "CompuMaster.Data.Controls", "CompuMaster.Data.Controls\CompuMaster.Data.Controls.vbproj", "{1BF97E36-3D0C-481E-A977-84CF2B6586C1}"
 EndProject
-Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "CompuMaster.Data.Controls", "CompuMaster.Data.Controls\CompuMaster.Data.Controls.vbproj", "{1BF97E36-3D0C-481E-A977-84CF2B6586C1}"
-EndProject
-Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "CompuMaster.Test.Data", "CompuMaster.Test.Tools.Data\CompuMaster.Test.Data.vbproj", "{1A4BEA9F-6D74-4740-8871-4F87D2F777F4}"
+Project("{778DAE3C-4631-46EA-AA77-85C1314464D9}") = "CompuMaster.Test.Data", "CompuMaster.Test.Tools.Data\CompuMaster.Test.Data.vbproj", "{1A4BEA9F-6D74-4740-8871-4F87D2F777F4}"
 EndProject
 Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "DebugApp", "CompuMaster.Data.Controls.Debug\DebugApp.vbproj", "{DFF5ACB1-A556-4DD5-A418-2FEE9DC8440B}"
 EndProject
@@ -52,22 +50,6 @@ Global
 		{23D43CB0-A621-416A-966A-5A0C0EEB34DB}.Release|Any CPU.Build.0 = Release|Any CPU
 		{23D43CB0-A621-416A-966A-5A0C0EEB34DB}.Release|x86.ActiveCfg = Release|Any CPU
 		{23D43CB0-A621-416A-966A-5A0C0EEB34DB}.Release|x86.Build.0 = Release|Any CPU
-		{FF4D55AE-133C-4C65-B612-2CE21285F949}.CI_CD_WIN|Any CPU.ActiveCfg = Debug|Any CPU
-		{FF4D55AE-133C-4C65-B612-2CE21285F949}.CI_CD_WIN|Any CPU.Build.0 = Debug|Any CPU
-		{FF4D55AE-133C-4C65-B612-2CE21285F949}.CI_CD_WIN|x86.ActiveCfg = Debug|Any CPU
-		{FF4D55AE-133C-4C65-B612-2CE21285F949}.CI_CD_WIN|x86.Build.0 = Debug|Any CPU
-		{FF4D55AE-133C-4C65-B612-2CE21285F949}.CI_CD|Any CPU.ActiveCfg = Debug|Any CPU
-		{FF4D55AE-133C-4C65-B612-2CE21285F949}.CI_CD|Any CPU.Build.0 = Debug|Any CPU
-		{FF4D55AE-133C-4C65-B612-2CE21285F949}.CI_CD|x86.ActiveCfg = Debug|Any CPU
-		{FF4D55AE-133C-4C65-B612-2CE21285F949}.CI_CD|x86.Build.0 = Debug|Any CPU
-		{FF4D55AE-133C-4C65-B612-2CE21285F949}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{FF4D55AE-133C-4C65-B612-2CE21285F949}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{FF4D55AE-133C-4C65-B612-2CE21285F949}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{FF4D55AE-133C-4C65-B612-2CE21285F949}.Debug|x86.Build.0 = Debug|Any CPU
-		{FF4D55AE-133C-4C65-B612-2CE21285F949}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{FF4D55AE-133C-4C65-B612-2CE21285F949}.Release|Any CPU.Build.0 = Release|Any CPU
-		{FF4D55AE-133C-4C65-B612-2CE21285F949}.Release|x86.ActiveCfg = Release|Any CPU
-		{FF4D55AE-133C-4C65-B612-2CE21285F949}.Release|x86.Build.0 = Release|Any CPU
 		{1BF97E36-3D0C-481E-A977-84CF2B6586C1}.CI_CD_WIN|Any CPU.ActiveCfg = CI_CD|Any CPU
 		{1BF97E36-3D0C-481E-A977-84CF2B6586C1}.CI_CD_WIN|Any CPU.Build.0 = CI_CD|Any CPU
 		{1BF97E36-3D0C-481E-A977-84CF2B6586C1}.CI_CD_WIN|x86.ActiveCfg = CI_CD|Any CPU
