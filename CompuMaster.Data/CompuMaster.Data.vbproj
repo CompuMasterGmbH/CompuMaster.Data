@@ -3,7 +3,7 @@
   <PropertyGroup>
     <RootNamespace></RootNamespace>
 	  <TargetFrameworks>netstandard2.0;netcoreapp3.1;net5.0;net48;net461</TargetFrameworks>
-	  <Version>3.0.2022.0311</Version>
+	  <Version>3.0.2022.0610</Version>
 	  <Authors>Jochen Wezel</Authors>
 	  <Company>CompuMaster GmbH</Company>
 	  <Copyright>2010-2013,2016,2019-2022 CompuMaster GmbH</Copyright>
@@ -56,6 +56,7 @@
 	<OptionStrict>Off</OptionStrict>
 	<AssemblyName>CompuMaster.Data</AssemblyName>
 	<PackageIconUrl />
+	<AssemblyVersion>3.0.2022.610</AssemblyVersion>
   </PropertyGroup>
   <PropertyGroup Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Windows)))' == 'true'">
 	<NoWarn>CA1416</NoWarn>

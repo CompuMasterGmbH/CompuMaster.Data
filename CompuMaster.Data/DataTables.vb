@@ -3116,13 +3116,26 @@ Namespace CompuMaster.Data
         ''' <param name="ignoreDBNull">True never results a DBNull value</param>
         ''' <returns></returns>
         Public Shared Function FindUniqueValues(ByVal column As DataColumn, ByVal ignoreDBNull As Boolean) As ArrayList
+            Return FindUniqueValues(column, ignoreDBNull, CType(Nothing, Object()))
+        End Function
+
+        ''' <summary>
+        ''' Returns unique values in a column
+        ''' </summary>
+        ''' <param name="column">The DataColumn which holds the data</param>
+        ''' <param name="ignoreDBNull">True never results a DBNull value</param>
+        ''' <returns></returns>
+        Public Shared Function FindUniqueValues(ByVal column As DataColumn, ByVal ignoreDBNull As Boolean, ignoreValues As Object()) As ArrayList
             Dim table As DataTable = column.Table
             Dim Result As New ArrayList
             For MyCounter As Integer = 0 To table.Rows.Count - 1
-                If ignoreDBNull = True AndAlso IsDBNull(table.Rows(MyCounter)(column)) Then
+                Dim RawValue As Object = table.Rows(MyCounter)(column)
+                If ignoreDBNull = True AndAlso IsDBNull(RawValue) Then
                     'do not add DbNulls to result
-                ElseIf Not Result.Contains(table.Rows(MyCounter)(column)) Then
-                    Result.Add(table.Rows(MyCounter)(column))
+                ElseIf ignoreValues IsNot Nothing AndAlso ignoreValues.Contains(RawValue) Then
+                    'do not add ignoreValue to result
+                ElseIf Not Result.Contains(RawValue) Then
+                    Result.Add(RawValue)
                 End If
             Next
             Return Result
@@ -3144,15 +3157,28 @@ Namespace CompuMaster.Data
         ''' <param name="ignoreDBNull">True never results a DBNull value</param>
         ''' <returns></returns>
         Public Shared Function FindUniqueValues(Of T)(ByVal column As DataColumn, ByVal ignoreDBNull As Boolean) As System.Collections.Generic.List(Of T)
+            Return FindUniqueValues(Of T)(column, ignoreDBNull, CType(Nothing, T()))
+        End Function
+
+        ''' <summary>
+        ''' Returns unique values in a column (with DBNull converted to null/Nothing)
+        ''' </summary>
+        ''' <param name="column">The DataColumn which holds the data</param>
+        ''' <param name="ignoreDBNull">True never results a DBNull value, False will return null/Nothing value instead of DBNull</param>
+        ''' <returns></returns>
+        Public Shared Function FindUniqueValues(Of T)(ByVal column As DataColumn, ByVal ignoreDBNull As Boolean, ignoreValues As T()) As System.Collections.Generic.List(Of T)
             Dim table As DataTable = column.Table
             Dim Result As New System.Collections.Generic.List(Of T)
             For MyCounter As Integer = 0 To table.Rows.Count - 1
-                If ignoreDBNull = True AndAlso IsDBNull(table.Rows(MyCounter)(column)) Then
+                Dim RawValue As Object = table.Rows(MyCounter)(column)
+                If ignoreDBNull = True AndAlso IsDBNull(RawValue) Then
                     'do not add DbNulls to result
-                ElseIf ignoreDBNull = False AndAlso IsDBNull(table.Rows(MyCounter)(column)) Then
+                ElseIf ignoreDBNull = False AndAlso IsDBNull(RawValue) Then
                     Result.Add(Nothing)
+                ElseIf ignoreValues IsNot Nothing AndAlso ignoreValues.Contains(CType(RawValue, T)) Then
+                    'do not add ignoreValue to result
                 Else
-                    Dim Value As T = CType(table.Rows(MyCounter)(column), T)
+                    Dim Value As T = CType(RawValue, T)
                     If Not Result.Contains(Value) Then
                         Result.Add(Value)
                     End If
