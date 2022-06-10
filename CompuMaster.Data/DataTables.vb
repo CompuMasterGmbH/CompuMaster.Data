@@ -3125,7 +3125,7 @@ Namespace CompuMaster.Data
         ''' <param name="column">The DataColumn which holds the data</param>
         ''' <param name="ignoreDBNull">True never results a DBNull value</param>
         ''' <returns></returns>
-        Public Shared Function FindUniqueValues(ByVal column As DataColumn, ByVal ignoreDBNull As Boolean, ignoreValues As Object()) As ArrayList
+        Public Shared Function FindUniqueValues(ByVal column As DataColumn, ByVal ignoreDBNull As Boolean, ParamArray ignoreValues As Object()) As ArrayList
             Dim table As DataTable = column.Table
             Dim Result As New ArrayList
             For MyCounter As Integer = 0 To table.Rows.Count - 1
@@ -3166,7 +3166,7 @@ Namespace CompuMaster.Data
         ''' <param name="column">The DataColumn which holds the data</param>
         ''' <param name="ignoreDBNull">True never results a DBNull value, False will return null/Nothing value instead of DBNull</param>
         ''' <returns></returns>
-        Public Shared Function FindUniqueValues(Of T)(ByVal column As DataColumn, ByVal ignoreDBNull As Boolean, ignoreValues As T()) As System.Collections.Generic.List(Of T)
+        Public Shared Function FindUniqueValues(Of T)(ByVal column As DataColumn, ByVal ignoreDBNull As Boolean, ParamArray ignoreValues As T()) As System.Collections.Generic.List(Of T)
             Dim table As DataTable = column.Table
             Dim Result As New System.Collections.Generic.List(Of T)
             For MyCounter As Integer = 0 To table.Rows.Count - 1
