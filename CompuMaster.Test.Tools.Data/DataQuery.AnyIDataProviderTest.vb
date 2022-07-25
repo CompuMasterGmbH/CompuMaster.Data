@@ -5,6 +5,47 @@ Namespace CompuMaster.Test.Data.DataQuery
 
     <TestFixture(Category:="DataQueryAnyIDataProvider")> Public Class DataQueryAnyIDataProviderTest
 
+        ''' <summary>
+        ''' Verify implementation of required interfaces/overloads for method ExecuteScalar
+        ''' </summary>
+        <Test> Public Sub ExecuteScalar_MethodSupport()
+
+            Assert.Throws(Of System.NullReferenceException)( 'just acceept NullRef exception for now
+                Sub()
+                    CompuMaster.Data.DataQuery.AnyIDataProvider.ExecuteScalar(
+                        CType(Nothing, System.Data.SqlClient.SqlCommand),
+                        CompuMaster.Data.DataQuery.AnyIDataProvider.Automations.AutoOpenAndCloseAndDisposeConnection)
+                End Sub)
+
+            Assert.Throws(Of System.NullReferenceException)( 'just acceept NullRef exception for now
+                Sub()
+                    CompuMaster.Data.DataQuery.AnyIDataProvider.ExecuteScalar(
+                        CType(Nothing, System.Data.SqlClient.SqlConnection),
+                        "SELECT 1;",
+                        CommandType.Text,
+                        CType(Nothing, System.Data.IDataParameter()),
+                        CompuMaster.Data.DataQuery.AnyIDataProvider.Automations.AutoOpenAndCloseAndDisposeConnection)
+                End Sub)
+
+            Assert.Throws(Of System.NullReferenceException)( 'just acceept NullRef exception for now
+                Sub()
+                    Dim Dummy As Integer = CompuMaster.Data.DataQuery.AnyIDataProvider.ExecuteScalar(Of Integer)(
+                        CType(Nothing, System.Data.SqlClient.SqlCommand),
+                        CompuMaster.Data.DataQuery.AnyIDataProvider.Automations.AutoOpenAndCloseAndDisposeConnection)
+                End Sub)
+
+            Assert.Throws(Of System.NullReferenceException)( 'just acceept NullRef exception for now
+                Sub()
+                    Dim Dummy As Integer = CompuMaster.Data.DataQuery.AnyIDataProvider.ExecuteScalar(Of Integer)(
+                        CType(Nothing, System.Data.SqlClient.SqlConnection),
+                        "SELECT 1;",
+                        CommandType.Text,
+                        CType(Nothing, System.Data.IDataParameter()),
+                        CompuMaster.Data.DataQuery.AnyIDataProvider.Automations.AutoOpenAndCloseAndDisposeConnection)
+                End Sub)
+
+        End Sub
+
 #If Not CI_Build Then
         <Test()> Public Sub ExecuteReaderAndPutFirstColumnIntoGenericList()
             Dim TestFile As String = AssemblyTestEnvironment.TestFileAbsolutePath("testfiles\test_for_msaccess.mdb")
