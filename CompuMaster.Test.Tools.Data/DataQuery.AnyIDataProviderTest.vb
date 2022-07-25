@@ -29,14 +29,31 @@ Namespace CompuMaster.Test.Data.DataQuery
 
             Assert.Throws(Of System.NullReferenceException)( 'just acceept NullRef exception for now
                 Sub()
-                    Dim Dummy As Integer = CompuMaster.Data.DataQuery.AnyIDataProvider.ExecuteScalar(Of Integer)(
+                    Dim Dummy As Integer = CompuMaster.Data.DataQuery.AnyIDataProvider.ExecuteScalarToNullable(Of Integer)(
                         CType(Nothing, System.Data.SqlClient.SqlCommand),
                         CompuMaster.Data.DataQuery.AnyIDataProvider.Automations.AutoOpenAndCloseAndDisposeConnection)
                 End Sub)
 
             Assert.Throws(Of System.NullReferenceException)( 'just acceept NullRef exception for now
                 Sub()
-                    Dim Dummy As Integer = CompuMaster.Data.DataQuery.AnyIDataProvider.ExecuteScalar(Of Integer)(
+                    Dim Dummy As Integer = CompuMaster.Data.DataQuery.AnyIDataProvider.ExecuteScalarToNullable(Of Integer)(
+                        CType(Nothing, System.Data.SqlClient.SqlConnection),
+                        "SELECT 1;",
+                        CommandType.Text,
+                        CType(Nothing, System.Data.IDataParameter()),
+                        CompuMaster.Data.DataQuery.AnyIDataProvider.Automations.AutoOpenAndCloseAndDisposeConnection)
+                End Sub)
+
+            Assert.Throws(Of System.NullReferenceException)( 'just acceept NullRef exception for now
+                Sub()
+                    Dim Dummy As Integer = CompuMaster.Data.DataQuery.AnyIDataProvider.ExecuteScalar(Of String)(
+                        CType(Nothing, System.Data.SqlClient.SqlCommand),
+                        CompuMaster.Data.DataQuery.AnyIDataProvider.Automations.AutoOpenAndCloseAndDisposeConnection)
+                End Sub)
+
+            Assert.Throws(Of System.NullReferenceException)( 'just acceept NullRef exception for now
+                Sub()
+                    Dim Dummy As Integer = CompuMaster.Data.DataQuery.AnyIDataProvider.ExecuteScalar(Of String)(
                         CType(Nothing, System.Data.SqlClient.SqlConnection),
                         "SELECT 1;",
                         CommandType.Text,

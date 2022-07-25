@@ -219,12 +219,30 @@ Namespace CompuMaster.Data.DataQuery
         ''' <param name="sqlParameters">An optional list of SqlParameters</param>
         ''' <param name="automations">Automation options for the connection</param>
         ''' <returns></returns>
-        Public Function ExecuteScalar(Of T As Structure)(ByVal dbConnection As IDbConnection, ByVal commandText As String, ByVal commandType As System.Data.CommandType, ByVal sqlParameters As IDataParameter(), ByVal automations As Automations) As T?
+        Public Function ExecuteScalarToNullable(Of T As Structure)(ByVal dbConnection As IDbConnection, ByVal commandText As String, ByVal commandType As System.Data.CommandType, ByVal sqlParameters As IDataParameter(), ByVal automations As Automations) As T?
             Dim Result As Object = ExecuteScalar(dbConnection, commandText, commandType, sqlParameters, automations)
             If IsDBNull(Result) Then
                 Return Nothing
             Else
                 Return CType(Result, T?)
+            End If
+        End Function
+
+        ''' <summary>
+        '''     Executes a command scalar and returns the value
+        ''' </summary>
+        ''' <param name="dbConnection">The connection to the database</param>
+        ''' <param name="commandText">The command text</param>
+        ''' <param name="commandType">The command type</param>
+        ''' <param name="sqlParameters">An optional list of SqlParameters</param>
+        ''' <param name="automations">Automation options for the connection</param>
+        ''' <returns></returns>
+        Public Function ExecuteScalar(Of T As Class)(ByVal dbConnection As IDbConnection, ByVal commandText As String, ByVal commandType As System.Data.CommandType, ByVal sqlParameters As IDataParameter(), ByVal automations As Automations) As T
+            Dim Result As Object = ExecuteScalar(dbConnection, commandText, commandType, sqlParameters, automations)
+            If IsDBNull(Result) Then
+                Return Nothing
+            Else
+                Return CType(Result, T)
             End If
         End Function
 
@@ -278,12 +296,26 @@ Namespace CompuMaster.Data.DataQuery
         ''' </summary>
         ''' <param name="dbCommand">The command with an assigned connection property value</param>
         ''' <param name="automations">Automation options for the connection</param>
-        Public Function ExecuteScalar(Of T As Structure)(ByVal dbCommand As IDbCommand, ByVal automations As Automations) As T?
+        Public Function ExecuteScalarToNullable(Of T As Structure)(ByVal dbCommand As IDbCommand, ByVal automations As Automations) As T?
             Dim Result As Object = ExecuteScalar(dbCommand, automations)
             If IsDBNull(Result) Then
                 Return Nothing
             Else
                 Return CType(Result, T?)
+            End If
+        End Function
+
+        ''' <summary>
+        '''     Executes a command scalar and returns the value
+        ''' </summary>
+        ''' <param name="dbCommand">The command with an assigned connection property value</param>
+        ''' <param name="automations">Automation options for the connection</param>
+        Public Function ExecuteScalar(Of T As Class)(ByVal dbCommand As IDbCommand, ByVal automations As Automations) As T
+            Dim Result As Object = ExecuteScalar(dbCommand, automations)
+            If IsDBNull(Result) Then
+                Return Nothing
+            Else
+                Return CType(Result, T)
             End If
         End Function
 
