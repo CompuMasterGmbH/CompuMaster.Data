@@ -436,6 +436,25 @@ Namespace CompuMaster.Test.Data
             dt.Rows.Add(dt.NewRow)
             Console.WriteLine(CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(dt, 5, 20, "|", "|", "+", "="c, "-"c, AddressOf ConvertColumnToString))
 
+            Dim ConvertedPlainTextTable As String
+            Dim Expected As String
+
+            Expected =
+                "id|Hi         |dict                                                                " & System.Environment.NewLine &
+                "--+-----------+--------------------------------------------------------------------" & System.Environment.NewLine &
+                "23|Hello World|System.Collections.Generic.Dictionary`2[System.String,System.String]" & System.Environment.NewLine
+            ConvertedPlainTextTable = CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(dt.Rows(0))
+            Console.WriteLine(ConvertedPlainTextTable)
+            Assert.AreEqual(Expected, ConvertedPlainTextTable)
+
+            Expected =
+                "id|Hi|dict" & System.Environment.NewLine &
+                "--+--+----" & System.Environment.NewLine &
+                "  |  |    " & System.Environment.NewLine
+            ConvertedPlainTextTable = CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(dt.Rows(1))
+            Console.WriteLine(ConvertedPlainTextTable)
+            Assert.AreEqual(Expected, ConvertedPlainTextTable)
+
             'Real data table: quiz questions
             dt = TestTable2()
             Console.WriteLine(CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(dt))

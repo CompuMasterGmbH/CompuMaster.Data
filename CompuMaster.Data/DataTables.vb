@@ -2285,18 +2285,18 @@ Namespace CompuMaster.Data
                 If rows.Length > 0 Then
                     If table.Columns(ColCounter).DataType.IsValueType AndAlso Not GetType(String).IsInstanceOfType(table.Columns(ColCounter).DataType) Then
                         'number or date/time
-                        For RowCounter As Integer = 0 To table.Rows.Count - 1
-                            MinWidthForCells = System.Math.Max(MinWidthForCells, String.Format("{0}", table.Rows(RowCounter)(ColCounter)).Length)
+                        For RowCounter As Integer = 0 To rows.Count - 1
+                            MinWidthForCells = System.Math.Max(MinWidthForCells, String.Format("{0}", rows(RowCounter)(ColCounter)).Length)
                         Next
                     Else
                         'string or any other object
-                        Dim cellWidths(table.Rows.Count - 1) As Integer
-                        For RowCounter As Integer = 0 To table.Rows.Count - 1
+                        Dim cellWidths(rows.Count - 1) As Integer
+                        For RowCounter As Integer = 0 To rows.Count - 1
                             Dim RenderValue As Object
                             If columnFormatting Is Nothing Then
-                                RenderValue = table.Rows(RowCounter)(ColCounter)
+                                RenderValue = rows(RowCounter)(ColCounter)
                             Else
-                                RenderValue = columnFormatting(table.Columns(ColCounter), table.Rows(RowCounter)(ColCounter))
+                                RenderValue = columnFormatting(table.Columns(ColCounter), rows(RowCounter)(ColCounter))
                             End If
                             cellWidths(RowCounter) = String.Format("{0}", RenderValue).Length
                         Next
@@ -2331,18 +2331,18 @@ Namespace CompuMaster.Data
                     If table.Columns(ColCounter).DataType.IsValueType AndAlso Not GetType(String).IsInstanceOfType(table.Columns(ColCounter).DataType) Then
                         'number or date/time
                         MinWidthForCells = 1
-                        For RowCounter As Integer = 0 To table.Rows.Count - 1
-                            MinWidthForCells = System.Math.Max(MinWidthForCells, String.Format("{0}", table.Rows(RowCounter)(ColCounter)).Length)
+                        For RowCounter As Integer = 0 To rows.Count - 1
+                            MinWidthForCells = System.Math.Max(MinWidthForCells, String.Format("{0}", rows(RowCounter)(ColCounter)).Length)
                         Next
                     Else
                         'string or any other object
-                        Dim cellWidths(table.Rows.Count - 1) As Integer
-                        For RowCounter As Integer = 0 To table.Rows.Count - 1
+                        Dim cellWidths(rows.Count - 1) As Integer
+                        For RowCounter As Integer = 0 To rows.Count - 1
                             Dim RenderValue As Object
                             If columnFormatting Is Nothing Then
-                                RenderValue = table.Rows(RowCounter)(ColCounter)
+                                RenderValue = rows(RowCounter)(ColCounter)
                             Else
-                                RenderValue = columnFormatting(table.Columns(ColCounter), table.Rows(RowCounter)(ColCounter))
+                                RenderValue = columnFormatting(table.Columns(ColCounter), rows(RowCounter)(ColCounter))
                             End If
                             cellWidths(RowCounter) = String.Format("{0}", RenderValue).Length
                         Next
