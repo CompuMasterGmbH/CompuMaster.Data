@@ -490,12 +490,15 @@ Namespace CompuMaster.Test.Data
         <Test> Public Sub InsertColumnIntoClonedTable()
             Dim t As DataTable = TestTable1()
             Assert.AreEqual(New String() {"ID", "Value"}, CompuMaster.Data.DataTables.AllColumnNames(t))
-            t = CompuMaster.Data.DataTables.InsertColumnIntoClonedTable(t, 2, New DataColumn("Insert2"))
-            Assert.AreEqual(New String() {"ID", "Value", "Insert2"}, CompuMaster.Data.DataTables.AllColumnNames(t))
-            t = CompuMaster.Data.DataTables.InsertColumnIntoClonedTable(t, 1, New DataColumn("Insert1"))
-            Assert.AreEqual(New String() {"ID", "Insert1", "Value", "Insert2"}, CompuMaster.Data.DataTables.AllColumnNames(t))
-            t = CompuMaster.Data.DataTables.InsertColumnIntoClonedTable(t, 0, New DataColumn("Insert0"))
-            Assert.AreEqual(New String() {"Insert0", "ID", "Insert1", "Value", "Insert2"}, CompuMaster.Data.DataTables.AllColumnNames(t))
+            Dim c As DataTable
+            c = CompuMaster.Data.DataTables.InsertColumnIntoClonedTable(t, 2, New DataColumn("Insert2"))
+            Assert.AreEqual(New String() {"ID", "Value"}, CompuMaster.Data.DataTables.AllColumnNames(t), "Origin table must remain untouched")
+            Assert.AreEqual(New String() {"ID", "Value", "Insert2"}, CompuMaster.Data.DataTables.AllColumnNames(c))
+            c = CompuMaster.Data.DataTables.InsertColumnIntoClonedTable(c, 1, New DataColumn("Insert1"))
+            Assert.AreEqual(New String() {"ID", "Insert1", "Value", "Insert2"}, CompuMaster.Data.DataTables.AllColumnNames(c))
+            c = CompuMaster.Data.DataTables.InsertColumnIntoClonedTable(c, 0, New DataColumn("Insert0"))
+            Assert.AreEqual(New String() {"Insert0", "ID", "Insert1", "Value", "Insert2"}, CompuMaster.Data.DataTables.AllColumnNames(c))
+            Assert.AreEqual(New String() {"ID", "Value"}, CompuMaster.Data.DataTables.AllColumnNames(t), "Origin table must remain untouched")
         End Sub
 
         <Test()> Public Sub CopyDataTableWithSubsetOfRows()

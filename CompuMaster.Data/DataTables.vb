@@ -4470,9 +4470,10 @@ Namespace CompuMaster.Data
         ''' <returns></returns>
         Public Shared Function InsertColumnIntoClonedTable(table As DataTable, index As Integer, column As DataColumn) As DataTable
             Dim TargetColumnSet As New List(Of String)(CompuMaster.Data.DataTables.AllColumnNames(table))
-            table.Columns.Add(column)
+            Dim Result As DataTable = CompuMaster.Data.DataTables.CreateDataTableClone(table)
+            Result.Columns.Add(column)
             TargetColumnSet.Insert(index, column.ColumnName)
-            Return CompuMaster.Data.DataTables.ReArrangeDataColumns(table, TargetColumnSet.ToArray)
+            Return CompuMaster.Data.DataTables.ReArrangeDataColumns(Result, TargetColumnSet.ToArray)
         End Function
 
     End Class
