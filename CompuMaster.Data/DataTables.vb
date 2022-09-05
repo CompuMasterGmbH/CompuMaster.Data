@@ -4461,6 +4461,20 @@ Namespace CompuMaster.Data
             Next
         End Sub
 
+        ''' <summary>
+        ''' Create a new table with the inserted column at a specific index position 
+        ''' </summary>
+        ''' <param name="table"></param>
+        ''' <param name="index"></param>
+        ''' <param name="column"></param>
+        ''' <returns></returns>
+        Public Shared Function InsertColumnIntoClonedTable(table As DataTable, index As Integer, column As DataColumn) As DataTable
+            Dim TargetColumnSet As New List(Of String)(CompuMaster.Data.DataTables.AllColumnNames(table))
+            table.Columns.Add(column)
+            TargetColumnSet.Insert(index, column.ColumnName)
+            Return CompuMaster.Data.DataTables.ReArrangeDataColumns(table, TargetColumnSet.ToArray)
+        End Function
+
     End Class
 
 End Namespace
