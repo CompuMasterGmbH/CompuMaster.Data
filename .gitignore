@@ -46,3 +46,4 @@ CompuMaster.Test.Web.DataUpdate/Bin/CompuMaster.Data.pdb
 /CompuMaster.Test.TinyWebServerAdvanced/obj
 bin
 obj
+InternalTrace.*.log
