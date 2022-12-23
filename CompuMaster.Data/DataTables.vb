@@ -3174,7 +3174,9 @@ Namespace CompuMaster.Data
                 If ignoreDBNull = True AndAlso IsDBNull(RawValue) Then
                     'do not add DbNulls to result
                 ElseIf ignoreDBNull = False AndAlso IsDBNull(RawValue) Then
-                    Result.Add(Nothing)
+                    If Not Result.Contains(Nothing) Then
+                        Result.Add(Nothing)
+                    End If
                 ElseIf ignoreValues IsNot Nothing AndAlso ignoreValues.Contains(CType(RawValue, T)) Then
                     'do not add ignoreValue to result
                 Else

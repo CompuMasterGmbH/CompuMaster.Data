@@ -929,6 +929,93 @@ Namespace CompuMaster.Test.Data
             stringList = CompuMaster.Data.DataTables.FindUniqueValues(Of String)(dt.Columns(0), True, New String() {"Saturn", "Moon"})
             Assert.AreEqual("Sun", stringList(0))
             Assert.AreEqual(1, stringList.Count)
+
+            'Add additional duplicates
+            row = dt.NewRow
+            row.Item(0) = DBNull.Value
+            dt.Rows.Add(row)
+
+            row = dt.NewRow
+            row.Item(0) = ""
+            dt.Rows.Add(row)
+
+            row = dt.NewRow
+            row.Item(0) = DBNull.Value
+            dt.Rows.Add(row)
+
+            row = dt.NewRow
+            row.Item(0) = ""
+            dt.Rows.Add(row)
+
+            row = dt.NewRow
+            row.Item(0) = "Sun"
+            dt.Rows.Add(row)
+
+            row = dt.NewRow
+            row.Item(0) = "Moon"
+            dt.Rows.Add(row)
+
+            row = dt.NewRow
+            row.Item(0) = "Sun"
+            dt.Rows.Add(row)
+
+            'Recheck again
+            list = CompuMaster.Data.DataTables.FindUniqueValues(dt.Columns(0))
+            Assert.AreEqual("Sun", list(0))
+            Assert.AreEqual("Moon", list(1))
+            Assert.AreEqual("Saturn", list(2))
+            Assert.IsTrue(IsDBNull(list(3)), "Expected DbNull value")
+            Assert.AreEqual("", list(4))
+            Assert.AreEqual(5, list.Count)
+
+            list = CompuMaster.Data.DataTables.FindUniqueValues(dt.Columns(0), True)
+            Assert.AreEqual("Sun", list(0))
+            Assert.AreEqual("Moon", list(1))
+            Assert.AreEqual("Saturn", list(2))
+            Assert.AreEqual("", list(3))
+            Assert.AreEqual(4, list.Count)
+
+            stringList = CompuMaster.Data.DataTables.FindUniqueValues(Of String)(dt.Columns(0))
+            Assert.AreEqual("Sun", stringList(0))
+            Assert.AreEqual("Moon", stringList(1))
+            Assert.AreEqual("Saturn", stringList(2))
+            Assert.IsNull(stringList(3), "Expected DbNull->Null value")
+            Assert.AreEqual("", stringList(4))
+            Assert.AreEqual(5, stringList.Count)
+
+            stringList = CompuMaster.Data.DataTables.FindUniqueValues(Of String)(dt.Columns(0), True)
+            Assert.AreEqual("Sun", stringList(0))
+            Assert.AreEqual("Moon", stringList(1))
+            Assert.AreEqual("Saturn", stringList(2))
+            Assert.AreEqual("", stringList(3))
+            Assert.AreEqual(4, stringList.Count)
+        End Sub
+
+        <Test()> Public Sub FindUniqueValues_TestStringListContainsNothingOrEmptyString()
+            Dim L As List(Of String)
+
+            '1st test suite: start with adding null/Nothing value
+            L = New List(Of String)
+            Assert.False(L.Contains(""))
+            Assert.False(L.Contains(Nothing))
+            L.Add(Nothing)
+            Assert.False(L.Contains(""))
+            Assert.True(L.Contains(Nothing))
+            L.Add("")
+            Assert.True(L.Contains(""))
+            Assert.True(L.Contains(Nothing))
+
+            '2nd test suite: start with adding ""/EmptyString value
+            L = New List(Of String)
+            Assert.False(L.Contains(""))
+            Assert.False(L.Contains(Nothing))
+            L.Add("")
+            Assert.True(L.Contains(""))
+            Assert.False(L.Contains(Nothing))
+            L.Add(Nothing)
+            Assert.True(L.Contains(""))
+            Assert.True(L.Contains(Nothing))
+
         End Sub
 
         <Test()> Public Sub LookupUniqueColumnName()
