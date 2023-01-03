@@ -2357,6 +2357,98 @@ Namespace CompuMaster.Test.Data
             Assert.AreEqual("_suf", CompuMaster.Data.DataTables.ValidateRequiredColumnNames(dt, New String() {"_suf"}, True)(0))
         End Sub
 
+        <Test()> Public Sub IsEmptyColumn()
+            Dim dt As New DataTable
+            dt.Columns.Add("col1", GetType(String))
+            dt.Columns.Add("col2", GetType(Object))
+            dt.Columns.Add("col3", GetType(String()))
+            dt.Columns.Add("col4", GetType(DateTime))
+            dt.Columns.Add("col5", GetType(Integer))
+            dt.Columns.Add("col6", GetType(Boolean))
+            dt.Columns.Add("col7", GetType(List(Of String)))
+            Dim NewRow As DataRow
+
+            'no rows -> everything must be considered empty
+            For Each col As DataColumn In dt.Columns
+                Assert.AreEqual(True, CompuMaster.Data.DataTables.IsEmptyColumn(col), col.ColumnName)
+            Next
+
+            'DbNull row -> everything must be considered empty
+            NewRow = dt.NewRow()
+            dt.Rows.Add(NewRow)
+            For Each col As DataColumn In dt.Columns
+                Assert.AreEqual(True, CompuMaster.Data.DataTables.IsEmptyColumn(col), col.ColumnName)
+            Next
+
+            'Null/Nothing row -> everything must be considered empty
+            NewRow = dt.NewRow()
+            NewRow.ItemArray = New Object() {Nothing, Nothing, Nothing, Nothing, Nothing, Nothing, Nothing}
+            dt.Rows.Add(NewRow)
+            For Each col As DataColumn In dt.Columns
+                Assert.AreEqual(True, CompuMaster.Data.DataTables.IsEmptyColumn(col), col.ColumnName)
+            Next
+
+            'values row -> everything must be considered NOT empty
+            NewRow = dt.NewRow()
+            NewRow.ItemArray = New Object() {"test", New Object(), New String() {}, New DateTime(2000, 1, 1, 12, 0, 0), 1, True, New List(Of String)}
+            dt.Rows.Add(NewRow)
+            For Each col As DataColumn In dt.Columns
+                Assert.AreEqual(False, CompuMaster.Data.DataTables.IsEmptyColumn(col), col.ColumnName)
+            Next
+
+            'values row with other values -> everything must be considered NOT empty
+            NewRow.ItemArray = New Object() {"", New Object(), New String() {""}, DateTime.MinValue, 0, False, New List(Of String)(0)}
+            For Each col As DataColumn In dt.Columns
+                Assert.AreEqual(False, CompuMaster.Data.DataTables.IsEmptyColumn(col), col.ColumnName)
+            Next
+        End Sub
+
+        Private Shared Function RemoveEmptyColumns_TestTable(itemArray As Object()) As DataTable
+            Dim dt As New DataTable
+            dt.Columns.Add("col1", GetType(String))
+            dt.Columns.Add("col2", GetType(Object))
+            dt.Columns.Add("col3", GetType(String()))
+            dt.Columns.Add("col4", GetType(DateTime))
+            dt.Columns.Add("col5", GetType(Integer))
+            dt.Columns.Add("col6", GetType(Boolean))
+            dt.Columns.Add("col7", GetType(List(Of String)))
+            If itemArray IsNot Nothing Then
+                Dim NewRow As DataRow = dt.NewRow
+                NewRow.ItemArray = itemArray
+                dt.Rows.Add(NewRow)
+            End If
+            Return dt
+        End Function
+
+        <Test()> Public Sub RemoveEmptyColumns()
+            Dim dt As DataTable
+
+            'no rows -> everything must be considered empty
+            dt = RemoveEmptyColumns_TestTable(Nothing)
+            CompuMaster.Data.DataTables.RemoveEmptyColumns(dt)
+            Assert.AreEqual(0, dt.Columns.Count)
+
+            'DbNull row -> everything must be considered empty
+            dt = RemoveEmptyColumns_TestTable(New Object() {DBNull.Value, DBNull.Value, DBNull.Value, DBNull.Value, DBNull.Value, DBNull.Value, DBNull.Value})
+            CompuMaster.Data.DataTables.RemoveEmptyColumns(dt)
+            Assert.AreEqual(0, dt.Columns.Count)
+
+            'Null/Nothing row -> everything must be considered empty
+            dt = RemoveEmptyColumns_TestTable(New Object() {Nothing, Nothing, Nothing, Nothing, Nothing, Nothing, Nothing})
+            CompuMaster.Data.DataTables.RemoveEmptyColumns(dt)
+            Assert.AreEqual(0, dt.Columns.Count)
+
+            'values row -> everything must be considered NOT empty
+            dt = RemoveEmptyColumns_TestTable(New Object() {"test", New Object(), New String() {}, New DateTime(2000, 1, 1, 12, 0, 0), 1, True, New List(Of String)})
+            CompuMaster.Data.DataTables.RemoveEmptyColumns(dt)
+            Assert.AreEqual(7, dt.Columns.Count)
+
+            'values row with other values -> everything must be considered NOT empty           
+            dt = RemoveEmptyColumns_TestTable(New Object() {"", New Object(), New String() {""}, DateTime.MinValue, 0, False, New List(Of String)(0)})
+            CompuMaster.Data.DataTables.RemoveEmptyColumns(dt)
+            Assert.AreEqual(7, dt.Columns.Count)
+        End Sub
+
     End Class
 #Enable Warning CA1822 ' Member als statisch markieren
 

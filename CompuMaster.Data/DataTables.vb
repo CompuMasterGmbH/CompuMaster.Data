@@ -4478,6 +4478,48 @@ Namespace CompuMaster.Data
             Return CompuMaster.Data.DataTables.ReArrangeDataColumns(Result, TargetColumnSet.ToArray)
         End Function
 
+        ''' <summary>
+        ''' Empty columns only contain DbNull values
+        ''' </summary>
+        ''' <param name="table"></param>
+        ''' <param name="columnName"></param>
+        ''' <returns></returns>
+        ''' <remarks>A table with no rows is considered empty in all columns</remarks>
+        Public Shared Function IsEmptyColumn(table As DataTable, columnName As String) As Boolean
+            Return IsEmptyColumn(table.Columns(columnName))
+        End Function
+
+        ''' <summary>
+        ''' Empty columns only contain DbNull values
+        ''' </summary>
+        ''' <param name="column"></param>
+        ''' <returns></returns>
+        ''' <remarks>A table with no rows is considered empty in all columns</remarks>
+        Public Shared Function IsEmptyColumn(column As DataColumn) As Boolean
+            Dim Table As DataTable = column.Table
+            For MyCounter As Integer = 0 To Table.Rows.Count - 1
+                If IsDBNull(Table.Rows(MyCounter)(column)) = False Then
+                    Return False
+                End If
+            Next
+            Return True
+        End Function
+
+        ''' <summary>
+        ''' Remove all columns of a table if they contain DbNull values only
+        ''' </summary>
+        ''' <param name="table"></param>
+        ''' <remarks>A table with no rows is considered empty in all columns</remarks>
+        Public Shared Sub RemoveEmptyColumns(table As DataTable)
+            Dim EmptyColumns As New List(Of String)
+            For MyCounter As Integer = 0 To table.Columns.Count - 1
+                If IsEmptyColumn(table.Columns(MyCounter)) Then
+                    EmptyColumns.Add(table.Columns(MyCounter).ColumnName)
+                End If
+            Next
+            RemoveColumns(table, EmptyColumns.ToArray)
+        End Sub
+
     End Class
 
 End Namespace
