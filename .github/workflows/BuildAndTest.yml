@@ -66,7 +66,7 @@ jobs:
             - name: Setup .NET Core
               uses: actions/setup-dotnet@v1
               with:
-                 dotnet-version: 6.0.x
+                 dotnet-version: 7.0.x
 
             - name: Dir Listing (Win)
               if: startsWith(matrix.os, 'windows')
@@ -87,7 +87,7 @@ jobs:
               run: dotnet build --configuration=${{env.BUILD_CONFIGURATION}}${{matrix.build_configuration_suffix}} --no-restore 
 
             - name: Run Unit Tests
-              run: dotnet test --framework net6.0 --results-directory test-results --logger junit --configuration=${{env.BUILD_CONFIGURATION}}${{matrix.build_configuration_suffix}} --no-restore 
+              run: dotnet test --framework net7.0 --results-directory test-results --logger junit --configuration=${{env.BUILD_CONFIGURATION}}${{matrix.build_configuration_suffix}} --no-restore 
 
             - name: Dir Listing (Win) test-results
               if: startsWith(matrix.os, 'windows')
