@@ -2469,23 +2469,44 @@ Namespace CompuMaster.Test.Data
         End Sub
 
         <Test> Public Sub RemoveColumnsExcept()
-            Dim Table As DataTable = Me.TestTable2WithInvariantCultureInColumnNames
+            Dim Table As DataTable
+
+            Table = Me.TestTable2WithInvariantCultureInColumnNames
             Assert.AreEqual(New String() {"Frage", "Antwort A", "Antwort B", "Antwort C", "Antwort D", "Rubrik", "Richtige Antwort", "Erläuterung", "100 ", "200 ", "500 ", "1000 ", "5000 ", "10000 ", "20000 "}, CompuMaster.Data.DataTables.AllColumnNames(Table))
             CompuMaster.Data.DataTables.RemoveColumnsExcept(Table, Table.Columns(4), Table.Columns(3), Table.Columns(2), Table.Columns(1))
+            Assert.AreEqual(New String() {"Antwort A", "Antwort B", "Antwort C", "Antwort D"}, CompuMaster.Data.DataTables.AllColumnNames(Table))
+
+            Table = Me.TestTable2WithInvariantCultureInColumnNames
+            Assert.AreEqual(New String() {"Frage", "Antwort A", "Antwort B", "Antwort C", "Antwort D", "Rubrik", "Richtige Antwort", "Erläuterung", "100 ", "200 ", "500 ", "1000 ", "5000 ", "10000 ", "20000 "}, CompuMaster.Data.DataTables.AllColumnNames(Table))
+            CompuMaster.Data.DataTables.RemoveColumnsExcept(Table, "Antwort D", "Antwort C", "Antwort B", "Antwort A")
             Assert.AreEqual(New String() {"Antwort A", "Antwort B", "Antwort C", "Antwort D"}, CompuMaster.Data.DataTables.AllColumnNames(Table))
         End Sub
 
         <Test> Public Sub SortColumns()
-            Dim Table As DataTable = Me.TestTable2WithInvariantCultureInColumnNames
+            Dim Table As DataTable
+
+            Table = Me.TestTable2WithInvariantCultureInColumnNames
             Assert.AreEqual(New String() {"Frage", "Antwort A", "Antwort B", "Antwort C", "Antwort D", "Rubrik", "Richtige Antwort", "Erläuterung", "100 ", "200 ", "500 ", "1000 ", "5000 ", "10000 ", "20000 "}, CompuMaster.Data.DataTables.AllColumnNames(Table))
             CompuMaster.Data.DataTables.SortColumns(Table, Table.Columns(4), Table.Columns(3), Table.Columns(2), Table.Columns(1))
+            Assert.AreEqual(New String() {"Antwort D", "Antwort C", "Antwort B", "Antwort A", "Frage", "Rubrik", "Richtige Antwort", "Erläuterung", "100 ", "200 ", "500 ", "1000 ", "5000 ", "10000 ", "20000 "}, CompuMaster.Data.DataTables.AllColumnNames(Table))
+
+            Table = Me.TestTable2WithInvariantCultureInColumnNames
+            Assert.AreEqual(New String() {"Frage", "Antwort A", "Antwort B", "Antwort C", "Antwort D", "Rubrik", "Richtige Antwort", "Erläuterung", "100 ", "200 ", "500 ", "1000 ", "5000 ", "10000 ", "20000 "}, CompuMaster.Data.DataTables.AllColumnNames(Table))
+            CompuMaster.Data.DataTables.SortColumns(Table, "Antwort D", "Antwort C", "Antwort B", "Antwort A")
             Assert.AreEqual(New String() {"Antwort D", "Antwort C", "Antwort B", "Antwort A", "Frage", "Rubrik", "Richtige Antwort", "Erläuterung", "100 ", "200 ", "500 ", "1000 ", "5000 ", "10000 ", "20000 "}, CompuMaster.Data.DataTables.AllColumnNames(Table))
         End Sub
 
         <Test> Public Sub ReArrangeColumns()
-            Dim Table As DataTable = Me.TestTable2WithInvariantCultureInColumnNames
+            Dim Table As DataTable
+
+            Table = Me.TestTable2WithInvariantCultureInColumnNames
             Assert.AreEqual(New String() {"Frage", "Antwort A", "Antwort B", "Antwort C", "Antwort D", "Rubrik", "Richtige Antwort", "Erläuterung", "100 ", "200 ", "500 ", "1000 ", "5000 ", "10000 ", "20000 "}, CompuMaster.Data.DataTables.AllColumnNames(Table))
             CompuMaster.Data.DataTables.ReArrangeColumns(Table, Table.Columns(4), Table.Columns(3), Table.Columns(2), Table.Columns(1))
+            Assert.AreEqual(New String() {"Antwort D", "Antwort C", "Antwort B", "Antwort A"}, CompuMaster.Data.DataTables.AllColumnNames(Table))
+
+            Table = Me.TestTable2WithInvariantCultureInColumnNames
+            Assert.AreEqual(New String() {"Frage", "Antwort A", "Antwort B", "Antwort C", "Antwort D", "Rubrik", "Richtige Antwort", "Erläuterung", "100 ", "200 ", "500 ", "1000 ", "5000 ", "10000 ", "20000 "}, CompuMaster.Data.DataTables.AllColumnNames(Table))
+            CompuMaster.Data.DataTables.ReArrangeColumns(Table, "Antwort D", "Antwort C", "Antwort B", "Antwort A")
             Assert.AreEqual(New String() {"Antwort D", "Antwort C", "Antwort B", "Antwort A"}, CompuMaster.Data.DataTables.AllColumnNames(Table))
         End Sub
 

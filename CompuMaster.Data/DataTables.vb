@@ -3441,6 +3441,19 @@ Namespace CompuMaster.Data
         ''' </summary>
         ''' <param name="table">A table</param>
         ''' <param name="columnsToMaintain">The columns which shall be kept</param>
+        Public Shared Sub RemoveColumnsExcept(table As DataTable, ParamArray columnsToMaintain As String())
+            Dim columns As New ArrayList
+            For MyCounter As Integer = 0 To columnsToMaintain.Length - 1
+                columns.Add(table.Columns(columnsToMaintain(MyCounter)))
+            Next
+            RemoveColumnsExcept(table, CType(columns.ToArray(GetType(System.Data.DataColumn)), System.Data.DataColumn()))
+        End Sub
+
+        ''' <summary>
+        ''' Remove all columns except for the specified ones
+        ''' </summary>
+        ''' <param name="table">A table</param>
+        ''' <param name="columnsToMaintain">The columns which shall be kept</param>
         Public Shared Sub RemoveColumnsExcept(table As DataTable, ParamArray columnsToMaintain As DataColumn())
             For MyCounter As Integer = table.Columns.Count - 1 To 0 Step -1
                 Dim KeepColumn As Boolean = False
@@ -3453,6 +3466,17 @@ Namespace CompuMaster.Data
                 If KeepColumn = False Then
                     table.Columns.RemoveAt(MyCounter)
                 End If
+            Next
+        End Sub
+
+        ''' <summary>
+        ''' Sort columns
+        ''' </summary>
+        ''' <param name="table">A table</param>
+        ''' <param name="columns">The new sort order for the columns (columns which are not mentioned, will be positioned to the end)</param>
+        Public Shared Sub SortColumns(table As DataTable, ParamArray columns As String())
+            For MyCounter As Integer = 0 To columns.Count - 1
+                table.Columns(columns(MyCounter)).SetOrdinal(MyCounter)
             Next
         End Sub
 
@@ -3475,7 +3499,7 @@ Namespace CompuMaster.Data
         Public Shared Sub ReArrangeColumns(ByVal table As DataTable, ParamArray columnsToMaintain As String())
             Dim columns As New ArrayList
             For MyCounter As Integer = 0 To columnsToMaintain.Length - 1
-                columns.Add(New DataColumn(columnsToMaintain(MyCounter), table.Columns(columnsToMaintain(MyCounter)).DataType))
+                columns.Add(table.Columns(columnsToMaintain(MyCounter)))
             Next
             ReArrangeColumns(table, CType(columns.ToArray(GetType(System.Data.DataColumn)), System.Data.DataColumn()))
         End Sub
