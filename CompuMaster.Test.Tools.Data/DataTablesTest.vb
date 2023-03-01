@@ -1,4 +1,4 @@
-Option Explicit On
+ÔªøOption Explicit On
 Option Strict On
 
 Imports NUnit.Framework
@@ -2303,13 +2303,13 @@ Namespace CompuMaster.Test.Data
             Dim testData As New DataTable
             testData.Columns.Add()
             testData.Columns.Add("test")
-            testData.Columns.Add("‰ˆ¸ƒ÷‹ﬂ")
+            testData.Columns.Add("√§√∂√º√Ñ√ñ√ú√ü")
             testData.Columns.Add("data")
             testData.Columns.Add()
 
-            CompuMaster.Data.DataTables.KeepColumnsAndRemoveAllOthers(testData, New String() {"ƒ÷‹‰ˆ¸ﬂ", "data", "istnich", ""})
+            CompuMaster.Data.DataTables.KeepColumnsAndRemoveAllOthers(testData, New String() {"√Ñ√ñ√ú√§√∂√º√ü", "data", "istnich", ""})
             Assert.AreEqual(2, testData.Columns.Count)
-            Assert.AreEqual("‰ˆ¸ƒ÷‹ﬂ", testData.Columns(0).ColumnName)
+            Assert.AreEqual("√§√∂√º√Ñ√ñ√ú√ü", testData.Columns(0).ColumnName)
             Assert.AreEqual("data", testData.Columns(1).ColumnName)
 
         End Sub
@@ -2462,21 +2462,21 @@ Namespace CompuMaster.Test.Data
 
         <Test> Public Sub RemoveColumnsExcept()
             Dim Table As DataTable = Me.TestTable2
-            Assert.AreEqual(New String() {"Frage", "Antwort A", "Antwort B", "Antwort C", "Antwort D", "Rubrik", "Richtige Antwort", "Erl‰uterung", "100 ", "200 ", "500 ", "1.000 ", "5.000 ", "10.000 ", "20.000 "}, CompuMaster.Data.DataTables.AllColumnNames(Table))
+            Assert.AreEqual(New String() {"Frage", "Antwort A", "Antwort B", "Antwort C", "Antwort D", "Rubrik", "Richtige Antwort", "Erl√§uterung", "100 ", "200 ", "500 ", "1.000 ", "5.000 ", "10.000 ", "20.000 "}, CompuMaster.Data.DataTables.AllColumnNames(Table))
             CompuMaster.Data.DataTables.RemoveColumnsExcept(Table, Table.Columns(4), Table.Columns(3), Table.Columns(2), Table.Columns(1))
             Assert.AreEqual(New String() {"Antwort A", "Antwort B", "Antwort C", "Antwort D"}, CompuMaster.Data.DataTables.AllColumnNames(Table))
         End Sub
 
         <Test> Public Sub SortColumns()
             Dim Table As DataTable = Me.TestTable2
-            Assert.AreEqual(New String() {"Frage", "Antwort A", "Antwort B", "Antwort C", "Antwort D", "Rubrik", "Richtige Antwort", "Erl‰uterung", "100 ", "200 ", "500 ", "1.000 ", "5.000 ", "10.000 ", "20.000 "}, CompuMaster.Data.DataTables.AllColumnNames(Table))
+            Assert.AreEqual(New String() {"Frage", "Antwort A", "Antwort B", "Antwort C", "Antwort D", "Rubrik", "Richtige Antwort", "Erl√§uterung", "100 ", "200 ", "500 ", "1.000 ", "5.000 ", "10.000 ", "20.000 "}, CompuMaster.Data.DataTables.AllColumnNames(Table))
             CompuMaster.Data.DataTables.SortColumns(Table, Table.Columns(4), Table.Columns(3), Table.Columns(2), Table.Columns(1))
-            Assert.AreEqual(New String() {"Antwort D", "Antwort C", "Antwort B", "Antwort A", "Frage", "Rubrik", "Richtige Antwort", "Erl‰uterung", "100 ", "200 ", "500 ", "1.000 ", "5.000 ", "10.000 ", "20.000 "}, CompuMaster.Data.DataTables.AllColumnNames(Table))
+            Assert.AreEqual(New String() {"Antwort D", "Antwort C", "Antwort B", "Antwort A", "Frage", "Rubrik", "Richtige Antwort", "Erl√§uterung", "100 ", "200 ", "500 ", "1.000 ", "5.000 ", "10.000 ", "20.000 "}, CompuMaster.Data.DataTables.AllColumnNames(Table))
         End Sub
 
         <Test> Public Sub ReArrangeColumns()
             Dim Table As DataTable = Me.TestTable2
-            Assert.AreEqual(New String() {"Frage", "Antwort A", "Antwort B", "Antwort C", "Antwort D", "Rubrik", "Richtige Antwort", "Erl‰uterung", "100 ", "200 ", "500 ", "1.000 ", "5.000 ", "10.000 ", "20.000 "}, CompuMaster.Data.DataTables.AllColumnNames(Table))
+            Assert.AreEqual(New String() {"Frage", "Antwort A", "Antwort B", "Antwort C", "Antwort D", "Rubrik", "Richtige Antwort", "Erl√§uterung", "100 ", "200 ", "500 ", "1.000 ", "5.000 ", "10.000 ", "20.000 "}, CompuMaster.Data.DataTables.AllColumnNames(Table))
             CompuMaster.Data.DataTables.ReArrangeColumns(Table, Table.Columns(4), Table.Columns(3), Table.Columns(2), Table.Columns(1))
             Assert.AreEqual(New String() {"Antwort D", "Antwort C", "Antwort B", "Antwort A"}, CompuMaster.Data.DataTables.AllColumnNames(Table))
         End Sub
@@ -2484,21 +2484,21 @@ Namespace CompuMaster.Test.Data
         <Test()> Public Sub ConvertColumnType()
             Dim Table As DataTable = Me.TestTable2
             'Assert status at start
-            Assert.AreEqual(New String() {"Frage", "Antwort A", "Antwort B", "Antwort C", "Antwort D", "Rubrik", "Richtige Antwort", "Erl‰uterung", "100 ", "200 ", "500 ", "1.000 ", "5.000 ", "10.000 ", "20.000 "}, CompuMaster.Data.DataTables.AllColumnNames(Table))
+            Assert.AreEqual(New String() {"Frage", "Antwort A", "Antwort B", "Antwort C", "Antwort D", "Rubrik", "Richtige Antwort", "Erl√§uterung", "100 ", "200 ", "500 ", "1.000 ", "5.000 ", "10.000 ", "20.000 "}, CompuMaster.Data.DataTables.AllColumnNames(Table))
             Assert.AreEqual(GetType(Double), Table.Columns("Rubrik").DataType)
             Assert.AreEqual(GetType(Double), Table.Columns("100 ").DataType)
 
             'Change column type and re-assert
             CompuMaster.Data.DataTables.ConvertColumnType(Table.Columns.Item("Rubrik"), GetType(String), Function(x) If(IsDBNull(x), x, CType(x, Double).ToString))
             Assert.AreEqual(GetType(String), Table.Columns("Rubrik").DataType)
-            Assert.AreEqual(New String() {"Frage", "Antwort A", "Antwort B", "Antwort C", "Antwort D", "Rubrik", "Richtige Antwort", "Erl‰uterung", "100 ", "200 ", "500 ", "1.000 ", "5.000 ", "10.000 ", "20.000 "}, CompuMaster.Data.DataTables.AllColumnNames(Table))
+            Assert.AreEqual(New String() {"Frage", "Antwort A", "Antwort B", "Antwort C", "Antwort D", "Rubrik", "Richtige Antwort", "Erl√§uterung", "100 ", "200 ", "500 ", "1.000 ", "5.000 ", "10.000 ", "20.000 "}, CompuMaster.Data.DataTables.AllColumnNames(Table))
 
             'Change column type and re-assert
             CompuMaster.Data.DataTables.ConvertColumnType(Table.Columns.Item("Rubrik"), GetType(Integer), Function(x) If(IsDBNull(x), x, Integer.Parse(CType(x, String))))
             CompuMaster.Data.DataTables.ConvertColumnType(Table.Columns.Item("100 "), GetType(Boolean), Function(x) If(IsDBNull(x), x, CType(x, String) = "1"))
             Assert.AreEqual(GetType(Integer), Table.Columns("Rubrik").DataType)
             Assert.AreEqual(GetType(Boolean), Table.Columns("100 ").DataType)
-            Assert.AreEqual(New String() {"Frage", "Antwort A", "Antwort B", "Antwort C", "Antwort D", "Rubrik", "Richtige Antwort", "Erl‰uterung", "100 ", "200 ", "500 ", "1.000 ", "5.000 ", "10.000 ", "20.000 "}, CompuMaster.Data.DataTables.AllColumnNames(Table))
+            Assert.AreEqual(New String() {"Frage", "Antwort A", "Antwort B", "Antwort C", "Antwort D", "Rubrik", "Richtige Antwort", "Erl√§uterung", "100 ", "200 ", "500 ", "1.000 ", "5.000 ", "10.000 ", "20.000 "}, CompuMaster.Data.DataTables.AllColumnNames(Table))
         End Sub
 
     End Class
