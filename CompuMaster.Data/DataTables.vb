@@ -276,10 +276,12 @@ Namespace CompuMaster.Data
                 End If
             Next
             'Remove the old column
-            Dim oldColName As String = column.ColumnName
+            Dim OldColName As String = column.ColumnName
+            Dim OldColOrdinal As Integer = column.Ordinal
             column.Table.Columns.Remove(column)
             'Rename the new column to the old name
-            newCol.ColumnName = oldColName
+            newCol.ColumnName = OldColName
+            newCol.SetOrdinal(OldColOrdinal)
         End Sub
 
         ''' <summary>
