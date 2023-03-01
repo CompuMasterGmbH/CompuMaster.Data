@@ -487,18 +487,36 @@ Namespace CompuMaster.Test.Data
             Throw New NotImplementedException
         End Sub
 
-        <Test> Public Sub InsertColumnIntoClonedTable()
+        <Test> <Obsolete> Public Sub InsertColumnIntoClonedTable()
+            Dim c As DataTable
             Dim t As DataTable = TestTable1()
             Assert.AreEqual(New String() {"ID", "Value"}, CompuMaster.Data.DataTables.AllColumnNames(t))
-            Dim c As DataTable
+
             c = CompuMaster.Data.DataTables.InsertColumnIntoClonedTable(t, 2, New DataColumn("Insert2"))
             Assert.AreEqual(New String() {"ID", "Value"}, CompuMaster.Data.DataTables.AllColumnNames(t), "Origin table must remain untouched")
             Assert.AreEqual(New String() {"ID", "Value", "Insert2"}, CompuMaster.Data.DataTables.AllColumnNames(c))
+
             c = CompuMaster.Data.DataTables.InsertColumnIntoClonedTable(c, 1, New DataColumn("Insert1"))
             Assert.AreEqual(New String() {"ID", "Insert1", "Value", "Insert2"}, CompuMaster.Data.DataTables.AllColumnNames(c))
+
             c = CompuMaster.Data.DataTables.InsertColumnIntoClonedTable(c, 0, New DataColumn("Insert0"))
             Assert.AreEqual(New String() {"Insert0", "ID", "Insert1", "Value", "Insert2"}, CompuMaster.Data.DataTables.AllColumnNames(c))
             Assert.AreEqual(New String() {"ID", "Value"}, CompuMaster.Data.DataTables.AllColumnNames(t), "Origin table must remain untouched")
+        End Sub
+
+        <Test> Public Sub InsertColumn()
+            Dim t As DataTable
+            t = TestTable1()
+            Assert.AreEqual(New String() {"ID", "Value"}, CompuMaster.Data.DataTables.AllColumnNames(t))
+
+            CompuMaster.Data.DataTables.InsertColumn(t, 2, New DataColumn("Insert2"))
+            Assert.AreEqual(New String() {"ID", "Value", "Insert2"}, CompuMaster.Data.DataTables.AllColumnNames(t))
+
+            CompuMaster.Data.DataTables.InsertColumn(t, 1, New DataColumn("Insert1"))
+            Assert.AreEqual(New String() {"ID", "Insert1", "Value", "Insert2"}, CompuMaster.Data.DataTables.AllColumnNames(t))
+
+            CompuMaster.Data.DataTables.InsertColumn(t, 0, New DataColumn("Insert0"))
+            Assert.AreEqual(New String() {"Insert0", "ID", "Insert1", "Value", "Insert2"}, CompuMaster.Data.DataTables.AllColumnNames(t))
         End Sub
 
         <Test()> Public Sub CopyDataTableWithSubsetOfRows()
@@ -1114,7 +1132,7 @@ Namespace CompuMaster.Test.Data
             Assert.IsFalse(dt.Columns.Contains(uname))
         End Sub
 
-        <Test()> Public Sub ReArrangeDataColumns()
+        <Test()> Public Sub CloneTableAndReArrangeDataColumns()
             Dim dt As New DataTable
             Dim dt2 As DataTable
             dt.Columns.Add("Test1")
@@ -1126,10 +1144,9 @@ Namespace CompuMaster.Test.Data
             dt.Rows.Add(New String() {"Test7", "Test8"})
             dt.Rows.Add(New String() {"Test9", "Test10"})
 
-
             'TODO: all overloads'
 
-            dt2 = CompuMaster.Data.DataTables.ReArrangeDataColumns(dt, New String() {"Test1"})
+            dt2 = CompuMaster.Data.DataTables.CloneTableAndReArrangeDataColumns(dt, New String() {"Test1"})
             Assert.AreEqual(1, dt2.Columns.Count())
             Assert.AreEqual(5, dt2.Rows.Count())
             StringAssert.IsMatch("Test1", dt2.Columns.Item(0).ColumnName)
@@ -2447,6 +2464,27 @@ Namespace CompuMaster.Test.Data
             dt = RemoveEmptyColumns_TestTable(New Object() {"", New Object(), New String() {""}, DateTime.MinValue, 0, False, New List(Of String)(0)})
             CompuMaster.Data.DataTables.RemoveEmptyColumns(dt)
             Assert.AreEqual(7, dt.Columns.Count)
+        End Sub
+
+        <Test> Public Sub RemoveColumnsExcept()
+            Dim Table As DataTable = Me.TestTable2
+            Assert.AreEqual(New String() {"Frage", "Antwort A", "Antwort B", "Antwort C", "Antwort D", "Rubrik", "Richtige Antwort", "Erläuterung", "100 ", "200 ", "500 ", "1.000 ", "5.000 ", "10.000 ", "20.000 "}, CompuMaster.Data.DataTables.AllColumnNames(Table))
+            CompuMaster.Data.DataTables.RemoveColumnsExcept(Table, Table.Columns(4), Table.Columns(3), Table.Columns(2), Table.Columns(1))
+            Assert.AreEqual(New String() {"Antwort A", "Antwort B", "Antwort C", "Antwort D"}, CompuMaster.Data.DataTables.AllColumnNames(Table))
+        End Sub
+
+        <Test> Public Sub SortColumns()
+            Dim Table As DataTable = Me.TestTable2
+            Assert.AreEqual(New String() {"Frage", "Antwort A", "Antwort B", "Antwort C", "Antwort D", "Rubrik", "Richtige Antwort", "Erläuterung", "100 ", "200 ", "500 ", "1.000 ", "5.000 ", "10.000 ", "20.000 "}, CompuMaster.Data.DataTables.AllColumnNames(Table))
+            CompuMaster.Data.DataTables.SortColumns(Table, Table.Columns(4), Table.Columns(3), Table.Columns(2), Table.Columns(1))
+            Assert.AreEqual(New String() {"Antwort D", "Antwort C", "Antwort B", "Antwort A", "Frage", "Rubrik", "Richtige Antwort", "Erläuterung", "100 ", "200 ", "500 ", "1.000 ", "5.000 ", "10.000 ", "20.000 "}, CompuMaster.Data.DataTables.AllColumnNames(Table))
+        End Sub
+
+        <Test> Public Sub ReArrangeColumns()
+            Dim Table As DataTable = Me.TestTable2
+            Assert.AreEqual(New String() {"Frage", "Antwort A", "Antwort B", "Antwort C", "Antwort D", "Rubrik", "Richtige Antwort", "Erläuterung", "100 ", "200 ", "500 ", "1.000 ", "5.000 ", "10.000 ", "20.000 "}, CompuMaster.Data.DataTables.AllColumnNames(Table))
+            CompuMaster.Data.DataTables.ReArrangeColumns(Table, Table.Columns(4), Table.Columns(3), Table.Columns(2), Table.Columns(1))
+            Assert.AreEqual(New String() {"Antwort D", "Antwort C", "Antwort B", "Antwort A"}, CompuMaster.Data.DataTables.AllColumnNames(Table))
         End Sub
 
     End Class

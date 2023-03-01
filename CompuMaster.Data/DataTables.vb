@@ -1230,7 +1230,7 @@ Namespace CompuMaster.Data
         ''' <remarks>
         '''     The columns will only be removed if they exist. If a column name doesn't exist, it will be ignored.
         ''' </remarks>
-        Public Shared Sub RemoveColumns(ByVal datatable As System.Data.DataTable, ByVal columnNames As String())
+        Public Shared Sub RemoveColumns(ByVal datatable As System.Data.DataTable, ParamArray columnNames As String())
             CompuMaster.Data.DataTablesTools.RemoveColumns(datatable, columnNames)
         End Sub
 
@@ -3338,6 +3338,8 @@ Namespace CompuMaster.Data
         ''' <param name="source">The source table with data</param>
         ''' <param name="columnsToCopy">An array of column names which shall be copied in the specified order from the source table</param>
         ''' <returns>A new and independent data table with copied data</returns>
+        <Obsolete("Better use CloneTableAndReArrangeDataColumns instead")>
+        <System.ComponentModel.EditorBrowsable(ComponentModel.EditorBrowsableState.Never)>
         Public Shared Function ReArrangeDataColumns(ByVal source As DataTable, ByVal columnsToCopy As String()) As DataTable
             Return CompuMaster.Data.DataTablesTools.ReArrangeDataColumns(source, columnsToCopy)
         End Function
@@ -3356,6 +3358,8 @@ Namespace CompuMaster.Data
         '''         ReArrangeDataColumns(source, New System.Data.DataColumn() {New DataColumn("column1Name", GetType(String)), New DataColumn("column2Name", GetType(Integer))})
         '''     </code>
         ''' </example>
+        <Obsolete("Better use CloneTableAndReArrangeDataColumns instead")>
+        <System.ComponentModel.EditorBrowsable(ComponentModel.EditorBrowsableState.Never)>
         Public Shared Function ReArrangeDataColumns(ByVal source As DataTable, ByVal destinationColumnSet As DataColumn()) As DataTable
             Return CompuMaster.Data.DataTablesTools.ReArrangeDataColumns(source, destinationColumnSet)
         End Function
@@ -3375,10 +3379,114 @@ Namespace CompuMaster.Data
         '''         ReArrangeDataColumns(source, New System.Data.DataColumn() {New DataColumn("column1Name", GetType(String)), New DataColumn("column2Name", GetType(Integer))})
         '''     </code>
         ''' </example>
+        <Obsolete("Better use CloneTableAndReArrangeDataColumns instead")>
+        <System.ComponentModel.EditorBrowsable(ComponentModel.EditorBrowsableState.Never)>
         Public Shared Function ReArrangeDataColumns(ByVal source As DataTable, ByVal destinationColumnSet As DataColumn(),
                                                     ByVal ignoreConversionExceptionAndLogThemHere As ArrayList) As DataTable
             Return CompuMaster.Data.DataTablesTools.ReArrangeDataColumns(source, destinationColumnSet, ignoreConversionExceptionAndLogThemHere)
         End Function
+
+        ''' <summary>
+        ''' Clone table and re-arrange columns
+        ''' </summary>
+        ''' <param name="source">The source table with data</param>
+        ''' <param name="columnsToCopy">An array of column names which shall be copied in the specified order from the source table</param>
+        ''' <returns>A new and independent data table with copied data</returns>
+        Public Shared Function CloneTableAndReArrangeDataColumns(ByVal source As DataTable, ByVal columnsToCopy As String()) As DataTable
+            Return CompuMaster.Data.DataTablesTools.ReArrangeDataColumns(source, columnsToCopy)
+        End Function
+
+        ''' <summary>
+        ''' Clone table and re-arrange columns order and also change their data types
+        ''' </summary>
+        ''' <param name="source">The source table with data</param>
+        ''' <param name="destinationColumnSet">An array of columns as they shall be inserted into the result</param>
+        ''' <returns>A new and independent data table with copied data</returns>
+        ''' <remarks>
+        '''     The copy process requires that the names of the destination columns can be found in the columns collection of the source table. 
+        ''' </remarks>
+        ''' <example>
+        '''     <code language="vb">
+        '''         ReArrangeDataColumns(source, New System.Data.DataColumn() {New DataColumn("column1Name", GetType(String)), New DataColumn("column2Name", GetType(Integer))})
+        '''     </code>
+        ''' </example>
+        Public Shared Function CloneTableAndReArrangeDataColumns(ByVal source As DataTable, ByVal destinationColumnSet As DataColumn()) As DataTable
+            Return CompuMaster.Data.DataTablesTools.ReArrangeDataColumns(source, destinationColumnSet)
+        End Function
+
+        ''' <summary>
+        ''' Clone table and re-arrange columns order and also change their data types
+        ''' </summary>
+        ''' <param name="source">The source table with data</param>
+        ''' <param name="destinationColumnSet">An array of columns as they shall be inserted into the result</param>
+        ''' <param name="ignoreConversionExceptionAndLogThemHere">In case of data conversion exceptions, log them here instead of throwing them immediately</param>
+        ''' <returns>A new and independent data table with copied data</returns>
+        ''' <remarks>
+        '''     The copy process requires that the names of the destination columns can be found in the columns collection of the source table. 
+        ''' </remarks>
+        ''' <example>
+        '''     <code language="vb">
+        '''         ReArrangeDataColumns(source, New System.Data.DataColumn() {New DataColumn("column1Name", GetType(String)), New DataColumn("column2Name", GetType(Integer))})
+        '''     </code>
+        ''' </example>
+        Public Shared Function CloneTableAndReArrangeDataColumns(ByVal source As DataTable, ByVal destinationColumnSet As DataColumn(),
+                                                    ByVal ignoreConversionExceptionAndLogThemHere As ArrayList) As DataTable
+            Return CompuMaster.Data.DataTablesTools.ReArrangeDataColumns(source, destinationColumnSet, ignoreConversionExceptionAndLogThemHere)
+        End Function
+
+        ''' <summary>
+        ''' Remove all columns except for the specified ones
+        ''' </summary>
+        ''' <param name="table">A table</param>
+        ''' <param name="columnsToMaintain">The columns which shall be kept</param>
+        Public Shared Sub RemoveColumnsExcept(table As DataTable, ParamArray columnsToMaintain As DataColumn())
+            For MyCounter As Integer = table.Columns.Count - 1 To 0 Step -1
+                Dim KeepColumn As Boolean = False
+                For ColumnsToMaintainCounter As Integer = 0 To columnsToMaintain.Count - 1
+                    If table.Columns(MyCounter) Is columnsToMaintain(ColumnsToMaintainCounter) Then
+                        KeepColumn = True
+                        Exit For
+                    End If
+                Next
+                If KeepColumn = False Then
+                    table.Columns.RemoveAt(MyCounter)
+                End If
+            Next
+        End Sub
+
+        ''' <summary>
+        ''' Sort columns
+        ''' </summary>
+        ''' <param name="table">A table</param>
+        ''' <param name="columns">The new sort order for the columns (columns which are not mentioned, will be positioned to the end)</param>
+        Public Shared Sub SortColumns(table As DataTable, ParamArray columns As DataColumn())
+            For MyCounter As Integer = 0 To columns.Count - 1
+                columns(MyCounter).SetOrdinal(MyCounter)
+            Next
+        End Sub
+
+        ''' <summary>
+        '''     Rearrange columns in the given order and remove all other columns
+        ''' </summary>
+        ''' <param name="table">A table</param>
+        ''' <param name="columnsToMaintain">The new sort order for the columns</param>
+        Public Shared Sub ReArrangeColumns(ByVal table As DataTable, ParamArray columnsToMaintain As String())
+            Dim columns As New ArrayList
+            For MyCounter As Integer = 0 To columnsToMaintain.Length - 1
+                columns.Add(New DataColumn(columnsToMaintain(MyCounter), table.Columns(columnsToMaintain(MyCounter)).DataType))
+            Next
+            ReArrangeColumns(table, CType(columns.ToArray(GetType(System.Data.DataColumn)), System.Data.DataColumn()))
+        End Sub
+
+        ''' <summary>
+        '''     Rearrange columns in the given order and remove all other columns
+        ''' </summary>
+        ''' <param name="table">A table</param>
+        ''' <param name="columnsToMaintain">The new sort order for the columns</param>
+        Public Shared Sub ReArrangeColumns(ByVal table As DataTable, ParamArray columnsToMaintain As DataColumn())
+            RemoveColumnsExcept(table, columnsToMaintain)
+            SortColumns(table, columnsToMaintain)
+        End Sub
 
         ''' <summary>
         ''' All columns of the table
@@ -4470,13 +4578,27 @@ Namespace CompuMaster.Data
         ''' <param name="index"></param>
         ''' <param name="column"></param>
         ''' <returns></returns>
+        <Obsolete("Better use InsertColumn instead")>
+        <System.ComponentModel.EditorBrowsable(ComponentModel.EditorBrowsableState.Never)>
         Public Shared Function InsertColumnIntoClonedTable(table As DataTable, index As Integer, column As DataColumn) As DataTable
             Dim TargetColumnSet As New List(Of String)(CompuMaster.Data.DataTables.AllColumnNames(table))
             Dim Result As DataTable = CompuMaster.Data.DataTables.CreateDataTableClone(table)
             Result.Columns.Add(column)
             TargetColumnSet.Insert(index, column.ColumnName)
-            Return CompuMaster.Data.DataTables.ReArrangeDataColumns(Result, TargetColumnSet.ToArray)
+            Return CompuMaster.Data.DataTables.CloneTableAndReArrangeDataColumns(Result, TargetColumnSet.ToArray)
         End Function
+
+        ''' <summary>
+        ''' Create a new table with the inserted column at a specific index position 
+        ''' </summary>
+        ''' <param name="table"></param>
+        ''' <param name="index"></param>
+        ''' <param name="column"></param>
+        ''' <returns></returns>
+        Public Shared Sub InsertColumn(table As DataTable, index As Integer, column As DataColumn)
+            table.Columns.Add(column)
+            column.SetOrdinal(index)
+        End Sub
 
         ''' <summary>
         ''' Empty columns only contain DbNull values
