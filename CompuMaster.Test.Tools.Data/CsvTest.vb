@@ -42,6 +42,7 @@ Namespace CompuMaster.Test.Data
             Console.WriteLine(CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(dt))
             Assert.AreEqual(10, dt.Columns.Count)
             Assert.AreEqual(3, dt.Rows.Count)
+            Assert.AreEqual("115", dt.Rows(0)(0))
 
             dt = CompuMaster.Data.Csv.ReadDataTableFromCsvFile(
                 TestFile, True, StartLine,
@@ -50,6 +51,7 @@ Namespace CompuMaster.Test.Data
             Console.WriteLine(CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(dt))
             Assert.AreEqual(10, dt.Columns.Count)
             Assert.AreEqual(3, dt.Rows.Count)
+            Assert.AreEqual("115", dt.Rows(0)(0))
 
             dt = CompuMaster.Data.Csv.ReadDataTableFromCsvFile(
                 TestFile, True, StartLine,
@@ -57,6 +59,7 @@ Namespace CompuMaster.Test.Data
             Console.WriteLine(CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(dt))
             Assert.AreEqual(10, dt.Columns.Count)
             Assert.AreEqual(3, dt.Rows.Count)
+            Assert.AreEqual("115", dt.Rows(0)(0))
 
             dt = CompuMaster.Data.Csv.ReadDataTableFromCsvFile(
                 TestFile, True, StartLine,
@@ -65,6 +68,7 @@ Namespace CompuMaster.Test.Data
             Console.WriteLine(CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(dt))
             Assert.AreEqual(10, dt.Columns.Count)
             Assert.AreEqual(3, dt.Rows.Count)
+            Assert.AreEqual("115", dt.Rows(0)(0))
 
             'CSV-String
             Dim CsvData As String = System.IO.File.ReadAllText(TestFile, FileEncoding)
@@ -74,6 +78,7 @@ Namespace CompuMaster.Test.Data
             Console.WriteLine(CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(dt))
             Assert.AreEqual(10, dt.Columns.Count)
             Assert.AreEqual(3, dt.Rows.Count)
+            Assert.AreEqual("115", dt.Rows(0)(0))
 
             dt = CompuMaster.Data.Csv.ReadDataTableFromCsvString(
                 CsvData, True, StartLine,
@@ -82,6 +87,7 @@ Namespace CompuMaster.Test.Data
             Console.WriteLine(CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(dt))
             Assert.AreEqual(10, dt.Columns.Count)
             Assert.AreEqual(3, dt.Rows.Count)
+            Assert.AreEqual("115", dt.Rows(0)(0))
 
             dt = CompuMaster.Data.Csv.ReadDataTableFromCsvString(
                 CsvData, True, StartLine,
@@ -89,6 +95,7 @@ Namespace CompuMaster.Test.Data
             Console.WriteLine(CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(dt))
             Assert.AreEqual(10, dt.Columns.Count)
             Assert.AreEqual(3, dt.Rows.Count)
+            Assert.AreEqual("115", dt.Rows(0)(0))
 
             dt = CompuMaster.Data.Csv.ReadDataTableFromCsvString(
                 CsvData, True, StartLine,
@@ -97,6 +104,7 @@ Namespace CompuMaster.Test.Data
             Console.WriteLine(CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(dt))
             Assert.AreEqual(10, dt.Columns.Count)
             Assert.AreEqual(3, dt.Rows.Count)
+            Assert.AreEqual("115", dt.Rows(0)(0))
 
         End Sub
 
