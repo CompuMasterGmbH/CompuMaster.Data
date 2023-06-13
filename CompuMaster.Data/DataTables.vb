@@ -3490,6 +3490,18 @@ Namespace CompuMaster.Data
         ''' </summary>
         ''' <param name="table">A table</param>
         ''' <param name="columns">The new sort order for the columns (columns which are not mentioned, will be positioned to the end)</param>
+        Public Shared Sub SortColumns(ParamArray columns As DataColumn())
+            For MyCounter As Integer = 0 To columns.Length - 1
+                columns(MyCounter).SetOrdinal(MyCounter)
+            Next
+        End Sub
+
+        ''' <summary>
+        ''' Sort columns
+        ''' </summary>
+        ''' <param name="table">A table</param>
+        ''' <param name="columns">The new sort order for the columns (columns which are not mentioned, will be positioned to the end)</param>
+        <Obsolete("Use another overload without argument ""table"", instead"), System.ComponentModel.EditorBrowsable(ComponentModel.EditorBrowsableState.Never)>
         Public Shared Sub SortColumns(table As DataTable, ParamArray columns As DataColumn())
             For MyCounter As Integer = 0 To columns.Length - 1
                 columns(MyCounter).SetOrdinal(MyCounter)
