@@ -129,7 +129,7 @@ Namespace CompuMaster.Data
             If value = Nothing Then
                 Return 0
             Else
-                Return value.IndexOf(search) + 1
+                Return value.IndexOf(search, StringComparison.Ordinal) + 1
             End If
         End Function
 

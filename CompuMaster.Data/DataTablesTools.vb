@@ -80,14 +80,14 @@ Namespace CompuMaster.Data
         ''' <returns>An index number for the given data row</returns>
         Friend Shared Function RowIndex(ByVal dataRow As DataRow) As Integer
             If dataRow.Table Is Nothing Then
-                Throw New Exception("DataRow must be part of a table to retrieve its row index")
+                Throw New ArgumentException("DataRow must be part of a table to retrieve its row index")
             End If
             For MyCounter As Integer = 0 To dataRow.Table.Rows.Count - 1
                 If dataRow.Table.Rows(MyCounter) Is dataRow Then
                     Return MyCounter
                 End If
             Next
-            Throw New Exception("Unexpected error: provided data row can't be identified in its data table. Please contact your software vendor.")
+            Throw New InvalidOperationException("Unexpected error: provided data row can't be identified in its data table. Please contact your software vendor.")
         End Function
 
         ''' <summary>
@@ -97,14 +97,14 @@ Namespace CompuMaster.Data
         ''' <returns>An index number for the given column</returns>
         Friend Shared Function ColumnIndex(ByVal column As DataColumn) As Integer
             If column.Table Is Nothing Then
-                Throw New Exception("DataColumn must be part of a table to retrieve its column index")
+                Throw New ArgumentException("DataColumn must be part of a table to retrieve its column index")
             End If
             For MyCounter As Integer = 0 To column.Table.Columns.Count - 1
                 If column.Table.Columns(MyCounter) Is column Then
                     Return MyCounter
                 End If
             Next
-            Throw New Exception("Unexpected error: provided data column can't be identified in its data table. Please contact your software vendor.")
+            Throw New InvalidOperationException("Unexpected error: provided data column can't be identified in its data table. Please contact your software vendor.")
         End Function
 
         ''' <summary>
@@ -210,7 +210,7 @@ Namespace CompuMaster.Data
             If datatable Is Nothing Then
                 Return Nothing
             ElseIf datatable.Rows.Count = 0 Then
-                Return New ListControlItem() {}
+                Return Array.Empty(Of ListControlItem)()
             Else
                 Dim Result As ListControlItem()
                 ReDim Result(datatable.Rows.Count - 1)
@@ -449,7 +449,7 @@ Namespace CompuMaster.Data
         ''' </remarks>
         Friend Shared Function ConvertDataTableToHashtable(ByVal keyColumn As DataColumn, ByVal valueColumn As DataColumn) As Hashtable
             If keyColumn.Table IsNot valueColumn.Table Then
-                Throw New Exception("Key column and value column must be from the same table")
+                Throw New ArgumentException("Key column and value column must be from the same table")
             End If
             Return ConvertDataTableToHashtable(keyColumn.Table, keyColumn.Ordinal, valueColumn.Ordinal)
         End Function
@@ -478,7 +478,7 @@ Namespace CompuMaster.Data
         ''' </remarks>
         Friend Shared Function ConvertDataTableToHashtable(ByVal data As DataTable, ByVal keyColumnIndex As Integer, ByVal valueColumnIndex As Integer) As Hashtable
             If data.Columns(keyColumnIndex).Unique = False Then
-                Throw New Exception("The hashtable requires your key column to be a unique column - make it a unique column, first!")
+                Throw New ArgumentException("The hashtable requires your key column to be a unique column - make it a unique column, first!")
             End If
             Dim Result As New Hashtable
             For MyCounter As Integer = 0 To data.Rows.Count - 1
@@ -507,7 +507,7 @@ Namespace CompuMaster.Data
         ''' <returns></returns>
         Friend Shared Function ConvertDataTableToDictionaryEntryArray(ByVal keyColumn As DataColumn, ByVal valueColumn As DataColumn) As DictionaryEntry()
             If keyColumn.Table IsNot valueColumn.Table Then
-                Throw New Exception("Key column and value column must be from the same table")
+                Throw New ArgumentException("Key column and value column must be from the same table")
             End If
             Return ConvertDataTableToDictionaryEntryArray(keyColumn.Table, keyColumn.Ordinal, valueColumn.Ordinal)
         End Function
@@ -767,7 +767,7 @@ Namespace CompuMaster.Data
                                                   ByVal htmlEncodeCellContentAndLineBreaks As Boolean,
                                                   disableHtmlEncodingForColumns As String()) As String
             If disableHtmlEncodingForColumns Is Nothing Then
-                disableHtmlEncodingForColumns = New String() {}
+                disableHtmlEncodingForColumns = Array.Empty(Of String)()
             End If
             If titleTagOpener Is Nothing AndAlso titleTagEnd Is Nothing Then
                 titleTagOpener = "<H1>"
@@ -1100,13 +1100,13 @@ Namespace CompuMaster.Data
 
             'Verify parameters
             If leftParentTable Is Nothing OrElse rightChildTable Is Nothing Then
-                Throw New Exception("One or both table references are null")
+                Throw New ArgumentException("One or both table references are null")
             End If
             If leftParentTable.DataSet Is Nothing OrElse leftParentTable.DataSet IsNot rightChildTable.DataSet Then
-                Throw New Exception("Both tables must be member of the same dataset")
+                Throw New ArgumentException("Both tables must be member of the same dataset")
             End If
             If relation Is Nothing Then
-                Throw New Exception("No relation defined between the two tables")
+                Throw New ArgumentException("No relation defined between the two tables")
             End If
 
             Dim rightColumns As Integer() = Nothing
@@ -1223,13 +1223,13 @@ Namespace CompuMaster.Data
 
             'Verify parameters
             If leftParentTable Is Nothing OrElse rightChildTable Is Nothing Then
-                Throw New Exception("One or both table references are null")
+                Throw New ArgumentException("One or both table references are null")
             End If
             If leftParentTable.DataSet Is Nothing OrElse leftParentTable.DataSet IsNot rightChildTable.DataSet Then
-                Throw New Exception("Both tables must be member of the same dataset")
+                Throw New ArgumentException("Both tables must be member of the same dataset")
             End If
             If relation Is Nothing Then
-                Throw New Exception("No relation defined between the two tables")
+                Throw New ArgumentException("No relation defined between the two tables")
             End If
 
             'Prepare column wrap table
@@ -1248,7 +1248,7 @@ Namespace CompuMaster.Data
                     Try
                         colWraps.Add(leftParentTable.Columns.Item(indexesOfLeftTableColumnsToCopy(ColCounter)).Ordinal)
                     Catch
-                        Throw New Exception("Column index can't be found in source table's column collection: " & indexesOfLeftTableColumnsToCopy(ColCounter))
+                        Throw New ArgumentException("Column index can't be found in source table's column collection: " & indexesOfLeftTableColumnsToCopy(ColCounter))
                     End Try
                 Next
                 LeftTableColumnWraps = CType(colWraps.ToArray(GetType(Integer)), Integer())
@@ -1352,7 +1352,7 @@ Namespace CompuMaster.Data
 
             'Verify parameters
             If leftTable Is Nothing OrElse rightTable Is Nothing Then
-                Throw New Exception("One or both table references are null")
+                Throw New ArgumentException("One or both table references are null")
             End If
 
             'Prepare column wrap table
@@ -1371,7 +1371,7 @@ Namespace CompuMaster.Data
                     Try
                         colWraps.Add(leftTable.Columns.Item(indexesOfLeftTableColumnsToCopy(ColCounter)).Ordinal)
                     Catch
-                        Throw New Exception("Column index can't be found in source table's column collection: " & indexesOfLeftTableColumnsToCopy(ColCounter))
+                        Throw New ArgumentException("Column index can't be found in source table's column collection: " & indexesOfLeftTableColumnsToCopy(ColCounter))
                     End Try
                 Next
                 LeftTableColumnWraps = CType(colWraps.ToArray(GetType(Integer)), Integer())
@@ -1513,7 +1513,7 @@ Namespace CompuMaster.Data
                 Return suggestedColumnName
             Else
                 'Add prefix "ClientTable_" or add/increase a counter at the end
-                If suggestedColumnName.StartsWith("ClientTable_") Then
+                If suggestedColumnName.StartsWith("ClientTable_", StringComparison.Ordinal) Then
                     'Find the position range of an already existing counter at the end of the string - if there is a number
                     Dim NumberPositionIndex As Integer = -1
                     For NumberPartCounter As Integer = suggestedColumnName.Length - 1 To 0 Step -1
@@ -1617,7 +1617,7 @@ Namespace CompuMaster.Data
                 Try
                     colWraps.Add(source.Columns.Item(destinationColumnSet(ColCounter).ColumnName).Ordinal)
                 Catch
-                    Throw New Exception("Column name can't be found in source table's column collection: " & destinationColumnSet(ColCounter).ColumnName)
+                    Throw New ArgumentException("Column name can't be found in source table's column collection: " & destinationColumnSet(ColCounter).ColumnName)
                 End Try
             Next
             Dim ColumnWraps As Integer() = CType(colWraps.ToArray(GetType(Integer)), Integer())

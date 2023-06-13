@@ -80,7 +80,7 @@ Namespace CompuMaster.Data.DataQuery
                     'End If
                 End If
             End If
-            Throw New Exception("Class not found: " & assemblyName & "::" & connectionTypeName)
+            Throw New ArgumentException("Class not found: " & assemblyName & "::" & connectionTypeName)
         End Function
 
         ''' <summary>
@@ -930,7 +930,7 @@ Namespace CompuMaster.Data.DataQuery
         ''' </remarks>
         Public Function ExecuteReader(ByVal dbConnection As IDbConnection, ByVal commandText As String, ByVal commandType As System.Data.CommandType, ByVal sqlParameters As IDataParameter(), ByVal automations As Automations, ByVal commandTimeout As Integer) As IDataReader
             If automations = Automations.AutoCloseAndDisposeConnection OrElse automations = Automations.AutoOpenAndCloseAndDisposeConnection Then
-                Throw New Exception("Can't close a data reader automatically since data has to be read first")
+                Throw New ArgumentException("Can't close a data reader automatically since data has to be read first")
             End If
 
             Dim MyConn As IDbConnection = dbConnection

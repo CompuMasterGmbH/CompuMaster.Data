@@ -11,7 +11,7 @@ Namespace CompuMaster.Data
         ''' <param name="path">The path of the new database file</param>
         ''' <remarks>The folder for the file should already exist and be writable. The file format of the database will be the latest known file type version which is recognized with the file extension.</remarks>
         Public Shared Sub CreateDatabaseFile(ByVal path As String)
-            Select Case System.IO.Path.GetExtension(path).ToLower
+            Select Case System.IO.Path.GetExtension(path).ToLowerInvariant
                 Case ".accdb"
                     CreateDatabaseFile(path, DatabaseFileType.MsAccess2007Accdb)
                 Case ".mdb"
@@ -115,11 +115,11 @@ Namespace CompuMaster.Data
             Dim buffer As Byte()
             Try
                 stream = System.Reflection.Assembly.GetExecutingAssembly().GetManifestResourceStream(embeddedFileName)
-                If stream Is Nothing Then Throw New Exception("Embedded resource not found: " & embeddedFileName)
+                If stream Is Nothing Then Throw New ArgumentException("Embedded resource not found: " & embeddedFileName)
                 ReDim buffer(CInt(stream.Length) - 1)
                 stream.Read(buffer, 0, CInt(stream.Length))
             Catch ex As Exception
-                Throw New Exception("Failure while loading resource name """ & embeddedFileName & """" & ControlChars.CrLf & "Available resource names are: " & String.Join(",", System.Reflection.Assembly.GetExecutingAssembly().GetManifestResourceNames), ex)
+                Throw New InvalidOperationException("Failure while loading resource name """ & embeddedFileName & """" & ControlChars.CrLf & "Available resource names are: " & String.Join(",", System.Reflection.Assembly.GetExecutingAssembly().GetManifestResourceNames), ex)
             Finally
                 If stream IsNot Nothing Then stream.Close()
             End Try

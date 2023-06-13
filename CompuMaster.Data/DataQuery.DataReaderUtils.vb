@@ -18,8 +18,8 @@ Namespace CompuMaster.Data.DataQuery
         ''' <param name="columnName">The name of the column which shall be identified</param>
         ''' <returns>True if the column exist else False</returns>
         Public Shared Function ContainsColumn(ByVal reader As IDataReader, ByVal columnName As String) As Boolean
-            If reader Is Nothing Then Throw New ArgumentNullException("reader", "Parameter reader is required")
-            If columnName = Nothing Then Throw New ArgumentNullException("columnName", "Parameter columnName can't be an empty value")
+            If reader Is Nothing Then Throw New ArgumentNullException(NameOf(reader), "Parameter reader is required")
+            If columnName = Nothing Then Throw New ArgumentNullException(NameOf(columnName), "Parameter columnName can't be an empty value")
             For MyCounter As Integer = 0 To reader.FieldCount - 1
                 If LCase(reader.GetName(MyCounter)) = LCase(columnName) Then Return True
             Next

@@ -1422,7 +1422,7 @@ Namespace CompuMaster.Data
             If text = Nothing Then Return Nothing
             Dim Result As Integer = 0
             Dim TextWithoutLastLineBreak As String = text.Replace(ControlChars.CrLf, ControlChars.Cr).Replace(ControlChars.Lf, ControlChars.Cr)
-            If TextWithoutLastLineBreak.EndsWith(ControlChars.Cr) Then
+            If TextWithoutLastLineBreak.EndsWith(ControlChars.Cr, StringComparison.Ordinal) Then
                 'Remove last CR because it doesn't count here (will usually be added automatically again in further steps)
                 TextWithoutLastLineBreak = TextWithoutLastLineBreak.Substring(0, TextWithoutLastLineBreak.Length - 1)
             End If

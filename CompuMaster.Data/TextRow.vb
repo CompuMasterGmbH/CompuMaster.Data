@@ -83,7 +83,7 @@ Namespace CompuMaster.Data
             For MyCounter As Integer = 0 To columnWidths.Length - 1
                 If columnWidths(MyCounter) = 0 Then
                     'Column to be hidden
-                    Lines(MyCounter) = New String() {}
+                    Lines(MyCounter) = Array.Empty(Of String)()
                 Else
                     'Column to be written
                     Lines(MyCounter) = Me.Cells(MyCounter).TextLines(dbNullText, tabText)

@@ -257,7 +257,7 @@ Namespace CompuMaster.Data
         ''' <remarks></remarks>
         Public Shared Sub ConvertColumnType(ByVal column As DataColumn, ByVal newDataType As Type, ByVal delegateForConversion As TypeConverter)
             If column.Table.Columns.CanRemove(column) = False Then
-                Throw New Exception("A column shall be converted which can't be removed; replacement failed")
+                Throw New ArgumentException("A column shall be converted which can't be removed; replacement failed")
             End If
             Dim newCol As DataColumn = column.Table.Columns.Add(CompuMaster.Data.DataTables.LookupUniqueColumnName(column.Table, column.ColumnName), newDataType)
             'Copy column settings as far as possible
@@ -390,8 +390,8 @@ Namespace CompuMaster.Data
         ''' </summary>
         ''' <param name="column">A column of a datatable</param>
         ''' <returns>A hashtable containing the origin column value as key and the number of occurances as value</returns>
-        Public Shared Function FindDuplicates(Of t)(ByVal column As DataColumn) As System.Collections.Generic.Dictionary(Of t, Integer)
-            Return CompuMaster.Data.DataTablesTools.FindDuplicates(Of t)(column)
+        Public Shared Function FindDuplicates(Of T)(ByVal column As DataColumn) As System.Collections.Generic.Dictionary(Of T, Integer)
+            Return CompuMaster.Data.DataTablesTools.FindDuplicates(Of T)(column)
         End Function
 
         ''' <summary>
@@ -400,8 +400,8 @@ Namespace CompuMaster.Data
         ''' <param name="column">A column of a datatable</param>
         ''' <param name="minOccurances">Only values with occurances equal or more than this number will be returned</param>
         ''' <returns>A hashtable containing the origin column value as key and the number of occurances as value</returns>
-        Public Shared Function FindDuplicates(Of t)(ByVal column As DataColumn, ByVal minOccurances As Integer) As System.Collections.Generic.Dictionary(Of t, Integer)
-            Return CompuMaster.Data.DataTablesTools.FindDuplicates(Of t)(column, minOccurances)
+        Public Shared Function FindDuplicates(Of T)(ByVal column As DataColumn, ByVal minOccurances As Integer) As System.Collections.Generic.Dictionary(Of T, Integer)
+            Return CompuMaster.Data.DataTablesTools.FindDuplicates(Of T)(column, minOccurances)
         End Function
 
         ''' <summary>
@@ -1121,7 +1121,7 @@ Namespace CompuMaster.Data
                     Dim columnExistsInDestination As Boolean = False
                     For MyDestTableCounter As Integer = 0 To destinationTable.Columns.Count - 1
                         If caseInsensitiveColumnNames Then
-                            If destinationTable.Columns(MyDestTableCounter).ColumnName.ToUpper = sourceTable.Columns(MySourceTableCounter).ColumnName.ToUpper Then
+                            If destinationTable.Columns(MyDestTableCounter).ColumnName.ToUpperInvariant = sourceTable.Columns(MySourceTableCounter).ColumnName.ToUpperInvariant Then
                                 columnExistsInDestination = True
                                 Exit For
                             End If
@@ -1144,7 +1144,7 @@ Namespace CompuMaster.Data
                             Try
                                 destTableColumn.AllowDBNull = sourceTableColumn.AllowDBNull
                             Catch dataEx As Exception
-                                Throw New Exception("Can't convert added column in destination table to NOT NULLABLE (rows already exist with assigned empty default values)", dataEx)
+                                Throw New InvalidOperationException("Can't convert added column in destination table to NOT NULLABLE (rows already exist with assigned empty default values)", dataEx)
                             End Try
                         ElseIf destTableColumn.AllowDBNull <> sourceTableColumn.AllowDBNull Then
                             destTableColumn.AllowDBNull = sourceTableColumn.AllowDBNull
@@ -1588,7 +1588,7 @@ Namespace CompuMaster.Data
         ''' <param name="dataTable">The datatable to retrieve the content from</param>
         ''' <returns>If no rows have been processed, the return string is nothing</returns>
         Public Shared Function ConvertToHtmlTable(ByVal dataTable As DataTable) As String
-            Return CompuMaster.Data.DataTablesTools.ConvertToHtmlTable(dataTable.Rows, dataTable.TableName, CType(Nothing, String), CType(Nothing, String), CType(Nothing, String), False, New String() {})
+            Return CompuMaster.Data.DataTablesTools.ConvertToHtmlTable(dataTable.Rows, dataTable.TableName, CType(Nothing, String), CType(Nothing, String), CType(Nothing, String), False, Array.Empty(Of String)())
         End Function
 
         ''' <summary>
@@ -1598,7 +1598,7 @@ Namespace CompuMaster.Data
         ''' <param name="label">An optional title of the rows</param>
         ''' <returns>If no rows have been processed, the return string is nothing</returns>
         Public Shared Function ConvertToHtmlTable(ByVal rows As DataRowCollection, ByVal label As String) As String
-            Return CompuMaster.Data.DataTablesTools.ConvertToHtmlTable(rows, label, CType(Nothing, String), CType(Nothing, String), CType(Nothing, String), False, New String() {})
+            Return CompuMaster.Data.DataTablesTools.ConvertToHtmlTable(rows, label, CType(Nothing, String), CType(Nothing, String), CType(Nothing, String), False, Array.Empty(Of String)())
         End Function
 
         ''' <summary>
@@ -1608,7 +1608,7 @@ Namespace CompuMaster.Data
         ''' <param name="label">An optional title of the rows</param>
         ''' <returns>If no rows have been processed, the return string is nothing</returns>
         Public Shared Function ConvertToHtmlTable(ByVal rows() As DataRow, ByVal label As String) As String
-            Return CompuMaster.Data.DataTablesTools.ConvertToHtmlTable(rows, label, CType(Nothing, String), CType(Nothing, String), CType(Nothing, String), False, New String() {})
+            Return CompuMaster.Data.DataTablesTools.ConvertToHtmlTable(rows, label, CType(Nothing, String), CType(Nothing, String), CType(Nothing, String), False, Array.Empty(Of String)())
         End Function
 
         ''' <summary>
@@ -1621,7 +1621,7 @@ Namespace CompuMaster.Data
         ''' <returns>If no rows have been processed, the return string is nothing</returns>
         Public Shared Function ConvertToHtmlTable(ByVal dataTable As DataTable, ByVal titleTagOpener As String, ByVal titleTagEnd As String,
                                                   ByVal additionalTableAttributes As String) As String
-            Return CompuMaster.Data.DataTablesTools.ConvertToHtmlTable(dataTable.Rows, dataTable.TableName, titleTagOpener, titleTagEnd, additionalTableAttributes, False, New String() {})
+            Return CompuMaster.Data.DataTablesTools.ConvertToHtmlTable(dataTable.Rows, dataTable.TableName, titleTagOpener, titleTagEnd, additionalTableAttributes, False, Array.Empty(Of String)())
         End Function
 
         ''' <summary>
@@ -1664,7 +1664,7 @@ Namespace CompuMaster.Data
         ''' <returns>If no rows have been processed, the return string is nothing</returns>
         Public Shared Function ConvertToHtmlTable(ByVal rows As DataRowCollection, ByVal label As String, ByVal titleTagOpener As String, ByVal titleTagEnd As String,
                                                   ByVal additionalTableAttributes As String) As String
-            Return CompuMaster.Data.DataTablesTools.ConvertToHtmlTable(rows, label, titleTagOpener, titleTagEnd, additionalTableAttributes, False, New String() {})
+            Return CompuMaster.Data.DataTablesTools.ConvertToHtmlTable(rows, label, titleTagOpener, titleTagEnd, additionalTableAttributes, False, Array.Empty(Of String)())
         End Function
 
         ''' <summary>
@@ -2109,7 +2109,7 @@ Namespace CompuMaster.Data
                 Else
                     Result.Append(verticalSeparatorHeader)
                 End If
-                If textAlignmentRight = True Then Result.Append(" ")
+                If textAlignmentRight = True Then Result.Append(" "c)
                 If column.Caption <> Nothing Then
                     Result.Append(TrimStringToFixedWidth(String.Format("{0}", column.Caption), fixedColumnWidths(ColCounter), ""))
                 Else
@@ -2287,13 +2287,13 @@ Namespace CompuMaster.Data
                 If rows.Length > 0 Then
                     If table.Columns(ColCounter).DataType.IsValueType AndAlso Not GetType(String).IsInstanceOfType(table.Columns(ColCounter).DataType) Then
                         'number or date/time
-                        For RowCounter As Integer = 0 To rows.Count - 1
+                        For RowCounter As Integer = 0 To rows.Length - 1
                             MinWidthForCells = System.Math.Max(MinWidthForCells, String.Format("{0}", rows(RowCounter)(ColCounter)).Length)
                         Next
                     Else
                         'string or any other object
-                        Dim cellWidths(rows.Count - 1) As Integer
-                        For RowCounter As Integer = 0 To rows.Count - 1
+                        Dim cellWidths(rows.Length - 1) As Integer
+                        For RowCounter As Integer = 0 To rows.Length - 1
                             Dim RenderValue As Object
                             If columnFormatting Is Nothing Then
                                 RenderValue = rows(RowCounter)(ColCounter)
@@ -2829,13 +2829,13 @@ Namespace CompuMaster.Data
             Dim leftIndexes As New ArrayList, rightIndexes As New ArrayList
             For MyCounter As Integer = 0 To leftKeyColumns.Length - 1
                 If leftTable Is leftKeyColumns(MyCounter).Table Then
-                    Throw New Exception("Table mismatch: data column must be referencing to the same data table")
+                    Throw New ArgumentException("Table mismatch: data column must be referencing to the same data table")
                 End If
                 leftIndexes.Add(leftKeyColumns(MyCounter).Ordinal)
             Next
             For MyCounter As Integer = 0 To rightKeyColumns.Length - 1
                 If rightTable Is rightKeyColumns(MyCounter).Table Then
-                    Throw New Exception("Table mismatch: data column must be referencing to the same data table")
+                    Throw New ArgumentException("Table mismatch: data column must be referencing to the same data table")
                 End If
                 rightIndexes.Add(rightKeyColumns(MyCounter).Ordinal)
             Next
@@ -2878,21 +2878,21 @@ Namespace CompuMaster.Data
             If leftKeyColumnIndexes.Length <> rightKeyColumnIndexes.Length Then Throw New Exception("Count of leftKeyColumnIndexes must be equal to count of rightKeyColumnIndexes")
             For MyCounter As Integer = 0 To leftKeyColumnIndexes.Length - 1
                 If leftTable.Columns(leftKeyColumnIndexes(MyCounter)).DataType IsNot rightTable.Columns(rightKeyColumnIndexes(MyCounter)).DataType Then
-                    Throw New Exception("Data types of key columns must be equal")
+                    Throw New ArgumentException("Data types of key columns must be equal")
                 End If
             Next
             With Nothing 'Ensure unique index numbers
                 Dim leftIndexes As New ArrayList, rightIndexes As New ArrayList
                 For MyCounter As Integer = 0 To leftKeyColumnIndexes.Length - 1
                     If leftIndexes.Contains(leftKeyColumnIndexes(MyCounter)) = True Then
-                        Throw New Exception("Duplicate data column with index " & leftKeyColumnIndexes(MyCounter))
+                        Throw New ArgumentException("Duplicate data column with index " & leftKeyColumnIndexes(MyCounter))
                     Else
                         leftIndexes.Add(leftKeyColumnIndexes(MyCounter))
                     End If
                 Next
                 For MyCounter As Integer = 0 To rightKeyColumnIndexes.Length - 1
                     If rightIndexes.Contains(rightKeyColumnIndexes(MyCounter)) = True Then
-                        Throw New Exception("Duplicate data column with index " & rightKeyColumnIndexes(MyCounter))
+                        Throw New ArgumentException("Duplicate data column with index " & rightKeyColumnIndexes(MyCounter))
                     Else
                         rightIndexes.Add(rightKeyColumnIndexes(MyCounter))
                     End If
@@ -3457,7 +3457,7 @@ Namespace CompuMaster.Data
         Public Shared Sub RemoveColumnsExcept(table As DataTable, ParamArray columnsToMaintain As DataColumn())
             For MyCounter As Integer = table.Columns.Count - 1 To 0 Step -1
                 Dim KeepColumn As Boolean = False
-                For ColumnsToMaintainCounter As Integer = 0 To columnsToMaintain.Count - 1
+                For ColumnsToMaintainCounter As Integer = 0 To columnsToMaintain.Length - 1
                     If table.Columns(MyCounter) Is columnsToMaintain(ColumnsToMaintainCounter) Then
                         KeepColumn = True
                         Exit For
@@ -3475,7 +3475,7 @@ Namespace CompuMaster.Data
         ''' <param name="table">A table</param>
         ''' <param name="columns">The new sort order for the columns (columns which are not mentioned, will be positioned to the end)</param>
         Public Shared Sub SortColumns(table As DataTable, ParamArray columns As String())
-            For MyCounter As Integer = 0 To columns.Count - 1
+            For MyCounter As Integer = 0 To columns.Length - 1
                 table.Columns(columns(MyCounter)).SetOrdinal(MyCounter)
             Next
         End Sub
@@ -3486,7 +3486,7 @@ Namespace CompuMaster.Data
         ''' <param name="table">A table</param>
         ''' <param name="columns">The new sort order for the columns (columns which are not mentioned, will be positioned to the end)</param>
         Public Shared Sub SortColumns(table As DataTable, ParamArray columns As DataColumn())
-            For MyCounter As Integer = 0 To columns.Count - 1
+            For MyCounter As Integer = 0 To columns.Length - 1
                 columns(MyCounter).SetOrdinal(MyCounter)
             Next
         End Sub
@@ -3710,7 +3710,7 @@ Namespace CompuMaster.Data
 
                 'Pre-Check required arguments
                 If leftTableKeys.Length <> rightTableKeys.Length Then Throw New ArgumentException("leftTableKeys and rightTableKeys must have got the same amount of keys")
-                If leftTableKeys.Length = 0 Then Throw New ArgumentNullException("leftTableKeys must have got at least 1 key")
+                If leftTableKeys.Length = 0 Then Throw New ArgumentNullException(NameOf(leftTableKeys), "leftTableKeys must have got at least 1 key")
                 For MyCounter As Integer = 0 To leftTableKeys.Length - 1
                     If leftTableKeys(MyCounter).Table IsNot leftTable Then Throw New ArgumentException("All leftTableKeys must be columns of leftTable")
                 Next
@@ -3730,7 +3730,7 @@ Namespace CompuMaster.Data
 
                 'Pre-Check required arguments
                 If leftTableKeys.Length <> rightTableKeys.Length Then Throw New ArgumentException("leftTableKeys and rightTableKeys must have got the same amount of keys")
-                If leftTableKeys.Length = 0 Then Throw New ArgumentNullException("leftTableKeys must have got at least 1 key")
+                If leftTableKeys.Length = 0 Then Throw New ArgumentNullException(NameOf(leftTableKeys), "leftTableKeys must have got at least 1 key")
                 For MyCounter As Integer = 0 To leftTableKeys.Length - 1
                     If leftTableKeys(MyCounter).Table IsNot leftTable Then Throw New ArgumentException("All leftTableKeys must be columns of leftTable")
                 Next
@@ -4028,8 +4028,8 @@ Namespace CompuMaster.Data
         ''' <param name="foreignTableKeyColumn"></param>
         ''' <returns></returns>
         Public Shared Function FindMatchingRowsInForeignTable(sourceRow As DataRow, foreignTable As DataTable, sourceRowKeyColumn As String, foreignTableKeyColumn As String) As DataRow()
-            If sourceRowKeyColumn = Nothing Then Throw New ArgumentNullException("leftKeyColumn")
-            If foreignTableKeyColumn = Nothing Then Throw New ArgumentNullException("rightKeyColumn")
+            If sourceRowKeyColumn = Nothing Then Throw New ArgumentNullException(NameOf(sourceRowKeyColumn))
+            If foreignTableKeyColumn = Nothing Then Throw New ArgumentNullException(NameOf(foreignTableKeyColumn))
             Return FindMatchingRowsInForeignTable(sourceRow, foreignTable, New String() {sourceRowKeyColumn}, New String() {foreignTableKeyColumn}, False)
         End Function
 
@@ -4042,8 +4042,8 @@ Namespace CompuMaster.Data
         ''' <param name="foreignTableKeyColumn"></param>
         ''' <returns></returns>
         Public Shared Function FindMatchingRowsInForeignTable(sourceRow As DataRow, foreignTable As DataTable, sourceRowKeyColumn As String, foreignTableKeyColumn As String, compareStringsCaseInsensitive As Boolean) As DataRow()
-            If sourceRowKeyColumn = Nothing Then Throw New ArgumentNullException("leftKeyColumn")
-            If foreignTableKeyColumn = Nothing Then Throw New ArgumentNullException("rightKeyColumn")
+            If sourceRowKeyColumn = Nothing Then Throw New ArgumentNullException(NameOf(sourceRowKeyColumn))
+            If foreignTableKeyColumn = Nothing Then Throw New ArgumentNullException(NameOf(foreignTableKeyColumn))
             Return FindMatchingRowsInForeignTable(sourceRow, foreignTable, New String() {sourceRowKeyColumn}, New String() {foreignTableKeyColumn}, compareStringsCaseInsensitive)
         End Function
 
@@ -4167,8 +4167,8 @@ Namespace CompuMaster.Data
         ''' <param name="foreignTableKeyColumn"></param>
         ''' <returns></returns>
         Public Shared Function FindMatchingRowsInForeignTable(sourceRow As DataRow, foreignTable As DataTable, sourceRowKeyColumn As DataColumn, foreignTableKeyColumn As DataColumn) As DataRow()
-            If sourceRowKeyColumn Is Nothing Then Throw New ArgumentNullException("leftKeyColumn")
-            If foreignTableKeyColumn Is Nothing Then Throw New ArgumentNullException("rightKeyColumn")
+            If sourceRowKeyColumn Is Nothing Then Throw New ArgumentNullException(NameOf(sourceRowKeyColumn))
+            If foreignTableKeyColumn Is Nothing Then Throw New ArgumentNullException(NameOf(foreignTableKeyColumn))
             Return FindMatchingRowsInForeignTable(sourceRow, foreignTable, New DataColumn() {sourceRowKeyColumn}, New DataColumn() {foreignTableKeyColumn}, False)
         End Function
 
@@ -4181,8 +4181,8 @@ Namespace CompuMaster.Data
         ''' <param name="foreignTableKeyColumn"></param>
         ''' <returns></returns>
         Public Shared Function FindMatchingRowsInForeignTable(sourceRow As DataRow, foreignTable As DataTable, sourceRowKeyColumn As DataColumn, foreignTableKeyColumn As DataColumn, compareStringsCaseInsensitive As Boolean) As DataRow()
-            If sourceRowKeyColumn Is Nothing Then Throw New ArgumentNullException("leftKeyColumn")
-            If foreignTableKeyColumn Is Nothing Then Throw New ArgumentNullException("rightKeyColumn")
+            If sourceRowKeyColumn Is Nothing Then Throw New ArgumentNullException(NameOf(sourceRowKeyColumn))
+            If foreignTableKeyColumn Is Nothing Then Throw New ArgumentNullException(NameOf(foreignTableKeyColumn))
             Return FindMatchingRowsInForeignTable(sourceRow, foreignTable, New DataColumn() {sourceRowKeyColumn}, New DataColumn() {foreignTableKeyColumn}, compareStringsCaseInsensitive)
         End Function
 
@@ -4506,7 +4506,7 @@ Namespace CompuMaster.Data
         ''' <param name="ignoreCase">Ignore upper/lower case (invariant) of column names</param>
         ''' <returns></returns>
         Public Shared Function ValidateRequiredColumnNames(table As DataTable, requiredColumnNames As String(), ignoreCase As Boolean) As String()
-            If requiredColumnNames Is Nothing OrElse requiredColumnNames.Length = 0 Then Return New String() {} 'Shortcut result
+            If requiredColumnNames Is Nothing OrElse requiredColumnNames.Length = 0 Then Return Array.Empty(Of String)() 'Shortcut result
 
             Dim AvailableColumns As New System.Collections.Generic.List(Of String)
             For MyCounter As Integer = 0 To table.Columns.Count - 1

@@ -253,7 +253,7 @@ Namespace CompuMaster.Data
         Private Shared Function CreateTableCommandText(ByVal tableName As String, ByVal primaryColumnName As String, ByVal ddlLanguage As DdlLanguage) As String
             Dim OpenBrackets, CloseBrackets As String
 #Disable Warning CA2249 ' Erwägen Sie die Verwendung von "string.Contains" anstelle von "string.IndexOf"
-            If tableName.IndexOf("[") >= 0 AndAlso tableName.IndexOf("]") >= 0 Then
+            If tableName.IndexOf("[", StringComparison.Ordinal) >= 0 AndAlso tableName.IndexOf("]", StringComparison.Ordinal) >= 0 Then
 #Enable Warning CA2249 ' Erwägen Sie die Verwendung von "string.Contains" anstelle von "string.IndexOf"
                 'table name already in a well-formed syntax, e.g. "dbo.[Test - 123]"
                 OpenBrackets = Nothing
@@ -316,7 +316,7 @@ Namespace CompuMaster.Data
         Public Shared Function AddMissingColumnsCommandText(ByVal sourceTable As DataTable, ByVal destinationTable As DataTable, remoteTableName As String, ByVal ddlLanguage As DdlLanguage) As String
             Dim OpenBrackets, CloseBrackets As String
 #Disable Warning CA2249 ' Erwägen Sie die Verwendung von "string.Contains" anstelle von "string.IndexOf"
-            If remoteTableName.IndexOf("[") >= 0 AndAlso remoteTableName.IndexOf("]") >= 0 Then
+            If remoteTableName.IndexOf("[", StringComparison.Ordinal) >= 0 AndAlso remoteTableName.IndexOf("]", StringComparison.Ordinal) >= 0 Then
 #Enable Warning CA2249 ' Erwägen Sie die Verwendung von "string.Contains" anstelle von "string.IndexOf"
                 'table name already in a well-formed syntax, e.g. "dbo.[Test - 123]"
                 OpenBrackets = Nothing
@@ -487,7 +487,7 @@ Namespace CompuMaster.Data
         Public Shared Function LoadTableDataForManipulationViaCode(ByVal dataConnection As IDbConnection, ByVal tableName As String, ByVal commandTimeout As Integer, isSafeTableName As Boolean) As CompuMaster.Data.DataManipulationResult
             Dim OpenBrackets, CloseBrackets As String
 #Disable Warning CA2249 ' Erwägen Sie die Verwendung von "string.Contains" anstelle von "string.IndexOf"
-            If tableName.IndexOf("[") >= 0 AndAlso tableName.IndexOf("]") >= 0 Then
+            If tableName.IndexOf("[", StringComparison.Ordinal) >= 0 AndAlso tableName.IndexOf("]", StringComparison.Ordinal) >= 0 Then
 #Enable Warning CA2249 ' Erwägen Sie die Verwendung von "string.Contains" anstelle von "string.IndexOf"
                 'table name already in a well-formed syntax, e.g. "dbo.[Test - 123]"
                 OpenBrackets = Nothing
@@ -801,7 +801,7 @@ Namespace CompuMaster.Data
                         Dim InnerEx As SqlDataAdapterException = CType(ex, SqlDataAdapterException)
                         Throw New SqlDataAdapterException("Error found - transaction has been rolled back", InnerEx)
                     Else
-                        Throw New Exception("Error found - transaction has been rolled back", ex)
+                        Throw New InvalidOperationException("Error found - transaction has been rolled back", ex)
                     End If
                 End Try
             Else
@@ -835,7 +835,7 @@ Namespace CompuMaster.Data
         Private Shared Function LoadTableStructureWith1RowFromConnection(ByVal tableName As String, ByVal dataConnection As IDbConnection, ByVal ignoreExceptions As Boolean) As DataTable
             Dim OpenBrackets, CloseBrackets As String
 #Disable Warning CA2249 ' Erwägen Sie die Verwendung von "string.Contains" anstelle von "string.IndexOf"
-            If tableName.IndexOf("[") >= 0 AndAlso tableName.IndexOf("]") >= 0 Then
+            If tableName.IndexOf("[", StringComparison.Ordinal) >= 0 AndAlso tableName.IndexOf("]", StringComparison.Ordinal) >= 0 Then
 #Enable Warning CA2249 ' Erwägen Sie die Verwendung von "string.Contains" anstelle von "string.IndexOf"
                 'table name already in a well-formed syntax, e.g. "dbo.[Test - 123]"
                 OpenBrackets = Nothing
@@ -867,7 +867,7 @@ Namespace CompuMaster.Data
                 If ignoreExceptions Then
                     Return Nothing
                 Else
-                    Throw New Exception("Error reading from table """ & tableName & """", ex)
+                    Throw New InvalidOperationException("Error reading from table """ & tableName & """", ex)
                 End If
             End Try
         End Function
