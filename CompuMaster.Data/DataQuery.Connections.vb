@@ -41,7 +41,7 @@ Namespace CompuMaster.Data.DataQuery
             If FoundProvider <> Nothing Then
                 Return CompuMaster.Data.DataQuery.PlatformTools.CreateDataConnection("OleDB", "Provider=" & FoundProvider & ";Data Source=" & path & ";User Id=admin;Password=" & databasePassword & ";")
             End If
-            If path.ToLowerInvariant.EndsWith(".mdb") OrElse path.ToLowerInvariant.EndsWith(".mde") Then
+            If path.ToLowerInvariant.EndsWith(".mdb", StringComparison.Ordinal) OrElse path.ToLowerInvariant.EndsWith(".mde", StringComparison.Ordinal) Then
                 'Try to lookup MS Jet provider which is still fine for this file type
                 FoundProvider = PlatformTools.FindLatestMsOfficeJetOleDbProviderName
                 If FoundProvider <> Nothing Then
@@ -53,7 +53,7 @@ Namespace CompuMaster.Data.DataQuery
             Dim MsJetProviderIsSufficient As Boolean
             Try
                 'Try to create a temporary file - might fail in environments which are not fully trusted
-                If path.ToLowerInvariant.EndsWith(".mdb") OrElse path.ToLowerInvariant.EndsWith(".mde") Then
+                If path.ToLowerInvariant.EndsWith(".mdb", StringComparison.Ordinal) OrElse path.ToLowerInvariant.EndsWith(".mde", StringComparison.Ordinal) Then
                     TestFile = New TestFile(DataQuery.TestFile.TestFileType.MsAccessMdb)
                     MsJetProviderIsSufficient = True
                 Else
@@ -66,7 +66,7 @@ Namespace CompuMaster.Data.DataQuery
                 If CompuMaster.Data.DataQuery.PlatformTools.CurrentClrRuntime = CompuMaster.Data.DataQuery.PlatformTools.ClrRuntimePlatform.x64 Then
                     '64bit - Requires Office 2010 JET drivers, but are called "Microsoft.ACE.OLEDB.12.0", too
                     Return CompuMaster.Data.DataQuery.PlatformTools.CreateDataConnection("OleDB", "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" & path & ";User Id=admin;Password=" & databasePassword & ";")
-                ElseIf path.ToLowerInvariant.EndsWith(".accdb") OrElse path.ToLowerInvariant.EndsWith(".accde") Then
+                ElseIf path.ToLowerInvariant.EndsWith(".accdb", StringComparison.Ordinal) OrElse path.ToLowerInvariant.EndsWith(".accde", StringComparison.Ordinal) Then
                     '32bit - Requires Office 2007 JET drivers
                     Return CompuMaster.Data.DataQuery.PlatformTools.CreateDataConnection("OleDB", "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" & path & ";User Id=admin;Password=" & databasePassword & ";")
                 Else
@@ -91,7 +91,7 @@ Namespace CompuMaster.Data.DataQuery
                     If CompuMaster.Data.DataQuery.PlatformTools.CurrentClrRuntime = CompuMaster.Data.DataQuery.PlatformTools.ClrRuntimePlatform.x64 Then
                         '64bit - Requires Office 2010 JET drivers
                         Throw New Office2010x64OleDbOdbcEngineRequiredException()
-                    ElseIf path.ToLower.EndsWith(".accdb") Then
+                    ElseIf path.ToLowerInvariant.EndsWith(".accdb", StringComparison.Ordinal) Then
                         '32bit - Requires Office 2007 JET drivers
                         Return CompuMaster.Data.DataQuery.PlatformTools.CreateDataConnection("OleDB", "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" & path & ";Jet OLEDB:Database Password=" & databasePassword & ";")
                     Else
@@ -132,7 +132,7 @@ Namespace CompuMaster.Data.DataQuery
             Dim MsJetProviderIsSufficient As Boolean
             Try
                 'Try to create a temporary file - might fail in environments which are not fully trusted
-                If path.ToLowerInvariant.EndsWith(".mdb") OrElse path.ToLowerInvariant.EndsWith(".mde") Then
+                If path.ToLowerInvariant.EndsWith(".mdb", StringComparison.Ordinal) OrElse path.ToLowerInvariant.EndsWith(".mde", StringComparison.Ordinal) Then
                     TestFile = New TestFile(DataQuery.TestFile.TestFileType.MsAccessMdb)
                     MsJetProviderIsSufficient = True
                 Else
@@ -145,7 +145,7 @@ Namespace CompuMaster.Data.DataQuery
                 If CompuMaster.Data.DataQuery.PlatformTools.CurrentClrRuntime = CompuMaster.Data.DataQuery.PlatformTools.ClrRuntimePlatform.x64 Then
                     '64bit 
                     Return CompuMaster.Data.DataQuery.PlatformTools.CreateDataConnection("ODBC", "Driver={Microsoft Access Driver (*.mdb, *.accdb)};Dbq=" & path & ";Uid=Admin;Pwd=;")
-                ElseIf path.ToLowerInvariant.EndsWith(".accdb") OrElse path.ToLowerInvariant.EndsWith(".accde") Then
+                ElseIf path.ToLowerInvariant.EndsWith(".accdb", StringComparison.Ordinal) OrElse path.ToLowerInvariant.EndsWith(".accde", StringComparison.Ordinal) Then
                     '32bit but .accdb
                     Return CompuMaster.Data.DataQuery.PlatformTools.CreateDataConnection("ODBC", "Driver={Microsoft Access Driver (*.mdb, *.accdb)};Dbq=" & path & ";Uid=Admin;Pwd=;")
                 Else
@@ -163,7 +163,7 @@ Namespace CompuMaster.Data.DataQuery
                     If CompuMaster.Data.DataQuery.PlatformTools.CurrentClrRuntime = CompuMaster.Data.DataQuery.PlatformTools.ClrRuntimePlatform.x64 Then
                         '64bit 
                         Return CompuMaster.Data.DataQuery.PlatformTools.CreateDataConnection("ODBC", "Driver={Microsoft Access Driver (*.mdb, *.accdb)};Dbq=" & path & ";Uid=Admin;Pwd=" & databasePassword & ";")
-                    ElseIf path.ToLowerInvariant.EndsWith(".accdb") OrElse path.ToLowerInvariant.EndsWith(".accde") Then
+                    ElseIf path.ToLowerInvariant.EndsWith(".accdb", StringComparison.Ordinal) OrElse path.ToLowerInvariant.EndsWith(".accde", StringComparison.Ordinal) Then
                         '32bit but .accdb
                         Return CompuMaster.Data.DataQuery.PlatformTools.CreateDataConnection("ODBC", "Driver={Microsoft Access Driver (*.mdb, *.accdb)};Dbq=" & path & ";Uid=Admin;Pwd=" & databasePassword & ";")
                     Else
@@ -247,7 +247,7 @@ Namespace CompuMaster.Data.DataQuery
             If FoundProvider <> Nothing Then
                 Return CompuMaster.Data.DataQuery.PlatformTools.CreateDataConnection("OleDB", "Provider=" & FoundProvider & ";Data Source=" & path & ";User Id=admin;Password=" & databasePassword & ";")
             End If
-            If path.ToLowerInvariant.EndsWith(".mdb") OrElse path.ToLowerInvariant.EndsWith(".mde") Then
+            If path.ToLowerInvariant.EndsWith(".mdb", StringComparison.Ordinal) OrElse path.ToLowerInvariant.EndsWith(".mde", StringComparison.Ordinal) Then
                 'Try to lookup MS Jet provider which is still fine for this file type
                 FoundProvider = PlatformTools.FindLatestMsOfficeJetOleDbProviderName
                 If FoundProvider <> Nothing Then
@@ -259,7 +259,7 @@ Namespace CompuMaster.Data.DataQuery
             Dim MsJetProviderIsSufficient As Boolean
             Try
                 'Try to create a temporary file - might fail in environments which are not fully trusted
-                If path.ToLowerInvariant.EndsWith(".mdb") OrElse path.ToLowerInvariant.EndsWith(".mde") Then
+                If path.ToLowerInvariant.EndsWith(".mdb", StringComparison.Ordinal) OrElse path.ToLowerInvariant.EndsWith(".mde", StringComparison.Ordinal) Then
                     TestFile = New TestFile(DataQuery.TestFile.TestFileType.MsAccessMdb)
                     MsJetProviderIsSufficient = True
                 Else
@@ -272,7 +272,7 @@ Namespace CompuMaster.Data.DataQuery
                 If CompuMaster.Data.DataQuery.PlatformTools.CurrentClrRuntime = CompuMaster.Data.DataQuery.PlatformTools.ClrRuntimePlatform.x64 Then
                     '64bit - Requires Office 2010 JET drivers, but are called "Microsoft.ACE.OLEDB.12.0", too
                     Return CompuMaster.Data.DataQuery.PlatformTools.CreateDataConnection("OleDB", "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" & path & ";User Id=admin;Password=;")
-                ElseIf path.ToLowerInvariant.EndsWith(".accdb") OrElse path.ToLowerInvariant.EndsWith(".accde") Then
+                ElseIf path.ToLowerInvariant.EndsWith(".accdb", StringComparison.Ordinal) OrElse path.ToLowerInvariant.EndsWith(".accde", StringComparison.Ordinal) Then
                     '32bit - Requires Office 2007 JET drivers
                     Return CompuMaster.Data.DataQuery.PlatformTools.CreateDataConnection("OleDB", "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" & path & ";User Id=admin;Password=;")
                 Else
@@ -301,7 +301,7 @@ Namespace CompuMaster.Data.DataQuery
                     If CompuMaster.Data.DataQuery.PlatformTools.CurrentClrRuntime = CompuMaster.Data.DataQuery.PlatformTools.ClrRuntimePlatform.x64 Then
                         '64bit - Requires Office 2010 JET drivers
                         Throw New Office2010x64OleDbOdbcEngineRequiredException()
-                    ElseIf path.ToLowerInvariant.EndsWith(".accdb") OrElse path.ToLowerInvariant.EndsWith(".accde") Then
+                    ElseIf path.ToLowerInvariant.EndsWith(".accdb", StringComparison.Ordinal) OrElse path.ToLowerInvariant.EndsWith(".accde", StringComparison.Ordinal) Then
                         '32bit - Requires Office 2007 JET drivers
                         Return CompuMaster.Data.DataQuery.PlatformTools.CreateDataConnection("OleDB", "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" & path & ";Jet OLEDB:Database Password=" & databasePassword & ";")
                     Else
@@ -333,7 +333,7 @@ Namespace CompuMaster.Data.DataQuery
             If FoundProvider <> Nothing Then
                 Return CompuMaster.Data.DataQuery.PlatformTools.CreateDataConnection("OleDB", "Provider=" & FoundProvider & ";Data Source=" & path & ";Extended Properties=""Excel 12.0 Xml;HDR=" & BoolIf(firstRowContainsHeaders, "YES", "NO") & ";" & BoolIf(readAllColumnsAsTextOnly, "IMEX=1", "IMEX=0") & """;")
             End If
-            If path.ToLowerInvariant.EndsWith(".mdb") OrElse path.ToLowerInvariant.EndsWith(".mde") Then
+            If path.ToLowerInvariant.EndsWith(".mdb", StringComparison.Ordinal) OrElse path.ToLowerInvariant.EndsWith(".mde", StringComparison.Ordinal) Then
                 'Try to lookup MS Jet provider which is still fine for this file type
                 FoundProvider = PlatformTools.FindLatestMsOfficeJetOleDbProviderName
                 If FoundProvider <> Nothing Then
@@ -344,7 +344,7 @@ Namespace CompuMaster.Data.DataQuery
             Dim TestFile As TestFile = Nothing
             Try
                 Dim MsJetProviderIsSufficient As Boolean
-                If path.ToLowerInvariant.EndsWith(".xls") Then
+                If path.ToLowerInvariant.EndsWith(".xls", StringComparison.Ordinal) Then
                     TestFile = New TestFile(DataQuery.TestFile.TestFileType.MsExcel95Xls)
                     MsJetProviderIsSufficient = True
                 Else
@@ -372,7 +372,7 @@ Namespace CompuMaster.Data.DataQuery
                     If CompuMaster.Data.DataQuery.PlatformTools.CurrentClrRuntime = CompuMaster.Data.DataQuery.PlatformTools.ClrRuntimePlatform.x64 Then
                         '64bit - Requires Office 2010 JET drivers
                         Throw New Office2010x64OleDbOdbcEngineRequiredException()
-                    ElseIf path.ToLower.EndsWith(".xlsx") OrElse path.ToLower.EndsWith(".xlsb") OrElse path.ToLower.EndsWith(".xlsm") Then
+                    ElseIf path.ToLowerInvariant.EndsWith(".xlsx", StringComparison.Ordinal) OrElse path.ToLowerInvariant.EndsWith(".xlsb", StringComparison.Ordinal) OrElse path.ToLowerInvariant.EndsWith(".xlsm", StringComparison.Ordinal) Then
                         '32bit - Requires Office 2007 JET drivers
                         Return CompuMaster.Data.DataQuery.PlatformTools.CreateDataConnection("OleDB", "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" & path & ";Extended Properties=""Excel 12.0 Xml;HDR=" & BoolIf(firstRowContainsHeaders, "YES", "NO") & ";" & BoolIf(readAllColumnsAsTextOnly, "IMEX=1", "") & """;")
                     Else
@@ -402,7 +402,7 @@ Namespace CompuMaster.Data.DataQuery
             Dim TestFile As TestFile = Nothing
             Try
                 Dim MsJetProviderIsSufficient As Boolean
-                If path.ToLowerInvariant.EndsWith(".xls") Then
+                If path.ToLowerInvariant.EndsWith(".xls", StringComparison.Ordinal) Then
                     TestFile = New TestFile(DataQuery.TestFile.TestFileType.MsExcel95Xls)
                     MsJetProviderIsSufficient = True
                 Else
@@ -418,7 +418,7 @@ Namespace CompuMaster.Data.DataQuery
                     If CompuMaster.Data.DataQuery.PlatformTools.CurrentClrRuntime = CompuMaster.Data.DataQuery.PlatformTools.ClrRuntimePlatform.x64 Then
                         '64bit - Requires Office 2010 JET drivers
                         Return CompuMaster.Data.DataQuery.PlatformTools.CreateDataConnection("ODBC", "Driver={Microsoft Excel Driver (*.xls, *.xlsx, *.xlsm, *.xlsb)};Dbq=" & path & ";" & BoolIf(firstRowContainsHeaders, "FirstRowHasNames=1", "FirstRowHasNames=0") & ";" & BoolIf(readAllColumnsAsTextOnly, "ReadOnly=1", "ReadOnly=0") & """;")
-                    ElseIf path.ToLower.EndsWith(".xlsx") OrElse path.ToLower.EndsWith(".xlsb") OrElse path.ToLower.EndsWith(".xlsm") Then
+                    ElseIf path.ToLowerInvariant.EndsWith(".xlsx", StringComparison.Ordinal) OrElse path.ToLowerInvariant.EndsWith(".xlsb", StringComparison.Ordinal) OrElse path.ToLowerInvariant.EndsWith(".xlsm", StringComparison.Ordinal) Then
                         '32bit - Requires Office 2007 JET drivers
                         Return CompuMaster.Data.DataQuery.PlatformTools.CreateDataConnection("ODBC", "Driver={Microsoft Excel Driver (*.xls, *.xlsx, *.xlsm, *.xlsb)};Dbq=" & path & ";" & BoolIf(firstRowContainsHeaders, "FirstRowHasNames=1", "FirstRowHasNames=0") & ";" & BoolIf(readAllColumnsAsTextOnly, "ReadOnly=1", "ReadOnly=0") & """;")
                     Else
@@ -450,7 +450,7 @@ Namespace CompuMaster.Data.DataQuery
             If FoundProvider <> Nothing Then
                 Return CompuMaster.Data.DataQuery.PlatformTools.CreateDataConnection("OleDB", "Provider=" & FoundProvider & ";Data Source=" & path & ";Extended Properties=""Excel 12.0 Xml;HDR=" & BoolIf(firstRowContainsHeaders, "YES", "NO") & ";" & BoolIf(readAllColumnsAsTextOnly, "IMEX=1", "IMEX=0") & """;")
             End If
-            If path.ToLowerInvariant.EndsWith(".mdb") OrElse path.ToLowerInvariant.EndsWith(".mde") Then
+            If path.ToLowerInvariant.EndsWith(".mdb", StringComparison.Ordinal) OrElse path.ToLowerInvariant.EndsWith(".mde", StringComparison.Ordinal) Then
                 'Try to lookup MS Jet provider which is still fine for this file type
                 FoundProvider = PlatformTools.FindLatestMsOfficeJetOleDbProviderName
                 If FoundProvider <> Nothing Then
@@ -461,7 +461,7 @@ Namespace CompuMaster.Data.DataQuery
             Dim TestFile As TestFile = Nothing
             Try
                 Dim MsJetProviderIsSufficient As Boolean
-                If path.ToLowerInvariant.EndsWith(".xls") Then
+                If path.ToLowerInvariant.EndsWith(".xls", StringComparison.Ordinal) Then
                     TestFile = New TestFile(DataQuery.TestFile.TestFileType.MsExcel95Xls)
                     MsJetProviderIsSufficient = True
                 Else
@@ -484,7 +484,7 @@ Namespace CompuMaster.Data.DataQuery
                     If CompuMaster.Data.DataQuery.PlatformTools.CurrentClrRuntime = CompuMaster.Data.DataQuery.PlatformTools.ClrRuntimePlatform.x64 Then
                         '64bit - Requires Office 2010 JET drivers
                         Throw New Office2010x64OleDbOdbcEngineRequiredException()
-                    ElseIf path.ToLower.EndsWith(".xlsx") OrElse path.ToLower.EndsWith(".xlsb") OrElse path.ToLower.EndsWith(".xlsm") Then
+                    ElseIf path.ToLowerInvariant.EndsWith(".xlsx", StringComparison.Ordinal) OrElse path.ToLowerInvariant.EndsWith(".xlsb", StringComparison.Ordinal) OrElse path.ToLowerInvariant.EndsWith(".xlsm", StringComparison.Ordinal) Then
                         '32bit - Requires Office 2007 JET drivers
                         Return CompuMaster.Data.DataQuery.PlatformTools.CreateDataConnection("OleDB", "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" & path & ";Extended Properties=""Excel 12.0 Xml;HDR=" & BoolIf(firstRowContainsHeaders, "YES", "NO") & ";" & BoolIf(readAllColumnsAsTextOnly, "IMEX=1", "") & """;")
                     Else
@@ -529,10 +529,12 @@ Namespace CompuMaster.Data.DataQuery
         Private Shared MicrosoftAccessTextCsvConnectionProviderWorkingStatusForOdbcDriver As TriState = TriState.UseDefault
         Private Shared MicrosoftTextCsvConnectionProviderWorkingStatusForOdbcDriver As TriState = TriState.UseDefault
 
+#Disable Warning CA1805 ' Do not initialize unnecessarily
         ''' <summary>
         ''' Verbose mode creates some additional console output on probe exceptions
         ''' </summary>
         Friend Shared ProbeOleDbOrOdbcProviderVerboseMode As Boolean = False
+#Enable Warning CA1805 ' Do not initialize unnecessarily
 
         ''' <summary>
         ''' Test an OLE DB connection if result hasn't been cached, yet

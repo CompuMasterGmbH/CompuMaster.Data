@@ -122,7 +122,7 @@ Namespace CompuMaster.Data
 
             If File.Exists(path) Then
                 'do nothing for now
-            ElseIf path.ToLower.StartsWith("http://") OrElse path.ToLower.StartsWith("https://") Then
+            ElseIf path.ToLowerInvariant.StartsWith("http://") OrElse path.ToLowerInvariant.StartsWith("https://") Then
                 Dim LocalCopyOfFileContentFromRemoteUri As String = Utils.ReadStringDataFromUri(path, encoding)
                 Result = ReadDataTableFromCsvString(LocalCopyOfFileContentFromRemoteUri, includesColumnHeaders, startAtLineIndex, columnWidths, convertEmptyStringsToDBNull, lineEncodings, lineEncodingAutoConversions)
                 Result.TableName = System.IO.Path.GetFileNameWithoutExtension(path)
@@ -171,7 +171,7 @@ Namespace CompuMaster.Data
 
             If File.Exists(path) Then
                 'do nothing for now
-            ElseIf path.ToLower.StartsWith("http://") OrElse path.ToLower.StartsWith("https://") Then
+            ElseIf path.ToLowerInvariant.StartsWith("http://") OrElse path.ToLowerInvariant.StartsWith("https://") Then
                 Dim EncodingWebName As String
                 If encoding Is Nothing Then
                     EncodingWebName = Nothing
@@ -373,7 +373,7 @@ Namespace CompuMaster.Data
 
             If File.Exists(path) Then
                 'do nothing for now
-            ElseIf path.ToLower.StartsWith("http://") OrElse path.ToLower.StartsWith("https://") Then
+            ElseIf path.ToLowerInvariant.StartsWith("http://") OrElse path.ToLowerInvariant.StartsWith("https://") Then
                 Dim LocalCopyOfFileContentFromRemoteUri As String = Utils.ReadStringDataFromUri(path, encoding)
                 Result = ReadDataTableFromCsvString(LocalCopyOfFileContentFromRemoteUri, includesColumnHeaders, startAtLineIndex, columnSeparator, recognizeTextBy, recognizeMultipleColumnSeparatorCharsAsOne, convertEmptyStringsToDBNull, lineEncodings, lineEncodingAutoConversions)
                 Result.TableName = System.IO.Path.GetFileNameWithoutExtension(path)
@@ -430,7 +430,7 @@ Namespace CompuMaster.Data
 
             If File.Exists(path) Then
                 'do nothing for now
-            ElseIf path.ToLower.StartsWith("http://") OrElse path.ToLower.StartsWith("https://") Then
+            ElseIf path.ToLowerInvariant.StartsWith("http://") OrElse path.ToLowerInvariant.StartsWith("https://") Then
                 Dim EncodingWebName As String
                 If encoding Is Nothing Then
                     EncodingWebName = Nothing
