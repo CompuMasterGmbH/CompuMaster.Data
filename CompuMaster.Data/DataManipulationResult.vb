@@ -10,9 +10,11 @@ Namespace CompuMaster.Data
     Public Class DataManipulationResult
         Implements IDisposable
 
+#Disable Warning CA1051 ' Sichtbare Instanzfelder nicht deklarieren
         Protected WithEvents DataTable As System.Data.DataTable
         Protected UpdateDataAdapter As System.Data.IDbDataAdapter
         Protected SelectCommand As System.Data.IDbCommand
+#Enable Warning CA1051 ' Sichtbare Instanzfelder nicht deklarieren
 
         ''' <summary>
         ''' Create an empty instance 

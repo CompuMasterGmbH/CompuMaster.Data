@@ -1249,7 +1249,7 @@ Namespace CompuMaster.Data
         ''' <param name="values">The array to be validated</param>
         Public Shared Function ArrayNotNothingOrEmpty(Of T)(ByVal values As T()) As T()
             If values Is Nothing Then
-                Return New T() {}
+                Return Array.Empty(Of T)()
             Else
                 Return values
             End If
@@ -1321,7 +1321,9 @@ Namespace CompuMaster.Data
             'https://compumaster.dyndns.biz/.....asmx without trusted certificate
             Dim CurrentValidationCallback As System.Net.Security.RemoteCertificateValidationCallback = System.Net.ServicePointManager.ServerCertificateValidationCallback
             Try
+#Disable Warning CA5359 ' Deaktivieren Sie die Zertifikatüberprüfung nicht
                 If ignoreSslValidationExceptions Then System.Net.ServicePointManager.ServerCertificateValidationCallback = New System.Net.Security.RemoteCertificateValidationCallback(AddressOf OnValidationCallback)
+#Enable Warning CA5359 ' Deaktivieren Sie die Zertifikatüberprüfung nicht
                 If encodingName <> Nothing Then
                     Dim bytes As Byte()
                     If postData Is Nothing Then

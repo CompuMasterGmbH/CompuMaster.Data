@@ -5,6 +5,7 @@ Imports System.Data
 Imports CompuMaster.Data.Utils
 Imports CompuMaster.Data.Information
 Imports CompuMaster.Data.Strings
+Imports System.Linq
 
 Namespace CompuMaster.Data
     ''' <summary>
@@ -2134,7 +2135,7 @@ Namespace CompuMaster.Data
                     Else
                         Result.Append(verticalSeparatorCells)
                     End If
-                    If textAlignmentRight = True Then Result.Append(" ")
+                    If textAlignmentRight = True Then Result.Append(" "c)
                     Dim RenderValue As Object
                     If columnFormatting Is Nothing Then
                         RenderValue = row(column)
@@ -2545,7 +2546,11 @@ Namespace CompuMaster.Data
         Friend Shared Function TrimStringToFixedWidth(ByVal value As String, ByVal width As Integer, suffixIfValueMustBeShortened As String) As String
             If value Is Nothing Then value = String.Empty
             If suffixIfValueMustBeShortened IsNot Nothing AndAlso value.Length > width AndAlso width > suffixIfValueMustBeShortened.Length Then
+#If NETFRAMEWORK Then
                 Return value.Substring(0, width - suffixIfValueMustBeShortened.Length) & suffixIfValueMustBeShortened
+#Else
+                Return String.Concat(value.AsSpan(0, width - suffixIfValueMustBeShortened.Length), suffixIfValueMustBeShortened)
+#End If
             Else
                 Return Strings.LSet(value, width)
             End If
@@ -2875,7 +2880,7 @@ Namespace CompuMaster.Data
             If leftKeyColumnIndexes Is Nothing OrElse leftKeyColumnIndexes.Length = 0 Then Throw New ArgumentException("Missing argument", NameOf(leftKeyColumnIndexes))
             If rightTable Is Nothing Then Throw New ArgumentException("Missing argument", NameOf(rightTable))
             If rightKeyColumnIndexes Is Nothing OrElse rightKeyColumnIndexes.Length = 0 Then Throw New ArgumentException("Missing argument", NameOf(rightKeyColumnIndexes))
-            If leftKeyColumnIndexes.Length <> rightKeyColumnIndexes.Length Then Throw New Exception("Count of leftKeyColumnIndexes must be equal to count of rightKeyColumnIndexes")
+            If leftKeyColumnIndexes.Length <> rightKeyColumnIndexes.Length Then Throw New ArgumentException("Count of leftKeyColumnIndexes must be equal to count of rightKeyColumnIndexes")
             For MyCounter As Integer = 0 To leftKeyColumnIndexes.Length - 1
                 If leftTable.Columns(leftKeyColumnIndexes(MyCounter)).DataType IsNot rightTable.Columns(rightKeyColumnIndexes(MyCounter)).DataType Then
                     Throw New ArgumentException("Data types of key columns must be equal")

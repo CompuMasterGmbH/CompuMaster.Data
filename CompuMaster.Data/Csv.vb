@@ -24,10 +24,12 @@ Namespace CompuMaster.Data
             RowBreakCrLf_CellLineBreakRemoved = 13 'remove all line breaks
             RowBreakCr_CellLineBreakRemoved = 14 'remove all line breaks
             RowBreakLf_CellLineBreakRemoved = 15 'remove all line breaks
+#Disable Warning CA1069 ' Enums values should not be duplicated
             ''' <summary>
             ''' Rule as RowBreakCrLf_CellLineBreakLf
             ''' </summary>
             [Default] = 1
+#Enable Warning CA1069 ' Enums values should not be duplicated
             'Windows = 1
             'Mac = 2
             'Linux = 3
@@ -59,10 +61,12 @@ Namespace CompuMaster.Data
             ''' CURRENT DESIGN ISSUE WITH TROUBLE: LineBreaks in first and last column can't be identified if its for the previous row or for the next row since this data is missing in CSV file
             ''' </remarks>
             RowBreakCrLfOrCrOrLf_CellLineBreakCrLfOrCrOrLf = 7
+#Disable Warning CA1069 ' Enums values should not be duplicated
             ''' <summary>
             ''' Rule as RowBreakCrLfOrCr_CellLineBreakLf
             ''' </summary>
             [Default] = 5
+#Enable Warning CA1069 ' Enums values should not be duplicated
             ''' <summary>
             ''' Platform dependent NewLine encoding for row separation, line breaks in cells LF (Windows+Mac) or CR (Linux+Unix)
             ''' </summary>

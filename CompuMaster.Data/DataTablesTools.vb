@@ -4,6 +4,7 @@ Option Strict On
 Imports System.Collections.Generic
 Imports System.Data
 Imports CompuMaster.Data.Information
+Imports System.Linq
 
 Namespace CompuMaster.Data
 
@@ -659,12 +660,8 @@ Namespace CompuMaster.Data
                 MyConn.Open()
                 MyDA.Fill(MyDataTable)
             Finally
-                If MyDA IsNot Nothing Then
-                    MyDA.Dispose()
-                End If
-                If MyCmd IsNot Nothing Then
-                    MyCmd.Dispose()
-                End If
+                MyDA?.Dispose()
+                MyCmd?.Dispose()
                 If MyConn IsNot Nothing Then
                     If MyConn.State <> ConnectionState.Closed Then
                         MyConn.Close()
@@ -695,12 +692,8 @@ Namespace CompuMaster.Data
                 MyConn.Open()
                 MyDA.Fill(MyDataTable)
             Finally
-                If MyDA IsNot Nothing Then
-                    MyDA.Dispose()
-                End If
-                If MyCmd IsNot Nothing Then
-                    MyCmd.Dispose()
-                End If
+                MyDA?.Dispose()
+                MyCmd?.Dispose()
                 If MyConn IsNot Nothing Then
                     If MyConn.State <> ConnectionState.Closed Then
                         MyConn.Close()
@@ -1531,7 +1524,11 @@ Namespace CompuMaster.Data
                     Else
                         'Update the counter value
                         NumberCounterValue = CType(suggestedColumnName.Substring(NumberPositionIndex), Integer) + 1
+#If NETFRAMEWORK Then
                         suggestedColumnName = suggestedColumnName.Substring(0, NumberPositionIndex) & NumberCounterValue.ToString
+#Else
+                        suggestedColumnName = String.Concat(suggestedColumnName.AsSpan(0, NumberPositionIndex), NumberCounterValue.ToString)
+#End If
                     End If
                 Else
                     'Add new prefix

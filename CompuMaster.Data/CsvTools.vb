@@ -133,7 +133,7 @@ Namespace CompuMaster.Data
 
             If File.Exists(path) Then
                 'do nothing for now
-            ElseIf path.ToLowerInvariant.StartsWith("http://") OrElse path.ToLowerInvariant.StartsWith("https://") Then
+            ElseIf path.ToLowerInvariant.StartsWith("http://", StringComparison.Ordinal) OrElse path.ToLowerInvariant.StartsWith("https://", StringComparison.Ordinal) Then
                 Dim LocalCopyOfFileContentFromRemoteUri As String = Utils.ReadStringDataFromUri(path, encoding)
                 Result = ReadDataTableFromCsvString(LocalCopyOfFileContentFromRemoteUri, includesColumnHeaders, startAtLineIndex, columnWidths, convertEmptyStringsToDBNull, lineEncodings, lineEncodingAutoConversions)
                 Result.TableName = System.IO.Path.GetFileNameWithoutExtension(path)
@@ -152,9 +152,7 @@ Namespace CompuMaster.Data
                 Result = ReadDataTableFromCsvReader(reader, includesColumnHeaders, startAtLineIndex, System.Globalization.CultureInfo.CurrentCulture, columnWidths, convertEmptyStringsToDBNull, lineEncodings, lineEncodingAutoConversions)
                 Result.TableName = System.IO.Path.GetFileNameWithoutExtension(path)
             Finally
-                If reader IsNot Nothing Then
-                    reader.Close()
-                End If
+                reader?.Close()
             End Try
 
             Return Result
@@ -182,7 +180,7 @@ Namespace CompuMaster.Data
 
             If File.Exists(path) Then
                 'do nothing for now
-            ElseIf path.ToLowerInvariant.StartsWith("http://") OrElse path.ToLowerInvariant.StartsWith("https://") Then
+            ElseIf path.ToLowerInvariant.StartsWith("http://", StringComparison.Ordinal) OrElse path.ToLowerInvariant.StartsWith("https://", StringComparison.Ordinal) Then
                 Dim EncodingWebName As String
                 If encoding Is Nothing Then
                     EncodingWebName = Nothing
@@ -207,9 +205,7 @@ Namespace CompuMaster.Data
                 Result = ReadDataTableFromCsvReader(reader, includesColumnHeaders, startAtLineIndex, cultureFormatProvider, columnWidths, convertEmptyStringsToDBNull, lineEncodings, lineEncodingAutoConversions)
                 Result.TableName = System.IO.Path.GetFileNameWithoutExtension(path)
             Finally
-                If reader IsNot Nothing Then
-                    reader.Close()
-                End If
+                reader?.Close()
             End Try
 
             Return Result
@@ -237,9 +233,7 @@ Namespace CompuMaster.Data
                 reader = New StreamReader(New MemoryStream(System.Text.Encoding.Unicode.GetBytes(data)), System.Text.Encoding.Unicode, False)
                 Result = ReadDataTableFromCsvReader(reader, includesColumnHeaders, startAtLineIndex, System.Globalization.CultureInfo.CurrentCulture, columnWidths, convertEmptyStringsToDBNull, lineEncodings, lineEncodingAutoConversions)
             Finally
-                If reader IsNot Nothing Then
-                    reader.Close()
-                End If
+                reader?.Close()
             End Try
 
             Return Result
@@ -268,9 +262,7 @@ Namespace CompuMaster.Data
                 reader = New StreamReader(New MemoryStream(System.Text.Encoding.Unicode.GetBytes(data)), System.Text.Encoding.Unicode, False)
                 Result = ReadDataTableFromCsvReader(reader, includesColumnHeaders, startAtLineIndex, cultureFormatProvider, columnWidths, convertEmptyStringsToDBNull, lineEncodings, lineEncodingAutoConversions)
             Finally
-                If reader IsNot Nothing Then
-                    reader.Close()
-                End If
+                reader?.Close()
             End Try
 
             Return Result
@@ -384,7 +376,7 @@ Namespace CompuMaster.Data
 
             If File.Exists(path) Then
                 'do nothing for now
-            ElseIf path.ToLowerInvariant.StartsWith("http://") OrElse path.ToLowerInvariant.StartsWith("https://") Then
+            ElseIf path.ToLowerInvariant.StartsWith("http://", StringComparison.Ordinal) OrElse path.ToLowerInvariant.StartsWith("https://", StringComparison.Ordinal) Then
                 Dim LocalCopyOfFileContentFromRemoteUri As String = Utils.ReadStringDataFromUri(path, encoding)
                 Result = ReadDataTableFromCsvString(LocalCopyOfFileContentFromRemoteUri, includesColumnHeaders, startAtLineIndex, columnSeparator, recognizeTextBy, recognizeMultipleColumnSeparatorCharsAsOne, convertEmptyStringsToDBNull, lineEncodings, lineEncodingAutoConversions)
                 Result.TableName = System.IO.Path.GetFileNameWithoutExtension(path)
@@ -441,7 +433,7 @@ Namespace CompuMaster.Data
 
             If File.Exists(path) Then
                 'do nothing for now
-            ElseIf path.ToLowerInvariant.StartsWith("http://") OrElse path.ToLowerInvariant.StartsWith("https://") Then
+            ElseIf path.ToLowerInvariant.StartsWith("http://", StringComparison.Ordinal) OrElse path.ToLowerInvariant.StartsWith("https://", StringComparison.Ordinal) Then
                 Dim EncodingWebName As String
                 If encoding Is Nothing Then
                     EncodingWebName = Nothing
@@ -466,9 +458,7 @@ Namespace CompuMaster.Data
                 Result = ReadDataTableFromCsvReader(reader, includesColumnHeaders, startAtLineIndex, cultureFormatProvider, Nothing, recognizeTextBy, recognizeMultipleColumnSeparatorCharsAsOne, convertEmptyStringsToDBNull, lineEncodings, lineEncodingAutoConversions)
                 Result.TableName = System.IO.Path.GetFileNameWithoutExtension(path)
             Finally
-                If reader IsNot Nothing Then
-                    reader.Close()
-                End If
+                reader?.Close()
             End Try
 
             Return Result
@@ -574,7 +564,7 @@ Namespace CompuMaster.Data
                         Dim colValue As String = Trim(ColValues(ColCounter))
                         If Result.Columns.Count <= ColCounter Then
                             If lineEncodings = Csv.ReadLineEncodings.RowBreakCrLfOrCrOrLf_CellLineBreakCrLfOrCrOrLf Then
-                                Throw New Exception("Line endings setting RowBreakCrLfOrCrOrLf_CellLineBreakCrLfOrCrOrLf requires the CSV data to provide the same column count in each row: error reading record row " & Result.Rows.Count + 1 & " and cell """ & colValue & """ - full raw row data:" & System.Environment.NewLine & rdStr.Substring(CurrentRowStartPosition, CharPosition - CurrentRowStartPosition))
+                                Throw New InvalidOperationException("Line endings setting RowBreakCrLfOrCrOrLf_CellLineBreakCrLfOrCrOrLf requires the CSV data to provide the same column count in each row: error reading record row " & Result.Rows.Count + 1 & " and cell """ & colValue & """ - full raw row data:" & System.Environment.NewLine & rdStr.Substring(CurrentRowStartPosition, CharPosition - CurrentRowStartPosition))
                             Else
                                 Result.Columns.Add(New DataColumn(Nothing, GetType(String)))
                             End If
@@ -836,9 +826,7 @@ Namespace CompuMaster.Data
                 reader = New StreamReader(New MemoryStream(System.Text.Encoding.Unicode.GetBytes(data)), System.Text.Encoding.Unicode, False)
                 Result = ReadDataTableFromCsvReader(reader, includesColumnHeaders, startAtLineIndex, System.Globalization.CultureInfo.CurrentCulture, columnSeparator, recognizeTextBy, recognizeMultipleColumnSeparatorCharsAsOne, convertEmptyStringsToDBNull, lineEncodings, lineEncodingAutoConversions)
             Finally
-                If reader IsNot Nothing Then
-                    reader.Close()
-                End If
+                reader?.Close()
             End Try
 
             Return Result
@@ -868,9 +856,7 @@ Namespace CompuMaster.Data
                 reader = New StreamReader(New MemoryStream(System.Text.Encoding.Unicode.GetBytes(data)), System.Text.Encoding.Unicode, False)
                 Result = ReadDataTableFromCsvReader(reader, includesColumnHeaders, startAtLineIndex, cultureFormatProvider, Nothing, recognizeTextBy, recognizeMultipleColumnSeparatorCharsAsOne, convertEmptyStringsToDBNull, lineEncodings, lineEncodingAutoConversions)
             Finally
-                If reader IsNot Nothing Then
-                    reader.Close()
-                End If
+                reader?.Close()
             End Try
 
             Return Result
@@ -891,7 +877,7 @@ Namespace CompuMaster.Data
             'Ensure that only string columns are here
             For ColCounter As Integer = 0 To data.Columns.Count - 1
                 If data.Columns(ColCounter).DataType IsNot GetType(String) Then
-                    Throw New Exception("All columns must be of data type System.String")
+                    Throw New InvalidOperationException("All columns must be of data type System.String")
                 End If
             Next
 
@@ -921,7 +907,7 @@ Namespace CompuMaster.Data
             'Ensure that only string columns are here
             For ColCounter As Integer = 0 To data.Columns.Count - 1
                 If data.Columns(ColCounter).DataType IsNot GetType(String) Then
-                    Throw New Exception("All columns must be of data type System.String")
+                    Throw New InvalidOperationException("All columns must be of data type System.String")
                 End If
             Next
 
@@ -970,9 +956,7 @@ Namespace CompuMaster.Data
                 Dim textStringBuilder As System.Text.StringBuilder = ConvertDataTableToCsv(dataTable, includesColumnHeaders, cultureFormatProvider, columnWidths, lineEncodings)
                 WriteTextStringBuilderToStreamWriter(writer, textStringBuilder)
             Finally
-                If writer IsNot Nothing Then
-                    writer.Close()
-                End If
+                writer?.Close()
             End Try
 
         End Sub
@@ -986,9 +970,7 @@ Namespace CompuMaster.Data
                 Dim textStringBuilder As System.Text.StringBuilder = ConvertDataTableToCsv(dataTable, includesColumnHeaders, cultureFormatProvider, columnSeparator, recognizeTextBy, lineEncodings)
                 WriteTextStringBuilderToStreamWriter(writer, textStringBuilder)
             Finally
-                If writer IsNot Nothing Then
-                    writer.Close()
-                End If
+                writer?.Close()
             End Try
 
         End Sub
@@ -1224,9 +1206,7 @@ Namespace CompuMaster.Data
                 Next
 
             Finally
-                If writer IsNot Nothing Then
-                    writer.Close()
-                End If
+                writer?.Close()
             End Try
 
         End Sub
@@ -1352,9 +1332,7 @@ Namespace CompuMaster.Data
                 Next
 
             Finally
-                If writer IsNot Nothing Then
-                    writer.Close()
-                End If
+                writer?.Close()
             End Try
 
             Return Result
@@ -1477,9 +1455,7 @@ Namespace CompuMaster.Data
                 Next
 
             Finally
-                If writer IsNot Nothing Then
-                    writer.Close()
-                End If
+                writer?.Close()
             End Try
 
         End Sub
@@ -1534,9 +1510,7 @@ Namespace CompuMaster.Data
                 Next
 
             Finally
-                If writer IsNot Nothing Then
-                    writer.Close()
-                End If
+                writer?.Close()
             End Try
 
         End Sub

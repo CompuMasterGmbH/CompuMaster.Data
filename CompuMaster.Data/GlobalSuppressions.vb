@@ -13,3 +13,4 @@ Imports System.Diagnostics.CodeAnalysis
 <Assembly: SuppressMessage("Minor Code Smell", "S2355:Array literals should be used instead of array creation expressions", Justification:="<Ausstehend>")>
 <Assembly: SuppressMessage("Minor Code Smell", "S4136:Method overloads should be grouped together", Justification:="<Ausstehend>")>
 <Assembly: SuppressMessage("CodeQuality", "IDE0079:Unnötige Unterdrückung entfernen", Justification:="<Ausstehend>")>
+<Assembly: SuppressMessage("Naming", "CA1707:Identifiers should not contain underscores", Justification:="<Ausstehend>")>
