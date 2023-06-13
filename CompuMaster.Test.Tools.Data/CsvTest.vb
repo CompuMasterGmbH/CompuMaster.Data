@@ -1,4 +1,5 @@
 ﻿Imports NUnit.Framework
+Imports OfficeOpenXml
 Imports System.Data
 Imports System.Security.Policy
 
@@ -24,6 +25,224 @@ Namespace CompuMaster.Test.Data
             Assert.Greater(dt.Rows.Count, 0)
         End Sub
 
+        <Test> Public Sub ReadDataTableFromFixedWidthsCsv()
+            Dim TestFile As String = AssemblyTestEnvironment.TestFileAbsolutePath(System.IO.Path.Combine("testfiles", "fixedwidths.csv"))
+            Dim StartLine As Integer = 0
+            System.Console.WriteLine("TestFile=" & TestFile)
+            System.Console.WriteLine("StartLine=" & TestFile)
+
+            Dim CsvCulture As System.Globalization.CultureInfo = System.Globalization.CultureInfo.CreateSpecificCulture("de-DE")
+            Dim FileEncoding As System.Text.Encoding = System.Text.Encoding.UTF8
+            Dim FileEncodingName As String = "UTF-8"
+            Dim FixedWidths = New Integer() {6, 40, 25, 25, 25, 25, 25, 25, 25, 25}
+            Dim dt As DataTable
+
+            'CSV-File
+            dt = CompuMaster.Data.Csv.ReadDataTableFromCsvFile(
+                TestFile, True, StartLine,
+                FixedWidths, FileEncoding, CsvCulture, True)
+            Console.WriteLine(CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(dt))
+            Assert.AreEqual(10, dt.Columns.Count)
+            Assert.AreEqual(3, dt.Rows.Count)
+            Assert.AreEqual("Konto", dt.Columns(0).ColumnName)
+            Assert.AreEqual("115", dt.Rows(0)(0))
+            Assert.AreEqual("Geschäftsausstattung", dt.Rows(2)(1))
+            Assert.AreEqual(DBNull.Value, dt.Rows(2)(9))
+
+            dt = CompuMaster.Data.Csv.ReadDataTableFromCsvFile(
+                TestFile, True, StartLine,
+                CompuMaster.Data.Csv.ReadLineEncodings.RowBreakCrLfOrCr_CellLineBreakLf, CompuMaster.Data.Csv.ReadLineEncodingAutoConversion.NoAutoConversion,
+                FixedWidths, FileEncoding, CsvCulture, True)
+            Console.WriteLine(CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(dt))
+            Assert.AreEqual(10, dt.Columns.Count)
+            Assert.AreEqual(3, dt.Rows.Count)
+            Assert.AreEqual("Konto", dt.Columns(0).ColumnName)
+            Assert.AreEqual("115", dt.Rows(0)(0))
+            Assert.AreEqual("Geschäftsausstattung", dt.Rows(2)(1))
+            Assert.AreEqual(DBNull.Value, dt.Rows(2)(9))
+
+            dt = CompuMaster.Data.Csv.ReadDataTableFromCsvFile(
+                TestFile, True, StartLine,
+                FixedWidths, FileEncodingName, True)
+            Console.WriteLine(CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(dt))
+            Assert.AreEqual(10, dt.Columns.Count)
+            Assert.AreEqual(3, dt.Rows.Count)
+            Assert.AreEqual("Konto", dt.Columns(0).ColumnName)
+            Assert.AreEqual("115", dt.Rows(0)(0))
+            Assert.AreEqual("Geschäftsausstattung", dt.Rows(2)(1))
+            Assert.AreEqual(DBNull.Value, dt.Rows(2)(9))
+
+            dt = CompuMaster.Data.Csv.ReadDataTableFromCsvFile(
+                TestFile, True, StartLine,
+                CompuMaster.Data.Csv.ReadLineEncodings.RowBreakCrLfOrCr_CellLineBreakLf, CompuMaster.Data.Csv.ReadLineEncodingAutoConversion.NoAutoConversion,
+                FixedWidths, FileEncodingName, True)
+            Console.WriteLine(CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(dt))
+            Assert.AreEqual(10, dt.Columns.Count)
+            Assert.AreEqual(3, dt.Rows.Count)
+            Assert.AreEqual("Konto", dt.Columns(0).ColumnName)
+            Assert.AreEqual("115", dt.Rows(0)(0))
+            Assert.AreEqual("Geschäftsausstattung", dt.Rows(2)(1))
+            Assert.AreEqual(DBNull.Value, dt.Rows(2)(9))
+
+            'CSV-String
+            Dim CsvData As String = System.IO.File.ReadAllText(TestFile, FileEncoding)
+            dt = CompuMaster.Data.Csv.ReadDataTableFromCsvString(
+                CsvData, True, StartLine,
+                CsvCulture, FixedWidths, True)
+            Console.WriteLine(CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(dt))
+            Assert.AreEqual(10, dt.Columns.Count)
+            Assert.AreEqual(3, dt.Rows.Count)
+            Assert.AreEqual("Konto", dt.Columns(0).ColumnName)
+            Assert.AreEqual("115", dt.Rows(0)(0))
+            Assert.AreEqual("Geschäftsausstattung", dt.Rows(2)(1))
+            Assert.AreEqual(DBNull.Value, dt.Rows(2)(9))
+
+            dt = CompuMaster.Data.Csv.ReadDataTableFromCsvString(
+                CsvData, True, StartLine,
+                CompuMaster.Data.Csv.ReadLineEncodings.RowBreakCrLfOrCr_CellLineBreakLf, CompuMaster.Data.Csv.ReadLineEncodingAutoConversion.NoAutoConversion,
+                CsvCulture, FixedWidths, True)
+            Console.WriteLine(CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(dt))
+            Assert.AreEqual(10, dt.Columns.Count)
+            Assert.AreEqual(3, dt.Rows.Count)
+            Assert.AreEqual("Konto", dt.Columns(0).ColumnName)
+            Assert.AreEqual("115", dt.Rows(0)(0))
+            Assert.AreEqual("Geschäftsausstattung", dt.Rows(2)(1))
+            Assert.AreEqual(DBNull.Value, dt.Rows(2)(9))
+
+            dt = CompuMaster.Data.Csv.ReadDataTableFromCsvString(
+                CsvData, True, StartLine,
+                CsvCulture, FixedWidths, True)
+            Console.WriteLine(CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(dt))
+            Assert.AreEqual(10, dt.Columns.Count)
+            Assert.AreEqual(3, dt.Rows.Count)
+            Assert.AreEqual("Konto", dt.Columns(0).ColumnName)
+            Assert.AreEqual("115", dt.Rows(0)(0))
+            Assert.AreEqual("Geschäftsausstattung", dt.Rows(2)(1))
+            Assert.AreEqual(DBNull.Value, dt.Rows(2)(9))
+
+            dt = CompuMaster.Data.Csv.ReadDataTableFromCsvString(
+                CsvData, True, StartLine,
+                CompuMaster.Data.Csv.ReadLineEncodings.RowBreakCrLfOrCr_CellLineBreakLf, CompuMaster.Data.Csv.ReadLineEncodingAutoConversion.NoAutoConversion,
+                CsvCulture, FixedWidths, True)
+            Console.WriteLine(CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(dt))
+            Assert.AreEqual(10, dt.Columns.Count)
+            Assert.AreEqual(3, dt.Rows.Count)
+            Assert.AreEqual("Konto", dt.Columns(0).ColumnName)
+            Assert.AreEqual("115", dt.Rows(0)(0))
+            Assert.AreEqual("Geschäftsausstattung", dt.Rows(2)(1))
+            Assert.AreEqual(DBNull.Value, dt.Rows(2)(9))
+
+        End Sub
+
+        <Test> Public Sub ReadDataTableFromFixedWidthsCsv_WithExtraLinesBefore()
+            Dim TestFile As String = AssemblyTestEnvironment.TestFileAbsolutePath(System.IO.Path.Combine("testfiles", "fixedwidths_withExtraLinesBefore.csv"))
+            Dim StartLine As Integer = 3
+            System.Console.WriteLine("TestFile=" & TestFile)
+            System.Console.WriteLine("StartLine=" & TestFile)
+
+            Dim CsvCulture As System.Globalization.CultureInfo = System.Globalization.CultureInfo.CreateSpecificCulture("de-DE")
+            Dim FileEncoding As System.Text.Encoding = System.Text.Encoding.UTF8
+            Dim FileEncodingName As String = "UTF-8"
+            Dim FixedWidths = New Integer() {6, 40, 25, 25, 25, 25, 25, 25, 25, 25}
+            Dim dt As DataTable
+
+            'CSV-File
+            dt = CompuMaster.Data.Csv.ReadDataTableFromCsvFile(
+                TestFile, True, StartLine,
+                FixedWidths, FileEncoding, CsvCulture, True)
+            Console.WriteLine(CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(dt))
+            Assert.AreEqual(10, dt.Columns.Count)
+            Assert.AreEqual(3, dt.Rows.Count)
+            Assert.AreEqual("Konto", dt.Columns(0).ColumnName)
+            Assert.AreEqual("115", dt.Rows(0)(0))
+            Assert.AreEqual("Geschäftsausstattung", dt.Rows(2)(1))
+            Assert.AreEqual(DBNull.Value, dt.Rows(2)(9))
+
+            dt = CompuMaster.Data.Csv.ReadDataTableFromCsvFile(
+                TestFile, True, StartLine,
+                CompuMaster.Data.Csv.ReadLineEncodings.RowBreakCrLfOrCr_CellLineBreakLf, CompuMaster.Data.Csv.ReadLineEncodingAutoConversion.NoAutoConversion,
+                FixedWidths, FileEncoding, CsvCulture, True)
+            Console.WriteLine(CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(dt))
+            Assert.AreEqual(10, dt.Columns.Count)
+            Assert.AreEqual(3, dt.Rows.Count)
+            Assert.AreEqual("Konto", dt.Columns(0).ColumnName)
+            Assert.AreEqual("115", dt.Rows(0)(0))
+            Assert.AreEqual("Geschäftsausstattung", dt.Rows(2)(1))
+            Assert.AreEqual(DBNull.Value, dt.Rows(2)(9))
+
+            dt = CompuMaster.Data.Csv.ReadDataTableFromCsvFile(
+                TestFile, True, StartLine,
+                FixedWidths, FileEncodingName, True)
+            Console.WriteLine(CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(dt))
+            Assert.AreEqual(10, dt.Columns.Count)
+            Assert.AreEqual(3, dt.Rows.Count)
+            Assert.AreEqual("Konto", dt.Columns(0).ColumnName)
+            Assert.AreEqual("115", dt.Rows(0)(0))
+            Assert.AreEqual("Geschäftsausstattung", dt.Rows(2)(1))
+            Assert.AreEqual(DBNull.Value, dt.Rows(2)(9))
+
+            dt = CompuMaster.Data.Csv.ReadDataTableFromCsvFile(
+                TestFile, True, StartLine,
+                CompuMaster.Data.Csv.ReadLineEncodings.RowBreakCrLfOrCr_CellLineBreakLf, CompuMaster.Data.Csv.ReadLineEncodingAutoConversion.NoAutoConversion,
+                FixedWidths, FileEncodingName, True)
+            Console.WriteLine(CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(dt))
+            Assert.AreEqual(10, dt.Columns.Count)
+            Assert.AreEqual(3, dt.Rows.Count)
+            Assert.AreEqual("Konto", dt.Columns(0).ColumnName)
+            Assert.AreEqual("115", dt.Rows(0)(0))
+            Assert.AreEqual("Geschäftsausstattung", dt.Rows(2)(1))
+            Assert.AreEqual(DBNull.Value, dt.Rows(2)(9))
+
+            'CSV-String
+            Dim CsvData As String = System.IO.File.ReadAllText(TestFile, FileEncoding)
+            dt = CompuMaster.Data.Csv.ReadDataTableFromCsvString(
+                CsvData, True, StartLine,
+                CsvCulture, FixedWidths, True)
+            Console.WriteLine(CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(dt))
+            Assert.AreEqual(10, dt.Columns.Count)
+            Assert.AreEqual(3, dt.Rows.Count)
+            Assert.AreEqual("Konto", dt.Columns(0).ColumnName)
+            Assert.AreEqual("115", dt.Rows(0)(0))
+            Assert.AreEqual("Geschäftsausstattung", dt.Rows(2)(1))
+            Assert.AreEqual(DBNull.Value, dt.Rows(2)(9))
+
+            dt = CompuMaster.Data.Csv.ReadDataTableFromCsvString(
+                CsvData, True, StartLine,
+                CompuMaster.Data.Csv.ReadLineEncodings.RowBreakCrLfOrCr_CellLineBreakLf, CompuMaster.Data.Csv.ReadLineEncodingAutoConversion.NoAutoConversion,
+                CsvCulture, FixedWidths, True)
+            Console.WriteLine(CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(dt))
+            Assert.AreEqual(10, dt.Columns.Count)
+            Assert.AreEqual(3, dt.Rows.Count)
+            Assert.AreEqual("Konto", dt.Columns(0).ColumnName)
+            Assert.AreEqual("115", dt.Rows(0)(0))
+            Assert.AreEqual("Geschäftsausstattung", dt.Rows(2)(1))
+            Assert.AreEqual(DBNull.Value, dt.Rows(2)(9))
+
+            dt = CompuMaster.Data.Csv.ReadDataTableFromCsvString(
+                CsvData, True, StartLine,
+                CsvCulture, FixedWidths, True)
+            Console.WriteLine(CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(dt))
+            Assert.AreEqual(10, dt.Columns.Count)
+            Assert.AreEqual(3, dt.Rows.Count)
+            Assert.AreEqual("Konto", dt.Columns(0).ColumnName)
+            Assert.AreEqual("115", dt.Rows(0)(0))
+            Assert.AreEqual("Geschäftsausstattung", dt.Rows(2)(1))
+            Assert.AreEqual(DBNull.Value, dt.Rows(2)(9))
+
+            dt = CompuMaster.Data.Csv.ReadDataTableFromCsvString(
+                CsvData, True, StartLine,
+                CompuMaster.Data.Csv.ReadLineEncodings.RowBreakCrLfOrCr_CellLineBreakLf, CompuMaster.Data.Csv.ReadLineEncodingAutoConversion.NoAutoConversion,
+                CsvCulture, FixedWidths, True)
+            Console.WriteLine(CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(dt))
+            Assert.AreEqual(10, dt.Columns.Count)
+            Assert.AreEqual(3, dt.Rows.Count)
+            Assert.AreEqual("Konto", dt.Columns(0).ColumnName)
+            Assert.AreEqual("115", dt.Rows(0)(0))
+            Assert.AreEqual("Geschäftsausstattung", dt.Rows(2)(1))
+            Assert.AreEqual(DBNull.Value, dt.Rows(2)(9))
+
+        End Sub
+
         <Test> Public Sub ReadDataTableFromDatevCsv()
             Dim TestFile As String = AssemblyTestEnvironment.TestFileAbsolutePath(System.IO.Path.Combine("testfiles", "datev.csv"))
             Dim StartLine As Integer = 6
@@ -42,7 +261,10 @@ Namespace CompuMaster.Test.Data
             Console.WriteLine(CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(dt))
             Assert.AreEqual(10, dt.Columns.Count)
             Assert.AreEqual(3, dt.Rows.Count)
+            Assert.AreEqual("Konto", dt.Columns(0).ColumnName)
             Assert.AreEqual("115", dt.Rows(0)(0))
+            Assert.AreEqual("Geschäftsausstattung", dt.Rows(2)(1))
+            Assert.AreEqual(DBNull.Value, dt.Rows(2)(9))
 
             dt = CompuMaster.Data.Csv.ReadDataTableFromCsvFile(
                 TestFile, True, StartLine,
@@ -51,7 +273,10 @@ Namespace CompuMaster.Test.Data
             Console.WriteLine(CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(dt))
             Assert.AreEqual(10, dt.Columns.Count)
             Assert.AreEqual(3, dt.Rows.Count)
+            Assert.AreEqual("Konto", dt.Columns(0).ColumnName)
             Assert.AreEqual("115", dt.Rows(0)(0))
+            Assert.AreEqual("Geschäftsausstattung", dt.Rows(2)(1))
+            Assert.AreEqual(DBNull.Value, dt.Rows(2)(9))
 
             dt = CompuMaster.Data.Csv.ReadDataTableFromCsvFile(
                 TestFile, True, StartLine,
@@ -59,7 +284,10 @@ Namespace CompuMaster.Test.Data
             Console.WriteLine(CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(dt))
             Assert.AreEqual(10, dt.Columns.Count)
             Assert.AreEqual(3, dt.Rows.Count)
+            Assert.AreEqual("Konto", dt.Columns(0).ColumnName)
             Assert.AreEqual("115", dt.Rows(0)(0))
+            Assert.AreEqual("Geschäftsausstattung", dt.Rows(2)(1))
+            Assert.AreEqual(DBNull.Value, dt.Rows(2)(9))
 
             dt = CompuMaster.Data.Csv.ReadDataTableFromCsvFile(
                 TestFile, True, StartLine,
@@ -68,7 +296,10 @@ Namespace CompuMaster.Test.Data
             Console.WriteLine(CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(dt))
             Assert.AreEqual(10, dt.Columns.Count)
             Assert.AreEqual(3, dt.Rows.Count)
+            Assert.AreEqual("Konto", dt.Columns(0).ColumnName)
             Assert.AreEqual("115", dt.Rows(0)(0))
+            Assert.AreEqual("Geschäftsausstattung", dt.Rows(2)(1))
+            Assert.AreEqual(DBNull.Value, dt.Rows(2)(9))
 
             'CSV-String
             Dim CsvData As String = System.IO.File.ReadAllText(TestFile, FileEncoding)
@@ -78,7 +309,10 @@ Namespace CompuMaster.Test.Data
             Console.WriteLine(CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(dt))
             Assert.AreEqual(10, dt.Columns.Count)
             Assert.AreEqual(3, dt.Rows.Count)
+            Assert.AreEqual("Konto", dt.Columns(0).ColumnName)
             Assert.AreEqual("115", dt.Rows(0)(0))
+            Assert.AreEqual("Geschäftsausstattung", dt.Rows(2)(1))
+            Assert.AreEqual(DBNull.Value, dt.Rows(2)(9))
 
             dt = CompuMaster.Data.Csv.ReadDataTableFromCsvString(
                 CsvData, True, StartLine,
@@ -87,7 +321,10 @@ Namespace CompuMaster.Test.Data
             Console.WriteLine(CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(dt))
             Assert.AreEqual(10, dt.Columns.Count)
             Assert.AreEqual(3, dt.Rows.Count)
+            Assert.AreEqual("Konto", dt.Columns(0).ColumnName)
             Assert.AreEqual("115", dt.Rows(0)(0))
+            Assert.AreEqual("Geschäftsausstattung", dt.Rows(2)(1))
+            Assert.AreEqual(DBNull.Value, dt.Rows(2)(9))
 
             dt = CompuMaster.Data.Csv.ReadDataTableFromCsvString(
                 CsvData, True, StartLine,
@@ -95,7 +332,10 @@ Namespace CompuMaster.Test.Data
             Console.WriteLine(CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(dt))
             Assert.AreEqual(10, dt.Columns.Count)
             Assert.AreEqual(3, dt.Rows.Count)
+            Assert.AreEqual("Konto", dt.Columns(0).ColumnName)
             Assert.AreEqual("115", dt.Rows(0)(0))
+            Assert.AreEqual("Geschäftsausstattung", dt.Rows(2)(1))
+            Assert.AreEqual(DBNull.Value, dt.Rows(2)(9))
 
             dt = CompuMaster.Data.Csv.ReadDataTableFromCsvString(
                 CsvData, True, StartLine,
@@ -104,7 +344,10 @@ Namespace CompuMaster.Test.Data
             Console.WriteLine(CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(dt))
             Assert.AreEqual(10, dt.Columns.Count)
             Assert.AreEqual(3, dt.Rows.Count)
+            Assert.AreEqual("Konto", dt.Columns(0).ColumnName)
             Assert.AreEqual("115", dt.Rows(0)(0))
+            Assert.AreEqual("Geschäftsausstattung", dt.Rows(2)(1))
+            Assert.AreEqual(DBNull.Value, dt.Rows(2)(9))
 
         End Sub
 

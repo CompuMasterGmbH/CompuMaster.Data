@@ -56,6 +56,17 @@ Namespace CompuMaster.Data
 
             'Read the file char by char and add row by row
             Dim CharPosition As Integer = 0
+            For MyCounter As Integer = 0 To startAtLineIndex - 1
+                CharPosition = rdStr.IndexOfAny(New Char() {ControlChars.Cr, ControlChars.Lf}, CharPosition) + 1
+                If CharPosition > rdStr.Length Then
+                    'simply return the empty table when there is no input data
+                    Return Result
+                End If
+                If rdStr.Chars(CharPosition - 1) = ControlChars.Cr AndAlso rdStr.Chars(CharPosition) = ControlChars.Lf Then
+                    CharPosition += 1
+                End If
+            Next
+
             While CharPosition < rdStr.Length
 
                 'Read the next csv row
