@@ -1,0 +1,10 @@
+﻿Summen- und Saldenliste für März 2023
+"SampleCompay";12345;23456;09.05.2023 09:08 Uhr
+
+Konten:;Wirtschaftsjahr:;Zeitraum:;Währung:
+Sachkonten, Debitoren, Kreditoren;01.01.2023;März 2023;EUR
+
+Konto;Kontobezeichnung;EB-Wert Soll;EB-Wert Haben;März Soll;März Haben;Januar - März Soll;Januar - März Haben;Saldo per März Soll;Saldo per März Haben
+"115";"Andere Bauten (eigene Grundstücke)      ";2.468,00;;0,00;68,00;0,00;204,00;2.264,00;
+"320";"Pkw                                     ";100.815,00;;0,00;1.884,30;0,00;5.652,94;95.162,06;
+"410";"Geschäftsausstattung                    ";692,00;;0,00;38,41;0,00;115,24;576,76;

@@ -34,6 +34,9 @@
     <DefineTrace>false</DefineTrace>
   </PropertyGroup>
   <ItemGroup>
+    <None Remove="testfiles\datev.csv" />
+  </ItemGroup>
+  <ItemGroup>
     <Content Include="testfiles\3000RowsTable.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -41,6 +44,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="testfiles\dataset-multitable.xml" />
+    <Content Include="testfiles\datev.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="testfiles\Q&amp;A.xls">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

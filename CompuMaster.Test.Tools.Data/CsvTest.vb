@@ -1,5 +1,6 @@
 ﻿Imports NUnit.Framework
 Imports System.Data
+Imports System.Security.Policy
 
 Namespace CompuMaster.Test.Data
 
@@ -22,6 +23,83 @@ Namespace CompuMaster.Test.Data
             Assert.Greater(dt.Columns.Count, 0)
             Assert.Greater(dt.Rows.Count, 0)
         End Sub
+
+        <Test> Public Sub ReadDataTableFromDatevCsv()
+            Dim TestFile As String = AssemblyTestEnvironment.TestFileAbsolutePath(System.IO.Path.Combine("testfiles", "datev.csv"))
+            Dim StartLine As Integer = 6
+            System.Console.WriteLine("TestFile=" & TestFile)
+            System.Console.WriteLine("StartLine=" & TestFile)
+
+            Dim CsvCulture As System.Globalization.CultureInfo = System.Globalization.CultureInfo.CreateSpecificCulture("de-DE")
+            Dim FileEncoding As System.Text.Encoding = System.Text.Encoding.UTF8
+            Dim FileEncodingName As String = "UTF-8"
+            Dim dt As DataTable
+
+            'CSV-File
+            dt = CompuMaster.Data.Csv.ReadDataTableFromCsvFile(
+                TestFile, True, StartLine,
+                FileEncoding, CsvCulture, """"c, False, True)
+            Console.WriteLine(CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(dt))
+            Assert.AreEqual(10, dt.Columns.Count)
+            Assert.AreEqual(3, dt.Rows.Count)
+
+            dt = CompuMaster.Data.Csv.ReadDataTableFromCsvFile(
+                TestFile, True, StartLine,
+                CompuMaster.Data.Csv.ReadLineEncodings.RowBreakCrLfOrCr_CellLineBreakLf, CompuMaster.Data.Csv.ReadLineEncodingAutoConversion.NoAutoConversion,
+                FileEncoding, CsvCulture, """"c, False, True)
+            Console.WriteLine(CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(dt))
+            Assert.AreEqual(10, dt.Columns.Count)
+            Assert.AreEqual(3, dt.Rows.Count)
+
+            dt = CompuMaster.Data.Csv.ReadDataTableFromCsvFile(
+                TestFile, True, StartLine,
+                FileEncodingName, columnSeparator:=";"c, recognizeTextBy:=""""c, recognizeMultipleColumnSeparatorCharsAsOne:=False, True)
+            Console.WriteLine(CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(dt))
+            Assert.AreEqual(10, dt.Columns.Count)
+            Assert.AreEqual(3, dt.Rows.Count)
+
+            dt = CompuMaster.Data.Csv.ReadDataTableFromCsvFile(
+                TestFile, True, StartLine,
+                CompuMaster.Data.Csv.ReadLineEncodings.RowBreakCrLfOrCr_CellLineBreakLf, CompuMaster.Data.Csv.ReadLineEncodingAutoConversion.NoAutoConversion,
+                FileEncodingName, columnSeparator:=";"c, recognizeTextBy:=""""c, recognizeMultipleColumnSeparatorCharsAsOne:=False, True)
+            Console.WriteLine(CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(dt))
+            Assert.AreEqual(10, dt.Columns.Count)
+            Assert.AreEqual(3, dt.Rows.Count)
+
+            'CSV-String
+            Dim CsvData As String = System.IO.File.ReadAllText(TestFile, FileEncoding)
+            dt = CompuMaster.Data.Csv.ReadDataTableFromCsvString(
+                CsvData, True, StartLine,
+                CsvCulture, """"c, False, True)
+            Console.WriteLine(CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(dt))
+            Assert.AreEqual(10, dt.Columns.Count)
+            Assert.AreEqual(3, dt.Rows.Count)
+
+            dt = CompuMaster.Data.Csv.ReadDataTableFromCsvString(
+                CsvData, True, StartLine,
+                CompuMaster.Data.Csv.ReadLineEncodings.RowBreakCrLfOrCr_CellLineBreakLf, CompuMaster.Data.Csv.ReadLineEncodingAutoConversion.NoAutoConversion,
+                CsvCulture, """"c, False, True)
+            Console.WriteLine(CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(dt))
+            Assert.AreEqual(10, dt.Columns.Count)
+            Assert.AreEqual(3, dt.Rows.Count)
+
+            dt = CompuMaster.Data.Csv.ReadDataTableFromCsvString(
+                CsvData, True, StartLine,
+                ";"c, """"c, False, True)
+            Console.WriteLine(CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(dt))
+            Assert.AreEqual(10, dt.Columns.Count)
+            Assert.AreEqual(3, dt.Rows.Count)
+
+            dt = CompuMaster.Data.Csv.ReadDataTableFromCsvString(
+                CsvData, True, StartLine,
+                CompuMaster.Data.Csv.ReadLineEncodings.RowBreakCrLfOrCr_CellLineBreakLf, CompuMaster.Data.Csv.ReadLineEncodingAutoConversion.NoAutoConversion,
+                ";"c, """"c, False, True)
+            Console.WriteLine(CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(dt))
+            Assert.AreEqual(10, dt.Columns.Count)
+            Assert.AreEqual(3, dt.Rows.Count)
+
+        End Sub
+
 
         ''' <summary>
         ''' Test from a mini-webserver providing a CSV download with missing response header content-type/charset 
