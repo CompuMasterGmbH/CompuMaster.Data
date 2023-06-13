@@ -646,7 +646,7 @@ Namespace CompuMaster.Data
                                 If IsIgnoreLine Then
                                     'do nothing
                                 Else
-                                    CurrentColumnValue.Append("""") 'TODO: needs to be recognizeTextBy-char!
+                                    CurrentColumnValue.Append(recognizeTextBy)
                                 End If
                                 'fix the position to be now after the second quotation marks
                                 CharPositionCounter += 1
