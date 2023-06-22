@@ -1884,6 +1884,23 @@ Namespace CompuMaster.Data
         '''     Return a string with all columns and rows, helpfull for debugging purposes
         ''' </summary>
         ''' <param name="dataTable">The datatable to retrieve the content from</param>
+        ''' <param name="fixedColumnWidths">Array of column widths, where value of 0 => invisible column, null or missing/unspecified => auto width; </param>
+        ''' <returns>All rows are separated by fixed width. If no rows have been processed, the user will get notified about this fact</returns>
+        ''' <remarks></remarks>
+        Public Shared Function ConvertToPlainTextTableFixedColumnWidths(ByVal dataTable As DataTable, ByVal fixedColumnWidths As Integer?()) As String
+            Dim EffectiveFixedColumnWidths = SuggestColumnWidthsForFixedPlainTables(dataTable)
+            For MyCounter As Integer = 0 To fixedColumnWidths.Length - 1
+                If fixedColumnWidths(MyCounter).HasValue Then
+                    EffectiveFixedColumnWidths(MyCounter) = fixedColumnWidths(MyCounter).Value
+                End If
+            Next
+            Return ConvertToPlainTextTableWithFixedColumnWidthsInternal(dataTable.Rows, dataTable.TableName, EffectiveFixedColumnWidths, Nothing)
+        End Function
+
+        ''' <summary>
+        '''     Return a string with all columns and rows, helpfull for debugging purposes
+        ''' </summary>
+        ''' <param name="dataTable">The datatable to retrieve the content from</param>
         ''' <returns>All rows are separated by fixed width. If no rows have been processed, the user will get notified about this fact</returns>
         ''' <remarks></remarks>
         Public Shared Function ConvertToPlainTextTableFixedColumnWidths(ByVal dataTable As DataTable, ByVal standardColumnWidth As Integer) As String
@@ -1962,6 +1979,28 @@ Namespace CompuMaster.Data
                                                                         verticalSeparatorForCells, Nothing)
         End Function
 
+        ''' <summary>
+        '''     Return a string with all columns and rows, helpfull for debugging purposes
+        ''' </summary>
+        ''' <param name="dataTable">The datatable to retrieve the content from</param>
+        ''' <returns>All rows are separated by fixed width. If no rows have been processed, the user will get notified about this fact</returns>
+        ''' <remarks></remarks>
+        Public Shared Function ConvertToPlainTextTableFixedColumnWidths(ByVal dataTable As DataTable, ByVal fixedColumnWidths As Integer?(),
+                                                                        horizontalSeparatorAfterHeader As String, horizontalSeparatorCells As String,
+                                                                        crossSeparator As String, verticalSeparatorAfterHeader As Char,
+                                                                        verticalSeparatorForCells As Char) As String
+            Dim EffectiveFixedColumnWidths = SuggestColumnWidthsForFixedPlainTables(dataTable)
+            For MyCounter As Integer = 0 To fixedColumnWidths.Length - 1
+                If fixedColumnWidths(MyCounter).HasValue Then
+                    EffectiveFixedColumnWidths(MyCounter) = fixedColumnWidths(MyCounter).Value
+                End If
+            Next
+            Return ConvertToPlainTextTableWithFixedColumnWidthsInternal(dataTable.Rows, dataTable.TableName, EffectiveFixedColumnWidths,
+                                                                        horizontalSeparatorAfterHeader, horizontalSeparatorCells,
+                                                                        crossSeparator, crossSeparator,
+                                                                        verticalSeparatorAfterHeader,
+                                                                        verticalSeparatorForCells, Nothing)
+        End Function
         ''' <summary>
         '''     Return a string with all columns and rows, helpfull for debugging purposes
         ''' </summary>
