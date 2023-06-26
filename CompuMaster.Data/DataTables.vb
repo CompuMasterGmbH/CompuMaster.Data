@@ -477,6 +477,25 @@ Namespace CompuMaster.Data
         End Function
 
         ''' <summary>
+        '''     Create a new data table clone with only some selected rows
+        ''' </summary>
+        ''' <param name="sourceRows">The rows of a source table to be copied</param>
+        ''' <returns>The new clone of the datatable or nothing if null/zero sourceRows are specified</returns>
+        Public Shared Function CopyDataTableWithSubsetOfRows(ByVal sourceRows As IEnumerable(Of DataRow)) As DataTable
+            If sourceRows Is Nothing OrElse sourceRows.Any = False Then Return Nothing
+            Dim SourceTable As DataTable = sourceRows(0).Table
+            Dim Result As DataTable = SourceTable.Clone
+
+            For Each SourceRow As DataRow In sourceRows
+                Dim MyNewRow As DataRow = Result.NewRow
+                MyNewRow.ItemArray = SourceRow.ItemArray
+                Result.Rows.Add(MyNewRow)
+            Next
+
+            Return Result
+        End Function
+
+        ''' <summary>
         '''     Remove those rows in the source column which haven't got the same value in the compare table
         ''' </summary>
         ''' <param name="sourceColumn">This is the column of the master table where all operations shall be executed</param>

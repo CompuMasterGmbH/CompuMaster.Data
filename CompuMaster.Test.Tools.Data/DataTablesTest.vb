@@ -539,6 +539,24 @@ Namespace CompuMaster.Test.Data
 
         End Sub
 
+        <Test()> Public Sub CopyDataTableWithSubsetOfRows_SelectedRows()
+            Dim dt As New DataTable
+            dt.Columns.Add("hi")
+            dt.Columns.Add("hi2")
+            dt.Rows.Add(New String() {"hi", "d"})
+            dt.Rows.Add(New String() {"hix", "dix"})
+            dt.Rows.Add(New String() {"l", "d"})
+
+            Dim dt2 As DataTable = CompuMaster.Data.DataTables.CopyDataTableWithSubsetOfRows(New DataRow() {dt.Rows(0), dt.Rows(1)})
+            Assert.AreEqual(2, dt2.Rows.Count())
+            Assert.AreEqual("hi", dt.Rows.Item(0).Item(0))
+            Assert.AreEqual("hix", dt.Rows.Item(1).Item(0))
+
+            dt2 = CompuMaster.Data.DataTables.CopyDataTableWithSubsetOfRows(New DataRow() {dt.Rows(1), dt.Rows(2)})
+            Assert.AreEqual("l", dt2.Rows.Item(1).Item(0))
+
+        End Sub
+
         <Test()> Public Sub CreateDataRowClone()
             Dim dt As New DataTable
             dt.Columns.Add("id", GetType(Integer))
