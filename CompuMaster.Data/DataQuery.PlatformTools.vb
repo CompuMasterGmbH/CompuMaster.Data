@@ -37,7 +37,7 @@ Namespace CompuMaster.Data.DataQuery
                 '64bit CLR
                 Return ClrRuntimePlatform.x64
             Else
-                Throw New NotImplementedException("Platform lookup with IntPtr.Size " & IntPtr.Size.ToString & " not yet implemented")
+                Throw New NotImplementedException("Platform lookup with IntPtr.Size " & IntPtr.Size.ToString(Threading.Thread.CurrentThread.CurrentCulture) & " not yet implemented")
             End If
         End Function
 
@@ -57,7 +57,7 @@ Namespace CompuMaster.Data.DataQuery
             ElseIf provider = "OleDB" Then
                 MyConn = New System.Data.OleDb.OleDbConnection(connectionString)
             Else
-                Throw New Exception("Invalid data provider")
+                Throw New NotSupportedException("Invalid data provider: " & provider)
             End If
             Return MyConn
         End Function
@@ -132,7 +132,7 @@ Namespace CompuMaster.Data.DataQuery
         Public Shared Function ProbeOleDbProvider(nameMustStartWith As String) As Boolean
             Dim Providers As Generic.List(Of String) = InstalledOleDbProvidersList()
             For MyCounter As Integer = 0 To Providers.Count - 1
-                If Providers(MyCounter).StartsWith(nameMustStartWith) Then Return True
+                If Providers(MyCounter).StartsWith(nameMustStartWith, StringComparison.InvariantCulture) Then Return True
             Next
             Return False
         End Function
@@ -161,7 +161,7 @@ Namespace CompuMaster.Data.DataQuery
             Dim MatchingProviders As Generic.List(Of String)
             MatchingProviders = DataQuery.PlatformTools.InstalledOleDbProvidersList.FindAll(
                 Function(value As String) As Boolean
-                    Return value.StartsWith("Microsoft.ACE.OLEDB.")
+                    Return value.StartsWith("Microsoft.ACE.OLEDB.", StringComparison.InvariantCulture)
                 End Function)
             If MatchingProviders.Count = 0 Then
                 Return Nothing
@@ -179,7 +179,7 @@ Namespace CompuMaster.Data.DataQuery
             Dim MatchingProviders As Generic.List(Of String)
             MatchingProviders = DataQuery.PlatformTools.InstalledOleDbProvidersList.FindAll(
                 Function(value As String) As Boolean
-                    Return value.StartsWith("Microsoft.Jet.OLEDB.")
+                    Return value.StartsWith("Microsoft.Jet.OLEDB.", StringComparison.InvariantCulture)
                 End Function)
             If MatchingProviders.Count = 0 Then
                 Return Nothing

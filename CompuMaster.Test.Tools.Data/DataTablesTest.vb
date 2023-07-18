@@ -2505,7 +2505,9 @@ Namespace CompuMaster.Test.Data
 
             Table = Me.TestTable2WithInvariantCultureInColumnNames
             Assert.AreEqual(New String() {"Frage", "Antwort A", "Antwort B", "Antwort C", "Antwort D", "Rubrik", "Richtige Antwort", "Erläuterung", "100 ", "200 ", "500 ", "1000 ", "5000 ", "10000 ", "20000 "}, CompuMaster.Data.DataTables.AllColumnNames(Table))
+#Disable Warning BC40000 ' Typ oder Element ist veraltet
             CompuMaster.Data.DataTables.SortColumns(Table, Table.Columns(4), Table.Columns(3), Table.Columns(2), Table.Columns(1))
+#Enable Warning BC40000 ' Typ oder Element ist veraltet
             Assert.AreEqual(New String() {"Antwort D", "Antwort C", "Antwort B", "Antwort A", "Frage", "Rubrik", "Richtige Antwort", "Erläuterung", "100 ", "200 ", "500 ", "1000 ", "5000 ", "10000 ", "20000 "}, CompuMaster.Data.DataTables.AllColumnNames(Table))
 
             Table = Me.TestTable2WithInvariantCultureInColumnNames
@@ -2519,7 +2521,14 @@ Namespace CompuMaster.Test.Data
 
             Table = Me.TestTable2WithInvariantCultureInColumnNames
             Assert.AreEqual(New String() {"Frage", "Antwort A", "Antwort B", "Antwort C", "Antwort D", "Rubrik", "Richtige Antwort", "Erläuterung", "100 ", "200 ", "500 ", "1000 ", "5000 ", "10000 ", "20000 "}, CompuMaster.Data.DataTables.AllColumnNames(Table))
+#Disable Warning BC40000 ' Typ oder Element ist veraltet
             CompuMaster.Data.DataTables.ReArrangeColumns(Table, Table.Columns(4), Table.Columns(3), Table.Columns(2), Table.Columns(1))
+#Enable Warning BC40000 ' Typ oder Element ist veraltet
+            Assert.AreEqual(New String() {"Antwort D", "Antwort C", "Antwort B", "Antwort A"}, CompuMaster.Data.DataTables.AllColumnNames(Table))
+
+            Table = Me.TestTable2WithInvariantCultureInColumnNames
+            Assert.AreEqual(New String() {"Frage", "Antwort A", "Antwort B", "Antwort C", "Antwort D", "Rubrik", "Richtige Antwort", "Erläuterung", "100 ", "200 ", "500 ", "1000 ", "5000 ", "10000 ", "20000 "}, CompuMaster.Data.DataTables.AllColumnNames(Table))
+            CompuMaster.Data.DataTables.ReArrangeColumns(Table.Columns(4), Table.Columns(3), Table.Columns(2), Table.Columns(1))
             Assert.AreEqual(New String() {"Antwort D", "Antwort C", "Antwort B", "Antwort A"}, CompuMaster.Data.DataTables.AllColumnNames(Table))
 
             Table = Me.TestTable2WithInvariantCultureInColumnNames

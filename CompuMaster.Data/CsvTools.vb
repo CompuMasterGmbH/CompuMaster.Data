@@ -1573,7 +1573,7 @@ Namespace CompuMaster.Data
                     'Other data types which do not require textual handling
                     Dim Value As String
                     If cultureFormatProvider Is Globalization.CultureInfo.InvariantCulture Then
-                        Value = (CType(cellValue, DateTime).ToString("yyyy-MM-dd HH:mm:ss.fff"))
+                        Value = (CType(cellValue, DateTime).ToString("yyyy-MM-dd HH:mm:ss.fff", Threading.Thread.CurrentThread.CurrentCulture))
                     Else
                         Value = (CType(cellValue, DateTime).ToString(cultureFormatProvider))
                     End If

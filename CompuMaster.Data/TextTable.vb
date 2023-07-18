@@ -39,7 +39,7 @@ Namespace CompuMaster.Data
                         Dim column As DataColumn = row.Table.Columns(ColCounter)
                         Dim RenderValue As Object
                         RenderValue = columnFormatting(column, row(column))
-                        Cells.Add(New TextCell(String.Format("{0}", RenderValue)))
+                        Cells.Add(New TextCell(String.Format(Threading.Thread.CurrentThread.CurrentCulture, "{0}", RenderValue)))
                     Next
                     Rows.Add(New TextRow(Cells))
                 End If

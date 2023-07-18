@@ -771,9 +771,9 @@ Namespace CompuMaster.Data
             If label IsNot Nothing Then
                 Result.Append(titleTagOpener)
                 If htmlEncodeCellContentAndLineBreaks Then
-                    Result.Append(HtmlEncodeLineBreaks(System.Web.HttpUtility.HtmlEncode(String.Format("{0}", label))))
+                    Result.Append(HtmlEncodeLineBreaks(System.Web.HttpUtility.HtmlEncode(String.Format(Threading.Thread.CurrentThread.CurrentCulture, "{0}", label))))
                 Else
-                    Result.Append(String.Format("{0}", label))
+                    Result.Append(String.Format(Threading.Thread.CurrentThread.CurrentCulture, "{0}", label))
                 End If
                 Result.Append(titleTagEnd & System.Environment.NewLine)
             End If
@@ -791,15 +791,15 @@ Namespace CompuMaster.Data
                 Result.Append("<TH>")
                 If column.Caption <> Nothing Then
                     If htmlEncodeCellContentAndLineBreaks AndAlso HtmlEncodeCellContentDisabledForCurrentColumn = False Then
-                        Result.Append(HtmlEncodeLineBreaks(System.Web.HttpUtility.HtmlEncode(String.Format("{0}", column.Caption))))
+                        Result.Append(HtmlEncodeLineBreaks(System.Web.HttpUtility.HtmlEncode(String.Format(Threading.Thread.CurrentThread.CurrentCulture, "{0}", column.Caption))))
                     Else
-                        Result.Append(String.Format("{0}", column.Caption))
+                        Result.Append(String.Format(Threading.Thread.CurrentThread.CurrentCulture, "{0}", column.Caption))
                     End If
                 Else
                     If htmlEncodeCellContentAndLineBreaks AndAlso HtmlEncodeCellContentDisabledForCurrentColumn = False Then
-                        Result.Append(HtmlEncodeLineBreaks(System.Web.HttpUtility.HtmlEncode(String.Format("{0}", column.ColumnName))))
+                        Result.Append(HtmlEncodeLineBreaks(System.Web.HttpUtility.HtmlEncode(String.Format(Threading.Thread.CurrentThread.CurrentCulture, "{0}", column.ColumnName))))
                     Else
-                        Result.Append(String.Format("{0}", column.ColumnName))
+                        Result.Append(String.Format(Threading.Thread.CurrentThread.CurrentCulture, "{0}", column.ColumnName))
                     End If
                 End If
                 Result.Append("</TH>")
@@ -815,9 +815,9 @@ Namespace CompuMaster.Data
                         )
                     Result.Append("<TD>")
                     If htmlEncodeCellContentAndLineBreaks AndAlso HtmlEncodeCellContentDisabledForCurrentColumn = False Then
-                        Result.Append(HtmlEncodeLineBreaks(System.Web.HttpUtility.HtmlEncode(String.Format("{0}", row(column)))))
+                        Result.Append(HtmlEncodeLineBreaks(System.Web.HttpUtility.HtmlEncode(String.Format(Threading.Thread.CurrentThread.CurrentCulture, "{0}", row(column)))))
                     Else
-                        Result.Append(String.Format("{0}", row(column)))
+                        Result.Append(String.Format(Threading.Thread.CurrentThread.CurrentCulture, "{0}", row(column)))
                     End If
                     Result.Append("</TD>")
                 Next
@@ -859,25 +859,25 @@ Namespace CompuMaster.Data
             Const separator As Char = ControlChars.Tab
             Dim Result As New System.Text.StringBuilder
             If label <> "" Then
-                Result.Append(String.Format("{0}", label) & System.Environment.NewLine)
+                Result.AppendLine(String.Format(Threading.Thread.CurrentThread.CurrentCulture, "{0}", label))
             End If
             If rows.Length <= 0 Then
-                Result.Append("no rows found" & System.Environment.NewLine)
+                Result.AppendLine("no rows found")
                 Return Result.ToString
             End If
             For Each column As DataColumn In rows(0).Table.Columns
                 If column.Ordinal <> 0 Then Result.Append(separator)
                 If column.Caption <> Nothing Then
-                    Result.Append(String.Format("{0}", column.Caption))
+                    Result.Append(String.Format(Threading.Thread.CurrentThread.CurrentCulture, "{0}", column.Caption))
                 Else
-                    Result.Append(String.Format("{0}", column.ColumnName))
+                    Result.Append(String.Format(Threading.Thread.CurrentThread.CurrentCulture, "{0}", column.ColumnName))
                 End If
             Next
             Result.Append(System.Environment.NewLine)
             For Each row As DataRow In rows
                 For Each column As DataColumn In row.Table.Columns
                     If column.Ordinal <> 0 Then Result.Append(separator)
-                    Result.Append(String.Format("{0}", row(column)))
+                    Result.Append(String.Format(Threading.Thread.CurrentThread.CurrentCulture, "{0}", row(column)))
                 Next
                 Result.Append(System.Environment.NewLine)
             Next
@@ -894,18 +894,18 @@ Namespace CompuMaster.Data
             Const separator As Char = ControlChars.Tab
             Dim Result As New System.Text.StringBuilder
             If label <> "" Then
-                Result.Append(String.Format("{0}", label) & System.Environment.NewLine)
+                Result.AppendLine(String.Format(Threading.Thread.CurrentThread.CurrentCulture, "{0}", label))
             End If
             If rows.Count <= 0 Then
-                Result.Append("no rows found" & System.Environment.NewLine)
+                Result.AppendLine("no rows found")
                 Return Result.ToString
             End If
             For Each column As DataColumn In rows(0).Table.Columns
                 If column.Ordinal <> 0 Then Result.Append(separator)
                 If column.Caption <> Nothing Then
-                    Result.Append(String.Format("{0}", column.Caption))
+                    Result.Append(String.Format(Threading.Thread.CurrentThread.CurrentCulture, "{0}", column.Caption))
                 Else
-                    Result.Append(String.Format("{0}", column.ColumnName))
+                    Result.Append(String.Format(Threading.Thread.CurrentThread.CurrentCulture, "{0}", column.ColumnName))
                 End If
             Next
             Result.Append(System.Environment.NewLine)
@@ -913,7 +913,7 @@ Namespace CompuMaster.Data
                 If row.RowState <> DataRowState.Deleted Then
                     For Each column As DataColumn In row.Table.Columns
                         If column.Ordinal <> 0 Then Result.Append(separator)
-                        Result.Append(String.Format("{0}", row(column)))
+                        Result.Append(String.Format(Threading.Thread.CurrentThread.CurrentCulture, "{0}", row(column)))
                     Next
                     Result.Append(System.Environment.NewLine)
                 End If
@@ -1496,7 +1496,9 @@ Namespace CompuMaster.Data
 
             Dim ColumnNameAlreadyExistant As Boolean = False
             For MyCounter As Integer = 0 To dataTable.Columns.Count - 1
-                If String.Compare(suggestedColumnName, dataTable.Columns(MyCounter).ColumnName, True) = 0 Then
+#Disable Warning CA1309 ' Ordinalzeichenfolgenvergleich verwenden
+                If String.Compare(suggestedColumnName, dataTable.Columns(MyCounter).ColumnName, True, Threading.Thread.CurrentThread.CurrentCulture) = 0 Then
+#Enable Warning CA1309 ' Ordinalzeichenfolgenvergleich verwenden
                     ColumnNameAlreadyExistant = True
                 End If
             Next
@@ -1520,14 +1522,14 @@ Namespace CompuMaster.Data
                     If NumberPositionIndex = -1 OrElse NumberPositionIndex + 1 > suggestedColumnName.Length Then
                         'Attach a new counter value
                         NumberCounterValue = 1
-                        suggestedColumnName &= NumberCounterValue.ToString
+                        suggestedColumnName &= NumberCounterValue.ToString(Threading.Thread.CurrentThread.CurrentCulture)
                     Else
                         'Update the counter value
                         NumberCounterValue = CType(suggestedColumnName.Substring(NumberPositionIndex), Integer) + 1
 #If NETFRAMEWORK Then
-                        suggestedColumnName = suggestedColumnName.Substring(0, NumberPositionIndex) & NumberCounterValue.ToString
+                        suggestedColumnName = suggestedColumnName.Substring(0, NumberPositionIndex) & NumberCounterValue.ToString(Threading.Thread.CurrentThread.CurrentCulture)
 #Else
-                        suggestedColumnName = String.Concat(suggestedColumnName.AsSpan(0, NumberPositionIndex), NumberCounterValue.ToString)
+                        suggestedColumnName = String.Concat(suggestedColumnName.AsSpan(0, NumberPositionIndex), NumberCounterValue.ToString(Threading.Thread.CurrentThread.CurrentCulture))
 #End If
                     End If
                 Else

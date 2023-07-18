@@ -549,7 +549,7 @@ Namespace CompuMaster.Data
                     If Nullable.GetUnderlyingType(GetType(T)) IsNot Nothing AndAlso GetType(T).IsValueType AndAlso Nullable.GetUnderlyingType(GetType(T)) IsNot GetType(T) Then
                         Dim UnderlyingType As Type = Nullable.GetUnderlyingType(GetType(T)) 'e.g.: T = Nullable(Of Integer) -> UnderlyingType = Integer
                         Dim SplitValueOrNothing As String = StringNotEmptyOrNothing(SplitValue)
-                        Dim SplitValueAsT As T = CType(Convert.ChangeType(SplitValueOrNothing, UnderlyingType), T)
+                        Dim SplitValueAsT As T = CType(Convert.ChangeType(SplitValueOrNothing, UnderlyingType, Threading.Thread.CurrentThread.CurrentCulture), T)
                         Result.Add(CType(Activator.CreateInstance(GetType(T), SplitValueAsT), T))
                     Else
                         Result.Add(CType(CType(SplitValue, Object), T))
@@ -577,7 +577,7 @@ Namespace CompuMaster.Data
                     If Nullable.GetUnderlyingType(GetType(DateTime)) IsNot Nothing AndAlso GetType(DateTime).IsValueType AndAlso Nullable.GetUnderlyingType(GetType(DateTime)) IsNot GetType(DateTime) Then
                         Dim UnderlyingType As Type = Nullable.GetUnderlyingType(GetType(DateTime)) 'e.g.: T = Nullable(Of Integer) -> UnderlyingType = Integer
                         Dim SplitValueOrNothing As String = StringNotEmptyOrNothing(SplitValue)
-                        Dim SplitValueAsT As DateTime = CType(Convert.ChangeType(SplitValueOrNothing, UnderlyingType), DateTime)
+                        Dim SplitValueAsT As DateTime = CType(Convert.ChangeType(SplitValueOrNothing, UnderlyingType, Threading.Thread.CurrentThread.CurrentCulture), DateTime)
                         Result.Add(CType(Activator.CreateInstance(GetType(DateTime), SplitValueAsT), DateTime))
                     Else
                         Result.Add(CType(CType(SplitValue, Object), DateTime))
@@ -605,7 +605,7 @@ Namespace CompuMaster.Data
                     If Nullable.GetUnderlyingType(GetType(Boolean)) IsNot Nothing AndAlso GetType(Boolean).IsValueType AndAlso Nullable.GetUnderlyingType(GetType(Boolean)) IsNot GetType(Boolean) Then
                         Dim UnderlyingType As Type = Nullable.GetUnderlyingType(GetType(Boolean)) 'e.g.: T = Nullable(Of Integer) -> UnderlyingType = Integer
                         Dim SplitValueOrNothing As String = StringNotEmptyOrNothing(SplitValue)
-                        Dim SplitValueAsT As Boolean = CType(Convert.ChangeType(SplitValueOrNothing, UnderlyingType), Boolean)
+                        Dim SplitValueAsT As Boolean = CType(Convert.ChangeType(SplitValueOrNothing, UnderlyingType, Threading.Thread.CurrentThread.CurrentCulture), Boolean)
                         Result.Add(CType(Activator.CreateInstance(GetType(Boolean), SplitValueAsT), Boolean))
                     Else
                         Result.Add(CType(CType(SplitValue, Object), Boolean))
@@ -633,7 +633,7 @@ Namespace CompuMaster.Data
                     If Nullable.GetUnderlyingType(GetType(Byte)) IsNot Nothing AndAlso GetType(Byte).IsValueType AndAlso Nullable.GetUnderlyingType(GetType(Byte)) IsNot GetType(Byte) Then
                         Dim UnderlyingType As Type = Nullable.GetUnderlyingType(GetType(Byte)) 'e.g.: T = Nullable(Of Integer) -> UnderlyingType = Integer
                         Dim SplitValueOrNothing As String = StringNotEmptyOrNothing(SplitValue)
-                        Dim SplitValueAsT As Byte = CType(Convert.ChangeType(SplitValueOrNothing, UnderlyingType), Byte)
+                        Dim SplitValueAsT As Byte = CType(Convert.ChangeType(SplitValueOrNothing, UnderlyingType, Threading.Thread.CurrentThread.CurrentCulture), Byte)
                         Result.Add(CType(Activator.CreateInstance(GetType(Byte), SplitValueAsT), Byte))
                     Else
                         Result.Add(CType(CType(SplitValue, Object), Byte))
@@ -661,7 +661,7 @@ Namespace CompuMaster.Data
                     If Nullable.GetUnderlyingType(GetType(Double)) IsNot Nothing AndAlso GetType(Double).IsValueType AndAlso Nullable.GetUnderlyingType(GetType(Double)) IsNot GetType(Double) Then
                         Dim UnderlyingType As Type = Nullable.GetUnderlyingType(GetType(Double)) 'e.g.: T = Nullable(Of Integer) -> UnderlyingType = Integer
                         Dim SplitValueOrNothing As String = StringNotEmptyOrNothing(SplitValue)
-                        Dim SplitValueAsT As Double = CType(Convert.ChangeType(SplitValueOrNothing, UnderlyingType), Double)
+                        Dim SplitValueAsT As Double = CType(Convert.ChangeType(SplitValueOrNothing, UnderlyingType, Threading.Thread.CurrentThread.CurrentCulture), Double)
                         Result.Add(CType(Activator.CreateInstance(GetType(Double), SplitValueAsT), Double))
                     Else
                         Result.Add(CType(CType(SplitValue, Object), Double))
@@ -689,7 +689,7 @@ Namespace CompuMaster.Data
                     If Nullable.GetUnderlyingType(GetType(Integer)) IsNot Nothing AndAlso GetType(Integer).IsValueType AndAlso Nullable.GetUnderlyingType(GetType(Integer)) IsNot GetType(Integer) Then
                         Dim UnderlyingType As Type = Nullable.GetUnderlyingType(GetType(Integer)) 'e.g.: T = Nullable(Of Integer) -> UnderlyingType = Integer
                         Dim SplitValueOrNothing As String = StringNotEmptyOrNothing(SplitValue)
-                        Dim SplitValueAsT As Integer = CType(Convert.ChangeType(SplitValueOrNothing, UnderlyingType), Integer)
+                        Dim SplitValueAsT As Integer = CType(Convert.ChangeType(SplitValueOrNothing, UnderlyingType, Threading.Thread.CurrentThread.CurrentCulture), Integer)
                         Result.Add(CType(Activator.CreateInstance(GetType(Integer), SplitValueAsT), Integer))
                     Else
                         Result.Add(CType(CType(SplitValue, Object), Integer))
@@ -717,7 +717,7 @@ Namespace CompuMaster.Data
                     If Nullable.GetUnderlyingType(GetType(String)) IsNot Nothing AndAlso GetType(String).IsValueType AndAlso Nullable.GetUnderlyingType(GetType(String)) IsNot GetType(String) Then
                         Dim UnderlyingType As Type = Nullable.GetUnderlyingType(GetType(String)) 'e.g.: T = Nullable(Of Integer) -> UnderlyingType = Integer
                         Dim SplitValueOrNothing As String = StringNotEmptyOrNothing(SplitValue)
-                        Dim SplitValueAsT As String = CType(Convert.ChangeType(SplitValueOrNothing, UnderlyingType), String)
+                        Dim SplitValueAsT As String = CType(Convert.ChangeType(SplitValueOrNothing, UnderlyingType, Threading.Thread.CurrentThread.CurrentCulture), String)
                         Result.Add(CType(Activator.CreateInstance(GetType(String), SplitValueAsT), String))
                     Else
                         Result.Add(CType(CType(SplitValue, Object), String))
