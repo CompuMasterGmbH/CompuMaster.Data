@@ -617,7 +617,9 @@ Namespace CompuMaster.Data
                             End If
                         ElseIf IsDBNull(comparisonTable.Rows(MyCompCounter)(valuesMustExistInThisColumnToKeepTheSourceRow)) Then
                             'Not identical, continue search
+#Disable Warning CA1309 ' Ordinalzeichenfolgenvergleich verwenden
                         ElseIf String.Compare(CType(sourceTable.Rows(MyCounter)(sourceColumn), String), CType(comparisonTable.Rows(MyCompCounter)(valuesMustExistInThisColumnToKeepTheSourceRow), String), ignoreCaseInStrings, System.Globalization.CultureInfo.InvariantCulture) = 0 Then
+#Enable Warning CA1309 ' Ordinalzeichenfolgenvergleich verwenden
                             'Case insensitive comparison resulted to successful match
                             MatchFound = True
                             Exit For
@@ -759,7 +761,9 @@ Namespace CompuMaster.Data
                             End If
                         ElseIf IsDBNull(comparisonTable.Rows(MyCompCounter)(valuesMustExistInThisColumnToKeepTheSourceRow)) Then
                             'Not identical, continue search
+#Disable Warning CA1309 ' Ordinalzeichenfolgenvergleich verwenden
                         ElseIf String.Compare(CType(sourceTable.Rows(MyCounter)(sourceColumn), String), CType(comparisonTable.Rows(MyCompCounter)(valuesMustExistInThisColumnToKeepTheSourceRow), String), ignoreCaseInStrings, System.Globalization.CultureInfo.InvariantCulture) = 0 Then
+#Enable Warning CA1309 ' Ordinalzeichenfolgenvergleich verwenden
                             'Case insensitive comparison resulted to successful match
                             MatchFound = True
                             Exit For
@@ -1817,6 +1821,36 @@ Namespace CompuMaster.Data
         '''     Return a string with all columns and rows, helpfull for debugging purposes
         ''' </summary>
         ''' <param name="dataRows">The datatable to retrieve the content from</param>
+        ''' <param name="tableTitle">The headline for the table</param>
+        ''' <returns>All rows are separated by fixed width. If no rows have been processed, the user will get notified about this fact</returns>
+        ''' <remarks></remarks>
+        Public Shared Function ConvertToPlainTextTableFixedColumnWidths(ByVal dataRows As DataRow(), options As ConvertToPlainTextTableOptions) As String
+            Return ConvertToPlainTextTableWithFixedColumnWidthsInternal(dataRows, options.TableTitle,
+                                                                        If(options.FixedColumnWidths IsNot Nothing, options.FixedColumnWidths, SuggestColumnWidthsForFixedPlainTables(dataRows, options.OptimalWidthIsFoundWhenPercentageNumberOfRowsFitIntoCell)),
+                                                                        options.HorizontalSeparatorAfterHeader, options.HorizontalSeparatorForCells, options.CrossSeparatorHeader, options.CrossSeparatorCells, options.VerticalSeparatorAfterHeader.GetValueOrDefault, options.VerticalSeparatorForCells.GetValueOrDefault,
+                                                                        options.ColumnFormatting)
+
+        End Function
+
+        ''' <summary>
+        '''     Return a string with all columns and rows, helpfull for debugging purposes
+        ''' </summary>
+        ''' <param name="dataRows">The datatable to retrieve the content from</param>
+        ''' <param name="tableTitle">The headline for the table</param>
+        ''' <returns>All rows are separated by fixed width. If no rows have been processed, the user will get notified about this fact</returns>
+        ''' <remarks></remarks>
+        Public Shared Function ConvertToPlainTextTableFixedColumnWidths(ByVal table As DataTable, options As ConvertToPlainTextTableOptions) As String
+            Return ConvertToPlainTextTableWithFixedColumnWidthsInternal(table.Rows, options.TableTitle,
+                                                                        If(options.FixedColumnWidths IsNot Nothing, options.FixedColumnWidths, SuggestColumnWidthsForFixedPlainTables(table.Rows, options.OptimalWidthIsFoundWhenPercentageNumberOfRowsFitIntoCell)),
+                                                                        options.HorizontalSeparatorAfterHeader, options.HorizontalSeparatorForCells, options.CrossSeparatorHeader, options.CrossSeparatorCells, options.VerticalSeparatorAfterHeader.GetValueOrDefault, options.VerticalSeparatorForCells.GetValueOrDefault,
+                                                                        options.ColumnFormatting)
+
+        End Function
+
+        ''' <summary>
+        '''     Return a string with all columns and rows, helpfull for debugging purposes
+        ''' </summary>
+        ''' <param name="dataRows">The datatable to retrieve the content from</param>
         ''' <returns>All rows are separated by fixed width. If no rows have been processed, the user will get notified about this fact</returns>
         ''' <remarks></remarks>
         Public Shared Function ConvertToPlainTextTableFixedColumnWidths(ByVal dataRows As DataRow(), columnFormatting As DataColumnToString) As String
@@ -2170,9 +2204,9 @@ Namespace CompuMaster.Data
                 End If
                 If textAlignmentRight = True Then Result.Append(" "c)
                 If column.Caption <> Nothing Then
-                    Result.Append(TrimStringToFixedWidth(String.Format("{0}", column.Caption), fixedColumnWidths(ColCounter), ""))
+                    Result.Append(TrimStringToFixedWidth(String.Format(Threading.Thread.CurrentThread.CurrentCulture, "{0}", column.Caption), fixedColumnWidths(ColCounter), ""))
                 Else
-                    Result.Append(TrimStringToFixedWidth(String.Format("{0}", column.ColumnName), fixedColumnWidths(ColCounter), ""))
+                    Result.Append(TrimStringToFixedWidth(String.Format(Threading.Thread.CurrentThread.CurrentCulture, "{0}", column.ColumnName), fixedColumnWidths(ColCounter), ""))
                 End If
                 If ColCounter = table.Columns.Count - 1 Then Result.Append(verticalSeparatorCells.TrimEnd)
             Next
@@ -2200,7 +2234,7 @@ Namespace CompuMaster.Data
                     Else
                         RenderValue = columnFormatting(column, row(column))
                     End If
-                    Result.Append(TrimStringToFixedWidth(String.Format("{0}", RenderValue), fixedColumnWidths(ColCounter), ""))
+                    Result.Append(TrimStringToFixedWidth(String.Format(Threading.Thread.CurrentThread.CurrentCulture, "{0}", RenderValue), fixedColumnWidths(ColCounter), ""))
                     If ColCounter = table.Columns.Count - 1 Then Result.Append(verticalSeparatorCells.TrimEnd)
                 Next
                 Result.Append(System.Environment.NewLine)
@@ -2338,16 +2372,16 @@ Namespace CompuMaster.Data
             For ColCounter As Integer = 0 To table.Columns.Count - 1
                 Dim MinWidthForHeader As Integer
                 If table.Columns(ColCounter).Caption <> Nothing Then
-                    MinWidthForHeader = (String.Format("{0}", table.Columns(ColCounter).Caption)).Length
+                    MinWidthForHeader = (String.Format(Threading.Thread.CurrentThread.CurrentCulture, "{0}", table.Columns(ColCounter).Caption)).Length
                 Else
-                    MinWidthForHeader = (String.Format("{0}", table.Columns(ColCounter).ColumnName)).Length
+                    MinWidthForHeader = (String.Format(Threading.Thread.CurrentThread.CurrentCulture, "{0}", table.Columns(ColCounter).ColumnName)).Length
                 End If
                 Dim MinWidthForCells As Integer
                 If rows.Length > 0 Then
                     If table.Columns(ColCounter).DataType.IsValueType AndAlso Not GetType(String).IsInstanceOfType(table.Columns(ColCounter).DataType) Then
                         'number or date/time
                         For RowCounter As Integer = 0 To rows.Length - 1
-                            MinWidthForCells = System.Math.Max(MinWidthForCells, String.Format("{0}", rows(RowCounter)(ColCounter)).Length)
+                            MinWidthForCells = System.Math.Max(MinWidthForCells, String.Format(Threading.Thread.CurrentThread.CurrentCulture, "{0}", rows(RowCounter)(ColCounter)).Length)
                         Next
                     Else
                         'string or any other object
@@ -2359,7 +2393,7 @@ Namespace CompuMaster.Data
                             Else
                                 RenderValue = columnFormatting(table.Columns(ColCounter), rows(RowCounter)(ColCounter))
                             End If
-                            cellWidths(RowCounter) = String.Format("{0}", RenderValue).Length
+                            cellWidths(RowCounter) = String.Format(Threading.Thread.CurrentThread.CurrentCulture, "{0}", RenderValue).Length
                         Next
                         MinWidthForCells = MaxValueOfFirstXPercent(cellWidths, optimalWidthWhenPercentageNumberOfRowsFitIntoCell)
                     End If
@@ -2383,9 +2417,9 @@ Namespace CompuMaster.Data
             For ColCounter As Integer = 0 To table.Columns.Count - 1
                 Dim MinWidthForHeader As Integer
                 If table.Columns(ColCounter).Caption <> Nothing Then
-                    MinWidthForHeader = (String.Format("{0}", table.Columns(ColCounter).Caption)).Length
+                    MinWidthForHeader = (String.Format(Threading.Thread.CurrentThread.CurrentCulture, "{0}", table.Columns(ColCounter).Caption)).Length
                 Else
-                    MinWidthForHeader = (String.Format("{0}", table.Columns(ColCounter).ColumnName)).Length
+                    MinWidthForHeader = (String.Format(Threading.Thread.CurrentThread.CurrentCulture, "{0}", table.Columns(ColCounter).ColumnName)).Length
                 End If
                 Dim MinWidthForCells As Integer
                 If rows.Count > 0 Then
@@ -2393,7 +2427,7 @@ Namespace CompuMaster.Data
                         'number or date/time
                         MinWidthForCells = 1
                         For RowCounter As Integer = 0 To rows.Count - 1
-                            MinWidthForCells = System.Math.Max(MinWidthForCells, String.Format("{0}", rows(RowCounter)(ColCounter)).Length)
+                            MinWidthForCells = System.Math.Max(MinWidthForCells, String.Format(Threading.Thread.CurrentThread.CurrentCulture, "{0}", rows(RowCounter)(ColCounter)).Length)
                         Next
                     Else
                         'string or any other object
@@ -2405,7 +2439,7 @@ Namespace CompuMaster.Data
                             Else
                                 RenderValue = columnFormatting(table.Columns(ColCounter), rows(RowCounter)(ColCounter))
                             End If
-                            cellWidths(RowCounter) = String.Format("{0}", RenderValue).Length
+                            cellWidths(RowCounter) = String.Format(Threading.Thread.CurrentThread.CurrentCulture, "{0}", RenderValue).Length
                         Next
                         MinWidthForCells = MaxValueOfFirstXPercent(cellWidths, optimalWidthWhenPercentageNumberOfRowsFitIntoCell)
                     End If
@@ -2482,7 +2516,7 @@ Namespace CompuMaster.Data
 
             'Add table name
             If label <> "" Then
-                Result.Append(String.Format("{0}", label) & System.Environment.NewLine)
+                Result.Append(String.Format(Threading.Thread.CurrentThread.CurrentCulture, "{0}", label) & System.Environment.NewLine)
             End If
             If rows.Length <= 0 Then
                 Result.Append("no rows found" & System.Environment.NewLine)
@@ -2493,9 +2527,9 @@ Namespace CompuMaster.Data
                 Dim column As DataColumn = rows(0).Table.Columns(ColCounter)
                 If ColCounter <> 0 Then Result.Append(horizontalSeparatorAfterHeader)
                 If column.Caption <> Nothing Then
-                    Result.Append(TrimStringToFixedWidth(String.Format("{0}", column.Caption), fixedColumnWidths(ColCounter), SuffixIfValueMustBeShortened))
+                    Result.Append(TrimStringToFixedWidth(String.Format(Threading.Thread.CurrentThread.CurrentCulture, "{0}", column.Caption), fixedColumnWidths(ColCounter), SuffixIfValueMustBeShortened))
                 Else
-                    Result.Append(TrimStringToFixedWidth(String.Format("{0}", column.ColumnName), fixedColumnWidths(ColCounter), SuffixIfValueMustBeShortened))
+                    Result.Append(TrimStringToFixedWidth(String.Format(Threading.Thread.CurrentThread.CurrentCulture, "{0}", column.ColumnName), fixedColumnWidths(ColCounter), SuffixIfValueMustBeShortened))
                 End If
             Next
             Result.Append(System.Environment.NewLine)
@@ -2522,7 +2556,7 @@ Namespace CompuMaster.Data
                     Else
                         RenderValue = columnFormatting(column, row(column))
                     End If
-                    Result.Append(TrimStringToFixedWidth(String.Format("{0}", RenderValue), fixedColumnWidths(ColCounter), SuffixIfValueMustBeShortened))
+                    Result.Append(TrimStringToFixedWidth(String.Format(Threading.Thread.CurrentThread.CurrentCulture, "{0}", RenderValue), fixedColumnWidths(ColCounter), SuffixIfValueMustBeShortened))
                 Next
                 Result.Append(System.Environment.NewLine)
                 If verticalSeparatorForCells <> Nothing Then
@@ -2557,39 +2591,50 @@ Namespace CompuMaster.Data
         ''' <param name="verticalSeparatorForCells"></param>
         ''' <returns>All rows are with fixed column withs. If no rows have been processed, the user will get notified about this fact</returns>
         ''' <remarks></remarks>
+        '<Obsolete("Use ConvertToPlainTextTableWithFixedColumnWidthsInternal instead", True)>
         Private Shared Function ConvertToPlainTextTableWithFixedColumnWidthsInternal(ByVal rows As DataRowCollection, ByVal label As String,
                                                                               ByVal fixedColumnWidths As Integer(),
                                                                               horizontalSeparatorAfterHeader As String, horizontalSeparatorForCells As String,
                                                                               crossSeparatorHeader As String, crossSeparatorCells As String,
                                                                               verticalSeparatorAfterHeader As Char, verticalSeparatorForCells As Char,
                                                                               columnFormatting As DataColumnToString) As String
-            If Len(horizontalSeparatorForCells) <> Len(horizontalSeparatorAfterHeader) Then Throw New ArgumentException("Length of verticalSeparatorHeader and verticalSeparatorCells must be equal")
-            If (Char.GetNumericValue(verticalSeparatorAfterHeader) > 0 OrElse Char.GetNumericValue(verticalSeparatorForCells) > 0) AndAlso Len(crossSeparatorHeader) <> Len(horizontalSeparatorAfterHeader) Then Throw New ArgumentException("Length of verticalSeparatorHeader and crossSeparator must be equal since horizontal lines are requested")
+            Return ConvertToPlainTextTableWithFixedColumnWidthsInternal(rows, New ConvertToPlainTextTableOptions() With {
+                .TableTitle = label,
+                .FixedColumnWidths = fixedColumnWidths,
+                .HorizontalSeparatorAfterHeader = horizontalSeparatorAfterHeader,
+                .HorizontalSeparatorForCells = horizontalSeparatorForCells,
+                .CrossSeparatorHeader = crossSeparatorHeader,
+                .CrossSeparatorCells = crossSeparatorCells,
+                .VerticalSeparatorAfterHeader = If(verticalSeparatorAfterHeader <> Nothing, verticalSeparatorAfterHeader, New Char?),
+                .VerticalSeparatorForCells = If(verticalSeparatorForCells <> Nothing, verticalSeparatorForCells, New Char?),
+                .ColumnFormatting = columnFormatting
+                })
+        End Function
+
+        ''' <summary>
+        '''     Return a string with all columns and rows, helpfull for debugging purposes
+        ''' </summary>
+        ''' <param name="rows">The rows to be processed</param>
+        ''' <param name="options">Options for output style and data</param>
+        ''' <returns>All rows are with fixed column withs. If no rows have been processed, the user will get notified about this fact</returns>
+        ''' <remarks></remarks>
+        Private Shared Function ConvertToPlainTextTableWithFixedColumnWidthsInternal(ByVal rows As DataRowCollection, options As ConvertToPlainTextTableOptions) As String
+            options.Validate()
             Dim Result As New System.Text.StringBuilder
             'Add table name
-            If label <> "" Then
-                Result.Append(String.Format("{0}", label) & System.Environment.NewLine)
+            If options.TableTitle <> "" Then
+                Result.AppendLine(String.Format(Threading.Thread.CurrentThread.CurrentCulture, "{0}", options.TableTitle))
             End If
             If rows.Count <= 0 Then
-                Result.Append("no rows found" & System.Environment.NewLine)
+                If options.NoRowsFoundMessage <> Nothing Then Result.AppendLine(options.NoRowsFoundMessage)
                 Return Result.ToString
             End If
             'Add converted table
-            Dim TextTable As New TextTable(rows(0).Table, columnFormatting)
-            Dim SuffixIfValueMustBeShortened As String = "..."
-            Dim VSeparatorAfterHeader As Char?
-            Dim VSeparatorForCells As Char?
-            If verticalSeparatorAfterHeader <> Nothing Then
-                VSeparatorAfterHeader = verticalSeparatorAfterHeader
-            End If
-            If verticalSeparatorForCells <> Nothing Then
-                VSeparatorForCells = verticalSeparatorForCells
-            End If
-            Result.Append(TextTable.ToString(fixedColumnWidths, System.Environment.NewLine, System.Environment.NewLine, "", "", SuffixIfValueMustBeShortened,
-                                             VSeparatorAfterHeader, VSeparatorForCells,
-                                             crossSeparatorHeader, crossSeparatorCells,
-                                             horizontalSeparatorAfterHeader, horizontalSeparatorForCells))
-            Result.Append(System.Environment.NewLine)
+            Dim TextTable As New TextTable(rows(0).Table, options.ColumnFormatting)
+            Result.AppendLine(TextTable.ToString(options.FixedColumnWidths, System.Environment.NewLine, System.Environment.NewLine, "", "", options.SuffixIfValueMustBeShortened,
+                                             options.VerticalSeparatorAfterHeader, options.VerticalSeparatorForCells,
+                                             options.CrossSeparatorHeader, options.CrossSeparatorCells,
+                                             options.HorizontalSeparatorAfterHeader, options.HorizontalSeparatorForCells))
             Return Result.ToString
         End Function
 
@@ -2692,16 +2737,16 @@ Namespace CompuMaster.Data
             Next
             Dim Result As New System.Text.StringBuilder
             If label <> "" Then
-                Result.Append(String.Format("{0}", label) & System.Environment.NewLine)
+                Result.Append(String.Format(Threading.Thread.CurrentThread.CurrentCulture, "{0}", label) & System.Environment.NewLine)
             End If
             For Each column As DataColumn In row.Table.Columns
                 If column.Caption <> Nothing Then
-                    Result.Append(Strings.RSet(String.Format("{0}", column.Caption), MaxLengthOfColumnTitle))
+                    Result.Append(Strings.RSet(String.Format(Threading.Thread.CurrentThread.CurrentCulture, "{0}", column.Caption), MaxLengthOfColumnTitle))
                 Else
-                    Result.Append(Strings.RSet(String.Format("{0}", column.ColumnName), MaxLengthOfColumnTitle))
+                    Result.Append(Strings.RSet(String.Format(Threading.Thread.CurrentThread.CurrentCulture, "{0}", column.ColumnName), MaxLengthOfColumnTitle))
                 End If
                 Result.Append(ColumnSeparator)
-                Result.Append(String.Format("{0}", row(column)))
+                Result.Append(String.Format(Threading.Thread.CurrentThread.CurrentCulture, "{0}", row(column)))
                 Result.Append(System.Environment.NewLine)
             Next
             Result.Append(System.Environment.NewLine)
@@ -3576,7 +3621,7 @@ Namespace CompuMaster.Data
             For MyCounter As Integer = 0 To columnsToMaintain.Length - 1
                 columns.Add(table.Columns(columnsToMaintain(MyCounter)))
             Next
-            ReArrangeColumns(table, CType(columns.ToArray(GetType(System.Data.DataColumn)), System.Data.DataColumn()))
+            ReArrangeColumns(CType(columns.ToArray(GetType(System.Data.DataColumn)), System.Data.DataColumn()))
         End Sub
 
         ''' <summary>
@@ -3584,9 +3629,22 @@ Namespace CompuMaster.Data
         ''' </summary>
         ''' <param name="table">A table</param>
         ''' <param name="columnsToMaintain">The new sort order for the columns</param>
+        <Obsolete("Use another overload without argument ""table"", instead"), System.ComponentModel.EditorBrowsable(ComponentModel.EditorBrowsableState.Never)>
         Public Shared Sub ReArrangeColumns(ByVal table As DataTable, ParamArray columnsToMaintain As DataColumn())
             RemoveColumnsExcept(table, columnsToMaintain)
-            SortColumns(table, columnsToMaintain)
+            SortColumns(columnsToMaintain)
+        End Sub
+
+        ''' <summary>
+        '''     Rearrange columns in the given order and remove all other columns
+        ''' </summary>
+        ''' <param name="table">A table</param>
+        ''' <param name="columnsToMaintain">The new sort order for the columns</param>
+        Public Shared Sub ReArrangeColumns(ParamArray columnsToMaintain As DataColumn())
+            If columnsToMaintain IsNot Nothing AndAlso columnsToMaintain.Length > 0 Then
+                RemoveColumnsExcept(columnsToMaintain(0).Table, columnsToMaintain)
+                SortColumns(columnsToMaintain)
+            End If
         End Sub
 
         ''' <summary>

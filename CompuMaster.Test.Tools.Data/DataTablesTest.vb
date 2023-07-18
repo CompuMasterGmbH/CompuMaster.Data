@@ -405,7 +405,46 @@ Namespace CompuMaster.Test.Data
 
         End Sub
 
-        <Test()> <CodeAnalysis.SuppressMessage("Style", "IDE0028:Initialisierung der Sammlung vereinfachen", Justification:="<Ausstehend>")>
+        <Test()>
+        <CodeAnalysis.SuppressMessage("Style", "IDE0028:Initialisierung der Sammlung vereinfachen")>
+        Public Sub ConvertToPlainTextTableFixedColumnWidths_DefaultStyles()
+            'Prepare test table
+            Dim dt As New DataTable
+            dt.Columns.Add("id", GetType(Integer))
+            dt.Columns.Add("Hi", GetType(String))
+            Dim row As DataRow = dt.NewRow
+            row.Item(0) = 23
+            row.Item(1) = "Hello World"
+            dt.Rows.Add(row)
+            'Delegated custom formatting
+            dt.Columns.Add("dict", GetType(System.Collections.Generic.Dictionary(Of String, String)))
+            dt.Rows(0)("dict") = New System.Collections.Generic.Dictionary(Of String, String)
+            Dim dict0 As New System.Collections.Generic.Dictionary(Of String, String)
+            dict0.Add("key1", "value1")
+            dict0.Add("key2", "value2")
+            dt.Rows(0)("dict") = dict0
+            dt.Rows.Add(dt.NewRow)
+
+            'Run tests
+            Dim StyleOptions As CompuMaster.Data.ConvertToPlainTextTableOptions
+            'Console.WriteLine(CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(dt, 5, 20, "|", "|", "+", "="c, "-"c, )
+
+            StyleOptions = New CompuMaster.Data.ConvertToPlainTextTableOptions
+            StyleOptions.ColumnFormatting = AddressOf ConvertColumnToString
+            Console.WriteLine(CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(dt, StyleOptions))
+
+            StyleOptions = CompuMaster.Data.ConvertToPlainTextTableOptions.SimpleLayout
+            StyleOptions.ColumnFormatting = AddressOf ConvertColumnToString
+            Console.WriteLine(CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(dt, StyleOptions))
+
+            StyleOptions = CompuMaster.Data.ConvertToPlainTextTableOptions.InlineBordersLayout
+            StyleOptions.ColumnFormatting = AddressOf ConvertColumnToString
+            Console.WriteLine(CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(dt, StyleOptions))
+
+        End Sub
+
+        <Test()>
+        <CodeAnalysis.SuppressMessage("Style", "IDE0028:Initialisierung der Sammlung vereinfachen")>
         Public Sub ConvertToPlainTextTableFixedColumnWidths()
             Dim dt As New DataTable
             dt.Columns.Add("id", GetType(Integer))
