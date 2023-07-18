@@ -154,11 +154,11 @@ Namespace CompuMaster.Data.DataQuery
             End If
             Dim Result As New List(Of DataProvider)
             For Each asm As System.Reflection.Assembly In AlreadyLoadedAssemblies
-                Dim asmName As String = asm.FullName.Substring(0, asm.FullName.IndexOf(","c)) 'asm.GetName.Name.ToLowerInvariant
+                Dim asmName As String = asm.FullName.Substring(0, asm.FullName.IndexOf(","c)).ToLowerInvariant 'asm.GetName.Name.ToLowerInvariant
                 Dim TryToFindDataConnectorsInAssembly As Boolean
                 If asmName = "system.data" OrElse asmName = "system.data.oracleclient" Then
                     TryToFindDataConnectorsInAssembly = True
-                ElseIf asmName = "system" OrElse asmName.StartsWith("system.") OrElse asmName.StartsWith("compumaster.data") OrElse asmName.StartsWith("mscorlib") OrElse asmName.StartsWith("mono.security") OrElse asmName.StartsWith("vshost") Then
+                ElseIf asmName = "system" OrElse asmName.StartsWith("system.", StringComparison.InvariantCulture) OrElse asmName.StartsWith("compumaster.data", StringComparison.InvariantCulture) OrElse asmName.StartsWith("mscorlib", StringComparison.InvariantCulture) OrElse asmName.StartsWith("mono.security", StringComparison.InvariantCulture) OrElse asmName.StartsWith("vshost", StringComparison.InvariantCulture) Then
                     TryToFindDataConnectorsInAssembly = False
                 Else
                     TryToFindDataConnectorsInAssembly = True
@@ -214,7 +214,7 @@ Namespace CompuMaster.Data.DataQuery
                 TypeProperties = GetTypePublicProperties(type)
             Catch ex As System.Reflection.ReflectionTypeLoadException
                 'just ignore this type
-                Return New System.Reflection.PropertyInfo() {}
+                Return Array.Empty(Of Reflection.PropertyInfo)()
             End Try
             Return TypeProperties
         End Function
@@ -254,7 +254,7 @@ Namespace CompuMaster.Data.DataQuery
         End Function
 
         Public Shared ReadOnly Property AvailableDataProvidersFoundExceptions As New List(Of DataProviderDetectionException)
-        Public Shared ReadOnly Property AvailableDataProvidersFoundExceptions(assembly As System.Reflection.Assembly) As DataProviderDetectionException
+        Public Shared ReadOnly Property AvailableDataProvidersFoundExceptionsFilteredByAssembly(assembly As System.Reflection.Assembly) As DataProviderDetectionException
             Get
                 For MyCounter As Integer = 0 To DataProvider.AvailableDataProvidersFoundExceptions.Count - 1
                     If DataProvider.AvailableDataProvidersFoundExceptions()(MyCounter).Assembly Is assembly Then
