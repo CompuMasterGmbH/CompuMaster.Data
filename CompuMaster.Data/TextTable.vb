@@ -1,10 +1,20 @@
 ﻿Option Explicit On
 Option Strict On
 
+Imports System.Convert
 Imports System.Data
+Imports System.Web.UI.WebControls
 
 Namespace CompuMaster.Data
 
+    'WARNING/TODO: Different logic between DataTables.SuggestColumnWidths and implementation of this class
+    '-> TODO: DbNullText implementation oder besser TextTableRenderOptions ?
+    '-> TODO: ColumnFormatting nicht in TextTable-Constructor !?
+    '-> TODO: above changes require complete redesign of arguments lists for constructor and ToString()
+
+    ''' <summary>
+    ''' A table of text cells
+    ''' </summary>
     Public Class TextTable
 
         Public Sub New()
@@ -30,6 +40,28 @@ Namespace CompuMaster.Data
             Me.AssignRowData(rows, columnFormatting)
         End Sub
 
+        'Public Sub New(table As DataTable, columnFormatting As DataTables.DataColumnToString)
+        '    Me.New(table, CType(Nothing, String), columnFormatting)
+        'End Sub
+        '
+        'Public Sub New(rows As DataRow(), columnFormatting As DataTables.DataColumnToString)
+        '    Me.New(rows, CType(Nothing, String), columnFormatting)
+        'End Sub
+        '
+        'Public Sub New(table As DataTable, dbNullText As String, columnFormatting As DataTables.DataColumnToString)
+        '    Me.New
+        '    Me.AssignHeadersData(table)
+        '    Me.AssignRowData(table.Rows, dbNullText, columnFormatting)
+        'End Sub
+        '
+        'Public Sub New(rows As DataRow(), dbNullText As String, columnFormatting As DataTables.DataColumnToString)
+        '    Me.New
+        '    If rows.Length = 0 Then Return
+        '    Dim Table As DataTable = rows(0).Table
+        '    Me.AssignHeadersData(Table)
+        '    Me.AssignRowData(rows, dbNullText, columnFormatting)
+        'End Sub
+
         Private Sub AssignHeadersData(table As DataTable)
             Dim HeaderCells As New System.Collections.Generic.List(Of TextCell)
             For ColCounter As Integer = 0 To table.Columns.Count - 1
@@ -42,21 +74,8 @@ Namespace CompuMaster.Data
             If tableRows.Count = 0 Then Return
             Dim Table As DataTable = tableRows(0).Table
             For RowCounter As Integer = 0 To tableRows.Count - 1
-                If columnFormatting Is Nothing Then
-                    'Fast item copy
-                    Rows.Add(New TextRow(tableRows(RowCounter).ItemArray))
-                Else
-                    'Formatted item copy
-                    Dim Row As DataRow = tableRows(RowCounter)
-                    Dim Cells As New System.Collections.Generic.List(Of TextCell)
-                    For ColCounter As Integer = 0 To Table.Columns.Count - 1
-                        Dim column As DataColumn = Table.Columns(ColCounter)
-                        Dim RenderValue As Object
-                        RenderValue = columnFormatting(column, Row(column))
-                        Cells.Add(New TextCell(String.Format(Threading.Thread.CurrentThread.CurrentCulture, "{0}", RenderValue)))
-                    Next
-                    Rows.Add(New TextRow(Cells))
-                End If
+                Dim Row As DataRow = tableRows(RowCounter)
+                AssignRowData(Row, columnFormatting)
             Next
         End Sub
 
@@ -64,23 +83,80 @@ Namespace CompuMaster.Data
             If tableRows.Length = 0 Then Return
             Dim Table As DataTable = tableRows(0).Table
             For RowCounter As Integer = 0 To tableRows.Length - 1
-                If columnFormatting Is Nothing Then
-                    'Fast item copy
-                    Rows.Add(New TextRow(tableRows(RowCounter).ItemArray))
-                Else
-                    'Formatted item copy
-                    Dim Row As DataRow = tableRows(RowCounter)
-                    Dim Cells As New System.Collections.Generic.List(Of TextCell)
-                    For ColCounter As Integer = 0 To Table.Columns.Count - 1
-                        Dim column As DataColumn = Table.Columns(ColCounter)
-                        Dim RenderValue As Object
-                        RenderValue = columnFormatting(column, Row(column))
-                        Cells.Add(New TextCell(String.Format(Threading.Thread.CurrentThread.CurrentCulture, "{0}", RenderValue)))
-                    Next
-                    Rows.Add(New TextRow(Cells))
-                End If
+                Dim Row As DataRow = tableRows(RowCounter)
+                AssignRowData(Row, columnFormatting)
             Next
         End Sub
+
+        'Private Sub AssignRowData(tableRows As DataRowCollection, dbNullText As String, columnFormatting As DataTables.DataColumnToString)
+        '    If tableRows.Count = 0 Then Return
+        '    Dim Table As DataTable = tableRows(0).Table
+        '    For RowCounter As Integer = 0 To tableRows.Count - 1
+        '        Dim Row As DataRow = tableRows(RowCounter)
+        '        AssignRowData(Row, dbNullText, columnFormatting)
+        '    Next
+        'End Sub
+        '
+        'Private Sub AssignRowData(tableRows As DataRow(), dbNullText As String, columnFormatting As DataTables.DataColumnToString)
+        '    If tableRows.Length = 0 Then Return
+        '    Dim Table As DataTable = tableRows(0).Table
+        '    For RowCounter As Integer = 0 To tableRows.Length - 1
+        '        Dim Row As DataRow = tableRows(RowCounter)
+        '        AssignRowData(Row, dbNullText, columnFormatting)
+        '    Next
+        'End Sub
+
+        Private Sub AssignRowData(row As DataRow, columnFormatting As DataTables.DataColumnToString)
+            If columnFormatting Is Nothing Then
+                'Fast item copy
+                Rows.Add(New TextRow(row.ItemArray))
+            Else
+                'Formatted item copy
+                Dim Cells As New System.Collections.Generic.List(Of TextCell)
+                For ColCounter As Integer = 0 To row.Table.Columns.Count - 1
+                    Dim column As DataColumn = row.Table.Columns(ColCounter)
+                    Dim RenderValue As Object
+                    RenderValue = columnFormatting(column, row(column))
+                    Cells.Add(New TextCell(String.Format(Threading.Thread.CurrentThread.CurrentCulture, "{0}", RenderValue)))
+                Next
+                Rows.Add(New TextRow(Cells))
+            End If
+        End Sub
+
+        'Private Sub AssignRowData(row As DataRow, dbNullText As String, columnFormatting As DataTables.DataColumnToString)
+        '    Dim Cells As New System.Collections.Generic.List(Of TextCell)
+        '    For ColCounter As Integer = 0 To row.Table.Columns.Count - 1
+        '        Dim column As DataColumn = row.Table.Columns(ColCounter)
+        '        Dim RawCellValue As Object = row(column)
+        '        Dim RenderValue As String
+        '        If column.DataType.IsValueType AndAlso Not GetType(String).IsInstanceOfType(column.DataType) Then
+        '            'number or date/time
+        '            If IsDBNull(RawCellValue) AndAlso dbNullText IsNot Nothing Then
+        '                RenderValue = dbNullText
+        '            ElseIf columnFormatting IsNot Nothing Then
+        '                RenderValue = columnFormatting(column, RawCellValue)
+        '            ElseIf IsDBNull(RawCellValue) Then
+        '                RenderValue = ""
+        '            Else
+        '                RenderValue = String.Format(Threading.Thread.CurrentThread.CurrentCulture, "{0}", RawCellValue)
+        '            End If
+        '        Else
+        '            'string or any other object
+        '            If IsDBNull(RawCellValue) AndAlso dbNullText IsNot Nothing Then
+        '                RenderValue = dbNullText
+        '            ElseIf columnFormatting IsNot Nothing Then
+        '                RenderValue = columnFormatting(column, RawCellValue)
+        '            ElseIf IsDBNull(RawCellValue) Then
+        '                RenderValue = ""
+        '            Else
+        '                RenderValue = String.Format(Threading.Thread.CurrentThread.CurrentCulture, "{0}", RawCellValue)
+        '            End If
+        '        End If
+        '        Cells.Add(New TextCell(String.Format(Threading.Thread.CurrentThread.CurrentCulture, "{0}", RenderValue)))
+        '    Next
+        '    Rows.Add(New TextRow(Cells))
+        'End Sub
+
 
         Public Sub New(headers As System.Collections.Generic.List(Of TextRow), rows As System.Collections.Generic.List(Of TextRow))
             If headers Is Nothing Then Throw New ArgumentNullException(NameOf(headers))
