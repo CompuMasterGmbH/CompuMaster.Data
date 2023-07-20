@@ -2,6 +2,7 @@
 Option Strict On
 
 Imports NUnit.Framework
+Imports OfficeOpenXml.FormulaParsing.Excel.Functions.RefAndLookup
 Imports System.Data
 
 Namespace CompuMaster.Test.Data
@@ -411,7 +412,7 @@ Namespace CompuMaster.Test.Data
             'Prepare test table
             Dim dt As New DataTable
             dt.Columns.Add("id", GetType(Integer))
-            dt.Columns.Add("Hi", GetType(String))
+            dt.Columns.Add("text", GetType(String))
             Dim row As DataRow = dt.NewRow
             row.Item(0) = 23
             row.Item(1) = "Hello World"
@@ -423,29 +424,67 @@ Namespace CompuMaster.Test.Data
             dict0.Add("key1", "value1")
             dict0.Add("key2", "value2")
             dt.Rows(0)("dict") = dict0
+            'Add empty 2nd row
             dt.Rows.Add(dt.NewRow)
+
+            'Prepare rows array
+            Dim RowsArray = New System.Data.DataRow() {dt.Rows(0), dt.Rows(1)}
 
             'Run tests
             Dim StyleOptions As CompuMaster.Data.ConvertToPlainTextTableOptions
-            'Console.WriteLine(CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(dt, 5, 20, "|", "|", "+", "="c, "-"c, )
+            Console.WriteLine("# Style demos")
+
+            'CheckSuggestedColWidths 
+            StyleOptions = New CompuMaster.Data.ConvertToPlainTextTableOptions
+            StyleOptions.ColumnFormatting = AddressOf ConvertColumnToString
+            Dim ColWidthsSuggested As Integer() = CompuMaster.Data.DataTables.SuggestColumnWidthsForFixedPlainTables(
+                dt.Rows, dt,
+                StyleOptions)
+            Dim SuggestedWidthsPrintTable As New DataTable()
+            For MyCounter As Integer = 0 To ColWidthsSuggested.Length - 1
+                SuggestedWidthsPrintTable.Columns.Add(dt.Columns(MyCounter).ColumnName)
+            Next
+            SuggestedWidthsPrintTable.Rows.Add(SuggestedWidthsPrintTable.NewRow)
+            For MyCounter As Integer = 0 To SuggestedWidthsPrintTable.Columns.Count - 1
+                SuggestedWidthsPrintTable.Rows(0)(MyCounter) = ColWidthsSuggested(MyCounter).ToString
+            Next
+            Console.WriteLine()
+            Console.WriteLine("## SuggestedWidths")
+            Console.WriteLine(CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(SuggestedWidthsPrintTable, StyleOptions))
 
             StyleOptions = New CompuMaster.Data.ConvertToPlainTextTableOptions
             StyleOptions.ColumnFormatting = AddressOf ConvertColumnToString
+            Console.WriteLine()
+            Console.WriteLine("## ConvertToPlainTextTableOptions-Default via RowsCollection")
             Console.WriteLine(CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(dt, StyleOptions))
+            Console.WriteLine()
+            Console.WriteLine("## ConvertToPlainTextTableOptions-Default via RowsArray")
+            Console.WriteLine(CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(RowsArray, StyleOptions))
 
             StyleOptions = CompuMaster.Data.ConvertToPlainTextTableOptions.SimpleLayout
             StyleOptions.ColumnFormatting = AddressOf ConvertColumnToString
+            Console.WriteLine()
+            Console.WriteLine("## SimpleLayout via RowsCollection")
             Console.WriteLine(CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(dt, StyleOptions))
+            Console.WriteLine()
+            Console.WriteLine("## SimpleLayout via RowsArray")
+            Console.WriteLine(CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(RowsArray, StyleOptions))
 
             StyleOptions = CompuMaster.Data.ConvertToPlainTextTableOptions.InlineBordersLayout
             StyleOptions.ColumnFormatting = AddressOf ConvertColumnToString
+            Console.WriteLine()
+            Console.WriteLine("## InlineBordersLayout via RowsCollection")
             Console.WriteLine(CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(dt, StyleOptions))
+            Console.WriteLine()
+            Console.WriteLine("## InlineBordersLayout via RowsArray")
+            Console.WriteLine(CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(RowsArray, StyleOptions))
 
         End Sub
 
         <Test()>
         <CodeAnalysis.SuppressMessage("Style", "IDE0028:Initialisierung der Sammlung vereinfachen")>
         Public Sub ConvertToPlainTextTableFixedColumnWidths()
+#Disable Warning BC40000 ' Typ oder Element ist veraltet
             Dim dt As New DataTable
             dt.Columns.Add("id", GetType(Integer))
             dt.Columns.Add("Hi", GetType(String))
@@ -502,7 +541,7 @@ Namespace CompuMaster.Test.Data
             Console.WriteLine(CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(dt, " :: ", " :: ", "=##=", "="c, "="c))
             Console.WriteLine(CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(dt, 10))
             Console.WriteLine(CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(dt, 5, 20))
-
+#Enable Warning BC40000 ' Typ oder Element ist veraltet
         End Sub
 
         <CodeAnalysis.SuppressMessage("Major Code Smell", "S1172:Unused procedure parameters should be removed", Justification:="Required parameter to fit AddressOf method compatibility")>

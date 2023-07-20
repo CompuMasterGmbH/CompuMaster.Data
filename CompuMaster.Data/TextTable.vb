@@ -18,33 +18,68 @@ Namespace CompuMaster.Data
 
         Public Sub New(table As DataTable, columnFormatting As DataTables.DataColumnToString)
             Me.New
+            Me.AssignHeadersData(table)
+            Me.AssignRowData(table.Rows, columnFormatting)
+        End Sub
 
-            'Add headers
+        Public Sub New(rows As DataRow(), columnFormatting As DataTables.DataColumnToString)
+            Me.New
+            If rows.Length = 0 Then Return
+            Dim Table As DataTable = rows(0).Table
+            Me.AssignHeadersData(Table)
+            Me.AssignRowData(rows, columnFormatting)
+        End Sub
+
+        Private Sub AssignHeadersData(table As DataTable)
             Dim HeaderCells As New System.Collections.Generic.List(Of TextCell)
             For ColCounter As Integer = 0 To table.Columns.Count - 1
                 HeaderCells.Add(New TextCell(Utils.StringNotEmptyOrAlternativeValue(table.Columns(ColCounter).Caption, table.Columns(ColCounter).ColumnName)))
             Next
             Me.Headers.Add(New TextRow(HeaderCells))
+        End Sub
 
-            'Add rows
-            For RowCounter As Integer = 0 To table.Rows.Count - 1
+        Private Sub AssignRowData(tableRows As DataRowCollection, columnFormatting As DataTables.DataColumnToString)
+            If tableRows.Count = 0 Then Return
+            Dim Table As DataTable = tableRows(0).Table
+            For RowCounter As Integer = 0 To tableRows.Count - 1
                 If columnFormatting Is Nothing Then
                     'Fast item copy
-                    Rows.Add(New TextRow(table.Rows(RowCounter).ItemArray))
+                    Rows.Add(New TextRow(tableRows(RowCounter).ItemArray))
                 Else
                     'Formatted item copy
-                    Dim Row As DataRow = table.Rows(RowCounter)
+                    Dim Row As DataRow = tableRows(RowCounter)
                     Dim Cells As New System.Collections.Generic.List(Of TextCell)
-                    For ColCounter As Integer = 0 To table.Columns.Count - 1
-                        Dim column As DataColumn = row.Table.Columns(ColCounter)
+                    For ColCounter As Integer = 0 To Table.Columns.Count - 1
+                        Dim column As DataColumn = Table.Columns(ColCounter)
                         Dim RenderValue As Object
-                        RenderValue = columnFormatting(column, row(column))
+                        RenderValue = columnFormatting(column, Row(column))
                         Cells.Add(New TextCell(String.Format(Threading.Thread.CurrentThread.CurrentCulture, "{0}", RenderValue)))
                     Next
                     Rows.Add(New TextRow(Cells))
                 End If
             Next
+        End Sub
 
+        Private Sub AssignRowData(tableRows As DataRow(), columnFormatting As DataTables.DataColumnToString)
+            If tableRows.Length = 0 Then Return
+            Dim Table As DataTable = tableRows(0).Table
+            For RowCounter As Integer = 0 To tableRows.Length - 1
+                If columnFormatting Is Nothing Then
+                    'Fast item copy
+                    Rows.Add(New TextRow(tableRows(RowCounter).ItemArray))
+                Else
+                    'Formatted item copy
+                    Dim Row As DataRow = tableRows(RowCounter)
+                    Dim Cells As New System.Collections.Generic.List(Of TextCell)
+                    For ColCounter As Integer = 0 To Table.Columns.Count - 1
+                        Dim column As DataColumn = Table.Columns(ColCounter)
+                        Dim RenderValue As Object
+                        RenderValue = columnFormatting(column, Row(column))
+                        Cells.Add(New TextCell(String.Format(Threading.Thread.CurrentThread.CurrentCulture, "{0}", RenderValue)))
+                    Next
+                    Rows.Add(New TextRow(Cells))
+                End If
+            Next
         End Sub
 
         Public Sub New(headers As System.Collections.Generic.List(Of TextRow), rows As System.Collections.Generic.List(Of TextRow))

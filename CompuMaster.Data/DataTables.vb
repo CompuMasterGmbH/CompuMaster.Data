@@ -1803,7 +1803,9 @@ Namespace CompuMaster.Data
             If dataRows.Length > 0 Then
                 TableName = dataRows(0).Table.TableName
             End If
-            Return ConvertToPlainTextTableWithFixedColumnWidthsInternal(dataRows, TableName, SuggestColumnWidthsForFixedPlainTables(dataRows, 100.0), Nothing)
+            Dim Options = ConvertToPlainTextTableOptions.SimpleLayout
+            Options.TableTitle = TableName
+            Return ConvertToPlainTextTableWithFixedColumnWidths(dataRows, Options)
         End Function
 
         ''' <summary>
@@ -1814,7 +1816,9 @@ Namespace CompuMaster.Data
         ''' <returns>All rows are separated by fixed width. If no rows have been processed, the user will get notified about this fact</returns>
         ''' <remarks></remarks>
         Public Shared Function ConvertToPlainTextTableFixedColumnWidths(ByVal dataRows As DataRow(), tableTitle As String) As String
-            Return ConvertToPlainTextTableWithFixedColumnWidthsInternal(dataRows, tableTitle, SuggestColumnWidthsForFixedPlainTables(dataRows, 100.0), Nothing)
+            Dim Options = ConvertToPlainTextTableOptions.SimpleLayout
+            Options.TableTitle = tableTitle
+            Return ConvertToPlainTextTableWithFixedColumnWidths(dataRows, Options)
         End Function
 
         ''' <summary>
@@ -1825,11 +1829,7 @@ Namespace CompuMaster.Data
         ''' <returns>All rows are separated by fixed width. If no rows have been processed, the user will get notified about this fact</returns>
         ''' <remarks></remarks>
         Public Shared Function ConvertToPlainTextTableFixedColumnWidths(ByVal dataRows As DataRow(), options As ConvertToPlainTextTableOptions) As String
-            Return ConvertToPlainTextTableWithFixedColumnWidthsInternal(dataRows, options.TableTitle,
-                                                                        If(options.FixedColumnWidths IsNot Nothing, options.FixedColumnWidths, SuggestColumnWidthsForFixedPlainTables(dataRows, options.OptimalWidthIsFoundWhenPercentageNumberOfRowsFitIntoCell)),
-                                                                        options.HorizontalSeparatorAfterHeader, options.HorizontalSeparatorForCells, options.CrossSeparatorHeader, options.CrossSeparatorCells, options.VerticalSeparatorAfterHeader.GetValueOrDefault, options.VerticalSeparatorForCells.GetValueOrDefault,
-                                                                        options.ColumnFormatting)
-
+            Return ConvertToPlainTextTableWithFixedColumnWidths(dataRows, options)
         End Function
 
         ''' <summary>
@@ -1840,11 +1840,7 @@ Namespace CompuMaster.Data
         ''' <returns>All rows are separated by fixed width. If no rows have been processed, the user will get notified about this fact</returns>
         ''' <remarks></remarks>
         Public Shared Function ConvertToPlainTextTableFixedColumnWidths(ByVal table As DataTable, options As ConvertToPlainTextTableOptions) As String
-            Return ConvertToPlainTextTableWithFixedColumnWidthsInternal(table.Rows, options.TableTitle,
-                                                                        If(options.FixedColumnWidths IsNot Nothing, options.FixedColumnWidths, SuggestColumnWidthsForFixedPlainTables(table.Rows, options.OptimalWidthIsFoundWhenPercentageNumberOfRowsFitIntoCell)),
-                                                                        options.HorizontalSeparatorAfterHeader, options.HorizontalSeparatorForCells, options.CrossSeparatorHeader, options.CrossSeparatorCells, options.VerticalSeparatorAfterHeader.GetValueOrDefault, options.VerticalSeparatorForCells.GetValueOrDefault,
-                                                                        options.ColumnFormatting)
-
+            Return ConvertToPlainTextTableWithFixedColumnWidths(table.Rows, options)
         End Function
 
         ''' <summary>
@@ -1853,6 +1849,8 @@ Namespace CompuMaster.Data
         ''' <param name="dataRows">The datatable to retrieve the content from</param>
         ''' <returns>All rows are separated by fixed width. If no rows have been processed, the user will get notified about this fact</returns>
         ''' <remarks></remarks>
+        <Obsolete("Better use overloaded method with options argument")>
+        <System.ComponentModel.EditorBrowsable(ComponentModel.EditorBrowsableState.Never)>
         Public Shared Function ConvertToPlainTextTableFixedColumnWidths(ByVal dataRows As DataRow(), columnFormatting As DataColumnToString) As String
             Dim TableName As String = ""
             If dataRows.Length > 0 Then
@@ -1868,7 +1866,9 @@ Namespace CompuMaster.Data
         ''' <returns>All rows are separated by fixed width. If no rows have been processed, the user will get notified about this fact</returns>
         ''' <remarks></remarks>
         Public Shared Function ConvertToPlainTextTableFixedColumnWidths(ByVal dataRow As DataRow) As String
-            Return ConvertToPlainTextTableWithFixedColumnWidthsInternal(New System.Data.DataRow() {dataRow}, dataRow.Table.TableName, SuggestColumnWidthsForFixedPlainTables(New System.Data.DataRow() {dataRow}, 100.0), Nothing)
+            Dim Options = ConvertToPlainTextTableOptions.SimpleLayout
+            Options.TableTitle = dataRow.Table.TableName
+            Return ConvertToPlainTextTableWithFixedColumnWidths(New System.Data.DataRow() {dataRow}, Options)
         End Function
 
         ''' <summary>
@@ -1879,7 +1879,9 @@ Namespace CompuMaster.Data
         ''' <returns>All rows are separated by fixed width. If no rows have been processed, the user will get notified about this fact</returns>
         ''' <remarks></remarks>
         Public Shared Function ConvertToPlainTextTableFixedColumnWidths(ByVal dataRow As DataRow, tableTitle As String) As String
-            Return ConvertToPlainTextTableWithFixedColumnWidthsInternal(New System.Data.DataRow() {dataRow}, tableTitle, SuggestColumnWidthsForFixedPlainTables(New System.Data.DataRow() {dataRow}, 100.0), Nothing)
+            Dim Options = ConvertToPlainTextTableOptions.SimpleLayout
+            Options.TableTitle = tableTitle
+            Return ConvertToPlainTextTableWithFixedColumnWidths(New System.Data.DataRow() {dataRow}, Options)
         End Function
 
         ''' <summary>
@@ -1888,6 +1890,8 @@ Namespace CompuMaster.Data
         ''' <param name="dataRow">The data row to retrieve the content from</param>
         ''' <returns>All rows are separated by fixed width. If no rows have been processed, the user will get notified about this fact</returns>
         ''' <remarks></remarks>
+        <Obsolete("Better use overloaded method with options argument")>
+        <System.ComponentModel.EditorBrowsable(ComponentModel.EditorBrowsableState.Never)>
         Public Shared Function ConvertToPlainTextTableFixedColumnWidths(ByVal dataRow As DataRow, columnFormatting As DataColumnToString) As String
             Return ConvertToPlainTextTableWithFixedColumnWidthsInternal(New System.Data.DataRow() {dataRow}, dataRow.Table.TableName, SuggestColumnWidthsForFixedPlainTables(New System.Data.DataRow() {dataRow}, Nothing, 100.0, columnFormatting), columnFormatting)
         End Function
@@ -1899,7 +1903,9 @@ Namespace CompuMaster.Data
         ''' <returns>All rows are separated by fixed width. If no rows have been processed, the user will get notified about this fact</returns>
         ''' <remarks></remarks>
         Public Shared Function ConvertToPlainTextTableFixedColumnWidths(ByVal dataTable As DataTable) As String
-            Return ConvertToPlainTextTableWithFixedColumnWidthsInternal(dataTable.Rows, dataTable.TableName, SuggestColumnWidthsForFixedPlainTables(dataTable.Rows, 100.0), Nothing)
+            Dim Options = ConvertToPlainTextTableOptions.SimpleLayout
+            Options.TableTitle = dataTable.TableName
+            Return ConvertToPlainTextTableWithFixedColumnWidths(dataTable.Rows, Options)
         End Function
 
         ''' <summary>
@@ -1910,7 +1916,9 @@ Namespace CompuMaster.Data
         ''' <returns>All rows are separated by fixed width. If no rows have been processed, the user will get notified about this fact</returns>
         ''' <remarks></remarks>
         Public Shared Function ConvertToPlainTextTableFixedColumnWidths(ByVal dataTable As DataTable, ByVal tableTitle As String) As String
-            Return ConvertToPlainTextTableWithFixedColumnWidthsInternal(dataTable.Rows, tableTitle, SuggestColumnWidthsForFixedPlainTables(dataTable.Rows, 100.0), Nothing)
+            Dim Options = ConvertToPlainTextTableOptions.SimpleLayout
+            Options.TableTitle = tableTitle
+            Return ConvertToPlainTextTableWithFixedColumnWidths(dataTable.Rows, Options)
         End Function
 
         ''' <summary>
@@ -1919,6 +1927,8 @@ Namespace CompuMaster.Data
         ''' <param name="dataTable">The datatable to retrieve the content from</param>
         ''' <returns>All rows are separated by fixed width. If no rows have been processed, the user will get notified about this fact</returns>
         ''' <remarks></remarks>
+        <Obsolete("Better use overloaded method with options argument")>
+        <System.ComponentModel.EditorBrowsable(ComponentModel.EditorBrowsableState.Never)>
         Public Shared Function ConvertToPlainTextTableFixedColumnWidths(ByVal dataTable As DataTable, columnFormatting As DataColumnToString) As String
             Return ConvertToPlainTextTableWithFixedColumnWidthsInternal(dataTable.Rows, dataTable.TableName, SuggestColumnWidthsForFixedPlainTables(dataTable.Rows, Nothing, 100.0, columnFormatting), columnFormatting)
         End Function
@@ -1929,6 +1939,8 @@ Namespace CompuMaster.Data
         ''' <param name="dataTable">The datatable to retrieve the content from</param>
         ''' <returns>All rows are separated by fixed width. If no rows have been processed, the user will get notified about this fact</returns>
         ''' <remarks></remarks>
+        <Obsolete("Better use overloaded method with options argument")>
+        <System.ComponentModel.EditorBrowsable(ComponentModel.EditorBrowsableState.Never)>
         Public Shared Function ConvertToPlainTextTableFixedColumnWidths(ByVal dataTable As DataTable, ByVal fixedColumnWidths As Integer()) As String
             Return ConvertToPlainTextTableWithFixedColumnWidthsInternal(dataTable.Rows, dataTable.TableName, fixedColumnWidths, Nothing)
         End Function
@@ -1940,6 +1952,8 @@ Namespace CompuMaster.Data
         ''' <param name="fixedColumnWidths">Array of column widths, where value of 0 => invisible column, null or missing/unspecified => auto width; </param>
         ''' <returns>All rows are separated by fixed width. If no rows have been processed, the user will get notified about this fact</returns>
         ''' <remarks></remarks>
+        <Obsolete("Better use overloaded method with options argument")>
+        <System.ComponentModel.EditorBrowsable(ComponentModel.EditorBrowsableState.Never)>
         Public Shared Function ConvertToPlainTextTableFixedColumnWidths(ByVal dataTable As DataTable, ByVal fixedColumnWidths As Integer?()) As String
             Dim EffectiveFixedColumnWidths = SuggestColumnWidthsForFixedPlainTables(dataTable)
             For MyCounter As Integer = 0 To fixedColumnWidths.Length - 1
@@ -1956,6 +1970,8 @@ Namespace CompuMaster.Data
         ''' <param name="dataTable">The datatable to retrieve the content from</param>
         ''' <returns>All rows are separated by fixed width. If no rows have been processed, the user will get notified about this fact</returns>
         ''' <remarks></remarks>
+        <Obsolete("Better use overloaded method with options argument")>
+        <System.ComponentModel.EditorBrowsable(ComponentModel.EditorBrowsableState.Never)>
         Public Shared Function ConvertToPlainTextTableFixedColumnWidths(ByVal dataTable As DataTable, ByVal standardColumnWidth As Integer) As String
             Dim columnWidths As New System.Collections.Generic.List(Of Integer)
             For MyCounter As Integer = 0 To dataTable.Columns.Count - 1
@@ -1970,6 +1986,8 @@ Namespace CompuMaster.Data
         ''' <param name="dataTable">The datatable to retrieve the content from</param>
         ''' <returns>All rows are separated by fixed width. If no rows have been processed, the user will get notified about this fact</returns>
         ''' <remarks></remarks>
+        <Obsolete("Better use overloaded method with options argument")>
+        <System.ComponentModel.EditorBrowsable(ComponentModel.EditorBrowsableState.Never)>
         Public Shared Function ConvertToPlainTextTableFixedColumnWidths(ByVal dataTable As DataTable, ByVal minimumColumnWidth As Integer,
                                                                         maximumColumnWidth As Integer) As String
             Return ConvertToPlainTextTableFixedColumnWidths(dataTable, minimumColumnWidth, maximumColumnWidth, Nothing)
@@ -1981,6 +1999,8 @@ Namespace CompuMaster.Data
         ''' <param name="dataTable">The datatable to retrieve the content from</param>
         ''' <returns>All rows are separated by fixed width. If no rows have been processed, the user will get notified about this fact</returns>
         ''' <remarks></remarks>
+        <Obsolete("Better use overloaded method with options argument")>
+        <System.ComponentModel.EditorBrowsable(ComponentModel.EditorBrowsableState.Never)>
         Public Shared Function ConvertToPlainTextTableFixedColumnWidths(ByVal dataTable As DataTable, ByVal minimumColumnWidth As Integer,
                                                                         maximumColumnWidth As Integer,
                                                                         columnFormatting As DataColumnToString) As String
@@ -2006,6 +2026,8 @@ Namespace CompuMaster.Data
         ''' <param name="dataTable">The datatable to retrieve the content from</param>
         ''' <returns>All rows are separated by fixed width. If no rows have been processed, the user will get notified about this fact</returns>
         ''' <remarks></remarks>
+        <Obsolete("Better use overloaded method with options argument")>
+        <System.ComponentModel.EditorBrowsable(ComponentModel.EditorBrowsableState.Never)>
         Public Shared Function ConvertToPlainTextTableFixedColumnWidths(ByVal dataTable As DataTable,
                                                                         horizontalSeparatorAfterHeader As String,
                                                                         horizontalSeparatorCells As String, crossSeparator As String,
@@ -2021,6 +2043,8 @@ Namespace CompuMaster.Data
         ''' <param name="dataTable">The datatable to retrieve the content from</param>
         ''' <returns>All rows are separated by fixed width. If no rows have been processed, the user will get notified about this fact</returns>
         ''' <remarks></remarks>
+        <Obsolete("Better use overloaded method with options argument")>
+        <System.ComponentModel.EditorBrowsable(ComponentModel.EditorBrowsableState.Never)>
         Public Shared Function ConvertToPlainTextTableFixedColumnWidths(ByVal dataTable As DataTable, ByVal fixedColumnWidths As Integer(),
                                                                         horizontalSeparatorAfterHeader As String, horizontalSeparatorCells As String,
                                                                         crossSeparator As String, verticalSeparatorAfterHeader As Char,
@@ -2038,6 +2062,8 @@ Namespace CompuMaster.Data
         ''' <param name="dataTable">The datatable to retrieve the content from</param>
         ''' <returns>All rows are separated by fixed width. If no rows have been processed, the user will get notified about this fact</returns>
         ''' <remarks></remarks>
+        <Obsolete("Better use overloaded method with options argument")>
+        <System.ComponentModel.EditorBrowsable(ComponentModel.EditorBrowsableState.Never)>
         Public Shared Function ConvertToPlainTextTableFixedColumnWidths(ByVal dataTable As DataTable, ByVal fixedColumnWidths As Integer?(),
                                                                         horizontalSeparatorAfterHeader As String, horizontalSeparatorCells As String,
                                                                         crossSeparator As String, verticalSeparatorAfterHeader As Char,
@@ -2060,6 +2086,8 @@ Namespace CompuMaster.Data
         ''' <param name="dataTable">The datatable to retrieve the content from</param>
         ''' <returns>All rows are separated by fixed width. If no rows have been processed, the user will get notified about this fact</returns>
         ''' <remarks></remarks>
+        <Obsolete("Better use overloaded method with options argument")>
+        <System.ComponentModel.EditorBrowsable(ComponentModel.EditorBrowsableState.Never)>
         Public Shared Function ConvertToPlainTextTableFixedColumnWidths(ByVal dataTable As DataTable, ByVal standardColumnWidth As Integer,
                                                                         horizontalSeparatorAfterHeader As String, horizontalSeparatorForCells As String,
                                                                         crossSeparator As String, verticalSeparatorAfterHeader As Char,
@@ -2078,6 +2106,8 @@ Namespace CompuMaster.Data
         ''' <param name="dataTable">The datatable to retrieve the content from</param>
         ''' <returns>All rows are separated by fixed width. If no rows have been processed, the user will get notified about this fact</returns>
         ''' <remarks></remarks>
+        <Obsolete("Better use overloaded method with options argument")>
+        <System.ComponentModel.EditorBrowsable(ComponentModel.EditorBrowsableState.Never)>
         Public Shared Function ConvertToPlainTextTableFixedColumnWidths(ByVal dataTable As DataTable, ByVal minimumColumnWidth As Integer,
                                                                         maximumColumnWidth As Integer,
                                                                         horizontalSeparatorAfterHeader As String,
@@ -2107,6 +2137,8 @@ Namespace CompuMaster.Data
         ''' <param name="dataTable">The datatable to retrieve the content from</param>
         ''' <returns>All rows are separated by fixed width. If no rows have been processed, the user will get notified about this fact</returns>
         ''' <remarks></remarks>
+        <Obsolete("Better use overloaded method with options argument")>
+        <System.ComponentModel.EditorBrowsable(ComponentModel.EditorBrowsableState.Never)>
         Public Shared Function ConvertToPlainTextTableFixedColumnWidths(ByVal dataTable As DataTable, ByVal minimumColumnWidth As Integer,
                                                                         maximumColumnWidth As Integer,
                                                                         horizontalSeparatorAfterHeader As String,
@@ -2179,7 +2211,7 @@ Namespace CompuMaster.Data
             'For DokuWiki, use
             Const verticalSeparatorHeader As String = " ^ "
             Const verticalSeparatorCells As String = " | "
-            Dim fixedColumnWidths As Integer() = SuggestColumnWidthsForFixedPlainTables(table.Rows, table, 100.0, columnFormatting)
+            Dim fixedColumnWidths As Integer() = SuggestColumnWidthsForFixedPlainTables(table.Rows, table, ConvertToPlainTextTableOptions.SimpleLayout)
             Dim Result As New System.Text.StringBuilder
             Dim rows As DataRowCollection = table.Rows
             'Add table name
@@ -2248,6 +2280,8 @@ Namespace CompuMaster.Data
         ''' <param name="table">A table</param>
         ''' <returns></returns>
         ''' <remarks></remarks>
+        <Obsolete("Better use overloaded method with options argument and set OptimalWidthWhenPercentagaeNumberOfRowsFitIntoCell=80")>
+        <System.ComponentModel.EditorBrowsable(ComponentModel.EditorBrowsableState.Never)>
         Public Shared Function SuggestColumnWidthsForFixedPlainTables(table As System.Data.DataTable) As Integer()
             Return SuggestColumnWidthsForFixedPlainTables(table.Rows, table, 80, Nothing)
         End Function
@@ -2258,6 +2292,8 @@ Namespace CompuMaster.Data
         ''' <param name="table">A table</param>
         ''' <returns></returns>
         ''' <remarks></remarks>
+        <Obsolete("Better use overloaded method with options argument")>
+        <System.ComponentModel.EditorBrowsable(ComponentModel.EditorBrowsableState.Never)>
         Public Shared Function SuggestColumnWidthsForFixedPlainTables(table As System.Data.DataTable, optimalWidthWhenPercentageNumberOfRowsFitIntoCell As Double) As Integer()
             Return SuggestColumnWidthsForFixedPlainTables(table.Rows, table, optimalWidthWhenPercentageNumberOfRowsFitIntoCell, Nothing)
         End Function
@@ -2268,6 +2304,8 @@ Namespace CompuMaster.Data
         ''' <param name="rows">A set of DataRows</param>
         ''' <returns></returns>
         ''' <remarks></remarks>
+        <Obsolete("Better use overloaded method with options argument and set OptimalWidthWhenPercentagaeNumberOfRowsFitIntoCell=80")>
+        <System.ComponentModel.EditorBrowsable(ComponentModel.EditorBrowsableState.Never)>
         Public Shared Function SuggestColumnWidthsForFixedPlainTables(rows As System.Data.DataRowCollection) As Integer()
             If rows.Count = 0 Then
                 Return Nothing
@@ -2282,6 +2320,8 @@ Namespace CompuMaster.Data
         ''' <param name="rows">A set of DataRows</param>
         ''' <returns></returns>
         ''' <remarks></remarks>
+        <Obsolete("Better use overloaded method with options argument")>
+        <System.ComponentModel.EditorBrowsable(ComponentModel.EditorBrowsableState.Never)>
         Public Shared Function SuggestColumnWidthsForFixedPlainTables(rows As System.Data.DataRowCollection, optimalWidthWhenPercentageNumberOfRowsFitIntoCell As Double) As Integer()
             If rows.Count = 0 Then
                 Return Nothing
@@ -2296,6 +2336,8 @@ Namespace CompuMaster.Data
         ''' <param name="rows">A set of DataRows</param>
         ''' <returns></returns>
         ''' <remarks></remarks>
+        <Obsolete("Better use overloaded method with options argument and set OptimalWidthWhenPercentagaeNumberOfRowsFitIntoCell=80")>
+        <System.ComponentModel.EditorBrowsable(ComponentModel.EditorBrowsableState.Never)>
         Public Shared Function SuggestColumnWidthsForFixedPlainTables(rows As System.Data.DataRow()) As Integer()
             If rows.Length = 0 Then
                 Return Nothing
@@ -2310,6 +2352,8 @@ Namespace CompuMaster.Data
         ''' <param name="rows">A set of DataRows</param>
         ''' <returns></returns>
         ''' <remarks></remarks>
+        <Obsolete("Better use overloaded method with options argument")>
+        <System.ComponentModel.EditorBrowsable(ComponentModel.EditorBrowsableState.Never)>
         Public Shared Function SuggestColumnWidthsForFixedPlainTables(rows As System.Data.DataRow(), optimalWidthWhenPercentageNumberOfRowsFitIntoCell As Double) As Integer()
             If rows.Length = 0 Then
                 Return Nothing
@@ -2324,6 +2368,8 @@ Namespace CompuMaster.Data
         ''' <param name="table">A table</param>
         ''' <returns></returns>
         ''' <remarks></remarks>
+        <Obsolete("Better use overloaded method with options argument and set OptimalWidthWhenPercentagaeNumberOfRowsFitIntoCell=80")>
+        <System.ComponentModel.EditorBrowsable(ComponentModel.EditorBrowsableState.Never)>
         Public Shared Function SuggestColumnWidthsForFixedPlainTables(table As System.Data.DataTable, columnFormatting As DataColumnToString) As Integer()
             Return SuggestColumnWidthsForFixedPlainTables(table.Rows, table, 80, columnFormatting)
         End Function
@@ -2334,6 +2380,8 @@ Namespace CompuMaster.Data
         ''' <param name="rows">A set of DataRows</param>
         ''' <returns></returns>
         ''' <remarks></remarks>
+        <Obsolete("Better use overloaded method with options argument and set OptimalWidthWhenPercentagaeNumberOfRowsFitIntoCell=80")>
+        <System.ComponentModel.EditorBrowsable(ComponentModel.EditorBrowsableState.Never)>
         Public Shared Function SuggestColumnWidthsForFixedPlainTables(rows As System.Data.DataRowCollection, columnFormatting As DataColumnToString) As Integer()
             If rows.Count = 0 Then
                 Return Nothing
@@ -2348,6 +2396,8 @@ Namespace CompuMaster.Data
         ''' <param name="rows">A set of DataRows</param>
         ''' <returns></returns>
         ''' <remarks></remarks>
+        <Obsolete("Better use overloaded method with options argument and set OptimalWidthWhenPercentagaeNumberOfRowsFitIntoCell=80")>
+        <System.ComponentModel.EditorBrowsable(ComponentModel.EditorBrowsableState.Never)>
         Public Shared Function SuggestColumnWidthsForFixedPlainTables(rows As System.Data.DataRow(), columnFormatting As DataColumnToString) As Integer()
             If rows.Length = 0 Then
                 Return Nothing
@@ -2355,6 +2405,35 @@ Namespace CompuMaster.Data
                 Return SuggestColumnWidthsForFixedPlainTables(rows, rows(0).Table, 80, columnFormatting)
             End If
         End Function
+
+        ''' <param name="table">A table</param>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        <Obsolete("Better use overloaded method with options argument")>
+        <System.ComponentModel.EditorBrowsable(ComponentModel.EditorBrowsableState.Never)>
+        Private Shared Function SuggestColumnWidthsForFixedPlainTables(rows As System.Data.DataRow(), ByVal table As DataTable,
+                                                                       optimalWidthWhenPercentageNumberOfRowsFitIntoCell As Double,
+                                                                       columnFormatting As DataColumnToString) As Integer()
+            Dim Options As New ConvertToPlainTextTableOptions
+            Options.ColumnFormatting = columnFormatting
+            Options.OptimalWidthIsFoundWhenPercentageNumberOfRowsFitIntoCell = optimalWidthWhenPercentageNumberOfRowsFitIntoCell
+            Return SuggestColumnWidthsForFixedPlainTables(rows, table, Options)
+        End Function
+
+        ''' <param name="table">A table</param>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        <Obsolete("Better use overloaded method with options argument")>
+        <System.ComponentModel.EditorBrowsable(ComponentModel.EditorBrowsableState.Never)>
+        Private Shared Function SuggestColumnWidthsForFixedPlainTables(rows As System.Data.DataRowCollection, table As DataTable,
+                                                                       optimalWidthWhenPercentageNumberOfRowsFitIntoCell As Double,
+                                                                       columnFormatting As DataColumnToString) As Integer()
+            Dim Options As New ConvertToPlainTextTableOptions
+            Options.ColumnFormatting = columnFormatting
+            Options.OptimalWidthIsFoundWhenPercentageNumberOfRowsFitIntoCell = optimalWidthWhenPercentageNumberOfRowsFitIntoCell
+            Return SuggestColumnWidthsForFixedPlainTables(rows, table, Options)
+        End Function
+
         ''' <summary>
         ''' Suggests column widths for a table using as minimum 2 chars, but minimum header string length, but also either full cell length for number/date/time columns or for all other types a given % value of all values should be visible completely
         ''' </summary>
@@ -2362,9 +2441,8 @@ Namespace CompuMaster.Data
         ''' <param name="table">A table</param>
         ''' <returns></returns>
         ''' <remarks></remarks>
-        Private Shared Function SuggestColumnWidthsForFixedPlainTables(rows As System.Data.DataRow(), ByVal table As DataTable,
-                                                                       optimalWidthWhenPercentageNumberOfRowsFitIntoCell As Double,
-                                                                       columnFormatting As DataColumnToString) As Integer()
+        Public Shared Function SuggestColumnWidthsForFixedPlainTables(rows As System.Data.DataRow(), ByVal table As DataTable,
+                                                                       options As ConvertToPlainTextTableOptions) As Integer()
             If table Is Nothing AndAlso rows IsNot Nothing AndAlso rows.Length > 0 Then
                 table = rows(0).Table
             End If
@@ -2380,27 +2458,65 @@ Namespace CompuMaster.Data
                 If rows.Length > 0 Then
                     If table.Columns(ColCounter).DataType.IsValueType AndAlso Not GetType(String).IsInstanceOfType(table.Columns(ColCounter).DataType) Then
                         'number or date/time
+                        MinWidthForCells = 1
                         For RowCounter As Integer = 0 To rows.Length - 1
-                            MinWidthForCells = System.Math.Max(MinWidthForCells, String.Format(Threading.Thread.CurrentThread.CurrentCulture, "{0}", rows(RowCounter)(ColCounter)).Length)
+                            Dim RawCellValue As Object = rows(RowCounter)(ColCounter)
+                            Dim RenderValue As String
+                            If IsDBNull(RawCellValue) AndAlso options.DbNullText IsNot Nothing Then
+                                RenderValue = options.DbNullText
+                            ElseIf options.ColumnFormatting IsNot Nothing Then
+                                RenderValue = options.ColumnFormatting(table.Columns(ColCounter), rows(RowCounter)(ColCounter))
+                            ElseIf IsDBNull(RawCellValue) Then
+                                RenderValue = ""
+                            Else
+                                RenderValue = String.Format(Threading.Thread.CurrentThread.CurrentCulture, "{0}", RawCellValue)
+                            End If
+                            MinWidthForCells = System.Math.Max(MinWidthForCells, If(RenderValue Is Nothing, 0, RenderValue.Length))
                         Next
                     Else
                         'string or any other object
                         Dim cellWidths(rows.Length - 1) As Integer
                         For RowCounter As Integer = 0 To rows.Length - 1
-                            Dim RenderValue As Object
-                            If columnFormatting Is Nothing Then
-                                RenderValue = rows(RowCounter)(ColCounter)
+                            Dim RawCellValue As Object = rows(RowCounter)(ColCounter)
+                            Dim RenderValue As String
+                            If IsDBNull(RawCellValue) AndAlso options.DbNullText IsNot Nothing Then
+                                RenderValue = options.DbNullText
+                            ElseIf options.ColumnFormatting IsNot Nothing Then
+                                RenderValue = options.ColumnFormatting(table.Columns(ColCounter), rows(RowCounter)(ColCounter))
+                            ElseIf IsDBNull(RawCellValue) Then
+                                RenderValue = ""
                             Else
-                                RenderValue = columnFormatting(table.Columns(ColCounter), rows(RowCounter)(ColCounter))
+                                RenderValue = String.Format(Threading.Thread.CurrentThread.CurrentCulture, "{0}", RawCellValue)
                             End If
-                            cellWidths(RowCounter) = String.Format(Threading.Thread.CurrentThread.CurrentCulture, "{0}", RenderValue).Length
+                            cellWidths(RowCounter) = If(RenderValue Is Nothing, 0, RenderValue.Length)
                         Next
-                        MinWidthForCells = MaxValueOfFirstXPercent(cellWidths, optimalWidthWhenPercentageNumberOfRowsFitIntoCell)
+                        MinWidthForCells = MaxValueOfFirstXPercent(cellWidths, options.OptimalWidthIsFoundWhenPercentageNumberOfRowsFitIntoCell)
                     End If
+                Else
+                    'no rows existing
+                    MinWidthForCells = 0
                 End If
                 colWidths.Add(System.Math.Max(2, System.Math.Max(MinWidthForHeader, MinWidthForCells)))
             Next
             Return CType(colWidths.ToArray(GetType(Integer)), Integer())
+        End Function
+
+
+        ''' <summary>
+        ''' Suggests column widths for a table using as minimum 2 chars, but minimum header string length, but also either full cell length for number/date/time columns or for all other types a given % value of all values should be visible completely
+        ''' </summary>
+        ''' <param name="rows">A set of DataRows</param>
+        ''' <param name="options">Options</param>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        Public Shared Function SuggestColumnWidthsForFixedPlainTables(rows As System.Data.DataRowCollection,
+                                                                       options As ConvertToPlainTextTableOptions) As Integer()
+            If rows.Count = 0 Then
+                Return Nothing
+            Else
+                Dim Table As DataTable = rows(0).Table
+                Return SuggestColumnWidthsForFixedPlainTables(rows, Table, options)
+            End If
         End Function
 
         ''' <summary>
@@ -2410,9 +2526,8 @@ Namespace CompuMaster.Data
         ''' <param name="table">A table</param>
         ''' <returns></returns>
         ''' <remarks></remarks>
-        Private Shared Function SuggestColumnWidthsForFixedPlainTables(rows As System.Data.DataRowCollection, table As DataTable,
-                                                                       optimalWidthWhenPercentageNumberOfRowsFitIntoCell As Double,
-                                                                       columnFormatting As DataColumnToString) As Integer()
+        Public Shared Function SuggestColumnWidthsForFixedPlainTables(rows As System.Data.DataRowCollection, table As DataTable,
+                                                                       options As ConvertToPlainTextTableOptions) As Integer()
             Dim colWidths As New ArrayList
             For ColCounter As Integer = 0 To table.Columns.Count - 1
                 Dim MinWidthForHeader As Integer
@@ -2427,22 +2542,41 @@ Namespace CompuMaster.Data
                         'number or date/time
                         MinWidthForCells = 1
                         For RowCounter As Integer = 0 To rows.Count - 1
-                            MinWidthForCells = System.Math.Max(MinWidthForCells, String.Format(Threading.Thread.CurrentThread.CurrentCulture, "{0}", rows(RowCounter)(ColCounter)).Length)
+                            Dim RawCellValue As Object = rows(RowCounter)(ColCounter)
+                            Dim RenderValue As String
+                            If IsDBNull(RawCellValue) AndAlso options.DbNullText IsNot Nothing Then
+                                RenderValue = options.DbNullText
+                            ElseIf options.ColumnFormatting IsNot Nothing Then
+                                RenderValue = options.ColumnFormatting(table.Columns(ColCounter), rows(RowCounter)(ColCounter))
+                            ElseIf IsDBNull(RawCellValue) Then
+                                RenderValue = ""
+                            Else
+                                RenderValue = String.Format(Threading.Thread.CurrentThread.CurrentCulture, "{0}", RawCellValue)
+                            End If
+                            MinWidthForCells = System.Math.Max(MinWidthForCells, If(RenderValue Is Nothing, 0, RenderValue.Length))
                         Next
                     Else
                         'string or any other object
                         Dim cellWidths(rows.Count - 1) As Integer
                         For RowCounter As Integer = 0 To rows.Count - 1
-                            Dim RenderValue As Object
-                            If columnFormatting Is Nothing Then
-                                RenderValue = rows(RowCounter)(ColCounter)
+                            Dim RawCellValue As Object = rows(RowCounter)(ColCounter)
+                            Dim RenderValue As String
+                            If IsDBNull(RawCellValue) AndAlso options.DbNullText IsNot Nothing Then
+                                RenderValue = options.DbNullText
+                            ElseIf options.ColumnFormatting IsNot Nothing Then
+                                RenderValue = options.ColumnFormatting(table.Columns(ColCounter), rows(RowCounter)(ColCounter))
+                            ElseIf IsDBNull(RawCellValue) Then
+                                RenderValue = ""
                             Else
-                                RenderValue = columnFormatting(table.Columns(ColCounter), rows(RowCounter)(ColCounter))
+                                RenderValue = String.Format(Threading.Thread.CurrentThread.CurrentCulture, "{0}", RawCellValue)
                             End If
-                            cellWidths(RowCounter) = String.Format(Threading.Thread.CurrentThread.CurrentCulture, "{0}", RenderValue).Length
+                            cellWidths(RowCounter) = If(RenderValue Is Nothing, 0, RenderValue.Length)
                         Next
-                        MinWidthForCells = MaxValueOfFirstXPercent(cellWidths, optimalWidthWhenPercentageNumberOfRowsFitIntoCell)
+                        MinWidthForCells = MaxValueOfFirstXPercent(cellWidths, options.OptimalWidthIsFoundWhenPercentageNumberOfRowsFitIntoCell)
                     End If
+                Else
+                    'no rows existing
+                    MinWidthForCells = 0
                 End If
                 colWidths.Add(System.Math.Max(2, System.Math.Max(MinWidthForHeader, MinWidthForCells)))
             Next
@@ -2457,16 +2591,32 @@ Namespace CompuMaster.Data
         ''' <param name="fixedColumnWidths">The column sizes in chars</param>
         ''' <returns>All rows are with fixed column withs. If no rows have been processed, the user will get notified about this fact</returns>
         ''' <remarks></remarks>
+        <Obsolete("Better use overloaded method with options argument")>
+        <System.ComponentModel.EditorBrowsable(ComponentModel.EditorBrowsableState.Never)>
         Private Shared Function ConvertToPlainTextTableWithFixedColumnWidthsInternal(ByVal rows As DataRow(), ByVal label As String,
                                                                               ByVal fixedColumnWidths As Integer(),
                                                                               columnFormatting As DataColumnToString) As String
-            Const hSeparatorHeader As String = "|"
-            Const vSeparatorHeader As Char = "-"c
-            Const crossSeparatorHeader As String = "+"
-            Const vSeparatorCells As Char = Nothing
-            Const hSeparatorCells As String = "|"
-            Const crossSeparatorCells As String = "+"
-            Return ConvertToPlainTextTableWithFixedColumnWidthsInternal(rows, label, fixedColumnWidths, hSeparatorHeader, hSeparatorCells, crossSeparatorHeader, crossSeparatorCells, vSeparatorHeader, vSeparatorCells, columnFormatting)
+            Dim Options = ConvertToPlainTextTableOptions.SimpleLayout
+            With Options
+                .FixedColumnWidths = ConvertInt32ArrayToNullableInt32Array(fixedColumnWidths)
+                .ColumnFormatting = columnFormatting
+                .TableTitle = label
+            End With
+            Return ConvertToPlainTextTableWithFixedColumnWidths(rows, Options)
+        End Function
+
+        ''' <summary>
+        ''' Convert Int32[] to NullableOfInt32[]
+        ''' </summary>
+        ''' <param name="values"></param>
+        ''' <returns></returns>
+        Private Shared Function ConvertInt32ArrayToNullableInt32Array(values As Integer()) As Integer?()
+            If values Is Nothing Then Return Nothing
+            Dim Result As New List(Of Integer?)
+            For MyCounter As Integer = 0 To values.Length - 1
+                Result.Add(values(MyCounter))
+            Next
+            Return Result.ToArray
         End Function
 
         ''' <summary>
@@ -2477,102 +2627,18 @@ Namespace CompuMaster.Data
         ''' <param name="fixedColumnWidths">The column sizes in chars</param>
         ''' <returns>All rows are with fixed column withs. If no rows have been processed, the user will get notified about this fact</returns>
         ''' <remarks></remarks>
+        <Obsolete("Better use overloaded method with options argument")>
+        <System.ComponentModel.EditorBrowsable(ComponentModel.EditorBrowsableState.Never)>
         Private Shared Function ConvertToPlainTextTableWithFixedColumnWidthsInternal(ByVal rows As DataRowCollection, ByVal label As String,
                                                                               ByVal fixedColumnWidths As Integer(),
                                                                               columnFormatting As DataColumnToString) As String
-            Const hSeparatorHeader As String = "|"
-            Const vSeparatorHeader As Char = "-"c
-            Const crossSeparatorHeader As String = "+"
-            Const vSeparatorCells As Char = Nothing
-            Const hSeparatorCells As String = "|"
-            Const crossSeparatorCells As String = "+"
-            Return ConvertToPlainTextTableWithFixedColumnWidthsInternal(rows, label, fixedColumnWidths, hSeparatorHeader, hSeparatorCells, crossSeparatorHeader, crossSeparatorCells, vSeparatorHeader, vSeparatorCells, columnFormatting)
-        End Function
-
-        ''' <summary>
-        '''     Return a string with all columns and rows, helpfull for debugging purposes
-        ''' </summary>
-        ''' <param name="rows">The rows to be processed</param>
-        ''' <param name="label">An optional title of the rows</param>
-        ''' <param name="fixedColumnWidths">The column sizes in chars</param>
-        ''' <param name="verticalSeparatorAfterHeader"></param>
-        ''' <param name="verticalSeparatorForCells"></param>
-        ''' <param name="crossSeparatorHeader"></param>
-        ''' <param name="crossSeparatorCells"></param>
-        ''' <param name="horizontalSeparatorAfterHeader"></param>
-        ''' <param name="horizontalSeparatorForCells"></param>
-        ''' <returns>All rows are with fixed column withs. If no rows have been processed, the user will get notified about this fact</returns>
-        ''' <remarks></remarks>
-        Private Shared Function ConvertToPlainTextTableWithFixedColumnWidthsInternal(ByVal rows As DataRow(), ByVal label As String,
-                                                                              ByVal fixedColumnWidths As Integer(),
-                                                                              horizontalSeparatorAfterHeader As String, horizontalSeparatorForCells As String,
-                                                                              crossSeparatorHeader As String, crossSeparatorCells As String,
-                                                                              verticalSeparatorAfterHeader As Char, verticalSeparatorForCells As Char,
-                                                                              columnFormatting As DataColumnToString) As String
-            If Len(horizontalSeparatorForCells) <> Len(horizontalSeparatorAfterHeader) Then Throw New ArgumentException("Length of horizontalSeparatorAfterHeader and horizontalSeparatorForCells must be equal")
-            If (Char.GetNumericValue(verticalSeparatorAfterHeader) > 0 OrElse Char.GetNumericValue(verticalSeparatorForCells) > 0) AndAlso Len(crossSeparatorHeader) <> Len(horizontalSeparatorAfterHeader) Then Throw New ArgumentException("Length of horizontalSeparatorAfterHeader and crossSeparatorHeader must be equal since horizontal lines are requested")
-            Dim Result As New System.Text.StringBuilder
-            Const SuffixIfValueMustBeShortened As String = "..."
-
-            'Add table name
-            If label <> "" Then
-                Result.Append(String.Format(Threading.Thread.CurrentThread.CurrentCulture, "{0}", label) & System.Environment.NewLine)
-            End If
-            If rows.Length <= 0 Then
-                Result.Append("no rows found" & System.Environment.NewLine)
-                Return Result.ToString
-            End If
-            'Add column headers
-            For ColCounter As Integer = 0 To System.Math.Min(rows(0).Table.Columns.Count, fixedColumnWidths.Length) - 1
-                Dim column As DataColumn = rows(0).Table.Columns(ColCounter)
-                If ColCounter <> 0 Then Result.Append(horizontalSeparatorAfterHeader)
-                If column.Caption <> Nothing Then
-                    Result.Append(TrimStringToFixedWidth(String.Format(Threading.Thread.CurrentThread.CurrentCulture, "{0}", column.Caption), fixedColumnWidths(ColCounter), SuffixIfValueMustBeShortened))
-                Else
-                    Result.Append(TrimStringToFixedWidth(String.Format(Threading.Thread.CurrentThread.CurrentCulture, "{0}", column.ColumnName), fixedColumnWidths(ColCounter), SuffixIfValueMustBeShortened))
-                End If
-            Next
-            Result.Append(System.Environment.NewLine)
-            If verticalSeparatorAfterHeader <> Nothing Then
-                'Add header separator
-                Dim LineSeparatorHeader As String = ""
-                For ColCounter As Integer = 0 To System.Math.Min(rows(0).Table.Columns.Count, fixedColumnWidths.Length) - 1
-#Disable Warning S1643 ' Strings should not be concatenated using "+" or "&" in a loop
-                    If ColCounter <> 0 Then LineSeparatorHeader &= crossSeparatorHeader
-                    LineSeparatorHeader &= Strings.StrDup(fixedColumnWidths(ColCounter), verticalSeparatorAfterHeader)
-#Enable Warning S1643 ' Strings should not be concatenated using "+" or "&" in a loop
-                Next
-                Result.Append(LineSeparatorHeader)
-                Result.Append(System.Environment.NewLine)
-            End If
-            'Add table rows
-            For Each row As DataRow In rows
-                For ColCounter As Integer = 0 To System.Math.Min(row.Table.Columns.Count, fixedColumnWidths.Length) - 1
-                    Dim column As DataColumn = row.Table.Columns(ColCounter)
-                    If ColCounter <> 0 Then Result.Append(horizontalSeparatorForCells)
-                    Dim RenderValue As Object
-                    If columnFormatting Is Nothing Then
-                        RenderValue = row(column)
-                    Else
-                        RenderValue = columnFormatting(column, row(column))
-                    End If
-                    Result.Append(TrimStringToFixedWidth(String.Format(Threading.Thread.CurrentThread.CurrentCulture, "{0}", RenderValue), fixedColumnWidths(ColCounter), SuffixIfValueMustBeShortened))
-                Next
-                Result.Append(System.Environment.NewLine)
-                If verticalSeparatorForCells <> Nothing Then
-                    'Add lines in between of the cells area
-                    Dim LineSeparatorCells As String = ""
-                    For ColCounter As Integer = 0 To System.Math.Min(rows(0).Table.Columns.Count, fixedColumnWidths.Length) - 1
-#Disable Warning S1643 ' Strings should not be concatenated using "+" or "&" in a loop
-                        If ColCounter <> 0 Then LineSeparatorCells &= crossSeparatorCells
-                        LineSeparatorCells &= Strings.StrDup(fixedColumnWidths(ColCounter), verticalSeparatorForCells)
-#Enable Warning S1643 ' Strings should not be concatenated using "+" or "&" in a loop
-                    Next
-                    Result.Append(LineSeparatorCells)
-                    Result.Append(System.Environment.NewLine)
-                End If
-            Next
-            Return Result.ToString
+            Dim Options = ConvertToPlainTextTableOptions.SimpleLayout
+            With Options
+                .FixedColumnWidths = ConvertInt32ArrayToNullableInt32Array(fixedColumnWidths)
+                .ColumnFormatting = columnFormatting
+                .TableTitle = label
+            End With
+            Return ConvertToPlainTextTableWithFixedColumnWidths(rows, Options)
         End Function
 
         Public Delegate Function DataColumnToString(column As System.Data.DataColumn, value As Object) As String
@@ -2591,16 +2657,17 @@ Namespace CompuMaster.Data
         ''' <param name="verticalSeparatorForCells"></param>
         ''' <returns>All rows are with fixed column withs. If no rows have been processed, the user will get notified about this fact</returns>
         ''' <remarks></remarks>
-        '<Obsolete("Use ConvertToPlainTextTableWithFixedColumnWidthsInternal instead", True)>
+        <Obsolete("Better use overloaded method with options argument")>
+        <System.ComponentModel.EditorBrowsable(ComponentModel.EditorBrowsableState.Never)>
         Private Shared Function ConvertToPlainTextTableWithFixedColumnWidthsInternal(ByVal rows As DataRowCollection, ByVal label As String,
                                                                               ByVal fixedColumnWidths As Integer(),
                                                                               horizontalSeparatorAfterHeader As String, horizontalSeparatorForCells As String,
                                                                               crossSeparatorHeader As String, crossSeparatorCells As String,
                                                                               verticalSeparatorAfterHeader As Char, verticalSeparatorForCells As Char,
                                                                               columnFormatting As DataColumnToString) As String
-            Return ConvertToPlainTextTableWithFixedColumnWidthsInternal(rows, New ConvertToPlainTextTableOptions() With {
+            Return ConvertToPlainTextTableWithFixedColumnWidths(rows, New ConvertToPlainTextTableOptions() With {
                 .TableTitle = label,
-                .FixedColumnWidths = fixedColumnWidths,
+                .FixedColumnWidths = ConvertInt32ArrayToNullableInt32Array(fixedColumnWidths),
                 .HorizontalSeparatorAfterHeader = horizontalSeparatorAfterHeader,
                 .HorizontalSeparatorForCells = horizontalSeparatorForCells,
                 .CrossSeparatorHeader = crossSeparatorHeader,
@@ -2618,7 +2685,7 @@ Namespace CompuMaster.Data
         ''' <param name="options">Options for output style and data</param>
         ''' <returns>All rows are with fixed column withs. If no rows have been processed, the user will get notified about this fact</returns>
         ''' <remarks></remarks>
-        Private Shared Function ConvertToPlainTextTableWithFixedColumnWidthsInternal(ByVal rows As DataRowCollection, options As ConvertToPlainTextTableOptions) As String
+        Public Shared Function ConvertToPlainTextTableWithFixedColumnWidths(ByVal rows As DataRowCollection, options As ConvertToPlainTextTableOptions) As String
             options.Validate()
             Dim Result As New System.Text.StringBuilder
             'Add table name
@@ -2629,13 +2696,89 @@ Namespace CompuMaster.Data
                 If options.NoRowsFoundMessage <> Nothing Then Result.AppendLine(options.NoRowsFoundMessage)
                 Return Result.ToString
             End If
+
             'Add converted table
             Dim TextTable As New TextTable(rows(0).Table, options.ColumnFormatting)
-            Result.AppendLine(TextTable.ToString(options.FixedColumnWidths, System.Environment.NewLine, System.Environment.NewLine, "", "", options.SuffixIfValueMustBeShortened,
-                                             options.VerticalSeparatorAfterHeader, options.VerticalSeparatorForCells,
-                                             options.CrossSeparatorHeader, options.CrossSeparatorCells,
-                                             options.HorizontalSeparatorAfterHeader, options.HorizontalSeparatorForCells))
+            Result.AppendLine(
+                TextTable.ToString(
+                    EffectiveFixedColumnWidths(rows, rows(0).Table, options),
+                    System.Environment.NewLine, System.Environment.NewLine, "", "", options.SuffixIfValueMustBeShortened,
+                    options.VerticalSeparatorAfterHeader, options.VerticalSeparatorForCells,
+                    options.CrossSeparatorHeader, options.CrossSeparatorCells,
+                    options.HorizontalSeparatorAfterHeader, options.HorizontalSeparatorForCells))
             Return Result.ToString
+        End Function
+
+        ''' <summary>
+        '''     Return a string with all columns and rows, helpfull for debugging purposes
+        ''' </summary>
+        ''' <param name="rows">The rows to be processed</param>
+        ''' <param name="options">Options for output style and data</param>
+        ''' <returns>All rows are with fixed column withs. If no rows have been processed, the user will get notified about this fact</returns>
+        ''' <remarks></remarks>
+        Public Shared Function ConvertToPlainTextTableWithFixedColumnWidths(ByVal rows As DataRow(), options As ConvertToPlainTextTableOptions) As String
+            options.Validate()
+            Dim Result As New System.Text.StringBuilder
+            'Add table name
+            If options.TableTitle <> "" Then
+                Result.AppendLine(String.Format(Threading.Thread.CurrentThread.CurrentCulture, "{0}", options.TableTitle))
+            End If
+            If rows.Length = 0 Then
+                If options.NoRowsFoundMessage <> Nothing Then Result.AppendLine(options.NoRowsFoundMessage)
+                Return Result.ToString
+            End If
+
+            'Add converted table
+            Dim TextTable As New TextTable(rows, options.ColumnFormatting)
+            Result.AppendLine(
+                TextTable.ToString(
+                    EffectiveFixedColumnWidths(rows, rows(0).Table, options),
+                    System.Environment.NewLine, System.Environment.NewLine, "", "", options.SuffixIfValueMustBeShortened,
+                    options.VerticalSeparatorAfterHeader, options.VerticalSeparatorForCells,
+                    options.CrossSeparatorHeader, options.CrossSeparatorCells,
+                    options.HorizontalSeparatorAfterHeader, options.HorizontalSeparatorForCells))
+            Return Result.ToString
+        End Function
+
+        ''' <summary>
+        ''' Evaluate toe effective column widths based on specified widths and auto-detected suggestions
+        ''' </summary>
+        ''' <param name="rows"></param>
+        ''' <param name="table"></param>
+        ''' <param name="options"></param>
+        ''' <returns></returns>
+        Private Shared Function EffectiveFixedColumnWidths(rows As DataRow(), table As DataTable, options As ConvertToPlainTextTableOptions) As Integer()
+            Dim Result As New List(Of Integer)
+            Dim SuggestedWidths = SuggestColumnWidthsForFixedPlainTables(rows, table, options)
+            For MyCounter As Integer = 0 To table.Columns.Count - 1
+                If options.FixedColumnWidths IsNot Nothing AndAlso MyCounter < options.FixedColumnWidths.Length AndAlso options.FixedColumnWidths(MyCounter).HasValue = True Then
+                    Result.Add(options.FixedColumnWidths(MyCounter).Value)
+                Else
+                    Result.Add(SuggestedWidths(MyCounter))
+                End If
+            Next
+            Return Result.ToArray
+        End Function
+
+        ''' <summary>
+        ''' Evaluate toe effective column widths based on specified widths and auto-detected suggestions
+        ''' </summary>
+        ''' <param name="rows"></param>
+        ''' <param name="table"></param>
+        ''' <param name="options"></param>
+        ''' <returns></returns>
+        Private Shared Function EffectiveFixedColumnWidths(rows As DataRowCollection, table As DataTable, options As ConvertToPlainTextTableOptions) As Integer()
+            Dim Result As New List(Of Integer)
+            Dim SuggestedWidths As Integer()
+            SuggestedWidths = SuggestColumnWidthsForFixedPlainTables(rows, table, options)
+            For MyCounter As Integer = 0 To table.Columns.Count - 1
+                If options.FixedColumnWidths IsNot Nothing AndAlso MyCounter < options.FixedColumnWidths.Length AndAlso options.FixedColumnWidths(MyCounter).HasValue = True Then
+                    Result.Add(options.FixedColumnWidths(MyCounter).Value)
+                Else
+                    Result.Add(SuggestedWidths(MyCounter))
+                End If
+            Next
+            Return Result.ToArray
         End Function
 
         ''' <summary>
