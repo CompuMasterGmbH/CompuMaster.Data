@@ -154,11 +154,9 @@ Namespace CompuMaster.Data.DataQuery
             End If
             Dim Result As New List(Of DataProvider)
             For Each asm As System.Reflection.Assembly In AlreadyLoadedAssemblies
-                Dim asmName As String = asm.FullName.Substring(0, asm.FullName.IndexOf(","c)).ToLowerInvariant 'asm.GetName.Name.ToLowerInvariant
+                Dim asmName As String = asm.GetName.Name.ToLowerInvariant 'asm.FullName.Substring(0, asm.FullName.IndexOf(","c)).ToLowerInvariant '
                 Dim TryToFindDataConnectorsInAssembly As Boolean
-                If asmName = "system.data" OrElse asmName = "system.data.oracleclient" Then
-                    TryToFindDataConnectorsInAssembly = True
-                ElseIf asmName = "system" OrElse asmName.StartsWith("system.", StringComparison.InvariantCulture) OrElse asmName.StartsWith("compumaster.data", StringComparison.InvariantCulture) OrElse asmName.StartsWith("mscorlib", StringComparison.InvariantCulture) OrElse asmName.StartsWith("mono.security", StringComparison.InvariantCulture) OrElse asmName.StartsWith("vshost", StringComparison.InvariantCulture) Then
+                If asmName = "system" OrElse asmName.StartsWith("mscorlib", StringComparison.InvariantCulture) OrElse asmName.StartsWith("mono.security", StringComparison.InvariantCulture) OrElse asmName.StartsWith("vshost", StringComparison.InvariantCulture) Then
                     TryToFindDataConnectorsInAssembly = False
                 Else
                     TryToFindDataConnectorsInAssembly = True
