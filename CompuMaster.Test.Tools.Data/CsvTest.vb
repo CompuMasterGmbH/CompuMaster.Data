@@ -1150,7 +1150,7 @@ Namespace CompuMaster.Test.Data
             Dim Result As DataTable = CompuMaster.Data.Csv.ReadDataTableFromCsvFile(AssemblyTestEnvironment.TestFileAbsolutePath("testfiles\test_linebreak_crlf_cellbreak_crlf.csv"), True, CompuMaster.Data.Csv.ReadLineEncodings.RowBreakCrLfOrCrOrLf_CellLineBreakCrLfOrCrOrLf, CompuMaster.Data.Csv.ReadLineEncodingAutoConversion.NoAutoConversion, "UTF-8", ";"c, """"c, False, True)
 
             'Test output
-            Console.WriteLine(CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(Result, CompuMaster.Data.ConvertToPlainTextTableOptions.InlineBordersLayout))
+            Console.WriteLine(CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(Result, CompuMaster.Data.ConvertToPlainTextTableOptions.InlineBordersLayoutAnsi))
 
             'Some simple tests with 1-liners
             For MyColCounter As Integer = 0 To 2

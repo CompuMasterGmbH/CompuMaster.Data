@@ -26,7 +26,7 @@ Namespace CompuMaster.Data
         ''' Uses "=", "|" and "+" to separate header and row areas and to separate columns, uses "-", "|" and "+" to separate rows from other rows
         ''' </summary>
         ''' <returns></returns>
-        Public Shared ReadOnly Property InlineBordersLayout As ConvertToPlainTextTableOptions
+        Public Shared ReadOnly Property InlineBordersLayoutAnsi As ConvertToPlainTextTableOptions
             Get
                 Return New ConvertToPlainTextTableOptions() With {
                     .VerticalSeparatorAfterHeader = "="c,
@@ -39,6 +39,22 @@ Namespace CompuMaster.Data
             End Get
         End Property
 
+        ''' <summary>
+        ''' Uses "=", "|" and "+" to separate header and row areas and to separate columns, uses "-", "|" and "+" to separate rows from other rows
+        ''' </summary>
+        ''' <returns></returns>
+        Public Shared ReadOnly Property InlineBordersLayoutNice As ConvertToPlainTextTableOptions
+            Get
+                Return New ConvertToPlainTextTableOptions() With {
+                    .VerticalSeparatorAfterHeader = "═"c,
+                    .VerticalSeparatorForCells = "─"c,
+                    .CrossSeparatorHeader = "╪",
+                    .CrossSeparatorCells = "┼",
+                    .HorizontalSeparatorAfterHeader = "│",
+                    .HorizontalSeparatorForCells = "│"
+                }
+            End Get
+        End Property
         ''' <summary>
         ''' An optional label before the table itself
         ''' </summary>

@@ -470,7 +470,16 @@ Namespace CompuMaster.Test.Data
             Console.WriteLine("## SimpleLayout via RowsArray")
             Console.WriteLine(CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(RowsArray, StyleOptions))
 
-            StyleOptions = CompuMaster.Data.ConvertToPlainTextTableOptions.InlineBordersLayout
+            StyleOptions = CompuMaster.Data.ConvertToPlainTextTableOptions.InlineBordersLayoutAnsi
+            StyleOptions.ColumnFormatting = AddressOf ConvertColumnToString
+            Console.WriteLine()
+            Console.WriteLine("## InlineBordersLayout via RowsCollection")
+            Console.WriteLine(CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(dt, StyleOptions))
+            Console.WriteLine()
+            Console.WriteLine("## InlineBordersLayout via RowsArray")
+            Console.WriteLine(CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(RowsArray, StyleOptions))
+
+            StyleOptions = CompuMaster.Data.ConvertToPlainTextTableOptions.InlineBordersLayoutNice
             StyleOptions.ColumnFormatting = AddressOf ConvertColumnToString
             Console.WriteLine()
             Console.WriteLine("## InlineBordersLayout via RowsCollection")

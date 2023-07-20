@@ -6,6 +6,7 @@ Imports CompuMaster.Data.Utils
 Imports CompuMaster.Data.Information
 Imports CompuMaster.Data.Strings
 Imports System.Linq
+Imports System.Data.Common
 
 Namespace CompuMaster.Data
     ''' <summary>
@@ -2448,15 +2449,16 @@ Namespace CompuMaster.Data
             End If
             Dim colWidths As New ArrayList
             For ColCounter As Integer = 0 To table.Columns.Count - 1
+                Dim column As DataColumn = table.Columns(ColCounter)
                 Dim MinWidthForHeader As Integer
-                If table.Columns(ColCounter).Caption <> Nothing Then
-                    MinWidthForHeader = (String.Format(Threading.Thread.CurrentThread.CurrentCulture, "{0}", table.Columns(ColCounter).Caption)).Length
+                If column.Caption <> Nothing Then
+                    MinWidthForHeader = (String.Format(Threading.Thread.CurrentThread.CurrentCulture, "{0}", column.Caption)).Length
                 Else
-                    MinWidthForHeader = (String.Format(Threading.Thread.CurrentThread.CurrentCulture, "{0}", table.Columns(ColCounter).ColumnName)).Length
+                    MinWidthForHeader = (String.Format(Threading.Thread.CurrentThread.CurrentCulture, "{0}", column.ColumnName)).Length
                 End If
                 Dim MinWidthForCells As Integer
                 If rows.Length > 0 Then
-                    If table.Columns(ColCounter).DataType.IsValueType AndAlso Not GetType(String).IsInstanceOfType(table.Columns(ColCounter).DataType) Then
+                    If column.DataType.IsValueType AndAlso Not GetType(String).IsInstanceOfType(column.DataType) Then
                         'number or date/time
                         MinWidthForCells = 1
                         For RowCounter As Integer = 0 To rows.Length - 1
@@ -2465,7 +2467,7 @@ Namespace CompuMaster.Data
                             If IsDBNull(RawCellValue) AndAlso options.DbNullText IsNot Nothing Then
                                 RenderValue = options.DbNullText
                             ElseIf options.ColumnFormatting IsNot Nothing Then
-                                RenderValue = options.ColumnFormatting(table.Columns(ColCounter), rows(RowCounter)(ColCounter))
+                                RenderValue = options.ColumnFormatting(column, RawCellValue)
                             ElseIf IsDBNull(RawCellValue) Then
                                 RenderValue = ""
                             Else
@@ -2482,7 +2484,7 @@ Namespace CompuMaster.Data
                             If IsDBNull(RawCellValue) AndAlso options.DbNullText IsNot Nothing Then
                                 RenderValue = options.DbNullText
                             ElseIf options.ColumnFormatting IsNot Nothing Then
-                                RenderValue = options.ColumnFormatting(table.Columns(ColCounter), rows(RowCounter)(ColCounter))
+                                RenderValue = options.ColumnFormatting(column, RawCellValue)
                             ElseIf IsDBNull(RawCellValue) Then
                                 RenderValue = ""
                             Else
@@ -2530,15 +2532,16 @@ Namespace CompuMaster.Data
                                                                        options As ConvertToPlainTextTableOptions) As Integer()
             Dim colWidths As New ArrayList
             For ColCounter As Integer = 0 To table.Columns.Count - 1
+                Dim column As DataColumn = table.Columns(ColCounter)
                 Dim MinWidthForHeader As Integer
-                If table.Columns(ColCounter).Caption <> Nothing Then
-                    MinWidthForHeader = (String.Format(Threading.Thread.CurrentThread.CurrentCulture, "{0}", table.Columns(ColCounter).Caption)).Length
+                If column.Caption <> Nothing Then
+                    MinWidthForHeader = (String.Format(Threading.Thread.CurrentThread.CurrentCulture, "{0}", column.Caption)).Length
                 Else
-                    MinWidthForHeader = (String.Format(Threading.Thread.CurrentThread.CurrentCulture, "{0}", table.Columns(ColCounter).ColumnName)).Length
+                    MinWidthForHeader = (String.Format(Threading.Thread.CurrentThread.CurrentCulture, "{0}", column.ColumnName)).Length
                 End If
                 Dim MinWidthForCells As Integer
                 If rows.Count > 0 Then
-                    If table.Columns(ColCounter).DataType.IsValueType AndAlso Not GetType(String).IsInstanceOfType(table.Columns(ColCounter).DataType) Then
+                    If column.DataType.IsValueType AndAlso Not GetType(String).IsInstanceOfType(column.DataType) Then
                         'number or date/time
                         MinWidthForCells = 1
                         For RowCounter As Integer = 0 To rows.Count - 1
@@ -2547,7 +2550,7 @@ Namespace CompuMaster.Data
                             If IsDBNull(RawCellValue) AndAlso options.DbNullText IsNot Nothing Then
                                 RenderValue = options.DbNullText
                             ElseIf options.ColumnFormatting IsNot Nothing Then
-                                RenderValue = options.ColumnFormatting(table.Columns(ColCounter), rows(RowCounter)(ColCounter))
+                                RenderValue = options.ColumnFormatting(column, RawCellValue)
                             ElseIf IsDBNull(RawCellValue) Then
                                 RenderValue = ""
                             Else
@@ -2564,7 +2567,7 @@ Namespace CompuMaster.Data
                             If IsDBNull(RawCellValue) AndAlso options.DbNullText IsNot Nothing Then
                                 RenderValue = options.DbNullText
                             ElseIf options.ColumnFormatting IsNot Nothing Then
-                                RenderValue = options.ColumnFormatting(table.Columns(ColCounter), rows(RowCounter)(ColCounter))
+                                RenderValue = options.ColumnFormatting(column, RawCellValue)
                             ElseIf IsDBNull(RawCellValue) Then
                                 RenderValue = ""
                             Else
