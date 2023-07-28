@@ -1036,6 +1036,16 @@ Namespace CompuMaster.Data.DataQuery
         ''' </summary>
         ''' <param name="dbCommand">The command object</param>
         ''' <param name="automations">Automation options for the connection</param>
+        ''' <returns></returns>
+        Public Function FillDataTable(ByVal dbCommand As IDbCommand, ByVal automations As Automations) As System.Data.DataTable
+            Return FillDataTable(dbCommand, automations)
+        End Function
+
+        ''' <summary>
+        '''     Fill a new data table with the result of a command
+        ''' </summary>
+        ''' <param name="dbCommand">The command object</param>
+        ''' <param name="automations">Automation options for the connection</param>
         ''' <param name="tableName">The name for the new table</param>
         ''' <returns></returns>
         Public Function FillDataTable(ByVal dbCommand As IDbCommand, ByVal automations As Automations, ByVal tableName As String) As System.Data.DataTable
