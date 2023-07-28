@@ -2415,9 +2415,10 @@ Namespace CompuMaster.Data
         Private Shared Function SuggestColumnWidthsForFixedPlainTables(rows As System.Data.DataRow(), ByVal table As DataTable,
                                                                        optimalWidthWhenPercentageNumberOfRowsFitIntoCell As Double,
                                                                        columnFormatting As DataColumnToString) As Integer()
-            Dim Options As New ConvertToPlainTextTableOptions
-            Options.ColumnFormatting = columnFormatting
-            Options.OptimalWidthIsFoundWhenPercentageNumberOfRowsFitIntoCell = optimalWidthWhenPercentageNumberOfRowsFitIntoCell
+            Dim Options As New ConvertToPlainTextTableOptions With {
+                .ColumnFormatting = columnFormatting,
+                .OptimalWidthIsFoundWhenPercentageNumberOfRowsFitIntoCell = optimalWidthWhenPercentageNumberOfRowsFitIntoCell
+            }
             Return SuggestColumnWidthsForFixedPlainTables(rows, table, Options)
         End Function
 
@@ -2429,9 +2430,10 @@ Namespace CompuMaster.Data
         Private Shared Function SuggestColumnWidthsForFixedPlainTables(rows As System.Data.DataRowCollection, table As DataTable,
                                                                        optimalWidthWhenPercentageNumberOfRowsFitIntoCell As Double,
                                                                        columnFormatting As DataColumnToString) As Integer()
-            Dim Options As New ConvertToPlainTextTableOptions
-            Options.ColumnFormatting = columnFormatting
-            Options.OptimalWidthIsFoundWhenPercentageNumberOfRowsFitIntoCell = optimalWidthWhenPercentageNumberOfRowsFitIntoCell
+            Dim Options As New ConvertToPlainTextTableOptions With {
+                .ColumnFormatting = columnFormatting,
+                .OptimalWidthIsFoundWhenPercentageNumberOfRowsFitIntoCell = optimalWidthWhenPercentageNumberOfRowsFitIntoCell
+            }
             Return SuggestColumnWidthsForFixedPlainTables(rows, table, Options)
         End Function
 

@@ -431,15 +431,6 @@ Namespace CompuMaster.Data
         End Function
 
         ''' <summary>
-        '''     Convert an ArrayList to a datatable
-        ''' </summary>
-        ''' <param name="arrayList">An ArrayList with some content</param>
-        ''' <returns>Datatable with column &quot;key&quot; and &quot;value&quot;</returns>
-        <Obsolete("use ConvertICollectionToDataTable instead", False)> Friend Shared Function ConvertArrayListToDataTable(ByVal arrayList As ArrayList) As DataTable
-            Return ConvertICollectionToDataTable(arrayList)
-        End Function
-
-        ''' <summary>
         '''     Convert a data table to a hash table
         ''' </summary>
         ''' <param name="keyColumn">This is the key column from the data table and MUST BE UNIQUE</param>
@@ -527,16 +518,6 @@ Namespace CompuMaster.Data
                 Result(MyCounter) = New DictionaryEntry(data.Rows(MyCounter)(keyColumnIndex), data.Rows(MyCounter)(valueColumnIndex))
             Next
             Return Result
-        End Function
-
-        ''' <summary>
-        '''     Convert a hashtable to a datatable
-        ''' </summary>
-        ''' <param name="hashtable">A hashtable with some content</param>
-        ''' <returns>Datatable with column &quot;key&quot; and &quot;value&quot;</returns>
-        <Obsolete("use ConvertIDictionaryToDataTable instead and pay attention to parameter keyIsUnique", False)>
-        Friend Shared Function ConvertHashtableToDataTable(ByVal hashtable As Hashtable) As DataTable
-            Return ConvertIDictionaryToDataTable(hashtable, True)
         End Function
 
         ''' <summary>

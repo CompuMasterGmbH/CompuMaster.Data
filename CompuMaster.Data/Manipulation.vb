@@ -44,7 +44,7 @@ Namespace CompuMaster.Data
         ''' A container for a DataTable with its IDataAdapter and IDbCommand
         ''' </summary>
         ''' <remarks></remarks>
-        <Obsolete("Use CompuMaster.Data.Manipulation instead", False), ComponentModel.EditorBrowsable(ComponentModel.EditorBrowsableState.Never)> Public Class DataManipulationResults
+        <Obsolete("Subject of removal in future versions. Use CompuMaster.Data.Manipulation instead", True), ComponentModel.EditorBrowsable(ComponentModel.EditorBrowsableState.Never)> Public Class DataManipulationResults
             Inherits CompuMaster.Data.DataManipulationResult
             <Obsolete("Use CompuMaster.Data.Manipulation instead", True)> Public Sub New()
                 MyBase.New(Nothing, Nothing, Nothing, Nothing)
