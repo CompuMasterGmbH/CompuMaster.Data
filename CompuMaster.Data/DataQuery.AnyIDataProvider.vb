@@ -2,6 +2,7 @@ Option Explicit On
 Option Strict On
 
 Imports System.Data
+Imports System.Data.SqlClient
 Imports CompuMaster.Data.Information
 
 Namespace CompuMaster.Data.DataQuery
@@ -139,9 +140,7 @@ Namespace CompuMaster.Data.DataQuery
                     End If
                 End If
                 Result = MyCmd.ExecuteNonQuery
-                If MyCmd IsNot Nothing Then
-                    MyCmd.Dispose()
-                End If
+                MyCmd?.Dispose()
             Catch ex As Exception
                 Throw New CompuMaster.Data.DataQuery.DataException(MyCmd, ex)
             Finally
@@ -154,6 +153,14 @@ Namespace CompuMaster.Data.DataQuery
                     End If
                 End If
             End Try
+        End Sub
+
+        ''' <summary>
+        '''     Executes a command without returning any data
+        ''' </summary>
+        ''' <param name="dbCommand">The command with an assigned connection property value</param>
+        Public Sub ExecuteNonQuery(ByVal dbCommand As IDbCommand)
+            ExecuteNonQuery(dbCommand, Automations.AutoOpenAndCloseAndDisposeConnection)
         End Sub
 
         ''' <summary>
@@ -205,10 +212,20 @@ Namespace CompuMaster.Data.DataQuery
         ''' <param name="commandText">The command text</param>
         ''' <param name="commandType">The command type</param>
         ''' <param name="sqlParameters">An optional list of SqlParameters</param>
-        <Obsolete("Use another overload of this method including argument automations"), System.ComponentModel.EditorBrowsable(ComponentModel.EditorBrowsableState.Never)>
         Public Sub ExecuteNonQuery(ByVal dbConnection As IDbConnection, ByVal commandText As String, ByVal commandType As System.Data.CommandType, ByVal sqlParameters As IDataParameter())
             ExecuteNonQuery(dbConnection, commandText, commandType, sqlParameters, Automations.AutoOpenAndCloseAndDisposeConnection)
         End Sub
+
+        ''' <summary>
+        '''     Executes a command scalar and returns the value
+        ''' </summary>
+        ''' <param name="dbConnection">The connection to the database</param>
+        ''' <param name="commandText">The command text</param>
+        ''' <param name="commandType">The command type</param>
+        ''' <returns></returns>
+        Public Function ExecuteScalarToNullable(Of T As Structure)(ByVal dbConnection As IDbConnection, ByVal commandText As String, ByVal commandType As System.Data.CommandType) As T?
+            Return ExecuteScalarToNullable(Of T)(dbConnection, commandText, commandType, CType(Nothing, IDataParameter()), Automations.AutoOpenAndCloseAndDisposeConnection)
+        End Function
 
         ''' <summary>
         '''     Executes a command scalar and returns the value
@@ -226,6 +243,17 @@ Namespace CompuMaster.Data.DataQuery
             Else
                 Return CType(Result, T?)
             End If
+        End Function
+
+        ''' <summary>
+        '''     Executes a command scalar and returns the value
+        ''' </summary>
+        ''' <param name="dbConnection">The connection to the database</param>
+        ''' <param name="commandText">The command text</param>
+        ''' <param name="commandType">The command type</param>
+        ''' <returns></returns>
+        Public Function ExecuteScalar(Of T As Class)(ByVal dbConnection As IDbConnection, ByVal commandText As String, ByVal commandType As System.Data.CommandType) As T
+            Return ExecuteScalar(Of T)(dbConnection, commandText, commandType, CType(Nothing, IDataParameter()), Automations.AutoOpenAndCloseAndDisposeConnection)
         End Function
 
         ''' <summary>
@@ -273,9 +301,7 @@ Namespace CompuMaster.Data.DataQuery
                     End If
                 End If
                 Result = MyCmd.ExecuteScalar
-                If MyCmd IsNot Nothing Then
-                    MyCmd.Dispose()
-                End If
+                MyCmd?.Dispose()
             Catch ex As Exception
                 Throw New CompuMaster.Data.DataQuery.DataException(MyCmd, ex)
             Finally
@@ -289,6 +315,14 @@ Namespace CompuMaster.Data.DataQuery
                 End If
             End Try
             Return Result
+        End Function
+
+        ''' <summary>
+        '''     Executes a command scalar and returns the value
+        ''' </summary>
+        ''' <param name="dbCommand">The command with an assigned connection property value</param>
+        Public Function ExecuteScalarToNullable(Of T As Structure)(ByVal dbCommand As IDbCommand) As T?
+            Return ExecuteScalarToNullable(Of T)(dbCommand, Automations.AutoOpenAndCloseAndDisposeConnection)
         End Function
 
         ''' <summary>
@@ -309,6 +343,14 @@ Namespace CompuMaster.Data.DataQuery
         '''     Executes a command scalar and returns the value
         ''' </summary>
         ''' <param name="dbCommand">The command with an assigned connection property value</param>
+        Public Function ExecuteScalar(Of T As Class)(ByVal dbCommand As IDbCommand) As T
+            Return ExecuteScalar(Of T)(dbCommand, Automations.AutoOpenAndCloseAndDisposeConnection)
+        End Function
+
+        ''' <summary>
+        '''     Executes a command scalar and returns the value
+        ''' </summary>
+        ''' <param name="dbCommand">The command with an assigned connection property value</param>
         ''' <param name="automations">Automation options for the connection</param>
         Public Function ExecuteScalar(Of T As Class)(ByVal dbCommand As IDbCommand, ByVal automations As Automations) As T
             Dim Result As Object = ExecuteScalar(dbCommand, automations)
@@ -317,6 +359,14 @@ Namespace CompuMaster.Data.DataQuery
             Else
                 Return CType(Result, T)
             End If
+        End Function
+
+        ''' <summary>
+        '''     Executes a command scalar and returns the value
+        ''' </summary>
+        ''' <param name="dbCommand">The command with an assigned connection property value</param>
+        Public Function ExecuteScalar(ByVal dbCommand As IDbCommand) As Object
+            Return ExecuteScalar(dbCommand, Automations.AutoOpenAndCloseAndDisposeConnection)
         End Function
 
         ''' <summary>
@@ -358,7 +408,6 @@ Namespace CompuMaster.Data.DataQuery
         ''' <param name="commandType">The command type</param>
         ''' <param name="sqlParameters">An optional list of SqlParameters</param>
         ''' <returns></returns>
-        <Obsolete("Use another overload of this method including argument automations"), System.ComponentModel.EditorBrowsable(ComponentModel.EditorBrowsableState.Never)>
         Public Function ExecuteScalar(ByVal dbConnection As IDbConnection, ByVal commandText As String, ByVal commandType As System.Data.CommandType, ByVal sqlParameters As IDataParameter()) As Object
             Return ExecuteScalar(dbConnection, commandText, commandType, sqlParameters, Automations.AutoOpenAndCloseAndDisposeConnection)
         End Function
@@ -383,6 +432,15 @@ Namespace CompuMaster.Data.DataQuery
                 Next
             End If
             Return ExecuteReaderAndPutFirstColumnIntoArrayList(MyCmd, automations)
+        End Function
+
+        ''' <summary>
+        '''     Executes a command with a data reader and returns the values of the first column
+        ''' </summary>
+        ''' <param name="dbCommand">The command object which shall be executed</param>
+        ''' <returns></returns>
+        Public Function ExecuteReaderAndPutFirstColumnIntoArrayList(ByVal dbCommand As IDbCommand) As ArrayList
+            Return ExecuteReaderAndPutFirstColumnIntoArrayList(dbCommand, Automations.AutoOpenAndCloseAndDisposeConnection)
         End Function
 
         ''' <summary>
@@ -424,6 +482,21 @@ Namespace CompuMaster.Data.DataQuery
             Return Result
         End Function
 
+        ''' <summary>
+        '''     Executes a command with a data reader and returns the values of the first column
+        ''' </summary>
+        ''' <param name="dbCommand">The command object which shall be executed</param>
+        ''' <returns></returns>
+        Public Function ExecuteReaderAndPutFirstColumnIntoGenericList(Of TValue)(ByVal dbCommand As IDbCommand) As System.Collections.Generic.List(Of TValue)
+            Return ExecuteReaderAndPutFirstColumnIntoGenericList(Of TValue)(dbCommand, Automations.AutoOpenAndCloseAndDisposeConnection)
+        End Function
+
+        ''' <summary>
+        '''     Executes a command with a data reader and returns the values of the first column
+        ''' </summary>
+        ''' <param name="dbCommand">The command object which shall be executed</param>
+        ''' <param name="automations">Automation options for the connection</param>
+        ''' <returns></returns>
         Public Function ExecuteReaderAndPutFirstColumnIntoGenericList(Of TValue)(ByVal dbCommand As IDbCommand, ByVal automations As Automations) As System.Collections.Generic.List(Of TValue)
             Dim MyConn As IDbConnection = dbCommand.Connection
             Dim MyCmd As IDbCommand = dbCommand
@@ -460,7 +533,21 @@ Namespace CompuMaster.Data.DataQuery
             End Try
             Return Result
         End Function
+        ''' <summary>
+        '''     Executes a command with a data reader and returns the values of the first column
+        ''' </summary>
+        ''' <param name="dbCommand">The command object which shall be executed</param>
+        ''' <returns></returns>
+        Public Function ExecuteReaderAndPutFirstColumnIntoGenericNullableList(Of TValue As Structure)(ByVal dbCommand As IDbCommand) As System.Collections.Generic.List(Of TValue?)
+            Return ExecuteReaderAndPutFirstColumnIntoGenericNullableList(Of TValue)(dbCommand, Automations.AutoOpenAndCloseAndDisposeConnection)
+        End Function
 
+        ''' <summary>
+        '''     Executes a command with a data reader and returns the values of the first column
+        ''' </summary>
+        ''' <param name="dbCommand">The command object which shall be executed</param>
+        ''' <param name="automations">Automation options for the connection</param>
+        ''' <returns></returns>
         Public Function ExecuteReaderAndPutFirstColumnIntoGenericNullableList(Of TValue As Structure)(ByVal dbCommand As IDbCommand, ByVal automations As Automations) As System.Collections.Generic.List(Of TValue?)
             Dim MyConn As IDbConnection = dbCommand.Connection
             Dim MyCmd As IDbCommand = dbCommand
@@ -514,6 +601,15 @@ Namespace CompuMaster.Data.DataQuery
         '''     Executes a command with a data reader and returns the values of the first two columns
         ''' </summary>
         ''' <param name="dbCommand">The prepared command to the database</param>
+        ''' <returns>An array of DictionaryEntry with the values of the first column as the key element and the second column values in the value element of the DictionaryEntry</returns>
+        Public Function ExecuteReaderAndPutFirstTwoColumnsIntoDictionaryEntryArray(ByVal dbCommand As IDbCommand) As DictionaryEntry()
+            Return ExecuteReaderAndPutFirstTwoColumnsIntoDictionaryEntryArray(dbCommand, Automations.AutoOpenAndCloseAndDisposeConnection)
+        End Function
+
+        ''' <summary>
+        '''     Executes a command with a data reader and returns the values of the first two columns
+        ''' </summary>
+        ''' <param name="dbCommand">The prepared command to the database</param>
         ''' <param name="automations">Automation options for the connection</param>
         ''' <returns>An array of DictionaryEntry with the values of the first column as the key element and the second column values in the value element of the DictionaryEntry</returns>
         Public Function ExecuteReaderAndPutFirstTwoColumnsIntoDictionaryEntryArray(ByVal dbCommand As IDbCommand, ByVal automations As Automations) As DictionaryEntry()
@@ -546,6 +642,18 @@ Namespace CompuMaster.Data.DataQuery
                 End If
             End Try
             Return CType(Result.ToArray(GetType(DictionaryEntry)), DictionaryEntry())
+        End Function
+
+        ''' <summary>
+        '''     Executes a command with a data reader and returns the values of the first two columns
+        ''' </summary>
+        ''' <param name="dbConnection">The connection to the database</param>
+        ''' <param name="commandText">The command text</param>
+        ''' <param name="commandType">The command type</param>
+        ''' <param name="sqlParameters">An optional list of SqlParameters</param>
+        ''' <returns>An array of DictionaryEntry with the values of the first column as the key element and the second column values in the value element of the DictionaryEntry</returns>
+        Public Function ExecuteReaderAndPutFirstTwoColumnsIntoDictionaryEntryArray(ByVal dbConnection As IDbConnection, ByVal commandText As String, ByVal commandType As System.Data.CommandType, ByVal sqlParameters As IDataParameter()) As DictionaryEntry()
+            Return ExecuteReaderAndPutFirstTwoColumnsIntoDictionaryEntryArray(dbConnection, commandText, commandType, sqlParameters, Automations.AutoOpenAndCloseAndDisposeConnection)
         End Function
 
         ''' <summary>
@@ -595,6 +703,18 @@ Namespace CompuMaster.Data.DataQuery
                 End If
             End Try
             Return CType(Result.ToArray(GetType(DictionaryEntry)), DictionaryEntry())
+        End Function
+
+        ''' <summary>
+        '''     Executes a command with a data reader and returns the values of the first column
+        ''' </summary>
+        ''' <param name="dbCommand">The command object which shall be executed</param>
+        ''' <returns>A hashtable with the values of the first column in the hashtable's key field and the second column values in the hashtable's value field</returns>
+        ''' <remarks>
+        ''' ATTENTION: Please note that multiple but equal values from the first column will result in 1 key/value pair since hashtables use a unique key and override the value with the last assignment. Alternatively you may want to receive an array of DictionaryEntry.
+        ''' </remarks>
+        Public Function ExecuteReaderAndPutFirstTwoColumnsIntoHashtable(ByVal dbCommand As IDbCommand) As Hashtable
+            Return ExecuteReaderAndPutFirstTwoColumnsIntoHashtable(dbCommand, Automations.AutoOpenAndCloseAndDisposeConnection)
         End Function
 
         ''' <summary>
@@ -694,6 +814,15 @@ Namespace CompuMaster.Data.DataQuery
         '''     Executes a command with a data reader and returns the values of the first two columns
         ''' </summary>
         ''' <param name="dbCommand">The command object which shall be executed</param>
+        ''' <returns>A list of KeyValuePairs with the values of the first column in the key field and the second column values in the value field, NULL values are initialized with null (Nothing in VisualBasic)</returns>
+        Public Function ExecuteReaderAndPutFirstTwoColumnsIntoGenericKeyValuePairs(Of TKey, TValue)(ByVal dbCommand As IDbCommand) As System.Collections.Generic.List(Of System.Collections.Generic.KeyValuePair(Of TKey, TValue))
+            Return ExecuteReaderAndPutFirstTwoColumnsIntoGenericKeyValuePairs(Of TKey, TValue)(dbCommand, Automations.AutoOpenAndCloseAndDisposeConnection)
+        End Function
+
+        ''' <summary>
+        '''     Executes a command with a data reader and returns the values of the first two columns
+        ''' </summary>
+        ''' <param name="dbCommand">The command object which shall be executed</param>
         ''' <param name="automations">Automation options for the connection</param>
         ''' <returns>A list of KeyValuePairs with the values of the first column in the key field and the second column values in the value field, NULL values are initialized with null (Nothing in VisualBasic)</returns>
         Public Function ExecuteReaderAndPutFirstTwoColumnsIntoGenericKeyValuePairs(Of TKey, TValue)(ByVal dbCommand As IDbCommand, ByVal automations As Automations) As System.Collections.Generic.List(Of System.Collections.Generic.KeyValuePair(Of TKey, TValue))
@@ -745,6 +874,16 @@ Namespace CompuMaster.Data.DataQuery
         ''' <param name="dbCommand">The command object which shall be executed</param>
         ''' <param name="automations">Automation options for the connection</param>
         ''' <returns>A list of KeyValuePairs with the values of the first column in the key field and the second column values in the value field</returns>
+        Public Function ExecuteReaderAndPutFirstTwoColumnsIntoGenericNullableKeyValuePairs(Of TKey As Structure, TValue As Structure)(ByVal dbCommand As IDbCommand) As System.Collections.Generic.List(Of System.Collections.Generic.KeyValuePair(Of TKey?, TValue?))
+            Return ExecuteReaderAndPutFirstTwoColumnsIntoGenericNullableKeyValuePairs(Of TKey, TValue)(dbCommand, Automations.AutoOpenAndCloseAndDisposeConnection)
+        End Function
+
+        ''' <summary>
+        '''     Executes a command with a data reader and returns the values of the first two columns
+        ''' </summary>
+        ''' <param name="dbCommand">The command object which shall be executed</param>
+        ''' <param name="automations">Automation options for the connection</param>
+        ''' <returns>A list of KeyValuePairs with the values of the first column in the key field and the second column values in the value field</returns>
         Public Function ExecuteReaderAndPutFirstTwoColumnsIntoGenericNullableKeyValuePairs(Of TKey As Structure, TValue As Structure)(ByVal dbCommand As IDbCommand, ByVal automations As Automations) As System.Collections.Generic.List(Of System.Collections.Generic.KeyValuePair(Of TKey?, TValue?))
             Dim Result As New System.Collections.Generic.List(Of System.Collections.Generic.KeyValuePair(Of TKey?, TValue?))
             Dim MyCmd As IDbCommand = dbCommand
@@ -786,6 +925,18 @@ Namespace CompuMaster.Data.DataQuery
                 End If
             End Try
             Return Result
+        End Function
+
+        ''' <summary>
+        '''     Executes a command with a data reader and returns the values of the first two columns
+        ''' </summary>
+        ''' <param name="dbCommand">The command object which shall be executed</param>
+        ''' <returns>A dictionary of KeyValuePairs with the values of the first column in the key field and the second column values in the value field, NULL values are initialized with null (Nothing in VisualBasic)</returns>
+        ''' <remarks>
+        ''' ATTENTION: Please note that multiple but equal values from the first column will result in 1 key/value pair since hashtables use a unique key and override the value with the last assignment. Alternatively you may want to receive a List of KeyValuePairs.
+        ''' </remarks>
+        Public Function ExecuteReaderAndPutFirstTwoColumnsIntoGenericDictionary(Of TKey, TValue)(ByVal dbCommand As IDbCommand) As System.Collections.Generic.Dictionary(Of TKey, TValue)
+            Return ExecuteReaderAndPutFirstTwoColumnsIntoGenericDictionary(Of TKey, TValue)(dbCommand, Automations.AutoOpenAndCloseAndDisposeConnection)
         End Function
 
         ''' <summary>
@@ -842,6 +993,18 @@ Namespace CompuMaster.Data.DataQuery
                 End If
             End Try
             Return Result
+        End Function
+
+        ''' <summary>
+        '''     Executes a command with a data reader and returns the values of the first two columns
+        ''' </summary>
+        ''' <param name="dbCommand">The command object which shall be executed</param>
+        ''' <returns>A dictionary of KeyValuePairs with the values of the first column in the key field and the second column values in the value field</returns>
+        ''' <remarks>
+        ''' ATTENTION: Please note that multiple but equal values from the first column will result in 1 key/value pair since hashtables use a unique key and override the value with the last assignment. Alternatively you may want to receive a List of KeyValuePairs.
+        ''' </remarks>
+        Public Function ExecuteReaderAndPutFirstTwoColumnsIntoGenericNullableDictionary(Of TKey, TValue As Structure)(ByVal dbCommand As IDbCommand) As System.Collections.Generic.Dictionary(Of TKey, TValue?)
+            Return ExecuteReaderAndPutFirstTwoColumnsIntoGenericNullableDictionary(Of TKey, TValue)(dbCommand, Automations.AutoOpenAndCloseAndDisposeConnection)
         End Function
 
         ''' <summary>
@@ -925,9 +1088,7 @@ Namespace CompuMaster.Data.DataQuery
         ''' <param name="automations">Automation options for the connection</param>
         ''' <param name="commandTimeout">A timeout value in seconds for the command object (negative values will be ignored and leave the timeout value on default)</param>
         ''' <returns></returns>
-        ''' <remarks>
-        '''     Automations can only open a connection, but never close. This is because you have to close the connection by yourself AFTER you walked through the data reader.
-        ''' </remarks>
+        ''' <remarks>If requested, automatic closing of connection will happen when reader reaches end of data (feature of reader classes). Alternatively, you have to close the connection by yourself AFTER you walked through the data reader.</remarks>
         Public Function ExecuteReader(ByVal dbConnection As IDbConnection, ByVal commandText As String, ByVal commandType As System.Data.CommandType, ByVal sqlParameters As IDataParameter(), ByVal automations As Automations, ByVal commandTimeout As Integer) As IDataReader
             If automations = Automations.AutoCloseAndDisposeConnection OrElse automations = Automations.AutoOpenAndCloseAndDisposeConnection Then
                 Throw New ArgumentException("Can't close a data reader automatically since data has to be read first")
@@ -972,6 +1133,7 @@ Namespace CompuMaster.Data.DataQuery
         ''' <param name="commandText">The command text</param>
         ''' <param name="commandType">The command type</param>
         ''' <param name="sqlParameters">An optional list of SqlParameters</param>
+        ''' <remarks>If requested, automatic closing of connection will happen when reader reaches end of data (feature of reader classes). Alternatively, you have to close the connection by yourself AFTER you walked through the data reader.</remarks>
         ''' <returns></returns>
         Public Function ExecuteReader(ByVal dbConnection As IDbConnection, ByVal commandText As String, ByVal commandType As System.Data.CommandType, ByVal sqlParameters As IDataParameter(), ByVal automations As Automations) As IDataReader
             Dim MyConn As IDbConnection = dbConnection
@@ -1008,6 +1170,7 @@ Namespace CompuMaster.Data.DataQuery
         ''' </summary>
         ''' <param name="dbCommand">The command with an assigned connection property value</param>
         ''' <param name="automations">Automation options for the connection</param>
+        ''' <remarks>If requested, automatic closing of connection will happen when reader reaches end of data (feature of reader classes). Alternatively, you have to close the connection by yourself AFTER you walked through the data reader.</remarks>
         Public Function ExecuteReader(ByVal dbCommand As IDbCommand, ByVal automations As Automations) As IDataReader
             Dim MyCmd As IDbCommand = dbCommand
             Dim MyConn As IDbConnection = MyCmd.Connection
@@ -1029,6 +1192,15 @@ Namespace CompuMaster.Data.DataQuery
                 'Keep the connection opened since the reader still requires processing
             End Try
             Return Result
+        End Function
+
+        ''' <summary>
+        '''     Fill a new data table with the result of a command
+        ''' </summary>
+        ''' <param name="dbCommand">The command object</param>
+        ''' <returns></returns>
+        Public Function FillDataTable(ByVal dbCommand As IDbCommand) As System.Data.DataTable
+            Return FillDataTable(dbCommand, Automations.AutoOpenAndCloseAndDisposeConnection)
         End Function
 
         ''' <summary>
@@ -1138,7 +1310,28 @@ Namespace CompuMaster.Data.DataQuery
         ''' <summary>
         '''     Fill a new data table with the result of a command
         ''' </summary>
-        ''' <param name="dbCommand">The command object</param>
+        ''' <param name="dbConnection">The connection to the database</param>
+        ''' <param name="commandText">The command text</param>
+        ''' <param name="commandType">The command type</param>
+        ''' <returns></returns>
+        Public Function FillDataTable(ByVal dbConnection As IDbConnection, ByVal commandText As String, ByVal commandType As System.Data.CommandType) As System.Data.DataTable
+            Return FillDataTable(dbConnection, commandText, commandType, CType(Nothing, IDataParameter()), Automations.AutoOpenAndCloseAndDisposeConnection)
+        End Function
+
+        ''' <summary>
+        '''     Fill several new data tables with the result of a command
+        ''' </summary>
+        ''' <param name="dbCommand">The command object containing multiple SELECT statements</param>
+        ''' <param name="automations">Automation options for the connection</param>
+        ''' <returns></returns>
+        Public Function FillDataTables(ByVal dbCommand As IDbCommand) As System.Data.DataTable()
+            Return FillDataTables(dbCommand, Automations.AutoOpenAndCloseAndDisposeConnection)
+        End Function
+
+        ''' <summary>
+        '''     Fill several new data tables with the result of a command
+        ''' </summary>
+        ''' <param name="dbCommand">The command object containing multiple SELECT statements</param>
         ''' <param name="automations">Automation options for the connection</param>
         ''' <returns></returns>
         Public Function FillDataTables(ByVal dbCommand As IDbCommand, ByVal automations As Automations) As System.Data.DataTable()
