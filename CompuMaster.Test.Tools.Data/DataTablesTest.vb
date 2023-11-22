@@ -2651,6 +2651,53 @@ Namespace CompuMaster.Test.Data
             End Try
         End Sub
 
+        <Test> Public Sub ConvertToMetaDataTable(<NUnit.Framework.Values("de-DE", "en-US")> cultureName As String)
+            Dim PreviousThreadCulture As System.Globalization.CultureInfo = System.Threading.Thread.CurrentThread.CurrentCulture
+            Try
+                System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.GetCultureInfo(cultureName)
+
+                Dim FullDataTable As DataTable = Me.TestTable2WithInvariantCultureInColumnNames
+                FullDataTable.Columns("Frage").Caption = "Fragestellung"
+                FullDataTable.Columns("Frage").Unique = True
+                FullDataTable.Columns("Frage").AllowDBNull = False
+                FullDataTable.Columns.Add("FirstLetterOfFrage", GetType(String), "SUBSTRING(ISNULL(Frage, ' '),1,1)")
+                Dim MetaTable As DataTable = CompuMaster.Data.DataTables.ConvertToMetaDataTable(FullDataTable, EnumValues(Of CompuMaster.Data.DataTables.MetaDataFields)().ToArray)
+                Dim MetaTableStringified = CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(MetaTable, CompuMaster.Data.ConvertToPlainTextTableOptions.SimpleLayout)
+
+                'Assert status at start
+                Assert.AreEqual(New String() {"Frage", "Antwort A", "Antwort B", "Antwort C", "Antwort D", "Rubrik", "Richtige Antwort", "Erläuterung", "100 ", "200 ", "500 ", "1000 ", "5000 ", "10000 ", "20000 ", "FirstLetterOfFrage"}, CompuMaster.Data.DataTables.AllColumnNames(MetaTable))
+                Assert.AreEqual(GetType(String), MetaTable.Columns("Rubrik").DataType)
+                Assert.AreEqual(GetType(String), MetaTable.Columns("100 ").DataType)
+
+                'Check full result of meta information
+                Console.WriteLine("## Origin data table (top 5)")
+                Console.WriteLine(CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(CompuMaster.Data.DataTables.CopyDataTableWithSubsetOfRows(FullDataTable, 0, 5), CompuMaster.Data.ConvertToPlainTextTableOptions.SimpleLayout))
+                Console.WriteLine()
+                Console.WriteLine("## Meta data table")
+                Console.WriteLine(MetaTableStringified)
+
+                Dim ExpectedMetaTableStringified As String =
+                    "Frage        |Antwort A    |Antwort B    |Antwort C    |Antwort D    |Rubrik       |Richtige Antwort|Erläuterung  |100          |200          |500          |1000         |5000         |10000        |20000        |FirstLetterOfFrage               " & System.Environment.NewLine &
+                    "-------------+-------------+-------------+-------------+-------------+-------------+----------------+-------------+-------------+-------------+-------------+-------------+-------------+-------------+-------------+---------------------------------" & System.Environment.NewLine &
+                    "System.String|System.String|System.String|System.String|System.String|System.Double|System.String   |System.String|System.Double|System.Double|System.Double|System.Double|System.Double|System.Double|System.Double|System.String                    " & System.Environment.NewLine &
+                    "Fragestellung|Antwort A    |Antwort B    |Antwort C    |Antwort D    |Rubrik       |Richtige Antwort|Erläuterung  |100          |200          |500          |1000         |5000         |10000        |20000        |FirstLetterOfFrage               " & System.Environment.NewLine &
+                    "False        |True         |True         |True         |True         |True         |True            |True         |True         |True         |True         |True         |True         |True         |True         |True                             " & System.Environment.NewLine &
+                    "             |             |             |             |             |             |                |             |             |             |             |             |             |             |             |SUBSTRING(ISNULL(Frage, ' '),1,1)" & System.Environment.NewLine &
+                    "True         |False        |False        |False        |False        |False        |False           |False        |False        |False        |False        |False        |False        |False        |False        |False                            " & System.Environment.NewLine
+                Assert.AreEqual(ExpectedMetaTableStringified, MetaTableStringified)
+            Finally
+                System.Threading.Thread.CurrentThread.CurrentCulture = PreviousThreadCulture
+            End Try
+        End Sub
+
+        Private Shared Function EnumValues(Of EnumBaseType As Structure)() As List(Of EnumBaseType)
+            Dim Result As New List(Of EnumBaseType)
+            For Each Value As EnumBaseType In [Enum].GetValues(GetType(EnumBaseType))
+                Result.Add(Value)
+            Next
+            Return Result
+        End Function
+
     End Class
 #Enable Warning CA1822 ' Member als statisch markieren
 

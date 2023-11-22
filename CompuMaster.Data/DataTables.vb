@@ -4949,6 +4949,53 @@ Namespace CompuMaster.Data
             RemoveColumns(table, EmptyColumns.ToArray)
         End Sub
 
+        ''' <summary>
+        ''' Extractable meta data fields
+        ''' </summary>
+        Public Enum MetaDataFields As Byte
+            DataType = 0
+            Caption = 1
+            AllowDbNull = 2
+            Expression = 3
+            Unique = 4
+        End Enum
+
+        ''' <summary>
+        ''' Extract and create a table with meta data of the given table
+        ''' </summary>
+        ''' <param name="table"></param>
+        ''' <param name="requiredMetaData"></param>
+        ''' <returns></returns>
+        Public Shared Function ConvertToMetaDataTable(table As System.Data.DataTable, ParamArray requiredMetaData As MetaDataFields()) As System.Data.DataTable
+            Dim Result As New System.Data.DataTable("META:" & table.TableName)
+            For MyCounter As Integer = 0 To table.Columns.Count - 1
+                Dim Col As System.Data.DataColumn = table.Columns(MyCounter)
+                Result.Columns.Add(Col.ColumnName, GetType(String))
+            Next
+            For Each RequestedMetaDataField As MetaDataFields In requiredMetaData
+                Dim NewRow As System.Data.DataRow = Result.NewRow
+                For ColCounter As Integer = 0 To table.Columns.Count - 1
+                    Dim Col As System.Data.DataColumn = table.Columns(ColCounter)
+                    Select Case RequestedMetaDataField
+                        Case MetaDataFields.DataType
+                            NewRow(ColCounter) = Col.DataType.FullName
+                        Case MetaDataFields.Caption
+                            NewRow(ColCounter) = Col.Caption
+                        Case MetaDataFields.AllowDbNull
+                            NewRow(ColCounter) = Col.AllowDBNull
+                        Case MetaDataFields.Expression
+                            NewRow(ColCounter) = Col.Expression
+                        Case MetaDataFields.Unique
+                            NewRow(ColCounter) = Col.Unique
+                        Case Else
+                            Throw New NotImplementedException
+                    End Select
+                Next
+                Result.Rows.Add(NewRow)
+            Next
+            Return Result
+        End Function
+
     End Class
 
 End Namespace
