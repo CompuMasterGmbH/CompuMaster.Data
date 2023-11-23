@@ -220,6 +220,54 @@ Namespace CompuMaster.Test.Data
             Assert.AreEqual(New Integer() {2, 15, 5}, TextTable.SuggestedColumnWidths("", ""))
         End Sub
 
+        <Test> Public Sub ToStringWithOptionRowNumberingEnabled()
+            Dim TestTable As DataTable
+            Dim TextTable As CompuMaster.Data.TextTable
+            Dim Expected, Output As String
+
+            TestTable = TestTable1()
+            TestTable.Columns(1).ColumnName &= ControlChars.CrLf & "Line2"
+            TextTable = New CompuMaster.Data.TextTable(TestTable)
+            TextTable.ApplyRowNumbering()
+
+            Dim ExpectedRowLineBreak As String
+            Dim ExpectedCellLineBreak As String
+
+            Output = TextTable.ToString()
+            Console.WriteLine(Output)
+
+            Assert.AreEqual("#", TextTable.Headers(0).Cells(0).Text)
+            For RowCounter As Integer = 0 To TextTable.Rows.Count - 1
+                Assert.AreEqual(TextTable.Rows(RowCounter).Cells(1).Text, TextTable.Rows(RowCounter).Cells(0).Text)
+                Assert.AreEqual((RowCounter + 1).ToString, TextTable.Rows(RowCounter).Cells(0).Text)
+            Next
+
+            ExpectedRowLineBreak = System.Environment.NewLine
+            ExpectedCellLineBreak = System.Environment.NewLine
+            Expected =
+                "#│ID│Value1         │Val2 " & ExpectedCellLineBreak &
+                " │  │Line2          │     " & ExpectedRowLineBreak &
+                "═╪══╪═══════════════╪═════" & ExpectedRowLineBreak &
+                "1│1 │Hello world!   │Line1" & ExpectedCellLineBreak &
+                " │  │               │Line2" & ExpectedRowLineBreak &
+                "─┼──┼───────────────┼─────" & ExpectedRowLineBreak &
+                "2│2 │Gotcha!        │     " & ExpectedRowLineBreak &
+                "─┼──┼───────────────┼─────" & ExpectedRowLineBreak &
+                "3│3 │Hello world!   │     " & ExpectedRowLineBreak &
+                "─┼──┼───────────────┼─────" & ExpectedRowLineBreak &
+                "4│4 │Not a duplicate│     " & ExpectedRowLineBreak &
+                "─┼──┼───────────────┼─────" & ExpectedRowLineBreak &
+                "5│5 │Hello world!   │    T" & ExpectedRowLineBreak &
+                "─┼──┼───────────────┼─────" & ExpectedRowLineBreak &
+                "6│6 │GOTCHA!        │     " & ExpectedRowLineBreak &
+                "─┼──┼───────────────┼─────" & ExpectedRowLineBreak &
+                "7│7 │Gotcha!        │     "
+            Assert.AreEqual(AscW("│"), AscW(Output.Substring(1, 1)), "Expected """ & "│" & """, but found """ & Output.Substring(1, 1) & """")
+            Assert.AreEqual(AscW(Expected.Substring(1, 1)), AscW(Output.Substring(1, 1)))
+            Assert.AreEqual(Expected.Substring(0, 40), Output.Substring(0, 40))
+            Assert.AreEqual(Expected, Output)
+        End Sub
+
 #Region "Test data"
         Private Function TestTable1() As DataTable
             Dim Result As New DataTable("test1")

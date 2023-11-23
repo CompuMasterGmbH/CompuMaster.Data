@@ -2704,14 +2704,15 @@ Namespace CompuMaster.Data
 
             'Add converted table
             Dim TextTable As New TextTable(rows(0).Table, options.ColumnFormatting)
+            If options.RowNumbering Then TextTable.ApplyRowNumbering()
             Result.AppendLine(
                 TextTable.ToString(
                     EffectiveFixedColumnWidths(rows, rows(0).Table, options),
                     System.Environment.NewLine, System.Environment.NewLine, "", "", options.SuffixIfValueMustBeShortened,
                     options.VerticalSeparatorAfterHeader, options.VerticalSeparatorForCells,
                     options.CrossSeparatorHeader, options.CrossSeparatorCells,
-                    options.HorizontalSeparatorAfterHeader, options.HorizontalSeparatorForCells))
-            Return Result.ToString
+                    options.HorizontalSeparatorAfterHeader, options.HorizontalSeparatorForCells)) Then
+                Return Result.ToString
         End Function
 
         ''' <summary>
@@ -2735,6 +2736,7 @@ Namespace CompuMaster.Data
 
             'Add converted table
             Dim TextTable As New TextTable(rows, options.ColumnFormatting)
+            If options.RowNumbering Then TextTable.ApplyRowNumbering()
             Result.AppendLine(
                 TextTable.ToString(
                     EffectiveFixedColumnWidths(rows, rows(0).Table, options),

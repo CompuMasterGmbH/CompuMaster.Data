@@ -143,6 +143,12 @@ Namespace CompuMaster.Data
         Public Property ColumnFormatting As DataTables.DataColumnToString
 
         ''' <summary>
+        ''' Add row numbering to the formatted table
+        ''' </summary>
+        ''' <returns></returns>
+        Public Property RowNumbering As Boolean
+
+        ''' <summary>
         ''' Validate specified options data
         ''' </summary>
         Friend Sub Validate()

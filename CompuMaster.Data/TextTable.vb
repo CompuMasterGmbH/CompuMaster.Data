@@ -301,6 +301,24 @@ Namespace CompuMaster.Data
         End Function
 
         ''' <summary>
+        ''' Add a very 1st column named "#" which contains the row number
+        ''' </summary>
+        Public Sub ApplyRowNumbering()
+            For MyRowCounter As Integer = 0 To Me.Headers.Count - 1
+                Dim HeaderText As String
+                If MyRowCounter = 0 Then
+                    HeaderText = "#"
+                Else
+                    HeaderText = Nothing
+                End If
+                Me.Headers(MyRowCounter).Cells.Insert(0, New TextCell(HeaderText))
+            Next
+            For MyRowCounter As Integer = 0 To Me.Rows.Count - 1
+                Me.Rows(MyRowCounter).Cells.Insert(0, New TextCell((MyRowCounter + 1).ToString(System.Globalization.CultureInfo.InvariantCulture)))
+            Next
+        End Sub
+
+        ''' <summary>
         ''' Output direction for all cells
         ''' </summary>
         Public Enum CellOutputDirection As Byte
