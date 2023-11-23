@@ -553,6 +553,104 @@ Namespace CompuMaster.Test.Data
 #Enable Warning BC40000 ' Typ oder Element ist veraltet
         End Sub
 
+
+        Private Shared Function OutputOptions(minimumColumnWidth As Integer?, rowNumbering As Boolean) As CompuMaster.Data.ConvertToPlainTextTableOptions
+            Dim Result = CompuMaster.Data.ConvertToPlainTextTableOptions.SimpleLayout
+            Result.MinimumColumnWidth = minimumColumnWidth
+            Result.MaximumColumnWidth = 65535
+            Result.RowNumbering = rowNumbering
+            Return Result
+        End Function
+
+        <Test> Public Sub ConvertToPlainTextTableFixedColumnWidths_RowNumbering(<Values(False, True)> rowNumbering As Boolean)
+            Dim dt = TestTable1()
+
+            Dim ConvertedPlainTextTable As String
+            Dim Expected As String
+
+            ConvertedPlainTextTable = CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(dt, OutputOptions(2, rowNumbering))
+            Console.WriteLine(ConvertedPlainTextTable)
+            If rowNumbering Then
+                Expected =
+                    "# |ID|Value          " & System.Environment.NewLine &
+                    "--+--+---------------" & System.Environment.NewLine &
+                    "1 |1 |Hello world!   " & System.Environment.NewLine &
+                    "2 |2 |Gotcha!        " & System.Environment.NewLine &
+                    "3 |3 |Hello world!   " & System.Environment.NewLine &
+                    "4 |4 |Not a duplicate" & System.Environment.NewLine &
+                    "5 |5 |Hello world!   " & System.Environment.NewLine &
+                    "6 |6 |GOTCHA!        " & System.Environment.NewLine &
+                    "7 |7 |Gotcha!        " & System.Environment.NewLine
+            Else
+                Expected =
+                    "ID|Value          " & System.Environment.NewLine &
+                    "--+---------------" & System.Environment.NewLine &
+                    "1 |Hello world!   " & System.Environment.NewLine &
+                    "2 |Gotcha!        " & System.Environment.NewLine &
+                    "3 |Hello world!   " & System.Environment.NewLine &
+                    "4 |Not a duplicate" & System.Environment.NewLine &
+                    "5 |Hello world!   " & System.Environment.NewLine &
+                    "6 |GOTCHA!        " & System.Environment.NewLine &
+                    "7 |Gotcha!        " & System.Environment.NewLine
+            End If
+            Assert.AreEqual(Expected, ConvertedPlainTextTable)
+
+            ConvertedPlainTextTable = CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(dt, OutputOptions(3, rowNumbering))
+            Console.WriteLine(ConvertedPlainTextTable)
+            If rowNumbering Then
+                Expected =
+                    "#  |ID |Value          " & System.Environment.NewLine &
+                    "---+---+---------------" & System.Environment.NewLine &
+                    "1  |1  |Hello world!   " & System.Environment.NewLine &
+                    "2  |2  |Gotcha!        " & System.Environment.NewLine &
+                    "3  |3  |Hello world!   " & System.Environment.NewLine &
+                    "4  |4  |Not a duplicate" & System.Environment.NewLine &
+                    "5  |5  |Hello world!   " & System.Environment.NewLine &
+                    "6  |6  |GOTCHA!        " & System.Environment.NewLine &
+                    "7  |7  |Gotcha!        " & System.Environment.NewLine
+            Else
+                Expected =
+                    "ID |Value          " & System.Environment.NewLine &
+                    "---+---------------" & System.Environment.NewLine &
+                    "1  |Hello world!   " & System.Environment.NewLine &
+                    "2  |Gotcha!        " & System.Environment.NewLine &
+                    "3  |Hello world!   " & System.Environment.NewLine &
+                    "4  |Not a duplicate" & System.Environment.NewLine &
+                    "5  |Hello world!   " & System.Environment.NewLine &
+                    "6  |GOTCHA!        " & System.Environment.NewLine &
+                    "7  |Gotcha!        " & System.Environment.NewLine
+            End If
+            Assert.AreEqual(Expected, ConvertedPlainTextTable)
+
+            ConvertedPlainTextTable = CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(dt, OutputOptions(New Integer?(), rowNumbering)) 'no minimum column width -> should be handled as min. 2 chars (hard-coded)
+            Console.WriteLine(ConvertedPlainTextTable)
+            If rowNumbering Then
+                Expected =
+                    "# |ID|Value          " & System.Environment.NewLine &
+                    "--+--+---------------" & System.Environment.NewLine &
+                    "1 |1 |Hello world!   " & System.Environment.NewLine &
+                    "2 |2 |Gotcha!        " & System.Environment.NewLine &
+                    "3 |3 |Hello world!   " & System.Environment.NewLine &
+                    "4 |4 |Not a duplicate" & System.Environment.NewLine &
+                    "5 |5 |Hello world!   " & System.Environment.NewLine &
+                    "6 |6 |GOTCHA!        " & System.Environment.NewLine &
+                    "7 |7 |Gotcha!        " & System.Environment.NewLine
+            Else
+                Expected =
+                    "ID|Value          " & System.Environment.NewLine &
+                    "--+---------------" & System.Environment.NewLine &
+                    "1 |Hello world!   " & System.Environment.NewLine &
+                    "2 |Gotcha!        " & System.Environment.NewLine &
+                    "3 |Hello world!   " & System.Environment.NewLine &
+                    "4 |Not a duplicate" & System.Environment.NewLine &
+                    "5 |Hello world!   " & System.Environment.NewLine &
+                    "6 |GOTCHA!        " & System.Environment.NewLine &
+                    "7 |Gotcha!        " & System.Environment.NewLine
+            End If
+            Assert.AreEqual(Expected, ConvertedPlainTextTable)
+
+        End Sub
+
         <CodeAnalysis.SuppressMessage("Major Code Smell", "S1172:Unused procedure parameters should be removed", Justification:="Required parameter to fit AddressOf method compatibility")>
         Private Function ConvertColumnToString(column As DataColumn, value As Object) As String
             If IsDBNull(value) Then

@@ -2438,7 +2438,7 @@ Namespace CompuMaster.Data
         End Function
 
         ''' <summary>
-        ''' Suggests column widths for a table using as minimum 2 chars, but minimum header string length, but also either full cell length for number/date/time columns or for all other types a given % value of all values should be visible completely
+        ''' Suggests column widths for a table using the configured minimum chars from ConvertToPlainTextTableOptions (or at least 2 chars if not configured), but minimum header string length, but also either full cell length for number/date/time columns or for all other types a given % value of all values should be visible completely
         ''' </summary>
         ''' <param name="rows">A set of DataRows</param>
         ''' <param name="table">A table</param>
@@ -2500,7 +2500,7 @@ Namespace CompuMaster.Data
                     'no rows existing
                     MinWidthForCells = 0
                 End If
-                colWidths.Add(System.Math.Max(2, System.Math.Max(MinWidthForHeader, MinWidthForCells)))
+                colWidths.Add(System.Math.Max([options].MinimumColumnWidth.GetValueOrDefault(2), System.Math.Max(MinWidthForHeader, MinWidthForCells)))
             Next
             Return CType(colWidths.ToArray(GetType(Integer)), Integer())
         End Function
@@ -2524,7 +2524,7 @@ Namespace CompuMaster.Data
         End Function
 
         ''' <summary>
-        ''' Suggests column widths for a table using as minimum 2 chars, but minimum header string length, but also either full cell length for number/date/time columns or for all other types a given % value of all values should be visible completely
+        ''' Suggests column widths for a table using the configured minimum chars from ConvertToPlainTextTableOptions (or at least 2 chars if not configured), but minimum header string length, but also either full cell length for number/date/time columns or for all other types a given % value of all values should be visible completely
         ''' </summary>
         ''' <param name="rows">A set of DataRows</param>
         ''' <param name="table">A table</param>
@@ -2583,7 +2583,7 @@ Namespace CompuMaster.Data
                     'no rows existing
                     MinWidthForCells = 0
                 End If
-                colWidths.Add(System.Math.Max(2, System.Math.Max(MinWidthForHeader, MinWidthForCells)))
+                colWidths.Add(System.Math.Max([options].MinimumColumnWidth.GetValueOrDefault(2), System.Math.Max(MinWidthForHeader, MinWidthForCells)))
             Next
             Return CType(colWidths.ToArray(GetType(Integer)), Integer())
         End Function
@@ -2764,6 +2764,9 @@ Namespace CompuMaster.Data
                     Result.Add(SuggestedWidths(MyCounter))
                 End If
             Next
+            If options.RowNumbering Then
+                Result.Insert(0, System.Math.Max([options].MinimumColumnWidth.GetValueOrDefault(2), rows.Length.ToString(System.Globalization.CultureInfo.InvariantCulture).Length))
+            End If
             Return Result.ToArray
         End Function
 
@@ -2785,6 +2788,9 @@ Namespace CompuMaster.Data
                     Result.Add(SuggestedWidths(MyCounter))
                 End If
             Next
+            If options.RowNumbering Then
+                Result.Insert(0, System.Math.Max([options].MinimumColumnWidth.GetValueOrDefault(2), rows.Count.ToString(System.Globalization.CultureInfo.InvariantCulture).Length))
+            End If
             Return Result.ToArray
         End Function
 
