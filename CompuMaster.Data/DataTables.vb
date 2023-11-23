@@ -2711,8 +2711,8 @@ Namespace CompuMaster.Data
                     System.Environment.NewLine, System.Environment.NewLine, "", "", options.SuffixIfValueMustBeShortened,
                     options.VerticalSeparatorAfterHeader, options.VerticalSeparatorForCells,
                     options.CrossSeparatorHeader, options.CrossSeparatorCells,
-                    options.HorizontalSeparatorAfterHeader, options.HorizontalSeparatorForCells)) Then
-                Return Result.ToString
+                    options.HorizontalSeparatorAfterHeader, options.HorizontalSeparatorForCells))
+            Return Result.ToString
         End Function
 
         ''' <summary>
