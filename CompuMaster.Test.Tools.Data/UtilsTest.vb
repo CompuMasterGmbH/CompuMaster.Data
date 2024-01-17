@@ -164,6 +164,13 @@ Namespace CompuMaster.Test.Data
             Assert.AreEqual(New Byte() {1}, CompuMaster.Data.Utils.ArrayNotEmptyOrDBNull(New Byte() {1}))
         End Sub
 
+        <Test> Public Sub ReadStringFromUri()
+            Dim Url As String = CsvTest.CSV_ONLINE_TEST_RESOURCE_EN_US_URL
+            Assert.NotZero(CompuMaster.Data.Utils.ReadByteDataFromUri(Url).Length)
+            Assert.NotZero(CompuMaster.Data.Utils.ReadStringDataFromUri(Url, System.Text.Encoding.ASCII.WebName).Length)
+            Assert.NotZero(CompuMaster.Data.Utils.ReadStringDataFromUri(Url, System.Text.Encoding.UTF8.WebName).Length)
+            Assert.NotZero(CompuMaster.Data.Utils.ReadStringDataFromUri(Url, Nothing).Length)
+        End Sub
     End Class
 
 End Namespace
