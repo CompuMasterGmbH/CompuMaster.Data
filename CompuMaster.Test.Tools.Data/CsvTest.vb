@@ -10,13 +10,15 @@ Namespace CompuMaster.Test.Data
         Public Sub New()
         End Sub
 
+        Friend Const CSV_ONLINE_TEST_RESOURCE_EN_US_URL As String = "https://raw.githubusercontent.com/datasets/covid-19/main/data/reference.csv"
+
         Private ReadOnly _OriginCulture As System.Globalization.CultureInfo = System.Threading.Thread.CurrentThread.CurrentCulture
         <TearDown> Public Sub ResetCulture()
             System.Threading.Thread.CurrentThread.CurrentCulture = _OriginCulture
         End Sub
 
         <Test> Public Sub ReadDataTableFromCsvUrlWithTls12Required()
-            Dim Url As String = "https://data.cityofnewyork.us/api/views/kku6-nxdu/rows.csv?accessType=DOWNLOAD"
+            Dim Url As String = CSV_ONLINE_TEST_RESOURCE_EN_US_URL
             Dim CsvCulture As System.Globalization.CultureInfo = System.Globalization.CultureInfo.CreateSpecificCulture("en-US")
             Dim FileEncoding As System.Text.Encoding = Nothing
             Dim dt As DataTable = CompuMaster.Data.Csv.ReadDataTableFromCsvFile(Url, True, FileEncoding, CsvCulture, """"c, False, True)

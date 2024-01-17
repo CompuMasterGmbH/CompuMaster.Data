@@ -4,10 +4,10 @@
 		<OutputType>Library</OutputType>
 		<AssemblyName>CompuMaster.Data.Controls</AssemblyName>
 		<TargetFrameworks>net48;net6.0-windows</TargetFrameworks>
-	  	<Version>3.0.2023.1124</Version>
+	  	<Version>3.0.2024.0117</Version>
 		<Authors>Jochen Wezel</Authors>
 		<Company>CompuMaster GmbH</Company>
-		<Copyright>2010-2023 CompuMaster GmbH</Copyright>
+		<Copyright>2010-2024 CompuMaster GmbH</Copyright>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 		<PackageProjectUrl>https://github.com/CompuMasterGmbH/CompuMaster.Data</PackageProjectUrl>
 		<PackageIcon>logo_64x64.png</PackageIcon>
