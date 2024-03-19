@@ -1210,7 +1210,7 @@ Namespace CompuMaster.Data.DataQuery
         ''' <param name="automations">Automation options for the connection</param>
         ''' <returns></returns>
         Public Function FillDataTable(ByVal dbCommand As IDbCommand, ByVal automations As Automations) As System.Data.DataTable
-            Return FillDataTable(dbCommand, automations)
+            Return FillDataTable(dbCommand, automations, Nothing)
         End Function
 
         ''' <summary>
