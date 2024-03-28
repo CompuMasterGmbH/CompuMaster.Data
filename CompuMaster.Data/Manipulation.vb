@@ -2,6 +2,7 @@
 Option Strict On
 
 Imports System.Data
+Imports System.Data.Common
 Imports CompuMaster.Data.Strings
 
 Namespace CompuMaster.Data
@@ -156,9 +157,11 @@ Namespace CompuMaster.Data
             End If
 
             'Extend schema if required
-            Dim extendSchemaCommandText As String = AddMissingColumnsCommandText(sourceTable, RemoteTable, ddlLanguage)
-            If extendSchemaCommandText <> Nothing Then
-                CompuMaster.Data.DataQuery.ExecuteNonQuery(dataConnection, extendSchemaCommandText, CommandType.Text, Nothing, CompuMaster.Data.DataQuery.Automations.None, 0)
+            If ddlLanguage <> DdlLanguage.NoDDL Then
+                Dim extendSchemaCommandText As String = AddMissingColumnsCommandText(sourceTable, RemoteTable, ddlLanguage)
+                If extendSchemaCommandText <> Nothing Then
+                    CompuMaster.Data.DataQuery.ExecuteNonQuery(dataConnection, extendSchemaCommandText, CommandType.Text, Nothing, CompuMaster.Data.DataQuery.Automations.None, 0)
+                End If
             End If
             RemoteTable = LoadTableStructureWith1RowFromConnection(remoteTableName, dataConnection, False)
 

@@ -14,3 +14,4 @@ Imports System.Diagnostics.CodeAnalysis
 <Assembly: SuppressMessage("Minor Code Smell", "S4136:Method overloads should be grouped together", Justification:="<Ausstehend>")>
 <Assembly: SuppressMessage("CodeQuality", "IDE0079:Unnötige Unterdrückung entfernen", Justification:="<Ausstehend>")>
 <Assembly: SuppressMessage("Naming", "CA1707:Identifiers should not contain underscores", Justification:="<Ausstehend>")>
+<Assembly: SuppressMessage("Maintainability", "CA1510:ArgumentNullException-Throw-Hilfsprogramm verwenden", Justification:="<Ausstehend>")>
