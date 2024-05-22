@@ -5,7 +5,7 @@
     <IsPackable>false</IsPackable>
     <RootNamespace />
     <AssemblyName>CompuMaster.Test.Tools.Data</AssemblyName>
-    <Version>3.0.2024.0117</Version>
+    <Version>3.0.2024.0522</Version>
     <Authors>Jochen Wezel</Authors>
     <Company>CompuMaster GmbH</Company>
     <Product>CompuMaster.Data</Product>
