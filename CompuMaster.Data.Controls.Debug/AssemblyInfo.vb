@@ -12,7 +12,7 @@ Imports System.Runtime.InteropServices
 <Assembly: AssemblyDescription("")>
 <Assembly: AssemblyCompany("CompuMaster GmbH")>
 <Assembly: AssemblyProduct("CompuMaster Tools")>
-<Assembly: AssemblyCopyright("2010-2019 CompuMaster GmbH")>
+<Assembly: AssemblyCopyright("2010-2024 CompuMaster GmbH")>
 <Assembly: AssemblyTrademark("CompuMaster")>
 
 <Assembly: ComVisible(False)>
@@ -20,4 +20,4 @@ Imports System.Runtime.InteropServices
 'Die folgende GUID bestimmt die ID der Typbibliothek, wenn dieses Projekt für COM verfügbar gemacht wird
 <Assembly: Guid("75ea9579-4ddb-43f8-b61a-28432acbcb12")>
 
-<Assembly: AssemblyVersion("2019.02.27.100")>
+<Assembly: AssemblyVersion("2024.05.22.100")>
