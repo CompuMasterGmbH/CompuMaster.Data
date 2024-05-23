@@ -68,6 +68,12 @@ Namespace CompuMaster.Test.Data
             Return dt
         End Function
 
+        Private Function TestTable2WithDisabledFirstRowContentAsColumnName() As DataTable
+            Dim file As String = AssemblyTestEnvironment.TestFileAbsolutePath(System.IO.Path.Combine("testfiles", "Q&A.xlsx"))
+            Dim dt As DataTable = CompuMaster.Data.XlsEpplus.ReadDataTableFromXlsFile(file, False) ', "Rund um das NT")
+            Return dt
+        End Function
+
         Private Function TestTable2WithInvariantCultureInColumnNames() As DataTable
             Dim Result = TestTable2()
             For MyCounter As Integer = Result.Columns("Erläuterung").Ordinal + 1 To Result.Columns.Count - 1
@@ -1335,6 +1341,14 @@ Namespace CompuMaster.Test.Data
             Console.WriteLine("New free unique column name: " & uname & " (lookup name: " & lname & ")")
             Assert.IsNotEmpty(uname)
             Assert.IsFalse(dt.Columns.Contains(uname))
+        End Sub
+
+        <Test> Public Sub LookupUniqueColumnName2()
+            Dim DuplicatedColumnNames15 = New String() {"Column", "Column", "Column", "Column", "Column", "Column", "Column", "Column", "Column", "Column", "Column", "Column", "Column", "Column", "Column"}
+            Dim ColumnsSimplyNumbered15 = New String() {"Column1", "Column2", "Column3", "Column4", "Column5", "Column6", "Column7", "Column8", "Column9", "Column10", "Column11", "Column12", "Column13", "Column14", "Column15"}
+            Assert.AreEqual("Column1", CompuMaster.Data.DataTables.LookupUniqueColumnName(DuplicatedColumnNames15, "Column"))
+            Assert.AreEqual("Column1", CompuMaster.Data.DataTables.LookupUniqueColumnName(DuplicatedColumnNames15, "Column1"))
+            Assert.AreEqual("Column16", CompuMaster.Data.DataTables.LookupUniqueColumnName(ColumnsSimplyNumbered15, "Column1"))
         End Sub
 
         <Test()> Public Sub CloneTableAndReArrangeDataColumns()
@@ -2795,6 +2809,20 @@ Namespace CompuMaster.Test.Data
             Next
             Return Result
         End Function
+
+        <Test> Public Sub ApplyFirstRowContentToColumnNames()
+            Dim FullDataTable As DataTable
+
+            FullDataTable = Me.TestTable2WithDisabledFirstRowContentAsColumnName
+            Assert.AreEqual(New String() {"Column1", "Column2", "Column3", "Column4", "Column5", "Column6", "Column7", "Column8", "Column9", "Column10", "Column11", "Column12", "Column13", "Column14", "Column15"}, CompuMaster.Data.DataTables.AllColumnNames(FullDataTable))
+            CompuMaster.Data.DataTables.ApplyFirstRowContentToColumnNames(FullDataTable)
+            Assert.AreEqual(New String() {"Frage", "Antwort A", "Antwort B", "Antwort C", "Antwort D", "Rubrik", "Richtige Antwort", "Erläuterung", "100", "200", "500", "1000", "5000", "10000", "20000"}, CompuMaster.Data.DataTables.AllColumnNames(FullDataTable))
+
+            FullDataTable = Me.TestTable2WithDisabledFirstRowContentAsColumnName
+            FullDataTable.Rows(0)(1) = "Frage"
+            CompuMaster.Data.DataTables.ApplyFirstRowContentToColumnNames(FullDataTable)
+            Assert.AreEqual(New String() {"Frage", "Frage1", "Antwort B", "Antwort C", "Antwort D", "Rubrik", "Richtige Antwort", "Erläuterung", "100", "200", "500", "1000", "5000", "10000", "20000"}, CompuMaster.Data.DataTables.AllColumnNames(FullDataTable))
+        End Sub
 
     End Class
 #Enable Warning CA1822 ' Member als statisch markieren

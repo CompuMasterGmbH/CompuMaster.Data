@@ -1474,13 +1474,28 @@ Namespace CompuMaster.Data
         ''' <param name="suggestedColumnName">A column name suggestion</param>
         ''' <returns>The suggested column name as it is or modified column name to be unique</returns>
         Friend Shared Function LookupUniqueColumnName(ByVal dataTable As DataTable, ByVal suggestedColumnName As String) As String
+            Dim ColumnNames As New List(Of String)
+            For MyCounter As Integer = 0 To dataTable.Columns.Count - 1
+                ColumnNames.Add(dataTable.Columns(MyCounter).ColumnName)
+            Next
+            Return LookupUniqueColumnName(ColumnNames.ToArray, suggestedColumnName)
+        End Function
+
+        ''' <summary>
+        '''     Lookup a new unique column name for a data table
+        ''' </summary>
+        ''' <param name="columnNames">The column names of a data table</param>
+        ''' <param name="suggestedColumnName">A column name suggestion</param>
+        ''' <returns>The suggested column name as it is or modified column name to be unique (case-insensitive)</returns>
+        Friend Shared Function LookupUniqueColumnName(columnNames As String(), ByVal suggestedColumnName As String, Optional prefixForSuggestedColumnNames As String = "ClientTable_") As String
 
             Dim ColumnNameAlreadyExistant As Boolean = False
-            For MyCounter As Integer = 0 To dataTable.Columns.Count - 1
+            For MyCounter As Integer = 0 To columnNames.Length - 1
 #Disable Warning CA1309 ' Ordinalzeichenfolgenvergleich verwenden
-                If String.Compare(suggestedColumnName, dataTable.Columns(MyCounter).ColumnName, True, Threading.Thread.CurrentThread.CurrentCulture) = 0 Then
+                If String.Compare(suggestedColumnName, columnNames(MyCounter), True, Threading.Thread.CurrentThread.CurrentCulture) = 0 Then
 #Enable Warning CA1309 ' Ordinalzeichenfolgenvergleich verwenden
                     ColumnNameAlreadyExistant = True
+                    Exit For
                 End If
             Next
 
@@ -1489,7 +1504,7 @@ Namespace CompuMaster.Data
                 Return suggestedColumnName
             Else
                 'Add prefix "ClientTable_" or add/increase a counter at the end
-                If suggestedColumnName.StartsWith("ClientTable_", StringComparison.Ordinal) Then
+                If suggestedColumnName.StartsWith(prefixForSuggestedColumnNames, StringComparison.Ordinal) Then
                     'Find the position range of an already existing counter at the end of the string - if there is a number
                     Dim NumberPositionIndex As Integer = -1
                     For NumberPartCounter As Integer = suggestedColumnName.Length - 1 To 0 Step -1
@@ -1515,10 +1530,10 @@ Namespace CompuMaster.Data
                     End If
                 Else
                     'Add new prefix
-                    suggestedColumnName = "ClientTable_" & suggestedColumnName
+                    suggestedColumnName = prefixForSuggestedColumnNames & suggestedColumnName
                 End If
                 'Revalidate uniqueness by running recursively
-                suggestedColumnName = LookupUniqueColumnName(dataTable, suggestedColumnName)
+                suggestedColumnName = LookupUniqueColumnName(columnNames, suggestedColumnName, prefixForSuggestedColumnNames)
             End If
 
             Return suggestedColumnName

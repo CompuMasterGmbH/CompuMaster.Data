@@ -1587,7 +1587,7 @@ Namespace CompuMaster.Data
         ''' </summary>
         ''' <param name="dataTable">The data table which shall get a new data column</param>
         ''' <param name="suggestedColumnName">A column name suggestion</param>
-        ''' <returns>The suggested column name as it is or modified column name to be unique</returns>
+        ''' <returns>The suggested column name as it is or modified column name to be unique (case-insensitive)</returns>
         ''' <remarks>
         ''' </remarks>
         Public Shared Function LookupUniqueColumnName(ByVal dataTable As DataTable, ByVal suggestedColumnName As String) As String
@@ -1599,12 +1599,22 @@ Namespace CompuMaster.Data
         ''' </summary>
         ''' <param name="dataTable">The data table which shall get a new data column</param>
         ''' <param name="suggestedColumnName">A column name suggestion</param>
-        ''' <returns>The suggested column name as it is or modified column name to be unique</returns>
+        ''' <returns>The suggested column name as it is or modified column name to be unique (case-insensitive)</returns>
         ''' <remarks>
         ''' </remarks>
         <Obsolete("Use the correct method name without typing error"), ComponentModel.EditorBrowsable(ComponentModel.EditorBrowsableState.Never)>
         Public Shared Function LookupUnqiueColumnName(ByVal dataTable As DataTable, ByVal suggestedColumnName As String) As String
             Return CompuMaster.Data.DataTablesTools.LookupUniqueColumnName(dataTable, suggestedColumnName)
+        End Function
+
+        ''' <summary>
+        '''     Lookup a new unique column name for a data table
+        ''' </summary>
+        ''' <param name="columnNames">The column names of a data table</param>
+        ''' <param name="suggestedColumnName">A column name suggestion</param>
+        ''' <returns>The suggested column name as it is or modified column name to be unique (case-insensitive)</returns>
+        Public Shared Function LookupUniqueColumnName(columnNames As String(), ByVal suggestedColumnName As String) As String
+            Return CompuMaster.Data.DataTablesTools.LookupUniqueColumnName(columnNames, suggestedColumnName, "")
         End Function
 
         ''' <summary>
@@ -5003,6 +5013,34 @@ Namespace CompuMaster.Data
             Next
             Return Result
         End Function
+
+        ''' <summary>
+        ''' Apply column names based on first row content (and remove first row)
+        ''' </summary>
+        ''' <param name="table"></param>
+        Public Shared Sub ApplyFirstRowContentToColumnNames(table As DataTable)
+            Dim FirstRow As DataRow = table.Rows(0)
+            Dim ColumnNames As New List(Of String)
+
+            'Find unique column names from first row
+            For ColIndex As Integer = 0 To table.Columns.Count - 1
+                Dim NewColumnName As String = Utils.NoDBNull(FirstRow(ColIndex), "").ToString()
+                If ColumnNames.Contains(NewColumnName) = False Then
+                    ColumnNames.Add(NewColumnName)
+                Else
+                    ColumnNames.Add(DataTables.LookupUniqueColumnName(ColumnNames.ToArray, NewColumnName))
+                End If
+            Next
+            If ColumnNames.Count <> table.Columns.Count Then Throw New InvalidOperationException("Internal error: Column count mismatch")
+
+            'Assign new column names
+            For ColIndex As Integer = 0 To table.Columns.Count - 1
+                table.Columns(ColIndex).ColumnName = ColumnNames(ColIndex)
+            Next
+
+            'Remove first row
+            table.Rows.RemoveAt(0)
+        End Sub
 
     End Class
 
