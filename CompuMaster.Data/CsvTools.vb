@@ -631,7 +631,7 @@ Namespace CompuMaster.Data
                             CurrentColumnValue.Append(lineContent.Chars(CharPositionCounter))
                         Else
                             'now it's a column separator
-                            'implementation follows to the handling of recognizeDoubledColumnSeparatorCharAsOne as Excel does
+                            'implementation follows to the handling of recognizeMultipleColumnSeparatorCharsAsOne as Excel does
                             If Not (recognizeMultipleColumnSeparatorCharsAsOne = True AndAlso lineContent.Chars(CharPositionCounter - 1) = columnSeparator) Then
                                 outputList.Add(CurrentColumnValue.ToString)
                                 CurrentColumnValue = New System.Text.StringBuilder
