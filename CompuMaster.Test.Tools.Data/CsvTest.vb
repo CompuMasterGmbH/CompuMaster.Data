@@ -1119,11 +1119,11 @@ Namespace CompuMaster.Test.Data
         End Sub
 
         <Test> Sub CsvEncode()
-            Assert.AreEqual("R1C1""""" & vbLf, CompuMaster.Data.CsvTools.CsvEncode("R1C1""" & vbLf, """"c, CompuMaster.Data.Csv.WriteLineEncodings.RowBreakCr_CellLineBreakLf))
-            Assert.AreEqual("R1C1""""" & vbLf & vbLf, CompuMaster.Data.CsvTools.CsvEncode("R1C1""" & ControlChars.CrLf & vbCr, """"c, CompuMaster.Data.Csv.WriteLineEncodings.RowBreakCr_CellLineBreakLf))
-            Assert.AreEqual("R1C1""""""""" & vbLf & vbLf, CompuMaster.Data.CsvTools.CsvEncode("R1C1""""" & ControlChars.CrLf & vbCr, """"c, CompuMaster.Data.Csv.WriteLineEncodings.RowBreakCr_CellLineBreakLf))
-            Assert.AreEqual("R1C1""""" & vbLf & vbLf, CompuMaster.Data.CsvTools.CsvEncode("R1C1""" & ControlChars.CrLf & vbCr, """"c, CompuMaster.Data.Csv.WriteLineEncodings.RowBreakCrLf_CellLineBreakLf))
-            Assert.AreEqual("R1C1""""""""" & vbLf & vbLf, CompuMaster.Data.CsvTools.CsvEncode("R1C1""""" & ControlChars.CrLf & vbCr, """"c, CompuMaster.Data.Csv.WriteLineEncodings.RowBreakCrLf_CellLineBreakLf))
+            Assert.AreEqual("R1C1""""" & vbLf, CompuMaster.Data.CsvTables.CsvTools.CsvEncode("R1C1""" & vbLf, """"c, CompuMaster.Data.Csv.WriteLineEncodings.RowBreakCr_CellLineBreakLf))
+            Assert.AreEqual("R1C1""""" & vbLf & vbLf, CompuMaster.Data.CsvTables.CsvTools.CsvEncode("R1C1""" & ControlChars.CrLf & vbCr, """"c, CompuMaster.Data.Csv.WriteLineEncodings.RowBreakCr_CellLineBreakLf))
+            Assert.AreEqual("R1C1""""""""" & vbLf & vbLf, CompuMaster.Data.CsvTables.CsvTools.CsvEncode("R1C1""""" & ControlChars.CrLf & vbCr, """"c, CompuMaster.Data.Csv.WriteLineEncodings.RowBreakCr_CellLineBreakLf))
+            Assert.AreEqual("R1C1""""" & vbLf & vbLf, CompuMaster.Data.CsvTables.CsvTools.CsvEncode("R1C1""" & ControlChars.CrLf & vbCr, """"c, CompuMaster.Data.Csv.WriteLineEncodings.RowBreakCrLf_CellLineBreakLf))
+            Assert.AreEqual("R1C1""""""""" & vbLf & vbLf, CompuMaster.Data.CsvTables.CsvTools.CsvEncode("R1C1""""" & ControlChars.CrLf & vbCr, """"c, CompuMaster.Data.Csv.WriteLineEncodings.RowBreakCrLf_CellLineBreakLf))
         End Sub
 
         Private Function CloneTableWithSearchAndReplaceOnStrings(table As DataTable, searchValue As String, replaceValue As String) As DataTable
