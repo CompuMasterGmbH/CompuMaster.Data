@@ -5064,6 +5064,57 @@ Namespace CompuMaster.Data
             table.Rows.RemoveAt(0)
         End Sub
 
+        ''' <summary>
+        ''' Add or update a column with row numbering
+        ''' </summary>
+        ''' <param name="table"></param>
+        ''' <param name="columnName"></param>
+        ''' <remarks>A required additional column will be inserted as the very first column</remarks>
+        Public Shared Sub AddOrUpdateRowNumbering(table As DataTable, columnName As String)
+            AddOrUpdateRowNumbering(table, columnName, 1)
+        End Sub
+
+        ''' <summary>
+        ''' Add or update a column with row numbering
+        ''' </summary>
+        ''' <param name="table"></param>
+        ''' <param name="columnName"></param>
+        ''' <remarks>A required additional column will be inserted as the very first column</remarks>
+        Public Shared Sub AddOrUpdateRowNumbering(table As DataTable, columnName As String, startNumber As Int32)
+            If table.Columns.Contains(columnName) Then
+                ApplyRowNumbering(table.Columns(columnName), startNumber)
+            Else
+                Dim NewColumn As New DataColumn(columnName, GetType(Int32))
+                InsertColumn(table, 0, NewColumn)
+                ApplyRowNumbering(NewColumn, startNumber)
+            End If
+        End Sub
+
+        ''' <summary>
+        ''' Update a column with row numbering
+        ''' </summary>
+        ''' <param name="column"></param>
+        Public Shared Sub ApplyRowNumbering(column As DataColumn)
+            ApplyRowNumbering(column, 1)
+        End Sub
+
+        ''' <summary>
+        ''' Update a column with row numbering
+        ''' </summary>
+        ''' <param name="column"></param>
+        Public Shared Sub ApplyRowNumbering(column As DataColumn, startNumber As Int32)
+            Select Case column.DataType
+                Case GetType(String), GetType(Int32), GetType(Int64)
+                    Dim RowCounter As Integer = startNumber
+                    For MyCounter As Integer = 0 To column.Table.Rows.Count - 1
+                        column.Table.Rows(MyCounter)(column) = RowCounter
+                        RowCounter += 1
+                    Next
+                Case Else
+                    Throw New ArgumentException("Unsupported column data type for row numbering: " & column.DataType.FullName)
+            End Select
+        End Sub
+
     End Class
 
 End Namespace
