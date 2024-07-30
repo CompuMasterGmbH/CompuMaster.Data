@@ -47,3 +47,4 @@ CompuMaster.Test.Web.DataUpdate/Bin/CompuMaster.Data.pdb
 bin
 obj
 InternalTrace.*.log
+*sensitive*
