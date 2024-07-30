@@ -533,7 +533,7 @@ Namespace CompuMaster.Data
 #Disable Warning S1066 ' Collapsible "if" statements should be merged
                 If lineEncodings = Csv.ReadLineEncodings.RowBreakCrLfOrCrOrLf_CellLineBreakCrLfOrCrOrLf AndAlso detectCompletedRowLineBasedOnRequiredColumnCount = 0 Then
                     If RowCounter <> 0 Then 'already includesColumnHeaders required since lineEncodings check on method head
-                        Throw New ArgumentNullException("detectCompletedRowLineBasedOnRequiredColumnCount", "Argument detectCompletedRowLineBasedOnRequiredColumnCount required for reading with line endings RowBreakCrLfOrCrOrLf_CellLineBreakCrLfOrCrOrLf")
+                        Throw New InvalidOperationException("Argument detectCompletedRowLineBasedOnRequiredColumnCount required for reading with line endings RowBreakCrLfOrCrOrLf_CellLineBreakCrLfOrCrOrLf")
                     End If
                 End If
 #Enable Warning S1066 ' Collapsible "if" statements should be merged
