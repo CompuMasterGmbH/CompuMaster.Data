@@ -178,9 +178,10 @@ Namespace CompuMaster.Data
             'Find all elements and count their duplicates number
             For MyCounter As Integer = 0 To Table.Rows.Count - 1
                 Dim key As T = CType(Table.Rows(MyCounter)(column), T)
-                If Result.ContainsKey(key) Then
+                Dim value As Integer = Nothing
+                If Result.TryGetValue(key, value) Then
                     'Increase counter for this existing value by 1
-                    Result.Item(key) = CType(Result.Item(key), Integer) + 1
+                    Result.Item(key) = CType(value, Integer) + 1
                 Else
                     'Add new element
                     Result.Add(key, 1)
