@@ -1784,7 +1784,7 @@ Namespace CompuMaster.Data
         End Function
 
         ''' <summary>
-        '''     Return a string with all columns and rows, helpfull for debugging purposes
+        '''     Return a string with all columns and rows
         ''' </summary>
         ''' <param name="dataTable">The datatable to retrieve the content from</param>
         ''' <returns>All rows are tab separated. If no rows have been processed, the user will get notified about this fact</returns>
@@ -1793,7 +1793,7 @@ Namespace CompuMaster.Data
         End Function
 
         ''' <summary>
-        '''     Return a string with all columns and rows, helpfull for debugging purposes
+        '''     Return a string with all columns and rows
         ''' </summary>
         ''' <param name="dataTable">The datatable to retrieve the content from</param>
         ''' <param name="fixedColumnWidths">The column sizes in chars</param>
@@ -1804,7 +1804,7 @@ Namespace CompuMaster.Data
         End Function
 
         ''' <summary>
-        '''     Return a string with all columns and rows, helpfull for debugging purposes
+        '''     Return a string with all columns and rows
         ''' </summary>
         ''' <param name="dataRows">The datatable to retrieve the content from</param>
         ''' <returns>All rows are separated by fixed width. If no rows have been processed, the user will get notified about this fact</returns>
@@ -1820,7 +1820,7 @@ Namespace CompuMaster.Data
         End Function
 
         ''' <summary>
-        '''     Return a string with all columns and rows, helpfull for debugging purposes
+        '''     Return a string with all columns and rows
         ''' </summary>
         ''' <param name="dataRows">The datatable to retrieve the content from</param>
         ''' <param name="tableTitle">The headline for the table</param>
@@ -1833,7 +1833,18 @@ Namespace CompuMaster.Data
         End Function
 
         ''' <summary>
-        '''     Return a string with all columns and rows, helpfull for debugging purposes
+        '''     Return a string with all columns and rows
+        ''' </summary>
+        ''' <param name="dataRows">The datatable to retrieve the content from</param>
+        ''' <param name="tableTitle">The headline for the table</param>
+        ''' <returns>All rows are separated by fixed width. If no rows have been processed, the user will get notified about this fact</returns>
+        ''' <remarks></remarks>
+        Public Shared Function ConvertToPlainTextTableFixedColumnWidths(ByVal dataRow As DataRow, options As ConvertToPlainTextTableOptions) As String
+            Return ConvertToPlainTextTableWithFixedColumnWidths(New DataRow() {dataRow}, options)
+        End Function
+
+        ''' <summary>
+        '''     Return a string with all columns and rows
         ''' </summary>
         ''' <param name="dataRows">The datatable to retrieve the content from</param>
         ''' <param name="tableTitle">The headline for the table</param>
@@ -1844,7 +1855,7 @@ Namespace CompuMaster.Data
         End Function
 
         ''' <summary>
-        '''     Return a string with all columns and rows, helpfull for debugging purposes
+        '''     Return a string with all columns and rows
         ''' </summary>
         ''' <param name="dataRows">The datatable to retrieve the content from</param>
         ''' <param name="tableTitle">The headline for the table</param>
@@ -1855,7 +1866,7 @@ Namespace CompuMaster.Data
         End Function
 
         ''' <summary>
-        '''     Return a string with all columns and rows, helpfull for debugging purposes
+        '''     Return a string with all columns and rows
         ''' </summary>
         ''' <param name="dataRows">The datatable to retrieve the content from</param>
         ''' <returns>All rows are separated by fixed width. If no rows have been processed, the user will get notified about this fact</returns>
@@ -1871,7 +1882,7 @@ Namespace CompuMaster.Data
         End Function
 
         ''' <summary>
-        '''     Return a string with all columns and rows, helpfull for debugging purposes
+        '''     Return a string with all columns and rows
         ''' </summary>
         ''' <param name="dataRow">The data row to retrieve the content from</param>
         ''' <returns>All rows are separated by fixed width. If no rows have been processed, the user will get notified about this fact</returns>
@@ -1883,7 +1894,7 @@ Namespace CompuMaster.Data
         End Function
 
         ''' <summary>
-        '''     Return a string with all columns and rows, helpfull for debugging purposes
+        '''     Return a string with all columns and rows
         ''' </summary>
         ''' <param name="dataRow">The data row to retrieve the content from</param>
         ''' <param name="tableTitle">The headline for the table</param>
@@ -1896,7 +1907,7 @@ Namespace CompuMaster.Data
         End Function
 
         ''' <summary>
-        '''     Return a string with all columns and rows, helpfull for debugging purposes
+        '''     Return a string with all columns and rows
         ''' </summary>
         ''' <param name="dataRow">The data row to retrieve the content from</param>
         ''' <returns>All rows are separated by fixed width. If no rows have been processed, the user will get notified about this fact</returns>
@@ -1908,7 +1919,7 @@ Namespace CompuMaster.Data
         End Function
 
         ''' <summary>
-        '''     Return a string with all columns and rows, helpfull for debugging purposes
+        '''     Return a string with all columns and rows
         ''' </summary>
         ''' <param name="dataTable">The datatable to retrieve the content from</param>
         ''' <returns>All rows are separated by fixed width. If no rows have been processed, the user will get notified about this fact</returns>
@@ -1920,7 +1931,7 @@ Namespace CompuMaster.Data
         End Function
 
         ''' <summary>
-        '''     Return a string with all columns and rows, helpfull for debugging purposes
+        '''     Return a string with all columns and rows
         ''' </summary>
         ''' <param name="dataTable">The datatable to retrieve the content from</param>
         ''' <param name="tableTitle">The headline for the table</param>
@@ -1933,7 +1944,7 @@ Namespace CompuMaster.Data
         End Function
 
         ''' <summary>
-        '''     Return a string with all columns and rows, helpfull for debugging purposes
+        '''     Return a string with all columns and rows
         ''' </summary>
         ''' <param name="dataTable">The datatable to retrieve the content from</param>
         ''' <returns>All rows are separated by fixed width. If no rows have been processed, the user will get notified about this fact</returns>
@@ -1945,7 +1956,7 @@ Namespace CompuMaster.Data
         End Function
 
         ''' <summary>
-        '''     Return a string with all columns and rows, helpfull for debugging purposes
+        '''     Return a string with all columns and rows
         ''' </summary>
         ''' <param name="dataTable">The datatable to retrieve the content from</param>
         ''' <returns>All rows are separated by fixed width. If no rows have been processed, the user will get notified about this fact</returns>
@@ -1957,7 +1968,7 @@ Namespace CompuMaster.Data
         End Function
 
         ''' <summary>
-        '''     Return a string with all columns and rows, helpfull for debugging purposes
+        '''     Return a string with all columns and rows
         ''' </summary>
         ''' <param name="dataTable">The datatable to retrieve the content from</param>
         ''' <param name="fixedColumnWidths">Array of column widths, where value of 0 => invisible column, null or missing/unspecified => auto width; </param>
@@ -1976,7 +1987,7 @@ Namespace CompuMaster.Data
         End Function
 
         ''' <summary>
-        '''     Return a string with all columns and rows, helpfull for debugging purposes
+        '''     Return a string with all columns and rows
         ''' </summary>
         ''' <param name="dataTable">The datatable to retrieve the content from</param>
         ''' <returns>All rows are separated by fixed width. If no rows have been processed, the user will get notified about this fact</returns>
@@ -1992,7 +2003,7 @@ Namespace CompuMaster.Data
         End Function
 
         ''' <summary>
-        '''     Return a string with all columns and rows, helpfull for debugging purposes
+        '''     Return a string with all columns and rows
         ''' </summary>
         ''' <param name="dataTable">The datatable to retrieve the content from</param>
         ''' <returns>All rows are separated by fixed width. If no rows have been processed, the user will get notified about this fact</returns>
@@ -2005,7 +2016,7 @@ Namespace CompuMaster.Data
         End Function
 
         ''' <summary>
-        '''     Return a string with all columns and rows, helpfull for debugging purposes
+        '''     Return a string with all columns and rows
         ''' </summary>
         ''' <param name="dataTable">The datatable to retrieve the content from</param>
         ''' <returns>All rows are separated by fixed width. If no rows have been processed, the user will get notified about this fact</returns>
@@ -2032,7 +2043,7 @@ Namespace CompuMaster.Data
         End Function
 
         ''' <summary>
-        '''     Return a string with all columns and rows, helpfull for debugging purposes
+        '''     Return a string with all columns and rows
         ''' </summary>
         ''' <param name="dataTable">The datatable to retrieve the content from</param>
         ''' <returns>All rows are separated by fixed width. If no rows have been processed, the user will get notified about this fact</returns>
@@ -2049,7 +2060,7 @@ Namespace CompuMaster.Data
         End Function
 
         ''' <summary>
-        '''     Return a string with all columns and rows, helpfull for debugging purposes
+        '''     Return a string with all columns and rows
         ''' </summary>
         ''' <param name="dataTable">The datatable to retrieve the content from</param>
         ''' <returns>All rows are separated by fixed width. If no rows have been processed, the user will get notified about this fact</returns>
@@ -2068,7 +2079,7 @@ Namespace CompuMaster.Data
         End Function
 
         ''' <summary>
-        '''     Return a string with all columns and rows, helpfull for debugging purposes
+        '''     Return a string with all columns and rows
         ''' </summary>
         ''' <param name="dataTable">The datatable to retrieve the content from</param>
         ''' <returns>All rows are separated by fixed width. If no rows have been processed, the user will get notified about this fact</returns>
@@ -2092,7 +2103,7 @@ Namespace CompuMaster.Data
                                                                         verticalSeparatorForCells, Nothing)
         End Function
         ''' <summary>
-        '''     Return a string with all columns and rows, helpfull for debugging purposes
+        '''     Return a string with all columns and rows
         ''' </summary>
         ''' <param name="dataTable">The datatable to retrieve the content from</param>
         ''' <returns>All rows are separated by fixed width. If no rows have been processed, the user will get notified about this fact</returns>
@@ -2112,7 +2123,7 @@ Namespace CompuMaster.Data
         End Function
 
         ''' <summary>
-        '''     Return a string with all columns and rows, helpfull for debugging purposes
+        '''     Return a string with all columns and rows
         ''' </summary>
         ''' <param name="dataTable">The datatable to retrieve the content from</param>
         ''' <returns>All rows are separated by fixed width. If no rows have been processed, the user will get notified about this fact</returns>
@@ -2143,7 +2154,7 @@ Namespace CompuMaster.Data
         End Function
 
         ''' <summary>
-        '''     Return a string with all columns and rows, helpfull for debugging purposes
+        '''     Return a string with all columns and rows
         ''' </summary>
         ''' <param name="dataTable">The datatable to retrieve the content from</param>
         ''' <returns>All rows are separated by fixed width. If no rows have been processed, the user will get notified about this fact</returns>
@@ -2599,7 +2610,7 @@ Namespace CompuMaster.Data
         End Function
 
         ''' <summary>
-        '''     Return a string with all columns and rows, helpfull for debugging purposes
+        '''     Return a string with all columns and rows
         ''' </summary>
         ''' <param name="rows">The rows to be processed</param>
         ''' <param name="label">An optional title of the rows</param>
@@ -2635,7 +2646,7 @@ Namespace CompuMaster.Data
         End Function
 
         ''' <summary>
-        '''     Return a string with all columns and rows, helpfull for debugging purposes
+        '''     Return a string with all columns and rows
         ''' </summary>
         ''' <param name="rows">The rows to be processed</param>
         ''' <param name="label">An optional title of the rows</param>
@@ -2659,7 +2670,7 @@ Namespace CompuMaster.Data
         Public Delegate Function DataColumnToString(column As System.Data.DataColumn, value As Object) As String
 
         ''' <summary>
-        '''     Return a string with all columns and rows, helpfull for debugging purposes
+        '''     Return a string with all columns and rows
         ''' </summary>
         ''' <param name="rows">The rows to be processed</param>
         ''' <param name="label">An optional title of the rows</param>
@@ -2694,7 +2705,7 @@ Namespace CompuMaster.Data
         End Function
 
         ''' <summary>
-        '''     Return a string with all columns and rows, helpfull for debugging purposes
+        '''     Return a string with all columns and rows
         ''' </summary>
         ''' <param name="rows">The rows to be processed</param>
         ''' <param name="options">Options for output style and data</param>
@@ -2726,7 +2737,18 @@ Namespace CompuMaster.Data
         End Function
 
         ''' <summary>
-        '''     Return a string with all columns and rows, helpfull for debugging purposes
+        '''     Return a string with all columns of a row
+        ''' </summary>
+        ''' <param name="rows">The rows to be processed</param>
+        ''' <param name="options">Options for output style and data</param>
+        ''' <returns>All rows are with fixed column withs. If no rows have been processed, the user will get notified about this fact</returns>
+        ''' <remarks></remarks>
+        Public Shared Function ConvertToPlainTextTableWithFixedColumnWidths(ByVal row As DataRow, options As ConvertToPlainTextTableOptions) As String
+            Return ConvertToPlainTextTableWithFixedColumnWidths(New DataRow() {row}, options)
+        End Function
+
+        ''' <summary>
+        '''     Return a string with all columns and rows
         ''' </summary>
         ''' <param name="rows">The rows to be processed</param>
         ''' <param name="options">Options for output style and data</param>
@@ -2854,7 +2876,7 @@ Namespace CompuMaster.Data
 
 
         ''' <summary>
-        '''     Return a string with all columns and rows, helpfull for debugging purposes
+        '''     Return a string with all columns and rows
         ''' </summary>
         ''' <param name="rows">The rows to be processed</param>
         ''' <param name="label">An optional title of the rows</param>
@@ -2864,7 +2886,7 @@ Namespace CompuMaster.Data
         End Function
 
         ''' <summary>
-        '''     Return a string with all columns and rows, helpfull for debugging purposes
+        '''     Return a string with all columns and rows
         ''' </summary>
         ''' <param name="rows">The rows to be processed</param>
         ''' <param name="label">An optional title of the rows</param>
@@ -2874,7 +2896,7 @@ Namespace CompuMaster.Data
         End Function
 
         ''' <summary>
-        '''     Return a string with all columns and rows, helpfull for debugging purposes
+        '''     Return a string with all columns and rows
         ''' </summary>
         ''' <param name="rows">The rows to be processed</param>
         ''' <param name="label">An optional title of the rows</param>
@@ -2886,7 +2908,7 @@ Namespace CompuMaster.Data
         End Function
 
         ''' <summary>
-        '''     Return a string with all columns for the specified row in vertical arrangement, helpfull for debugging purposes
+        '''     Return a string with all columns for the specified row in vertical arrangement
         ''' </summary>
         ''' <param name="row">The row to be processed</param>
         ''' <param name="label">An optional title of the rows</param>

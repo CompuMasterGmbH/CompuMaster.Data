@@ -822,7 +822,7 @@ Namespace CompuMaster.Data
         End Function
 
         ''' <summary>
-        '''     Return a string with all columns and rows, helpfull for debugging purposes
+        '''     Return a string with all columns and rows
         ''' </summary>
         ''' <param name="dataTable">The datatable to retrieve the content from</param>
         ''' <returns>All rows are tab separated. If no rows have been processed, the user will get notified about this fact</returns>
@@ -831,7 +831,7 @@ Namespace CompuMaster.Data
         End Function
 
         ''' <summary>
-        '''     Return a string with all columns and rows, helpfull for debugging purposes
+        '''     Return a string with all columns and rows
         ''' </summary>
         ''' <param name="rows">The rows to be processed</param>
         ''' <param name="label">An optional title of the rows</param>
@@ -866,7 +866,7 @@ Namespace CompuMaster.Data
         End Function
 
         ''' <summary>
-        '''     Return a string with all columns and rows, helpfull for debugging purposes
+        '''     Return a string with all columns and rows
         ''' </summary>
         ''' <param name="rows">The rows to be processed</param>
         ''' <param name="label">An optional title of the rows</param>
@@ -923,7 +923,7 @@ Namespace CompuMaster.Data
         End Sub
 
         ''' <summary>
-        '''     Return a string with all columns and rows, helpfull for debugging purposes
+        '''     Return a string with all columns and rows
         ''' </summary>
         ''' <param name="rows">The rows to be processed</param>
         ''' <param name="label">An optional title of the rows</param>
