@@ -14,6 +14,10 @@ Namespace CompuMaster.Data.CsvTables
         Public Sub New()
         End Sub
 
+        Public Sub New(ByVal csvContainsColumnHeaders As Boolean, startAtLineIndex As Integer, Optional ByVal columnSeparator As Char = ","c, Optional ByVal recognizeTextBy As Char = """"c, Optional ByVal recognizeMultipleColumnSeparatorCharsAsOne As Boolean = False, Optional ByVal convertEmptyStringsToDBNull As Boolean = False)
+            Me.New(csvContainsColumnHeaders, startAtLineIndex, CompuMaster.Data.Csv.ReadLineEncodings.Default, CompuMaster.Data.Csv.ReadLineEncodingAutoConversion.AutoConvertLineBreakToSystemEnvironmentNewLine, columnSeparator, recognizeTextBy, recognizeMultipleColumnSeparatorCharsAsOne, convertEmptyStringsToDBNull)
+        End Sub
+
         Public Sub New(ByVal csvContainsColumnHeaders As Boolean, startAtLineIndex As Integer, lineEncodings As CompuMaster.Data.Csv.ReadLineEncodings, lineEncodingAutoConversions As CompuMaster.Data.Csv.ReadLineEncodingAutoConversion, Optional ByVal columnSeparator As Char = ","c, Optional ByVal recognizeTextBy As Char = """"c, Optional ByVal recognizeMultipleColumnSeparatorCharsAsOne As Boolean = False, Optional ByVal convertEmptyStringsToDBNull As Boolean = False)
             Me._CultureFormatProvider = System.Globalization.CultureInfo.CurrentCulture
             Me.CsvContainsColumnHeaders = csvContainsColumnHeaders
@@ -24,6 +28,10 @@ Namespace CompuMaster.Data.CsvTables
             Me.RecognizeMultipleColumnSeparatorCharsAsOne = recognizeMultipleColumnSeparatorCharsAsOne
             Me.RecognizeTextBy = recognizeTextBy
             Me.ConvertEmptyStringsToDBNull = convertEmptyStringsToDBNull
+        End Sub
+
+        Public Sub New(ByVal csvContainsColumnHeaders As Boolean, startAtLineIndex As Integer, ByVal cultureFormatProvider As System.Globalization.CultureInfo, Optional ByVal recognizeTextBy As Char = """"c, Optional ByVal recognizeMultipleColumnSeparatorCharsAsOne As Boolean = False, Optional ByVal convertEmptyStringsToDBNull As Boolean = False)
+            Me.New(csvContainsColumnHeaders, startAtLineIndex, CompuMaster.Data.Csv.ReadLineEncodings.Default, CompuMaster.Data.Csv.ReadLineEncodingAutoConversion.AutoConvertLineBreakToSystemEnvironmentNewLine, cultureFormatProvider, recognizeTextBy, recognizeMultipleColumnSeparatorCharsAsOne, convertEmptyStringsToDBNull)
         End Sub
 
         Public Sub New(ByVal csvContainsColumnHeaders As Boolean, startAtLineIndex As Integer, lineEncodings As CompuMaster.Data.Csv.ReadLineEncodings, lineEncodingAutoConversions As CompuMaster.Data.Csv.ReadLineEncodingAutoConversion, ByVal cultureFormatProvider As System.Globalization.CultureInfo, Optional ByVal recognizeTextBy As Char = """"c, Optional ByVal recognizeMultipleColumnSeparatorCharsAsOne As Boolean = False, Optional ByVal convertEmptyStringsToDBNull As Boolean = False)

@@ -1,7 +1,6 @@
 ﻿Imports NUnit.Framework
-Imports OfficeOpenXml
 Imports System.Data
-Imports System.Security.Policy
+Imports CompuMaster.Data.CsvTables
 
 Namespace CompuMaster.Test.Data
 
@@ -258,6 +257,17 @@ Namespace CompuMaster.Test.Data
 
             'CSV-File
             dt = CompuMaster.Data.Csv.ReadDataTableFromCsvFile(
+                New CsvFileOptions(TestFile, FileEncoding),
+                New CsvReadOptionsDynamicColumnSize(True, StartLine, CsvCulture, """"c, False, True))
+            Console.WriteLine(CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(dt))
+            Assert.AreEqual(10, dt.Columns.Count)
+            Assert.AreEqual(3, dt.Rows.Count)
+            Assert.AreEqual("Konto", dt.Columns(0).ColumnName)
+            Assert.AreEqual("115", dt.Rows(0)(0))
+            Assert.AreEqual("Geschäftsausstattung", dt.Rows(2)(1))
+            Assert.AreEqual(DBNull.Value, dt.Rows(2)(9))
+
+            dt = CompuMaster.Data.Csv.ReadDataTableFromCsvFile(
                 TestFile, True, StartLine,
                 FileEncoding, CsvCulture, """"c, False, True)
             Console.WriteLine(CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(dt))
@@ -352,7 +362,6 @@ Namespace CompuMaster.Test.Data
             Assert.AreEqual(DBNull.Value, dt.Rows(2)(9))
 
         End Sub
-
 
         ''' <summary>
         ''' Test from a mini-webserver providing a CSV download with missing response header content-type/charset 
@@ -1211,6 +1220,145 @@ Namespace CompuMaster.Test.Data
             Assert.AreEqual(3, Result.Columns.Count)
             Assert.AreEqual(7, Result.Rows.Count)
         End Sub
+
+        <Test> Public Sub ReadDataTableFromLexOfficeCsv()
+            Dim TestFile As String = AssemblyTestEnvironment.TestFileAbsolutePath(System.IO.Path.Combine("testfiles", "lexoffice.csv"))
+            Dim StartLine As Integer = 0
+            System.Console.WriteLine("TestFile=" & TestFile)
+            System.Console.WriteLine("StartLine=" & TestFile)
+
+            Dim CsvCulture As System.Globalization.CultureInfo = System.Globalization.CultureInfo.CreateSpecificCulture("de-DE")
+            Dim FileEncoding As System.Text.Encoding = System.Text.Encoding.UTF8
+            Dim FileEncodingName As String = "UTF-8"
+            Dim dt As DataTable
+
+            'CSV-File
+            dt = CompuMaster.Data.Csv.ReadDataTableFromCsvFile(
+                New CsvFileOptions(TestFile, FileEncoding),
+                New CsvReadOptionsDynamicColumnSize(True, StartLine, CsvCulture, """"c, False, True) With {.RecognizeBackslashEscapes = True})
+            Console.WriteLine(CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(dt))
+            Assert.AreEqual(10, dt.Columns.Count)
+            Assert.AreEqual(2218, dt.Rows.Count)
+            Assert.AreEqual("Konto", dt.Columns(0).ColumnName)
+            Assert.AreEqual("200", dt.Rows(0)(0))
+            Assert.AreEqual("Vhddkqrugy Sfjbnrt iyu Tgyropiam", dt.Rows(2)(1))
+            Assert.AreEqual(DBNull.Value, dt.Rows(2)(9))
+
+            dt = CompuMaster.Data.Csv.ReadDataTableFromCsvFile(
+                New CsvFileOptions(TestFile, FileEncoding),
+                New CsvReadOptionsDynamicColumnSize(
+                    True, StartLine,
+                    CompuMaster.Data.Csv.ReadLineEncodings.RowBreakCrLfOrCr_CellLineBreakLf, CompuMaster.Data.Csv.ReadLineEncodingAutoConversion.NoAutoConversion,
+                    CsvCulture, """"c, False, True) With {.RecognizeBackslashEscapes = True})
+            Console.WriteLine(CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(dt))
+            Assert.AreEqual(10, dt.Columns.Count)
+            Assert.AreEqual(2218, dt.Rows.Count)
+            Assert.AreEqual("Konto", dt.Columns(0).ColumnName)
+            Assert.AreEqual("200", dt.Rows(0)(0))
+            Assert.AreEqual("Vhddkqrugy Sfjbnrt iyu Tgyropiam", dt.Rows(2)(1))
+            Assert.AreEqual(DBNull.Value, dt.Rows(2)(9))
+
+            dt = CompuMaster.Data.Csv.ReadDataTableFromCsvFile(
+                New CsvFileOptions(TestFile, FileEncoding),
+                New CsvReadOptionsDynamicColumnSize(
+                    True, StartLine,
+                    CsvCulture, recognizeTextBy:=""""c, recognizeMultipleColumnSeparatorCharsAsOne:=False, True) With {.ColumnSeparator = ";"c, .RecognizeBackslashEscapes = True})
+            Console.WriteLine(CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(dt))
+            Assert.AreEqual(10, dt.Columns.Count)
+            Assert.AreEqual(2218, dt.Rows.Count)
+            Assert.AreEqual("Konto", dt.Columns(0).ColumnName)
+            Assert.AreEqual("200", dt.Rows(0)(0))
+            Assert.AreEqual("Vhddkqrugy Sfjbnrt iyu Tgyropiam", dt.Rows(2)(1))
+            Assert.AreEqual(DBNull.Value, dt.Rows(2)(9))
+
+            dt = CompuMaster.Data.Csv.ReadDataTableFromCsvFile(
+                New CsvFileOptions(TestFile, FileEncoding),
+                New CsvReadOptionsDynamicColumnSize(
+                    True, StartLine,
+                    CompuMaster.Data.Csv.ReadLineEncodings.RowBreakCrLfOrCr_CellLineBreakLf, CompuMaster.Data.Csv.ReadLineEncodingAutoConversion.NoAutoConversion,
+                    CsvCulture, recognizeTextBy:=""""c, recognizeMultipleColumnSeparatorCharsAsOne:=False, True) With {.ColumnSeparator = ";"c, .RecognizeBackslashEscapes = True})
+            Console.WriteLine(CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(dt))
+            Assert.AreEqual(10, dt.Columns.Count)
+            Assert.AreEqual(2218, dt.Rows.Count)
+            Assert.AreEqual("Konto", dt.Columns(0).ColumnName)
+            Assert.AreEqual("200", dt.Rows(0)(0))
+            Assert.AreEqual("Vhddkqrugy Sfjbnrt iyu Tgyropiam", dt.Rows(2)(1))
+            Assert.AreEqual(DBNull.Value, dt.Rows(2)(9))
+
+            'CSV-String
+            Dim CsvData As String = System.IO.File.ReadAllText(TestFile, FileEncoding)
+            dt = CompuMaster.Data.Csv.ReadDataTableFromCsvString(
+                CsvData,
+                New CsvReadOptionsDynamicColumnSize(True, StartLine, CsvCulture, """"c, False, True) With {.RecognizeBackslashEscapes = True})
+            Console.WriteLine(CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(dt))
+            Assert.AreEqual(10, dt.Columns.Count)
+            Assert.AreEqual(2218, dt.Rows.Count)
+            Assert.AreEqual("Konto", dt.Columns(0).ColumnName)
+            Assert.AreEqual("200", dt.Rows(0)(0))
+            Assert.AreEqual("Vhddkqrugy Sfjbnrt iyu Tgyropiam", dt.Rows(2)(1))
+            Assert.AreEqual(DBNull.Value, dt.Rows(2)(9))
+
+            dt = CompuMaster.Data.Csv.ReadDataTableFromCsvString(
+                CsvData,
+                New CsvReadOptionsDynamicColumnSize(
+                    True, StartLine,
+                    CsvCulture, """"c, False, True) With {.RecognizeBackslashEscapes = True})
+            Console.WriteLine(CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(dt))
+            Assert.AreEqual(10, dt.Columns.Count)
+            Assert.AreEqual(2218, dt.Rows.Count)
+            Assert.AreEqual("Konto", dt.Columns(0).ColumnName)
+            Assert.AreEqual("200", dt.Rows(0)(0))
+            Assert.AreEqual("Vhddkqrugy Sfjbnrt iyu Tgyropiam", dt.Rows(2)(1))
+            Assert.AreEqual(DBNull.Value, dt.Rows(2)(9))
+
+            dt = CompuMaster.Data.Csv.ReadDataTableFromCsvString(
+                CsvData,
+                New CsvReadOptionsDynamicColumnSize(
+                    True, StartLine,
+                    CompuMaster.Data.Csv.ReadLineEncodings.RowBreakCrLfOrCr_CellLineBreakLf, CompuMaster.Data.Csv.ReadLineEncodingAutoConversion.NoAutoConversion,
+                    CsvCulture, """"c, False, True) With {.RecognizeBackslashEscapes = True})
+            Console.WriteLine(CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(dt))
+            Assert.AreEqual(10, dt.Columns.Count)
+            Assert.AreEqual(2218, dt.Rows.Count)
+            Assert.AreEqual("Konto", dt.Columns(0).ColumnName)
+            Assert.AreEqual("200", dt.Rows(0)(0))
+            Assert.AreEqual("Vhddkqrugy Sfjbnrt iyu Tgyropiam", dt.Rows(2)(1))
+            Assert.AreEqual(DBNull.Value, dt.Rows(2)(9))
+
+            dt = CompuMaster.Data.Csv.ReadDataTableFromCsvString(
+                CsvData,
+                New CsvReadOptionsDynamicColumnSize(
+                    True, StartLine,
+                    CsvCulture, recognizeTextBy:=""""c, recognizeMultipleColumnSeparatorCharsAsOne:=False, True) With {.ColumnSeparator = ";"c, .RecognizeBackslashEscapes = True})
+            Console.WriteLine(CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(dt))
+            Assert.AreEqual(10, dt.Columns.Count)
+            Assert.AreEqual(2218, dt.Rows.Count)
+            Assert.AreEqual("Konto", dt.Columns(0).ColumnName)
+            Assert.AreEqual("200", dt.Rows(0)(0))
+            Assert.AreEqual("Vhddkqrugy Sfjbnrt iyu Tgyropiam", dt.Rows(2)(1))
+            Assert.AreEqual(DBNull.Value, dt.Rows(2)(9))
+
+            dt = CompuMaster.Data.Csv.ReadDataTableFromCsvString(
+                CsvData,
+                New CsvReadOptionsDynamicColumnSize(
+                    True, StartLine,
+                    CompuMaster.Data.Csv.ReadLineEncodings.RowBreakCrLfOrCr_CellLineBreakLf, CompuMaster.Data.Csv.ReadLineEncodingAutoConversion.NoAutoConversion,
+                    CsvCulture, recognizeTextBy:=""""c, recognizeMultipleColumnSeparatorCharsAsOne:=False, True) With {.ColumnSeparator = ";"c, .RecognizeBackslashEscapes = True})
+            Console.WriteLine(CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(dt))
+            Assert.AreEqual(10, dt.Columns.Count)
+            Assert.AreEqual(2218, dt.Rows.Count)
+            Assert.AreEqual("Konto", dt.Columns(0).ColumnName)
+            Assert.AreEqual("200", dt.Rows(0)(0))
+            Assert.AreEqual("Vhddkqrugy Sfjbnrt iyu Tgyropiam", dt.Rows(2)(1))
+            Assert.AreEqual(DBNull.Value, dt.Rows(2)(9))
+
+        End Sub
+
+        Private Function TableCopyWithRowNumbering(table As DataTable, startNumber As Int32) As DataTable
+            Dim dtWithRowNumbering As DataTable = table.Copy
+            CompuMaster.Data.DataTables.AddOrUpdateRowNumbering(dtWithRowNumbering, "Row-No", startNumber)
+            Return dtWithRowNumbering
+        End Function
 
     End Class
 #Enable Warning CA1822 ' Member als statisch markieren

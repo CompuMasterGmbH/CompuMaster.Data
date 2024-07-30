@@ -409,175 +409,236 @@ Namespace CompuMaster.Data.CsvTables
             Dim CurrentRowIndex As Integer = 0
             For CharPositionCounter = startposition To lineContent.Length - 1
                 Dim IsIgnoreLine As Boolean = (CurrentRowIndex < startAtLineIndex)
-                Select Case lineContent.Chars(CharPositionCounter)
-                    Case options.ColumnSeparator
-                        If IsIgnoreLine Then
-                            'do nothing
-                        ElseIf InQuotationMarks Then
-                            'just add the character as it is because it's inside of a cell text
-                            CurrentColumnValue.Append(lineContent.Chars(CharPositionCounter))
-                        Else
-                            'now it's a column separator
-                            'implementation follows to the handling of recognizeMultipleColumnSeparatorCharsAsOne as Excel does
-                            If Not (options.RecognizeMultipleColumnSeparatorCharsAsOne = True AndAlso lineContent.Chars(CharPositionCounter - 1) = options.ColumnSeparator) Then
-                                outputList.Add(CurrentColumnValue.ToString)
-                                CurrentColumnValue = New System.Text.StringBuilder
-                            End If
-                        End If
-                    Case options.RecognizeTextBy
-                        If InQuotationMarks = False Then
-                            InQuotationMarks = Not InQuotationMarks
-                        Else
-                            'Switch between state of in- our out-of quotation marks
-                            If CharPositionCounter + 1 < lineContent.Length AndAlso lineContent.Chars(CharPositionCounter + 1) = options.RecognizeTextBy Then
-                                'doubled quotation marks lead to one single quotation mark
+                If options.RecognizeBackslashEscapes AndAlso lineContent.Chars(CharPositionCounter) = "\"c Then
+                    If CharPositionCounter + 1 < lineContent.Length Then
+                        Select Case lineContent.Chars(CharPositionCounter + 1)
+                            Case "\"c
+                                'escaped backslash
                                 If IsIgnoreLine Then
                                     'do nothing
                                 Else
-                                    CurrentColumnValue.Append(options.RecognizeTextBy)
+                                    CurrentColumnValue.Append("\"c)
                                 End If
-                                'fix the position to be now after the second quotation marks
                                 CharPositionCounter += 1
-                            Else
-                                InQuotationMarks = Not InQuotationMarks
-                            End If
-                        End If
-                    Case ControlChars.Lf
-                        If InQuotationMarks OrElse (lineEncodings = Csv.ReadLineEncodings.RowBreakCrLfOrCrOrLf_CellLineBreakCrLfOrCrOrLf AndAlso outputList.Count < detectCompletedRowLineBasedOnRequiredColumnCount - 1) Then
-                            'it's a line separator within logical cell
-                            If IsIgnoreLine Then
-                                'do nothing
-                            Else
-                                'TODO: read cell line breaks correctly
-                                'Select Case lineEncodings
-                                '    Case Csv.ReadLineEncodings.None
-                                '    Case Csv.ReadLineEncodings.RowBreakCrLfOrCr_CellLineBreakLf
-                                '    Case Csv.ReadLineEncodings.RowBreakCrLfOrLf_CellLineBreakCr
-                                '    Case Csv.ReadLineEncodings.RowBreakCrLf_CellLineBreakCr
-                                '    Case Csv.ReadLineEncodings.RowBreakCrLf_CellLineBreakLf
-                                '    Case Csv.ReadLineEncodings.RowBreakCr_CellLineBreakLf
-                                '    Case Csv.ReadLineEncodings.RowBreakLf_CellLineBreakCr
-                                '    Case Else
-                                '        Throw New NotImplementedException("Invalid lineEncoding")
-                                'End Select
-
-                                'just add the line-break because it's inside of a cell text
-                                Select Case options.LineEncodingAutoConversions
-                                    Case Csv.ReadLineEncodingAutoConversion.NoAutoConversion
-                                        CurrentColumnValue.Append(lineContent.Chars(CharPositionCounter))
-                                    Case Csv.ReadLineEncodingAutoConversion.AutoConvertLineBreakToCrLf
-                                        CurrentColumnValue.Append(ControlChars.CrLf)
-                                    Case Csv.ReadLineEncodingAutoConversion.AutoConvertLineBreakToCr
-                                        CurrentColumnValue.Append(ControlChars.Cr)
-                                    Case Csv.ReadLineEncodingAutoConversion.AutoConvertLineBreakToLf
-                                        CurrentColumnValue.Append(ControlChars.Lf)
-                                    Case Csv.ReadLineEncodingAutoConversion.AutoConvertLineBreakToSystemEnvironmentNewLine
-                                        CurrentColumnValue.Append(System.Environment.NewLine)
-                                    Case Else
-                                        Throw New NotImplementedException("Invalid lineEncoding")
-                                End Select
-                            End If
-                        Else
-                            'now it's a row line separator
-
-                            'TODO: read cell line breaks correctly
-                            'Select Case lineEncodings
-                            '    Case Csv.ReadLineEncodings.None
-                            '    Case Csv.ReadLineEncodings.RowBreakCrLfOrCr_CellLineBreakLf
-                            '    Case Csv.ReadLineEncodings.RowBreakCrLfOrLf_CellLineBreakCr
-                            '    Case Csv.ReadLineEncodings.RowBreakCrLf_CellLineBreakCr
-                            '    Case Csv.ReadLineEncodings.RowBreakCrLf_CellLineBreakLf
-                            '    Case Csv.ReadLineEncodings.RowBreakCr_CellLineBreakLf
-                            '    Case Csv.ReadLineEncodings.RowBreakLf_CellLineBreakCr
-                            '    Case Else
-                            '        Throw New NotImplementedException("Invalid lineEncoding")
-                            'End Select
-
-                            If IsIgnoreLine Then
-                                'effectively, do nothing - except for counting up already-ignored lines
-                                CurrentRowIndex += 1
-                            Else
-                                'Add previously collected data as column value
-                                outputList.Add(CurrentColumnValue.ToString)
-                                CurrentColumnValue = New System.Text.StringBuilder
-                                'Leave this method because the reading of one csv row has been completed
-                                Exit For
-                            End If
-                        End If
-                    Case ControlChars.Cr
-                        If InQuotationMarks OrElse (lineEncodings = Csv.ReadLineEncodings.RowBreakCrLfOrCrOrLf_CellLineBreakCrLfOrCrOrLf AndAlso outputList.Count < detectCompletedRowLineBasedOnRequiredColumnCount - 1) Then
-                            'it's a line separator within logical cell
-                            If IsIgnoreLine Then
-                                'do nothing
-                            Else
-                                'TODO: read cell line breaks correctly
-                                'Select Case lineEncodings
-                                '    Case Csv.ReadLineEncodings.None
-                                '    Case Csv.ReadLineEncodings.RowBreakCrLfOrCr_CellLineBreakLf
-                                '    Case Csv.ReadLineEncodings.RowBreakCrLfOrLf_CellLineBreakCr
-                                '    Case Csv.ReadLineEncodings.RowBreakCrLf_CellLineBreakCr
-                                '    Case Csv.ReadLineEncodings.RowBreakCrLf_CellLineBreakLf
-                                '    Case Csv.ReadLineEncodings.RowBreakCr_CellLineBreakLf
-                                '    Case Csv.ReadLineEncodings.RowBreakLf_CellLineBreakCr
-                                '    Case Else
-                                '        Throw New NotImplementedException("Invalid lineEncoding")
-                                'End Select
-
+                            Case """"c
+                                'escaped quotation mark
+                                If IsIgnoreLine Then
+                                    'do nothing
+                                Else
+                                    CurrentColumnValue.Append(""""c)
+                                End If
+                                CharPositionCounter += 1
+                            Case "n"c
+                                'escaped line break
+                                If IsIgnoreLine Then
+                                    'do nothing
+                                Else
+                                    CurrentColumnValue.Append(ControlChars.Lf)
+                                End If
+                                CharPositionCounter += 1
+                            Case "r"c
+                                'escaped carriage return
+                                If IsIgnoreLine Then
+                                    'do nothing
+                                Else
+                                    CurrentColumnValue.Append(ControlChars.Cr)
+                                End If
+                                CharPositionCounter += 1
+                            Case "t"c
+                                'escaped tab
+                                If IsIgnoreLine Then
+                                    'do nothing
+                                Else
+                                    CurrentColumnValue.Append(ControlChars.Tab)
+                                End If
+                                CharPositionCounter += 1
+                            Case Else
                                 'just add the character as it is because it's inside of a cell text
-                                Select Case options.LineEncodingAutoConversions
-                                    Case Csv.ReadLineEncodingAutoConversion.NoAutoConversion
-                                        CurrentColumnValue.Append(lineContent.Chars(CharPositionCounter))
-                                    Case Csv.ReadLineEncodingAutoConversion.AutoConvertLineBreakToCrLf
-                                        CurrentColumnValue.Append(ControlChars.CrLf)
-                                    Case Csv.ReadLineEncodingAutoConversion.AutoConvertLineBreakToCr
-                                        CurrentColumnValue.Append(ControlChars.Cr)
-                                    Case Csv.ReadLineEncodingAutoConversion.AutoConvertLineBreakToLf
-                                        CurrentColumnValue.Append(ControlChars.Lf)
-                                    Case Csv.ReadLineEncodingAutoConversion.AutoConvertLineBreakToSystemEnvironmentNewLine
-                                        CurrentColumnValue.Append(System.Environment.NewLine)
-                                    Case Else
-                                        Throw New NotImplementedException("Invalid lineEncoding")
-                                End Select
-                            End If
-                        Else
-                            'now it's a row line separator
-
-                            'TODO: read cell line breaks correctly
-                            'Select Case lineEncodings
-                            '    Case Csv.ReadLineEncodings.None
-                            '    Case Csv.ReadLineEncodings.RowBreakCrLfOrCr_CellLineBreakLf
-                            '    Case Csv.ReadLineEncodings.RowBreakCrLfOrLf_CellLineBreakCr
-                            '    Case Csv.ReadLineEncodings.RowBreakCrLf_CellLineBreakCr
-                            '    Case Csv.ReadLineEncodings.RowBreakCrLf_CellLineBreakLf
-                            '    Case Csv.ReadLineEncodings.RowBreakCr_CellLineBreakLf
-                            '    Case Csv.ReadLineEncodings.RowBreakLf_CellLineBreakCr
-                            '    Case Else
-                            '        Throw New NotImplementedException("Invalid lineEncoding")
-                            'End Select
-
-                            If CharPositionCounter + 1 < lineContent.Length AndAlso lineContent.Chars(CharPositionCounter + 1) = ControlChars.Lf Then
-                                'Found a CrLf occurance; handle it as one line break!
-                                CharPositionCounter += 1
-                            End If
-                            If IsIgnoreLine Then
-                                'effectively, do nothing - except for counting up already-ignored lines
-                                CurrentRowIndex += 1
-                            Else
-                                'Add previously collected data as column value
-                                outputList.Add(CurrentColumnValue.ToString)
-                                CurrentColumnValue = New System.Text.StringBuilder
-                                'Leave this method because the reading of one csv row has been completed
-                                Exit For
-                            End If
-                        End If
-                    Case Else
+                                If IsIgnoreLine Then
+                                    'do nothing
+                                Else
+                                    CurrentColumnValue.Append(lineContent.Chars(CharPositionCounter))
+                                End If
+                        End Select
+                    Else
+                        'just add the character as it is because it's inside of a cell text
                         If IsIgnoreLine Then
                             'do nothing
                         Else
-                            'just add the character as it is because it's inside of a cell text
                             CurrentColumnValue.Append(lineContent.Chars(CharPositionCounter))
                         End If
-                End Select
+                    End If
+                Else
+                    Select Case lineContent.Chars(CharPositionCounter)
+                        Case options.ColumnSeparator
+                            If IsIgnoreLine Then
+                                'do nothing
+                            ElseIf InQuotationMarks Then
+                                'just add the character as it is because it's inside of a cell text
+                                CurrentColumnValue.Append(lineContent.Chars(CharPositionCounter))
+                            Else
+                                'now it's a column separator
+                                'implementation follows to the handling of recognizeMultipleColumnSeparatorCharsAsOne as Excel does
+                                If Not (options.RecognizeMultipleColumnSeparatorCharsAsOne = True AndAlso lineContent.Chars(CharPositionCounter - 1) = options.ColumnSeparator) Then
+                                    outputList.Add(CurrentColumnValue.ToString)
+                                    CurrentColumnValue = New System.Text.StringBuilder
+                                End If
+                            End If
+                        Case options.RecognizeTextBy
+                            If InQuotationMarks = False Then
+                                InQuotationMarks = Not InQuotationMarks
+                            Else
+                                'Switch between state of in- our out-of quotation marks
+                                If CharPositionCounter + 1 < lineContent.Length AndAlso lineContent.Chars(CharPositionCounter + 1) = options.RecognizeTextBy Then
+                                    'doubled quotation marks lead to one single quotation mark
+                                    If IsIgnoreLine Then
+                                        'do nothing
+                                    Else
+                                        CurrentColumnValue.Append(options.RecognizeTextBy)
+                                    End If
+                                    'fix the position to be now after the second quotation marks
+                                    CharPositionCounter += 1
+                                Else
+                                    InQuotationMarks = Not InQuotationMarks
+                                End If
+                            End If
+                        Case ControlChars.Lf
+                            If InQuotationMarks OrElse (lineEncodings = Csv.ReadLineEncodings.RowBreakCrLfOrCrOrLf_CellLineBreakCrLfOrCrOrLf AndAlso outputList.Count < detectCompletedRowLineBasedOnRequiredColumnCount - 1) Then
+                                'it's a line separator within logical cell
+                                If IsIgnoreLine Then
+                                    'do nothing
+                                Else
+                                    'TODO: read cell line breaks correctly
+                                    'Select Case lineEncodings
+                                    '    Case Csv.ReadLineEncodings.None
+                                    '    Case Csv.ReadLineEncodings.RowBreakCrLfOrCr_CellLineBreakLf
+                                    '    Case Csv.ReadLineEncodings.RowBreakCrLfOrLf_CellLineBreakCr
+                                    '    Case Csv.ReadLineEncodings.RowBreakCrLf_CellLineBreakCr
+                                    '    Case Csv.ReadLineEncodings.RowBreakCrLf_CellLineBreakLf
+                                    '    Case Csv.ReadLineEncodings.RowBreakCr_CellLineBreakLf
+                                    '    Case Csv.ReadLineEncodings.RowBreakLf_CellLineBreakCr
+                                    '    Case Else
+                                    '        Throw New NotImplementedException("Invalid lineEncoding")
+                                    'End Select
+
+                                    'just add the line-break because it's inside of a cell text
+                                    Select Case options.LineEncodingAutoConversions
+                                        Case Csv.ReadLineEncodingAutoConversion.NoAutoConversion
+                                            CurrentColumnValue.Append(lineContent.Chars(CharPositionCounter))
+                                        Case Csv.ReadLineEncodingAutoConversion.AutoConvertLineBreakToCrLf
+                                            CurrentColumnValue.Append(ControlChars.CrLf)
+                                        Case Csv.ReadLineEncodingAutoConversion.AutoConvertLineBreakToCr
+                                            CurrentColumnValue.Append(ControlChars.Cr)
+                                        Case Csv.ReadLineEncodingAutoConversion.AutoConvertLineBreakToLf
+                                            CurrentColumnValue.Append(ControlChars.Lf)
+                                        Case Csv.ReadLineEncodingAutoConversion.AutoConvertLineBreakToSystemEnvironmentNewLine
+                                            CurrentColumnValue.Append(System.Environment.NewLine)
+                                        Case Else
+                                            Throw New NotImplementedException("Invalid lineEncoding")
+                                    End Select
+                                End If
+                            Else
+                                'now it's a row line separator
+
+                                'TODO: read cell line breaks correctly
+                                'Select Case lineEncodings
+                                '    Case Csv.ReadLineEncodings.None
+                                '    Case Csv.ReadLineEncodings.RowBreakCrLfOrCr_CellLineBreakLf
+                                '    Case Csv.ReadLineEncodings.RowBreakCrLfOrLf_CellLineBreakCr
+                                '    Case Csv.ReadLineEncodings.RowBreakCrLf_CellLineBreakCr
+                                '    Case Csv.ReadLineEncodings.RowBreakCrLf_CellLineBreakLf
+                                '    Case Csv.ReadLineEncodings.RowBreakCr_CellLineBreakLf
+                                '    Case Csv.ReadLineEncodings.RowBreakLf_CellLineBreakCr
+                                '    Case Else
+                                '        Throw New NotImplementedException("Invalid lineEncoding")
+                                'End Select
+
+                                If IsIgnoreLine Then
+                                    'effectively, do nothing - except for counting up already-ignored lines
+                                    CurrentRowIndex += 1
+                                Else
+                                    'Add previously collected data as column value
+                                    outputList.Add(CurrentColumnValue.ToString)
+                                    CurrentColumnValue = New System.Text.StringBuilder
+                                    'Leave this method because the reading of one csv row has been completed
+                                    Exit For
+                                End If
+                            End If
+                        Case ControlChars.Cr
+                            If InQuotationMarks OrElse (lineEncodings = Csv.ReadLineEncodings.RowBreakCrLfOrCrOrLf_CellLineBreakCrLfOrCrOrLf AndAlso outputList.Count < detectCompletedRowLineBasedOnRequiredColumnCount - 1) Then
+                                'it's a line separator within logical cell
+                                If IsIgnoreLine Then
+                                    'do nothing
+                                Else
+                                    'TODO: read cell line breaks correctly
+                                    'Select Case lineEncodings
+                                    '    Case Csv.ReadLineEncodings.None
+                                    '    Case Csv.ReadLineEncodings.RowBreakCrLfOrCr_CellLineBreakLf
+                                    '    Case Csv.ReadLineEncodings.RowBreakCrLfOrLf_CellLineBreakCr
+                                    '    Case Csv.ReadLineEncodings.RowBreakCrLf_CellLineBreakCr
+                                    '    Case Csv.ReadLineEncodings.RowBreakCrLf_CellLineBreakLf
+                                    '    Case Csv.ReadLineEncodings.RowBreakCr_CellLineBreakLf
+                                    '    Case Csv.ReadLineEncodings.RowBreakLf_CellLineBreakCr
+                                    '    Case Else
+                                    '        Throw New NotImplementedException("Invalid lineEncoding")
+                                    'End Select
+
+                                    'just add the character as it is because it's inside of a cell text
+                                    Select Case options.LineEncodingAutoConversions
+                                        Case Csv.ReadLineEncodingAutoConversion.NoAutoConversion
+                                            CurrentColumnValue.Append(lineContent.Chars(CharPositionCounter))
+                                        Case Csv.ReadLineEncodingAutoConversion.AutoConvertLineBreakToCrLf
+                                            CurrentColumnValue.Append(ControlChars.CrLf)
+                                        Case Csv.ReadLineEncodingAutoConversion.AutoConvertLineBreakToCr
+                                            CurrentColumnValue.Append(ControlChars.Cr)
+                                        Case Csv.ReadLineEncodingAutoConversion.AutoConvertLineBreakToLf
+                                            CurrentColumnValue.Append(ControlChars.Lf)
+                                        Case Csv.ReadLineEncodingAutoConversion.AutoConvertLineBreakToSystemEnvironmentNewLine
+                                            CurrentColumnValue.Append(System.Environment.NewLine)
+                                        Case Else
+                                            Throw New NotImplementedException("Invalid lineEncoding")
+                                    End Select
+                                End If
+                            Else
+                                'now it's a row line separator
+
+                                'TODO: read cell line breaks correctly
+                                'Select Case lineEncodings
+                                '    Case Csv.ReadLineEncodings.None
+                                '    Case Csv.ReadLineEncodings.RowBreakCrLfOrCr_CellLineBreakLf
+                                '    Case Csv.ReadLineEncodings.RowBreakCrLfOrLf_CellLineBreakCr
+                                '    Case Csv.ReadLineEncodings.RowBreakCrLf_CellLineBreakCr
+                                '    Case Csv.ReadLineEncodings.RowBreakCrLf_CellLineBreakLf
+                                '    Case Csv.ReadLineEncodings.RowBreakCr_CellLineBreakLf
+                                '    Case Csv.ReadLineEncodings.RowBreakLf_CellLineBreakCr
+                                '    Case Else
+                                '        Throw New NotImplementedException("Invalid lineEncoding")
+                                'End Select
+
+                                If CharPositionCounter + 1 < lineContent.Length AndAlso lineContent.Chars(CharPositionCounter + 1) = ControlChars.Lf Then
+                                    'Found a CrLf occurance; handle it as one line break!
+                                    CharPositionCounter += 1
+                                End If
+                                If IsIgnoreLine Then
+                                    'effectively, do nothing - except for counting up already-ignored lines
+                                    CurrentRowIndex += 1
+                                Else
+                                    'Add previously collected data as column value
+                                    outputList.Add(CurrentColumnValue.ToString)
+                                    CurrentColumnValue = New System.Text.StringBuilder
+                                    'Leave this method because the reading of one csv row has been completed
+                                    Exit For
+                                End If
+                            End If
+                        Case Else
+                            If IsIgnoreLine Then
+                                'do nothing
+                            Else
+                                'just add the character as it is because it's inside of a cell text
+                                CurrentColumnValue.Append(lineContent.Chars(CharPositionCounter))
+                            End If
+                    End Select
+                End If
             Next
 
             'Add the last column value to the collection
