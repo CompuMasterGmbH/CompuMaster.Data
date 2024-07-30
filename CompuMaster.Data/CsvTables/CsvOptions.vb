@@ -6,7 +6,7 @@ Imports System.Data
 Imports CompuMaster.Data.Strings
 Imports System.Text
 
-Namespace CompuMaster.Data.Model.Csv
+Namespace CompuMaster.Data.CsvTables
 
     Public Class CsvOptions
 

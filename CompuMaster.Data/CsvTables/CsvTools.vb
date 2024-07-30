@@ -5,7 +5,7 @@ Imports System.IO
 Imports System.Data
 Imports CompuMaster.Data.Strings
 
-Namespace CompuMaster.Data
+Namespace CompuMaster.Data.CsvTables
 
     ''' <summary>
     '''     Provides simplified access to CSV files
@@ -19,7 +19,7 @@ Namespace CompuMaster.Data
 
 #Region "Fixed columns"
         ''' <summary>
-        '''     Read from a CSV table
+        '''     Read from a CSV table with fixed column widths
         ''' </summary>
         ''' <param name="reader">A stream reader targetting CSV data</param>
         ''' <param name="includesColumnHeaders">Indicates wether column headers are present</param>
@@ -270,7 +270,7 @@ Namespace CompuMaster.Data
         End Function
 
         ''' <summary>
-        '''     Split a line content into separate column values and add them to the output list
+        '''     Split a line content (from a table with fixed column widths) into separate column values and add them to the output list
         ''' </summary>
         ''' <param name="lineContent">The line content as it has been read from the CSV file</param>
         ''' <param name="outputList">An array list which shall hold the separated column values</param>
@@ -587,7 +587,7 @@ Namespace CompuMaster.Data
         End Function
 
         ''' <summary>
-        '''     Split a line content into separate column values and add them to the output list
+        '''     Split a line content (from a table with column separators) into separate column values and add them to the output list
         ''' </summary>
         ''' <param name="lineContent">The line content as it has been read from the CSV file</param>
         ''' <param name="outputList">An array list which shall hold the separated column values</param>
