@@ -1,8 +1,4 @@
-﻿Imports System.Diagnostics.Eventing
-Imports System.IO
-Imports System.Text
-
-Namespace CompuMaster.Data.CsvTables
+﻿Namespace CompuMaster.Data.CsvTables
 
     Public MustInherit Class CsvReadBaseOptions
 

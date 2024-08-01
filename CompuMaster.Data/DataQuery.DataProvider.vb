@@ -91,9 +91,9 @@ Namespace CompuMaster.Data.DataQuery
                 Result = Strings.Replace(Me.ConnectionType.Name, "Connection", "")
                 Result = Strings.Replace(Result, "Connection".ToLowerInvariant, "")
                 Result = Strings.Replace(Result, "Connection".ToUpperInvariant, "")
-                If Result = "Sql" AndAlso (Me.AssemblyName.ToLowerInvariant = "system.data" OrElse Me.AssemblyName.ToLowerInvariant = "system.data.sqlclient") Then
+                If Result = "Sql" AndAlso (AssemblyName.Equals("system.data", StringComparison.OrdinalIgnoreCase) OrElse AssemblyName.Equals("system.data.sqlclient", StringComparison.OrdinalIgnoreCase)) Then
                     Result = "SqlClient"
-                ElseIf Result = "Odbc" AndAlso (Me.AssemblyName.ToLowerInvariant = "system.data" OrElse Me.AssemblyName.ToLowerInvariant = "system.data.odbc") Then
+                ElseIf Result = "Odbc" AndAlso (AssemblyName.Equals("system.data", StringComparison.OrdinalIgnoreCase) OrElse AssemblyName.Equals("system.data.odbc", StringComparison.OrdinalIgnoreCase)) Then
                     Result = "ODBC"
                 End If
                 Return Result

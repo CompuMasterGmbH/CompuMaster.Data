@@ -1146,7 +1146,7 @@ Namespace CompuMaster.Data
                     Dim columnExistsInDestination As Boolean = False
                     For MyDestTableCounter As Integer = 0 To destinationTable.Columns.Count - 1
                         If caseInsensitiveColumnNames Then
-                            If destinationTable.Columns(MyDestTableCounter).ColumnName.ToUpperInvariant = sourceTable.Columns(MySourceTableCounter).ColumnName.ToUpperInvariant Then
+                            If destinationTable.Columns(MyDestTableCounter).ColumnName.Equals(sourceTable.Columns(MySourceTableCounter).ColumnName, StringComparison.OrdinalIgnoreCase) Then
                                 columnExistsInDestination = True
                                 Exit For
                             End If
@@ -3335,6 +3335,18 @@ Namespace CompuMaster.Data
         ''' <returns></returns>
         ''' <remarks>Comparisons with DBNull.Value will return False or True, never DBNull.Value</remarks>
         Public Shared Function CompareValuesOfUnknownType(ByVal value1 As Object, ByVal value2 As Object, ByVal compareStringsCaseInsensitive As Boolean) As Boolean
+            Return CompareValuesOfUnknownType(value1, value2, If(compareStringsCaseInsensitive, StringComparison.InvariantCultureIgnoreCase, StringComparison.Ordinal))
+        End Function
+
+        ''' <summary>
+        ''' Compare 2 values of unknown but same type
+        ''' </summary>
+        ''' <param name="value1">1st value</param>
+        ''' <param name="value2">2nd value</param>
+        ''' <param name="compareStringsCaseInsensitive">True to compare strings case insensitive, False for case sensitive</param>
+        ''' <returns></returns>
+        ''' <remarks>Comparisons with DBNull.Value will return False or True, never DBNull.Value</remarks>
+        Public Shared Function CompareValuesOfUnknownType(ByVal value1 As Object, ByVal value2 As Object, ByVal stringComparisonStyle As StringComparison) As Boolean
             Dim TypeCheckValue As Object
             If value1 Is Nothing Then
                 TypeCheckValue = value2
@@ -3354,14 +3366,8 @@ Namespace CompuMaster.Data
                 Return True
             ElseIf TypeCheckValue.GetType Is GetType(String) Then
                 'Strings
-                If compareStringsCaseInsensitive = False Then
-                    If CType(value1, String) <> CType(value2, String) Then
-                        Return False
-                    End If
-                Else
-                    If StringNotNothingOrEmpty(CType(value1, String)).ToLower(Globalization.CultureInfo.InvariantCulture) <> StringNotNothingOrEmpty(CType(value2, String)).ToLower(Globalization.CultureInfo.InvariantCulture) Then
-                        Return False
-                    End If
+                If Not StringNotNothingOrEmpty(CType(value1, String)).Equals(StringNotNothingOrEmpty(CType(value2, String)), stringComparisonStyle) Then
+                    Return False
                 End If
             ElseIf TypeCheckValue.GetType Is GetType(System.Double) Then
                 'Doubles

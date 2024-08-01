@@ -971,7 +971,9 @@ Namespace CompuMaster.Data.DataQuery
                     Else
                         value = CType(MyReader(1), TValue)
                     End If
+#Disable Warning CA1864 ' Methode "Dictionary.TryAdd(TKey, TValue)" bevorzugen -> RECOMMENDED FEATURE NOT SUPPORTED BY .NET 4
                     If Result.ContainsKey(key) Then
+#Enable Warning CA1864 ' Methode "Dictionary.TryAdd(TKey, TValue)" bevorzugen
                         Result(key) = value
                     Else
                         Result.Add(key, value)
@@ -1039,7 +1041,9 @@ Namespace CompuMaster.Data.DataQuery
                     Else
                         value = New TValue?(CType(MyReader(1), TValue))
                     End If
+#Disable Warning CA1864 ' Methode "Dictionary.TryAdd(TKey, TValue)" bevorzugen -> RECOMMENDED FEATURE NOT SUPPORTED BY .NET 4
                     If Result.ContainsKey(key) Then
+#Enable Warning CA1864 ' Methode "Dictionary.TryAdd(TKey, TValue)" bevorzugen
                         Result(key) = value
                     Else
                         Result.Add(key, value)

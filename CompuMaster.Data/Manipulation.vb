@@ -255,9 +255,7 @@ Namespace CompuMaster.Data
         ''' <remarks></remarks>
         Private Shared Function CreateTableCommandText(ByVal tableName As String, ByVal primaryColumnName As String, ByVal ddlLanguage As DdlLanguage) As String
             Dim OpenBrackets, CloseBrackets As String
-#Disable Warning CA2249 ' Erwägen Sie die Verwendung von "string.Contains" anstelle von "string.IndexOf"
-            If tableName.IndexOf("[", StringComparison.Ordinal) >= 0 AndAlso tableName.IndexOf("]", StringComparison.Ordinal) >= 0 Then
-#Enable Warning CA2249 ' Erwägen Sie die Verwendung von "string.Contains" anstelle von "string.IndexOf"
+            If tableName.Contains("["c) AndAlso tableName.Contains("]"c) Then
                 'table name already in a well-formed syntax, e.g. "dbo.[Test - 123]"
                 OpenBrackets = Nothing
                 CloseBrackets = Nothing
@@ -318,9 +316,7 @@ Namespace CompuMaster.Data
         <CodeAnalysis.SuppressMessage("Minor Code Smell", "S1643:Strings should not be concatenated using ""+"" or ""&"" in a loop", Justification:="<Ausstehend>")>
         Public Shared Function AddMissingColumnsCommandText(ByVal sourceTable As DataTable, ByVal destinationTable As DataTable, remoteTableName As String, ByVal ddlLanguage As DdlLanguage) As String
             Dim OpenBrackets, CloseBrackets As String
-#Disable Warning CA2249 ' Erwägen Sie die Verwendung von "string.Contains" anstelle von "string.IndexOf"
-            If remoteTableName.IndexOf("[", StringComparison.Ordinal) >= 0 AndAlso remoteTableName.IndexOf("]", StringComparison.Ordinal) >= 0 Then
-#Enable Warning CA2249 ' Erwägen Sie die Verwendung von "string.Contains" anstelle von "string.IndexOf"
+            If remoteTableName.Contains("["c) AndAlso remoteTableName.Contains("]"c) Then
                 'table name already in a well-formed syntax, e.g. "dbo.[Test - 123]"
                 OpenBrackets = Nothing
                 CloseBrackets = Nothing
@@ -489,9 +485,7 @@ Namespace CompuMaster.Data
         ''' <remarks></remarks>
         Public Shared Function LoadTableDataForManipulationViaCode(ByVal dataConnection As IDbConnection, ByVal tableName As String, ByVal commandTimeout As Integer, isSafeTableName As Boolean) As CompuMaster.Data.DataManipulationResult
             Dim OpenBrackets, CloseBrackets As String
-#Disable Warning CA2249 ' Erwägen Sie die Verwendung von "string.Contains" anstelle von "string.IndexOf"
-            If tableName.IndexOf("[", StringComparison.Ordinal) >= 0 AndAlso tableName.IndexOf("]", StringComparison.Ordinal) >= 0 Then
-#Enable Warning CA2249 ' Erwägen Sie die Verwendung von "string.Contains" anstelle von "string.IndexOf"
+            If tableName.Contains("["c) AndAlso tableName.Contains("]"c) Then
                 'table name already in a well-formed syntax, e.g. "dbo.[Test - 123]"
                 OpenBrackets = Nothing
                 CloseBrackets = Nothing
@@ -837,9 +831,7 @@ Namespace CompuMaster.Data
         ''' <remarks></remarks>
         Private Shared Function LoadTableStructureWith1RowFromConnection(ByVal tableName As String, ByVal dataConnection As IDbConnection, ByVal ignoreExceptions As Boolean) As DataTable
             Dim OpenBrackets, CloseBrackets As String
-#Disable Warning CA2249 ' Erwägen Sie die Verwendung von "string.Contains" anstelle von "string.IndexOf"
-            If tableName.IndexOf("[", StringComparison.Ordinal) >= 0 AndAlso tableName.IndexOf("]", StringComparison.Ordinal) >= 0 Then
-#Enable Warning CA2249 ' Erwägen Sie die Verwendung von "string.Contains" anstelle von "string.IndexOf"
+            If tableName.Contains("["c) AndAlso tableName.Contains("]"c) Then
                 'table name already in a well-formed syntax, e.g. "dbo.[Test - 123]"
                 OpenBrackets = Nothing
                 CloseBrackets = Nothing

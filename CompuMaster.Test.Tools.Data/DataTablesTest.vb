@@ -105,6 +105,7 @@ Namespace CompuMaster.Test.Data
             dt.Rows.Add(e)
             Assert.AreEqual(0, CompuMaster.Data.DataTables.ColumnIndex(dt.Columns("hey")))
         End Sub
+
         <Test()> Public Sub CompareValuesOfUnknownType()
             Dim dt As New DataTable
             dt.Columns.Add("DummmyColumn")
@@ -112,7 +113,21 @@ Namespace CompuMaster.Test.Data
             Dim e As Integer = 23
             Dim f As Integer = 24
             Assert.IsTrue(CompuMaster.Data.DataTables.CompareValuesOfUnknownType("D", "D", False))
+            Assert.IsTrue(CompuMaster.Data.DataTables.CompareValuesOfUnknownType("D", "D", True))
+            Assert.IsFalse(CompuMaster.Data.DataTables.CompareValuesOfUnknownType("D", "E", False))
+            Assert.IsFalse(CompuMaster.Data.DataTables.CompareValuesOfUnknownType("D", "E", True))
             Assert.IsFalse(CompuMaster.Data.DataTables.CompareValuesOfUnknownType("D", "d", False))
+            Assert.IsFalse(CompuMaster.Data.DataTables.CompareValuesOfUnknownType("É", "é", False))
+            Assert.IsTrue(CompuMaster.Data.DataTables.CompareValuesOfUnknownType("É", "é", True))
+            Assert.IsFalse(CompuMaster.Data.DataTables.CompareValuesOfUnknownType(e, f, False))
+            Assert.IsTrue(CompuMaster.Data.DataTables.CompareValuesOfUnknownType("D", "D", StringComparison.Ordinal))
+            Assert.IsTrue(CompuMaster.Data.DataTables.CompareValuesOfUnknownType("D", "D", StringComparison.OrdinalIgnoreCase))
+            Assert.IsFalse(CompuMaster.Data.DataTables.CompareValuesOfUnknownType("D", "E", StringComparison.Ordinal))
+            Assert.IsFalse(CompuMaster.Data.DataTables.CompareValuesOfUnknownType("D", "E", StringComparison.OrdinalIgnoreCase))
+            Assert.IsFalse(CompuMaster.Data.DataTables.CompareValuesOfUnknownType("D", "d", StringComparison.Ordinal))
+            Assert.IsTrue(CompuMaster.Data.DataTables.CompareValuesOfUnknownType("D", "d", StringComparison.OrdinalIgnoreCase))
+            Assert.IsFalse(CompuMaster.Data.DataTables.CompareValuesOfUnknownType("É", "é", StringComparison.Ordinal))
+            Assert.IsTrue(CompuMaster.Data.DataTables.CompareValuesOfUnknownType("É", "é", StringComparison.OrdinalIgnoreCase))
             Assert.IsFalse(CompuMaster.Data.DataTables.CompareValuesOfUnknownType(e, f, False))
         End Sub
 
