@@ -4,7 +4,7 @@
 		<OutputType>Library</OutputType>
 		<AssemblyName>CompuMaster.Data.Controls</AssemblyName>
 		<TargetFrameworks>net48;net6.0-windows</TargetFrameworks>
-	  	<Version>3.0.2024.0730</Version>
+	  	<Version>3.0.2024.0801</Version>
 		<Authors>Jochen Wezel</Authors>
 		<Company>CompuMaster GmbH</Company>
 		<Copyright>2010-2024 CompuMaster GmbH</Copyright>
