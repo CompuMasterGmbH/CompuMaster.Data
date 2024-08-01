@@ -11,6 +11,9 @@ Namespace CompuMaster.Data.CsvTables
     Public Class CsvReadOptionsFixedColumnSize
         Inherits CsvReadBaseOptions
 
+        ''' <summary>
+        ''' Create a new instance of CsvReadOptionsFixedColumnSize
+        ''' </summary>
         Public Sub New()
             'Me._CultureFormatProvider = System.Globalization.CultureInfo.InvariantCulture
             Me._CultureFormatProvider = System.Globalization.CultureInfo.CurrentCulture
@@ -27,6 +30,27 @@ Namespace CompuMaster.Data.CsvTables
             Me._CultureFormatProvider = cultureFormatProvider
         End Sub
 
+        ''' <summary>
+        ''' Create a new instance of CsvReadOptionsFixedColumnSize
+        ''' </summary>
+        ''' <param name="includesColumnHeaders">Indicates wether column headers are present</param>
+        ''' <param name="lineEncodings">Encoding style for linebreaks</param>
+        ''' <param name="lineEncodingAutoConversions">Change linebreak encodings on reading</param>
+        ''' <param name="columnWidths">An array of column widths in their order</param>
+        ''' <param name="convertEmptyStringsToDBNull">Convert values with empty strings automatically to DbNull</param>
+        Public Sub New(includesColumnHeaders As Boolean, lineEncodings As CompuMaster.Data.Csv.ReadLineEncodings, lineEncodingAutoConversions As CompuMaster.Data.Csv.ReadLineEncodingAutoConversion, columnWidths As Integer(), convertEmptyStringsToDBNull As Boolean)
+            Me.New(includesColumnHeaders, 0, lineEncodings, lineEncodingAutoConversions, columnWidths, convertEmptyStringsToDBNull)
+        End Sub
+
+        ''' <summary>
+        ''' Create a new instance of CsvReadOptionsFixedColumnSize
+        ''' </summary>
+        ''' <param name="includesColumnHeaders">Indicates wether column headers are present</param>
+        ''' <param name="startAtLineIndex">Start reading of table data at specified line index (most often 0 for very first line)</param>
+        ''' <param name="lineEncodings">Encoding style for linebreaks</param>
+        ''' <param name="lineEncodingAutoConversions">Change linebreak encodings on reading</param>
+        ''' <param name="columnWidths">An array of column widths in their order</param>
+        ''' <param name="convertEmptyStringsToDBNull">Convert values with empty strings automatically to DbNull</param>
         Public Sub New(includesColumnHeaders As Boolean, startAtLineIndex As Integer, lineEncodings As CompuMaster.Data.Csv.ReadLineEncodings, lineEncodingAutoConversions As CompuMaster.Data.Csv.ReadLineEncodingAutoConversion, columnWidths As Integer(), convertEmptyStringsToDBNull As Boolean)
             Me.CsvContainsColumnHeaders = includesColumnHeaders
             Me.StartAtLineIndex = startAtLineIndex
@@ -38,6 +62,10 @@ Namespace CompuMaster.Data.CsvTables
         End Sub
 
         Private _ColumnWidths As Integer()
+        ''' <summary>
+        ''' 
+        ''' </summary>
+        ''' <returns></returns>
         Public Property ColumnWidths As Integer()
             Get
                 If _ColumnWidths Is Nothing Then

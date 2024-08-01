@@ -8,44 +8,110 @@ Imports System.Text
 
 Namespace CompuMaster.Data.CsvTables
 
+    ''' <summary>
+    ''' Configuration options for reading CSV data from a file or stream
+    ''' </summary>
     Public Class CsvReadOptionsDynamicColumnSize
         Inherits CsvReadBaseOptions
 
+        ''' <summary>
+        ''' Create a new instance of CsvReadOptionsDynamicColumnSize
+        ''' </summary>
         Public Sub New()
         End Sub
 
-        Public Sub New(ByVal csvContainsColumnHeaders As Boolean, startAtLineIndex As Integer, Optional ByVal columnSeparator As Char = ","c, Optional ByVal recognizeTextBy As Char = """"c, Optional ByVal recognizeMultipleColumnSeparatorCharsAsOne As Boolean = False, Optional ByVal convertEmptyStringsToDBNull As Boolean = False)
-            Me.New(csvContainsColumnHeaders, startAtLineIndex, CompuMaster.Data.Csv.ReadLineEncodings.Default, CompuMaster.Data.Csv.ReadLineEncodingAutoConversion.AutoConvertLineBreakToSystemEnvironmentNewLine, columnSeparator, recognizeTextBy, recognizeMultipleColumnSeparatorCharsAsOne, convertEmptyStringsToDBNull)
+        ''' <summary>
+        ''' Create a new instance of CsvReadOptionsDynamicColumnSize
+        ''' </summary>
+        ''' <param name="csvContainsColumnHeaders">Indicates wether column headers are present</param>
+        ''' <param name="columnSeparator">Choose the required character for splitting the columns. Set to null (Nothing in VisualBasic) to enable fixed column widths mode</param>
+        ''' <param name="recognizeTextBy">A character indicating the start and end of text strings</param>
+        ''' <param name="convertEmptyStringsToDBNull">Convert values with empty strings automatically to DbNull</param>
+        Public Sub New(ByVal csvContainsColumnHeaders As Boolean, Optional ByVal columnSeparator As Char = ","c, Optional ByVal recognizeTextBy As Char = """"c, Optional ByVal convertEmptyStringsToDBNull As Boolean = False)
+            Me.New(csvContainsColumnHeaders, 0, CompuMaster.Data.Csv.ReadLineEncodings.Default, CompuMaster.Data.Csv.ReadLineEncodingAutoConversion.AutoConvertLineBreakToSystemEnvironmentNewLine, columnSeparator, recognizeTextBy, convertEmptyStringsToDBNull)
         End Sub
 
-        Public Sub New(ByVal csvContainsColumnHeaders As Boolean, startAtLineIndex As Integer, lineEncodings As CompuMaster.Data.Csv.ReadLineEncodings, lineEncodingAutoConversions As CompuMaster.Data.Csv.ReadLineEncodingAutoConversion, Optional ByVal columnSeparator As Char = ","c, Optional ByVal recognizeTextBy As Char = """"c, Optional ByVal recognizeMultipleColumnSeparatorCharsAsOne As Boolean = False, Optional ByVal convertEmptyStringsToDBNull As Boolean = False)
+        ''' <summary>
+        ''' Create a new instance of CsvReadOptionsDynamicColumnSize
+        ''' </summary>
+        ''' <param name="csvContainsColumnHeaders">Indicates wether column headers are present</param>
+        ''' <param name="startAtLineIndex">Start reading of table data at specified line index (most often 0 for very first line)</param>
+        ''' <param name="columnSeparator">Choose the required character for splitting the columns. Set to null (Nothing in VisualBasic) to enable fixed column widths mode</param>
+        ''' <param name="recognizeTextBy">A character indicating the start and end of text strings</param>
+        ''' <param name="convertEmptyStringsToDBNull">Convert values with empty strings automatically to DbNull</param>
+        Public Sub New(ByVal csvContainsColumnHeaders As Boolean, startAtLineIndex As Integer, Optional ByVal columnSeparator As Char = ","c, Optional ByVal recognizeTextBy As Char = """"c, Optional ByVal convertEmptyStringsToDBNull As Boolean = False)
+            Me.New(csvContainsColumnHeaders, startAtLineIndex, CompuMaster.Data.Csv.ReadLineEncodings.Default, CompuMaster.Data.Csv.ReadLineEncodingAutoConversion.AutoConvertLineBreakToSystemEnvironmentNewLine, columnSeparator, recognizeTextBy, convertEmptyStringsToDBNull)
+        End Sub
+
+        ''' <summary>
+        ''' Create a new instance of CsvReadOptionsDynamicColumnSize
+        ''' </summary>
+        ''' <param name="csvContainsColumnHeaders">Indicates wether column headers are present</param>
+        ''' <param name="startAtLineIndex">Start reading of table data at specified line index (most often 0 for very first line)</param>
+        ''' <param name="lineEncodings">Encoding style for linebreaks</param>
+        ''' <param name="lineEncodingAutoConversions">Change linebreak encodings on reading</param>
+        ''' <param name="columnSeparator">Choose the required character for splitting the columns. Set to null (Nothing in VisualBasic) to enable fixed column widths mode</param>
+        ''' <param name="recognizeTextBy">A character indicating the start and end of text strings</param>
+        ''' <param name="convertEmptyStringsToDBNull">Convert values with empty strings automatically to DbNull</param>
+        Public Sub New(ByVal csvContainsColumnHeaders As Boolean, startAtLineIndex As Integer, lineEncodings As CompuMaster.Data.Csv.ReadLineEncodings, lineEncodingAutoConversions As CompuMaster.Data.Csv.ReadLineEncodingAutoConversion, Optional ByVal columnSeparator As Char = ","c, Optional ByVal recognizeTextBy As Char = """"c, Optional ByVal convertEmptyStringsToDBNull As Boolean = False)
             Me._CultureFormatProvider = System.Globalization.CultureInfo.CurrentCulture
             Me.CsvContainsColumnHeaders = csvContainsColumnHeaders
             Me.StartAtLineIndex = startAtLineIndex
             Me.LineEncodings = lineEncodings
             Me.LineEncodingAutoConversions = lineEncodingAutoConversions
             Me.ColumnSeparator = columnSeparator
-            Me.RecognizeMultipleColumnSeparatorCharsAsOne = recognizeMultipleColumnSeparatorCharsAsOne
             Me.RecognizeTextBy = recognizeTextBy
             Me.ConvertEmptyStringsToDBNull = convertEmptyStringsToDBNull
         End Sub
 
-        Public Sub New(ByVal csvContainsColumnHeaders As Boolean, startAtLineIndex As Integer, ByVal cultureFormatProvider As System.Globalization.CultureInfo, Optional ByVal recognizeTextBy As Char = """"c, Optional ByVal recognizeMultipleColumnSeparatorCharsAsOne As Boolean = False, Optional ByVal convertEmptyStringsToDBNull As Boolean = False)
-            Me.New(csvContainsColumnHeaders, startAtLineIndex, CompuMaster.Data.Csv.ReadLineEncodings.Default, CompuMaster.Data.Csv.ReadLineEncodingAutoConversion.AutoConvertLineBreakToSystemEnvironmentNewLine, cultureFormatProvider, recognizeTextBy, recognizeMultipleColumnSeparatorCharsAsOne, convertEmptyStringsToDBNull)
+        ''' <summary>
+        ''' Create a new instance of CsvReadOptionsDynamicColumnSize
+        ''' </summary>
+        ''' <param name="csvContainsColumnHeaders">Indicates wether column headers are present</param>
+        ''' <param name="cultureFormatProvider">Choose the required character for splitting the columns. Set to null (Nothing in VisualBasic) to enable fixed column widths mode</param>
+        ''' <param name="recognizeTextBy">A character indicating the start and end of text strings</param>
+        ''' <param name="convertEmptyStringsToDBNull">Convert values with empty strings automatically to DbNull</param>
+        Public Sub New(ByVal csvContainsColumnHeaders As Boolean, ByVal cultureFormatProvider As System.Globalization.CultureInfo, Optional ByVal recognizeTextBy As Char = """"c, Optional ByVal convertEmptyStringsToDBNull As Boolean = False)
+            Me.New(csvContainsColumnHeaders, 0, CompuMaster.Data.Csv.ReadLineEncodings.Default, CompuMaster.Data.Csv.ReadLineEncodingAutoConversion.AutoConvertLineBreakToSystemEnvironmentNewLine, cultureFormatProvider, recognizeTextBy, convertEmptyStringsToDBNull)
         End Sub
 
-        Public Sub New(ByVal csvContainsColumnHeaders As Boolean, startAtLineIndex As Integer, lineEncodings As CompuMaster.Data.Csv.ReadLineEncodings, lineEncodingAutoConversions As CompuMaster.Data.Csv.ReadLineEncodingAutoConversion, ByVal cultureFormatProvider As System.Globalization.CultureInfo, Optional ByVal recognizeTextBy As Char = """"c, Optional ByVal recognizeMultipleColumnSeparatorCharsAsOne As Boolean = False, Optional ByVal convertEmptyStringsToDBNull As Boolean = False)
+        ''' <summary>
+        ''' Create a new instance of CsvReadOptionsDynamicColumnSize
+        ''' </summary>
+        ''' <param name="csvContainsColumnHeaders">Indicates wether column headers are present</param>
+        ''' <param name="startAtLineIndex">Start reading of table data at specified line index (most often 0 for very first line)</param>
+        ''' <param name="cultureFormatProvider">Choose the required character for splitting the columns. Set to null (Nothing in VisualBasic) to enable fixed column widths mode</param>
+        ''' <param name="recognizeTextBy">A character indicating the start and end of text strings</param>
+        ''' <param name="convertEmptyStringsToDBNull">Convert values with empty strings automatically to DbNull</param>
+        Public Sub New(ByVal csvContainsColumnHeaders As Boolean, startAtLineIndex As Integer, ByVal cultureFormatProvider As System.Globalization.CultureInfo, Optional ByVal recognizeTextBy As Char = """"c, Optional ByVal convertEmptyStringsToDBNull As Boolean = False)
+            Me.New(csvContainsColumnHeaders, startAtLineIndex, CompuMaster.Data.Csv.ReadLineEncodings.Default, CompuMaster.Data.Csv.ReadLineEncodingAutoConversion.AutoConvertLineBreakToSystemEnvironmentNewLine, cultureFormatProvider, recognizeTextBy, convertEmptyStringsToDBNull)
+        End Sub
+
+        ''' <summary>
+        ''' Create a new instance of CsvReadOptionsDynamicColumnSize
+        ''' </summary>
+        ''' <param name="csvContainsColumnHeaders">Indicates wether column headers are present</param>
+        ''' <param name="startAtLineIndex">Start reading of table data at specified line index (most often 0 for very first line)</param>
+        ''' <param name="lineEncodings">Encoding style for linebreaks</param>
+        ''' <param name="lineEncodingAutoConversions">Change linebreak encodings on reading</param>
+        ''' <param name="cultureFormatProvider">Choose the required character for splitting the columns. Set to null (Nothing in VisualBasic) to enable fixed column widths mode</param>
+        ''' <param name="recognizeTextBy">A character indicating the start and end of text strings</param>
+        ''' <param name="convertEmptyStringsToDBNull">Convert values with empty strings automatically to DbNull</param>
+        Public Sub New(ByVal csvContainsColumnHeaders As Boolean, startAtLineIndex As Integer, lineEncodings As CompuMaster.Data.Csv.ReadLineEncodings, lineEncodingAutoConversions As CompuMaster.Data.Csv.ReadLineEncodingAutoConversion, ByVal cultureFormatProvider As System.Globalization.CultureInfo, Optional ByVal recognizeTextBy As Char = """"c, Optional ByVal convertEmptyStringsToDBNull As Boolean = False)
             Me._CultureFormatProvider = cultureFormatProvider
             Me.CsvContainsColumnHeaders = csvContainsColumnHeaders
             Me.StartAtLineIndex = startAtLineIndex
             Me.LineEncodings = lineEncodings
             Me.LineEncodingAutoConversions = lineEncodingAutoConversions
             Me.RecognizeTextBy = recognizeTextBy
-            Me.RecognizeMultipleColumnSeparatorCharsAsOne = recognizeMultipleColumnSeparatorCharsAsOne
             Me.ConvertEmptyStringsToDBNull = convertEmptyStringsToDBNull
         End Sub
 
         Private _CultureFormatProvider As System.Globalization.CultureInfo
+        ''' <summary>
+        ''' Culture settings for expected CSV structure (especially for list separators aka column separators)
+        ''' </summary>
+        ''' <returns></returns>
         Public Property CultureFormatProvider As System.Globalization.CultureInfo
             Get
                 If Me._CultureFormatProvider Is Nothing Then

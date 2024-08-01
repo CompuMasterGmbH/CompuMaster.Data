@@ -134,25 +134,6 @@ Namespace CompuMaster.Data.CsvTables
 
         End Function
 
-        '''' <summary>
-        ''''     Read from a CSV file with fixed column widths
-        '''' </summary>
-        '''' <param name="path">The path of the file</param>
-        '''' <param name="includesColumnHeaders">Indicates wether column headers are present</param>
-        '''' <param name="columnWidths">An array of column widths in their order</param>
-        '''' <param name="encoding">The text encoding of the file</param>
-        '''' <param name="cultureFormatProvider">A culture for all conversions</param>
-        '''' <param name="convertEmptyStringsToDBNull">Convert values with empty strings automatically to DbNull</param>
-        '''' <param name="lineEncodings">Encoding style for linebreaks</param>
-        '''' <param name="lineEncodingAutoConversions">Change linebreak encodings on reading</param>
-        '''' <returns></returns>
-        '''' <remarks>
-        '''' In case of duplicate column names, all additional occurances of the same column name will be modified to use a unique column name
-        '''' </remarks>
-        'Friend Shared Function ReadDataTableFromCsvFile(ByVal path As String, ByVal includesColumnHeaders As Boolean, startAtLineIndex As Integer, ByVal columnWidths As Integer(), ByVal encoding As System.Text.Encoding, ByVal cultureFormatProvider As System.Globalization.CultureInfo, ByVal convertEmptyStringsToDBNull As Boolean, lineEncodings As CompuMaster.Data.Csv.ReadLineEncodings, lineEncodingAutoConversions As CompuMaster.Data.Csv.ReadLineEncodingAutoConversion) As DataTable
-        '    Return ReadDataTableFromCsvFile(New CsvFileOptions(path, encoding), New CsvReadOptionsFixedColumnSize(includesColumnHeaders, startAtLineIndex, lineEncodings, lineEncodingAutoConversions, columnWidths, convertEmptyStringsToDBNull))
-        'End Function
-
         ''' <summary>
         '''     Read from a CSV file with fixed column widths
         ''' </summary>

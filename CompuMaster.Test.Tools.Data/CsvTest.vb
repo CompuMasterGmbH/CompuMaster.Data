@@ -39,9 +39,11 @@ Namespace CompuMaster.Test.Data
             Dim dt As DataTable
 
             'CSV-File
+#Disable Warning BC40000 ' Typ oder Element ist veraltet
             dt = CompuMaster.Data.Csv.ReadDataTableFromCsvFile(
                 TestFile, True, StartLine,
                 FixedWidths, FileEncoding, CsvCulture, True)
+#Enable Warning BC40000 ' Typ oder Element ist veraltet
             Console.WriteLine(CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(dt))
             Assert.AreEqual(10, dt.Columns.Count)
             Assert.AreEqual(3, dt.Rows.Count)
@@ -50,10 +52,12 @@ Namespace CompuMaster.Test.Data
             Assert.AreEqual("Geschäftsausstattung", dt.Rows(2)(1))
             Assert.AreEqual(DBNull.Value, dt.Rows(2)(9))
 
+#Disable Warning BC40000 ' Typ oder Element ist veraltet
             dt = CompuMaster.Data.Csv.ReadDataTableFromCsvFile(
                 TestFile, True, StartLine,
                 CompuMaster.Data.Csv.ReadLineEncodings.RowBreakCrLfOrCr_CellLineBreakLf, CompuMaster.Data.Csv.ReadLineEncodingAutoConversion.NoAutoConversion,
                 FixedWidths, FileEncoding, CsvCulture, True)
+#Enable Warning BC40000 ' Typ oder Element ist veraltet
             Console.WriteLine(CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(dt))
             Assert.AreEqual(10, dt.Columns.Count)
             Assert.AreEqual(3, dt.Rows.Count)
@@ -89,7 +93,7 @@ Namespace CompuMaster.Test.Data
             Dim CsvData As String = System.IO.File.ReadAllText(TestFile, FileEncoding)
             dt = CompuMaster.Data.Csv.ReadDataTableFromCsvString(
                 CsvData, True, StartLine,
-                CsvCulture, FixedWidths, True)
+                FixedWidths, True)
             Console.WriteLine(CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(dt))
             Assert.AreEqual(10, dt.Columns.Count)
             Assert.AreEqual(3, dt.Rows.Count)
@@ -101,7 +105,7 @@ Namespace CompuMaster.Test.Data
             dt = CompuMaster.Data.Csv.ReadDataTableFromCsvString(
                 CsvData, True, StartLine,
                 CompuMaster.Data.Csv.ReadLineEncodings.RowBreakCrLfOrCr_CellLineBreakLf, CompuMaster.Data.Csv.ReadLineEncodingAutoConversion.NoAutoConversion,
-                CsvCulture, FixedWidths, True)
+                FixedWidths, True)
             Console.WriteLine(CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(dt))
             Assert.AreEqual(10, dt.Columns.Count)
             Assert.AreEqual(3, dt.Rows.Count)
@@ -112,7 +116,7 @@ Namespace CompuMaster.Test.Data
 
             dt = CompuMaster.Data.Csv.ReadDataTableFromCsvString(
                 CsvData, True, StartLine,
-                CsvCulture, FixedWidths, True)
+                FixedWidths, True)
             Console.WriteLine(CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(dt))
             Assert.AreEqual(10, dt.Columns.Count)
             Assert.AreEqual(3, dt.Rows.Count)
@@ -124,7 +128,7 @@ Namespace CompuMaster.Test.Data
             dt = CompuMaster.Data.Csv.ReadDataTableFromCsvString(
                 CsvData, True, StartLine,
                 CompuMaster.Data.Csv.ReadLineEncodings.RowBreakCrLfOrCr_CellLineBreakLf, CompuMaster.Data.Csv.ReadLineEncodingAutoConversion.NoAutoConversion,
-                CsvCulture, FixedWidths, True)
+                FixedWidths, True)
             Console.WriteLine(CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(dt))
             Assert.AreEqual(10, dt.Columns.Count)
             Assert.AreEqual(3, dt.Rows.Count)
@@ -148,9 +152,11 @@ Namespace CompuMaster.Test.Data
             Dim dt As DataTable
 
             'CSV-File
+#Disable Warning BC40000 ' Typ oder Element ist veraltet
             dt = CompuMaster.Data.Csv.ReadDataTableFromCsvFile(
                 TestFile, True, StartLine,
                 FixedWidths, FileEncoding, CsvCulture, True)
+#Enable Warning BC40000 ' Typ oder Element ist veraltet
             Console.WriteLine(CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(dt))
             Assert.AreEqual(10, dt.Columns.Count)
             Assert.AreEqual(3, dt.Rows.Count)
@@ -159,10 +165,12 @@ Namespace CompuMaster.Test.Data
             Assert.AreEqual("Geschäftsausstattung", dt.Rows(2)(1))
             Assert.AreEqual(DBNull.Value, dt.Rows(2)(9))
 
+#Disable Warning BC40000 ' Typ oder Element ist veraltet
             dt = CompuMaster.Data.Csv.ReadDataTableFromCsvFile(
                 TestFile, True, StartLine,
                 CompuMaster.Data.Csv.ReadLineEncodings.RowBreakCrLfOrCr_CellLineBreakLf, CompuMaster.Data.Csv.ReadLineEncodingAutoConversion.NoAutoConversion,
                 FixedWidths, FileEncoding, CsvCulture, True)
+#Enable Warning BC40000 ' Typ oder Element ist veraltet
             Console.WriteLine(CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(dt))
             Assert.AreEqual(10, dt.Columns.Count)
             Assert.AreEqual(3, dt.Rows.Count)
@@ -198,7 +206,7 @@ Namespace CompuMaster.Test.Data
             Dim CsvData As String = System.IO.File.ReadAllText(TestFile, FileEncoding)
             dt = CompuMaster.Data.Csv.ReadDataTableFromCsvString(
                 CsvData, True, StartLine,
-                CsvCulture, FixedWidths, True)
+                FixedWidths, True)
             Console.WriteLine(CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(dt))
             Assert.AreEqual(10, dt.Columns.Count)
             Assert.AreEqual(3, dt.Rows.Count)
@@ -210,7 +218,7 @@ Namespace CompuMaster.Test.Data
             dt = CompuMaster.Data.Csv.ReadDataTableFromCsvString(
                 CsvData, True, StartLine,
                 CompuMaster.Data.Csv.ReadLineEncodings.RowBreakCrLfOrCr_CellLineBreakLf, CompuMaster.Data.Csv.ReadLineEncodingAutoConversion.NoAutoConversion,
-                CsvCulture, FixedWidths, True)
+                FixedWidths, True)
             Console.WriteLine(CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(dt))
             Assert.AreEqual(10, dt.Columns.Count)
             Assert.AreEqual(3, dt.Rows.Count)
@@ -221,7 +229,7 @@ Namespace CompuMaster.Test.Data
 
             dt = CompuMaster.Data.Csv.ReadDataTableFromCsvString(
                 CsvData, True, StartLine,
-                CsvCulture, FixedWidths, True)
+                FixedWidths, True)
             Console.WriteLine(CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(dt))
             Assert.AreEqual(10, dt.Columns.Count)
             Assert.AreEqual(3, dt.Rows.Count)
@@ -233,7 +241,7 @@ Namespace CompuMaster.Test.Data
             dt = CompuMaster.Data.Csv.ReadDataTableFromCsvString(
                 CsvData, True, StartLine,
                 CompuMaster.Data.Csv.ReadLineEncodings.RowBreakCrLfOrCr_CellLineBreakLf, CompuMaster.Data.Csv.ReadLineEncodingAutoConversion.NoAutoConversion,
-                CsvCulture, FixedWidths, True)
+                FixedWidths, True)
             Console.WriteLine(CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(dt))
             Assert.AreEqual(10, dt.Columns.Count)
             Assert.AreEqual(3, dt.Rows.Count)
@@ -258,7 +266,7 @@ Namespace CompuMaster.Test.Data
             'CSV-File
             dt = CompuMaster.Data.Csv.ReadDataTableFromCsvFile(
                 New CsvFileOptions(TestFile, FileEncoding),
-                New CsvReadOptionsDynamicColumnSize(True, StartLine, CsvCulture, """"c, False, True))
+                New CsvReadOptionsDynamicColumnSize(True, StartLine, CsvCulture, """"c, True))
             Console.WriteLine(CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(dt))
             Assert.AreEqual(10, dt.Columns.Count)
             Assert.AreEqual(3, dt.Rows.Count)
@@ -292,7 +300,7 @@ Namespace CompuMaster.Test.Data
 
             dt = CompuMaster.Data.Csv.ReadDataTableFromCsvFile(
                 TestFile, True, StartLine,
-                FileEncodingName, columnSeparator:=";"c, recognizeTextBy:=""""c, recognizeMultipleColumnSeparatorCharsAsOne:=False, True)
+                FileEncodingName, columnSeparator:=";"c, recognizeTextBy:=""""c, False, True)
             Console.WriteLine(CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(dt))
             Assert.AreEqual(10, dt.Columns.Count)
             Assert.AreEqual(3, dt.Rows.Count)
@@ -304,7 +312,7 @@ Namespace CompuMaster.Test.Data
             dt = CompuMaster.Data.Csv.ReadDataTableFromCsvFile(
                 TestFile, True, StartLine,
                 CompuMaster.Data.Csv.ReadLineEncodings.RowBreakCrLfOrCr_CellLineBreakLf, CompuMaster.Data.Csv.ReadLineEncodingAutoConversion.NoAutoConversion,
-                FileEncodingName, columnSeparator:=";"c, recognizeTextBy:=""""c, recognizeMultipleColumnSeparatorCharsAsOne:=False, True)
+                FileEncodingName, columnSeparator:=";"c, recognizeTextBy:=""""c, False, True)
             Console.WriteLine(CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(dt))
             Assert.AreEqual(10, dt.Columns.Count)
             Assert.AreEqual(3, dt.Rows.Count)
@@ -459,7 +467,9 @@ Namespace CompuMaster.Test.Data
                 Case 2
                     Console.WriteLine()
                     Console.WriteLine("test of fixed column method type")
+#Disable Warning BC40000 ' Typ oder Element ist veraltet
                     CsvTableFromUrl = CompuMaster.Data.Csv.ReadDataTableFromCsvFile(GithubCountryCodesTestUrl, True, New Integer() {}, CType(Nothing, System.Text.Encoding), System.Globalization.CultureInfo.GetCultureInfo("en-US"), False)
+#Enable Warning BC40000 ' Typ oder Element ist veraltet
                     CsvStringTableFromUrl = CompuMaster.Data.DataTables.ConvertToPlainTextTable(CsvTableFromUrl)
                     Console.WriteLine(CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(CsvTableFromUrl))
                     Assert.IsTrue(CsvStringTableFromUrl.Contains("Russian Federation"))
@@ -1235,7 +1245,7 @@ Namespace CompuMaster.Test.Data
             'CSV-File
             dt = CompuMaster.Data.Csv.ReadDataTableFromCsvFile(
                 New CsvFileOptions(TestFile, FileEncoding),
-                New CsvReadOptionsDynamicColumnSize(True, StartLine, CsvCulture, """"c, False, True) With {.RecognizeBackslashEscapes = True})
+                New CsvReadOptionsDynamicColumnSize(True, StartLine, CsvCulture, """"c, True) With {.RecognizeBackslashEscapes = True})
             Console.WriteLine(CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(dt))
             Assert.AreEqual(10, dt.Columns.Count)
             Assert.AreEqual(2218, dt.Rows.Count)
@@ -1249,7 +1259,7 @@ Namespace CompuMaster.Test.Data
                 New CsvReadOptionsDynamicColumnSize(
                     True, StartLine,
                     CompuMaster.Data.Csv.ReadLineEncodings.RowBreakCrLfOrCr_CellLineBreakLf, CompuMaster.Data.Csv.ReadLineEncodingAutoConversion.NoAutoConversion,
-                    CsvCulture, """"c, False, True) With {.RecognizeBackslashEscapes = True})
+                    CsvCulture, """"c, True) With {.RecognizeBackslashEscapes = True})
             Console.WriteLine(CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(dt))
             Assert.AreEqual(10, dt.Columns.Count)
             Assert.AreEqual(2218, dt.Rows.Count)
@@ -1262,7 +1272,7 @@ Namespace CompuMaster.Test.Data
                 New CsvFileOptions(TestFile, FileEncoding),
                 New CsvReadOptionsDynamicColumnSize(
                     True, StartLine,
-                    CsvCulture, recognizeTextBy:=""""c, recognizeMultipleColumnSeparatorCharsAsOne:=False, True) With {.ColumnSeparator = ";"c, .RecognizeBackslashEscapes = True})
+                    CsvCulture, recognizeTextBy:=""""c, True) With {.ColumnSeparator = ";"c, .RecognizeBackslashEscapes = True})
             Console.WriteLine(CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(dt))
             Assert.AreEqual(10, dt.Columns.Count)
             Assert.AreEqual(2218, dt.Rows.Count)
@@ -1276,7 +1286,7 @@ Namespace CompuMaster.Test.Data
                 New CsvReadOptionsDynamicColumnSize(
                     True, StartLine,
                     CompuMaster.Data.Csv.ReadLineEncodings.RowBreakCrLfOrCr_CellLineBreakLf, CompuMaster.Data.Csv.ReadLineEncodingAutoConversion.NoAutoConversion,
-                    CsvCulture, recognizeTextBy:=""""c, recognizeMultipleColumnSeparatorCharsAsOne:=False, True) With {.ColumnSeparator = ";"c, .RecognizeBackslashEscapes = True})
+                    CsvCulture, recognizeTextBy:=""""c, True) With {.ColumnSeparator = ";"c, .RecognizeBackslashEscapes = True})
             Console.WriteLine(CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(dt))
             Assert.AreEqual(10, dt.Columns.Count)
             Assert.AreEqual(2218, dt.Rows.Count)
@@ -1289,7 +1299,7 @@ Namespace CompuMaster.Test.Data
             Dim CsvData As String = System.IO.File.ReadAllText(TestFile, FileEncoding)
             dt = CompuMaster.Data.Csv.ReadDataTableFromCsvString(
                 CsvData,
-                New CsvReadOptionsDynamicColumnSize(True, StartLine, CsvCulture, """"c, False, True) With {.RecognizeBackslashEscapes = True})
+                New CsvReadOptionsDynamicColumnSize(True, StartLine, CsvCulture, """"c, True) With {.RecognizeBackslashEscapes = True})
             Console.WriteLine(CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(dt))
             Assert.AreEqual(10, dt.Columns.Count)
             Assert.AreEqual(2218, dt.Rows.Count)
@@ -1302,34 +1312,7 @@ Namespace CompuMaster.Test.Data
                 CsvData,
                 New CsvReadOptionsDynamicColumnSize(
                     True, StartLine,
-                    CsvCulture, """"c, False, True) With {.RecognizeBackslashEscapes = True})
-            Console.WriteLine(CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(dt))
-            Assert.AreEqual(10, dt.Columns.Count)
-            Assert.AreEqual(2218, dt.Rows.Count)
-            Assert.AreEqual("Konto", dt.Columns(0).ColumnName)
-            Assert.AreEqual("200", dt.Rows(0)(0))
-            Assert.AreEqual("Vhddkqrugy Sfjbnrt iyu Tgyropiam", dt.Rows(2)(1))
-            Assert.AreEqual(DBNull.Value, dt.Rows(2)(9))
-
-            dt = CompuMaster.Data.Csv.ReadDataTableFromCsvString(
-                CsvData,
-                New CsvReadOptionsDynamicColumnSize(
-                    True, StartLine,
-                    CompuMaster.Data.Csv.ReadLineEncodings.RowBreakCrLfOrCr_CellLineBreakLf, CompuMaster.Data.Csv.ReadLineEncodingAutoConversion.NoAutoConversion,
-                    CsvCulture, """"c, False, True) With {.RecognizeBackslashEscapes = True})
-            Console.WriteLine(CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(dt))
-            Assert.AreEqual(10, dt.Columns.Count)
-            Assert.AreEqual(2218, dt.Rows.Count)
-            Assert.AreEqual("Konto", dt.Columns(0).ColumnName)
-            Assert.AreEqual("200", dt.Rows(0)(0))
-            Assert.AreEqual("Vhddkqrugy Sfjbnrt iyu Tgyropiam", dt.Rows(2)(1))
-            Assert.AreEqual(DBNull.Value, dt.Rows(2)(9))
-
-            dt = CompuMaster.Data.Csv.ReadDataTableFromCsvString(
-                CsvData,
-                New CsvReadOptionsDynamicColumnSize(
-                    True, StartLine,
-                    CsvCulture, recognizeTextBy:=""""c, recognizeMultipleColumnSeparatorCharsAsOne:=False, True) With {.ColumnSeparator = ";"c, .RecognizeBackslashEscapes = True})
+                    CsvCulture, """"c, True) With {.RecognizeBackslashEscapes = True})
             Console.WriteLine(CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(dt))
             Assert.AreEqual(10, dt.Columns.Count)
             Assert.AreEqual(2218, dt.Rows.Count)
@@ -1343,7 +1326,34 @@ Namespace CompuMaster.Test.Data
                 New CsvReadOptionsDynamicColumnSize(
                     True, StartLine,
                     CompuMaster.Data.Csv.ReadLineEncodings.RowBreakCrLfOrCr_CellLineBreakLf, CompuMaster.Data.Csv.ReadLineEncodingAutoConversion.NoAutoConversion,
-                    CsvCulture, recognizeTextBy:=""""c, recognizeMultipleColumnSeparatorCharsAsOne:=False, True) With {.ColumnSeparator = ";"c, .RecognizeBackslashEscapes = True})
+                    CsvCulture, """"c, True) With {.RecognizeBackslashEscapes = True})
+            Console.WriteLine(CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(dt))
+            Assert.AreEqual(10, dt.Columns.Count)
+            Assert.AreEqual(2218, dt.Rows.Count)
+            Assert.AreEqual("Konto", dt.Columns(0).ColumnName)
+            Assert.AreEqual("200", dt.Rows(0)(0))
+            Assert.AreEqual("Vhddkqrugy Sfjbnrt iyu Tgyropiam", dt.Rows(2)(1))
+            Assert.AreEqual(DBNull.Value, dt.Rows(2)(9))
+
+            dt = CompuMaster.Data.Csv.ReadDataTableFromCsvString(
+                CsvData,
+                New CsvReadOptionsDynamicColumnSize(
+                    True, StartLine,
+                    CsvCulture, recognizeTextBy:=""""c, True) With {.ColumnSeparator = ";"c, .RecognizeBackslashEscapes = True})
+            Console.WriteLine(CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(dt))
+            Assert.AreEqual(10, dt.Columns.Count)
+            Assert.AreEqual(2218, dt.Rows.Count)
+            Assert.AreEqual("Konto", dt.Columns(0).ColumnName)
+            Assert.AreEqual("200", dt.Rows(0)(0))
+            Assert.AreEqual("Vhddkqrugy Sfjbnrt iyu Tgyropiam", dt.Rows(2)(1))
+            Assert.AreEqual(DBNull.Value, dt.Rows(2)(9))
+
+            dt = CompuMaster.Data.Csv.ReadDataTableFromCsvString(
+                CsvData,
+                New CsvReadOptionsDynamicColumnSize(
+                    True, StartLine,
+                    CompuMaster.Data.Csv.ReadLineEncodings.RowBreakCrLfOrCr_CellLineBreakLf, CompuMaster.Data.Csv.ReadLineEncodingAutoConversion.NoAutoConversion,
+                    CsvCulture, recognizeTextBy:=""""c, True) With {.ColumnSeparator = ";"c, .RecognizeBackslashEscapes = True})
             Console.WriteLine(CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(dt))
             Assert.AreEqual(10, dt.Columns.Count)
             Assert.AreEqual(2218, dt.Rows.Count)
