@@ -86,55 +86,59 @@ Namespace CompuMaster.Test.Data
         <Test> <CodeAnalysis.SuppressMessage("Performance", "CA1825:Avoid zero-length array allocations.", Justification:="<Ausstehend>")>
         Public Sub NoDBNullArrayOrListFromString_Generics()
             'DBNull.Value
-            Assert.AreEqual(Nothing, CompuMaster.Data.Utils.NoDBNullArrayFromString(Of String)(DBNull.Value, ","))
-            Assert.AreEqual(Nothing, CompuMaster.Data.Utils.NoDBNullArrayFromString(Of Object)(DBNull.Value, ","))
-            Assert.AreEqual(Nothing, CompuMaster.Data.Utils.NoDBNullArrayFromString(Of Integer)(DBNull.Value, ","))
-            Assert.AreEqual(Nothing, CompuMaster.Data.Utils.NoDBNullArrayFromString(Of Integer?)(DBNull.Value, ","))
+            Assert.AreEqual(Nothing, CompuMaster.Data.Utils.NoDBNullArrayFromString(Of String)(DBNull.Value, ","c))
+            Assert.AreEqual(Nothing, CompuMaster.Data.Utils.NoDBNullArrayFromString(Of Object)(DBNull.Value, ","c))
+            Assert.AreEqual(Nothing, CompuMaster.Data.Utils.NoDBNullArrayFromString(Of Integer)(DBNull.Value, ","c))
+            Assert.AreEqual(Nothing, CompuMaster.Data.Utils.NoDBNullArrayFromString(Of Integer?)(DBNull.Value, ","c))
             'Empty String
-            Assert.AreEqual(New String() {}, CompuMaster.Data.Utils.NoDBNullArrayFromString(Of String)("", ","))
-            Assert.AreEqual(New Object() {}, CompuMaster.Data.Utils.NoDBNullArrayFromString(Of Object)("", ","))
-            Assert.AreEqual(New Integer() {}, CompuMaster.Data.Utils.NoDBNullArrayFromString(Of Integer)("", ","))
-            Assert.AreEqual(New Integer?() {}, CompuMaster.Data.Utils.NoDBNullArrayFromString(Of Integer?)("", ","))
+            Assert.AreEqual(New String() {}, CompuMaster.Data.Utils.NoDBNullArrayFromString(Of String)("", ","c))
+            Assert.AreEqual(New Object() {}, CompuMaster.Data.Utils.NoDBNullArrayFromString(Of Object)("", ","c))
+            Assert.AreEqual(New Integer() {}, CompuMaster.Data.Utils.NoDBNullArrayFromString(Of Integer)("", ","c))
+            Assert.AreEqual(New Integer?() {}, CompuMaster.Data.Utils.NoDBNullArrayFromString(Of Integer?)("", ","c))
+            Assert.AreEqual(New String() {}, CompuMaster.Data.Utils.NoDBNullArrayFromString(Of String)("", New Char() {","c, ";"c}))
+            Assert.AreEqual(New Object() {}, CompuMaster.Data.Utils.NoDBNullArrayFromString(Of Object)("", New Char() {","c, ";"c}))
+            Assert.AreEqual(New Integer() {}, CompuMaster.Data.Utils.NoDBNullArrayFromString(Of Integer)("", New Char() {","c, ";"c}))
+            Assert.AreEqual(New Integer?() {}, CompuMaster.Data.Utils.NoDBNullArrayFromString(Of Integer?)("", New Char() {","c, ";"c}))
             'Single String
-            Assert.AreEqual(New String() {"Test"}, CompuMaster.Data.Utils.NoDBNullArrayFromString(Of String)("Test", ","))
+            Assert.AreEqual(New String() {"Test"}, CompuMaster.Data.Utils.NoDBNullArrayFromString(Of String)("Test", ","c))
             'Assert.AreEqual(New Object() {New Object}, CompuMaster.Data.Utils.NoDBNullArrayFromString(Of Object)(New Object.ToString, ","))
             If Type.GetType("Mono.Runtime") Is Nothing Then
                 'Running in Mono .NET Framework which is not fully implemented/bug-free at this point
-                Assert.AreEqual(New Integer() {1}, CompuMaster.Data.Utils.NoDBNullArrayFromString(Of Integer)("1", ","))
+                Assert.AreEqual(New Integer() {1}, CompuMaster.Data.Utils.NoDBNullArrayFromString(Of Integer)("1", ","c))
             End If
-            Assert.AreEqual(New Integer?() {1}, CompuMaster.Data.Utils.NoDBNullArrayFromString(Of Integer?)("1", ","))
+            Assert.AreEqual(New Integer?() {1}, CompuMaster.Data.Utils.NoDBNullArrayFromString(Of Integer?)("1", ","c))
             'Separatable String
-            Assert.AreEqual(New String() {"Test1", "Test2", "Test3"}, CompuMaster.Data.Utils.NoDBNullArrayFromString(Of String)("Test1,Test2,Test3", ","))
+            Assert.AreEqual(New String() {"Test1", "Test2", "Test3"}, CompuMaster.Data.Utils.NoDBNullArrayFromString(Of String)("Test1,Test2,Test3", ","c))
             'Assert.AreEqual(New Object() {}, CompuMaster.Data.Utils.NoDBNullArrayFromString(Of Object)("", ","))
             If Type.GetType("Mono.Runtime") Is Nothing Then
                 'Running in Mono .NET Framework which is not fully implemented/bug-free at this point
-                Assert.AreEqual(New Integer() {1, 2, 3}, CompuMaster.Data.Utils.NoDBNullArrayFromString(Of Integer)("1,2,3", ","))
+                Assert.AreEqual(New Integer() {1, 2, 3}, CompuMaster.Data.Utils.NoDBNullArrayFromString(Of Integer)("1,2,3", ","c))
             End If
-            Assert.AreEqual(New Integer?() {1, 2, 3}, CompuMaster.Data.Utils.NoDBNullArrayFromString(Of Integer?)("1,2,3", ","))
+            Assert.AreEqual(New Integer?() {1, 2, 3}, CompuMaster.Data.Utils.NoDBNullArrayFromString(Of Integer?)("1,2,3", ","c))
         End Sub
 
         <Test> <CodeAnalysis.SuppressMessage("Performance", "CA1825:Avoid zero-length array allocations.", Justification:="<Ausstehend>")>
         Public Sub NoDBNullArrayOrListFromString_NoGenerics()
             'DBNull.Value
-            Assert.AreEqual(Nothing, CompuMaster.Data.Utils.NoDBNullArrayFromString(DBNull.Value, ",", CType(Nothing, String())))
-            Assert.AreEqual(Nothing, CompuMaster.Data.Utils.NoDBNullArrayFromString(DBNull.Value, ",", CType(Nothing, Object())))
-            Assert.AreEqual(Nothing, CompuMaster.Data.Utils.NoDBNullArrayFromString(DBNull.Value, ",", CType(Nothing, Integer())))
-            'Assert.AreEqual(Nothing, CompuMaster.Data.Utils.NoDBNullArrayFromString(DBNull.Value, ",", CType(Nothing, Integer?())))
+            Assert.AreEqual(Nothing, CompuMaster.Data.Utils.NoDBNullArrayFromString(DBNull.Value, ","c, CType(Nothing, String())))
+            Assert.AreEqual(Nothing, CompuMaster.Data.Utils.NoDBNullArrayFromString(DBNull.Value, ","c, CType(Nothing, Object())))
+            Assert.AreEqual(Nothing, CompuMaster.Data.Utils.NoDBNullArrayFromString(DBNull.Value, ","c, CType(Nothing, Integer())))
+            'Assert.AreEqual(Nothing, CompuMaster.Data.Utils.NoDBNullArrayFromString(DBNull.Value, ","c, CType(Nothing, Integer?())))
             'Empty String
-            Assert.AreEqual(New String() {}, CompuMaster.Data.Utils.NoDBNullArrayFromString("", ",", CType(Nothing, String())))
-            Assert.AreEqual(New Object() {}, CompuMaster.Data.Utils.NoDBNullArrayFromString("", ",", CType(Nothing, Object())))
-            Assert.AreEqual(New Integer() {}, CompuMaster.Data.Utils.NoDBNullArrayFromString("", ",", CType(Nothing, Integer())))
-            'Assert.AreEqual(New Integer?() {}, CompuMaster.Data.Utils.NoDBNullArrayFromString("", ",", CType(Nothing, Integer?())))
+            Assert.AreEqual(New String() {}, CompuMaster.Data.Utils.NoDBNullArrayFromString("", ","c, CType(Nothing, String())))
+            Assert.AreEqual(New Object() {}, CompuMaster.Data.Utils.NoDBNullArrayFromString("", ","c, CType(Nothing, Object())))
+            Assert.AreEqual(New Integer() {}, CompuMaster.Data.Utils.NoDBNullArrayFromString("", ","c, CType(Nothing, Integer())))
+            'Assert.AreEqual(New Integer?() {}, CompuMaster.Data.Utils.NoDBNullArrayFromString("", ","c, CType(Nothing, Integer?())))
             'Single String
-            Assert.AreEqual(New String() {"Test"}, CompuMaster.Data.Utils.NoDBNullArrayFromString("Test", ",", CType(Nothing, String())))
-            'Assert.AreEqual(New Object() {New Object}, CompuMaster.Data.Utils.NoDBNullArrayFromString(New Object.ToString, ",", CType(Nothing, Object())))
-            Assert.AreEqual(New Integer() {1}, CompuMaster.Data.Utils.NoDBNullArrayFromString("1", ",", CType(Nothing, Integer())))
-            'Assert.AreEqual(New Integer?() {1}, CompuMaster.Data.Utils.NoDBNullArrayFromString("1", ",", CType(Nothing, Integer?())))
+            Assert.AreEqual(New String() {"Test"}, CompuMaster.Data.Utils.NoDBNullArrayFromString("Test", ","c, CType(Nothing, String())))
+            'Assert.AreEqual(New Object() {New Object}, CompuMaster.Data.Utils.NoDBNullArrayFromString(New Object.ToString, ","c, CType(Nothing, Object())))
+            Assert.AreEqual(New Integer() {1}, CompuMaster.Data.Utils.NoDBNullArrayFromString("1", ","c, CType(Nothing, Integer())))
+            'Assert.AreEqual(New Integer?() {1}, CompuMaster.Data.Utils.NoDBNullArrayFromString("1", ","c, CType(Nothing, Integer?())))
             'Separatable String
-            Assert.AreEqual(New String() {"Test1", "Test2", "Test3"}, CompuMaster.Data.Utils.NoDBNullArrayFromString("Test1,Test2,Test3", ",", CType(Nothing, String())))
-            'Assert.AreEqual(New Object() {}, CompuMaster.Data.Utils.NoDBNullArrayFromString("", ",", CType(Nothing, Object())))
-            Assert.AreEqual(New Integer() {1, 2, 3}, CompuMaster.Data.Utils.NoDBNullArrayFromString("1,2,3", ",", CType(Nothing, Integer())))
-            'Assert.AreEqual(New Integer?() {1, 2, 3}, CompuMaster.Data.Utils.NoDBNullArrayFromString("1,2,3", ",", CType(Nothing, Integer?())))
+            Assert.AreEqual(New String() {"Test1", "Test2", "Test3"}, CompuMaster.Data.Utils.NoDBNullArrayFromString("Test1,Test2,Test3", ","c, CType(Nothing, String())))
+            'Assert.AreEqual(New Object() {}, CompuMaster.Data.Utils.NoDBNullArrayFromString("", ","c, CType(Nothing, Object())))
+            Assert.AreEqual(New Integer() {1, 2, 3}, CompuMaster.Data.Utils.NoDBNullArrayFromString("1,2,3", ","c, CType(Nothing, Integer())))
+            'Assert.AreEqual(New Integer?() {1, 2, 3}, CompuMaster.Data.Utils.NoDBNullArrayFromString("1,2,3", ","c, CType(Nothing, Integer?())))
         End Sub
 
         <Test> Public Sub NullableTypeWithItsValueOrDBNull()
