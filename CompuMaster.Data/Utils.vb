@@ -1280,7 +1280,7 @@ Namespace CompuMaster.Data
         ''' <param name="value">The value to be validated</param>
         ''' <returns></returns>
         ''' <remarks></remarks>
-        <DebuggerHidden(), CLSCompliant(False)> Public Shared Function ValueNotNothingOrDBNull(ByVal value As UInt16) As Object
+        <DebuggerHidden()> Public Shared Function ValueNotNothingOrDBNull(ByVal value As UInt16) As Object
             If value = Nothing Then
                 Return DBNull.Value
             Else
@@ -1293,7 +1293,7 @@ Namespace CompuMaster.Data
         ''' <param name="value">The value to be validated</param>
         ''' <returns></returns>
         ''' <remarks></remarks>
-        <DebuggerHidden(), CLSCompliant(False)> Public Shared Function ValueNotNothingOrDBNull(ByVal value As UInt32) As Object
+        <DebuggerHidden()> Public Shared Function ValueNotNothingOrDBNull(ByVal value As UInt32) As Object
             If value = Nothing Then
                 Return DBNull.Value
             Else
@@ -1306,7 +1306,7 @@ Namespace CompuMaster.Data
         ''' <param name="value">The value to be validated</param>
         ''' <returns></returns>
         ''' <remarks></remarks>
-        <DebuggerHidden(), CLSCompliant(False)> Public Shared Function ValueNotNothingOrDBNull(ByVal value As UInt64) As Object
+        <DebuggerHidden()> Public Shared Function ValueNotNothingOrDBNull(ByVal value As UInt64) As Object
             If value = Nothing Then
                 Return DBNull.Value
             Else
@@ -1446,7 +1446,7 @@ Namespace CompuMaster.Data
         ''' <param name="value">The value to be validated</param>
         ''' <returns></returns>
         ''' <remarks></remarks>
-        <DebuggerHidden(), CLSCompliant(False)> Public Shared Function ValueNotNothingOrAlternativeValue(ByVal value As Byte, ByVal alternativeValue As UInt16) As UInt16
+        <DebuggerHidden()> Public Shared Function ValueNotNothingOrAlternativeValue(ByVal value As Byte, ByVal alternativeValue As UInt16) As UInt16
             If value = Nothing Then
                 Return alternativeValue
             Else
@@ -1459,7 +1459,7 @@ Namespace CompuMaster.Data
         ''' <param name="value">The value to be validated</param>
         ''' <returns></returns>
         ''' <remarks></remarks>
-        <DebuggerHidden(), CLSCompliant(False)> Public Shared Function ValueNotNothingOrAlternativeValue(ByVal value As Byte, ByVal alternativeValue As UInt32) As UInt32
+        <DebuggerHidden()> Public Shared Function ValueNotNothingOrAlternativeValue(ByVal value As Byte, ByVal alternativeValue As UInt32) As UInt32
             If value = Nothing Then
                 Return alternativeValue
             Else
@@ -1472,7 +1472,7 @@ Namespace CompuMaster.Data
         ''' <param name="value">The value to be validated</param>
         ''' <returns></returns>
         ''' <remarks></remarks>
-        <DebuggerHidden(), CLSCompliant(False)> Public Shared Function ValueNotNothingOrAlternativeValue(ByVal value As Byte, ByVal alternativeValue As UInt64) As UInt64
+        <DebuggerHidden()> Public Shared Function ValueNotNothingOrAlternativeValue(ByVal value As Byte, ByVal alternativeValue As UInt64) As UInt64
             If value = Nothing Then
                 Return alternativeValue
             Else
