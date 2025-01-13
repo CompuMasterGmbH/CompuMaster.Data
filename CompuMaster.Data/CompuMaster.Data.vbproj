@@ -3,10 +3,10 @@
 	<PropertyGroup>
 		<RootNamespace></RootNamespace>
 		<TargetFrameworks>netstandard2.0;netcoreapp3.1;net6.0;net48;net461</TargetFrameworks>
-		<Version>3.0.2024.0815</Version>
-		<Authors>Jochen Wezel</Authors>
+		<Version>3.0.2025.0113</Version>
+    <Copyright>2010-2025 CompuMaster GmbH</Copyright>
+    <Authors>Jochen Wezel</Authors>
 		<Company>CompuMaster GmbH</Company>
-		<Copyright>2010-2024 CompuMaster GmbH</Copyright>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 		<PackageProjectUrl>https://www.nuget.org/packages/CompuMaster.Data/</PackageProjectUrl>
 		<PackageIcon>logo_64x64.png</PackageIcon>
@@ -24,7 +24,7 @@
 		<FileAlignment>512</FileAlignment>
 		<MyType>Empty</MyType>
 	</PropertyGroup>
-	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+	<PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
 		<DebugSymbols>true</DebugSymbols>
 		<DebugType>full</DebugType>
 		<DefineDebug>true</DefineDebug>
@@ -32,7 +32,7 @@
 		<OutputPath>bin\Debug\netstandard2.0</OutputPath>
 		<NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
 	</PropertyGroup>
-	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='CI_CD|AnyCPU'">
+	<PropertyGroup Condition="'$(Configuration)' == 'CI_CD'">
 		<DebugSymbols>true</DebugSymbols>
 		<DebugType>full</DebugType>
 		<DefineDebug>true</DefineDebug>
@@ -40,7 +40,7 @@
 		<OutputPath>bin\CI_CD\netstandard2.0</OutputPath>
 		<NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
 	</PropertyGroup>
-	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+	<PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
 		<DebugType>pdbonly</DebugType>
 		<DefineDebug>false</DefineDebug>
 		<DefineTrace>true</DefineTrace>
