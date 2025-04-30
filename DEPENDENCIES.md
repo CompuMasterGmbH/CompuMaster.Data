@@ -29,6 +29,10 @@ Der aktive Testlauf wurde abgebrochen. Grund: Der Testhostprozess ist abgestürz
    at System.Threading.ThreadPoolWorkQueue.Dispatch()
    at System.Threading.PortableThreadPool.WorkerThread.WorkerThreadStart()
 ```
+
+* NUnit3TestAdapter
+  * IST: v4.5.0
+  * NEU: v5.0.0 -> Unit Tests in VS laufen nicht an für Test-Platform .NET 6 (net48 und netcore3.1 und net8 sind ok)
 * Npgsql
   * IST: v8.0
   * NEU: v9.0 -> ohne Support für .NET Framework 4.8 -> benötigt zuerst vollständiges Upgrade auf .NET (Core)
@@ -38,3 +42,15 @@ Der aktive Testlauf wurde abgebrochen. Grund: Der Testhostprozess ist abgestürz
 * System.Data.SqlClient
   * IST: v4.8.6
   * NEU: v4.9.0 -> PlatformNotSupportedException: lost supported on netcoreapp3.1 platform
+
+### Potentially not compatible / not fully tested
+
+* System.Data.Odbc
+  * IST: v6.0.0
+  * NEU: v9.0.x -> PlatformNotSupportedException?!
+* System.Data.OleDb
+  * IST: v6.0.0
+  * NEU: v9.0.x -> PlatformNotSupportedException?!
+* System.DirectoryServices
+  * IST: v6.0.0
+  * NEU: v9.0.x -> PlatformNotSupportedException?!
