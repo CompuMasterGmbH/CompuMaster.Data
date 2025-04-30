@@ -101,10 +101,10 @@
   </ItemGroup>
 
   <ItemGroup>
-	<PackageReference Include="CompuMaster.Data.XlsEpplus" Version="3.0.2022.812" />
 	<PackageReference Include="CompuMaster.Web.TinyWebServerAdvanced" Version="2021.7.28.100" />
+	<PackageReference Include="CompuMaster.Data.XlsEpplus" Version="3.0.2024.1104" />
 	<PackageReference Include="JUnitTestLogger4GitHub" Version="1.1.1" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.8.0" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.13.0" />
     <PackageReference Include="Npgsql" Version="6.0.11" />
     <PackageReference Include="NUnit" Version="3.14.0" />
     <PackageReference Include="NUnit3TestAdapter" Version="4.5.0" />

@@ -10,6 +10,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{266A3BE1-C77B-4330-BE4F-156C2DCB0BFE}"
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
+		DEPENDENCIES.md = DEPENDENCIES.md
 	EndProjectSection
 EndProject
 Project("{778DAE3C-4631-46EA-AA77-85C1314464D9}") = "CompuMaster.Data", "CompuMaster.Data\CompuMaster.Data.vbproj", "{23D43CB0-A621-416A-966A-5A0C0EEB34DB}"
