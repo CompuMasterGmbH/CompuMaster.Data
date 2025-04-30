@@ -3,7 +3,7 @@
 	<PropertyGroup>
 		<RootNamespace></RootNamespace>
 		<TargetFrameworks>netstandard2.0;netcoreapp3.1;net6.0;net48;net461</TargetFrameworks>
-		<Version>3.0.2025.0113</Version>
+		<Version>3.0.2025.0430</Version>
     <Copyright>2010-2025 CompuMaster GmbH</Copyright>
     <Authors>Jochen Wezel</Authors>
 		<Company>CompuMaster GmbH</Company>
