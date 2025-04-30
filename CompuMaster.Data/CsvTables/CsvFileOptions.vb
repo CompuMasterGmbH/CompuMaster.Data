@@ -160,12 +160,14 @@ Namespace CompuMaster.Data.CsvTables
                 Throw New System.IO.FileNotFoundException("File not found", Me.FilePath)
             End If
 
+            ' Datei im Read-Only-Modus öffnen
+            Dim MyFileStream As New FileStream(Me.FilePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite)
             If Me.FileEncoding IsNot Nothing Then
-                Return New StreamReader(Me.FilePath, Me.FileEncoding)
+                Return New StreamReader(MyFileStream, Me.FileEncoding)
             ElseIf Me.FileEncodingName = "" Then
-                Return New StreamReader(Me.FilePath, System.Text.Encoding.Default)
+                Return New StreamReader(MyFileStream, System.Text.Encoding.Default)
             Else
-                Return New StreamReader(Me.FilePath, System.Text.Encoding.GetEncoding(Me.FileEncodingName))
+                Return New StreamReader(MyFileStream, System.Text.Encoding.GetEncoding(Me.FileEncodingName))
             End If
         End Function
 
