@@ -263,6 +263,15 @@ Namespace CompuMaster.Data
         ''' </summary>
         ''' <returns></returns>
         Public Function ToExcelStyleTextTable() As TextTable
+            Return ToExcelStyleTextTable(False)
+        End Function
+
+        ''' <summary>
+        ''' Convert to TextTable with Excel-like column names (A, B, ..., Z, AA, AB, ..., AZ, BA, BB, ...) and row numbers (1-based)
+        ''' </summary>
+        ''' <param name="replaceColumnHeaders">True for dropping existing column headers and replace them with Excel style column names, False for moving the existing column headers into regular data rows</param>
+        ''' <returns></returns>
+        Public Function ToExcelStyleTextTable(replaceColumnHeaders As Boolean) As TextTable
             'Prepare new header row with column letters
             Dim NewHeaderRows As New System.Collections.Generic.List(Of TextRow)
             With Nothing
@@ -277,12 +286,18 @@ Namespace CompuMaster.Data
 
             'Prepare new table data
             Dim NewDataRows As New System.Collections.Generic.List(Of TextRow)
-            For RowCounter As Integer = 0 To Me.Headers.Count - 1 'Add all existing header rows as regular data rows
-                NewDataRows.Add(Me.Headers(RowCounter).Clone)
-            Next
-            For RowCounter As Integer = 0 To Me.Rows.Count - 1 'Add all existing data rows
-                NewDataRows.Add(Me.Rows(RowCounter).Clone)
-            Next
+            If replaceColumnHeaders = False Then
+                'Add all existing header rows as regular data rows
+                For RowCounter As Integer = 0 To Me.Headers.Count - 1
+                    NewDataRows.Add(Me.Headers(RowCounter).Clone)
+                Next
+            End If
+            With Nothing
+                'Add all existing data rows
+                For RowCounter As Integer = 0 To Me.Rows.Count - 1
+                    NewDataRows.Add(Me.Rows(RowCounter).Clone)
+                Next
+            End With
 
             'Create new table
             Dim Result As TextTable = New TextTable()
