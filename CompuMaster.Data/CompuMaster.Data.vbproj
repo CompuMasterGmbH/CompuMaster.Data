@@ -139,4 +139,11 @@
 		<PackageReference Include="System.Runtime" Version="4.3.1">
 		</PackageReference>
 	</ItemGroup>
+
+  <PropertyGroup>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <None Include="../README.md" Pack="true" PackagePath="/"/>
+  </ItemGroup>
 </Project>
