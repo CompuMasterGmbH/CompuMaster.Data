@@ -197,6 +197,22 @@ Namespace CompuMaster.Data
             Next
         End Sub
 
+        ''' <summary>
+        ''' Creates a deep clone of this row (including all cells)
+        ''' </summary>
+        ''' <returns></returns>
+        Public Function Clone() As TextRow
+            Dim NewRow As New TextRow()
+            For Each Cell As TextCell In Me.Cells
+                NewRow.Cells.Add(Cell.Clone())
+            Next
+            Return NewRow
+        End Function
+
+        Public Overrides Function ToString() As String
+            Return MyBase.ToString() & ": cell count=" & Me.Count
+        End Function
+
     End Class
 
 End Namespace

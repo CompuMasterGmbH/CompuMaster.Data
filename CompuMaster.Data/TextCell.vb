@@ -66,6 +66,25 @@ Namespace CompuMaster.Data
             End If
         End Function
 
+        ''' <summary>
+        ''' Creates a copy of the current cell
+        ''' </summary>
+        ''' <returns></returns>
+        Public Function Clone() As TextCell
+            Dim NewCell As New TextCell(Me.Text)
+            Return NewCell
+        End Function
+
+        Public Overrides Function ToString() As String
+            If Me.Text Is Nothing Then
+                Return "{NULL}"
+            ElseIf Me.Text = Nothing Then
+                Return "{String.Empty}"
+            Else
+                Return Me.Text
+            End If
+        End Function
+
     End Class
 
 End Namespace

@@ -39,6 +39,13 @@ Namespace CompuMaster.Data
             Me.AssignRowData(rows, columnFormatting)
         End Sub
 
+        Public Sub New(headers As System.Collections.Generic.List(Of TextRow), rows As System.Collections.Generic.List(Of TextRow))
+            If headers Is Nothing Then Throw New ArgumentNullException(NameOf(headers))
+            If rows Is Nothing Then Throw New ArgumentNullException(NameOf(rows))
+            Me.Headers = headers
+            Me.Rows = rows
+        End Sub
+
         'Public Sub New(table As DataTable, columnFormatting As DataTables.DataColumnToString)
         '    Me.New(table, CType(Nothing, String), columnFormatting)
         'End Sub
@@ -156,16 +163,170 @@ Namespace CompuMaster.Data
         '    Rows.Add(New TextRow(Cells))
         'End Sub
 
-
-        Public Sub New(headers As System.Collections.Generic.List(Of TextRow), rows As System.Collections.Generic.List(Of TextRow))
-            If headers Is Nothing Then Throw New ArgumentNullException(NameOf(headers))
-            If rows Is Nothing Then Throw New ArgumentNullException(NameOf(rows))
-            Me.Headers = headers
-            Me.Rows = rows
-        End Sub
-
+        ''' <summary>
+        ''' Captions of the table (can be multiple rows)
+        ''' </summary>
+        ''' <returns></returns>
         Public Property Headers As System.Collections.Generic.List(Of TextRow)
+
+        ''' <summary>
+        ''' Rows of the table
+        ''' </summary>
+        ''' <returns></returns>
         Public Property Rows As System.Collections.Generic.List(Of TextRow)
+
+        ''' <summary>
+        ''' Maximum number of columns in the table (including headers and rows)
+        ''' </summary>
+        ''' <returns></returns>
+        Public Function ColumnCount() As Integer
+            Dim MaxColumns As Integer = 0
+            For MyCounter As Integer = 0 To Me.Headers.Count - 1
+                MaxColumns = System.Math.Max(MaxColumns, Me.Headers(MyCounter).Cells.Count)
+            Next
+            For MyCounter As Integer = 0 To Me.Rows.Count - 1
+                MaxColumns = System.Math.Max(MaxColumns, Me.Rows(MyCounter).Cells.Count)
+            Next
+            Return MaxColumns
+        End Function
+
+        ''' <summary>
+        ''' Convert TextTable to classic DataTable
+        ''' </summary>
+        ''' <returns></returns>
+        Public Function ToDataTable() As DataTable
+            'Collect column names from all header rows (if multiple header rows exist, combine their texts with line breaks)
+            Dim ColumnNames As New System.Collections.Generic.List(Of String)
+            For RowCounter As Integer = 0 To Me.Headers.Count - 1
+                For ColCounter As Integer = 0 To Me.Headers(RowCounter).Cells.Count - 1
+                    If ColumnNames.Count <= ColCounter Then
+                        'Add new column
+                        ColumnNames.Add(Me.Headers(RowCounter).Cells(ColCounter).Text)
+                    Else
+                        'Column already exists -> extend column name if required
+                        Dim ExistingColumnName As String = ColumnNames(ColCounter)
+                        If ExistingColumnName <> Nothing Then
+                            ColumnNames(ColCounter) = ExistingColumnName & System.Environment.NewLine & Me.Headers(RowCounter).Cells(ColCounter).Text
+                        Else
+                            ColumnNames(ColCounter) = Me.Headers(RowCounter).Cells(ColCounter).Text
+                        End If
+                    End If
+                Next
+            Next
+
+            'Create DataTable with all columns
+            Dim Result As New DataTable
+            For ColCounter As Integer = 0 To ColumnNames.Count - 1
+                Dim UniqueColumnName As String = DataTables.LookupUniqueColumnName(Result, ColumnNames(ColCounter))
+                Result.Columns.Add(UniqueColumnName, GetType(String))
+            Next
+
+            'Add all rows
+            For RowCounter As Integer = 0 To Me.Rows.Count - 1
+                Dim NewRow As DataRow = Result.NewRow
+                For ColCounter As Integer = 0 To Me.Rows(RowCounter).Count - 1
+                    If Me.Rows(RowCounter).Cells(ColCounter).Text <> Nothing Then
+                        NewRow(ColCounter) = Me.Rows(RowCounter).Cells(ColCounter).Text
+                    End If
+                Next
+                Result.Rows.Add(NewRow)
+            Next
+            Return Result
+        End Function
+
+        Private Shared Function OutputOptions(rowNumbering As Boolean) As CompuMaster.Data.ConvertToPlainTextTableOptions
+            Dim Result = CompuMaster.Data.ConvertToPlainTextTableOptions.SimpleLayout
+            Result.MinimumColumnWidth = 2
+            Result.MaximumColumnWidth = 65535
+            Result.RowNumbering = rowNumbering
+            Return Result
+        End Function
+
+        Public Function ToPlainTextTable() As String
+            Return CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(Me.ToDataTable, OutputOptions(False))
+        End Function
+
+        Public Function ToPlainTextTable(rowNumbering As Boolean) As String
+            Return CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(Me.ToDataTable, OutputOptions(rowNumbering))
+        End Function
+
+        ''' <summary>
+        ''' Convert to plain text table with Excel-like column names (A, B, ..., Z, AA, AB, ..., AZ, BA, BB, ...) and row numbers (1-based)
+        ''' </summary>
+        ''' <returns></returns>
+        Public Function ToPlainTextExcelTable() As String
+            Return CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(Me.ToExcelStyleTextTable.ToDataTable, OutputOptions(False))
+        End Function
+
+        ''' <summary>
+        ''' Convert to TextTable with Excel-like column names (A, B, ..., Z, AA, AB, ..., AZ, BA, BB, ...) and row numbers (1-based)
+        ''' </summary>
+        ''' <returns></returns>
+        Public Function ToExcelStyleTextTable() As TextTable
+            'Prepare new header row with column letters
+            Dim NewHeaderRows As New System.Collections.Generic.List(Of TextRow)
+            With Nothing
+                'Setup column names in letters
+                Dim NewHeaderCells As New TextRow
+                Dim MaxColumns As Integer = Me.ColumnCount()
+                For MyCounter As Integer = 0 To MaxColumns - 1
+                    NewHeaderCells.Cells.Add(New TextCell(ExcelColumnName(MyCounter)))
+                Next
+                NewHeaderRows.Add(NewHeaderCells)
+            End With
+
+            'Prepare new table data
+            Dim NewDataRows As New System.Collections.Generic.List(Of TextRow)
+            For RowCounter As Integer = 0 To Me.Headers.Count - 1 'Add all existing header rows as regular data rows
+                NewDataRows.Add(Me.Headers(RowCounter).Clone)
+            Next
+            For RowCounter As Integer = 0 To Me.Rows.Count - 1 'Add all existing data rows
+                NewDataRows.Add(Me.Rows(RowCounter).Clone)
+            Next
+
+            'Create new table
+            Dim Result As TextTable = New TextTable()
+            Result.Headers = NewHeaderRows
+            Result.Rows = NewDataRows
+
+            'Setup row numbers 1-based
+            Result.ApplyRowNumbering()
+
+            Return Result
+        End Function
+
+        ''' <summary>
+        ''' Calculate Excel-like column name (A, B, ..., Z, AA, AB, ..., AZ, BA, BB, ...) for given 0-based column index
+        ''' </summary>
+        ''' <param name="columnIndex"></param>
+        ''' <returns></returns>
+        Friend Shared ReadOnly Property ExcelColumnName(columnIndex As Integer) As String
+            Get
+                If columnIndex < 0 Then Throw New ArgumentOutOfRangeException(NameOf(columnIndex), "Must be a positive value")
+                Dim x As Integer = columnIndex + 1
+                If x >= 1 AndAlso x <= 26 Then
+                    Return Char.ConvertFromUtf32(x + 64)
+                Else
+                    Return ExcelColumnName(CType(((x - x Mod 26) / 26) - 1, Integer)) & Char.ConvertFromUtf32((x Mod 26) + 64)
+                End If
+            End Get
+        End Property
+
+        ''' <summary>
+        ''' Creates a copy of the current table
+        ''' </summary>
+        ''' <returns></returns>
+        Public Function Clone() As TextTable
+            Dim NewHeaders As New System.Collections.Generic.List(Of TextRow)
+            For MyCounter As Integer = 0 To Me.Headers.Count - 1
+                NewHeaders.Add(Me.Headers(MyCounter).Clone)
+            Next
+            Dim NewRows As New System.Collections.Generic.List(Of TextRow)
+            For MyCounter As Integer = 0 To Me.Rows.Count - 1
+                NewRows.Add(Me.Rows(MyCounter).Clone)
+            Next
+            Return New TextTable(NewHeaders, NewRows)
+        End Function
 
         ''' <summary>
         ''' Text representation of table

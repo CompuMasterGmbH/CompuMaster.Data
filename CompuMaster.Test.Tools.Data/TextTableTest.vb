@@ -268,6 +268,76 @@ Namespace CompuMaster.Test.Data
             Assert.AreEqual(Expected, Output)
         End Sub
 
+        <Test>
+        Public Sub ToExcelStyleTextTable()
+            Dim TestTable As DataTable
+            Dim TextTable As CompuMaster.Data.TextTable
+            Dim Expected, Output As String
+
+            TestTable = TestTable1()
+            TestTable.Columns(1).ColumnName &= ControlChars.CrLf & "Line2"
+            TextTable = (New CompuMaster.Data.TextTable(TestTable)).ToExcelStyleTextTable
+
+            Dim ExpectedRowLineBreak As String
+            Dim ExpectedCellLineBreak As String
+
+            Output = TextTable.ToPlainTextTable()
+            Console.WriteLine(Output)
+
+            Assert.AreEqual("#", TextTable.Headers(0).Cells(0).Text)
+
+            ExpectedRowLineBreak = System.Environment.NewLine
+            ExpectedCellLineBreak = System.Environment.NewLine
+            Expected =
+                "# |A |B              |C          " & ExpectedCellLineBreak &
+                "--+--+---------------+-----------" & ExpectedRowLineBreak &
+                "1 |ID|Value1         |Val2       " & ExpectedRowLineBreak &
+                "  |  |Line2          |           " & ExpectedCellLineBreak &
+                "2 |1 |Hello world!   |Line1      " & ExpectedRowLineBreak &
+                "  |  |               |Line2      " & ExpectedRowLineBreak &
+                "3 |2 |Gotcha!        |           " & ExpectedRowLineBreak &
+                "4 |3 |Hello world!   |           " & ExpectedRowLineBreak &
+                "5 |4 |Not a duplicate|           " & ExpectedRowLineBreak &
+                "6 |5 |Hello world!   |T          " & ExpectedRowLineBreak &
+                "7 |6 |GOTCHA!        |           " & ExpectedRowLineBreak &
+                "8 |7 |Gotcha!        |           " & ExpectedRowLineBreak
+            Assert.AreEqual(Expected, Output)
+        End Sub
+
+        <Test>
+        Public Sub ToPlainTextExcelTable()
+            Dim TestTable As DataTable
+            Dim TextTable As CompuMaster.Data.TextTable
+            Dim Expected, Output As String
+
+            TestTable = TestTable1()
+            TestTable.Columns(1).ColumnName &= ControlChars.CrLf & "Line2"
+            TextTable = New CompuMaster.Data.TextTable(TestTable)
+
+            Dim ExpectedRowLineBreak As String
+            Dim ExpectedCellLineBreak As String
+
+            Output = TextTable.ToPlainTextExcelTable()
+            Console.WriteLine(Output)
+
+            ExpectedRowLineBreak = System.Environment.NewLine
+            ExpectedCellLineBreak = System.Environment.NewLine
+            Expected =
+                "# |A |B              |C          " & ExpectedCellLineBreak &
+                "--+--+---------------+-----------" & ExpectedRowLineBreak &
+                "1 |ID|Value1         |Val2       " & ExpectedRowLineBreak &
+                "  |  |Line2          |           " & ExpectedCellLineBreak &
+                "2 |1 |Hello world!   |Line1      " & ExpectedRowLineBreak &
+                "  |  |               |Line2      " & ExpectedRowLineBreak &
+                "3 |2 |Gotcha!        |           " & ExpectedRowLineBreak &
+                "4 |3 |Hello world!   |           " & ExpectedRowLineBreak &
+                "5 |4 |Not a duplicate|           " & ExpectedRowLineBreak &
+                "6 |5 |Hello world!   |T          " & ExpectedRowLineBreak &
+                "7 |6 |GOTCHA!        |           " & ExpectedRowLineBreak &
+                "8 |7 |Gotcha!        |           " & ExpectedRowLineBreak
+            Assert.AreEqual(Expected, Output)
+        End Sub
+
 #Region "Test data"
         Private Function TestTable1() As DataTable
             Dim Result As New DataTable("test1")
