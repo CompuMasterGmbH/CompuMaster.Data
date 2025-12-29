@@ -1,4 +1,5 @@
 Imports NUnit.Framework
+Imports NUnit.Framework.Legacy
 Imports System.Data
 
 Namespace CompuMaster.Test.Data
@@ -10,7 +11,7 @@ Namespace CompuMaster.Test.Data
                 Case PlatformID.Win32NT
                     'continue
                 Case Else
-                    Assert.Ignore("LDAP not available for non-Windows platforms")
+                    ClassicAssert.Ignore("LDAP not available for non-Windows platforms")
             End Select
         End Sub
 
@@ -31,19 +32,19 @@ Namespace CompuMaster.Test.Data
                         'Test available
                         Dim testTable As DataTable = CompuMaster.Data.Ldap.Query("compumaster", "(objectCategory=user)")
                         Console.WriteLine(CompuMaster.Data.DataTables.ConvertToPlainTextTable(testTable))
-                        Assert.Greater(testTable.Rows.Count, 1)
+                        ClassicAssert.Greater(testTable.Rows.Count, 1)
                         testTable = CompuMaster.Data.Ldap.Query("CN=Jochen Wezel,OU=Boppard,OU=Users - CompuMaster,DC=lan,DC=compumaster,DC=de", "(objectCategory=user)")
                         Console.WriteLine(CompuMaster.Data.DataTables.ConvertToPlainTextTable(testTable))
-                        Assert.AreEqual(testTable.Rows.Count, 1)
+                        ClassicAssert.AreEqual(testTable.Rows.Count, 1)
                     Else
                         'Expected exception: The server is not operational.
-                        Assert.Catch(Of System.Runtime.InteropServices.COMException)(Sub()
+                        ClassicAssert.Catch(Of System.Runtime.InteropServices.COMException)(Sub()
                                                                                          CompuMaster.Data.Ldap.Query("compumaster", "(objectCategory=user)")
                                                                                      End Sub)
                     End If
                 Case Else
                     'Expected exception: System.DirectoryServices is not supported on this platform.
-                    Assert.Catch(Of PlatformNotSupportedException)(Sub()
+                    ClassicAssert.Catch(Of PlatformNotSupportedException)(Sub()
                                                                        CompuMaster.Data.Ldap.Query("compumaster", "(objectCategory=user)")
                                                                    End Sub)
             End Select
@@ -57,11 +58,11 @@ Namespace CompuMaster.Test.Data
         <Test, Category("LDAP")> Public Sub QueryMoreThan1000Entries()
             Dim RecordCount As Integer = CompuMaster.Data.Ldap.QueryRecordCount("yourdomain.com", "(objectCategory=user)", "yourdomain\user", "yourpassword")
             Console.WriteLine(RecordCount)
-            Assert.Greater(RecordCount, 1000)
+            ClassicAssert.Greater(RecordCount, 1000)
             Dim testTable As DataTable = CompuMaster.Data.Ldap.Query("yourdomain.com", "(objectCategory=user)", "yourdomain\user", "yourpassword")
-            Assert.Greater(testTable.Rows.Count, 1000)
+            ClassicAssert.Greater(testTable.Rows.Count, 1000)
             testTable = CompuMaster.Data.Ldap.Query("CN=Users,DC=yourdomain,DC=com", "(objectCategory=user)")
-            Assert.Greater(testTable.Rows.Count, 1000)
+            ClassicAssert.Greater(testTable.Rows.Count, 1000)
         End Sub
 
     End Class
@@ -70,9 +71,9 @@ Namespace CompuMaster.Test.Data
     <NUnit.Framework.TestFixture(Category:="LDAP with security")> Public Class MiniTests
 
         <NUnit.Framework.Test> Public Sub TestIsStringWithA2ZOnly()
-            Assert.AreEqual(True, IsStringWithA2ZOnly("akbkDED"))
-            Assert.AreEqual(False, IsStringWithA2ZOnly("akbkDED "))
-            Assert.AreEqual(False, IsStringWithA2ZOnly("akbküDED"))
+            ClassicAssert.AreEqual(True, IsStringWithA2ZOnly("akbkDED"))
+            ClassicAssert.AreEqual(False, IsStringWithA2ZOnly("akbkDED "))
+            ClassicAssert.AreEqual(False, IsStringWithA2ZOnly("akbküDED"))
         End Sub
 
         Private Shared Function IsStringWithA2ZOnly(value As String) As Boolean

@@ -2,6 +2,7 @@
 Option Strict On
 
 Imports NUnit.Framework
+Imports NUnit.Framework.Legacy
 
 Namespace CompuMaster.Test.Data
 
@@ -13,12 +14,12 @@ Namespace CompuMaster.Test.Data
             Dim Cell As CompuMaster.Data.TextCell
 
             Cell = New CompuMaster.Data.TextCell("Line 1" & ControlChars.CrLf & ControlChars.Tab & "- Line 2 (with extra chars)" & ControlChars.Cr & "Line 3" & ControlChars.Lf & "Line 4")
-            Assert.AreEqual(3, Cell.LineBreaksCount)
-            Assert.AreEqual(4, Cell.TextLines(DbNullText, TabText).Length)
-            Assert.AreEqual(New String() {
+            ClassicAssert.AreEqual(3, Cell.LineBreaksCount)
+            ClassicAssert.AreEqual(4, Cell.TextLines(DbNullText, TabText).Length)
+            ClassicAssert.AreEqual(New String() {
                             "Line 1", "    - Line 2 (with extra chars)", "Line 3", "Line 4"
                             }, Cell.TextLines(DbNullText, TabText))
-            Assert.AreEqual(31, Cell.MaxWidth(DbNullText, TabText))
+            ClassicAssert.AreEqual(31, Cell.MaxWidth(DbNullText, TabText))
         End Sub
 
     End Class

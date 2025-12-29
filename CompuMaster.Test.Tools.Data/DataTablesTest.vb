@@ -2,6 +2,7 @@
 Option Strict On
 
 Imports NUnit.Framework
+Imports NUnit.Framework.Legacy
 Imports OfficeOpenXml.FormulaParsing.Excel.Functions.RefAndLookup
 Imports System.Data
 
@@ -12,14 +13,14 @@ Namespace CompuMaster.Test.Data
 
 #Region "TestComparisons"
         Public Shared Sub AssertTables(table1 As DataTable, table2 As DataTable, assertionTitle As String)
-            Assert.AreEqual(table1.Columns.Count, table2.Columns.Count, assertionTitle & ": Column count must be equal")
-            Assert.AreEqual(table1.Rows.Count, table2.Rows.Count, assertionTitle & ": Row count must be equal")
+            ClassicAssert.AreEqual(table1.Columns.Count, table2.Columns.Count, assertionTitle & ": Column count must be equal")
+            ClassicAssert.AreEqual(table1.Rows.Count, table2.Rows.Count, assertionTitle & ": Row count must be equal")
             For MyCounter As Integer = 0 To table1.Columns.Count - 1
-                Assert.AreEqual(table1.Columns(MyCounter).DataType, table2.Columns(MyCounter).DataType, assertionTitle & ": DataType must be equal for column index " & MyCounter)
+                ClassicAssert.AreEqual(table1.Columns(MyCounter).DataType, table2.Columns(MyCounter).DataType, assertionTitle & ": DataType must be equal for column index " & MyCounter)
             Next
             For MyCounter As Integer = 0 To table1.Columns.Count - 1
                 For MyRowCounter As Integer = 0 To table1.Rows.Count - 1
-                    Assert.AreEqual(table1.Rows(MyRowCounter)(MyCounter), table2.Rows(MyRowCounter)(MyCounter), assertionTitle & ": Cell value must be equal for row index " & MyRowCounter & ", column index " & MyCounter)
+                    ClassicAssert.AreEqual(table1.Rows(MyRowCounter)(MyCounter), table2.Rows(MyRowCounter)(MyCounter), assertionTitle & ": Cell value must be equal for row index " & MyRowCounter & ", column index " & MyCounter)
                 Next
             Next
         End Sub
@@ -103,7 +104,7 @@ Namespace CompuMaster.Test.Data
             Dim e As DataRow = dt.NewRow
             e.Item(0) = "D"
             dt.Rows.Add(e)
-            Assert.AreEqual(0, CompuMaster.Data.DataTables.ColumnIndex(dt.Columns("hey")))
+            ClassicAssert.AreEqual(0, CompuMaster.Data.DataTables.ColumnIndex(dt.Columns("hey")))
         End Sub
 
         <Test()> Public Sub CompareValuesOfUnknownType()
@@ -112,23 +113,23 @@ Namespace CompuMaster.Test.Data
 
             Dim e As Integer = 23
             Dim f As Integer = 24
-            Assert.IsTrue(CompuMaster.Data.DataTables.CompareValuesOfUnknownType("D", "D", False))
-            Assert.IsTrue(CompuMaster.Data.DataTables.CompareValuesOfUnknownType("D", "D", True))
-            Assert.IsFalse(CompuMaster.Data.DataTables.CompareValuesOfUnknownType("D", "E", False))
-            Assert.IsFalse(CompuMaster.Data.DataTables.CompareValuesOfUnknownType("D", "E", True))
-            Assert.IsFalse(CompuMaster.Data.DataTables.CompareValuesOfUnknownType("D", "d", False))
-            Assert.IsFalse(CompuMaster.Data.DataTables.CompareValuesOfUnknownType("É", "é", False))
-            Assert.IsTrue(CompuMaster.Data.DataTables.CompareValuesOfUnknownType("É", "é", True))
-            Assert.IsFalse(CompuMaster.Data.DataTables.CompareValuesOfUnknownType(e, f, False))
-            Assert.IsTrue(CompuMaster.Data.DataTables.CompareValuesOfUnknownType("D", "D", StringComparison.Ordinal))
-            Assert.IsTrue(CompuMaster.Data.DataTables.CompareValuesOfUnknownType("D", "D", StringComparison.OrdinalIgnoreCase))
-            Assert.IsFalse(CompuMaster.Data.DataTables.CompareValuesOfUnknownType("D", "E", StringComparison.Ordinal))
-            Assert.IsFalse(CompuMaster.Data.DataTables.CompareValuesOfUnknownType("D", "E", StringComparison.OrdinalIgnoreCase))
-            Assert.IsFalse(CompuMaster.Data.DataTables.CompareValuesOfUnknownType("D", "d", StringComparison.Ordinal))
-            Assert.IsTrue(CompuMaster.Data.DataTables.CompareValuesOfUnknownType("D", "d", StringComparison.OrdinalIgnoreCase))
-            Assert.IsFalse(CompuMaster.Data.DataTables.CompareValuesOfUnknownType("É", "é", StringComparison.Ordinal))
-            Assert.IsTrue(CompuMaster.Data.DataTables.CompareValuesOfUnknownType("É", "é", StringComparison.OrdinalIgnoreCase))
-            Assert.IsFalse(CompuMaster.Data.DataTables.CompareValuesOfUnknownType(e, f, False))
+            ClassicAssert.IsTrue(CompuMaster.Data.DataTables.CompareValuesOfUnknownType("D", "D", False))
+            ClassicAssert.IsTrue(CompuMaster.Data.DataTables.CompareValuesOfUnknownType("D", "D", True))
+            ClassicAssert.IsFalse(CompuMaster.Data.DataTables.CompareValuesOfUnknownType("D", "E", False))
+            ClassicAssert.IsFalse(CompuMaster.Data.DataTables.CompareValuesOfUnknownType("D", "E", True))
+            ClassicAssert.IsFalse(CompuMaster.Data.DataTables.CompareValuesOfUnknownType("D", "d", False))
+            ClassicAssert.IsFalse(CompuMaster.Data.DataTables.CompareValuesOfUnknownType("É", "é", False))
+            ClassicAssert.IsTrue(CompuMaster.Data.DataTables.CompareValuesOfUnknownType("É", "é", True))
+            ClassicAssert.IsFalse(CompuMaster.Data.DataTables.CompareValuesOfUnknownType(e, f, False))
+            ClassicAssert.IsTrue(CompuMaster.Data.DataTables.CompareValuesOfUnknownType("D", "D", StringComparison.Ordinal))
+            ClassicAssert.IsTrue(CompuMaster.Data.DataTables.CompareValuesOfUnknownType("D", "D", StringComparison.OrdinalIgnoreCase))
+            ClassicAssert.IsFalse(CompuMaster.Data.DataTables.CompareValuesOfUnknownType("D", "E", StringComparison.Ordinal))
+            ClassicAssert.IsFalse(CompuMaster.Data.DataTables.CompareValuesOfUnknownType("D", "E", StringComparison.OrdinalIgnoreCase))
+            ClassicAssert.IsFalse(CompuMaster.Data.DataTables.CompareValuesOfUnknownType("D", "d", StringComparison.Ordinal))
+            ClassicAssert.IsTrue(CompuMaster.Data.DataTables.CompareValuesOfUnknownType("D", "d", StringComparison.OrdinalIgnoreCase))
+            ClassicAssert.IsFalse(CompuMaster.Data.DataTables.CompareValuesOfUnknownType("É", "é", StringComparison.Ordinal))
+            ClassicAssert.IsTrue(CompuMaster.Data.DataTables.CompareValuesOfUnknownType("É", "é", StringComparison.OrdinalIgnoreCase))
+            ClassicAssert.IsFalse(CompuMaster.Data.DataTables.CompareValuesOfUnknownType(e, f, False))
         End Sub
 
         <Test()> Public Sub ConvertColumnValuesIntoArrayList()
@@ -153,7 +154,7 @@ Namespace CompuMaster.Test.Data
 
 
             Dim list As ArrayList = CompuMaster.Data.DataTables.ConvertColumnValuesIntoArrayList(dt.Columns.Item(0))
-            Assert.AreEqual(4, list.Count)
+            ClassicAssert.AreEqual(4, list.Count)
         End Sub
 
         <Test(), Ignore("Requires custom connection string to execute")> Public Sub ConvertDataReaderToDataSet()
@@ -163,7 +164,7 @@ Namespace CompuMaster.Test.Data
             MyCmd.CommandText = "exec sp_databases; Exec sp_tables;"
             Dim Reader As System.Data.IDataReader = CompuMaster.Data.DataQuery.AnyIDataProvider.ExecuteReader(MyCmd, CompuMaster.Data.DataQuery.Automations.AutoOpenAndCloseAndDisposeConnection)
             Dim Data As DataSet = CompuMaster.Data.DataTables.ConvertDataReaderToDataSet(Reader)
-            Assert.AreEqual(2, Data.Tables.Count)
+            ClassicAssert.AreEqual(2, Data.Tables.Count)
         End Sub
 
 #If Not CI_Build Then
@@ -175,8 +176,8 @@ Namespace CompuMaster.Test.Data
             MyCmd.CommandText = "SELECT IntegerLongValue, StringShort, StringMemo FROM [SeveralColumnTypesTest] ORDER BY ID"
             Dim Reader As System.Data.IDataReader = CompuMaster.Data.DataQuery.AnyIDataProvider.ExecuteReader(MyCmd, CompuMaster.Data.DataQuery.Automations.AutoOpenAndCloseAndDisposeConnection)
             Dim Data As DataTable = CompuMaster.Data.DataTables.ConvertDataReaderToDataTable(Reader, "mytablename")
-            Assert.AreEqual("mytablename", Data.TableName)
-            Assert.AreNotEqual(0, Data.Rows.Count)
+            ClassicAssert.AreEqual("mytablename", Data.TableName)
+            ClassicAssert.AreNotEqual(0, Data.Rows.Count)
         End Sub
 #End If
 
@@ -196,9 +197,9 @@ Namespace CompuMaster.Test.Data
             dt.Rows.Add(row2)
 
             Dim e As ArrayList = CompuMaster.Data.DataTables.ConvertDataTableToArrayList(dt.Columns.Item(0))
-            Assert.AreEqual(2, e.Count)
-            Assert.AreEqual(23, e.Item(0))
-            Assert.AreEqual(25, e.Item(1))
+            ClassicAssert.AreEqual(2, e.Count)
+            ClassicAssert.AreEqual(23, e.Item(0))
+            ClassicAssert.AreEqual(25, e.Item(1))
         End Sub
 
         <Test()> Public Sub ConvertDataTableToDictionaryEntryArray()
@@ -210,9 +211,9 @@ Namespace CompuMaster.Test.Data
             rRow.Item(1) = 25
             dt.Rows.Add(rRow)
             Dim e As DictionaryEntry() = CompuMaster.Data.DataTables.ConvertDataTableToDictionaryEntryArray(dt)
-            Assert.AreEqual(1, e.GetLength(0))
-            Assert.AreEqual("Number", dt.Rows.Item(0).Item(0))
-            Assert.AreEqual(25, dt.Rows.Item(0).Item(1))
+            ClassicAssert.AreEqual(1, e.GetLength(0))
+            ClassicAssert.AreEqual("Number", dt.Rows.Item(0).Item(0))
+            ClassicAssert.AreEqual(25, dt.Rows.Item(0).Item(1))
         End Sub
 
         <Test()> Public Sub ConvertDataTableToHashtable()
@@ -226,8 +227,8 @@ Namespace CompuMaster.Test.Data
             rRow.Item(1) = "z"
             dt.Rows.Add(rRow)
             Dim ht As Hashtable = CompuMaster.Data.DataTables.ConvertDataTableToHashtable(dt)
-            Assert.IsTrue(ht.ContainsKey("a"))
-            Assert.IsTrue(ht.ContainsValue("z"))
+            ClassicAssert.IsTrue(ht.ContainsKey("a"))
+            ClassicAssert.IsTrue(ht.ContainsValue("z"))
         End Sub
 
         <Test(), NUnit.Framework.Ignore("NotYetImplemented")> Public Sub ConvertDataTableToWebFormsListItem()
@@ -254,12 +255,12 @@ Namespace CompuMaster.Test.Data
             de(1).Value = "Water"
 
             Dim dt As DataTable = CompuMaster.Data.DataTables.ConvertDictionaryEntryArrayToDataTable(de)
-            Assert.AreEqual(2, dt.Columns.Count())
-            Assert.AreEqual(2, dt.Rows.Count())
-            Assert.AreEqual("Hello", dt.Rows.Item(0).Item(0))
-            Assert.AreEqual("Fire", dt.Rows.Item(1).Item(0))
-            Assert.AreEqual("Bye", dt.Rows.Item(0).Item(1))
-            Assert.AreEqual("Water", dt.Rows.Item(1).Item(1))
+            ClassicAssert.AreEqual(2, dt.Columns.Count())
+            ClassicAssert.AreEqual(2, dt.Rows.Count())
+            ClassicAssert.AreEqual("Hello", dt.Rows.Item(0).Item(0))
+            ClassicAssert.AreEqual("Fire", dt.Rows.Item(1).Item(0))
+            ClassicAssert.AreEqual("Bye", dt.Rows.Item(0).Item(1))
+            ClassicAssert.AreEqual("Water", dt.Rows.Item(1).Item(1))
         End Sub
 
         <Test(), NUnit.Framework.Ignore("NotYetImplemented")> Public Sub ConvertICollectionToDataTable()
@@ -272,8 +273,8 @@ Namespace CompuMaster.Test.Data
             dict.Add("Berlin", "Germany")
 
             Dim dt As DataTable = CompuMaster.Data.DataTables.ConvertIDictionaryToDataTable(dict)
-            Assert.AreEqual(1, dt.Rows.Count())
-            Assert.AreEqual(2, dt.Columns.Count())
+            ClassicAssert.AreEqual(1, dt.Rows.Count())
+            ClassicAssert.AreEqual(2, dt.Columns.Count())
 
         End Sub
 
@@ -283,8 +284,8 @@ Namespace CompuMaster.Test.Data
             nvc.Add("Berlin", "Germany")
             nvc.Add("Paris", "France")
             Dim dt As DataTable = CompuMaster.Data.DataTables.ConvertNameValueCollectionToDataTable(nvc)
-            Assert.AreEqual(2, dt.Columns.Count())
-            Assert.AreEqual(2, dt.Rows.Count())
+            ClassicAssert.AreEqual(2, dt.Columns.Count())
+            ClassicAssert.AreEqual(2, dt.Rows.Count())
         End Sub
 
         <Test()> Public Sub ConvertToHtmlTable()
@@ -306,69 +307,69 @@ Namespace CompuMaster.Test.Data
             '## Basic HTML output
             Dim ExpectedHtml As String, Html As String
             ExpectedHtml = CompuMaster.Data.DataTables.ConvertToHtmlTable(dt)
-            Assert.IsNotNull(ExpectedHtml)
-            Assert.IsNotEmpty(ExpectedHtml)
+            ClassicAssert.IsNotNull(ExpectedHtml)
+            ClassicAssert.IsNotEmpty(ExpectedHtml)
             Html = CompuMaster.Data.DataTables.ConvertToHtmlTable(dt.Rows, dt.TableName)
-            Assert.AreEqual(ExpectedHtml, Html)
+            ClassicAssert.AreEqual(ExpectedHtml, Html)
             Html = CompuMaster.Data.DataTables.ConvertToHtmlTable(RowArray, dt.TableName)
-            Assert.AreEqual(ExpectedHtml, Html)
+            ClassicAssert.AreEqual(ExpectedHtml, Html)
 
             '## Arguments list for DataTable
             Html = CompuMaster.Data.DataTables.ConvertToHtmlTable(dt, NullString, NullString, NullString)
-            Assert.AreEqual(ExpectedHtml, Html)
-            Assert.IsTrue(Html.Contains("Hello <strong>World</strong>"))
-            Assert.IsTrue(Html.Contains("<strong>Action</strong>"))
-            Assert.IsTrue(Html.Contains("<a hef=""/test/"">Test</a>"))
+            ClassicAssert.AreEqual(ExpectedHtml, Html)
+            ClassicAssert.IsTrue(Html.Contains("Hello <strong>World</strong>"))
+            ClassicAssert.IsTrue(Html.Contains("<strong>Action</strong>"))
+            ClassicAssert.IsTrue(Html.Contains("<a hef=""/test/"">Test</a>"))
 
             '- test with HTML encoding
             Html = CompuMaster.Data.DataTables.ConvertToHtmlTable(dt, NullString, NullString, NullString, True)
-            Assert.IsTrue(Html.Contains("Hello &lt;strong&gt;World&lt;/strong&gt;"))
-            Assert.IsTrue(Html.Contains("&lt;strong&gt;Action&lt;/strong&gt;"))
-            Assert.IsTrue(Html.Contains("&lt;a hef=&quot;/test/&quot;&gt;Test&lt;/a&gt;"))
+            ClassicAssert.IsTrue(Html.Contains("Hello &lt;strong&gt;World&lt;/strong&gt;"))
+            ClassicAssert.IsTrue(Html.Contains("&lt;strong&gt;Action&lt;/strong&gt;"))
+            ClassicAssert.IsTrue(Html.Contains("&lt;a hef=&quot;/test/&quot;&gt;Test&lt;/a&gt;"))
 
             '- test with HTML encoding except defined columns
             Html = CompuMaster.Data.DataTables.ConvertToHtmlTable(dt, NullString, NullString, NullString, True, HtmlColumns)
-            Assert.IsTrue(Html.Contains("Hello &lt;strong&gt;World&lt;/strong&gt;"))
-            Assert.IsTrue(Html.Contains("<strong>Action</strong>"))
-            Assert.IsTrue(Html.Contains("<a hef=""/test/"">Test</a>"))
+            ClassicAssert.IsTrue(Html.Contains("Hello &lt;strong&gt;World&lt;/strong&gt;"))
+            ClassicAssert.IsTrue(Html.Contains("<strong>Action</strong>"))
+            ClassicAssert.IsTrue(Html.Contains("<a hef=""/test/"">Test</a>"))
 
             '## Arguments list for DataRowCollection
             Html = CompuMaster.Data.DataTables.ConvertToHtmlTable(dt.Rows, dt.TableName, NullString, NullString, NullString)
-            Assert.AreEqual(ExpectedHtml, Html)
-            Assert.IsTrue(Html.Contains("Hello <strong>World</strong>"))
-            Assert.IsTrue(Html.Contains("<strong>Action</strong>"))
-            Assert.IsTrue(Html.Contains("<a hef=""/test/"">Test</a>"))
+            ClassicAssert.AreEqual(ExpectedHtml, Html)
+            ClassicAssert.IsTrue(Html.Contains("Hello <strong>World</strong>"))
+            ClassicAssert.IsTrue(Html.Contains("<strong>Action</strong>"))
+            ClassicAssert.IsTrue(Html.Contains("<a hef=""/test/"">Test</a>"))
 
             '- test with HTML encoding
             Html = CompuMaster.Data.DataTables.ConvertToHtmlTable(dt.Rows, dt.TableName, NullString, NullString, NullString, True)
-            Assert.IsTrue(Html.Contains("Hello &lt;strong&gt;World&lt;/strong&gt;"))
-            Assert.IsTrue(Html.Contains("&lt;strong&gt;Action&lt;/strong&gt;"))
-            Assert.IsTrue(Html.Contains("&lt;a hef=&quot;/test/&quot;&gt;Test&lt;/a&gt;"))
+            ClassicAssert.IsTrue(Html.Contains("Hello &lt;strong&gt;World&lt;/strong&gt;"))
+            ClassicAssert.IsTrue(Html.Contains("&lt;strong&gt;Action&lt;/strong&gt;"))
+            ClassicAssert.IsTrue(Html.Contains("&lt;a hef=&quot;/test/&quot;&gt;Test&lt;/a&gt;"))
 
             '- test with HTML encoding except defined columns
             Html = CompuMaster.Data.DataTables.ConvertToHtmlTable(dt, NullString, NullString, NullString, True, HtmlColumns)
-            Assert.IsTrue(Html.Contains("Hello &lt;strong&gt;World&lt;/strong&gt;"))
-            Assert.IsTrue(Html.Contains("<strong>Action</strong>"))
-            Assert.IsTrue(Html.Contains("<a hef=""/test/"">Test</a>"))
+            ClassicAssert.IsTrue(Html.Contains("Hello &lt;strong&gt;World&lt;/strong&gt;"))
+            ClassicAssert.IsTrue(Html.Contains("<strong>Action</strong>"))
+            ClassicAssert.IsTrue(Html.Contains("<a hef=""/test/"">Test</a>"))
 
             '## Arguments list for DataRow array
             Html = CompuMaster.Data.DataTables.ConvertToHtmlTable(RowArray, dt.TableName, NullString, NullString, NullString)
-            Assert.AreEqual(ExpectedHtml, Html)
-            Assert.IsTrue(Html.Contains("Hello <strong>World</strong>"))
-            Assert.IsTrue(Html.Contains("<strong>Action</strong>"))
-            Assert.IsTrue(Html.Contains("<a hef=""/test/"">Test</a>"))
+            ClassicAssert.AreEqual(ExpectedHtml, Html)
+            ClassicAssert.IsTrue(Html.Contains("Hello <strong>World</strong>"))
+            ClassicAssert.IsTrue(Html.Contains("<strong>Action</strong>"))
+            ClassicAssert.IsTrue(Html.Contains("<a hef=""/test/"">Test</a>"))
 
             '- test with HTML encoding
             Html = CompuMaster.Data.DataTables.ConvertToHtmlTable(RowArray, dt.TableName, NullString, NullString, NullString, True)
-            Assert.IsTrue(Html.Contains("Hello &lt;strong&gt;World&lt;/strong&gt;"))
-            Assert.IsTrue(Html.Contains("&lt;strong&gt;Action&lt;/strong&gt;"))
-            Assert.IsTrue(Html.Contains("&lt;a hef=&quot;/test/&quot;&gt;Test&lt;/a&gt;"))
+            ClassicAssert.IsTrue(Html.Contains("Hello &lt;strong&gt;World&lt;/strong&gt;"))
+            ClassicAssert.IsTrue(Html.Contains("&lt;strong&gt;Action&lt;/strong&gt;"))
+            ClassicAssert.IsTrue(Html.Contains("&lt;a hef=&quot;/test/&quot;&gt;Test&lt;/a&gt;"))
 
             '- test with HTML encoding except defined columns
             Html = CompuMaster.Data.DataTables.ConvertToHtmlTable(dt, NullString, NullString, NullString, True, HtmlColumns)
-            Assert.IsTrue(Html.Contains("Hello &lt;strong&gt;World&lt;/strong&gt;"))
-            Assert.IsTrue(Html.Contains("<strong>Action</strong>"))
-            Assert.IsTrue(Html.Contains("<a hef=""/test/"">Test</a>"))
+            ClassicAssert.IsTrue(Html.Contains("Hello &lt;strong&gt;World&lt;/strong&gt;"))
+            ClassicAssert.IsTrue(Html.Contains("<strong>Action</strong>"))
+            ClassicAssert.IsTrue(Html.Contains("<a hef=""/test/"">Test</a>"))
 
         End Sub
 
@@ -385,7 +386,7 @@ Namespace CompuMaster.Test.Data
 
 
             Dim html As String = CompuMaster.Data.DataTables.ConvertToPlainTextTable(dt)
-            Assert.IsNotEmpty(html)
+            ClassicAssert.IsNotEmpty(html)
 
             Dim dt2 As New DataTable
             dt2.Columns.Add("id", GetType(Integer))
@@ -404,7 +405,7 @@ Namespace CompuMaster.Test.Data
             dt2.AcceptChanges()
             dt2.Rows(1).Delete()
             Dim html2 As String = CompuMaster.Data.DataTables.ConvertToPlainTextTable(dt2)
-            Assert.IsNotEmpty(html2)
+            ClassicAssert.IsNotEmpty(html2)
 
         End Sub
 
@@ -555,7 +556,7 @@ Namespace CompuMaster.Test.Data
                 "23|Hello World|System.Collections.Generic.Dictionary`2[System.String,System.String]" & System.Environment.NewLine
             ConvertedPlainTextTable = CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(dt.Rows(0))
             Console.WriteLine(ConvertedPlainTextTable)
-            Assert.AreEqual(Expected, ConvertedPlainTextTable)
+            ClassicAssert.AreEqual(Expected, ConvertedPlainTextTable)
 
             Expected =
                 "id|Hi|dict" & System.Environment.NewLine &
@@ -563,7 +564,7 @@ Namespace CompuMaster.Test.Data
                 "  |  |    " & System.Environment.NewLine
             ConvertedPlainTextTable = CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(dt.Rows(1))
             Console.WriteLine(ConvertedPlainTextTable)
-            Assert.AreEqual(Expected, ConvertedPlainTextTable)
+            ClassicAssert.AreEqual(Expected, ConvertedPlainTextTable)
 
             'Real data table: quiz questions
             dt = TestTable2()
@@ -614,7 +615,7 @@ Namespace CompuMaster.Test.Data
                     "6 |GOTCHA!        " & System.Environment.NewLine &
                     "7 |Gotcha!        " & System.Environment.NewLine
             End If
-            Assert.AreEqual(Expected, ConvertedPlainTextTable)
+            ClassicAssert.AreEqual(Expected, ConvertedPlainTextTable)
 
             ConvertedPlainTextTable = CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(dt, OutputOptions(3, rowNumbering))
             Console.WriteLine(ConvertedPlainTextTable)
@@ -641,7 +642,7 @@ Namespace CompuMaster.Test.Data
                     "6  |GOTCHA!        " & System.Environment.NewLine &
                     "7  |Gotcha!        " & System.Environment.NewLine
             End If
-            Assert.AreEqual(Expected, ConvertedPlainTextTable)
+            ClassicAssert.AreEqual(Expected, ConvertedPlainTextTable)
 
             ConvertedPlainTextTable = CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(dt, OutputOptions(New Integer?(), rowNumbering)) 'no minimum column width -> should be handled as min. 2 chars (hard-coded)
             Console.WriteLine(ConvertedPlainTextTable)
@@ -668,7 +669,7 @@ Namespace CompuMaster.Test.Data
                     "6 |GOTCHA!        " & System.Environment.NewLine &
                     "7 |Gotcha!        " & System.Environment.NewLine
             End If
-            Assert.AreEqual(Expected, ConvertedPlainTextTable)
+            ClassicAssert.AreEqual(Expected, ConvertedPlainTextTable)
 
         End Sub
 
@@ -698,33 +699,33 @@ Namespace CompuMaster.Test.Data
         <Test> <Obsolete> Public Sub InsertColumnIntoClonedTable()
             Dim c As DataTable
             Dim t As DataTable = TestTable1()
-            Assert.AreEqual(New String() {"ID", "Value"}, CompuMaster.Data.DataTables.AllColumnNames(t))
+            ClassicAssert.AreEqual(New String() {"ID", "Value"}, CompuMaster.Data.DataTables.AllColumnNames(t))
 
             c = CompuMaster.Data.DataTables.InsertColumnIntoClonedTable(t, 2, New DataColumn("Insert2"))
-            Assert.AreEqual(New String() {"ID", "Value"}, CompuMaster.Data.DataTables.AllColumnNames(t), "Origin table must remain untouched")
-            Assert.AreEqual(New String() {"ID", "Value", "Insert2"}, CompuMaster.Data.DataTables.AllColumnNames(c))
+            ClassicAssert.AreEqual(New String() {"ID", "Value"}, CompuMaster.Data.DataTables.AllColumnNames(t), "Origin table must remain untouched")
+            ClassicAssert.AreEqual(New String() {"ID", "Value", "Insert2"}, CompuMaster.Data.DataTables.AllColumnNames(c))
 
             c = CompuMaster.Data.DataTables.InsertColumnIntoClonedTable(c, 1, New DataColumn("Insert1"))
-            Assert.AreEqual(New String() {"ID", "Insert1", "Value", "Insert2"}, CompuMaster.Data.DataTables.AllColumnNames(c))
+            ClassicAssert.AreEqual(New String() {"ID", "Insert1", "Value", "Insert2"}, CompuMaster.Data.DataTables.AllColumnNames(c))
 
             c = CompuMaster.Data.DataTables.InsertColumnIntoClonedTable(c, 0, New DataColumn("Insert0"))
-            Assert.AreEqual(New String() {"Insert0", "ID", "Insert1", "Value", "Insert2"}, CompuMaster.Data.DataTables.AllColumnNames(c))
-            Assert.AreEqual(New String() {"ID", "Value"}, CompuMaster.Data.DataTables.AllColumnNames(t), "Origin table must remain untouched")
+            ClassicAssert.AreEqual(New String() {"Insert0", "ID", "Insert1", "Value", "Insert2"}, CompuMaster.Data.DataTables.AllColumnNames(c))
+            ClassicAssert.AreEqual(New String() {"ID", "Value"}, CompuMaster.Data.DataTables.AllColumnNames(t), "Origin table must remain untouched")
         End Sub
 
         <Test> Public Sub InsertColumn()
             Dim t As DataTable
             t = TestTable1()
-            Assert.AreEqual(New String() {"ID", "Value"}, CompuMaster.Data.DataTables.AllColumnNames(t))
+            ClassicAssert.AreEqual(New String() {"ID", "Value"}, CompuMaster.Data.DataTables.AllColumnNames(t))
 
             CompuMaster.Data.DataTables.InsertColumn(t, 2, New DataColumn("Insert2"))
-            Assert.AreEqual(New String() {"ID", "Value", "Insert2"}, CompuMaster.Data.DataTables.AllColumnNames(t))
+            ClassicAssert.AreEqual(New String() {"ID", "Value", "Insert2"}, CompuMaster.Data.DataTables.AllColumnNames(t))
 
             CompuMaster.Data.DataTables.InsertColumn(t, 1, New DataColumn("Insert1"))
-            Assert.AreEqual(New String() {"ID", "Insert1", "Value", "Insert2"}, CompuMaster.Data.DataTables.AllColumnNames(t))
+            ClassicAssert.AreEqual(New String() {"ID", "Insert1", "Value", "Insert2"}, CompuMaster.Data.DataTables.AllColumnNames(t))
 
             CompuMaster.Data.DataTables.InsertColumn(t, 0, New DataColumn("Insert0"))
-            Assert.AreEqual(New String() {"Insert0", "ID", "Insert1", "Value", "Insert2"}, CompuMaster.Data.DataTables.AllColumnNames(t))
+            ClassicAssert.AreEqual(New String() {"Insert0", "ID", "Insert1", "Value", "Insert2"}, CompuMaster.Data.DataTables.AllColumnNames(t))
         End Sub
 
         <Test()> Public Sub CopyDataTableWithSubsetOfRows()
@@ -736,12 +737,12 @@ Namespace CompuMaster.Test.Data
             dt.Rows.Add(New String() {"l", "d"})
 
             Dim dt2 As DataTable = CompuMaster.Data.DataTables.CopyDataTableWithSubsetOfRows(dt, 2)
-            Assert.AreEqual(2, dt2.Rows.Count())
-            Assert.AreEqual("hi", dt.Rows.Item(0).Item(0))
-            Assert.AreEqual("hix", dt.Rows.Item(1).Item(0))
+            ClassicAssert.AreEqual(2, dt2.Rows.Count())
+            ClassicAssert.AreEqual("hi", dt.Rows.Item(0).Item(0))
+            ClassicAssert.AreEqual("hix", dt.Rows.Item(1).Item(0))
 
             dt2 = CompuMaster.Data.DataTables.CopyDataTableWithSubsetOfRows(dt, 1, 2)
-            Assert.AreEqual("l", dt2.Rows.Item(1).Item(0))
+            ClassicAssert.AreEqual("l", dt2.Rows.Item(1).Item(0))
 
         End Sub
 
@@ -754,12 +755,12 @@ Namespace CompuMaster.Test.Data
             dt.Rows.Add(New String() {"l", "d"})
 
             Dim dt2 As DataTable = CompuMaster.Data.DataTables.CopyDataTableWithSubsetOfRows(New DataRow() {dt.Rows(0), dt.Rows(1)})
-            Assert.AreEqual(2, dt2.Rows.Count())
-            Assert.AreEqual("hi", dt.Rows.Item(0).Item(0))
-            Assert.AreEqual("hix", dt.Rows.Item(1).Item(0))
+            ClassicAssert.AreEqual(2, dt2.Rows.Count())
+            ClassicAssert.AreEqual("hi", dt.Rows.Item(0).Item(0))
+            ClassicAssert.AreEqual("hix", dt.Rows.Item(1).Item(0))
 
             dt2 = CompuMaster.Data.DataTables.CopyDataTableWithSubsetOfRows(New DataRow() {dt.Rows(1), dt.Rows(2)})
-            Assert.AreEqual("l", dt2.Rows.Item(1).Item(0))
+            ClassicAssert.AreEqual("l", dt2.Rows.Item(1).Item(0))
 
         End Sub
 
@@ -777,8 +778,8 @@ Namespace CompuMaster.Test.Data
             Dim row2 As DataRow
             row2 = CompuMaster.Data.DataTables.CreateDataRowClone(dt.Rows(0))
 
-            Assert.AreEqual(9, row2.Item(0))
-            Assert.AreEqual("test", row2.Item(1))
+            ClassicAssert.AreEqual(9, row2.Item(0))
+            ClassicAssert.AreEqual("test", row2.Item(1))
         End Sub
 
         <Test()> Public Sub CreateDataTableClone()
@@ -797,20 +798,20 @@ Namespace CompuMaster.Test.Data
             dt.Rows.Add(row)
 
             dt2 = CompuMaster.Data.DataTables.CreateDataTableClone(dt)
-            Assert.AreEqual(1, dt2.Rows.Count())
-            Assert.AreEqual(2, dt2.Columns.Count())
+            ClassicAssert.AreEqual(1, dt2.Rows.Count())
+            ClassicAssert.AreEqual(2, dt2.Columns.Count())
 
-            Assert.AreEqual(7, dt2.Rows.Item(0).Item(0))
-            Assert.AreEqual("Test", dt2.Rows.Item(0).Item(1))
+            ClassicAssert.AreEqual(7, dt2.Rows.Item(0).Item(0))
+            ClassicAssert.AreEqual("Test", dt2.Rows.Item(0).Item(1))
 
             dt.Rows.Add(New Object() {8, "TestL2"})
 
 
             dt2 = CompuMaster.Data.DataTables.CreateDataTableClone(dt, "hi = 'TestL2'")
-            Assert.AreEqual(1, dt2.Rows.Count())
+            ClassicAssert.AreEqual(1, dt2.Rows.Count())
 
             dt2 = CompuMaster.Data.DataTables.CreateDataTableClone(dt, CType(Nothing, String), "id DESC")
-            Assert.AreEqual(8, dt2.Rows.Item(0).Item(0))
+            ClassicAssert.AreEqual(8, dt2.Rows.Item(0).Item(0))
 
 
             dt.Rows.Add(New Object() {9, "L"})
@@ -818,7 +819,7 @@ Namespace CompuMaster.Test.Data
             dt.Rows.Add(New Object() {11, "Lcx"})
 
             dt2 = CompuMaster.Data.DataTables.CreateDataTableClone(dt, Nothing, Nothing, 3)
-            Assert.AreEqual(3, dt2.Rows.Count())
+            ClassicAssert.AreEqual(3, dt2.Rows.Count())
 
             Dim first As New DataTable
             Dim second As New DataTable
@@ -834,7 +835,7 @@ Namespace CompuMaster.Test.Data
                                                              CompuMaster.Data.DataTables.RequestedSchemaChangesForUnusedColumns.None, CompuMaster.Data.DataTables.RequestedSchemaChangesForExistingColumns.None,
                                                              CompuMaster.Data.DataTables.RequestedSchemaChangesForAdditionalColumns.Add)
 
-            '  Assert.AreEqual(1, second.PrimaryKey.GetLength(0))
+            '  ClassicAssert.AreEqual(1, second.PrimaryKey.GetLength(0))
 
 
 
@@ -869,9 +870,9 @@ Namespace CompuMaster.Test.Data
             CompuMaster.Data.DataTables.CreateDataTableClone(merge_source, merge_dest, Nothing, Nothing, Nothing, CompuMaster.Data.DataTables.RequestedRowChanges.KeepExistingRowsInDestinationTableAndAddRemoveUpdateChangedRows,
                                                              True, CompuMaster.Data.DataTables.RequestedSchemaChangesForUnusedColumns.None, CompuMaster.Data.DataTables.RequestedSchemaChangesForExistingColumns.None,
                                                              CompuMaster.Data.DataTables.RequestedSchemaChangesForAdditionalColumns.None)
-            Assert.AreEqual(1, merge_dest.Rows.Count())
-            Assert.AreEqual(2, merge_dest.Columns.Count())
-            Assert.AreEqual("hello!", merge_dest.Rows(0).Item(1))
+            ClassicAssert.AreEqual(1, merge_dest.Rows.Count())
+            ClassicAssert.AreEqual(2, merge_dest.Columns.Count())
+            ClassicAssert.AreEqual("hello!", merge_dest.Rows(0).Item(1))
 
             merge_source = oldSource
             merge_dest = oldDest
@@ -879,10 +880,10 @@ Namespace CompuMaster.Test.Data
             CompuMaster.Data.DataTables.CreateDataTableClone(merge_source, merge_dest, Nothing, Nothing, Nothing, CompuMaster.Data.DataTables.RequestedRowChanges.KeepExistingRowsInDestinationTableAndAddRemoveUpdateChangedRows,
                                                              True, CompuMaster.Data.DataTables.RequestedSchemaChangesForUnusedColumns.None, CompuMaster.Data.DataTables.RequestedSchemaChangesForExistingColumns.None,
                                                              CompuMaster.Data.DataTables.RequestedSchemaChangesForAdditionalColumns.Add)
-            Assert.AreEqual(3, merge_dest.Columns.Count())
-            Assert.AreEqual(1, merge_dest.Rows.Count())
-            Assert.AreEqual("hello!", merge_dest.Rows(0).Item(1))
-            Assert.AreEqual("missing", merge_dest.Rows(0).Item(2))
+            ClassicAssert.AreEqual(3, merge_dest.Columns.Count())
+            ClassicAssert.AreEqual(1, merge_dest.Rows.Count())
+            ClassicAssert.AreEqual("hello!", merge_dest.Rows(0).Item(1))
+            ClassicAssert.AreEqual("missing", merge_dest.Rows(0).Item(2))
 
 
             Dim merge_source2 As New DataTable
@@ -909,8 +910,8 @@ Namespace CompuMaster.Test.Data
             CompuMaster.Data.DataTables.CreateDataTableClone(merge_source2, merge_dest2, Nothing, Nothing, Nothing, CompuMaster.Data.DataTables.RequestedRowChanges.KeepExistingRowsInDestinationTableAndAddRemoveUpdateChangedRows,
                                                              True, CompuMaster.Data.DataTables.RequestedSchemaChangesForUnusedColumns.None,
                                                              CompuMaster.Data.DataTables.RequestedSchemaChangesForExistingColumns.Update, CompuMaster.Data.DataTables.RequestedSchemaChangesForAdditionalColumns.None)
-            Assert.AreEqual("hello!", merge_dest2.Rows(0).Item(1))
-            Assert.AreEqual(2, merge_dest2.Columns.Count)
+            ClassicAssert.AreEqual("hello!", merge_dest2.Rows(0).Item(1))
+            ClassicAssert.AreEqual(2, merge_dest2.Columns.Count)
 
 
             Dim merge_source3 As New DataTable
@@ -943,7 +944,7 @@ Namespace CompuMaster.Test.Data
             merge_dest3.AcceptChanges()
 
             Dim Cloned_merge_dest3 As DataTable = CompuMaster.Data.DataTables.CreateDataTableClone(merge_dest3)
-            Assert.AreEqual(TableStatistics(merge_dest3), TableStatistics(Cloned_merge_dest3))
+            ClassicAssert.AreEqual(TableStatistics(merge_dest3), TableStatistics(Cloned_merge_dest3))
 
             'Show table statistics
             System.Console.WriteLine("TABLE: merge_source3")
@@ -981,26 +982,26 @@ Namespace CompuMaster.Test.Data
             System.Console.WriteLine(System.Environment.NewLine)
 
 
-            Assert.AreEqual(5, merge_dest3.Rows.Count)
-            Assert.AreEqual(3, merge_dest3.Columns.Count)
+            ClassicAssert.AreEqual(5, merge_dest3.Rows.Count)
+            ClassicAssert.AreEqual(3, merge_dest3.Columns.Count)
 
             'Checking sort after merge (only source)
-            Assert.AreEqual(1, merge_dest3.Rows.Item(0).Item(0))
-            Assert.AreEqual(9, merge_dest3.Rows.Item(1).Item(0))
-            Assert.AreEqual(10, merge_dest3.Rows.Item(2).Item(0))
+            ClassicAssert.AreEqual(1, merge_dest3.Rows.Item(0).Item(0))
+            ClassicAssert.AreEqual(9, merge_dest3.Rows.Item(1).Item(0))
+            ClassicAssert.AreEqual(10, merge_dest3.Rows.Item(2).Item(0))
             'Assert.AreEqual(4, merge_dest3.Rows.Item(3).Item(0))
             'Assert.AreEqual(5, merge_dest3.Rows.Item(4)l.Item(0))
-            Assert.AreEqual(2, merge_dest3.Rows.Item(3).Item(0))
-            Assert.AreEqual(3, merge_dest3.Rows.Item(4).Item(0))
+            ClassicAssert.AreEqual(2, merge_dest3.Rows.Item(3).Item(0))
+            ClassicAssert.AreEqual(3, merge_dest3.Rows.Item(4).Item(0))
 
             'Ensure in general correct merge
-            Assert.AreEqual("Text1", merge_dest3.Rows.Item(0).Item(1))
-            Assert.AreEqual("Not touched", merge_dest3.Rows.Item(1).Item(1))
-            Assert.AreEqual("...", merge_dest3.Rows.Item(2).Item(1))
+            ClassicAssert.AreEqual("Text1", merge_dest3.Rows.Item(0).Item(1))
+            ClassicAssert.AreEqual("Not touched", merge_dest3.Rows.Item(1).Item(1))
+            ClassicAssert.AreEqual("...", merge_dest3.Rows.Item(2).Item(1))
             'Assert.AreEqual("Text4", merge_dest3.Rows.Item(3).Item(1))
             'Assert.AreEqual("Text5", merge_dest3.Rows.Item(4).Item(1))
-            Assert.AreEqual("Text2", merge_dest3.Rows.Item(3).Item(1))
-            Assert.AreEqual("Text3", merge_dest3.Rows.Item(4).Item(1))
+            ClassicAssert.AreEqual("Text2", merge_dest3.Rows.Item(3).Item(1))
+            ClassicAssert.AreEqual("Text3", merge_dest3.Rows.Item(4).Item(1))
 
             CompuMaster.Data.DataTables.CreateDataTableClone(merge_source3, merge_dest3, "C = 'KEEP-THIS-RECORD'", "A ASC", 3, CompuMaster.Data.DataTables.RequestedRowChanges.KeepExistingRowsInDestinationTableAndAddRemoveUpdateChangedRows,
                                                              True, CompuMaster.Data.DataTables.RequestedSchemaChangesForUnusedColumns.None,
@@ -1011,7 +1012,7 @@ Namespace CompuMaster.Test.Data
             System.Console.WriteLine(System.Environment.NewLine)
             System.Console.WriteLine(System.Environment.NewLine)
 
-            Assert.AreEqual(3, merge_dest3.Rows.Count(), "RowCount check")
+            ClassicAssert.AreEqual(3, merge_dest3.Rows.Count(), "RowCount check")
 
             Dim big As New DataTable
             Dim bigCopy As New DataTable
@@ -1022,9 +1023,9 @@ Namespace CompuMaster.Test.Data
             CompuMaster.Data.DataTables.CreateDataTableClone(big, bigCopy, "", "", Nothing, CompuMaster.Data.DataTables.RequestedRowChanges.DropExistingRowsInDestinationTableAndInsertNewRows, False,
                                                              CompuMaster.Data.DataTables.RequestedSchemaChangesForUnusedColumns.Remove, CompuMaster.Data.DataTables.RequestedSchemaChangesForExistingColumns.None,
                                                              CompuMaster.Data.DataTables.RequestedSchemaChangesForAdditionalColumns.Add)
-            Assert.AreEqual(big.Columns.Count, bigCopy.Columns.Count)
-            Assert.AreEqual(big.Rows.Count, bigCopy.Rows.Count)
-            Assert.AreEqual(CompuMaster.Data.DataTables.ConvertToPlainTextTable(big.Rows, "Table"), CompuMaster.Data.DataTables.ConvertToPlainTextTable(bigCopy.Rows, "Table"))
+            ClassicAssert.AreEqual(big.Columns.Count, bigCopy.Columns.Count)
+            ClassicAssert.AreEqual(big.Rows.Count, bigCopy.Rows.Count)
+            ClassicAssert.AreEqual(CompuMaster.Data.DataTables.ConvertToPlainTextTable(big.Rows, "Table"), CompuMaster.Data.DataTables.ConvertToPlainTextTable(bigCopy.Rows, "Table"))
 
             bigCopy.Rows.Item(0).Item(1) = 29
             bigCopy.Rows.Item(1020).Item(1) = 20
@@ -1062,11 +1063,11 @@ Namespace CompuMaster.Test.Data
                                                              False, CompuMaster.Data.DataTables.RequestedSchemaChangesForUnusedColumns.None, CompuMaster.Data.DataTables.RequestedSchemaChangesForExistingColumns.None,
                                                              CompuMaster.Data.DataTables.RequestedSchemaChangesForAdditionalColumns.Add)
 
-            Assert.AreEqual(bigCopy.Rows.Count(), bigCopy2.Rows.Count())
-            Assert.AreEqual(bigCopy.Columns.Count, bigCopy2.Columns.Count)
-            Assert.AreEqual(20, bigCopy2.Rows.Item(1020).Item(1))
-            Assert.AreEqual(55, bigCopy2.Rows.Item(900).Item(1))
-            Assert.AreEqual(CompuMaster.Data.DataTables.ConvertToPlainTextTable(bigCopy.Rows, "Table"), CompuMaster.Data.DataTables.ConvertToPlainTextTable(bigCopy2.Rows, "Table"))
+            ClassicAssert.AreEqual(bigCopy.Rows.Count(), bigCopy2.Rows.Count())
+            ClassicAssert.AreEqual(bigCopy.Columns.Count, bigCopy2.Columns.Count)
+            ClassicAssert.AreEqual(20, bigCopy2.Rows.Item(1020).Item(1))
+            ClassicAssert.AreEqual(55, bigCopy2.Rows.Item(900).Item(1))
+            ClassicAssert.AreEqual(CompuMaster.Data.DataTables.ConvertToPlainTextTable(bigCopy.Rows, "Table"), CompuMaster.Data.DataTables.ConvertToPlainTextTable(bigCopy2.Rows, "Table"))
 
             System.Console.WriteLine("TABLE: bigCopy2")
             System.Console.WriteLine(TableStatistics(bigCopy2))
@@ -1136,43 +1137,43 @@ Namespace CompuMaster.Test.Data
 
             Dim list As ArrayList
             list = CompuMaster.Data.DataTables.FindUniqueValues(dt.Columns(0), False)
-            Assert.AreEqual("Sun", list(0))
-            Assert.AreEqual("Moon", list(1))
-            Assert.AreEqual("Saturn", list(2))
-            Assert.IsTrue(IsDBNull(list(3)), "Expected DbNull value")
-            Assert.AreEqual(4, list.Count)
+            ClassicAssert.AreEqual("Sun", list(0))
+            ClassicAssert.AreEqual("Moon", list(1))
+            ClassicAssert.AreEqual("Saturn", list(2))
+            ClassicAssert.IsTrue(IsDBNull(list(3)), "Expected DbNull value")
+            ClassicAssert.AreEqual(4, list.Count)
             list = CompuMaster.Data.DataTables.FindUniqueValues(dt.Columns(0), True)
-            Assert.AreEqual("Sun", list(0))
-            Assert.AreEqual("Moon", list(1))
-            Assert.AreEqual("Saturn", list(2))
-            Assert.AreEqual(3, list.Count)
+            ClassicAssert.AreEqual("Sun", list(0))
+            ClassicAssert.AreEqual("Moon", list(1))
+            ClassicAssert.AreEqual("Saturn", list(2))
+            ClassicAssert.AreEqual(3, list.Count)
             list = CompuMaster.Data.DataTables.FindUniqueValues(dt.Columns(0), False, New Object() {"Saturn", "Moon"})
-            Assert.AreEqual("Sun", list(0))
-            Assert.IsTrue(IsDBNull(list(1)), "Expected DbNull value")
-            Assert.AreEqual(2, list.Count)
+            ClassicAssert.AreEqual("Sun", list(0))
+            ClassicAssert.IsTrue(IsDBNull(list(1)), "Expected DbNull value")
+            ClassicAssert.AreEqual(2, list.Count)
             list = CompuMaster.Data.DataTables.FindUniqueValues(dt.Columns(0), True, New Object() {"Saturn", "Moon"})
-            Assert.AreEqual("Sun", list(0))
-            Assert.AreEqual(1, list.Count)
+            ClassicAssert.AreEqual("Sun", list(0))
+            ClassicAssert.AreEqual(1, list.Count)
 
             Dim stringList As List(Of String)
             stringList = CompuMaster.Data.DataTables.FindUniqueValues(Of String)(dt.Columns(0), False)
-            Assert.AreEqual("Sun", stringList(0))
-            Assert.AreEqual("Moon", stringList(1))
-            Assert.AreEqual("Saturn", stringList(2))
-            Assert.IsNull(stringList(3), "Expected DbNull->Null value")
-            Assert.AreEqual(4, stringList.Count)
+            ClassicAssert.AreEqual("Sun", stringList(0))
+            ClassicAssert.AreEqual("Moon", stringList(1))
+            ClassicAssert.AreEqual("Saturn", stringList(2))
+            ClassicAssert.IsNull(stringList(3), "Expected DbNull->Null value")
+            ClassicAssert.AreEqual(4, stringList.Count)
             stringList = CompuMaster.Data.DataTables.FindUniqueValues(Of String)(dt.Columns(0), True)
-            Assert.AreEqual("Sun", stringList(0))
-            Assert.AreEqual("Moon", stringList(1))
-            Assert.AreEqual("Saturn", stringList(2))
-            Assert.AreEqual(3, stringList.Count)
+            ClassicAssert.AreEqual("Sun", stringList(0))
+            ClassicAssert.AreEqual("Moon", stringList(1))
+            ClassicAssert.AreEqual("Saturn", stringList(2))
+            ClassicAssert.AreEqual(3, stringList.Count)
             stringList = CompuMaster.Data.DataTables.FindUniqueValues(Of String)(dt.Columns(0), False, New String() {"Saturn", "Moon"})
-            Assert.AreEqual("Sun", stringList(0))
-            Assert.IsNull(stringList(1), "Expected DbNull->Null value")
-            Assert.AreEqual(2, stringList.Count)
+            ClassicAssert.AreEqual("Sun", stringList(0))
+            ClassicAssert.IsNull(stringList(1), "Expected DbNull->Null value")
+            ClassicAssert.AreEqual(2, stringList.Count)
             stringList = CompuMaster.Data.DataTables.FindUniqueValues(Of String)(dt.Columns(0), True, New String() {"Saturn", "Moon"})
-            Assert.AreEqual("Sun", stringList(0))
-            Assert.AreEqual(1, stringList.Count)
+            ClassicAssert.AreEqual("Sun", stringList(0))
+            ClassicAssert.AreEqual(1, stringList.Count)
 
             'Add additional duplicates
             row = dt.NewRow
@@ -1205,34 +1206,34 @@ Namespace CompuMaster.Test.Data
 
             'Recheck again
             list = CompuMaster.Data.DataTables.FindUniqueValues(dt.Columns(0))
-            Assert.AreEqual("Sun", list(0))
-            Assert.AreEqual("Moon", list(1))
-            Assert.AreEqual("Saturn", list(2))
-            Assert.IsTrue(IsDBNull(list(3)), "Expected DbNull value")
-            Assert.AreEqual("", list(4))
-            Assert.AreEqual(5, list.Count)
+            ClassicAssert.AreEqual("Sun", list(0))
+            ClassicAssert.AreEqual("Moon", list(1))
+            ClassicAssert.AreEqual("Saturn", list(2))
+            ClassicAssert.IsTrue(IsDBNull(list(3)), "Expected DbNull value")
+            ClassicAssert.AreEqual("", list(4))
+            ClassicAssert.AreEqual(5, list.Count)
 
             list = CompuMaster.Data.DataTables.FindUniqueValues(dt.Columns(0), True)
-            Assert.AreEqual("Sun", list(0))
-            Assert.AreEqual("Moon", list(1))
-            Assert.AreEqual("Saturn", list(2))
-            Assert.AreEqual("", list(3))
-            Assert.AreEqual(4, list.Count)
+            ClassicAssert.AreEqual("Sun", list(0))
+            ClassicAssert.AreEqual("Moon", list(1))
+            ClassicAssert.AreEqual("Saturn", list(2))
+            ClassicAssert.AreEqual("", list(3))
+            ClassicAssert.AreEqual(4, list.Count)
 
             stringList = CompuMaster.Data.DataTables.FindUniqueValues(Of String)(dt.Columns(0))
-            Assert.AreEqual("Sun", stringList(0))
-            Assert.AreEqual("Moon", stringList(1))
-            Assert.AreEqual("Saturn", stringList(2))
-            Assert.IsNull(stringList(3), "Expected DbNull->Null value")
-            Assert.AreEqual("", stringList(4))
-            Assert.AreEqual(5, stringList.Count)
+            ClassicAssert.AreEqual("Sun", stringList(0))
+            ClassicAssert.AreEqual("Moon", stringList(1))
+            ClassicAssert.AreEqual("Saturn", stringList(2))
+            ClassicAssert.IsNull(stringList(3), "Expected DbNull->Null value")
+            ClassicAssert.AreEqual("", stringList(4))
+            ClassicAssert.AreEqual(5, stringList.Count)
 
             stringList = CompuMaster.Data.DataTables.FindUniqueValues(Of String)(dt.Columns(0), True)
-            Assert.AreEqual("Sun", stringList(0))
-            Assert.AreEqual("Moon", stringList(1))
-            Assert.AreEqual("Saturn", stringList(2))
-            Assert.AreEqual("", stringList(3))
-            Assert.AreEqual(4, stringList.Count)
+            ClassicAssert.AreEqual("Sun", stringList(0))
+            ClassicAssert.AreEqual("Moon", stringList(1))
+            ClassicAssert.AreEqual("Saturn", stringList(2))
+            ClassicAssert.AreEqual("", stringList(3))
+            ClassicAssert.AreEqual(4, stringList.Count)
         End Sub
 
         <Test()> Public Sub FindUniqueValues_TestStringListContainsNothingOrEmptyString()
@@ -1240,25 +1241,25 @@ Namespace CompuMaster.Test.Data
 
             '1st test suite: start with adding null/Nothing value
             L = New List(Of String)
-            Assert.False(L.Contains(""))
-            Assert.False(L.Contains(Nothing))
+            ClassicAssert.False(L.Contains(""))
+            ClassicAssert.False(L.Contains(Nothing))
             L.Add(Nothing)
-            Assert.False(L.Contains(""))
-            Assert.True(L.Contains(Nothing))
+            ClassicAssert.False(L.Contains(""))
+            ClassicAssert.True(L.Contains(Nothing))
             L.Add("")
-            Assert.True(L.Contains(""))
-            Assert.True(L.Contains(Nothing))
+            ClassicAssert.True(L.Contains(""))
+            ClassicAssert.True(L.Contains(Nothing))
 
             '2nd test suite: start with adding ""/EmptyString value
             L = New List(Of String)
-            Assert.False(L.Contains(""))
-            Assert.False(L.Contains(Nothing))
+            ClassicAssert.False(L.Contains(""))
+            ClassicAssert.False(L.Contains(Nothing))
             L.Add("")
-            Assert.True(L.Contains(""))
-            Assert.False(L.Contains(Nothing))
+            ClassicAssert.True(L.Contains(""))
+            ClassicAssert.False(L.Contains(Nothing))
             L.Add(Nothing)
-            Assert.True(L.Contains(""))
-            Assert.True(L.Contains(Nothing))
+            ClassicAssert.True(L.Contains(""))
+            ClassicAssert.True(L.Contains(Nothing))
 
         End Sub
 
@@ -1280,90 +1281,90 @@ Namespace CompuMaster.Test.Data
             lname = "Test"
             uname = CompuMaster.Data.DataTables.LookupUniqueColumnName(dt, lname)
             Console.WriteLine("New free unique column name: " & uname & " (lookup name: " & lname & ")")
-            Assert.IsNotEmpty(uname)
-            Assert.IsFalse(dt.Columns.Contains(uname))
+            ClassicAssert.IsNotEmpty(uname)
+            ClassicAssert.IsFalse(dt.Columns.Contains(uname))
             lname = "Test1"
             uname = CompuMaster.Data.DataTables.LookupUniqueColumnName(dt, lname)
             Console.WriteLine("New free unique column name: " & uname & " (lookup name: " & lname & ")")
-            Assert.IsNotEmpty(uname)
-            Assert.IsFalse(dt.Columns.Contains(uname))
-            Assert.AreEqual("Test1", uname)
+            ClassicAssert.IsNotEmpty(uname)
+            ClassicAssert.IsFalse(dt.Columns.Contains(uname))
+            ClassicAssert.AreEqual("Test1", uname)
             lname = "Test2"
             uname = CompuMaster.Data.DataTables.LookupUniqueColumnName(dt, lname)
             Console.WriteLine("New free unique column name: " & uname & " (lookup name: " & lname & ")")
-            Assert.IsNotEmpty(uname)
-            Assert.IsFalse(dt.Columns.Contains(uname))
+            ClassicAssert.IsNotEmpty(uname)
+            ClassicAssert.IsFalse(dt.Columns.Contains(uname))
             lname = "test2"
             uname = CompuMaster.Data.DataTables.LookupUniqueColumnName(dt, lname)
             Console.WriteLine("New free unique column name: " & uname & " (lookup name: " & lname & ")")
-            Assert.AreNotEqual("test2", uname)
-            Assert.IsNotEmpty(uname)
-            Assert.IsFalse(dt.Columns.Contains(uname))
+            ClassicAssert.AreNotEqual("test2", uname)
+            ClassicAssert.IsNotEmpty(uname)
+            ClassicAssert.IsFalse(dt.Columns.Contains(uname))
             lname = "Test4"
             uname = CompuMaster.Data.DataTables.LookupUniqueColumnName(dt, lname)
             Console.WriteLine("New free unique column name: " & uname & " (lookup name: " & lname & ")")
-            Assert.IsNotEmpty(uname)
-            Assert.IsFalse(dt.Columns.Contains(uname))
+            ClassicAssert.IsNotEmpty(uname)
+            ClassicAssert.IsFalse(dt.Columns.Contains(uname))
             lname = "Test14"
             uname = CompuMaster.Data.DataTables.LookupUniqueColumnName(dt, lname)
             Console.WriteLine("New free unique column name: " & uname & " (lookup name: " & lname & ")")
-            Assert.IsNotEmpty(uname)
-            Assert.IsFalse(dt.Columns.Contains(uname))
+            ClassicAssert.IsNotEmpty(uname)
+            ClassicAssert.IsFalse(dt.Columns.Contains(uname))
             lname = "ClientTable_"
             uname = CompuMaster.Data.DataTables.LookupUniqueColumnName(dt, lname)
             Console.WriteLine("New free unique column name: " & uname & " (lookup name: " & lname & ")")
-            Assert.IsNotEmpty(uname)
-            Assert.IsFalse(dt.Columns.Contains(uname))
+            ClassicAssert.IsNotEmpty(uname)
+            ClassicAssert.IsFalse(dt.Columns.Contains(uname))
             lname = "1"
             uname = CompuMaster.Data.DataTables.LookupUniqueColumnName(dt, lname)
             Console.WriteLine("New free unique column name: " & uname & " (lookup name: " & lname & ")")
-            Assert.IsNotEmpty(uname)
-            Assert.IsFalse(dt.Columns.Contains(uname))
+            ClassicAssert.IsNotEmpty(uname)
+            ClassicAssert.IsFalse(dt.Columns.Contains(uname))
             dt.Columns.Add("ClientTable_1")
             lname = "ClientTable_"
             uname = CompuMaster.Data.DataTables.LookupUniqueColumnName(dt, lname)
             Console.WriteLine("New free unique column name: " & uname & " (lookup name: " & lname & ")")
-            Assert.IsNotEmpty(uname)
-            Assert.IsFalse(dt.Columns.Contains(uname))
+            ClassicAssert.IsNotEmpty(uname)
+            ClassicAssert.IsFalse(dt.Columns.Contains(uname))
             lname = "1"
             uname = CompuMaster.Data.DataTables.LookupUniqueColumnName(dt, lname)
             Console.WriteLine("New free unique column name: " & uname & " (lookup name: " & lname & ")")
-            Assert.IsNotEmpty(uname)
-            Assert.IsFalse(dt.Columns.Contains(uname))
+            ClassicAssert.IsNotEmpty(uname)
+            ClassicAssert.IsFalse(dt.Columns.Contains(uname))
             lname = "ID"
             uname = CompuMaster.Data.DataTables.LookupUniqueColumnName(dt, lname)
             Console.WriteLine("New free unique column name: " & uname & " (lookup name: " & lname & ")")
-            Assert.IsNotEmpty(uname)
-            Assert.IsFalse(dt.Columns.Contains(uname))
+            ClassicAssert.IsNotEmpty(uname)
+            ClassicAssert.IsFalse(dt.Columns.Contains(uname))
             lname = "ClientTable_ID"
             uname = CompuMaster.Data.DataTables.LookupUniqueColumnName(dt, lname)
             Console.WriteLine("New free unique column name: " & uname & " (lookup name: " & lname & ")")
-            Assert.IsNotEmpty(uname)
-            Assert.IsFalse(dt.Columns.Contains(uname))
+            ClassicAssert.IsNotEmpty(uname)
+            ClassicAssert.IsFalse(dt.Columns.Contains(uname))
             lname = "clienttable_id"
             uname = CompuMaster.Data.DataTables.LookupUniqueColumnName(dt, lname)
             Console.WriteLine("New free unique column name: " & uname & " (lookup name: " & lname & ")")
-            Assert.AreNotEqual("clienttable_id", uname)
-            Assert.IsNotEmpty(uname)
-            Assert.IsFalse(dt.Columns.Contains(uname))
+            ClassicAssert.AreNotEqual("clienttable_id", uname)
+            ClassicAssert.IsNotEmpty(uname)
+            ClassicAssert.IsFalse(dt.Columns.Contains(uname))
             lname = "ClientTable_ID2"
             uname = CompuMaster.Data.DataTables.LookupUniqueColumnName(dt, lname)
             Console.WriteLine("New free unique column name: " & uname & " (lookup name: " & lname & ")")
-            Assert.IsNotEmpty(uname)
-            Assert.IsFalse(dt.Columns.Contains(uname))
+            ClassicAssert.IsNotEmpty(uname)
+            ClassicAssert.IsFalse(dt.Columns.Contains(uname))
             lname = "ClientTable_ID23"
             uname = CompuMaster.Data.DataTables.LookupUniqueColumnName(dt, lname)
             Console.WriteLine("New free unique column name: " & uname & " (lookup name: " & lname & ")")
-            Assert.IsNotEmpty(uname)
-            Assert.IsFalse(dt.Columns.Contains(uname))
+            ClassicAssert.IsNotEmpty(uname)
+            ClassicAssert.IsFalse(dt.Columns.Contains(uname))
         End Sub
 
         <Test> Public Sub LookupUniqueColumnName2()
             Dim DuplicatedColumnNames15 = New String() {"Column", "Column", "Column", "Column", "Column", "Column", "Column", "Column", "Column", "Column", "Column", "Column", "Column", "Column", "Column"}
             Dim ColumnsSimplyNumbered15 = New String() {"Column1", "Column2", "Column3", "Column4", "Column5", "Column6", "Column7", "Column8", "Column9", "Column10", "Column11", "Column12", "Column13", "Column14", "Column15"}
-            Assert.AreEqual("Column1", CompuMaster.Data.DataTables.LookupUniqueColumnName(DuplicatedColumnNames15, "Column"))
-            Assert.AreEqual("Column1", CompuMaster.Data.DataTables.LookupUniqueColumnName(DuplicatedColumnNames15, "Column1"))
-            Assert.AreEqual("Column16", CompuMaster.Data.DataTables.LookupUniqueColumnName(ColumnsSimplyNumbered15, "Column1"))
+            ClassicAssert.AreEqual("Column1", CompuMaster.Data.DataTables.LookupUniqueColumnName(DuplicatedColumnNames15, "Column"))
+            ClassicAssert.AreEqual("Column1", CompuMaster.Data.DataTables.LookupUniqueColumnName(DuplicatedColumnNames15, "Column1"))
+            ClassicAssert.AreEqual("Column16", CompuMaster.Data.DataTables.LookupUniqueColumnName(ColumnsSimplyNumbered15, "Column1"))
         End Sub
 
         <Test()> Public Sub CloneTableAndReArrangeDataColumns()
@@ -1381,44 +1382,44 @@ Namespace CompuMaster.Test.Data
             'TODO: all overloads'
 
             dt2 = CompuMaster.Data.DataTables.CloneTableAndReArrangeDataColumns(dt, New String() {"Test1"})
-            Assert.AreEqual(1, dt2.Columns.Count())
-            Assert.AreEqual(5, dt2.Rows.Count())
+            ClassicAssert.AreEqual(1, dt2.Columns.Count())
+            ClassicAssert.AreEqual(5, dt2.Rows.Count())
             StringAssert.IsMatch("Test1", dt2.Columns.Item(0).ColumnName)
-            Assert.AreEqual("Test9", dt2.Rows.Item(4).Item(0))
+            ClassicAssert.AreEqual("Test9", dt2.Rows.Item(4).Item(0))
 
         End Sub
 
         <Test()> Public Sub AddColumns()
             Dim dt As DataTable
             dt = Me.TestTable1()
-            Assert.AreEqual(2, dt.Columns.Count)
+            ClassicAssert.AreEqual(2, dt.Columns.Count)
 
             CompuMaster.Data.DataTables.AddColumns(dt, "SomeStringColumn")
-            Assert.AreEqual(3, dt.Columns.Count)
-            Assert.AreEqual("SomeStringColumn", dt.Columns(2).ColumnName)
-            Assert.AreEqual(GetType(String), dt.Columns(2).DataType)
+            ClassicAssert.AreEqual(3, dt.Columns.Count)
+            ClassicAssert.AreEqual("SomeStringColumn", dt.Columns(2).ColumnName)
+            ClassicAssert.AreEqual(GetType(String), dt.Columns(2).DataType)
 
             CompuMaster.Data.DataTables.AddColumns(dt, "SomeIntColumn", GetType(Integer))
-            Assert.AreEqual(4, dt.Columns.Count)
-            Assert.AreEqual("SomeIntColumn", dt.Columns(3).ColumnName)
-            Assert.AreEqual(GetType(Integer), dt.Columns(3).DataType)
+            ClassicAssert.AreEqual(4, dt.Columns.Count)
+            ClassicAssert.AreEqual("SomeIntColumn", dt.Columns(3).ColumnName)
+            ClassicAssert.AreEqual(GetType(Integer), dt.Columns(3).DataType)
 
             CompuMaster.Data.DataTables.AddColumns(dt, New String() {"SomeStringColumn1", "SomeStringColumn2"})
-            Assert.AreEqual(6, dt.Columns.Count)
-            Assert.AreEqual("SomeStringColumn1", dt.Columns(4).ColumnName)
-            Assert.AreEqual("SomeStringColumn2", dt.Columns(5).ColumnName)
-            Assert.AreEqual(GetType(String), dt.Columns(4).DataType)
-            Assert.AreEqual(GetType(String), dt.Columns(5).DataType)
+            ClassicAssert.AreEqual(6, dt.Columns.Count)
+            ClassicAssert.AreEqual("SomeStringColumn1", dt.Columns(4).ColumnName)
+            ClassicAssert.AreEqual("SomeStringColumn2", dt.Columns(5).ColumnName)
+            ClassicAssert.AreEqual(GetType(String), dt.Columns(4).DataType)
+            ClassicAssert.AreEqual(GetType(String), dt.Columns(5).DataType)
 
             CompuMaster.Data.DataTables.AddColumns(dt, New String() {"ID", "Value"}) 'already existing columns - nothing should be added
-            Assert.AreEqual(6, dt.Columns.Count)
+            ClassicAssert.AreEqual(6, dt.Columns.Count)
 
             CompuMaster.Data.DataTables.AddColumns(dt, New String() {"SomeIntegerColumn1", "SomeIntegerColumn2"}, GetType(Integer))
-            Assert.AreEqual(8, dt.Columns.Count)
-            Assert.AreEqual("SomeIntegerColumn1", dt.Columns(6).ColumnName)
-            Assert.AreEqual("SomeIntegerColumn2", dt.Columns(7).ColumnName)
-            Assert.AreEqual(GetType(Integer), dt.Columns(6).DataType)
-            Assert.AreEqual(GetType(Integer), dt.Columns(7).DataType)
+            ClassicAssert.AreEqual(8, dt.Columns.Count)
+            ClassicAssert.AreEqual("SomeIntegerColumn1", dt.Columns(6).ColumnName)
+            ClassicAssert.AreEqual("SomeIntegerColumn2", dt.Columns(7).ColumnName)
+            ClassicAssert.AreEqual(GetType(Integer), dt.Columns(6).DataType)
+            ClassicAssert.AreEqual(GetType(Integer), dt.Columns(7).DataType)
 
         End Sub
 
@@ -1429,9 +1430,9 @@ Namespace CompuMaster.Test.Data
             Dim row1 As DataRow = dt.NewRow
             row1.Item(0) = "D"
 
-            Assert.IsTrue(dt.Columns.Item(0).ColumnName = "SomeColumn")
+            ClassicAssert.IsTrue(dt.Columns.Item(0).ColumnName = "SomeColumn")
             CompuMaster.Data.DataTables.RemoveColumns(dt, New String() {"SomeColumn"})
-            Assert.AreEqual(0, dt.Columns.Count())
+            ClassicAssert.AreEqual(0, dt.Columns.Count())
         End Sub
 
         <Test()> Public Sub RemoveDuplicates()
@@ -1457,7 +1458,7 @@ Namespace CompuMaster.Test.Data
 
             CompuMaster.Data.DataTables.RemoveDuplicates(dt, "Something")
 
-            Assert.AreEqual(2, dt.Rows.Count())
+            ClassicAssert.AreEqual(2, dt.Rows.Count())
         End Sub
 
         <Test()> Public Sub RemoveRowsWithColumnValues()
@@ -1470,32 +1471,32 @@ Namespace CompuMaster.Test.Data
             dtTemplate.Rows.Add(New String() {"B", "Y"})
             dtTemplate.Rows.Add(New String() {"C", "X"})
             dtTemplate.Rows.Add(New Object() {DBNull.Value, "N"})
-            Assert.IsNotNull(dtTemplate.Rows(3)(0), "Not Nothing expected")
-            Assert.IsTrue(IsDBNull(dtTemplate.Rows(3)(0)), "DBNull expected")
+            ClassicAssert.IsNotNull(dtTemplate.Rows(3)(0), "Not Nothing expected")
+            ClassicAssert.IsTrue(IsDBNull(dtTemplate.Rows(3)(0)), "DBNull expected")
             dtTemplate.Rows.Add(New Object() {"", "N"})
             dtTemplate.Rows.Add(New Object() {Nothing, "N"})
-            Assert.IsNotNull(dtTemplate.Rows(5)(0), "Not Nothing expected because of .NET logic to translate into DBNull.value")
-            Assert.IsTrue(IsDBNull(dtTemplate.Rows(5)(0)), "DBNull expected because of .NET logic to translate into DBNull.value")
+            ClassicAssert.IsNotNull(dtTemplate.Rows(5)(0), "Not Nothing expected because of .NET logic to translate into DBNull.value")
+            ClassicAssert.IsTrue(IsDBNull(dtTemplate.Rows(5)(0)), "DBNull expected because of .NET logic to translate into DBNull.value")
 
             Console.WriteLine()
             Console.WriteLine("Test 1 with DBNull/Empty/Null")
             dt = CompuMaster.Data.DataTables.CreateDataTableClone(dtTemplate)
             CompuMaster.Data.DataTables.RemoveRowsWithColumnValues(dt.Columns(0), New Object() {DBNull.Value, "", Nothing})
             Console.WriteLine(CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(dt))
-            Assert.AreEqual(3, dt.Rows.Count())
-            Assert.AreEqual("A", dt.Rows.Item(0).Item(0))
-            Assert.AreEqual("B", dt.Rows.Item(1).Item(0))
-            Assert.AreEqual("C", dt.Rows.Item(2).Item(0))
+            ClassicAssert.AreEqual(3, dt.Rows.Count())
+            ClassicAssert.AreEqual("A", dt.Rows.Item(0).Item(0))
+            ClassicAssert.AreEqual("B", dt.Rows.Item(1).Item(0))
+            ClassicAssert.AreEqual("C", dt.Rows.Item(2).Item(0))
 
             Console.WriteLine()
             Console.WriteLine("Test 2 with DBNull/Empty/Null")
             dt = CompuMaster.Data.DataTables.CreateDataTableClone(dtTemplate)
             CompuMaster.Data.DataTables.RemoveRowsWithColumnValues(dt.Columns(0), New Object() {"A", "B", "C"})
             Console.WriteLine(CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(dt))
-            Assert.AreEqual(3, dt.Rows.Count())
-            Assert.AreEqual("N", dt.Rows.Item(0).Item(1))
-            Assert.AreEqual("N", dt.Rows.Item(1).Item(1))
-            Assert.AreEqual("N", dt.Rows.Item(2).Item(1))
+            ClassicAssert.AreEqual(3, dt.Rows.Count())
+            ClassicAssert.AreEqual("N", dt.Rows.Item(0).Item(1))
+            ClassicAssert.AreEqual("N", dt.Rows.Item(1).Item(1))
+            ClassicAssert.AreEqual("N", dt.Rows.Item(2).Item(1))
 
             Console.WriteLine()
             Console.WriteLine("Test 3 some simple tests")
@@ -1513,7 +1514,7 @@ Namespace CompuMaster.Test.Data
             dt.Rows.Add(row3)
             CompuMaster.Data.DataTables.RemoveRowsWithColumnValues(dt.Columns.Item(0), New String() {"YouCanDeleteThis"})
             Console.WriteLine(CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(dt))
-            Assert.AreEqual(1, dt.Rows.Count())
+            ClassicAssert.AreEqual(1, dt.Rows.Count())
 
         End Sub
 
@@ -1526,12 +1527,12 @@ Namespace CompuMaster.Test.Data
             dtTemplate.Rows.Add(New String() {"B", "Y"})
             dtTemplate.Rows.Add(New String() {"C", "X"})
             dtTemplate.Rows.Add(New Object() {DBNull.Value, "N"})
-            Assert.IsNotNull(dtTemplate.Rows(3)(0), "Not Nothing expected")
-            Assert.IsTrue(IsDBNull(dtTemplate.Rows(3)(0)), "DBNull expected")
+            ClassicAssert.IsNotNull(dtTemplate.Rows(3)(0), "Not Nothing expected")
+            ClassicAssert.IsTrue(IsDBNull(dtTemplate.Rows(3)(0)), "DBNull expected")
             dtTemplate.Rows.Add(New Object() {"", "N"})
             dtTemplate.Rows.Add(New Object() {Nothing, "N"})
-            Assert.IsNotNull(dtTemplate.Rows(5)(0), "Not Nothing expected because of .NET logic to translate into DBNull.value")
-            Assert.IsTrue(IsDBNull(dtTemplate.Rows(5)(0)), "DBNull expected because of .NET logic to translate into DBNull.value")
+            ClassicAssert.IsNotNull(dtTemplate.Rows(5)(0), "Not Nothing expected because of .NET logic to translate into DBNull.value")
+            ClassicAssert.IsTrue(IsDBNull(dtTemplate.Rows(5)(0)), "DBNull expected because of .NET logic to translate into DBNull.value")
             Dim dt As DataTable
 
             Console.WriteLine()
@@ -1539,20 +1540,20 @@ Namespace CompuMaster.Test.Data
             dt = CompuMaster.Data.DataTables.CreateDataTableClone(dtTemplate)
             CompuMaster.Data.DataTables.RemoveRowsWithWithoutRequiredValuesInColumn(dt.Columns(0), New Object() {DBNull.Value, "", Nothing})
             Console.WriteLine(CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(dt))
-            Assert.AreEqual(3, dt.Rows.Count())
-            Assert.AreEqual("N", dt.Rows.Item(0).Item(1))
-            Assert.AreEqual("N", dt.Rows.Item(1).Item(1))
-            Assert.AreEqual("N", dt.Rows.Item(2).Item(1))
+            ClassicAssert.AreEqual(3, dt.Rows.Count())
+            ClassicAssert.AreEqual("N", dt.Rows.Item(0).Item(1))
+            ClassicAssert.AreEqual("N", dt.Rows.Item(1).Item(1))
+            ClassicAssert.AreEqual("N", dt.Rows.Item(2).Item(1))
 
             Console.WriteLine()
             Console.WriteLine("Test 2 with DBNull/Empty/Null")
             dt = CompuMaster.Data.DataTables.CreateDataTableClone(dtTemplate)
             CompuMaster.Data.DataTables.RemoveRowsWithWithoutRequiredValuesInColumn(dt.Columns(0), New Object() {"A", "B", "C"})
             Console.WriteLine(CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(dt))
-            Assert.AreEqual(3, dt.Rows.Count())
-            Assert.AreEqual("A", dt.Rows.Item(0).Item(0))
-            Assert.AreEqual("B", dt.Rows.Item(1).Item(0))
-            Assert.AreEqual("C", dt.Rows.Item(2).Item(0))
+            ClassicAssert.AreEqual(3, dt.Rows.Count())
+            ClassicAssert.AreEqual("A", dt.Rows.Item(0).Item(0))
+            ClassicAssert.AreEqual("B", dt.Rows.Item(1).Item(0))
+            ClassicAssert.AreEqual("C", dt.Rows.Item(2).Item(0))
         End Sub
 
         <Test()> Public Sub RemoveRowsWithNoCorrespondingValueInComparisonTable()
@@ -1580,24 +1581,24 @@ Namespace CompuMaster.Test.Data
             dt = CompuMaster.Data.DataTables.CreateDataTableClone(dtTemplate)
             MethodResult = CompuMaster.Data.DataTables.RemoveRowsWithNoCorrespondingValueInComparisonTable(dt.Columns(0), dt2.Columns(0)).ToArray
             Console.WriteLine(CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(dt))
-            Assert.AreEqual(New Object() {"C", DBNull.Value}, MethodResult)
-            Assert.AreEqual(2, dt.Rows.Count())
-            Assert.AreEqual("A", dt.Rows.Item(0).Item(0))
-            Assert.AreEqual("B", dt.Rows.Item(1).Item(0))
-            Assert.AreEqual("Z", dt.Rows.Item(0).Item(1))
-            Assert.AreEqual("Y", dt.Rows.Item(1).Item(1))
+            ClassicAssert.AreEqual(New Object() {"C", DBNull.Value}, MethodResult)
+            ClassicAssert.AreEqual(2, dt.Rows.Count())
+            ClassicAssert.AreEqual("A", dt.Rows.Item(0).Item(0))
+            ClassicAssert.AreEqual("B", dt.Rows.Item(1).Item(0))
+            ClassicAssert.AreEqual("Z", dt.Rows.Item(0).Item(1))
+            ClassicAssert.AreEqual("Y", dt.Rows.Item(1).Item(1))
 
             Console.WriteLine()
             Console.WriteLine("Test 2 with DBNull at source but not at comparison table")
             dt = CompuMaster.Data.DataTables.CreateDataTableClone(dtTemplate)
             MethodResult = CompuMaster.Data.DataTables.RemoveRowsWithNoCorrespondingValueInComparisonTable(dt.Columns(0), dt2.Columns(0), True, False)
             Console.WriteLine(CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(dt))
-            Assert.AreEqual(New Object() {"C", DBNull.Value}, MethodResult)
-            Assert.AreEqual(2, dt.Rows.Count())
-            Assert.AreEqual("A", dt.Rows.Item(0).Item(0))
-            Assert.AreEqual("B", dt.Rows.Item(1).Item(0))
-            Assert.AreEqual("Z", dt.Rows.Item(0).Item(1))
-            Assert.AreEqual("Y", dt.Rows.Item(1).Item(1))
+            ClassicAssert.AreEqual(New Object() {"C", DBNull.Value}, MethodResult)
+            ClassicAssert.AreEqual(2, dt.Rows.Count())
+            ClassicAssert.AreEqual("A", dt.Rows.Item(0).Item(0))
+            ClassicAssert.AreEqual("B", dt.Rows.Item(1).Item(0))
+            ClassicAssert.AreEqual("Z", dt.Rows.Item(0).Item(1))
+            ClassicAssert.AreEqual("Y", dt.Rows.Item(1).Item(1))
 
             Console.WriteLine()
             Console.WriteLine("Test 3 with DBNull at both sides")
@@ -1605,14 +1606,14 @@ Namespace CompuMaster.Test.Data
             dt2.Rows.Add(New Object() {DBNull.Value, "N2"})
             MethodResult = CompuMaster.Data.DataTables.RemoveRowsWithNoCorrespondingValueInComparisonTable(dt.Columns(0), dt2.Columns(0), True, False)
             Console.WriteLine(CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(dt))
-            Assert.AreEqual(New Object() {"C"}, MethodResult)
-            Assert.AreEqual(3, dt.Rows.Count())
-            Assert.AreEqual("A", dt.Rows.Item(0).Item(0))
-            Assert.AreEqual("B", dt.Rows.Item(1).Item(0))
-            Assert.AreEqual(DBNull.Value, dt.Rows.Item(2).Item(0))
-            Assert.AreEqual("Z", dt.Rows.Item(0).Item(1))
-            Assert.AreEqual("Y", dt.Rows.Item(1).Item(1))
-            Assert.AreEqual("N", dt.Rows.Item(2).Item(1))
+            ClassicAssert.AreEqual(New Object() {"C"}, MethodResult)
+            ClassicAssert.AreEqual(3, dt.Rows.Count())
+            ClassicAssert.AreEqual("A", dt.Rows.Item(0).Item(0))
+            ClassicAssert.AreEqual("B", dt.Rows.Item(1).Item(0))
+            ClassicAssert.AreEqual(DBNull.Value, dt.Rows.Item(2).Item(0))
+            ClassicAssert.AreEqual("Z", dt.Rows.Item(0).Item(1))
+            ClassicAssert.AreEqual("Y", dt.Rows.Item(1).Item(1))
+            ClassicAssert.AreEqual("N", dt.Rows.Item(2).Item(1))
 
         End Sub
 
@@ -1640,35 +1641,35 @@ Namespace CompuMaster.Test.Data
             Console.WriteLine("Test 1 with DBNull at source but with removing source rows with DBNull")
             dt = CompuMaster.Data.DataTables.CreateDataTableClone(dtTemplate)
             MethodResult = CompuMaster.Data.DataTables.RemoveRowsWithCorrespondingValueInComparisonTable(dt.Columns(0), dt2.Columns(0))
-            Assert.AreEqual(3, MethodResult.Count)
+            ClassicAssert.AreEqual(3, MethodResult.Count)
             Console.WriteLine(CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(dt))
-            Assert.AreEqual(New Object() {"A", "B", DBNull.Value}, MethodResult)
-            Assert.AreEqual(1, dt.Rows.Count())
-            Assert.AreEqual("C", dt.Rows.Item(0).Item(0))
-            Assert.AreEqual("X", dt.Rows.Item(0).Item(1))
+            ClassicAssert.AreEqual(New Object() {"A", "B", DBNull.Value}, MethodResult)
+            ClassicAssert.AreEqual(1, dt.Rows.Count())
+            ClassicAssert.AreEqual("C", dt.Rows.Item(0).Item(0))
+            ClassicAssert.AreEqual("X", dt.Rows.Item(0).Item(1))
 
             Console.WriteLine()
             Console.WriteLine("Test 2 with DBNull at source but not at comparison table")
             dt = CompuMaster.Data.DataTables.CreateDataTableClone(dtTemplate)
             MethodResult = CompuMaster.Data.DataTables.RemoveRowsWithCorrespondingValueInComparisonTable(dt.Columns(0), dt2.Columns(0), True, False)
-            Assert.AreEqual(2, MethodResult.Count)
+            ClassicAssert.AreEqual(2, MethodResult.Count)
             Console.WriteLine(CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(dt))
-            Assert.AreEqual(2, dt.Rows.Count())
-            Assert.AreEqual("C", dt.Rows.Item(0).Item(0))
-            Assert.AreEqual("X", dt.Rows.Item(0).Item(1))
-            Assert.AreEqual(DBNull.Value, dt.Rows.Item(1).Item(0))
-            Assert.AreEqual("N", dt.Rows.Item(1).Item(1))
+            ClassicAssert.AreEqual(2, dt.Rows.Count())
+            ClassicAssert.AreEqual("C", dt.Rows.Item(0).Item(0))
+            ClassicAssert.AreEqual("X", dt.Rows.Item(0).Item(1))
+            ClassicAssert.AreEqual(DBNull.Value, dt.Rows.Item(1).Item(0))
+            ClassicAssert.AreEqual("N", dt.Rows.Item(1).Item(1))
 
             Console.WriteLine()
             Console.WriteLine("Test 3 with DBNull at both sides")
             dt = CompuMaster.Data.DataTables.CreateDataTableClone(dtTemplate)
             dt2.Rows.Add(New Object() {DBNull.Value, "N2"})
             MethodResult = CompuMaster.Data.DataTables.RemoveRowsWithCorrespondingValueInComparisonTable(dt.Columns(0), dt2.Columns(0), True, False)
-            Assert.AreEqual(3, MethodResult.Count)
+            ClassicAssert.AreEqual(3, MethodResult.Count)
             Console.WriteLine(CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(dt))
-            Assert.AreEqual(1, dt.Rows.Count())
-            Assert.AreEqual("C", dt.Rows.Item(0).Item(0))
-            Assert.AreEqual("X", dt.Rows.Item(0).Item(1))
+            ClassicAssert.AreEqual(1, dt.Rows.Count())
+            ClassicAssert.AreEqual("C", dt.Rows.Item(0).Item(0))
+            ClassicAssert.AreEqual("X", dt.Rows.Item(0).Item(1))
 
         End Sub
 
@@ -1677,7 +1678,7 @@ Namespace CompuMaster.Test.Data
             dt.Columns.Add("DummyColumn")
             Dim drow As DataRow = dt.NewRow
             dt.Rows.Add(drow)
-            Assert.AreEqual(0, CompuMaster.Data.DataTables.RowIndex(drow))
+            ClassicAssert.AreEqual(0, CompuMaster.Data.DataTables.RowIndex(drow))
 
         End Sub
 
@@ -1739,8 +1740,8 @@ Namespace CompuMaster.Test.Data
 
             Dim crossjoined As DataTable = CompuMaster.Data.DataTables.CrossJoinTables(TestTableSet.LeftTable, Nothing, TestTableSet.RightTable, Nothing)
             StringAssert.IsMatch("FourthCol", crossjoined.Columns.Item(3).ColumnName)
-            Assert.AreEqual("RightTest", crossjoined.Rows.Item(0).Item(3))
-            Assert.IsTrue(IsDBNull(crossjoined.Rows.Item(0).Item(2)))
+            ClassicAssert.AreEqual("RightTest", crossjoined.Rows.Item(0).Item(3))
+            ClassicAssert.IsTrue(IsDBNull(crossjoined.Rows.Item(0).Item(2)))
 
 
             Console.WriteLine("FULL-OUTER-JOINED TABLE CONTENTS")
@@ -1769,7 +1770,7 @@ Namespace CompuMaster.Test.Data
                     "--------+---------+--------+---------" & System.Environment.NewLine &
                     "Test    |Test2    |        |RightTest" & System.Environment.NewLine &
                     ""
-            Assert.AreEqual(ShallBeResult, CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(CrossJoined))
+            ClassicAssert.AreEqual(ShallBeResult, CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(CrossJoined))
 
         End Sub
 
@@ -1795,7 +1796,7 @@ Namespace CompuMaster.Test.Data
                     "Test2   |Test2Col2|        |RightTest2" & System.Environment.NewLine &
                     "Test2   |Test2Col2|        |RightTest3" & System.Environment.NewLine &
                     ""
-            Assert.AreEqual(ShallBeResult, CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(CrossJoined))
+            ClassicAssert.AreEqual(ShallBeResult, CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(CrossJoined))
 
         End Sub
 
@@ -1964,48 +1965,48 @@ Namespace CompuMaster.Test.Data
             Console.WriteLine(CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(FullOuterJoined))
 
             'Verify column (names)
-            Assert.AreEqual(5, FullOuterJoined.Columns.Count()) 'There must be exactly 5 columns '
+            ClassicAssert.AreEqual(5, FullOuterJoined.Columns.Count()) 'There must be exactly 5 columns '
             For i As Integer = 1 To 3
-                Assert.AreEqual("left" & i, FullOuterJoined.Columns(i - 1).ColumnName)
+                ClassicAssert.AreEqual("left" & i, FullOuterJoined.Columns(i - 1).ColumnName)
             Next i
             For i As Integer = 1 To 2
-                Assert.AreEqual("right" & i, FullOuterJoined.Columns(i + 2).ColumnName)
+                ClassicAssert.AreEqual("right" & i, FullOuterJoined.Columns(i + 2).ColumnName)
             Next i
 
             'Verify row (content)
-            Assert.AreEqual(11, FullOuterJoined.Rows.Count())
+            ClassicAssert.AreEqual(11, FullOuterJoined.Rows.Count())
             For i As Integer = 0 To 5
-                Assert.AreEqual(0 + i, CInt(FullOuterJoined.Rows(i)(0)))
-                Assert.AreEqual(1 + i, CInt(FullOuterJoined.Rows(i)(1)))
-                Assert.AreEqual(2 + i, CInt(FullOuterJoined.Rows(i)(2)))
-                Assert.AreEqual(0 + i, CInt(FullOuterJoined.Rows(i)(3)))
-                Assert.AreEqual(10 + i, CInt(FullOuterJoined.Rows(i)(4)))
+                ClassicAssert.AreEqual(0 + i, CInt(FullOuterJoined.Rows(i)(0)))
+                ClassicAssert.AreEqual(1 + i, CInt(FullOuterJoined.Rows(i)(1)))
+                ClassicAssert.AreEqual(2 + i, CInt(FullOuterJoined.Rows(i)(2)))
+                ClassicAssert.AreEqual(0 + i, CInt(FullOuterJoined.Rows(i)(3)))
+                ClassicAssert.AreEqual(10 + i, CInt(FullOuterJoined.Rows(i)(4)))
             Next i
-            Assert.AreEqual(567, CInt(FullOuterJoined.Rows(6)(0)))
-            Assert.AreEqual(65527, CInt(FullOuterJoined.Rows(6)(1)))
-            Assert.AreEqual(True, IsDBNull(FullOuterJoined.Rows(6)(2)))
-            Assert.AreEqual(True, IsDBNull(FullOuterJoined.Rows(6)(3)))
-            Assert.AreEqual(True, IsDBNull(FullOuterJoined.Rows(6)(4)))
-            Assert.AreEqual(678, CInt(FullOuterJoined.Rows(7)(0)))
-            Assert.AreEqual(65528, CInt(FullOuterJoined.Rows(7)(1)))
-            Assert.AreEqual(True, IsDBNull(FullOuterJoined.Rows(7)(2)))
-            Assert.AreEqual(True, IsDBNull(FullOuterJoined.Rows(7)(3)))
-            Assert.AreEqual(True, IsDBNull(FullOuterJoined.Rows(7)(4)))
-            Assert.AreEqual(True, IsDBNull(FullOuterJoined.Rows(8)(0)))
-            Assert.AreEqual(True, IsDBNull(FullOuterJoined.Rows(8)(1)))
-            Assert.AreEqual(True, IsDBNull(FullOuterJoined.Rows(8)(2)))
-            Assert.AreEqual(True, IsDBNull(FullOuterJoined.Rows(8)(3)))
-            Assert.AreEqual(True, IsDBNull(FullOuterJoined.Rows(8)(4)))
-            Assert.AreEqual(True, IsDBNull(FullOuterJoined.Rows(9)(0)))
-            Assert.AreEqual(True, IsDBNull(FullOuterJoined.Rows(9)(1)))
-            Assert.AreEqual(True, IsDBNull(FullOuterJoined.Rows(9)(2)))
-            Assert.AreEqual(789, CInt(FullOuterJoined.Rows(9)(3)))
-            Assert.AreEqual(65728, CInt(FullOuterJoined.Rows(9)(4)))
-            Assert.AreEqual(True, IsDBNull(FullOuterJoined.Rows(10)(0)))
-            Assert.AreEqual(True, IsDBNull(FullOuterJoined.Rows(10)(1)))
-            Assert.AreEqual(True, IsDBNull(FullOuterJoined.Rows(10)(2)))
-            Assert.AreEqual(890, CInt(FullOuterJoined.Rows(10)(3)))
-            Assert.AreEqual(True, IsDBNull(FullOuterJoined.Rows(10)(4)))
+            ClassicAssert.AreEqual(567, CInt(FullOuterJoined.Rows(6)(0)))
+            ClassicAssert.AreEqual(65527, CInt(FullOuterJoined.Rows(6)(1)))
+            ClassicAssert.AreEqual(True, IsDBNull(FullOuterJoined.Rows(6)(2)))
+            ClassicAssert.AreEqual(True, IsDBNull(FullOuterJoined.Rows(6)(3)))
+            ClassicAssert.AreEqual(True, IsDBNull(FullOuterJoined.Rows(6)(4)))
+            ClassicAssert.AreEqual(678, CInt(FullOuterJoined.Rows(7)(0)))
+            ClassicAssert.AreEqual(65528, CInt(FullOuterJoined.Rows(7)(1)))
+            ClassicAssert.AreEqual(True, IsDBNull(FullOuterJoined.Rows(7)(2)))
+            ClassicAssert.AreEqual(True, IsDBNull(FullOuterJoined.Rows(7)(3)))
+            ClassicAssert.AreEqual(True, IsDBNull(FullOuterJoined.Rows(7)(4)))
+            ClassicAssert.AreEqual(True, IsDBNull(FullOuterJoined.Rows(8)(0)))
+            ClassicAssert.AreEqual(True, IsDBNull(FullOuterJoined.Rows(8)(1)))
+            ClassicAssert.AreEqual(True, IsDBNull(FullOuterJoined.Rows(8)(2)))
+            ClassicAssert.AreEqual(True, IsDBNull(FullOuterJoined.Rows(8)(3)))
+            ClassicAssert.AreEqual(True, IsDBNull(FullOuterJoined.Rows(8)(4)))
+            ClassicAssert.AreEqual(True, IsDBNull(FullOuterJoined.Rows(9)(0)))
+            ClassicAssert.AreEqual(True, IsDBNull(FullOuterJoined.Rows(9)(1)))
+            ClassicAssert.AreEqual(True, IsDBNull(FullOuterJoined.Rows(9)(2)))
+            ClassicAssert.AreEqual(789, CInt(FullOuterJoined.Rows(9)(3)))
+            ClassicAssert.AreEqual(65728, CInt(FullOuterJoined.Rows(9)(4)))
+            ClassicAssert.AreEqual(True, IsDBNull(FullOuterJoined.Rows(10)(0)))
+            ClassicAssert.AreEqual(True, IsDBNull(FullOuterJoined.Rows(10)(1)))
+            ClassicAssert.AreEqual(True, IsDBNull(FullOuterJoined.Rows(10)(2)))
+            ClassicAssert.AreEqual(890, CInt(FullOuterJoined.Rows(10)(3)))
+            ClassicAssert.AreEqual(True, IsDBNull(FullOuterJoined.Rows(10)(4)))
 
         End Sub
 
@@ -2026,50 +2027,50 @@ Namespace CompuMaster.Test.Data
             Console.WriteLine(CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(FullOuterJoined))
 
             'Verify column (names)
-            Assert.AreEqual(5, FullOuterJoined.Columns.Count()) 'There must be exactly 5 columns '
-            Assert.AreEqual("ID", FullOuterJoined.Columns(0).ColumnName)
+            ClassicAssert.AreEqual(5, FullOuterJoined.Columns.Count()) 'There must be exactly 5 columns '
+            ClassicAssert.AreEqual("ID", FullOuterJoined.Columns(0).ColumnName)
             For i As Integer = 2 To 3
-                Assert.AreEqual("left" & i, FullOuterJoined.Columns(i - 1).ColumnName)
+                ClassicAssert.AreEqual("left" & i, FullOuterJoined.Columns(i - 1).ColumnName)
             Next i
-            Assert.AreEqual("ClientTable_ID", FullOuterJoined.Columns(3).ColumnName)
+            ClassicAssert.AreEqual("ClientTable_ID", FullOuterJoined.Columns(3).ColumnName)
             For i As Integer = 2 To 2
-                Assert.AreEqual("right" & i, FullOuterJoined.Columns(i + 2).ColumnName)
+                ClassicAssert.AreEqual("right" & i, FullOuterJoined.Columns(i + 2).ColumnName)
             Next i
 
             'Verify row (content)
-            Assert.AreEqual(11, FullOuterJoined.Rows.Count())
+            ClassicAssert.AreEqual(11, FullOuterJoined.Rows.Count())
             For i As Integer = 0 To 5
-                Assert.AreEqual(0 + i, CInt(FullOuterJoined.Rows(i)(0)))
-                Assert.AreEqual(1 + i, CInt(FullOuterJoined.Rows(i)(1)))
-                Assert.AreEqual(2 + i, CInt(FullOuterJoined.Rows(i)(2)))
-                Assert.AreEqual(0 + i, CInt(FullOuterJoined.Rows(i)(3)))
-                Assert.AreEqual(10 + i, CInt(FullOuterJoined.Rows(i)(4)))
+                ClassicAssert.AreEqual(0 + i, CInt(FullOuterJoined.Rows(i)(0)))
+                ClassicAssert.AreEqual(1 + i, CInt(FullOuterJoined.Rows(i)(1)))
+                ClassicAssert.AreEqual(2 + i, CInt(FullOuterJoined.Rows(i)(2)))
+                ClassicAssert.AreEqual(0 + i, CInt(FullOuterJoined.Rows(i)(3)))
+                ClassicAssert.AreEqual(10 + i, CInt(FullOuterJoined.Rows(i)(4)))
             Next i
-            Assert.AreEqual(567, CInt(FullOuterJoined.Rows(6)(0)))
-            Assert.AreEqual(65527, CInt(FullOuterJoined.Rows(6)(1)))
-            Assert.AreEqual(True, IsDBNull(FullOuterJoined.Rows(6)(2)))
-            Assert.AreEqual(True, IsDBNull(FullOuterJoined.Rows(6)(3)))
-            Assert.AreEqual(True, IsDBNull(FullOuterJoined.Rows(6)(4)))
-            Assert.AreEqual(678, CInt(FullOuterJoined.Rows(7)(0)))
-            Assert.AreEqual(65528, CInt(FullOuterJoined.Rows(7)(1)))
-            Assert.AreEqual(True, IsDBNull(FullOuterJoined.Rows(7)(2)))
-            Assert.AreEqual(True, IsDBNull(FullOuterJoined.Rows(7)(3)))
-            Assert.AreEqual(True, IsDBNull(FullOuterJoined.Rows(7)(4)))
-            Assert.AreEqual(True, IsDBNull(FullOuterJoined.Rows(8)(0)))
-            Assert.AreEqual(True, IsDBNull(FullOuterJoined.Rows(8)(1)))
-            Assert.AreEqual(True, IsDBNull(FullOuterJoined.Rows(8)(2)))
-            Assert.AreEqual(True, IsDBNull(FullOuterJoined.Rows(8)(3)))
-            Assert.AreEqual(True, IsDBNull(FullOuterJoined.Rows(8)(4)))
-            Assert.AreEqual(True, IsDBNull(FullOuterJoined.Rows(9)(0)))
-            Assert.AreEqual(True, IsDBNull(FullOuterJoined.Rows(9)(1)))
-            Assert.AreEqual(True, IsDBNull(FullOuterJoined.Rows(9)(2)))
-            Assert.AreEqual(789, CInt(FullOuterJoined.Rows(9)(3)))
-            Assert.AreEqual(65728, CInt(FullOuterJoined.Rows(9)(4)))
-            Assert.AreEqual(True, IsDBNull(FullOuterJoined.Rows(10)(0)))
-            Assert.AreEqual(True, IsDBNull(FullOuterJoined.Rows(10)(1)))
-            Assert.AreEqual(True, IsDBNull(FullOuterJoined.Rows(10)(2)))
-            Assert.AreEqual(890, CInt(FullOuterJoined.Rows(10)(3)))
-            Assert.AreEqual(True, IsDBNull(FullOuterJoined.Rows(10)(4)))
+            ClassicAssert.AreEqual(567, CInt(FullOuterJoined.Rows(6)(0)))
+            ClassicAssert.AreEqual(65527, CInt(FullOuterJoined.Rows(6)(1)))
+            ClassicAssert.AreEqual(True, IsDBNull(FullOuterJoined.Rows(6)(2)))
+            ClassicAssert.AreEqual(True, IsDBNull(FullOuterJoined.Rows(6)(3)))
+            ClassicAssert.AreEqual(True, IsDBNull(FullOuterJoined.Rows(6)(4)))
+            ClassicAssert.AreEqual(678, CInt(FullOuterJoined.Rows(7)(0)))
+            ClassicAssert.AreEqual(65528, CInt(FullOuterJoined.Rows(7)(1)))
+            ClassicAssert.AreEqual(True, IsDBNull(FullOuterJoined.Rows(7)(2)))
+            ClassicAssert.AreEqual(True, IsDBNull(FullOuterJoined.Rows(7)(3)))
+            ClassicAssert.AreEqual(True, IsDBNull(FullOuterJoined.Rows(7)(4)))
+            ClassicAssert.AreEqual(True, IsDBNull(FullOuterJoined.Rows(8)(0)))
+            ClassicAssert.AreEqual(True, IsDBNull(FullOuterJoined.Rows(8)(1)))
+            ClassicAssert.AreEqual(True, IsDBNull(FullOuterJoined.Rows(8)(2)))
+            ClassicAssert.AreEqual(True, IsDBNull(FullOuterJoined.Rows(8)(3)))
+            ClassicAssert.AreEqual(True, IsDBNull(FullOuterJoined.Rows(8)(4)))
+            ClassicAssert.AreEqual(True, IsDBNull(FullOuterJoined.Rows(9)(0)))
+            ClassicAssert.AreEqual(True, IsDBNull(FullOuterJoined.Rows(9)(1)))
+            ClassicAssert.AreEqual(True, IsDBNull(FullOuterJoined.Rows(9)(2)))
+            ClassicAssert.AreEqual(789, CInt(FullOuterJoined.Rows(9)(3)))
+            ClassicAssert.AreEqual(65728, CInt(FullOuterJoined.Rows(9)(4)))
+            ClassicAssert.AreEqual(True, IsDBNull(FullOuterJoined.Rows(10)(0)))
+            ClassicAssert.AreEqual(True, IsDBNull(FullOuterJoined.Rows(10)(1)))
+            ClassicAssert.AreEqual(True, IsDBNull(FullOuterJoined.Rows(10)(2)))
+            ClassicAssert.AreEqual(890, CInt(FullOuterJoined.Rows(10)(3)))
+            ClassicAssert.AreEqual(True, IsDBNull(FullOuterJoined.Rows(10)(4)))
 
         End Sub
 
@@ -2090,50 +2091,50 @@ Namespace CompuMaster.Test.Data
             Console.WriteLine(CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(FullOuterJoined))
 
             'Verify column (names)
-            Assert.AreEqual(5, FullOuterJoined.Columns.Count()) 'There must be exactly 5 columns '
-            Assert.AreEqual("ClientTable_ID", FullOuterJoined.Columns(0).ColumnName)
+            ClassicAssert.AreEqual(5, FullOuterJoined.Columns.Count()) 'There must be exactly 5 columns '
+            ClassicAssert.AreEqual("ClientTable_ID", FullOuterJoined.Columns(0).ColumnName)
             For i As Integer = 2 To 3
-                Assert.AreEqual("left" & i, FullOuterJoined.Columns(i - 1).ColumnName)
+                ClassicAssert.AreEqual("left" & i, FullOuterJoined.Columns(i - 1).ColumnName)
             Next i
-            Assert.AreEqual("ClientTable_ID1", FullOuterJoined.Columns(3).ColumnName)
+            ClassicAssert.AreEqual("ClientTable_ID1", FullOuterJoined.Columns(3).ColumnName)
             For i As Integer = 2 To 2
-                Assert.AreEqual("right" & i, FullOuterJoined.Columns(i + 2).ColumnName)
+                ClassicAssert.AreEqual("right" & i, FullOuterJoined.Columns(i + 2).ColumnName)
             Next i
 
             'Verify row (content)
-            Assert.AreEqual(11, FullOuterJoined.Rows.Count())
+            ClassicAssert.AreEqual(11, FullOuterJoined.Rows.Count())
             For i As Integer = 0 To 5
-                Assert.AreEqual(0 + i, CInt(FullOuterJoined.Rows(i)(0)))
-                Assert.AreEqual(1 + i, CInt(FullOuterJoined.Rows(i)(1)))
-                Assert.AreEqual(2 + i, CInt(FullOuterJoined.Rows(i)(2)))
-                Assert.AreEqual(0 + i, CInt(FullOuterJoined.Rows(i)(3)))
-                Assert.AreEqual(10 + i, CInt(FullOuterJoined.Rows(i)(4)))
+                ClassicAssert.AreEqual(0 + i, CInt(FullOuterJoined.Rows(i)(0)))
+                ClassicAssert.AreEqual(1 + i, CInt(FullOuterJoined.Rows(i)(1)))
+                ClassicAssert.AreEqual(2 + i, CInt(FullOuterJoined.Rows(i)(2)))
+                ClassicAssert.AreEqual(0 + i, CInt(FullOuterJoined.Rows(i)(3)))
+                ClassicAssert.AreEqual(10 + i, CInt(FullOuterJoined.Rows(i)(4)))
             Next i
-            Assert.AreEqual(567, CInt(FullOuterJoined.Rows(6)(0)))
-            Assert.AreEqual(65527, CInt(FullOuterJoined.Rows(6)(1)))
-            Assert.AreEqual(True, IsDBNull(FullOuterJoined.Rows(6)(2)))
-            Assert.AreEqual(True, IsDBNull(FullOuterJoined.Rows(6)(3)))
-            Assert.AreEqual(True, IsDBNull(FullOuterJoined.Rows(6)(4)))
-            Assert.AreEqual(678, CInt(FullOuterJoined.Rows(7)(0)))
-            Assert.AreEqual(65528, CInt(FullOuterJoined.Rows(7)(1)))
-            Assert.AreEqual(True, IsDBNull(FullOuterJoined.Rows(7)(2)))
-            Assert.AreEqual(True, IsDBNull(FullOuterJoined.Rows(7)(3)))
-            Assert.AreEqual(True, IsDBNull(FullOuterJoined.Rows(7)(4)))
-            Assert.AreEqual(True, IsDBNull(FullOuterJoined.Rows(8)(0)))
-            Assert.AreEqual(True, IsDBNull(FullOuterJoined.Rows(8)(1)))
-            Assert.AreEqual(True, IsDBNull(FullOuterJoined.Rows(8)(2)))
-            Assert.AreEqual(True, IsDBNull(FullOuterJoined.Rows(8)(3)))
-            Assert.AreEqual(True, IsDBNull(FullOuterJoined.Rows(8)(4)))
-            Assert.AreEqual(True, IsDBNull(FullOuterJoined.Rows(9)(0)))
-            Assert.AreEqual(True, IsDBNull(FullOuterJoined.Rows(9)(1)))
-            Assert.AreEqual(True, IsDBNull(FullOuterJoined.Rows(9)(2)))
-            Assert.AreEqual(789, CInt(FullOuterJoined.Rows(9)(3)))
-            Assert.AreEqual(65728, CInt(FullOuterJoined.Rows(9)(4)))
-            Assert.AreEqual(True, IsDBNull(FullOuterJoined.Rows(10)(0)))
-            Assert.AreEqual(True, IsDBNull(FullOuterJoined.Rows(10)(1)))
-            Assert.AreEqual(True, IsDBNull(FullOuterJoined.Rows(10)(2)))
-            Assert.AreEqual(890, CInt(FullOuterJoined.Rows(10)(3)))
-            Assert.AreEqual(True, IsDBNull(FullOuterJoined.Rows(10)(4)))
+            ClassicAssert.AreEqual(567, CInt(FullOuterJoined.Rows(6)(0)))
+            ClassicAssert.AreEqual(65527, CInt(FullOuterJoined.Rows(6)(1)))
+            ClassicAssert.AreEqual(True, IsDBNull(FullOuterJoined.Rows(6)(2)))
+            ClassicAssert.AreEqual(True, IsDBNull(FullOuterJoined.Rows(6)(3)))
+            ClassicAssert.AreEqual(True, IsDBNull(FullOuterJoined.Rows(6)(4)))
+            ClassicAssert.AreEqual(678, CInt(FullOuterJoined.Rows(7)(0)))
+            ClassicAssert.AreEqual(65528, CInt(FullOuterJoined.Rows(7)(1)))
+            ClassicAssert.AreEqual(True, IsDBNull(FullOuterJoined.Rows(7)(2)))
+            ClassicAssert.AreEqual(True, IsDBNull(FullOuterJoined.Rows(7)(3)))
+            ClassicAssert.AreEqual(True, IsDBNull(FullOuterJoined.Rows(7)(4)))
+            ClassicAssert.AreEqual(True, IsDBNull(FullOuterJoined.Rows(8)(0)))
+            ClassicAssert.AreEqual(True, IsDBNull(FullOuterJoined.Rows(8)(1)))
+            ClassicAssert.AreEqual(True, IsDBNull(FullOuterJoined.Rows(8)(2)))
+            ClassicAssert.AreEqual(True, IsDBNull(FullOuterJoined.Rows(8)(3)))
+            ClassicAssert.AreEqual(True, IsDBNull(FullOuterJoined.Rows(8)(4)))
+            ClassicAssert.AreEqual(True, IsDBNull(FullOuterJoined.Rows(9)(0)))
+            ClassicAssert.AreEqual(True, IsDBNull(FullOuterJoined.Rows(9)(1)))
+            ClassicAssert.AreEqual(True, IsDBNull(FullOuterJoined.Rows(9)(2)))
+            ClassicAssert.AreEqual(789, CInt(FullOuterJoined.Rows(9)(3)))
+            ClassicAssert.AreEqual(65728, CInt(FullOuterJoined.Rows(9)(4)))
+            ClassicAssert.AreEqual(True, IsDBNull(FullOuterJoined.Rows(10)(0)))
+            ClassicAssert.AreEqual(True, IsDBNull(FullOuterJoined.Rows(10)(1)))
+            ClassicAssert.AreEqual(True, IsDBNull(FullOuterJoined.Rows(10)(2)))
+            ClassicAssert.AreEqual(890, CInt(FullOuterJoined.Rows(10)(3)))
+            ClassicAssert.AreEqual(True, IsDBNull(FullOuterJoined.Rows(10)(4)))
 
         End Sub
 
@@ -2149,35 +2150,35 @@ Namespace CompuMaster.Test.Data
             Console.WriteLine(CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(FullOuterJoined))
 
             'Verify column (names)
-            Assert.AreEqual(5, FullOuterJoined.Columns.Count()) 'There must be exactly 5 columns '
+            ClassicAssert.AreEqual(5, FullOuterJoined.Columns.Count()) 'There must be exactly 5 columns '
             For i As Integer = 1 To 3
-                Assert.AreEqual("left" & i, FullOuterJoined.Columns(i - 1).ColumnName)
+                ClassicAssert.AreEqual("left" & i, FullOuterJoined.Columns(i - 1).ColumnName)
             Next i
             For i As Integer = 1 To 2
-                Assert.AreEqual("right" & i, FullOuterJoined.Columns(i + 2).ColumnName)
+                ClassicAssert.AreEqual("right" & i, FullOuterJoined.Columns(i + 2).ColumnName)
             Next i
 
             'Verify row (content)
-            Assert.AreEqual(12, FullOuterJoined.Rows.Count())
+            ClassicAssert.AreEqual(12, FullOuterJoined.Rows.Count())
             For i As Integer = 0 To 3
                 If i = 1 Then
-                    Assert.AreEqual(DBNull.Value, FullOuterJoined.Rows(i)(0))
+                    ClassicAssert.AreEqual(DBNull.Value, FullOuterJoined.Rows(i)(0))
                 Else
-                    Assert.AreEqual(0 + i, CInt(FullOuterJoined.Rows(i)(0)))
+                    ClassicAssert.AreEqual(0 + i, CInt(FullOuterJoined.Rows(i)(0)))
                 End If
-                Assert.AreEqual(1 + i, CInt(FullOuterJoined.Rows(i)(1)))
-                Assert.AreEqual(2 + i, CInt(FullOuterJoined.Rows(i)(2)))
+                ClassicAssert.AreEqual(1 + i, CInt(FullOuterJoined.Rows(i)(1)))
+                ClassicAssert.AreEqual(2 + i, CInt(FullOuterJoined.Rows(i)(2)))
                 If i = 1 Or i = 2 Then
-                    Assert.AreEqual(DBNull.Value, FullOuterJoined.Rows(i)(3))
+                    ClassicAssert.AreEqual(DBNull.Value, FullOuterJoined.Rows(i)(3))
                 Else
-                    Assert.AreEqual(0 + i, CInt(FullOuterJoined.Rows(i)(3)))
+                    ClassicAssert.AreEqual(0 + i, CInt(FullOuterJoined.Rows(i)(3)))
                 End If
                 If i = 1 Then
-                    Assert.AreEqual(3, CInt(FullOuterJoined.Rows(i)(4)))
+                    ClassicAssert.AreEqual(3, CInt(FullOuterJoined.Rows(i)(4)))
                 ElseIf i = 2 Then
-                    Assert.AreEqual(DBNull.Value, FullOuterJoined.Rows(i)(4))
+                    ClassicAssert.AreEqual(DBNull.Value, FullOuterJoined.Rows(i)(4))
                 ElseIf i = 4 Then
-                    Assert.AreEqual(1 + i, CInt(FullOuterJoined.Rows(i)(4)))
+                    ClassicAssert.AreEqual(1 + i, CInt(FullOuterJoined.Rows(i)(4)))
                 End If
             Next i
 
@@ -2197,7 +2198,7 @@ Namespace CompuMaster.Test.Data
                     "     |     |     |789   |65728 " & System.Environment.NewLine &
                     "     |     |     |890   |      " & System.Environment.NewLine &
                     ""
-            Assert.AreEqual(ShallBeResult, CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(FullOuterJoined))
+            ClassicAssert.AreEqual(ShallBeResult, CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(FullOuterJoined))
 
         End Sub
 
@@ -2257,12 +2258,12 @@ Namespace CompuMaster.Test.Data
             'Acceptance Criteria: 
             '- column of 2nd table must be renamed if 1st table already contains the same column name
             '- renamed column (e.g. "column1") must not exist in list of selected columns (incl. PKs) from 1st and 2nd table           
-            Assert.AreEqual(0, CInt(InnerJoined.Rows(0)("left1")))
-            Assert.AreEqual(3, CInt(InnerJoined.Rows(0)("test")))
-            Assert.AreEqual(2, CInt(InnerJoined.Rows(0)("ClientTable_test")))
+            ClassicAssert.AreEqual(0, CInt(InnerJoined.Rows(0)("left1")))
+            ClassicAssert.AreEqual(3, CInt(InnerJoined.Rows(0)("test")))
+            ClassicAssert.AreEqual(2, CInt(InnerJoined.Rows(0)("ClientTable_test")))
 
-            Assert.AreEqual("3", InnerJoined.Rows.Item(0).Item("test"))
-            Assert.AreEqual("2", InnerJoined.Rows.Item(0).Item("ClientTable_test"))
+            ClassicAssert.AreEqual("3", InnerJoined.Rows.Item(0).Item("test"))
+            ClassicAssert.AreEqual("2", InnerJoined.Rows.Item(0).Item("ClientTable_test"))
         End Sub
 
         <Test()> Public Sub InnerJoinTables_TablesWithEqualPKs()
@@ -2277,7 +2278,7 @@ Namespace CompuMaster.Test.Data
 
             'Verify column (names)
             For i As Integer = 1 To 3
-                Assert.AreEqual("left" & i, InnerJoined.Columns(i - 1).ColumnName)
+                ClassicAssert.AreEqual("left" & i, InnerJoined.Columns(i - 1).ColumnName)
             Next i
             StringAssert.IsMatch("left1", InnerJoined.Columns(0).ColumnName)
             StringAssert.IsMatch("left2", InnerJoined.Columns(1).ColumnName)
@@ -2286,23 +2287,23 @@ Namespace CompuMaster.Test.Data
             StringAssert.IsMatch("right1", InnerJoined.Columns(4).ColumnName)
             StringAssert.IsMatch("right2", InnerJoined.Columns(5).ColumnName)
             StringAssert.IsMatch("test", InnerJoined.Columns(6).ColumnName)
-            Assert.AreEqual(7, InnerJoined.Columns.Count())
+            ClassicAssert.AreEqual(7, InnerJoined.Columns.Count())
 
             'Verify row count and accessibility
-            Assert.AreEqual(6, InnerJoined.Rows.Count())
+            ClassicAssert.AreEqual(6, InnerJoined.Rows.Count())
 
             'Verify row (content)
-            Assert.AreEqual("3", InnerJoined.Rows.Item(0).Item(3))
-            Assert.AreEqual("2", InnerJoined.Rows.Item(0).Item(6))
+            ClassicAssert.AreEqual("3", InnerJoined.Rows.Item(0).Item(3))
+            ClassicAssert.AreEqual("2", InnerJoined.Rows.Item(0).Item(6))
 
             For RowCounter As Integer = 0 To 5
-                Assert.AreEqual(0 + RowCounter, CInt(InnerJoined.Rows(RowCounter)(0)), "RowCounter=" & RowCounter)
-                Assert.AreEqual(1 + RowCounter, CInt(InnerJoined.Rows(RowCounter)(1)), "RowCounter=" & RowCounter)
-                Assert.AreEqual(2 + RowCounter, CInt(InnerJoined.Rows(RowCounter)(2)), "RowCounter=" & RowCounter)
-                Assert.AreEqual(3 + RowCounter, CInt(InnerJoined.Rows(RowCounter)(3)), "RowCounter=" & RowCounter)
-                Assert.AreEqual(0 + RowCounter, CInt(InnerJoined.Rows(RowCounter)(4)), "RowCounter=" & RowCounter)
-                Assert.AreEqual(1 + RowCounter, CInt(InnerJoined.Rows(RowCounter)(5)), "RowCounter=" & RowCounter)
-                Assert.AreEqual(2 + RowCounter, CInt(InnerJoined.Rows(RowCounter)(6)), "RowCounter=" & RowCounter)
+                ClassicAssert.AreEqual(0 + RowCounter, CInt(InnerJoined.Rows(RowCounter)(0)), "RowCounter=" & RowCounter)
+                ClassicAssert.AreEqual(1 + RowCounter, CInt(InnerJoined.Rows(RowCounter)(1)), "RowCounter=" & RowCounter)
+                ClassicAssert.AreEqual(2 + RowCounter, CInt(InnerJoined.Rows(RowCounter)(2)), "RowCounter=" & RowCounter)
+                ClassicAssert.AreEqual(3 + RowCounter, CInt(InnerJoined.Rows(RowCounter)(3)), "RowCounter=" & RowCounter)
+                ClassicAssert.AreEqual(0 + RowCounter, CInt(InnerJoined.Rows(RowCounter)(4)), "RowCounter=" & RowCounter)
+                ClassicAssert.AreEqual(1 + RowCounter, CInt(InnerJoined.Rows(RowCounter)(5)), "RowCounter=" & RowCounter)
+                ClassicAssert.AreEqual(2 + RowCounter, CInt(InnerJoined.Rows(RowCounter)(6)), "RowCounter=" & RowCounter)
             Next RowCounter
 
         End Sub
@@ -2319,7 +2320,7 @@ Namespace CompuMaster.Test.Data
 
             'Verify column (names)
             For i As Integer = 1 To 3
-                Assert.AreEqual("left" & i, InnerJoined.Columns(i - 1).ColumnName)
+                ClassicAssert.AreEqual("left" & i, InnerJoined.Columns(i - 1).ColumnName)
             Next i
             StringAssert.IsMatch("left1", InnerJoined.Columns(0).ColumnName)
             StringAssert.IsMatch("left2", InnerJoined.Columns(1).ColumnName)
@@ -2328,23 +2329,23 @@ Namespace CompuMaster.Test.Data
             StringAssert.IsMatch("right1", InnerJoined.Columns(4).ColumnName)
             StringAssert.IsMatch("right2", InnerJoined.Columns(5).ColumnName)
             StringAssert.IsMatch("test", InnerJoined.Columns(6).ColumnName)
-            Assert.AreEqual(7, InnerJoined.Columns.Count())
+            ClassicAssert.AreEqual(7, InnerJoined.Columns.Count())
 
             'Verify row count and accessibility
-            Assert.AreEqual(5, InnerJoined.Rows.Count())
+            ClassicAssert.AreEqual(5, InnerJoined.Rows.Count())
 
             'Verify row (content)
-            Assert.AreEqual("4", InnerJoined.Rows.Item(0).Item(3))
-            Assert.AreEqual("3", InnerJoined.Rows.Item(0).Item(6))
+            ClassicAssert.AreEqual("4", InnerJoined.Rows.Item(0).Item(3))
+            ClassicAssert.AreEqual("3", InnerJoined.Rows.Item(0).Item(6))
 
             For RowCounter As Integer = 0 To 4
-                Assert.AreEqual(0 + 1 + RowCounter, CInt(InnerJoined.Rows(RowCounter)(0)), "RowCounter=" & RowCounter)
-                Assert.AreEqual(1 + 1 + RowCounter, CInt(InnerJoined.Rows(RowCounter)(1)), "RowCounter=" & RowCounter)
-                Assert.AreEqual(2 + 1 + RowCounter, CInt(InnerJoined.Rows(RowCounter)(2)), "RowCounter=" & RowCounter)
-                Assert.AreEqual(3 + 1 + RowCounter, CInt(InnerJoined.Rows(RowCounter)(3)), "RowCounter=" & RowCounter)
-                Assert.AreEqual(0 + 1 + RowCounter, CInt(InnerJoined.Rows(RowCounter)(4)), "RowCounter=" & RowCounter)
-                Assert.AreEqual(1 + 1 + RowCounter, CInt(InnerJoined.Rows(RowCounter)(5)), "RowCounter=" & RowCounter)
-                Assert.AreEqual(2 + 1 + RowCounter, CInt(InnerJoined.Rows(RowCounter)(6)), "RowCounter=" & RowCounter)
+                ClassicAssert.AreEqual(0 + 1 + RowCounter, CInt(InnerJoined.Rows(RowCounter)(0)), "RowCounter=" & RowCounter)
+                ClassicAssert.AreEqual(1 + 1 + RowCounter, CInt(InnerJoined.Rows(RowCounter)(1)), "RowCounter=" & RowCounter)
+                ClassicAssert.AreEqual(2 + 1 + RowCounter, CInt(InnerJoined.Rows(RowCounter)(2)), "RowCounter=" & RowCounter)
+                ClassicAssert.AreEqual(3 + 1 + RowCounter, CInt(InnerJoined.Rows(RowCounter)(3)), "RowCounter=" & RowCounter)
+                ClassicAssert.AreEqual(0 + 1 + RowCounter, CInt(InnerJoined.Rows(RowCounter)(4)), "RowCounter=" & RowCounter)
+                ClassicAssert.AreEqual(1 + 1 + RowCounter, CInt(InnerJoined.Rows(RowCounter)(5)), "RowCounter=" & RowCounter)
+                ClassicAssert.AreEqual(2 + 1 + RowCounter, CInt(InnerJoined.Rows(RowCounter)(6)), "RowCounter=" & RowCounter)
             Next RowCounter
 
         End Sub
@@ -2416,22 +2417,22 @@ Namespace CompuMaster.Test.Data
             Console.WriteLine(CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(LeftJoined))
 
             'Verify column (names)
-            Assert.AreEqual(4, LeftJoined.Columns.Count())
+            ClassicAssert.AreEqual(4, LeftJoined.Columns.Count())
             StringAssert.IsMatch("left1", LeftJoined.Columns(0).ColumnName)
             StringAssert.IsMatch("left2", LeftJoined.Columns(1).ColumnName)
             StringAssert.IsMatch("right1", LeftJoined.Columns(2).ColumnName)
             StringAssert.IsMatch("right2", LeftJoined.Columns(3).ColumnName)
 
             'Verify row (content)
-            Assert.AreEqual(2, LeftJoined.Rows.Count())
-            Assert.IsTrue(IsDBNull(LeftJoined.Rows(1).Item(2)))
-            Assert.AreEqual("23", LeftJoined.Rows(1).Item(0))
-            Assert.AreEqual("5", LeftJoined.Rows(0).Item(0))
-            Assert.AreEqual("11", LeftJoined.Rows(0).Item(3))
+            ClassicAssert.AreEqual(2, LeftJoined.Rows.Count())
+            ClassicAssert.IsTrue(IsDBNull(LeftJoined.Rows(1).Item(2)))
+            ClassicAssert.AreEqual("23", LeftJoined.Rows(1).Item(0))
+            ClassicAssert.AreEqual("5", LeftJoined.Rows(0).Item(0))
+            ClassicAssert.AreEqual("11", LeftJoined.Rows(0).Item(3))
 
-            Assert.AreEqual(10, CInt(LeftJoined.Rows(0)(1)))
-            Assert.AreEqual(5, CInt(LeftJoined.Rows(0)(2)))
-            Assert.AreEqual(99, CInt(LeftJoined.Rows(1)(1)))
+            ClassicAssert.AreEqual(10, CInt(LeftJoined.Rows(0)(1)))
+            ClassicAssert.AreEqual(5, CInt(LeftJoined.Rows(0)(2)))
+            ClassicAssert.AreEqual(99, CInt(LeftJoined.Rows(1)(1)))
         End Sub
 
         <Test(), Ignore("ToBeImplemented")> Public Sub SqlJoinTables_Inner()
@@ -2455,30 +2456,30 @@ Namespace CompuMaster.Test.Data
             Console.WriteLine(CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(LeftJoined))
 
             'Verify column (names)
-            Assert.AreEqual(4, LeftJoined.Columns.Count())
+            ClassicAssert.AreEqual(4, LeftJoined.Columns.Count())
             StringAssert.IsMatch("left1", LeftJoined.Columns(0).ColumnName)
             StringAssert.IsMatch("left2", LeftJoined.Columns(1).ColumnName)
             StringAssert.IsMatch("right1", LeftJoined.Columns(2).ColumnName)
             StringAssert.IsMatch("right2", LeftJoined.Columns(3).ColumnName)
 
             'Verify row (content)
-            Assert.AreEqual(2, LeftJoined.Rows.Count())
-            Assert.IsTrue(IsDBNull(LeftJoined.Rows(1).Item(2)))
-            Assert.AreEqual("23", LeftJoined.Rows(1).Item(0))
-            Assert.AreEqual("5", LeftJoined.Rows(0).Item(0))
-            Assert.AreEqual("11", LeftJoined.Rows(0).Item(3))
+            ClassicAssert.AreEqual(2, LeftJoined.Rows.Count())
+            ClassicAssert.IsTrue(IsDBNull(LeftJoined.Rows(1).Item(2)))
+            ClassicAssert.AreEqual("23", LeftJoined.Rows(1).Item(0))
+            ClassicAssert.AreEqual("5", LeftJoined.Rows(0).Item(0))
+            ClassicAssert.AreEqual("11", LeftJoined.Rows(0).Item(3))
 
-            Assert.AreEqual(10, CInt(LeftJoined.Rows(0)(1)))
-            Assert.AreEqual(5, CInt(LeftJoined.Rows(0)(2)))
-            Assert.AreEqual(99, CInt(LeftJoined.Rows(1)(1)))
+            ClassicAssert.AreEqual(10, CInt(LeftJoined.Rows(0)(1)))
+            ClassicAssert.AreEqual(5, CInt(LeftJoined.Rows(0)(2)))
+            ClassicAssert.AreEqual(99, CInt(LeftJoined.Rows(1)(1)))
 
         End Sub
 
         <Test> Public Sub SqlJoinTables_ExpectedExceptionNullParameter()
-            Assert.Throws(Of ArgumentNullException)(Sub()
-                                                        Dim TestTables As JoinTableSet = Me.CreateLeftJoinTableSet1
-                                                        CompuMaster.Data.DataTables.SqlJoinTables(TestTables.LeftTable, TestTables.LeftTable.PrimaryKey, Nothing, Nothing, TestTables.RightTable.PrimaryKey, Nothing, CompuMaster.Data.DataTables.SqlJoinTypes.Left)
-                                                    End Sub)
+            ClassicAssert.Throws(Of ArgumentNullException)(Sub()
+                                                               Dim TestTables As JoinTableSet = Me.CreateLeftJoinTableSet1
+                                                               CompuMaster.Data.DataTables.SqlJoinTables(TestTables.LeftTable, TestTables.LeftTable.PrimaryKey, Nothing, Nothing, TestTables.RightTable.PrimaryKey, Nothing, CompuMaster.Data.DataTables.SqlJoinTypes.Left)
+                                                           End Sub)
         End Sub
 
         Private Sub SqlJoinTables_Left_TableSet2()
@@ -2504,7 +2505,7 @@ Namespace CompuMaster.Test.Data
                     "567  |65527|     |      |      " & System.Environment.NewLine &
                     "5    |60   |70   |5     |      " & System.Environment.NewLine &
                     ""
-            Assert.AreEqual(ShallBeResult, CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(LeftJoined))
+            ClassicAssert.AreEqual(ShallBeResult, CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(LeftJoined))
 
         End Sub
 
@@ -2517,24 +2518,24 @@ Namespace CompuMaster.Test.Data
                 Console.WriteLine(CType(MyItem.Key, String) & "=" & CType(MyItem.Value, String))
             Next
 
-            Assert.AreEqual(2, Result.Count, "JW #00001")
+            ClassicAssert.AreEqual(2, Result.Count, "JW #00001")
             For Each MyKey As DictionaryEntry In Result
                 If CType(MyKey.Key, String) = "Hello world!" Then
-                    Assert.AreEqual(3, MyKey.Value, "JW #00002")
+                    ClassicAssert.AreEqual(3, MyKey.Value, "JW #00002")
                 ElseIf CType(MyKey.Key, String) = "Gotcha!" Then
                     'Gotcha! (not the one in capital letters!)
-                    Assert.AreEqual(2, MyKey.Value, "JW #00003")
+                    ClassicAssert.AreEqual(2, MyKey.Value, "JW #00003")
                 Else
-                    Assert.Fail("Invalid returned value: " & CType(MyKey.Key, Object).ToString)
+                    ClassicAssert.Fail("Invalid returned value: " & CType(MyKey.Key, Object).ToString)
                 End If
             Next
 
 
             Result = CompuMaster.Data.DataTables.FindDuplicates(testTable.Columns("value"), 3)
-            Assert.AreEqual(1, Result.Count, "JW #00011")
+            ClassicAssert.AreEqual(1, Result.Count, "JW #00011")
             For Each MyKey As DictionaryEntry In Result
-                Assert.AreEqual("Hello world!", MyKey.Key, "JW #00012")
-                Assert.AreEqual(3, MyKey.Value, "JW #00013")
+                ClassicAssert.AreEqual("Hello world!", MyKey.Key, "JW #00012")
+                ClassicAssert.AreEqual(3, MyKey.Value, "JW #00013")
             Next
 
         End Sub
@@ -2548,9 +2549,9 @@ Namespace CompuMaster.Test.Data
             testData.Columns.Add()
 
             CompuMaster.Data.DataTables.KeepColumnsAndRemoveAllOthers(testData, New String() {"ÄÖÜäöüß", "data", "istnich", ""})
-            Assert.AreEqual(2, testData.Columns.Count)
-            Assert.AreEqual("äöüÄÖÜß", testData.Columns(0).ColumnName)
-            Assert.AreEqual("data", testData.Columns(1).ColumnName)
+            ClassicAssert.AreEqual(2, testData.Columns.Count)
+            ClassicAssert.AreEqual("äöüÄÖÜß", testData.Columns(0).ColumnName)
+            ClassicAssert.AreEqual("data", testData.Columns(1).ColumnName)
 
         End Sub
 
@@ -2570,13 +2571,13 @@ Namespace CompuMaster.Test.Data
 
             'First, some case insensitive tests'
             CompuMaster.Data.DataTables.CreateDataTableClone(source, dest, Nothing, Nothing, 2, False, False, False, False, True)
-            Assert.AreEqual("test", dest.Rows.Item(0).Item("Testcolumn"))
-            Assert.Less(dest.Columns.Count(), 2) 'if 2 then the test failed, because we did a CaseInsensitive comparison'
+            ClassicAssert.AreEqual("test", dest.Rows.Item(0).Item("Testcolumn"))
+            ClassicAssert.Less(dest.Columns.Count(), 2) 'if 2 then the test failed, because we did a CaseInsensitive comparison'
             StringAssert.IsMatch("Testcolumn", dest.Columns.Item(0).ColumnName)
 
             'Now case sensitive'
             CompuMaster.Data.DataTables.CreateDataTableClone(source, dest, Nothing, Nothing, 2, False, False, False, False, False)
-            Assert.AreEqual(2, dest.Columns.Count()) 'Function shouldn't find "TestColumn" in dest (because there we only have Testcolumn (lowercase 'c'), and therefore add it => 2 columns in table'
+            ClassicAssert.AreEqual(2, dest.Columns.Count()) 'Function shouldn't find "TestColumn" in dest (because there we only have Testcolumn (lowercase 'c'), and therefore add it => 2 columns in table'
             StringAssert.IsMatch("Testcolumn", dest.Columns.Item(0).ColumnName)
             StringAssert.IsMatch("TestColumn", dest.Columns.Item(1).ColumnName)
 
@@ -2586,26 +2587,26 @@ Namespace CompuMaster.Test.Data
             Dim dt As New DataTable
             dt.Columns.Add("hEllo")
 
-            Assert.AreEqual(1, CompuMaster.Data.DataTables.ValidateRequiredColumnNames(dt, New String() {"_suf"}).Length)
-            Assert.AreEqual(1, CompuMaster.Data.DataTables.ValidateRequiredColumnNames(dt, New String() {"_suf", "hEllo"}).Length)
-            Assert.AreEqual(2, CompuMaster.Data.DataTables.ValidateRequiredColumnNames(dt, New String() {"_suf", "Hello"}).Length)
-            Assert.AreEqual(1, CompuMaster.Data.DataTables.ValidateRequiredColumnNames(dt, New String() {"Hello"}).Length)
-            Assert.AreEqual(0, CompuMaster.Data.DataTables.ValidateRequiredColumnNames(dt, New String() {"hEllo"}).Length)
-            Assert.AreEqual("_suf", CompuMaster.Data.DataTables.ValidateRequiredColumnNames(dt, New String() {"_suf"})(0))
+            ClassicAssert.AreEqual(1, CompuMaster.Data.DataTables.ValidateRequiredColumnNames(dt, New String() {"_suf"}).Length)
+            ClassicAssert.AreEqual(1, CompuMaster.Data.DataTables.ValidateRequiredColumnNames(dt, New String() {"_suf", "hEllo"}).Length)
+            ClassicAssert.AreEqual(2, CompuMaster.Data.DataTables.ValidateRequiredColumnNames(dt, New String() {"_suf", "Hello"}).Length)
+            ClassicAssert.AreEqual(1, CompuMaster.Data.DataTables.ValidateRequiredColumnNames(dt, New String() {"Hello"}).Length)
+            ClassicAssert.AreEqual(0, CompuMaster.Data.DataTables.ValidateRequiredColumnNames(dt, New String() {"hEllo"}).Length)
+            ClassicAssert.AreEqual("_suf", CompuMaster.Data.DataTables.ValidateRequiredColumnNames(dt, New String() {"_suf"})(0))
 
-            Assert.AreEqual(1, CompuMaster.Data.DataTables.ValidateRequiredColumnNames(dt, New String() {"_suf"}, False).Length)
-            Assert.AreEqual(1, CompuMaster.Data.DataTables.ValidateRequiredColumnNames(dt, New String() {"_suf", "hEllo"}, False).Length)
-            Assert.AreEqual(2, CompuMaster.Data.DataTables.ValidateRequiredColumnNames(dt, New String() {"_suf", "Hello"}, False).Length)
-            Assert.AreEqual(1, CompuMaster.Data.DataTables.ValidateRequiredColumnNames(dt, New String() {"Hello"}, False).Length)
-            Assert.AreEqual(0, CompuMaster.Data.DataTables.ValidateRequiredColumnNames(dt, New String() {"hEllo"}, False).Length)
-            Assert.AreEqual("_suf", CompuMaster.Data.DataTables.ValidateRequiredColumnNames(dt, New String() {"_suf"}, False)(0))
+            ClassicAssert.AreEqual(1, CompuMaster.Data.DataTables.ValidateRequiredColumnNames(dt, New String() {"_suf"}, False).Length)
+            ClassicAssert.AreEqual(1, CompuMaster.Data.DataTables.ValidateRequiredColumnNames(dt, New String() {"_suf", "hEllo"}, False).Length)
+            ClassicAssert.AreEqual(2, CompuMaster.Data.DataTables.ValidateRequiredColumnNames(dt, New String() {"_suf", "Hello"}, False).Length)
+            ClassicAssert.AreEqual(1, CompuMaster.Data.DataTables.ValidateRequiredColumnNames(dt, New String() {"Hello"}, False).Length)
+            ClassicAssert.AreEqual(0, CompuMaster.Data.DataTables.ValidateRequiredColumnNames(dt, New String() {"hEllo"}, False).Length)
+            ClassicAssert.AreEqual("_suf", CompuMaster.Data.DataTables.ValidateRequiredColumnNames(dt, New String() {"_suf"}, False)(0))
 
-            Assert.AreEqual(1, CompuMaster.Data.DataTables.ValidateRequiredColumnNames(dt, New String() {"_suf"}, True).Length)
-            Assert.AreEqual(1, CompuMaster.Data.DataTables.ValidateRequiredColumnNames(dt, New String() {"_suf", "hEllo"}, True).Length)
-            Assert.AreEqual(1, CompuMaster.Data.DataTables.ValidateRequiredColumnNames(dt, New String() {"_suf", "Hello"}, True).Length)
-            Assert.AreEqual(0, CompuMaster.Data.DataTables.ValidateRequiredColumnNames(dt, New String() {"Hello"}, True).Length)
-            Assert.AreEqual(0, CompuMaster.Data.DataTables.ValidateRequiredColumnNames(dt, New String() {"hEllo"}, True).Length)
-            Assert.AreEqual("_suf", CompuMaster.Data.DataTables.ValidateRequiredColumnNames(dt, New String() {"_suf"}, True)(0))
+            ClassicAssert.AreEqual(1, CompuMaster.Data.DataTables.ValidateRequiredColumnNames(dt, New String() {"_suf"}, True).Length)
+            ClassicAssert.AreEqual(1, CompuMaster.Data.DataTables.ValidateRequiredColumnNames(dt, New String() {"_suf", "hEllo"}, True).Length)
+            ClassicAssert.AreEqual(1, CompuMaster.Data.DataTables.ValidateRequiredColumnNames(dt, New String() {"_suf", "Hello"}, True).Length)
+            ClassicAssert.AreEqual(0, CompuMaster.Data.DataTables.ValidateRequiredColumnNames(dt, New String() {"Hello"}, True).Length)
+            ClassicAssert.AreEqual(0, CompuMaster.Data.DataTables.ValidateRequiredColumnNames(dt, New String() {"hEllo"}, True).Length)
+            ClassicAssert.AreEqual("_suf", CompuMaster.Data.DataTables.ValidateRequiredColumnNames(dt, New String() {"_suf"}, True)(0))
         End Sub
 
         <Test()> Public Sub IsEmptyColumn()
@@ -2621,14 +2622,14 @@ Namespace CompuMaster.Test.Data
 
             'no rows -> everything must be considered empty
             For Each col As DataColumn In dt.Columns
-                Assert.AreEqual(True, CompuMaster.Data.DataTables.IsEmptyColumn(col), col.ColumnName)
+                ClassicAssert.AreEqual(True, CompuMaster.Data.DataTables.IsEmptyColumn(col), col.ColumnName)
             Next
 
             'DbNull row -> everything must be considered empty
             NewRow = dt.NewRow()
             dt.Rows.Add(NewRow)
             For Each col As DataColumn In dt.Columns
-                Assert.AreEqual(True, CompuMaster.Data.DataTables.IsEmptyColumn(col), col.ColumnName)
+                ClassicAssert.AreEqual(True, CompuMaster.Data.DataTables.IsEmptyColumn(col), col.ColumnName)
             Next
 
             'Null/Nothing row -> everything must be considered empty
@@ -2636,7 +2637,7 @@ Namespace CompuMaster.Test.Data
             NewRow.ItemArray = New Object() {Nothing, Nothing, Nothing, Nothing, Nothing, Nothing, Nothing}
             dt.Rows.Add(NewRow)
             For Each col As DataColumn In dt.Columns
-                Assert.AreEqual(True, CompuMaster.Data.DataTables.IsEmptyColumn(col), col.ColumnName)
+                ClassicAssert.AreEqual(True, CompuMaster.Data.DataTables.IsEmptyColumn(col), col.ColumnName)
             Next
 
             'values row -> everything must be considered NOT empty
@@ -2644,13 +2645,13 @@ Namespace CompuMaster.Test.Data
             NewRow.ItemArray = New Object() {"test", New Object(), New String() {}, New DateTime(2000, 1, 1, 12, 0, 0), 1, True, New List(Of String)}
             dt.Rows.Add(NewRow)
             For Each col As DataColumn In dt.Columns
-                Assert.AreEqual(False, CompuMaster.Data.DataTables.IsEmptyColumn(col), col.ColumnName)
+                ClassicAssert.AreEqual(False, CompuMaster.Data.DataTables.IsEmptyColumn(col), col.ColumnName)
             Next
 
             'values row with other values -> everything must be considered NOT empty
             NewRow.ItemArray = New Object() {"", New Object(), New String() {""}, DateTime.MinValue, 0, False, New List(Of String)(0)}
             For Each col As DataColumn In dt.Columns
-                Assert.AreEqual(False, CompuMaster.Data.DataTables.IsEmptyColumn(col), col.ColumnName)
+                ClassicAssert.AreEqual(False, CompuMaster.Data.DataTables.IsEmptyColumn(col), col.ColumnName)
             Next
         End Sub
 
@@ -2677,78 +2678,78 @@ Namespace CompuMaster.Test.Data
             'no rows -> everything must be considered empty
             dt = RemoveEmptyColumns_TestTable(Nothing)
             CompuMaster.Data.DataTables.RemoveEmptyColumns(dt)
-            Assert.AreEqual(0, dt.Columns.Count)
+            ClassicAssert.AreEqual(0, dt.Columns.Count)
 
             'DbNull row -> everything must be considered empty
             dt = RemoveEmptyColumns_TestTable(New Object() {DBNull.Value, DBNull.Value, DBNull.Value, DBNull.Value, DBNull.Value, DBNull.Value, DBNull.Value})
             CompuMaster.Data.DataTables.RemoveEmptyColumns(dt)
-            Assert.AreEqual(0, dt.Columns.Count)
+            ClassicAssert.AreEqual(0, dt.Columns.Count)
 
             'Null/Nothing row -> everything must be considered empty
             dt = RemoveEmptyColumns_TestTable(New Object() {Nothing, Nothing, Nothing, Nothing, Nothing, Nothing, Nothing})
             CompuMaster.Data.DataTables.RemoveEmptyColumns(dt)
-            Assert.AreEqual(0, dt.Columns.Count)
+            ClassicAssert.AreEqual(0, dt.Columns.Count)
 
             'values row -> everything must be considered NOT empty
             dt = RemoveEmptyColumns_TestTable(New Object() {"test", New Object(), New String() {}, New DateTime(2000, 1, 1, 12, 0, 0), 1, True, New List(Of String)})
             CompuMaster.Data.DataTables.RemoveEmptyColumns(dt)
-            Assert.AreEqual(7, dt.Columns.Count)
+            ClassicAssert.AreEqual(7, dt.Columns.Count)
 
             'values row with other values -> everything must be considered NOT empty           
             dt = RemoveEmptyColumns_TestTable(New Object() {"", New Object(), New String() {""}, DateTime.MinValue, 0, False, New List(Of String)(0)})
             CompuMaster.Data.DataTables.RemoveEmptyColumns(dt)
-            Assert.AreEqual(7, dt.Columns.Count)
+            ClassicAssert.AreEqual(7, dt.Columns.Count)
         End Sub
 
         <Test> Public Sub RemoveColumnsExcept()
             Dim Table As DataTable
 
             Table = Me.TestTable2WithInvariantCultureInColumnNames
-            Assert.AreEqual(New String() {"Frage", "Antwort A", "Antwort B", "Antwort C", "Antwort D", "Rubrik", "Richtige Antwort", "Erläuterung", "100 ", "200 ", "500 ", "1000 ", "5000 ", "10000 ", "20000 "}, CompuMaster.Data.DataTables.AllColumnNames(Table))
+            ClassicAssert.AreEqual(New String() {"Frage", "Antwort A", "Antwort B", "Antwort C", "Antwort D", "Rubrik", "Richtige Antwort", "Erläuterung", "100 ", "200 ", "500 ", "1000 ", "5000 ", "10000 ", "20000 "}, CompuMaster.Data.DataTables.AllColumnNames(Table))
             CompuMaster.Data.DataTables.RemoveColumnsExcept(Table, Table.Columns(4), Table.Columns(3), Table.Columns(2), Table.Columns(1))
-            Assert.AreEqual(New String() {"Antwort A", "Antwort B", "Antwort C", "Antwort D"}, CompuMaster.Data.DataTables.AllColumnNames(Table))
+            ClassicAssert.AreEqual(New String() {"Antwort A", "Antwort B", "Antwort C", "Antwort D"}, CompuMaster.Data.DataTables.AllColumnNames(Table))
 
             Table = Me.TestTable2WithInvariantCultureInColumnNames
-            Assert.AreEqual(New String() {"Frage", "Antwort A", "Antwort B", "Antwort C", "Antwort D", "Rubrik", "Richtige Antwort", "Erläuterung", "100 ", "200 ", "500 ", "1000 ", "5000 ", "10000 ", "20000 "}, CompuMaster.Data.DataTables.AllColumnNames(Table))
+            ClassicAssert.AreEqual(New String() {"Frage", "Antwort A", "Antwort B", "Antwort C", "Antwort D", "Rubrik", "Richtige Antwort", "Erläuterung", "100 ", "200 ", "500 ", "1000 ", "5000 ", "10000 ", "20000 "}, CompuMaster.Data.DataTables.AllColumnNames(Table))
             CompuMaster.Data.DataTables.RemoveColumnsExcept(Table, "Antwort D", "Antwort C", "Antwort B", "Antwort A")
-            Assert.AreEqual(New String() {"Antwort A", "Antwort B", "Antwort C", "Antwort D"}, CompuMaster.Data.DataTables.AllColumnNames(Table))
+            ClassicAssert.AreEqual(New String() {"Antwort A", "Antwort B", "Antwort C", "Antwort D"}, CompuMaster.Data.DataTables.AllColumnNames(Table))
         End Sub
 
         <Test> Public Sub SortColumns()
             Dim Table As DataTable
 
             Table = Me.TestTable2WithInvariantCultureInColumnNames
-            Assert.AreEqual(New String() {"Frage", "Antwort A", "Antwort B", "Antwort C", "Antwort D", "Rubrik", "Richtige Antwort", "Erläuterung", "100 ", "200 ", "500 ", "1000 ", "5000 ", "10000 ", "20000 "}, CompuMaster.Data.DataTables.AllColumnNames(Table))
+            ClassicAssert.AreEqual(New String() {"Frage", "Antwort A", "Antwort B", "Antwort C", "Antwort D", "Rubrik", "Richtige Antwort", "Erläuterung", "100 ", "200 ", "500 ", "1000 ", "5000 ", "10000 ", "20000 "}, CompuMaster.Data.DataTables.AllColumnNames(Table))
 #Disable Warning BC40000 ' Typ oder Element ist veraltet
             CompuMaster.Data.DataTables.SortColumns(Table, Table.Columns(4), Table.Columns(3), Table.Columns(2), Table.Columns(1))
 #Enable Warning BC40000 ' Typ oder Element ist veraltet
-            Assert.AreEqual(New String() {"Antwort D", "Antwort C", "Antwort B", "Antwort A", "Frage", "Rubrik", "Richtige Antwort", "Erläuterung", "100 ", "200 ", "500 ", "1000 ", "5000 ", "10000 ", "20000 "}, CompuMaster.Data.DataTables.AllColumnNames(Table))
+            ClassicAssert.AreEqual(New String() {"Antwort D", "Antwort C", "Antwort B", "Antwort A", "Frage", "Rubrik", "Richtige Antwort", "Erläuterung", "100 ", "200 ", "500 ", "1000 ", "5000 ", "10000 ", "20000 "}, CompuMaster.Data.DataTables.AllColumnNames(Table))
 
             Table = Me.TestTable2WithInvariantCultureInColumnNames
-            Assert.AreEqual(New String() {"Frage", "Antwort A", "Antwort B", "Antwort C", "Antwort D", "Rubrik", "Richtige Antwort", "Erläuterung", "100 ", "200 ", "500 ", "1000 ", "5000 ", "10000 ", "20000 "}, CompuMaster.Data.DataTables.AllColumnNames(Table))
+            ClassicAssert.AreEqual(New String() {"Frage", "Antwort A", "Antwort B", "Antwort C", "Antwort D", "Rubrik", "Richtige Antwort", "Erläuterung", "100 ", "200 ", "500 ", "1000 ", "5000 ", "10000 ", "20000 "}, CompuMaster.Data.DataTables.AllColumnNames(Table))
             CompuMaster.Data.DataTables.SortColumns(Table, "Antwort D", "Antwort C", "Antwort B", "Antwort A")
-            Assert.AreEqual(New String() {"Antwort D", "Antwort C", "Antwort B", "Antwort A", "Frage", "Rubrik", "Richtige Antwort", "Erläuterung", "100 ", "200 ", "500 ", "1000 ", "5000 ", "10000 ", "20000 "}, CompuMaster.Data.DataTables.AllColumnNames(Table))
+            ClassicAssert.AreEqual(New String() {"Antwort D", "Antwort C", "Antwort B", "Antwort A", "Frage", "Rubrik", "Richtige Antwort", "Erläuterung", "100 ", "200 ", "500 ", "1000 ", "5000 ", "10000 ", "20000 "}, CompuMaster.Data.DataTables.AllColumnNames(Table))
         End Sub
 
         <Test> Public Sub ReArrangeColumns()
             Dim Table As DataTable
 
             Table = Me.TestTable2WithInvariantCultureInColumnNames
-            Assert.AreEqual(New String() {"Frage", "Antwort A", "Antwort B", "Antwort C", "Antwort D", "Rubrik", "Richtige Antwort", "Erläuterung", "100 ", "200 ", "500 ", "1000 ", "5000 ", "10000 ", "20000 "}, CompuMaster.Data.DataTables.AllColumnNames(Table))
+            ClassicAssert.AreEqual(New String() {"Frage", "Antwort A", "Antwort B", "Antwort C", "Antwort D", "Rubrik", "Richtige Antwort", "Erläuterung", "100 ", "200 ", "500 ", "1000 ", "5000 ", "10000 ", "20000 "}, CompuMaster.Data.DataTables.AllColumnNames(Table))
 #Disable Warning BC40000 ' Typ oder Element ist veraltet
             CompuMaster.Data.DataTables.ReArrangeColumns(Table, Table.Columns(4), Table.Columns(3), Table.Columns(2), Table.Columns(1))
 #Enable Warning BC40000 ' Typ oder Element ist veraltet
-            Assert.AreEqual(New String() {"Antwort D", "Antwort C", "Antwort B", "Antwort A"}, CompuMaster.Data.DataTables.AllColumnNames(Table))
+            ClassicAssert.AreEqual(New String() {"Antwort D", "Antwort C", "Antwort B", "Antwort A"}, CompuMaster.Data.DataTables.AllColumnNames(Table))
 
             Table = Me.TestTable2WithInvariantCultureInColumnNames
-            Assert.AreEqual(New String() {"Frage", "Antwort A", "Antwort B", "Antwort C", "Antwort D", "Rubrik", "Richtige Antwort", "Erläuterung", "100 ", "200 ", "500 ", "1000 ", "5000 ", "10000 ", "20000 "}, CompuMaster.Data.DataTables.AllColumnNames(Table))
+            ClassicAssert.AreEqual(New String() {"Frage", "Antwort A", "Antwort B", "Antwort C", "Antwort D", "Rubrik", "Richtige Antwort", "Erläuterung", "100 ", "200 ", "500 ", "1000 ", "5000 ", "10000 ", "20000 "}, CompuMaster.Data.DataTables.AllColumnNames(Table))
             CompuMaster.Data.DataTables.ReArrangeColumns(Table.Columns(4), Table.Columns(3), Table.Columns(2), Table.Columns(1))
-            Assert.AreEqual(New String() {"Antwort D", "Antwort C", "Antwort B", "Antwort A"}, CompuMaster.Data.DataTables.AllColumnNames(Table))
+            ClassicAssert.AreEqual(New String() {"Antwort D", "Antwort C", "Antwort B", "Antwort A"}, CompuMaster.Data.DataTables.AllColumnNames(Table))
 
             Table = Me.TestTable2WithInvariantCultureInColumnNames
-            Assert.AreEqual(New String() {"Frage", "Antwort A", "Antwort B", "Antwort C", "Antwort D", "Rubrik", "Richtige Antwort", "Erläuterung", "100 ", "200 ", "500 ", "1000 ", "5000 ", "10000 ", "20000 "}, CompuMaster.Data.DataTables.AllColumnNames(Table))
+            ClassicAssert.AreEqual(New String() {"Frage", "Antwort A", "Antwort B", "Antwort C", "Antwort D", "Rubrik", "Richtige Antwort", "Erläuterung", "100 ", "200 ", "500 ", "1000 ", "5000 ", "10000 ", "20000 "}, CompuMaster.Data.DataTables.AllColumnNames(Table))
             CompuMaster.Data.DataTables.ReArrangeColumns(Table, "Antwort D", "Antwort C", "Antwort B", "Antwort A")
-            Assert.AreEqual(New String() {"Antwort D", "Antwort C", "Antwort B", "Antwort A"}, CompuMaster.Data.DataTables.AllColumnNames(Table))
+            ClassicAssert.AreEqual(New String() {"Antwort D", "Antwort C", "Antwort B", "Antwort A"}, CompuMaster.Data.DataTables.AllColumnNames(Table))
         End Sub
 
         <Test()> Public Sub ConvertColumnType(<NUnit.Framework.Values("de-DE", "en-US")> cultureName As String)
@@ -2758,21 +2759,21 @@ Namespace CompuMaster.Test.Data
 
                 Dim Table As DataTable = Me.TestTable2WithInvariantCultureInColumnNames
                 'Assert status at start
-                Assert.AreEqual(New String() {"Frage", "Antwort A", "Antwort B", "Antwort C", "Antwort D", "Rubrik", "Richtige Antwort", "Erläuterung", "100 ", "200 ", "500 ", "1000 ", "5000 ", "10000 ", "20000 "}, CompuMaster.Data.DataTables.AllColumnNames(Table))
-                Assert.AreEqual(GetType(Double), Table.Columns("Rubrik").DataType)
-                Assert.AreEqual(GetType(Double), Table.Columns("100 ").DataType)
+                ClassicAssert.AreEqual(New String() {"Frage", "Antwort A", "Antwort B", "Antwort C", "Antwort D", "Rubrik", "Richtige Antwort", "Erläuterung", "100 ", "200 ", "500 ", "1000 ", "5000 ", "10000 ", "20000 "}, CompuMaster.Data.DataTables.AllColumnNames(Table))
+                ClassicAssert.AreEqual(GetType(Double), Table.Columns("Rubrik").DataType)
+                ClassicAssert.AreEqual(GetType(Double), Table.Columns("100 ").DataType)
 
                 'Change column type and re-assert
                 CompuMaster.Data.DataTables.ConvertColumnType(Table.Columns.Item("Rubrik"), GetType(String), Function(x) If(IsDBNull(x), x, CType(x, Double).ToString))
-                Assert.AreEqual(GetType(String), Table.Columns("Rubrik").DataType)
-                Assert.AreEqual(New String() {"Frage", "Antwort A", "Antwort B", "Antwort C", "Antwort D", "Rubrik", "Richtige Antwort", "Erläuterung", "100 ", "200 ", "500 ", "1000 ", "5000 ", "10000 ", "20000 "}, CompuMaster.Data.DataTables.AllColumnNames(Table))
+                ClassicAssert.AreEqual(GetType(String), Table.Columns("Rubrik").DataType)
+                ClassicAssert.AreEqual(New String() {"Frage", "Antwort A", "Antwort B", "Antwort C", "Antwort D", "Rubrik", "Richtige Antwort", "Erläuterung", "100 ", "200 ", "500 ", "1000 ", "5000 ", "10000 ", "20000 "}, CompuMaster.Data.DataTables.AllColumnNames(Table))
 
                 'Change column type and re-assert
                 CompuMaster.Data.DataTables.ConvertColumnType(Table.Columns.Item("Rubrik"), GetType(Integer), Function(x) If(IsDBNull(x), x, Integer.Parse(CType(x, String))))
                 CompuMaster.Data.DataTables.ConvertColumnType(Table.Columns.Item("100 "), GetType(Boolean), Function(x) If(IsDBNull(x), x, CType(x, String) = "1"))
-                Assert.AreEqual(GetType(Integer), Table.Columns("Rubrik").DataType)
-                Assert.AreEqual(GetType(Boolean), Table.Columns("100 ").DataType)
-                Assert.AreEqual(New String() {"Frage", "Antwort A", "Antwort B", "Antwort C", "Antwort D", "Rubrik", "Richtige Antwort", "Erläuterung", "100 ", "200 ", "500 ", "1000 ", "5000 ", "10000 ", "20000 "}, CompuMaster.Data.DataTables.AllColumnNames(Table))
+                ClassicAssert.AreEqual(GetType(Integer), Table.Columns("Rubrik").DataType)
+                ClassicAssert.AreEqual(GetType(Boolean), Table.Columns("100 ").DataType)
+                ClassicAssert.AreEqual(New String() {"Frage", "Antwort A", "Antwort B", "Antwort C", "Antwort D", "Rubrik", "Richtige Antwort", "Erläuterung", "100 ", "200 ", "500 ", "1000 ", "5000 ", "10000 ", "20000 "}, CompuMaster.Data.DataTables.AllColumnNames(Table))
             Finally
                 System.Threading.Thread.CurrentThread.CurrentCulture = PreviousThreadCulture
             End Try
@@ -2792,9 +2793,9 @@ Namespace CompuMaster.Test.Data
                 Dim MetaTableStringified = CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(MetaTable, CompuMaster.Data.ConvertToPlainTextTableOptions.SimpleLayout)
 
                 'Assert status at start
-                Assert.AreEqual(New String() {"Frage", "Antwort A", "Antwort B", "Antwort C", "Antwort D", "Rubrik", "Richtige Antwort", "Erläuterung", "100 ", "200 ", "500 ", "1000 ", "5000 ", "10000 ", "20000 ", "FirstLetterOfFrage"}, CompuMaster.Data.DataTables.AllColumnNames(MetaTable))
-                Assert.AreEqual(GetType(String), MetaTable.Columns("Rubrik").DataType)
-                Assert.AreEqual(GetType(String), MetaTable.Columns("100 ").DataType)
+                ClassicAssert.AreEqual(New String() {"Frage", "Antwort A", "Antwort B", "Antwort C", "Antwort D", "Rubrik", "Richtige Antwort", "Erläuterung", "100 ", "200 ", "500 ", "1000 ", "5000 ", "10000 ", "20000 ", "FirstLetterOfFrage"}, CompuMaster.Data.DataTables.AllColumnNames(MetaTable))
+                ClassicAssert.AreEqual(GetType(String), MetaTable.Columns("Rubrik").DataType)
+                ClassicAssert.AreEqual(GetType(String), MetaTable.Columns("100 ").DataType)
 
                 'Check full result of meta information
                 Console.WriteLine("## Origin data table (top 5)")
@@ -2811,7 +2812,7 @@ Namespace CompuMaster.Test.Data
                     "False        |True         |True         |True         |True         |True         |True            |True         |True         |True         |True         |True         |True         |True         |True         |True                             " & System.Environment.NewLine &
                     "             |             |             |             |             |             |                |             |             |             |             |             |             |             |             |SUBSTRING(ISNULL(Frage, ' '),1,1)" & System.Environment.NewLine &
                     "True         |False        |False        |False        |False        |False        |False           |False        |False        |False        |False        |False        |False        |False        |False        |False                            " & System.Environment.NewLine
-                Assert.AreEqual(ExpectedMetaTableStringified, MetaTableStringified)
+                ClassicAssert.AreEqual(ExpectedMetaTableStringified, MetaTableStringified)
             Finally
                 System.Threading.Thread.CurrentThread.CurrentCulture = PreviousThreadCulture
             End Try
@@ -2829,14 +2830,14 @@ Namespace CompuMaster.Test.Data
             Dim FullDataTable As DataTable
 
             FullDataTable = Me.TestTable2WithDisabledFirstRowContentAsColumnName
-            Assert.AreEqual(New String() {"Column1", "Column2", "Column3", "Column4", "Column5", "Column6", "Column7", "Column8", "Column9", "Column10", "Column11", "Column12", "Column13", "Column14", "Column15"}, CompuMaster.Data.DataTables.AllColumnNames(FullDataTable))
+            ClassicAssert.AreEqual(New String() {"Column1", "Column2", "Column3", "Column4", "Column5", "Column6", "Column7", "Column8", "Column9", "Column10", "Column11", "Column12", "Column13", "Column14", "Column15"}, CompuMaster.Data.DataTables.AllColumnNames(FullDataTable))
             CompuMaster.Data.DataTables.ApplyFirstRowContentToColumnNames(FullDataTable)
-            Assert.AreEqual(New String() {"Frage", "Antwort A", "Antwort B", "Antwort C", "Antwort D", "Rubrik", "Richtige Antwort", "Erläuterung", "100", "200", "500", "1000", "5000", "10000", "20000"}, CompuMaster.Data.DataTables.AllColumnNames(FullDataTable))
+            ClassicAssert.AreEqual(New String() {"Frage", "Antwort A", "Antwort B", "Antwort C", "Antwort D", "Rubrik", "Richtige Antwort", "Erläuterung", "100", "200", "500", "1000", "5000", "10000", "20000"}, CompuMaster.Data.DataTables.AllColumnNames(FullDataTable))
 
             FullDataTable = Me.TestTable2WithDisabledFirstRowContentAsColumnName
             FullDataTable.Rows(0)(1) = "Frage"
             CompuMaster.Data.DataTables.ApplyFirstRowContentToColumnNames(FullDataTable)
-            Assert.AreEqual(New String() {"Frage", "Frage1", "Antwort B", "Antwort C", "Antwort D", "Rubrik", "Richtige Antwort", "Erläuterung", "100", "200", "500", "1000", "5000", "10000", "20000"}, CompuMaster.Data.DataTables.AllColumnNames(FullDataTable))
+            ClassicAssert.AreEqual(New String() {"Frage", "Frage1", "Antwort B", "Antwort C", "Antwort D", "Rubrik", "Richtige Antwort", "Erläuterung", "100", "200", "500", "1000", "5000", "10000", "20000"}, CompuMaster.Data.DataTables.AllColumnNames(FullDataTable))
         End Sub
 
     End Class

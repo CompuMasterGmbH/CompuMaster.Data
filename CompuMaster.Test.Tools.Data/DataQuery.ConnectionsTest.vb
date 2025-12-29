@@ -1,4 +1,5 @@
 Imports NUnit.Framework
+Imports NUnit.Framework.Legacy
 Imports System.Data
 
 Namespace CompuMaster.Test.Data.DataQuery
@@ -13,8 +14,8 @@ Namespace CompuMaster.Test.Data.DataQuery
             conn.Dispose()
             CompuMaster.Data.DataQuery.AnyIDataProvider.CloseConnection(conn) 'should not throw an exception
             CompuMaster.Data.DataQuery.AnyIDataProvider.CloseAndDisposeConnection(conn) 'should not throw an exception
-            Assert.AreEqual(System.Data.ConnectionState.Closed, conn.State)
-            Assert.Pass("No exception thrown - all is perfect :-)")
+            ClassicAssert.AreEqual(System.Data.ConnectionState.Closed, conn.State)
+            ClassicAssert.Pass("No exception thrown - all is perfect :-)")
         End Sub
 
         <Test()> Public Sub CloseAndDisposeConnectionMsSql()
@@ -23,14 +24,14 @@ Namespace CompuMaster.Test.Data.DataQuery
             conn.Dispose()
             CompuMaster.Data.DataQuery.AnyIDataProvider.CloseConnection(conn) 'should not throw an exception
             CompuMaster.Data.DataQuery.AnyIDataProvider.CloseAndDisposeConnection(conn) 'should not throw an exception
-            Assert.AreEqual(System.Data.ConnectionState.Closed, conn.State)
-            Assert.Pass("No exception thrown - all is perfect :-)")
+            ClassicAssert.AreEqual(System.Data.ConnectionState.Closed, conn.State)
+            ClassicAssert.Pass("No exception thrown - all is perfect :-)")
         End Sub
 
         <Test()> Public Sub LoadAndUseConnectionFromExternalAssembly()
             'TODO: Unabhängigkeit von spezifischer Workstation mit Lw. G:
             'TODO: Sinnvolles Testing
-            Assert.Ignore("Implementation required")
+            ClassicAssert.Ignore("Implementation required")
         End Sub
 
 #If Not CI_Build Then
@@ -39,19 +40,19 @@ Namespace CompuMaster.Test.Data.DataQuery
             Console.WriteLine("Trying to find appropriate data provider for platform " & PlatformDependentProcessBitNumber())
             Dim TestFile As String = AssemblyTestEnvironment.TestFileAbsolutePath(path)
             Console.WriteLine("Trying to open database: " & TestFile)
-            Assert.True(System.IO.File.Exists(TestFile), "ERROR IN TEST: File not found: " & TestFile)
+            ClassicAssert.True(System.IO.File.Exists(TestFile), "ERROR IN TEST: File not found: " & TestFile)
             Dim MyConn As IDbConnection = CompuMaster.Data.DataQuery.Connections.MicrosoftAccessConnection(TestFile)
             Console.WriteLine("Evaluated data provider connection string for current platform: " & MyConn.ConnectionString)
             Dim MyCmd As IDbCommand = MyConn.CreateCommand()
             MyCmd.CommandType = CommandType.Text
             MyCmd.CommandText = "SELECT * FROM TestData"
             Dim table As DataTable = CompuMaster.Data.DataQuery.FillDataTable(MyCmd, CompuMaster.Data.DataQuery.Automations.AutoOpenAndCloseAndDisposeConnection, "testdata")
-            Assert.AreEqual(3, table.Rows.Count, "Row count for table TestData")
+            ClassicAssert.AreEqual(3, table.Rows.Count, "Row count for table TestData")
         End Sub
 
         <Test()> Public Sub ReadMsAccessDatabaseMdb()
             If CompuMaster.Data.DataQuery.PlatformTools.ProbeOleDbProvider("Microsoft.ACE.OLEDB.") = False AndAlso CompuMaster.Data.DataQuery.PlatformTools.ProbeOleDbProvider("Microsoft.Jet.OLEDB.") = False Then
-                Assert.Ignore("No MS Office driver installed")
+                ClassicAssert.Ignore("No MS Office driver installed")
             End If
 
             ReadMsAccessDatabaseMdb_Execute("testfiles\test_for_msaccess.mdb")
@@ -59,7 +60,7 @@ Namespace CompuMaster.Test.Data.DataQuery
 
         <Test()> Public Sub ReadMsAccessDatabaseMdb2000()
             If CompuMaster.Data.DataQuery.PlatformTools.ProbeOleDbProvider("Microsoft.ACE.OLEDB.") = False AndAlso CompuMaster.Data.DataQuery.PlatformTools.ProbeOleDbProvider("Microsoft.Jet.OLEDB.") = False Then
-                Assert.Ignore("No MS Office driver installed")
+                ClassicAssert.Ignore("No MS Office driver installed")
             End If
 
             ReadMsAccessDatabaseMdb_Execute("testfiles\test_for_msaccess_2000.mdb")
@@ -67,7 +68,7 @@ Namespace CompuMaster.Test.Data.DataQuery
 
         <Test()> Public Sub ReadMsAccessDatabaseMdb2002UpTo2003()
             If CompuMaster.Data.DataQuery.PlatformTools.ProbeOleDbProvider("Microsoft.ACE.OLEDB.") = False AndAlso CompuMaster.Data.DataQuery.PlatformTools.ProbeOleDbProvider("Microsoft.Jet.OLEDB.") = False Then
-                Assert.Ignore("No MS Office driver installed")
+                ClassicAssert.Ignore("No MS Office driver installed")
             End If
 
             ReadMsAccessDatabaseMdb_Execute("testfiles\test_for_msaccess_2002-2003.mdb")
@@ -75,7 +76,7 @@ Namespace CompuMaster.Test.Data.DataQuery
 
         <Test()> Public Sub ReadMsAccessDatabaseAccdb()
             If CompuMaster.Data.DataQuery.PlatformTools.ProbeOleDbProvider("Microsoft.ACE.OLEDB.") = False Then
-                Assert.Ignore("No MS Office driver installed")
+                ClassicAssert.Ignore("No MS Office driver installed")
             End If
 
             ReadMsAccessDatabaseMdb_Execute("testfiles\test_for_msaccess.accdb")
@@ -84,13 +85,13 @@ Namespace CompuMaster.Test.Data.DataQuery
         <Test> Public Sub TextCsvConnection()
             CompuMaster.Data.DataQuery.Connections.ProbeOleDbOrOdbcProviderVerboseMode = True 'add some additional output to console
             Dim conn As IDbConnection = CompuMaster.Data.DataQuery.Connections.TextCsvConnection(AssemblyTestEnvironment.TestFileAbsolutePath("testfiles"))
-            Assert.NotNull(conn, "CSV provider not found")
+            ClassicAssert.NotNull(conn, "CSV provider not found")
             Console.WriteLine("Evaluated data provider connection string for current platform: " & conn.ConnectionString)
             Dim Cmd As IDbCommand = conn.CreateCommand()
             Cmd.CommandType = CommandType.Text
             Cmd.CommandText = "SELECT * FROM [country-codes.csv]"
             Dim table As DataTable = CompuMaster.Data.DataQuery.FillDataTable(Cmd, CompuMaster.Data.DataQuery.Automations.AutoOpenAndCloseAndDisposeConnection, "testdata")
-            Assert.AreEqual(3, table.Rows.Count, "Row count for table TestData")
+            ClassicAssert.AreEqual(3, table.Rows.Count, "Row count for table TestData")
         End Sub
 
         <Test()> Public Sub EnumerateTablesAndViewsInOdbcDbDataSource()
@@ -100,7 +101,7 @@ Namespace CompuMaster.Test.Data.DataQuery
                 Case PlatformID.Win32NT
                     conn = CompuMaster.Data.DataQuery.Connections.TextCsvConnection(TestDir)
                 Case Else
-                    Assert.Catch(Of System.Data.Odbc.OdbcException)(Sub()
+                    ClassicAssert.Catch(Of System.Data.Odbc.OdbcException)(Sub()
                                                                         CompuMaster.Data.DataQuery.Connections.TextCsvConnection(TestDir)
                                                                     End Sub)
                     Dim Message As String
@@ -110,7 +111,7 @@ Namespace CompuMaster.Test.Data.DataQuery
                     Catch ex As System.Data.Odbc.OdbcException
                         Message = ex.Message
                     End Try
-                    Assert.Ignore("ODBC driver for CSV files not available on current platform " & System.Environment.OSVersion.VersionString & " (" & Message & ")")
+                    ClassicAssert.Ignore("ODBC driver for CSV files not available on current platform " & System.Environment.OSVersion.VersionString & " (" & Message & ")")
             End Select
             Try
                 conn.Open()
@@ -124,13 +125,13 @@ Namespace CompuMaster.Test.Data.DataQuery
                         TestDataTable = table
                     End If
                 Next
-                Assert.AreNotEqual(0, tables.Length)
-                Assert.IsNotNull(TestDataTable, "Table TestData not found")
-                Assert.AreEqual("country-codes.csv", TestDataTable.TableName)
-                Assert.AreEqual(Nothing, TestDataTable.SchemaName)
-                Assert.AreEqual("[country-codes.csv]", TestDataTable.ToString)
+                ClassicAssert.AreNotEqual(0, tables.Length)
+                ClassicAssert.IsNotNull(TestDataTable, "Table TestData not found")
+                ClassicAssert.AreEqual("country-codes.csv", TestDataTable.TableName)
+                ClassicAssert.AreEqual(Nothing, TestDataTable.SchemaName)
+                ClassicAssert.AreEqual("[country-codes.csv]", TestDataTable.ToString)
             Catch ex As System.Data.Odbc.OdbcException
-                Assert.Ignore("ODBC driver for CSV files not available on current platform " & System.Environment.OSVersion.VersionString & " (" & ex.Message & ")")
+                ClassicAssert.Ignore("ODBC driver for CSV files not available on current platform " & System.Environment.OSVersion.VersionString & " (" & ex.Message & ")")
             Finally
                 CompuMaster.Data.DataQuery.CloseAndDisposeConnection(conn)
             End Try
@@ -149,11 +150,11 @@ Namespace CompuMaster.Test.Data.DataQuery
                         TestDataTable = table
                     End If
                 Next
-                Assert.AreNotEqual(0, tables.Length)
-                Assert.IsNotNull(TestDataTable, "Table TestData not found")
-                Assert.AreEqual("TestData", TestDataTable.TableName)
-                Assert.AreEqual(Nothing, TestDataTable.SchemaName)
-                Assert.AreEqual("[TestData]", TestDataTable.ToString)
+                ClassicAssert.AreNotEqual(0, tables.Length)
+                ClassicAssert.IsNotNull(TestDataTable, "Table TestData not found")
+                ClassicAssert.AreEqual("TestData", TestDataTable.TableName)
+                ClassicAssert.AreEqual(Nothing, TestDataTable.SchemaName)
+                ClassicAssert.AreEqual("[TestData]", TestDataTable.ToString)
             Finally
                 CompuMaster.Data.DataQuery.CloseAndDisposeConnection(conn)
             End Try
@@ -161,7 +162,7 @@ Namespace CompuMaster.Test.Data.DataQuery
 
         <Test()> Public Sub EnumerateTablesAndViewsInOleDbDataSource()
             If CompuMaster.Data.DataQuery.PlatformTools.ProbeOleDbProvider("Microsoft.ACE.OLEDB.") = False AndAlso CompuMaster.Data.DataQuery.PlatformTools.ProbeOleDbProvider("Microsoft.Jet.OLEDB.") = False Then
-                Assert.Ignore("No MS Office driver installed")
+                ClassicAssert.Ignore("No MS Office driver installed")
             End If
 
             Dim TestFile As String = AssemblyTestEnvironment.TestFileAbsolutePath("testfiles\test_for_msaccess.mdb")
@@ -171,13 +172,13 @@ Namespace CompuMaster.Test.Data.DataQuery
                     Try
                         conn = CompuMaster.Data.DataQuery.Connections.MicrosoftAccessConnection(TestFile)
                     Catch ex As CompuMaster.Data.DataQuery.Connections.Office2010x64OleDbOdbcEngineRequiredException
-                        Assert.Ignore("Microsoft Access OleDB provider not available on current platform " & System.Environment.OSVersion.VersionString)
+                        ClassicAssert.Ignore("Microsoft Access OleDB provider not available on current platform " & System.Environment.OSVersion.VersionString)
                     End Try
                 Case Else
-                    Assert.Catch(Of CompuMaster.Data.DataQuery.Connections.Office2010x64OleDbOdbcEngineRequiredException)(Sub()
+                    ClassicAssert.Catch(Of CompuMaster.Data.DataQuery.Connections.Office2010x64OleDbOdbcEngineRequiredException)(Sub()
                                                                                                                               conn = CompuMaster.Data.DataQuery.Connections.MicrosoftAccessConnection(TestFile)
                                                                                                                           End Sub)
-                    Assert.Ignore("Microsoft Access OleDB provider not available on current platform " & System.Environment.OSVersion.VersionString)
+                    ClassicAssert.Ignore("Microsoft Access OleDB provider not available on current platform " & System.Environment.OSVersion.VersionString)
             End Select
             Console.WriteLine("Evaluated data provider connection string for current platform: " & conn.ConnectionString)
             If CType(conn, Object).GetType Is GetType(System.Data.OleDb.OleDbConnection) Then
@@ -193,16 +194,16 @@ Namespace CompuMaster.Test.Data.DataQuery
                             TestDataTable = table
                         End If
                     Next
-                    Assert.AreNotEqual(0, tables.Length)
-                    Assert.IsNotNull(TestDataTable, "Table TestData not found")
-                    Assert.AreEqual("TestData", TestDataTable.TableName)
-                    Assert.AreEqual(Nothing, TestDataTable.SchemaName)
-                    Assert.AreEqual("[TestData]", TestDataTable.ToString)
+                    ClassicAssert.AreNotEqual(0, tables.Length)
+                    ClassicAssert.IsNotNull(TestDataTable, "Table TestData not found")
+                    ClassicAssert.AreEqual("TestData", TestDataTable.TableName)
+                    ClassicAssert.AreEqual(Nothing, TestDataTable.SchemaName)
+                    ClassicAssert.AreEqual("[TestData]", TestDataTable.ToString)
                 Finally
                     CompuMaster.Data.DataQuery.CloseAndDisposeConnection(conn)
                 End Try
             Else
-                Assert.Fail("Test environment doesn't contain OleDb provider for current platform x64/x32 - reconfigure test server!")
+                ClassicAssert.Fail("Test environment doesn't contain OleDb provider for current platform x64/x32 - reconfigure test server!")
             End If
         End Sub
 #End If
@@ -210,7 +211,7 @@ Namespace CompuMaster.Test.Data.DataQuery
 #If Not CI_Build Then
         <Test()> Public Sub MicrosoftExcelOdbcConnection()
             If CompuMaster.Data.DataQuery.PlatformTools.ProbeOleDbProvider("Microsoft.ACE.OLEDB.") = False AndAlso CompuMaster.Data.DataQuery.PlatformTools.ProbeOleDbProvider("Microsoft.Jet.OLEDB.") = False Then
-                Assert.Ignore("No MS Office driver installed")
+                ClassicAssert.Ignore("No MS Office driver installed")
             End If
 
             Console.WriteLine("Trying to find appropriate data provider for platform " & PlatformDependentProcessBitNumber())
@@ -221,25 +222,25 @@ Namespace CompuMaster.Test.Data.DataQuery
                     Try
                         conn = CompuMaster.Data.DataQuery.Connections.MicrosoftExcelOdbcConnection(TestFile, False, True)
                     Catch ex As CompuMaster.Data.DataQuery.Connections.Office2010x64OleDbOdbcEngineRequiredException
-                        Assert.Ignore("Microsoft Excel OleDB provider not available on current platform " & System.Environment.OSVersion.VersionString)
+                        ClassicAssert.Ignore("Microsoft Excel OleDB provider not available on current platform " & System.Environment.OSVersion.VersionString)
                     End Try
                 Case Else
-                    Assert.Catch(Of CompuMaster.Data.DataQuery.Connections.Office2010x64OleDbOdbcEngineRequiredException)(Sub()
+                    ClassicAssert.Catch(Of CompuMaster.Data.DataQuery.Connections.Office2010x64OleDbOdbcEngineRequiredException)(Sub()
                                                                                                                               conn = CompuMaster.Data.DataQuery.Connections.MicrosoftExcelOdbcConnection(TestFile, False, True)
                                                                                                                           End Sub)
-                    Assert.Ignore("Microsoft Excel OleDB provider not available on current platform " & System.Environment.OSVersion.VersionString)
+                    ClassicAssert.Ignore("Microsoft Excel OleDB provider not available on current platform " & System.Environment.OSVersion.VersionString)
             End Select
             Console.WriteLine("Evaluated data provider connection string for current platform: " & conn.ConnectionString)
             If CType(conn, Object).GetType Is GetType(System.Data.Odbc.OdbcConnection) Then
                 Try
                     CompuMaster.Data.DataQuery.OpenConnection(conn)
-                    Assert.AreNotEqual(0, CompuMaster.Data.DataQuery.Connections.EnumerateTablesAndViewsInOdbcDataSource(conn).Length)
+                    ClassicAssert.AreNotEqual(0, CompuMaster.Data.DataQuery.Connections.EnumerateTablesAndViewsInOdbcDataSource(conn).Length)
                 Finally
                     CompuMaster.Data.DataQuery.CloseAndDisposeConnection(conn)
                 End Try
-                Assert.Pass("Excel XLS opened at " & PlatformDependentProcessBitNumber() & " platform")
+                ClassicAssert.Pass("Excel XLS opened at " & PlatformDependentProcessBitNumber() & " platform")
             Else
-                Assert.Fail("Failed to open Excel XLS at " & PlatformDependentProcessBitNumber() & " platform")
+                ClassicAssert.Fail("Failed to open Excel XLS at " & PlatformDependentProcessBitNumber() & " platform")
             End If
         End Sub
 
@@ -272,7 +273,7 @@ Namespace CompuMaster.Test.Data.DataQuery
                     conn = CompuMaster.Data.DataQuery.Connections.MicrosoftExcelOleDbConnection(CurrentTestFile, False, True)
                     If conn IsNot Nothing Then
                         'Console.WriteLine(CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(CompuMaster.Data.DataQuery.FillDataTable(conn, "SELECT * FROM [test$]", CommandType.Text, Nothing, CompuMaster.Data.DataQuery.AnyIDataProvider.Automations.AutoOpenConnection)))
-                        Assert.AreEqual("string", CType(CompuMaster.Data.DataQuery.ExecuteScalar(conn, "SELECT * FROM [test$]", CommandType.Text, Nothing, CompuMaster.Data.DataQuery.AnyIDataProvider.Automations.AutoOpenConnection), String))
+                        ClassicAssert.AreEqual("string", CType(CompuMaster.Data.DataQuery.ExecuteScalar(conn, "SELECT * FROM [test$]", CommandType.Text, Nothing, CompuMaster.Data.DataQuery.AnyIDataProvider.Automations.AutoOpenConnection), String))
                     End If
                 Catch ex As Exception
                     FoundProviderLookupException = ex
@@ -326,9 +327,9 @@ Namespace CompuMaster.Test.Data.DataQuery
                             'See:
                             '* https://social.msdn.microsoft.com/Forums/sqlserver/en-US/bdff0b5b-6838-4a4b-9029-e1ba953824db/how-to-access-excel-files-using-odbc-without-skipping-first-row-with-access-2013-runtime?forum=adodotnetdataproviders
                             '* https://docs.microsoft.com/de-de/office/client-developer/access/desktop-database-reference/initializing-the-microsoft-excel-driver?redirectedfrom=MSDN&tabs=office-2016
-                            Assert.AreEqual("string", ReadTable.Columns(0).ColumnName)
+                            ClassicAssert.AreEqual("string", ReadTable.Columns(0).ColumnName)
                         Else
-                            Assert.AreEqual("string", CType(CompuMaster.Data.DataQuery.ExecuteScalar(conn, "SELECT * FROM [test$]", CommandType.Text, Nothing, CompuMaster.Data.DataQuery.AnyIDataProvider.Automations.AutoOpenConnection), String))
+                            ClassicAssert.AreEqual("string", CType(CompuMaster.Data.DataQuery.ExecuteScalar(conn, "SELECT * FROM [test$]", CommandType.Text, Nothing, CompuMaster.Data.DataQuery.AnyIDataProvider.Automations.AutoOpenConnection), String))
                         End If
                     End If
                 Catch ex As Exception
@@ -376,7 +377,7 @@ Namespace CompuMaster.Test.Data.DataQuery
                     conn = CompuMaster.Data.DataQuery.Connections.MicrosoftExcelConnection(CurrentTestFile, False, True)
                     If conn IsNot Nothing Then
                         'Console.WriteLine(CompuMaster.Data.DataTables.ConvertToPlainTextTableFixedColumnWidths(CompuMaster.Data.DataQuery.FillDataTable(conn, "SELECT * FROM [test$]", CommandType.Text, Nothing, CompuMaster.Data.DataQuery.AnyIDataProvider.Automations.AutoOpenConnection)))
-                        Assert.AreEqual("string", CType(CompuMaster.Data.DataQuery.ExecuteScalar(conn, "SELECT * FROM [test$]", CommandType.Text, Nothing, CompuMaster.Data.DataQuery.AnyIDataProvider.Automations.AutoOpenConnection), String))
+                        ClassicAssert.AreEqual("string", CType(CompuMaster.Data.DataQuery.ExecuteScalar(conn, "SELECT * FROM [test$]", CommandType.Text, Nothing, CompuMaster.Data.DataQuery.AnyIDataProvider.Automations.AutoOpenConnection), String))
                     End If
                 Catch ex As Exception
                     FoundProviderLookupException = ex
@@ -405,9 +406,9 @@ Namespace CompuMaster.Test.Data.DataQuery
                 End If
             Next
             If TestFails = True Then
-                Assert.Fail("Some errors occured")
+                ClassicAssert.Fail("Some errors occured")
             Else
-                Assert.Pass("All files tested successfully with OLEDB + ODBC")
+                ClassicAssert.Pass("All files tested successfully with OLEDB + ODBC")
             End If
 
         End Sub
@@ -452,7 +453,7 @@ Namespace CompuMaster.Test.Data.DataQuery
                 Try
                     conn = CompuMaster.Data.DataQuery.Connections.MicrosoftAccessOleDbConnection(CurrentTestFile)
                     If conn IsNot Nothing Then
-                        Assert.AreEqual("1", CType(CompuMaster.Data.DataQuery.ExecuteScalar(conn, "SELECT * FROM testdata", CommandType.Text, Nothing, CompuMaster.Data.DataQuery.AnyIDataProvider.Automations.AutoOpenConnection), String))
+                        ClassicAssert.AreEqual("1", CType(CompuMaster.Data.DataQuery.ExecuteScalar(conn, "SELECT * FROM testdata", CommandType.Text, Nothing, CompuMaster.Data.DataQuery.AnyIDataProvider.Automations.AutoOpenConnection), String))
                     End If
                 Catch ex As Exception
                     FoundProviderLookupException = ex
@@ -498,7 +499,7 @@ Namespace CompuMaster.Test.Data.DataQuery
                 Try
                     conn = CompuMaster.Data.DataQuery.Connections.MicrosoftAccessOdbcConnection(CurrentTestFile)
                     If conn IsNot Nothing Then
-                        Assert.AreEqual("1", CType(CompuMaster.Data.DataQuery.ExecuteScalar(conn, "SELECT * FROM testdata", CommandType.Text, Nothing, CompuMaster.Data.DataQuery.AnyIDataProvider.Automations.AutoOpenConnection), String))
+                        ClassicAssert.AreEqual("1", CType(CompuMaster.Data.DataQuery.ExecuteScalar(conn, "SELECT * FROM testdata", CommandType.Text, Nothing, CompuMaster.Data.DataQuery.AnyIDataProvider.Automations.AutoOpenConnection), String))
                     End If
                 Catch ex As Exception
                     FoundProviderLookupException = ex
@@ -544,7 +545,7 @@ Namespace CompuMaster.Test.Data.DataQuery
                 Try
                     conn = CompuMaster.Data.DataQuery.Connections.MicrosoftAccessConnection(CurrentTestFile)
                     If conn IsNot Nothing Then
-                        Assert.AreEqual("1", CType(CompuMaster.Data.DataQuery.ExecuteScalar(conn, "SELECT * FROM testdata", CommandType.Text, Nothing, CompuMaster.Data.DataQuery.AnyIDataProvider.Automations.AutoOpenConnection), String))
+                        ClassicAssert.AreEqual("1", CType(CompuMaster.Data.DataQuery.ExecuteScalar(conn, "SELECT * FROM testdata", CommandType.Text, Nothing, CompuMaster.Data.DataQuery.AnyIDataProvider.Automations.AutoOpenConnection), String))
                     End If
                 Catch ex As Exception
                     FoundProviderLookupException = ex
@@ -573,9 +574,9 @@ Namespace CompuMaster.Test.Data.DataQuery
                 End If
             Next
             If TestFails = True Then
-                Assert.Fail("Some errors occured")
+                ClassicAssert.Fail("Some errors occured")
             Else
-                Assert.Pass("All files tested successfully with OLEDB + ODBC")
+                ClassicAssert.Pass("All files tested successfully with OLEDB + ODBC")
             End If
         End Sub
 
@@ -608,7 +609,7 @@ Namespace CompuMaster.Test.Data.DataQuery
 
         <Test()> Public Sub MicrosoftExcelOledbConnection()
             If CompuMaster.Data.DataQuery.PlatformTools.ProbeOleDbProvider("Microsoft.ACE.OLEDB.") = False AndAlso CompuMaster.Data.DataQuery.PlatformTools.ProbeOleDbProvider("Microsoft.Jet.OLEDB.") = False Then
-                Assert.Ignore("No MS Office driver installed")
+                ClassicAssert.Ignore("No MS Office driver installed")
             End If
 
             Console.WriteLine("Trying to find appropriate data provider for platform " & PlatformDependentProcessBitNumber())
@@ -618,19 +619,19 @@ Namespace CompuMaster.Test.Data.DataQuery
             If CType(conn, Object).GetType Is GetType(System.Data.OleDb.OleDbConnection) Then
                 Try
                     CompuMaster.Data.DataQuery.OpenConnection(conn)
-                    Assert.AreNotEqual(0, CompuMaster.Data.DataQuery.Connections.EnumerateTablesAndViewsInOleDbDataSource(conn).Length)
+                    ClassicAssert.AreNotEqual(0, CompuMaster.Data.DataQuery.Connections.EnumerateTablesAndViewsInOleDbDataSource(conn).Length)
                 Finally
                     CompuMaster.Data.DataQuery.CloseAndDisposeConnection(conn)
                 End Try
-                Assert.Pass("Excel XLS opened at " & PlatformDependentProcessBitNumber() & " platform")
+                ClassicAssert.Pass("Excel XLS opened at " & PlatformDependentProcessBitNumber() & " platform")
             Else
-                Assert.Fail("Failed to open Excel XLS at " & PlatformDependentProcessBitNumber() & " platform")
+                ClassicAssert.Fail("Failed to open Excel XLS at " & PlatformDependentProcessBitNumber() & " platform")
             End If
         End Sub
 
         <Test()> Public Sub MicrosoftExcelConnection()
             If CompuMaster.Data.DataQuery.PlatformTools.ProbeOleDbProvider("Microsoft.ACE.OLEDB.") = False AndAlso CompuMaster.Data.DataQuery.PlatformTools.ProbeOleDbProvider("Microsoft.Jet.OLEDB.") = False Then
-                Assert.Ignore("No MS Office driver installed")
+                ClassicAssert.Ignore("No MS Office driver installed")
             End If
 
             Console.WriteLine("Trying to find appropriate data provider for platform " & PlatformDependentProcessBitNumber())
@@ -640,20 +641,20 @@ Namespace CompuMaster.Test.Data.DataQuery
             If CType(conn, Object).GetType Is GetType(System.Data.OleDb.OleDbConnection) Then
                 Try
                     CompuMaster.Data.DataQuery.OpenConnection(conn)
-                    Assert.AreNotEqual(0, CompuMaster.Data.DataQuery.Connections.EnumerateTablesAndViewsInOleDbDataSource(conn).Length)
+                    ClassicAssert.AreNotEqual(0, CompuMaster.Data.DataQuery.Connections.EnumerateTablesAndViewsInOleDbDataSource(conn).Length)
                 Finally
                     CompuMaster.Data.DataQuery.CloseAndDisposeConnection(conn)
                 End Try
-                Assert.Pass("Excel XLS opened at " & PlatformDependentProcessBitNumber() & " platform")
+                ClassicAssert.Pass("Excel XLS opened at " & PlatformDependentProcessBitNumber() & " platform")
                 Console.WriteLine("Excel XLS opened at " & PlatformDependentProcessBitNumber() & " platform")
             Else
-                Assert.Fail("Failed to open Excel XLS at " & PlatformDependentProcessBitNumber() & " platform")
+                ClassicAssert.Fail("Failed to open Excel XLS at " & PlatformDependentProcessBitNumber() & " platform")
             End If
         End Sub
 
         <Test()> Public Sub MicrosoftAccessOdbcConnection()
             If CompuMaster.Data.DataQuery.PlatformTools.ProbeOleDbProvider("Microsoft.ACE.OLEDB.") = False AndAlso CompuMaster.Data.DataQuery.PlatformTools.ProbeOleDbProvider("Microsoft.Jet.OLEDB.") = False Then
-                Assert.Ignore("No MS Office driver installed")
+                ClassicAssert.Ignore("No MS Office driver installed")
             End If
 
             Console.WriteLine("Trying to find appropriate data provider for platform " & PlatformDependentProcessBitNumber())
@@ -663,19 +664,19 @@ Namespace CompuMaster.Test.Data.DataQuery
             If CType(conn, Object).GetType Is GetType(System.Data.Odbc.OdbcConnection) Then
                 Try
                     CompuMaster.Data.DataQuery.OpenConnection(conn)
-                    Assert.AreNotEqual(0, CompuMaster.Data.DataQuery.Connections.EnumerateTablesAndViewsInOdbcDataSource(conn).Length)
+                    ClassicAssert.AreNotEqual(0, CompuMaster.Data.DataQuery.Connections.EnumerateTablesAndViewsInOdbcDataSource(conn).Length)
                 Finally
                     CompuMaster.Data.DataQuery.CloseAndDisposeConnection(conn)
                 End Try
-                Assert.Pass("Access MDB opened at " & PlatformDependentProcessBitNumber() & " platform")
+                ClassicAssert.Pass("Access MDB opened at " & PlatformDependentProcessBitNumber() & " platform")
             Else
-                Assert.Fail("Failed to open Access MDB at " & PlatformDependentProcessBitNumber() & " platform")
+                ClassicAssert.Fail("Failed to open Access MDB at " & PlatformDependentProcessBitNumber() & " platform")
             End If
         End Sub
 
         <Test()> Public Sub MicrosoftAccessOledbConnection()
             If CompuMaster.Data.DataQuery.PlatformTools.ProbeOleDbProvider("Microsoft.ACE.OLEDB.") = False AndAlso CompuMaster.Data.DataQuery.PlatformTools.ProbeOleDbProvider("Microsoft.Jet.OLEDB.") = False Then
-                Assert.Ignore("No MS Office driver installed")
+                ClassicAssert.Ignore("No MS Office driver installed")
             End If
 
             Console.WriteLine("Trying to find appropriate data provider for platform " & PlatformDependentProcessBitNumber())
@@ -685,13 +686,13 @@ Namespace CompuMaster.Test.Data.DataQuery
             If CType(conn, Object).GetType Is GetType(System.Data.OleDb.OleDbConnection) Then
                 Try
                     CompuMaster.Data.DataQuery.OpenConnection(conn)
-                    Assert.AreNotEqual(0, CompuMaster.Data.DataQuery.Connections.EnumerateTablesAndViewsInOleDbDataSource(conn).Length)
+                    ClassicAssert.AreNotEqual(0, CompuMaster.Data.DataQuery.Connections.EnumerateTablesAndViewsInOleDbDataSource(conn).Length)
                 Finally
                     CompuMaster.Data.DataQuery.CloseAndDisposeConnection(conn)
                 End Try
-                Assert.Pass("Access MDB opened at " & PlatformDependentProcessBitNumber() & " platform")
+                ClassicAssert.Pass("Access MDB opened at " & PlatformDependentProcessBitNumber() & " platform")
             Else
-                Assert.Fail("Failed to open Access MDB at " & PlatformDependentProcessBitNumber() & " platform")
+                ClassicAssert.Fail("Failed to open Access MDB at " & PlatformDependentProcessBitNumber() & " platform")
             End If
         End Sub
 
@@ -705,7 +706,7 @@ Namespace CompuMaster.Test.Data.DataQuery
         '    Console.WriteLine("Current trust level for code security: " & GetCurrentTrustLevel.ToString)
         '    Console.WriteLine("Current trust level for app domain security: IsUnrestricted=" & AppDomain.CurrentDomain.ApplicationTrust.DefaultGrantSet.PermissionSet.IsUnrestricted())
         '    If (System.Web.AspNetHostingPermissionLevel.Medium <> GetCurrentTrustLevel()) Then
-        '        Assert.Ignore("Code access security trust level must be set to medium trust for this test")
+        '        ClassicAssert.Ignore("Code access security trust level must be set to medium trust for this test")
         '    End If
         '    MicrosoftAccessConnection()
 
@@ -737,7 +738,7 @@ Namespace CompuMaster.Test.Data.DataQuery
 
         <Test()> Public Sub MicrosoftAccessConnection()
             If CompuMaster.Data.DataQuery.PlatformTools.ProbeOleDbProvider("Microsoft.ACE.OLEDB.") = False AndAlso CompuMaster.Data.DataQuery.PlatformTools.ProbeOleDbProvider("Microsoft.Jet.OLEDB.") = False Then
-                Assert.Ignore("No MS Office driver installed")
+                ClassicAssert.Ignore("No MS Office driver installed")
             End If
 
             Console.WriteLine("Trying to find appropriate data provider for platform " & PlatformDependentProcessBitNumber())
@@ -747,13 +748,13 @@ Namespace CompuMaster.Test.Data.DataQuery
             If CType(conn, Object).GetType Is GetType(System.Data.OleDb.OleDbConnection) Then
                 Try
                     CompuMaster.Data.DataQuery.OpenConnection(conn)
-                    Assert.AreNotEqual(0, CompuMaster.Data.DataQuery.Connections.EnumerateTablesAndViewsInOleDbDataSource(conn).Length)
+                    ClassicAssert.AreNotEqual(0, CompuMaster.Data.DataQuery.Connections.EnumerateTablesAndViewsInOleDbDataSource(conn).Length)
                 Finally
                     CompuMaster.Data.DataQuery.CloseAndDisposeConnection(conn)
                 End Try
-                Assert.Pass("Access MDB opened at " & PlatformDependentProcessBitNumber() & " platform")
+                ClassicAssert.Pass("Access MDB opened at " & PlatformDependentProcessBitNumber() & " platform")
             Else
-                Assert.Fail("Failed to open Access MDB at " & PlatformDependentProcessBitNumber() & " platform")
+                ClassicAssert.Fail("Failed to open Access MDB at " & PlatformDependentProcessBitNumber() & " platform")
             End If
         End Sub
 
@@ -769,7 +770,7 @@ Namespace CompuMaster.Test.Data.DataQuery
 #If Not CI_Build Then
         <Test()> Public Sub ReadMsAccessDatabaseEnumeratedTable()
             If CompuMaster.Data.DataQuery.PlatformTools.ProbeOleDbProvider("Microsoft.ACE.OLEDB.") = False AndAlso CompuMaster.Data.DataQuery.PlatformTools.ProbeOleDbProvider("Microsoft.Jet.OLEDB.") = False Then
-                Assert.Ignore("No MS Office driver installed")
+                ClassicAssert.Ignore("No MS Office driver installed")
             End If
 
             Dim TestFile As String = AssemblyTestEnvironment.TestFileAbsolutePath("testfiles\test_for_msaccess.mdb")
@@ -786,7 +787,7 @@ Namespace CompuMaster.Test.Data.DataQuery
             Finally
                 CompuMaster.Data.DataQuery.CloseAndDisposeConnection(MyConn)
             End Try
-            Assert.AreNotEqual(0, table.Columns.Count, "Column count for random, enumerated table")
+            ClassicAssert.AreNotEqual(0, table.Columns.Count, "Column count for random, enumerated table")
         End Sub
 #End If
 

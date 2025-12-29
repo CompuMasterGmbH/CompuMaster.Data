@@ -1,4 +1,5 @@
 Imports NUnit.Framework
+Imports NUnit.Framework.Legacy
 Imports System.Data
 
 Namespace CompuMaster.Test.Data.WinPlatformsOnly
@@ -7,13 +8,13 @@ Namespace CompuMaster.Test.Data.WinPlatformsOnly
 
         Public Sub New()
             '#If CI_Build Then
-            '            Assert.Ignore("XsReader expected to be not working on non-windows platforms")
+            '            ClassicAssert.Ignore("XsReader expected to be not working on non-windows platforms")
             '#End If
         End Sub
 
         <Test()> Public Sub ReadLastCell()
             If CompuMaster.Data.DataQuery.PlatformTools.ProbeOleDbProvider("Microsoft.ACE.OLEDB.") = False AndAlso CompuMaster.Data.DataQuery.PlatformTools.ProbeOleDbProvider("Microsoft.Jet.OLEDB.") = False Then
-                Assert.Ignore("No MS Office driver installed")
+                ClassicAssert.Ignore("No MS Office driver installed")
             End If
 
             Dim TestFile As String = AssemblyTestEnvironment.TestFileAbsolutePath("testfiles\test_for_lastcell_e70aka97-2003.xls")
@@ -25,25 +26,25 @@ Namespace CompuMaster.Test.Data.WinPlatformsOnly
             'the number of columns and rows should be always 2
             Dim ReReadData As DataTable
             ReReadData = CompuMaster.Data.XlsReader.ReadDataTableFromXlsFile(TestFile, "test")
-            Assert.AreEqual(0, ReReadData.Rows.Count, "SaveAndReadEmptyStates #10") 'because last 4 lines only contains DBNull/nothing/empty string values
-            Assert.AreEqual(1, ReReadData.Columns.Count, "SaveAndReadEmptyStates #11") 'but the column "string" has been defined by the column header
+            ClassicAssert.AreEqual(0, ReReadData.Rows.Count, "SaveAndReadEmptyStates #10") 'because last 4 lines only contains DBNull/nothing/empty string values
+            ClassicAssert.AreEqual(1, ReReadData.Columns.Count, "SaveAndReadEmptyStates #11") 'but the column "string" has been defined by the column header
         End Sub
 
         <Test()> Public Sub ReadTestFileQnA()
             If CompuMaster.Data.DataQuery.PlatformTools.ProbeOleDbProvider("Microsoft.ACE.OLEDB.") = False AndAlso CompuMaster.Data.DataQuery.PlatformTools.ProbeOleDbProvider("Microsoft.Jet.OLEDB.") = False Then
-                Assert.Ignore("No MS Office driver installed")
+                ClassicAssert.Ignore("No MS Office driver installed")
             End If
 
             Dim file As String
             Dim dt As DataTable
             file = AssemblyTestEnvironment.TestFileAbsolutePath("testfiles\Q&A.xls")
             dt = CompuMaster.Data.XlsReader.ReadDataTableFromXlsFile(file, "Rund um das NT")
-            Assert.AreEqual(35, dt.Rows.Count, "Row-Length")
+            ClassicAssert.AreEqual(35, dt.Rows.Count, "Row-Length")
         End Sub
 
         <Test()> Public Sub ReadFormatExcel95()
             If CompuMaster.Data.DataQuery.PlatformTools.ProbeOleDbProvider("Microsoft.ACE.OLEDB.") = False AndAlso CompuMaster.Data.DataQuery.PlatformTools.ProbeOleDbProvider("Microsoft.Jet.OLEDB.") = False Then
-                Assert.Ignore("No MS Office driver installed")
+                ClassicAssert.Ignore("No MS Office driver installed")
             End If
 
             Dim TestFile As String = AssemblyTestEnvironment.TestFileAbsolutePath("testfiles\test_for_lastcell_e50aka95.xls")
@@ -55,7 +56,7 @@ Namespace CompuMaster.Test.Data.WinPlatformsOnly
 
         <Test()> Public Sub ReadFormatExcel97()
             If CompuMaster.Data.DataQuery.PlatformTools.ProbeOleDbProvider("Microsoft.ACE.OLEDB.") = False AndAlso CompuMaster.Data.DataQuery.PlatformTools.ProbeOleDbProvider("Microsoft.Jet.OLEDB.") = False Then
-                Assert.Ignore("No MS Office driver installed")
+                ClassicAssert.Ignore("No MS Office driver installed")
             End If
 
             Dim TestFile As String = AssemblyTestEnvironment.TestFileAbsolutePath("testfiles\test_for_lastcell_e70aka97-2003.xls")
@@ -67,7 +68,7 @@ Namespace CompuMaster.Test.Data.WinPlatformsOnly
 
         <Test()> Public Sub ReadFormatExcel2007xlsx()
             If CompuMaster.Data.DataQuery.PlatformTools.ProbeOleDbProvider("Microsoft.ACE.OLEDB.") = False Then
-                Assert.Ignore("No MS Office driver installed")
+                ClassicAssert.Ignore("No MS Office driver installed")
             End If
 
             Dim TestFile As String = AssemblyTestEnvironment.TestFileAbsolutePath("testfiles\test_for_lastcell_e12aka2007.xlsx")
@@ -79,7 +80,7 @@ Namespace CompuMaster.Test.Data.WinPlatformsOnly
 
         <Test()> Public Sub ReadFormatExcel2007xlsb()
             If CompuMaster.Data.DataQuery.PlatformTools.ProbeOleDbProvider("Microsoft.ACE.OLEDB.") = False Then
-                Assert.Ignore("No MS Office driver installed")
+                ClassicAssert.Ignore("No MS Office driver installed")
             End If
 
             Dim TestFile As String = AssemblyTestEnvironment.TestFileAbsolutePath("testfiles\test_for_lastcell_e12aka2007.xlsb")
@@ -91,7 +92,7 @@ Namespace CompuMaster.Test.Data.WinPlatformsOnly
 
         <Test()> Public Sub ReadFormatExcel2007xlsm()
             If CompuMaster.Data.DataQuery.PlatformTools.ProbeOleDbProvider("Microsoft.ACE.OLEDB.") = False Then
-                Assert.Ignore("No MS Office driver installed")
+                ClassicAssert.Ignore("No MS Office driver installed")
             End If
 
             Dim TestFile As String = AssemblyTestEnvironment.TestFileAbsolutePath("testfiles\test_for_lastcell_e12aka2007.xlsm")

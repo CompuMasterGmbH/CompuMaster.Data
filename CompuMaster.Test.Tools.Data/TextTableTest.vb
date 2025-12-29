@@ -2,6 +2,7 @@
 Option Strict On
 
 Imports NUnit.Framework
+Imports NUnit.Framework.Legacy
 Imports System.Data
 
 Namespace CompuMaster.Test.Data
@@ -16,11 +17,11 @@ Namespace CompuMaster.Test.Data
             TestTable = TestTable1()
             TextTable = New CompuMaster.Data.TextTable(TestTable)
             Console.WriteLine(TextTable.ToString())
-            Assert.AreEqual(1, TextTable.Headers.Count)
-            Assert.AreEqual(TestTable.Columns.Count, TextTable.Headers(0).Count)
-            Assert.AreEqual(TestTable.Rows.Count, TextTable.Rows.Count)
-            Assert.AreEqual(TestTable.Columns.Count, TextTable.Rows(0).Count)
-            Assert.AreEqual(TestTable.Columns.Count, TextTable.Rows(TextTable.Rows.Count - 1).Count)
+            ClassicAssert.AreEqual(1, TextTable.Headers.Count)
+            ClassicAssert.AreEqual(TestTable.Columns.Count, TextTable.Headers(0).Count)
+            ClassicAssert.AreEqual(TestTable.Rows.Count, TextTable.Rows.Count)
+            ClassicAssert.AreEqual(TestTable.Columns.Count, TextTable.Rows(0).Count)
+            ClassicAssert.AreEqual(TestTable.Columns.Count, TextTable.Rows(TextTable.Rows.Count - 1).Count)
 
             TestTable = TestTable1()
             TextTable = New CompuMaster.Data.TextTable(TestTable, Function(column As DataColumn, value As Object) As String
@@ -31,19 +32,19 @@ Namespace CompuMaster.Test.Data
                                                                       End If
                                                                   End Function)
             Console.WriteLine(TextTable.ToString())
-            Assert.AreEqual(1, TextTable.Headers.Count)
-            Assert.AreEqual(TestTable.Columns.Count, TextTable.Headers(0).Count)
-            Assert.AreEqual(TestTable.Rows.Count, TextTable.Rows.Count)
-            Assert.AreEqual(TestTable.Columns.Count, TextTable.Rows(0).Count)
-            Assert.AreEqual(TestTable.Columns.Count, TextTable.Rows(TextTable.Rows.Count - 1).Count)
+            ClassicAssert.AreEqual(1, TextTable.Headers.Count)
+            ClassicAssert.AreEqual(TestTable.Columns.Count, TextTable.Headers(0).Count)
+            ClassicAssert.AreEqual(TestTable.Rows.Count, TextTable.Rows.Count)
+            ClassicAssert.AreEqual(TestTable.Columns.Count, TextTable.Rows(0).Count)
+            ClassicAssert.AreEqual(TestTable.Columns.Count, TextTable.Rows(TextTable.Rows.Count - 1).Count)
 
             TestTable = TestTable2()
             TextTable = New CompuMaster.Data.TextTable(TestTable)
-            Assert.AreEqual(1, TextTable.Headers.Count)
-            Assert.AreEqual(TestTable.Columns.Count, TextTable.Headers(0).Count)
-            Assert.AreEqual(TestTable.Rows.Count, TextTable.Rows.Count)
-            Assert.AreEqual(TestTable.Columns.Count, TextTable.Rows(0).Count)
-            Assert.AreEqual(TestTable.Columns.Count, TextTable.Rows(TextTable.Rows.Count - 1).Count)
+            ClassicAssert.AreEqual(1, TextTable.Headers.Count)
+            ClassicAssert.AreEqual(TestTable.Columns.Count, TextTable.Headers(0).Count)
+            ClassicAssert.AreEqual(TestTable.Rows.Count, TextTable.Rows.Count)
+            ClassicAssert.AreEqual(TestTable.Columns.Count, TextTable.Rows(0).Count)
+            ClassicAssert.AreEqual(TestTable.Columns.Count, TextTable.Rows(TextTable.Rows.Count - 1).Count)
         End Sub
 
         <Test> Public Sub TextTableToString()
@@ -77,10 +78,10 @@ Namespace CompuMaster.Test.Data
                 "6 │GOTCHA!        │     " & ExpectedRowLineBreak &
                 "──┼───────────────┼─────" & ExpectedRowLineBreak &
                 "7 │Gotcha!        │     "
-            Assert.AreEqual(AscW("│"), AscW(Output.Substring(2, 1)))
-            Assert.AreEqual(AscW(Expected.Substring(2, 1)), AscW(Output.Substring(2, 1)))
-            Assert.AreEqual(Expected.Substring(0, 40), Output.Substring(0, 40))
-            Assert.AreEqual(Expected, Output)
+            ClassicAssert.AreEqual(AscW("│"), AscW(Output.Substring(2, 1)))
+            ClassicAssert.AreEqual(AscW(Expected.Substring(2, 1)), AscW(Output.Substring(2, 1)))
+            ClassicAssert.AreEqual(Expected.Substring(0, 40), Output.Substring(0, 40))
+            ClassicAssert.AreEqual(Expected, Output)
 
             ExpectedRowLineBreak = ControlChars.CrLf
             ExpectedCellLineBreak = ControlChars.Lf
@@ -103,7 +104,7 @@ Namespace CompuMaster.Test.Data
                 "6 │GOTCHA!        │<NULL>" & ExpectedRowLineBreak &
                 "──┼───────────────┼──────" & ExpectedRowLineBreak &
                 "7 │Gotcha!        │<NULL>"
-            Assert.AreEqual(Expected, Output)
+            ClassicAssert.AreEqual(Expected, Output)
 
             ExpectedRowLineBreak = ControlChars.Lf
             ExpectedCellLineBreak = ControlChars.Cr
@@ -120,7 +121,7 @@ Namespace CompuMaster.Test.Data
                 "5 │Hello world!   │    T " & ExpectedRowLineBreak &
                 "6 │GOTCHA!        │<NULL>" & ExpectedRowLineBreak &
                 "7 │Gotcha!        │<NULL>"
-            Assert.AreEqual(Expected, Output)
+            ClassicAssert.AreEqual(Expected, Output)
 
             ExpectedRowLineBreak = ControlChars.Lf
             ExpectedCellLineBreak = ControlChars.Cr
@@ -142,7 +143,7 @@ Namespace CompuMaster.Test.Data
                 "6 │GOTCHA!        │<NULL>" & ExpectedRowLineBreak &
                 "──┼───────────────┼──────" & ExpectedRowLineBreak &
                 "7 │Gotcha!        │<NULL>"
-            Assert.AreEqual(Expected, Output)
+            ClassicAssert.AreEqual(Expected, Output)
 
             ExpectedRowLineBreak = ControlChars.Lf
             ExpectedCellLineBreak = ControlChars.Cr
@@ -158,7 +159,7 @@ Namespace CompuMaster.Test.Data
                 "5 │Hello world!   │    T " & ExpectedRowLineBreak &
                 "6 │GOTCHA!        │<NULL>" & ExpectedRowLineBreak &
                 "7 │Gotcha!        │<NULL>"
-            Assert.AreEqual(Expected, Output)
+            ClassicAssert.AreEqual(Expected, Output)
 
             ExpectedRowLineBreak = ControlChars.Lf
             ExpectedCellLineBreak = ControlChars.Cr
@@ -174,7 +175,7 @@ Namespace CompuMaster.Test.Data
                 "Hello world!   │    T " & ExpectedRowLineBreak &
                 "GOTCHA!        │<NULL>" & ExpectedRowLineBreak &
                 "Gotcha!        │<NULL>"
-            Assert.AreEqual(Expected, Output)
+            ClassicAssert.AreEqual(Expected, Output)
 
             ExpectedRowLineBreak = ControlChars.Lf
             ExpectedCellLineBreak = ControlChars.Cr
@@ -190,7 +191,7 @@ Namespace CompuMaster.Test.Data
                 "Hell│    " & ExpectedRowLineBreak &
                 "GOTC│<NUL" & ExpectedRowLineBreak &
                 "Gotc│<NUL"
-            Assert.AreEqual(Expected, Output)
+            ClassicAssert.AreEqual(Expected, Output)
 
             ExpectedRowLineBreak = ControlChars.Lf
             ExpectedCellLineBreak = ControlChars.Cr
@@ -206,7 +207,7 @@ Namespace CompuMaster.Test.Data
                 "Hel│ ..." & ExpectedRowLineBreak &
                 "GOT│<..." & ExpectedRowLineBreak &
                 "Got│<..."
-            Assert.AreEqual(Expected, Output)
+            ClassicAssert.AreEqual(Expected, Output)
         End Sub
 
         <Test> Public Sub SuggestColumnWidths()
@@ -215,9 +216,9 @@ Namespace CompuMaster.Test.Data
             TestTable = TestTable1()
             TextTable = New CompuMaster.Data.TextTable(TestTable)
 
-            Assert.AreEqual(New Integer() {2, 15, 6}, TextTable.SuggestedColumnWidths("<NULL>", "    "))
-            Assert.AreEqual(New Integer() {2, 15, 9}, TextTable.SuggestedColumnWidths("<NULL>", "        "))
-            Assert.AreEqual(New Integer() {2, 15, 5}, TextTable.SuggestedColumnWidths("", ""))
+            ClassicAssert.AreEqual(New Integer() {2, 15, 6}, TextTable.SuggestedColumnWidths("<NULL>", "    "))
+            ClassicAssert.AreEqual(New Integer() {2, 15, 9}, TextTable.SuggestedColumnWidths("<NULL>", "        "))
+            ClassicAssert.AreEqual(New Integer() {2, 15, 5}, TextTable.SuggestedColumnWidths("", ""))
         End Sub
 
         <Test> Public Sub ToStringWithOptionRowNumberingEnabled()
@@ -236,10 +237,10 @@ Namespace CompuMaster.Test.Data
             Output = TextTable.ToString()
             Console.WriteLine(Output)
 
-            Assert.AreEqual("#", TextTable.Headers(0).Cells(0).Text)
+            ClassicAssert.AreEqual("#", TextTable.Headers(0).Cells(0).Text)
             For RowCounter As Integer = 0 To TextTable.Rows.Count - 1
-                Assert.AreEqual(TextTable.Rows(RowCounter).Cells(1).Text, TextTable.Rows(RowCounter).Cells(0).Text)
-                Assert.AreEqual((RowCounter + 1).ToString, TextTable.Rows(RowCounter).Cells(0).Text)
+                ClassicAssert.AreEqual(TextTable.Rows(RowCounter).Cells(1).Text, TextTable.Rows(RowCounter).Cells(0).Text)
+                ClassicAssert.AreEqual((RowCounter + 1).ToString, TextTable.Rows(RowCounter).Cells(0).Text)
             Next
 
             ExpectedRowLineBreak = System.Environment.NewLine
@@ -262,10 +263,10 @@ Namespace CompuMaster.Test.Data
                 "6│6 │GOTCHA!        │     " & ExpectedRowLineBreak &
                 "─┼──┼───────────────┼─────" & ExpectedRowLineBreak &
                 "7│7 │Gotcha!        │     "
-            Assert.AreEqual(AscW("│"), AscW(Output.Substring(1, 1)), "Expected """ & "│" & """, but found """ & Output.Substring(1, 1) & """")
-            Assert.AreEqual(AscW(Expected.Substring(1, 1)), AscW(Output.Substring(1, 1)))
-            Assert.AreEqual(Expected.Substring(0, 40), Output.Substring(0, 40))
-            Assert.AreEqual(Expected, Output)
+            ClassicAssert.AreEqual(AscW("│"), AscW(Output.Substring(1, 1)), "Expected """ & "│" & """, but found """ & Output.Substring(1, 1) & """")
+            ClassicAssert.AreEqual(AscW(Expected.Substring(1, 1)), AscW(Output.Substring(1, 1)))
+            ClassicAssert.AreEqual(Expected.Substring(0, 40), Output.Substring(0, 40))
+            ClassicAssert.AreEqual(Expected, Output)
         End Sub
 
         <Test>
@@ -284,7 +285,7 @@ Namespace CompuMaster.Test.Data
             Output = TextTable.ToPlainTextTable()
             Console.WriteLine(Output)
 
-            Assert.AreEqual("#", TextTable.Headers(0).Cells(0).Text)
+            ClassicAssert.AreEqual("#", TextTable.Headers(0).Cells(0).Text)
 
             ExpectedRowLineBreak = System.Environment.NewLine
             ExpectedCellLineBreak = System.Environment.NewLine
@@ -301,7 +302,7 @@ Namespace CompuMaster.Test.Data
                 "6 |5 |Hello world!   |T          " & ExpectedRowLineBreak &
                 "7 |6 |GOTCHA!        |           " & ExpectedRowLineBreak &
                 "8 |7 |Gotcha!        |           " & ExpectedRowLineBreak
-            Assert.AreEqual(Expected, Output)
+            ClassicAssert.AreEqual(Expected, Output)
         End Sub
 
         <Test>
@@ -335,7 +336,7 @@ Namespace CompuMaster.Test.Data
                 "6 |5 |Hello world!   |T          " & ExpectedRowLineBreak &
                 "7 |6 |GOTCHA!        |           " & ExpectedRowLineBreak &
                 "8 |7 |Gotcha!        |           " & ExpectedRowLineBreak
-            Assert.AreEqual(Expected, Output)
+            ClassicAssert.AreEqual(Expected, Output)
         End Sub
 
 #Region "Test data"
