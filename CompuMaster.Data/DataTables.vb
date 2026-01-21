@@ -369,41 +369,90 @@ Namespace CompuMaster.Data
         End Function
 
         ''' <summary>
-        '''     Find duplicate values in a given row and calculate the number of occurances of each value in the table
+        '''     Find duplicate values in a given row and calculate the number of occurrences of each value in the table
         ''' </summary>
         ''' <param name="column">A column of a datatable</param>
-        ''' <returns>A hashtable containing the origin column value as key and the number of occurances as value</returns>
+        ''' <returns>A hashtable containing the origin column value as key and the number of occurrences as value</returns>
         Public Shared Function FindDuplicates(ByVal column As DataColumn) As Hashtable
             Return CompuMaster.Data.DataTablesTools.FindDuplicates(column)
         End Function
 
         ''' <summary>
-        '''     Find duplicate values in a given row and calculate the number of occurances of each value in the table
+        '''     Find duplicate values in a given row and calculate the number of occurrences of each value in the table
         ''' </summary>
         ''' <param name="column">A column of a datatable</param>
-        ''' <param name="minOccurances">Only values with occurances equal or more than this number will be returned</param>
-        ''' <returns>A hashtable containing the origin column value as key and the number of occurances as value</returns>
-        Public Shared Function FindDuplicates(ByVal column As DataColumn, ByVal minOccurances As Integer) As Hashtable
-            Return CompuMaster.Data.DataTablesTools.FindDuplicates(column, minOccurances)
+        ''' <param name="minOccurrences">Only values with occurrences equal or more than this number will be returned</param>
+        ''' <returns>A hashtable containing the origin column value as key and the number of occurrences as value</returns>
+        Public Shared Function FindDuplicates(ByVal column As DataColumn, ByVal minOccurrences As Integer) As Hashtable
+            Return CompuMaster.Data.DataTablesTools.FindDuplicates(column, minOccurrences)
         End Function
 
         ''' <summary>
-        '''     Find duplicate values in a given row and calculate the number of occurances of each value in the table
+        '''     Find duplicate values in a given row and calculate the number of occurrences of each value in the table
         ''' </summary>
         ''' <param name="column">A column of a datatable</param>
-        ''' <returns>A hashtable containing the origin column value as key and the number of occurances as value</returns>
+        ''' <returns>A dictionary containing the origin column value as key and the number of occurrences as value.</returns>
+        <Obsolete("Use overload of FindDuplicates or FindDuplicatesExceptNullValue or FindDuplicatesOfNullValue instead, because this method throws System.InvalidCastException as soon as the column contains 1 or more DbNull values")>
+        <System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)>
         Public Shared Function FindDuplicates(Of T)(ByVal column As DataColumn) As System.Collections.Generic.Dictionary(Of T, Integer)
             Return CompuMaster.Data.DataTablesTools.FindDuplicates(Of T)(column)
         End Function
 
         ''' <summary>
-        '''     Find duplicate values in a given row and calculate the number of occurances of each value in the table
+        '''     Find duplicate values in a given row and calculate the number of occurrences of each value in the table
         ''' </summary>
         ''' <param name="column">A column of a datatable</param>
-        ''' <param name="minOccurances">Only values with occurances equal or more than this number will be returned</param>
-        ''' <returns>A hashtable containing the origin column value as key and the number of occurances as value</returns>
-        Public Shared Function FindDuplicates(Of T)(ByVal column As DataColumn, ByVal minOccurances As Integer) As System.Collections.Generic.Dictionary(Of T, Integer)
-            Return CompuMaster.Data.DataTablesTools.FindDuplicates(Of T)(column, minOccurances)
+        ''' <param name="minOccurrences">Only values with occurrences equal or more than this number will be returned</param>
+        ''' <returns>A dictionary containing the origin column value as key and the number of occurrences as value.</returns>
+        <Obsolete("Use overload of FindDuplicates or FindDuplicatesExceptNullValue or FindDuplicatesOfNullValue instead, because this method throws System.InvalidCastException as soon as the column contains 1 or more DbNull values")>
+        <System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)>
+        Public Shared Function FindDuplicates(Of T)(ByVal column As DataColumn, ByVal minOccurrences As Integer) As System.Collections.Generic.Dictionary(Of T, Integer)
+            Return CompuMaster.Data.DataTablesTools.FindDuplicates(Of T)(column, minOccurrences)
+        End Function
+
+        ''' <summary>
+        '''     Find duplicate values in a given column and calculate the number of occurrences of each value in the table.
+        '''     <para>
+        '''     DBNull/Nothing values are ignored and will not be counted
+        '''     </para>
+        ''' </summary>
+        ''' <typeparam name="T">The underlying value type (e.g. Integer, DateTime, Decimal).</typeparam>
+        ''' <param name="column">A column of a DataTable.</param>
+        ''' <returns>
+        '''     A dictionary containing the origin column value and the number of occurrences as value.
+        ''' </returns>
+        Public Shared Function FindDuplicatesExceptNullValue(Of T)(ByVal column As DataColumn) As System.Collections.Generic.Dictionary(Of T, Integer)
+            Return FindDuplicatesExceptNullValue(Of T)(column, 2)
+        End Function
+
+        ''' <summary>
+        '''     Find duplicate values in a given column and calculate the number of occurrences of each value in the table.
+        '''     <para>
+        '''     DBNull/Nothing values are ignored and will not be counted
+        '''     </para>
+        ''' </summary>
+        ''' <typeparam name="T">The underlying value type (e.g. Integer, DateTime, Decimal).</typeparam>
+        ''' <param name="column">A column of a DataTable.</param>
+        ''' <param name="minOccurrences">Only values with occurrences equal or more than this number will be returned. Minimum value: 2</param>
+        ''' <returns>
+        '''     A dictionary containing the origin column value and the number of occurrences as value.
+        ''' </returns>
+        Public Shared Function FindDuplicatesExceptNullValue(Of T)(ByVal column As DataColumn, ByVal minOccurrences As Integer) As System.Collections.Generic.Dictionary(Of T, Integer)
+            Return DataTablesTools.FindDuplicatesExceptNullValue(Of T)(column, minOccurrences)
+        End Function
+
+        ''' <summary>
+        '''     Count how often DBNull.Value (or Nothing) occurs in a given column.
+        '''     <para>
+        '''     DBNull.Value and Nothing are treated as null and counted together.
+        '''     If the resulting count is lower than <paramref name="minOccurrences"/>, this method returns null/Nothing.
+        '''     </para>
+        ''' </summary>
+        ''' <param name="column">A column of a DataTable.</param>
+        ''' <param name="minOccurrences">Only counts equal or more than this number will be returned; otherwise 0 is returned.</param>
+        ''' <returns>The number of occurrences of DBNull.Value/Nothing (merged), or 0 if below <paramref name="minOccurrences"/>.</returns>
+        Public Shared Function FindDuplicatesOfNullValue(ByVal column As DataColumn, ByVal minOccurrences As Integer) As Integer?
+            Return DataTablesTools.FindDuplicatesOfNullValue(column, minOccurrences)
         End Function
 
         ''' <summary>

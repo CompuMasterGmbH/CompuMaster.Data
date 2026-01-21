@@ -27,6 +27,21 @@ Namespace CompuMaster.Test.Data
 #End Region
 
 #Region "Test data"
+        ''' <summary>
+        ''' Test table with some duplicate values
+        ''' </summary>
+        ''' <returns><code>
+        ''' ID|Value          
+        ''' --+---------------
+        ''' 1 |Hello world!   
+        ''' 2 |Gotcha!        
+        ''' 3 |Hello world!   
+        ''' 4 |Not a duplicate
+        ''' 5 |Hello world!   
+        ''' 6 |GOTCHA!        
+        ''' 7 |Gotcha! 
+        ''' </code>
+        ''' </returns>
         Private Function TestTable1() As DataTable
             Dim Result As New DataTable("test1")
             Result.Columns.Add("ID", GetType(Integer))
@@ -79,6 +94,68 @@ Namespace CompuMaster.Test.Data
             Dim Result = TestTable2()
             For MyCounter As Integer = Result.Columns("Erläuterung").Ordinal + 1 To Result.Columns.Count - 1
                 Result.Columns(MyCounter).ColumnName = Result.Columns(MyCounter).ColumnName.Replace(",", "").Replace(".", "")
+            Next
+            Return Result
+        End Function
+
+        ''' <summary>
+        ''' Test table with several duplicate values including duplicate NULLs
+        ''' </summary>
+        ''' <returns><code>
+        ''' ID  |Value          |DateTime           
+        ''' ----+---------------+-------------------
+        ''' 1   |Hello world!   |01.01.2020 00:00:00
+        ''' 2   |Gotcha!        |NULL               
+        ''' 3   |Hello world!   |NULL               
+        ''' 4   |Not a duplicate|01.01.0001 00:00:00
+        ''' 5   |Hello world!   |01.01.0001 00:00:00
+        ''' 6   |GOTCHA!        |01.01.2020 00:00:00
+        ''' 7   |Gotcha!        |01.01.2020 00:00:00
+        ''' 0   |{String.Empty} |01.01.2020 00:00:00
+        ''' 8   |{String.Empty} |01.01.2020 00:00:00
+        ''' 7   |Gotcha!        |01.01.2020 00:00:00
+        ''' 7   |Gotcha!        |01.01.2020 00:00:00
+        ''' 7   |Gotcha!        |01.01.2020 00:00:00
+        ''' NULL|NULL           |01.01.2020 00:00:00
+        ''' NULL|NULL           |01.01.2020 00:00:00
+        ''' NULL|NULL           |01.01.2020 00:00:00
+        ''' </code>
+        ''' </returns>
+        Private Function TestTable3WithDuplicates() As DataTable
+            Dim Result As DataTable = TestTable1()
+            Dim newRow As DataRow
+            newRow = Result.NewRow
+            newRow(0) = 0
+            newRow(1) = String.Empty
+            Result.Rows.Add(newRow)
+            newRow = Result.NewRow
+            newRow(0) = 8
+            newRow(1) = String.Empty
+            Result.Rows.Add(newRow)
+            For MyCounter As Integer = 1 To 3
+                'Values with duplicate data
+                newRow = Result.NewRow
+                newRow(0) = 7
+                newRow(1) = "Gotcha!"
+                Result.Rows.Add(newRow)
+            Next
+            For MyCounter As Integer = 1 To 3
+                'Values with duplicate NULLs
+                newRow = Result.NewRow
+                newRow(0) = DBNull.Value
+                newRow(1) = DBNull.Value
+                Result.Rows.Add(newRow)
+            Next
+            Result.Columns.Add("DateTime", GetType(DateTime))
+            For MyCounter As Integer = 0 To Result.Rows.Count - 1
+                Select Case MyCounter
+                    Case 1, 2
+                        Result.Rows(MyCounter).Item("DateTime") = DBNull.Value
+                    Case 3, 4
+                        Result.Rows(MyCounter).Item("DateTime") = New DateTime
+                    Case Else
+                        Result.Rows(MyCounter).Item("DateTime") = New DateTime(2020, 1, 1)
+                End Select
             Next
             Return Result
         End Function
@@ -157,7 +234,7 @@ Namespace CompuMaster.Test.Data
             ClassicAssert.AreEqual(4, list.Count)
         End Sub
 
-        <Test(), Ignore("Requires custom connection string to execute")> Public Sub ConvertDataReaderToDataSet()
+        <Test(), Ignore("Requires custom connection String To execute")> Public Sub ConvertDataReaderToDataSet()
             Dim MyConn As New System.Data.SqlClient.SqlConnection("SERVER=yoursqlserver;DATABASE=master;PWD=xxxxxxxxxxxxxxxxxxx;UID=sa")
             Dim MyCmd As IDbCommand = MyConn.CreateCommand()
             MyCmd.CommandType = CommandType.Text
@@ -173,7 +250,7 @@ Namespace CompuMaster.Test.Data
             Dim MyConn As IDbConnection = CompuMaster.Data.DataQuery.Connections.MicrosoftAccessConnection(TestFile)
             Dim MyCmd As IDbCommand = MyConn.CreateCommand()
             MyCmd.CommandType = CommandType.Text
-            MyCmd.CommandText = "SELECT IntegerLongValue, StringShort, StringMemo FROM [SeveralColumnTypesTest] ORDER BY ID"
+            MyCmd.CommandText = "Select IntegerLongValue, StringShort, StringMemo FROM [SeveralColumnTypesTest] ORDER BY ID"
             Dim Reader As System.Data.IDataReader = CompuMaster.Data.DataQuery.AnyIDataProvider.ExecuteReader(MyCmd, CompuMaster.Data.DataQuery.Automations.AutoOpenAndCloseAndDisposeConnection)
             Dim Data As DataTable = CompuMaster.Data.DataTables.ConvertDataReaderToDataTable(Reader, "mytablename")
             ClassicAssert.AreEqual("mytablename", Data.TableName)
@@ -1459,6 +1536,16 @@ Namespace CompuMaster.Test.Data
             CompuMaster.Data.DataTables.RemoveDuplicates(dt, "Something")
 
             ClassicAssert.AreEqual(2, dt.Rows.Count())
+
+            Dim testTable As DataTable = TestTable3WithDuplicates()
+            Using comparisonTable As DataTable = TestTable3WithDuplicates()
+                CompuMaster.Data.DataTables.RemoveDuplicates(comparisonTable.Columns("ID"))
+                Assert.That(comparisonTable.Rows.Count, [Is].Not.EqualTo(testTable.Rows.Count))
+            End Using
+            Using comparisonTable As DataTable = TestTable3WithDuplicates()
+                CompuMaster.Data.DataTables.RemoveDuplicates(comparisonTable.Columns("Value"))
+                Assert.That(comparisonTable.Rows.Count, [Is].Not.EqualTo(testTable.Rows.Count))
+            End Using
         End Sub
 
         <Test()> Public Sub RemoveRowsWithColumnValues()
@@ -2538,6 +2625,61 @@ Namespace CompuMaster.Test.Data
                 ClassicAssert.AreEqual(3, MyKey.Value, "JW #00013")
             Next
 
+#Disable Warning BC40000 ' Typ oder Element ist veraltet
+            With CompuMaster.Data.DataTables.FindDuplicates(Of Integer)(TestTable1.Columns("ID"))
+                Assert.That(.Count, [Is].EqualTo(0))
+            End With
+            With CompuMaster.Data.DataTables.FindDuplicates(Of String)(TestTable1.Columns("Value"))
+                Assert.That(.Count, [Is].EqualTo(2))
+                Assert.That(.Item("Gotcha!"), [Is].EqualTo(2))
+                Assert.That(.Item("Hello world!"), [Is].EqualTo(3))
+            End With
+            Assert.Throws(Of InvalidCastException)(Sub() CompuMaster.Data.DataTables.FindDuplicates(Of Integer)(TestTable3WithDuplicates.Columns("ID")))
+#Enable Warning BC40000 ' Typ oder Element ist veraltet
+
+            With CompuMaster.Data.DataTables.FindDuplicates(TestTable3WithDuplicates.Columns("ID"))
+                Assert.That(.Count, [Is].EqualTo(2))
+                Assert.That(.Item(7), [Is].EqualTo(4))
+                Assert.That(.Item(DBNull.Value), [Is].EqualTo(3))
+            End With
+            With CompuMaster.Data.DataTables.FindDuplicates(TestTable3WithDuplicates.Columns("Value"))
+                Assert.That(.Keys, [Is].EquivalentTo(CType(New Object() {"Gotcha!", "Hello world!", DBNull.Value, String.Empty}, ICollection)))
+                Assert.That(.Count, [Is].EqualTo(4))
+                Assert.That(.Item("Gotcha!"), [Is].EqualTo(5))
+                Assert.That(.Item("Hello world!"), [Is].EqualTo(3))
+                Assert.That(.Item(DBNull.Value), [Is].EqualTo(3))
+                Assert.That(.Item(String.Empty), [Is].EqualTo(2))
+            End With
+            With CompuMaster.Data.DataTables.FindDuplicates(TestTable3WithDuplicates.Columns("ID"), 4)
+                Assert.That(.Count, [Is].EqualTo(1))
+                Assert.That(.Item(7), [Is].EqualTo(4))
+            End With
+            With CompuMaster.Data.DataTables.FindDuplicates(TestTable3WithDuplicates.Columns("Value"), 3)
+                Assert.That(.Count, [Is].EqualTo(3))
+                Assert.That(.Item("Gotcha!"), [Is].EqualTo(5))
+                Assert.That(.Item("Hello world!"), [Is].EqualTo(3))
+                Assert.That(.Item(DBNull.Value), [Is].EqualTo(3))
+            End With
+            With CompuMaster.Data.DataTables.FindDuplicates(TestTable3WithDuplicates.Columns("Value"), 4)
+                Assert.That(.Count, [Is].EqualTo(1))
+                Assert.That(.Item("Gotcha!"), [Is].EqualTo(5))
+            End With
+
+            With CompuMaster.Data.DataTables.FindDuplicatesExceptNullValue(Of Integer)(TestTable3WithDuplicates.Columns("ID"))
+                Assert.That(.Count, [Is].EqualTo(1))
+                Assert.That(.Item(7), [Is].EqualTo(4))
+            End With
+            Assert.Throws(Of ArgumentOutOfRangeException)(Sub() CompuMaster.Data.DataTables.FindDuplicatesOfNullValue(TestTable3WithDuplicates.Columns("ID"), 0))
+            Assert.That(CompuMaster.Data.DataTables.FindDuplicatesOfNullValue(TestTable3WithDuplicates.Columns("ID"), 3), [Is].EqualTo(3))
+            Assert.That(CompuMaster.Data.DataTables.FindDuplicatesOfNullValue(TestTable3WithDuplicates.Columns("ID"), 4), [Is].EqualTo(New Integer?))
+            Assert.That(CompuMaster.Data.DataTables.FindDuplicatesOfNullValue(TestTable3WithDuplicates.Columns("Value"), 3), [Is].EqualTo(3))
+            Assert.That(CompuMaster.Data.DataTables.FindDuplicatesOfNullValue(TestTable3WithDuplicates.Columns("Value"), 4), [Is].EqualTo(New Integer?))
+            With CompuMaster.Data.DataTables.FindDuplicatesExceptNullValue(Of DateTime)(TestTable3WithDuplicates.Columns("DateTime"))
+                Assert.That(.Count, [Is].EqualTo(2))
+                Assert.That(.Item(Nothing), [Is].EqualTo(2))
+                Assert.That(.Item(New DateTime), [Is].EqualTo(2))
+                Assert.That(.Item(New DateTime(2020, 1, 1)), [Is].EqualTo(TestTable3WithDuplicates.Rows.Count - 2 - 2))
+            End With
         End Sub
 
         <Test()> Public Sub KeepColumnsAndRemoveAllOthers()

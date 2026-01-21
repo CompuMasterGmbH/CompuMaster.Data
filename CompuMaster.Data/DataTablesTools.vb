@@ -112,21 +112,21 @@ Namespace CompuMaster.Data
         End Function
 
         ''' <summary>
-        '''     Find duplicate values in a given row and calculate the number of occurances of each value in the table
+        '''     Find duplicate values in a given row and calculate the number of occurrences of each value in the table
         ''' </summary>
         ''' <param name="column">A column of a datatable</param>
-        ''' <returns>A hashtable containing the origin column value as key and the number of occurances as value</returns>
+        ''' <returns>A hashtable containing the origin column value as key and the number of occurrences as value</returns>
         Friend Shared Function FindDuplicates(ByVal column As DataColumn) As Hashtable
             Return FindDuplicates(column, 2)
         End Function
 
         ''' <summary>
-        '''     Find duplicate values in a given row and calculate the number of occurances of each value in the table
+        '''     Find duplicate values in a given row and calculate the number of occurrences of each value in the table
         ''' </summary>
         ''' <param name="column">A column of a datatable</param>
-        ''' <param name="minOccurances">Only values with occurances equal or more than this number will be returned</param>
-        ''' <returns>A hashtable containing the origin column value as key and the number of occurances as value</returns>
-        Friend Shared Function FindDuplicates(ByVal column As DataColumn, ByVal minOccurances As Integer) As Hashtable
+        ''' <param name="minOccurrences">Only values with occurrences equal or more than this number will be returned</param>
+        ''' <returns>A hashtable containing the origin column value as key and the number of occurrences as value</returns>
+        Friend Shared Function FindDuplicates(ByVal column As DataColumn, ByVal minOccurrences As Integer) As Hashtable
 
             Dim Table As DataTable = column.Table
             Dim Result As New Hashtable
@@ -143,10 +143,10 @@ Namespace CompuMaster.Data
                 End If
             Next
 
-            'Remove all elements with occurances lesser than the required number
+            'Remove all elements with occurrences lesser than the required number
             Dim removeTheseKeys As New ArrayList
             For Each MyKey As DictionaryEntry In Result
-                If CType(MyKey.Value, Integer) < minOccurances Then
+                If CType(MyKey.Value, Integer) < minOccurrences Then
                     removeTheseKeys.Add(MyKey.Key)
                 End If
             Next
@@ -159,21 +159,27 @@ Namespace CompuMaster.Data
         End Function
 
         ''' <summary>
-        '''     Find duplicate values in a given row and calculate the number of occurances of each value in the table
+        '''     Find duplicate values in a given row and calculate the number of occurrences of each value in the table
         ''' </summary>
         ''' <param name="column">A column of a datatable</param>
-        ''' <returns>A hashtable containing the origin column value as key and the number of occurances as value</returns>
+        ''' <returns>A dictionary containing the origin column value as key and the number of occurrences as value.</returns>
+        <Obsolete("Use overload of FindDuplicates or FindDuplicatesExceptNullValue or FindDuplicatesOfNullValue instead, because this method throws System.InvalidCastException as soon as the column contains 1 or more DbNull values")>
         Friend Shared Function FindDuplicates(Of T)(ByVal column As DataColumn) As System.Collections.Generic.Dictionary(Of T, Integer)
             Return FindDuplicates(Of T)(column, 2)
         End Function
 
         ''' <summary>
-        '''     Find duplicate values in a given row and calculate the number of occurances of each value in the table
+        '''     Find duplicate values in a given column and calculate the number of occurrences of each value in the table.
+        '''     <para>
+        '''     Note about DBNull: this overload expects that the column does not contain DBNull values for type <typeparamref name="T"/>.
+        '''     If DBNull values may occur, use the overload with <paramref name="considerDbNullAsValue"/> or the Nullable overload.
+        '''     </para>
         ''' </summary>
         ''' <param name="column">A column of a datatable</param>
-        ''' <param name="minOccurances">Only values with occurances equal or more than this number will be returned</param>
-        ''' <returns>A hashtable containing the origin column value as key and the number of occurances as value</returns>
-        Friend Shared Function FindDuplicates(Of T)(ByVal column As DataColumn, ByVal minOccurances As Integer) As System.Collections.Generic.Dictionary(Of T, Integer)
+        ''' <param name="minOccurrences">Only values with occurrences equal or more than this number will be returned</param>
+        ''' <returns>A dictionary containing the origin column value as key and the number of occurrences as value.</returns>
+        <Obsolete("Use overload of FindDuplicates or FindDuplicatesExceptNullValue or FindDuplicatesOfNullValue instead, because this method throws System.InvalidCastException as soon as the column contains 1 or more DbNull values")>
+        Friend Shared Function FindDuplicates(Of T)(ByVal column As DataColumn, ByVal minOccurrences As Integer) As System.Collections.Generic.Dictionary(Of T, Integer)
 
             Dim Table As DataTable = column.Table
             Dim Result As New System.Collections.Generic.Dictionary(Of T, Integer)
@@ -181,20 +187,20 @@ Namespace CompuMaster.Data
             'Find all elements and count their duplicates number
             For MyCounter As Integer = 0 To Table.Rows.Count - 1
                 Dim key As T = CType(Table.Rows(MyCounter)(column), T)
-                Dim value As Integer = Nothing
-                If Result.TryGetValue(key, value) Then
+                Dim count As Integer = 0
+                If Result.TryGetValue(key, count) Then
                     'Increase counter for this existing value by 1
-                    Result.Item(key) = CType(value, Integer) + 1
+                    Result.Item(key) = count + 1
                 Else
                     'Add new element
                     Result.Add(key, 1)
                 End If
             Next
 
-            'Remove all elements with occurances lesser than the required number
+            'Remove all elements with occurrences lesser than the required number
             Dim removeTheseKeys As New System.Collections.Generic.List(Of T)
             For Each MyKey As System.Collections.Generic.KeyValuePair(Of T, Integer) In Result
-                If CType(MyKey.Value, Integer) < minOccurances Then
+                If MyKey.Value < minOccurrences Then
                     removeTheseKeys.Add(MyKey.Key)
                 End If
             Next
@@ -204,6 +210,85 @@ Namespace CompuMaster.Data
 
             Return Result
 
+        End Function
+
+        ''' <summary>
+        '''     Find duplicate values in a given column and calculate the number of occurrences of each value in the table.
+        '''     <para>
+        '''     DBNull/Nothing values are ignored and will not be counted
+        '''     </para>
+        ''' </summary>
+        ''' <typeparam name="T">The underlying value type (e.g. Integer, DateTime, Decimal).</typeparam>
+        ''' <param name="column">A column of a DataTable.</param>
+        ''' <param name="minOccurrences">Only values with occurrences equal or more than this number will be returned. Minimum value: 2</param>
+        ''' <returns>
+        '''     A dictionary containing the origin column value and the number of occurrences as value.
+        ''' </returns>
+        Friend Shared Function FindDuplicatesExceptNullValue(Of T)(ByVal column As DataColumn, ByVal minOccurrences As Integer) As System.Collections.Generic.Dictionary(Of T, Integer)
+            If minOccurrences < 2 Then Throw New ArgumentOutOfRangeException(NameOf(minOccurrences), "Minimum occurrences must be 2 or more")
+            Dim table As DataTable = column.Table
+            Dim result As New System.Collections.Generic.Dictionary(Of T, Integer)
+
+            For i As Integer = 0 To table.Rows.Count - 1
+                Dim raw As Object = table.Rows(i)(column)
+
+                If raw Is DBNull.Value OrElse raw Is Nothing Then
+                    Continue For
+                End If
+
+                Dim key As T = CType(raw, T)
+
+                Dim count As Integer
+                If result.TryGetValue(key, count) Then
+                    result(key) = count + 1
+                Else
+                    result.Add(key, 1)
+                End If
+            Next
+
+            'Remove all elements with occurrences lesser than the required number
+            Dim removeTheseKeys As New System.Collections.Generic.List(Of T)
+            For Each kvp As System.Collections.Generic.KeyValuePair(Of T, Integer) In result
+                If kvp.Value < minOccurrences Then
+                    removeTheseKeys.Add(kvp.Key)
+                End If
+            Next
+            For i As Integer = 0 To removeTheseKeys.Count - 1
+                result.Remove(removeTheseKeys(i))
+            Next
+
+            Return result
+
+        End Function
+
+        ''' <summary>
+        '''     Count how often DBNull.Value (or Nothing) occurs in a given column.
+        '''     <para>
+        '''     DBNull.Value and Nothing are treated as null and counted together.
+        '''     If the resulting count is lower than <paramref name="minOccurrences"/>, this method returns null/Nothing.
+        '''     </para>
+        ''' </summary>
+        ''' <param name="column">A column of a DataTable.</param>
+        ''' <param name="minOccurrences">Only counts equal or more than this number will be returned; otherwise 0 is returned.</param>
+        ''' <returns>The number of occurrences of DBNull.Value/Nothing (merged), or 0 if below <paramref name="minOccurrences"/>.</returns>
+        Friend Shared Function FindDuplicatesOfNullValue(ByVal column As DataColumn, ByVal minOccurrences As Integer) As Integer?
+            If minOccurrences < 2 Then Throw New ArgumentOutOfRangeException(NameOf(minOccurrences), "Minimum occurrences must be 2 or more")
+
+            Dim table As DataTable = column.Table
+            Dim nullCount As Integer = 0
+
+            For i As Integer = 0 To table.Rows.Count - 1
+                Dim raw As Object = table.Rows(i)(column)
+                If raw Is DBNull.Value OrElse raw Is Nothing Then
+                    nullCount += 1
+                End If
+            Next
+
+            If nullCount >= minOccurrences Then
+                Return nullCount
+            Else
+                Return Nothing
+            End If
         End Function
 
         ''' <summary>

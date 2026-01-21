@@ -26,7 +26,7 @@ Namespace CompuMaster.Data.CsvTables
         ''' <param name="options">Options for reading/converting the CSV data to DataTable</param>
         ''' <returns></returns>
         ''' <remarks>
-        ''' In case of duplicate column names, all additional occurances of the same column name will be modified to use a unique column name
+        ''' In case of duplicate column names, all additional occurrences of the same column name will be modified to use a unique column name
         ''' </remarks>
         Private Shared Function ReadDataTableFromCsvReader(ByVal reader As StreamReader, options As CsvReadOptionsFixedColumnSize) As DataTable
             Dim Result As New DataTable
@@ -104,7 +104,7 @@ Namespace CompuMaster.Data.CsvTables
         ''' </summary>
         ''' <returns></returns>
         ''' <remarks>
-        ''' In case of duplicate column names, all additional occurances of the same column name will be modified to use a unique column name
+        ''' In case of duplicate column names, all additional occurrences of the same column name will be modified to use a unique column name
         ''' </remarks>
         Friend Shared Function ReadDataTableFromCsvFile(csvFile As CsvFileOptions, options As CsvReadOptionsFixedColumnSize) As DataTable
 
@@ -139,7 +139,7 @@ Namespace CompuMaster.Data.CsvTables
         ''' </summary>
         ''' <returns></returns>
         ''' <remarks>
-        ''' In case of duplicate column names, all additional occurances of the same column name will be modified to use a unique column name
+        ''' In case of duplicate column names, all additional occurrences of the same column name will be modified to use a unique column name
         ''' </remarks>
         Friend Shared Function ReadDataTableFromCsvFile(csvFile As CsvFileOptions, options As CsvReadOptionsDynamicColumnSize) As DataTable
             Dim Result As New DataTable
@@ -179,7 +179,7 @@ Namespace CompuMaster.Data.CsvTables
         ''' <param name="lineEncodingAutoConversions">Change linebreak encodings on reading</param>
         ''' <returns></returns>
         ''' <remarks>
-        ''' In case of duplicate column names, all additional occurances of the same column name will be modified to use a unique column name
+        ''' In case of duplicate column names, all additional occurrences of the same column name will be modified to use a unique column name
         ''' </remarks>
         Friend Shared Function ReadDataTableFromCsvString(ByVal data As String, options As CsvReadOptionsFixedColumnSize) As DataTable
 
@@ -287,7 +287,7 @@ Namespace CompuMaster.Data.CsvTables
         ''' <param name="reader">A stream reader targetting CSV data</param>
         ''' <returns></returns>
         ''' <remarks>
-        ''' In case of duplicate column names, all additional occurances of the same column name will be modified to use a unique column name
+        ''' In case of duplicate column names, all additional occurrences of the same column name will be modified to use a unique column name
         ''' </remarks>
         Private Shared Function ReadDataTableFromCsvReader(ByVal reader As StreamReader, options As CsvReadOptionsDynamicColumnSize) As DataTable
             Dim Result As New DataTable
@@ -645,7 +645,7 @@ Namespace CompuMaster.Data.CsvTables
         ''' <param name="lineEncodingAutoConversions">Change linebreak encodings on reading</param>
         ''' <returns></returns>
         ''' <remarks>
-        ''' In case of duplicate column names, all additional occurances of the same column name will be modified to use a unique column name
+        ''' In case of duplicate column names, all additional occurrences of the same column name will be modified to use a unique column name
         ''' </remarks>
         Friend Shared Function ReadDataTableFromCsvString(ByVal data As String, options As CsvReadOptionsDynamicColumnSize) As DataTable
 
