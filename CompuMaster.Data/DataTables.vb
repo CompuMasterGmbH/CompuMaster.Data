@@ -414,7 +414,19 @@ Namespace CompuMaster.Data
         ''' <returns>A datatable with unique records in the specified column</returns>
         Public Shared Function RemoveDuplicates(ByVal dataTable As DataTable, ByVal columnName As String) As DataTable
             Return CompuMaster.Data.DataTablesTools.RemoveDuplicates(dataTable, columnName)
-        End Function 'RemoveDuplicateRows
+        End Function
+
+        ''' <summary>
+        ''' Remove rows with duplicate values in a given column
+        ''' </summary>
+        ''' <param name="dataTable">A datatable with duplicate values</param>
+        ''' <param name="columnName">column name of the datatable which contains the duplicate values</param>
+        ''' <returns>A datatable with unique records in the specified column</returns>
+        Public Shared Function RemoveDuplicates(ByVal dataColumn As DataColumn) As DataTable
+            If dataColumn Is Nothing Then Throw New ArgumentNullException(NameOf(dataColumn), "Data column must not be null")
+            If dataColumn.Table Is Nothing Then Throw New ArgumentException("DataColumn must be part of a table for this operation")
+            Return CompuMaster.Data.DataTablesTools.RemoveDuplicates(dataColumn.Table, dataColumn.ColumnName)
+        End Function
 
         ''' <summary>
         '''     Convert the first two columns into objects which can be consumed by the ListControl objects in the System.Windows.Forms namespaces
@@ -2702,6 +2714,17 @@ Namespace CompuMaster.Data
                 .VerticalSeparatorForCells = If(verticalSeparatorForCells <> Nothing, verticalSeparatorForCells, New Char?),
                 .ColumnFormatting = columnFormatting
                 })
+        End Function
+
+        ''' <summary>
+        '''     Return a string with all columns and rows
+        ''' </summary>
+        ''' <param name="table">The table to be processed</param>
+        ''' <param name="options">Options for output style and data</param>
+        ''' <returns>All rows are with fixed column withs. If no rows have been processed, the user will get notified about this fact</returns>
+        ''' <remarks></remarks>
+        Public Shared Function ConvertToPlainTextTableWithFixedColumnWidths(ByVal table As DataTable, options As ConvertToPlainTextTableOptions) As String
+            Return ConvertToPlainTextTableWithFixedColumnWidths(table.Rows, options)
         End Function
 
         ''' <summary>

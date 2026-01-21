@@ -23,6 +23,8 @@ Namespace CompuMaster.Data
         ''' <param name="columnName">Column name of the datatable which contains the duplicate values</param>
         ''' <returns>A datatable with unique records in the specified column</returns>
         Friend Shared Function RemoveDuplicates(ByVal dataTable As DataTable, ByVal columnName As String) As DataTable
+            If dataTable Is Nothing Then Throw New ArgumentNullException(NameOf(dataTable))
+            If columnName = Nothing Then Throw New ArgumentNullException(NameOf(columnName))
             Dim hTable As New Hashtable
             Dim duplicateList As New ArrayList
 
@@ -55,6 +57,8 @@ Namespace CompuMaster.Data
         '''     The names of the columns are handled case-insensitive.
         ''' </remarks>
         Friend Shared Sub KeepColumnsAndRemoveAllOthers(ByVal table As DataTable, ByVal remainingColumns As String())
+            If table Is Nothing Then Throw New ArgumentNullException(NameOf(table))
+            If remainingColumns Is Nothing Then Throw New ArgumentNullException(NameOf(remainingColumns))
             Dim KeepColFlags(table.Columns.Count - 1) As Boolean
             'Identify unwanted columns
             For MyKeepColCounter As Integer = 0 To remainingColumns.Length - 1
@@ -80,9 +84,8 @@ Namespace CompuMaster.Data
         ''' <param name="dataRow">The data row whose index number is required</param>
         ''' <returns>An index number for the given data row</returns>
         Friend Shared Function RowIndex(ByVal dataRow As DataRow) As Integer
-            If dataRow.Table Is Nothing Then
-                Throw New ArgumentException("DataRow must be part of a table to retrieve its row index")
-            End If
+            If dataRow Is Nothing Then Throw New ArgumentNullException(NameOf(dataRow))
+            If dataRow.Table Is Nothing Then Throw New ArgumentException("DataRow must be part of a table to retrieve its row index")
             For MyCounter As Integer = 0 To dataRow.Table.Rows.Count - 1
                 If dataRow.Table.Rows(MyCounter) Is dataRow Then
                     Return MyCounter
