@@ -32,6 +32,9 @@ env:
 
 jobs:
     publish:
+        permissions:
+          contents: write
+          id-token: write
         runs-on: windows-latest
         #if: false # always skip job
 
@@ -77,8 +80,16 @@ jobs:
             - name: Pack CompuMaster.Data.Controls
               run: dotnet pack --no-build --configuration=${{env.PACK_CONFIGURATION}} ${{env.BUILD_PROJECT2}} --output .  
 
+            - name: Authenticate to NuGet.org via Trusted Publishing
+              uses: NuGet/login@8d196754b4036150537f80ac539e15c2f1028841 # v1.2.0
+              id: nuget-login
+              with:
+                user: ${{ vars.NUGET_USER }}
+
             - name: PushNuget CompuMaster.Data + CompuMaster.Data.Controls
-              run: dotnet nuget push *.nupkg --source https://api.nuget.org/v3/index.json --api-key ${{ secrets.NUGET_API_KEY }} --skip-duplicate 
+              env:
+                NUGET_API_KEY: ${{ steps.nuget-login.outputs.NUGET_API_KEY }}
+              run: dotnet nuget push *.nupkg --source https://api.nuget.org/v3/index.json --api-key "$env:NUGET_API_KEY" --skip-duplicate
 
             - name: Publish Package Artifacts
               uses: actions/upload-artifact@v4
